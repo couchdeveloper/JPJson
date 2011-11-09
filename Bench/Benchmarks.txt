@@ -1,0 +1,26 @@
+Benchmark results:
+cd /Users/agrosam/Develop/C++/JSON/json_parser/json_parser
+
+g++-mp-4.6: 	0.701 ms .. 0.741 ms
+Version: g++-mp-4.6 (GCC) 4.6.1 20110325 (prerelease), Free Software Foundation
+Command line:
+g++-mp-4.6 -O3 -std=c++0x -fpermissive -mdynamic-no-pic -DNDEBUG -DBOOST_STRICT_CONFIG -fvisibility=hidden -fvisibility-inlines-hidden -I/opt/local/include -I../utilities -I.. ../utilities/timer.cpp ../json/Number.cpp main.cpp -o test_bench -DBOOST_HASH_NO_EXTENSIONS
+
+
+Command line:
+g++-mp-4.6 -O3 -fpermissive -mdynamic-no-pic -DNDEBUG -DBOOST_STRICT_CONFIG -fvisibility=hidden -fvisibility-inlines-hidden -I/opt/local/include -I../utilities -I.. ../utilities/timer.cpp ../json/Number.cpp main.cpp -o test_bench -DBOOST_HASH_NO_EXTENSIONS
+
+
+
+clang++: ms
+Versions: clang version 2.9 (tags/RELEASE_29/final)
+-O2 -std=c++0x -stdlib=libc++  -U__STRICT_ANSI__
+
+Command line:
+/opt/local/bin/clang++ -O2 -std=c++0x -stdlib=libc++ -U__STRICT_ANSI__ -DNDEBUG -mdynamic-no-pic -fvisibility=hidden -fvisibility-inlines-hidden -I/opt/local/include -I../utilities -I.. ../utilities/timer.cpp ../json/Number.cpp main.cpp -o test_bench
+
+Command line:
+/opt/local/bin/clang++ -O4 -std=c++0x -stdlib=libc++ -U__STRICT_ANSI__ -DNDEBUG -I/opt/local/include -I../utilities -I.. ../utilities/timer.cpp ../json/Number.cpp main.cpp -o test_bench -DBOOST_HASH_NO_EXTENSIONS -DBOOST_STRICT_CONFIG -DBOOST_DISABLE_THREADS
+
+Command line:
+/opt/local/bin/clang++ -O4 -stdlib=libc++ -U__STRICT_ANSI__ -DNDEBUG -I/opt/local/include -I../utilities -I.. ../utilities/timer.cpp ../json/Number.cpp main.cpp -o test_bench -DBOOST_HASH_NO_EXTENSIONS -DBOOST_STRICT_CONFIG -D BOOST_DISABLE_THREADS

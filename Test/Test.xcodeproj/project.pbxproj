@@ -1,0 +1,1519 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A103FB6A13EA8BC4009FA571 /* gtest_main.cc in Sources */ = {isa = PBXBuildFile; fileRef = A164221013D4357400796785 /* gtest_main.cc */; };
+		A103FB6B13EA8BF8009FA571 /* gtest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A164221113D4357400796785 /* gtest.framework */; };
+		A11D44A713DDD5AE00AF45A6 /* StringBufferTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A164227E13D442A300796785 /* StringBufferTest.cpp */; };
+		A12BA48E1452CF0C0083BAA6 /* libjson.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A12BA48D1452CF0C0083BAA6 /* libjson.a */; };
+		A13B27B8142B93A200744884 /* logger_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A16718B413EA880100A39091 /* logger_test.cpp */; };
+		A13B27BA142B93A700744884 /* atomic_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1995FAB141FCC2F00595100 /* atomic_test.cpp */; };
+		A13B27BB142B93B300744884 /* synchronous_queue_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A18DFC0B1425C6DA00DAFE2E /* synchronous_queue_test.cpp */; };
+		A13B27BD142B93BD00744884 /* syncqueue_streambuf_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A18DFC111426416800DAFE2E /* syncqueue_streambuf_test.cpp */; };
+		A13B27BE142B93CD00744884 /* utilities_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1D2529413DDA3A100960381 /* utilities_test.cpp */; };
+		A13B27BF142B93D300744884 /* code_point_conversions_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A105D10513F687CB006DE4C7 /* code_point_conversions_test.cpp */; };
+		A13B27C0142B93D600744884 /* unicode_conversions_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A140DD1C13E94E36009DBB8C /* unicode_conversions_test.cpp */; };
+		A13B27C1142B93DA00744884 /* UTF_to_UTF_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A187ACF913FE7E6800BCCB01 /* UTF_to_UTF_test.cpp */; };
+		A144F303145871230062D5E9 /* timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A199FC7613D5D186000170CD /* timer.cpp */; };
+		A14BE8E2146818460077EA5C /* timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A199FC7613D5D186000170CD /* timer.cpp */; };
+		A14BE8E3146818470077EA5C /* timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A199FC7613D5D186000170CD /* timer.cpp */; };
+		A14BE8E4146818A70077EA5C /* timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A199FC7613D5D186000170CD /* timer.cpp */; };
+		A164224713D4424300796785 /* gtest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A164221113D4357400796785 /* gtest.framework */; };
+		A16532B313ED2CCD00FA8A0A /* ByteSwapTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A164227913D442A300796785 /* ByteSwapTest.cpp */; };
+		A16532B413ED2CCD00FA8A0A /* IteratorTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A164227A13D442A300796785 /* IteratorTest.cpp */; };
+		A16532B513ED2CCD00FA8A0A /* JsonParserTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A164227B13D442A300796785 /* JsonParserTest.cpp */; };
+		A16532B613ED2CCD00FA8A0A /* JsonSemanticActionsTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A164227C13D442A300796785 /* JsonSemanticActionsTest.cpp */; };
+		A167EB621440716700BD2A58 /* JPJsonWriterTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A199FCB013D74363000170CD /* JPJsonWriterTest.mm */; };
+		A171E6C313D45E3800260A6B /* gtest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A164221113D4357400796785 /* gtest.framework */; };
+		A171E6CE13D4853300260A6B /* gtest_main.cc in Sources */ = {isa = PBXBuildFile; fileRef = A164221013D4357400796785 /* gtest_main.cc */; };
+		A171E6D013D4853600260A6B /* gtest_main.cc in Sources */ = {isa = PBXBuildFile; fileRef = A164221013D4357400796785 /* gtest_main.cc */; };
+		A171E6DE13D485AB00260A6B /* gtest_main.cc in Sources */ = {isa = PBXBuildFile; fileRef = A164221013D4357400796785 /* gtest_main.cc */; };
+		A171E6E113D4863100260A6B /* gtest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A164221113D4357400796785 /* gtest.framework */; };
+		A171E74C13D4966E00260A6B /* gtest_main.cc in Sources */ = {isa = PBXBuildFile; fileRef = A164221013D4357400796785 /* gtest_main.cc */; };
+		A171E74E13D4966E00260A6B /* gtest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A164221113D4357400796785 /* gtest.framework */; };
+		A171E77713D497E700260A6B /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A171E77613D497E700260A6B /* CoreFoundation.framework */; };
+		A171E77913D4996A00260A6B /* buffer_queue_Test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A171E6B613D45A1B00260A6B /* buffer_queue_Test.cpp */; };
+		A1834ECB140536EA00AD5A2C /* JsonArrayTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A164224F13D4427000796785 /* JsonArrayTest.cpp */; };
+		A1834ECC140536EF00AD5A2C /* JsonBooleanTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A164225013D4427000796785 /* JsonBooleanTest.cpp */; };
+		A1834ECD140536F300AD5A2C /* JsonContainerMoveSematicsTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A164225113D4427000796785 /* JsonContainerMoveSematicsTest.cpp */; };
+		A1834ECE140536F600AD5A2C /* JsonContainerTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A164225213D4427000796785 /* JsonContainerTest.cpp */; };
+		A1834ED01405371200AD5A2C /* JsonNullTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A164225513D4427000796785 /* JsonNullTest.cpp */; };
+		A1834ED11405371200AD5A2C /* JsonNumberTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A164225613D4427000796785 /* JsonNumberTest.cpp */; };
+		A1834ED21405371200AD5A2C /* JsonObjectTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A164225713D4427000796785 /* JsonObjectTest.cpp */; };
+		A1834ED31405371200AD5A2C /* JsonValueTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A164225A13D4427000796785 /* JsonValueTest.cpp */; };
+		A1834ED41405371200AD5A2C /* ObjectTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A164225B13D4427000796785 /* ObjectTest.cpp */; };
+		A18DFC131426492600DAFE2E /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A171E77613D497E700260A6B /* CoreFoundation.framework */; };
+		A18FD42C144471AD003E6EBA /* Test-UTF8-esc.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = A18FD42B144471AD003E6EBA /* Test-UTF8-esc.json */; };
+		A18FD42F14447222003E6EBA /* Test-UTF8-esc.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = A18FD42E14447222003E6EBA /* Test-UTF8-esc.json */; };
+		A194FBA113E0450200847B90 /* libicudata.46.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A194FB9B13E0450200847B90 /* libicudata.46.1.dylib */; };
+		A194FBA213E0450200847B90 /* libicui18n.46.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A194FB9C13E0450200847B90 /* libicui18n.46.1.dylib */; };
+		A194FBA313E0450200847B90 /* libicuio.46.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A194FB9D13E0450200847B90 /* libicuio.46.1.dylib */; };
+		A194FBA413E0450200847B90 /* libicule.46.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A194FB9E13E0450200847B90 /* libicule.46.1.dylib */; };
+		A194FBA513E0450200847B90 /* libiculx.46.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A194FB9F13E0450200847B90 /* libiculx.46.1.dylib */; };
+		A194FBA613E0450200847B90 /* libicuuc.46.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A194FBA013E0450200847B90 /* libicuuc.46.1.dylib */; };
+		A199EFCA1444729600B53269 /* Test-UTF8-esc.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = A199EFC91444729600B53269 /* Test-UTF8-esc.json */; };
+		A199FC7713D5D186000170CD /* timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A199FC7613D5D186000170CD /* timer.cpp */; };
+		A199FC7813D5D186000170CD /* timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A199FC7613D5D186000170CD /* timer.cpp */; };
+		A199FC7913D5D186000170CD /* timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A199FC7613D5D186000170CD /* timer.cpp */; };
+		A199FC7A13D5D186000170CD /* timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A199FC7613D5D186000170CD /* timer.cpp */; };
+		A199FC7C13D5DB12000170CD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A199FC7B13D5DB12000170CD /* Foundation.framework */; };
+		A19F3A6D142877E400266273 /* semaphore_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A19F3A6C142877E400266273 /* semaphore_test.cpp */; };
+		A1A1BE6B142B448B00335044 /* unicode_detect_bom_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1A1BE6A142B448B00335044 /* unicode_detect_bom_test.cpp */; };
+		A1A9C7C713F006510046FF43 /* JsonStringTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A164225813D4427000796785 /* JsonStringTest.cpp */; };
+		A1AF4B381461A3490065B048 /* TestJson in CopyFiles */ = {isa = PBXBuildFile; fileRef = A1AF4B371461A3490065B048 /* TestJson */; };
+		A1AF4B431462B4970065B048 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1AF4B421462B4970065B048 /* main.cpp */; };
+		A1AF4B491462B5AB0065B048 /* logger_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A16718B413EA880100A39091 /* logger_test.cpp */; };
+		A1AF4B4A1462B5AB0065B048 /* atomic_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1995FAB141FCC2F00595100 /* atomic_test.cpp */; };
+		A1AF4B4C1462B5AB0065B048 /* synchronous_queue_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A18DFC0B1425C6DA00DAFE2E /* synchronous_queue_test.cpp */; };
+		A1AF4B4D1462B5AB0065B048 /* syncqueue_streambuf_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A18DFC111426416800DAFE2E /* syncqueue_streambuf_test.cpp */; };
+		A1AF4B4E1462B5AB0065B048 /* semaphore_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A19F3A6C142877E400266273 /* semaphore_test.cpp */; };
+		A1AF4B501462B5AB0065B048 /* utilities_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1D2529413DDA3A100960381 /* utilities_test.cpp */; };
+		A1AF4B511462B5AB0065B048 /* code_point_conversions_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A105D10513F687CB006DE4C7 /* code_point_conversions_test.cpp */; };
+		A1AF4B521462B5AB0065B048 /* unicode_conversions_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A140DD1C13E94E36009DBB8C /* unicode_conversions_test.cpp */; };
+		A1AF4B531462B5AB0065B048 /* UTF_to_UTF_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A187ACF913FE7E6800BCCB01 /* UTF_to_UTF_test.cpp */; };
+		A1AF4B541462B5AB0065B048 /* unicode_detect_bom_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1A1BE6A142B448B00335044 /* unicode_detect_bom_test.cpp */; };
+		A1AF4B551462B5AB0065B048 /* JsonArrayTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A164224F13D4427000796785 /* JsonArrayTest.cpp */; };
+		A1AF4B561462B5AB0065B048 /* JsonBooleanTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A164225013D4427000796785 /* JsonBooleanTest.cpp */; };
+		A1AF4B571462B5AB0065B048 /* JsonContainerMoveSematicsTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A164225113D4427000796785 /* JsonContainerMoveSematicsTest.cpp */; };
+		A1AF4B581462B5AB0065B048 /* JsonContainerTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A164225213D4427000796785 /* JsonContainerTest.cpp */; };
+		A1AF4B591462B5AB0065B048 /* JsonCustomObjectTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A164225413D4427000796785 /* JsonCustomObjectTest.cpp */; };
+		A1AF4B5A1462B5AB0065B048 /* JsonNullTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A164225513D4427000796785 /* JsonNullTest.cpp */; };
+		A1AF4B5B1462B5AB0065B048 /* JsonNumberTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A164225613D4427000796785 /* JsonNumberTest.cpp */; };
+		A1AF4B5C1462B5AB0065B048 /* JsonObjectTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A164225713D4427000796785 /* JsonObjectTest.cpp */; };
+		A1AF4B5D1462B5AB0065B048 /* JsonStringTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A164225813D4427000796785 /* JsonStringTest.cpp */; };
+		A1AF4B5E1462B5AB0065B048 /* JsonValueTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A164225A13D4427000796785 /* JsonValueTest.cpp */; };
+		A1AF4B5F1462B5AB0065B048 /* ObjectTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A164225B13D4427000796785 /* ObjectTest.cpp */; };
+		A1AF4B621462B5AB0065B048 /* ByteSwapTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A164227913D442A300796785 /* ByteSwapTest.cpp */; };
+		A1AF4B631462B5AB0065B048 /* IteratorTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A164227A13D442A300796785 /* IteratorTest.cpp */; };
+		A1AF4B641462B5AB0065B048 /* JsonParserTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A164227B13D442A300796785 /* JsonParserTest.cpp */; };
+		A1AF4B651462B5AB0065B048 /* JsonSemanticActionsTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A164227C13D442A300796785 /* JsonSemanticActionsTest.cpp */; };
+		A1AF4B661462B5AB0065B048 /* StringBufferTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A164227E13D442A300796785 /* StringBufferTest.cpp */; };
+		A1AF4B671462B5AB0065B048 /* json_path_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1E4ADDB1450610E000F4E21 /* json_path_test.cpp */; };
+		A1AF4B681462B5AB0065B048 /* CFDataCacheTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1DC52B914582CDA00CE28F2 /* CFDataCacheTest.mm */; };
+		A1AF4B691462B5AB0065B048 /* SemanticActionsBaseTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1DC52BD14582D6C00CE28F2 /* SemanticActionsBaseTest.mm */; };
+		A1AF4B6A1462B5AB0065B048 /* SemanticActionsTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1DC52BA14582CDA00CE28F2 /* SemanticActionsTest.mm */; };
+		A1AF4B6B1462B5AB0065B048 /* JPSemanticActionsBaseTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A12BA49114541AD40083BAA6 /* JPSemanticActionsBaseTest.mm */; };
+		A1AF4B6C1462B5AB0065B048 /* JPSemanticActionsTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A12BA48F145417900083BAA6 /* JPSemanticActionsTest.mm */; };
+		A1AF4B6D1462B5AB0065B048 /* JPJsonParserTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A199FC8013D6FF45000170CD /* JPJsonParserTest.mm */; };
+		A1AF4B6E1462B5AB0065B048 /* JPAsyncJsonParserTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A192C71114239B59002EE32F /* JPAsyncJsonParserTest.mm */; };
+		A1AF4B6F1462B5AB0065B048 /* JPJsonWriterTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A199FCB013D74363000170CD /* JPJsonWriterTest.mm */; };
+		A1AF4B711462B7630065B048 /* libjson.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A12BA48D1452CF0C0083BAA6 /* libjson.a */; };
+		A1AF4B741462B7940065B048 /* gtest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A164221113D4357400796785 /* gtest.framework */; };
+		A1AF4B751462C59B0065B048 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A171E77613D497E700260A6B /* CoreFoundation.framework */; };
+		A1AF4B761462C5A20065B048 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A199FC7B13D5DB12000170CD /* Foundation.framework */; };
+		A1AF4B771462C73E0065B048 /* libicudata.46.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A194FB9B13E0450200847B90 /* libicudata.46.1.dylib */; };
+		A1AF4B781462C73E0065B048 /* libicuio.46.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A194FB9D13E0450200847B90 /* libicuio.46.1.dylib */; };
+		A1AF4B791462C73E0065B048 /* libicui18n.46.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A194FB9C13E0450200847B90 /* libicui18n.46.1.dylib */; };
+		A1AF4B7A1462C73E0065B048 /* libicule.46.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A194FB9E13E0450200847B90 /* libicule.46.1.dylib */; };
+		A1AF4B7B1462C73E0065B048 /* libiculx.46.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A194FB9F13E0450200847B90 /* libiculx.46.1.dylib */; };
+		A1AF4B7C1462C73E0065B048 /* libicuuc.46.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A194FBA013E0450200847B90 /* libicuuc.46.1.dylib */; };
+		A1AF4B801462D4D30065B048 /* Test-UTF8-esc.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = A1AF4B7F1462D4D30065B048 /* Test-UTF8-esc.json */; };
+		A1D2527E13DDA2AE00960381 /* gtest_main.cc in Sources */ = {isa = PBXBuildFile; fileRef = A164221013D4357400796785 /* gtest_main.cc */; };
+		A1D2528A13DDA2AE00960381 /* gtest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A164221113D4357400796785 /* gtest.framework */; };
+		A1DC4BDC14582A3E00CE28F2 /* JPAsyncJsonParserTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A192C71114239B59002EE32F /* JPAsyncJsonParserTest.mm */; };
+		A1DC4BDD14582A5D00CE28F2 /* JPJsonParserTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A199FC8013D6FF45000170CD /* JPJsonParserTest.mm */; };
+		A1DC4BDE14582A8D00CE28F2 /* JPSemanticActionsTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A12BA48F145417900083BAA6 /* JPSemanticActionsTest.mm */; };
+		A1DC4BDF14582AC400CE28F2 /* JPSemanticActionsBaseTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A12BA49114541AD40083BAA6 /* JPSemanticActionsBaseTest.mm */; };
+		A1DC4BE614582BB700CE28F2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A199FC7B13D5DB12000170CD /* Foundation.framework */; };
+		A1DC52BB14582CDA00CE28F2 /* CFDataCacheTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1DC52B914582CDA00CE28F2 /* CFDataCacheTest.mm */; };
+		A1DC52BC14582CDA00CE28F2 /* SemanticActionsTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1DC52BA14582CDA00CE28F2 /* SemanticActionsTest.mm */; };
+		A1DC52BE14582D6C00CE28F2 /* SemanticActionsBaseTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1DC52BD14582D6C00CE28F2 /* SemanticActionsBaseTest.mm */; };
+		A1DC52BF1458368200CE28F2 /* gtest_main.cc in Sources */ = {isa = PBXBuildFile; fileRef = A164221013D4357400796785 /* gtest_main.cc */; };
+		A1DC52C0145836D000CE28F2 /* gtest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A164221113D4357400796785 /* gtest.framework */; };
+		A1E228061408E58B0048FE07 /* JsonCustomObjectTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A164225413D4427000796785 /* JsonCustomObjectTest.cpp */; };
+		A1E4ADDC1450610E000F4E21 /* json_path_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1E4ADDB1450610E000F4E21 /* json_path_test.cpp */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		A164224813D4424300796785 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		A16718A813EA86DF00A39091 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		A171E6C413D45E3800260A6B /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		A171E6D313D4859500260A6B /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+				A18FD42F14447222003E6EBA /* Test-UTF8-esc.json in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		A171E74F13D4966E00260A6B /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 12;
+			dstPath = Resources;
+			dstSubfolderSpec = 16;
+			files = (
+				A1AF4B381461A3490065B048 /* TestJson in CopyFiles */,
+				A18FD42C144471AD003E6EBA /* Test-UTF8-esc.json in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A1AF4B3D1462B4960065B048 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 12;
+			dstPath = "";
+			dstSubfolderSpec = 16;
+			files = (
+				A1AF4B801462D4D30065B048 /* Test-UTF8-esc.json in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A1D2528B13DDA2AE00960381 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 12;
+			dstPath = "";
+			dstSubfolderSpec = 16;
+			files = (
+				A199EFCA1444729600B53269 /* Test-UTF8-esc.json in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A1DC4BE214582BB700CE28F2 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 12;
+			dstPath = "";
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		A105D10513F687CB006DE4C7 /* code_point_conversions_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = code_point_conversions_test.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		A12BA48D1452CF0C0083BAA6 /* libjson.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjson.a; path = "../../../../../Library/Developer/Xcode/DerivedData/Json-erlsofcekspqczcasdatcdjvtiuv/Build/Products/Debug/libjson.a"; sourceTree = "<group>"; };
+		A12BA48F145417900083BAA6 /* JPSemanticActionsTest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = JPSemanticActionsTest.mm; sourceTree = "<group>"; };
+		A12BA49114541AD40083BAA6 /* JPSemanticActionsBaseTest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = JPSemanticActionsBaseTest.mm; sourceTree = "<group>"; };
+		A140DD1C13E94E36009DBB8C /* unicode_conversions_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = unicode_conversions_test.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		A15D89801467F7A10001E08D /* RunAllTests.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = RunAllTests.sh; sourceTree = "<group>"; };
+		A164221013D4357400796785 /* gtest_main.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gtest_main.cc; path = "/Users/agrosam/Develop/GTest/gtest-1.6.0/src/gtest_main.cc"; sourceTree = "<absolute>"; };
+		A164221113D4357400796785 /* gtest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = gtest.framework; path = "/Users/agrosam/Develop/GTest/gtest-1.6.0/xcode/build/Release/gtest.framework"; sourceTree = "<absolute>"; };
+		A164224C13D4424300796785 /* JsonContainerTest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = JsonContainerTest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A164224F13D4427000796785 /* JsonArrayTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = JsonArrayTest.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		A164225013D4427000796785 /* JsonBooleanTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = JsonBooleanTest.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		A164225113D4427000796785 /* JsonContainerMoveSematicsTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = JsonContainerMoveSematicsTest.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		A164225213D4427000796785 /* JsonContainerTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = JsonContainerTest.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		A164225313D4427000796785 /* JsonContainerTest_prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = JsonContainerTest_prefix.pch; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		A164225413D4427000796785 /* JsonCustomObjectTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = JsonCustomObjectTest.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		A164225513D4427000796785 /* JsonNullTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = JsonNullTest.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		A164225613D4427000796785 /* JsonNumberTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = JsonNumberTest.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		A164225713D4427000796785 /* JsonObjectTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = JsonObjectTest.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		A164225813D4427000796785 /* JsonStringTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = JsonStringTest.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		A164225913D4427000796785 /* JsonTextTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = JsonTextTest.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		A164225A13D4427000796785 /* JsonValueTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = JsonValueTest.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		A164225B13D4427000796785 /* ObjectTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = ObjectTest.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		A164225C13D4427000796785 /* SafeBool.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = SafeBool.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		A164225D13D4427000796785 /* utf16BE_test.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = utf16BE_test.txt; sourceTree = "<group>"; };
+		A164225E13D4427000796785 /* utf16LE_test.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = utf16LE_test.txt; sourceTree = "<group>"; };
+		A164225F13D4427000796785 /* utf8_test.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = utf8_test.txt; sourceTree = "<group>"; };
+		A164227913D442A300796785 /* ByteSwapTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = ByteSwapTest.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		A164227A13D442A300796785 /* IteratorTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = IteratorTest.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		A164227B13D442A300796785 /* JsonParserTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = JsonParserTest.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		A164227C13D442A300796785 /* JsonSemanticActionsTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = JsonSemanticActionsTest.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		A164227D13D442A300796785 /* JsonTextTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = JsonTextTest.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		A164227E13D442A300796785 /* StringBufferTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = StringBufferTest.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		A16718AA13EA86DF00A39091 /* utilities_test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = utilities_test; sourceTree = BUILT_PRODUCTS_DIR; };
+		A16718B413EA880100A39091 /* logger_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = logger_test.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		A171E6B613D45A1B00260A6B /* buffer_queue_Test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = buffer_queue_Test.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		A171E6C813D45E3800260A6B /* BufferQueueTest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = BufferQueueTest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A171E6D513D4859500260A6B /* json_parser_test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = json_parser_test; sourceTree = BUILT_PRODUCTS_DIR; };
+		A171E75313D4966E00260A6B /* ObjC_Test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ObjC_Test; sourceTree = BUILT_PRODUCTS_DIR; };
+		A171E77613D497E700260A6B /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
+		A177AB6B14630A8800BA3AED /* AllTests-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AllTests-Prefix.pch"; sourceTree = "<group>"; };
+		A187ACF913FE7E6800BCCB01 /* UTF_to_UTF_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = UTF_to_UTF_test.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		A18DFC0B1425C6DA00DAFE2E /* synchronous_queue_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = synchronous_queue_test.cpp; sourceTree = "<group>"; };
+		A18DFC0F14260F8400DAFE2E /* sync_queue_iterator_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sync_queue_iterator_test.cpp; sourceTree = "<group>"; };
+		A18DFC111426416800DAFE2E /* syncqueue_streambuf_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = syncqueue_streambuf_test.cpp; sourceTree = "<group>"; };
+		A18FD42B144471AD003E6EBA /* Test-UTF8-esc.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = "Test-UTF8-esc.json"; path = "../Resources/Test-UTF8-esc.json"; sourceTree = "<group>"; };
+		A18FD42E14447222003E6EBA /* Test-UTF8-esc.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = "Test-UTF8-esc.json"; path = "../Resources/Test-UTF8-esc.json"; sourceTree = "<group>"; };
+		A192C71114239B59002EE32F /* JPAsyncJsonParserTest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = JPAsyncJsonParserTest.mm; sourceTree = "<group>"; };
+		A194FB9913E044BB00847B90 /* libicui18n.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libicui18n.a; path = /opt/local/lib/libicui18n.a; sourceTree = "<absolute>"; };
+		A194FB9B13E0450200847B90 /* libicudata.46.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicudata.46.1.dylib; path = /opt/local/lib/libicudata.46.1.dylib; sourceTree = "<absolute>"; };
+		A194FB9C13E0450200847B90 /* libicui18n.46.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicui18n.46.1.dylib; path = /opt/local/lib/libicui18n.46.1.dylib; sourceTree = "<absolute>"; };
+		A194FB9D13E0450200847B90 /* libicuio.46.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicuio.46.1.dylib; path = /opt/local/lib/libicuio.46.1.dylib; sourceTree = "<absolute>"; };
+		A194FB9E13E0450200847B90 /* libicule.46.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicule.46.1.dylib; path = /opt/local/lib/libicule.46.1.dylib; sourceTree = "<absolute>"; };
+		A194FB9F13E0450200847B90 /* libiculx.46.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiculx.46.1.dylib; path = /opt/local/lib/libiculx.46.1.dylib; sourceTree = "<absolute>"; };
+		A194FBA013E0450200847B90 /* libicuuc.46.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicuuc.46.1.dylib; path = /opt/local/lib/libicuuc.46.1.dylib; sourceTree = "<absolute>"; };
+		A1995FAB141FCC2F00595100 /* atomic_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = atomic_test.cpp; sourceTree = "<group>"; };
+		A1995FAE141FD75900595100 /* producer_consumer_queue_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = producer_consumer_queue_test.cpp; sourceTree = "<group>"; };
+		A199EFC91444729600B53269 /* Test-UTF8-esc.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = "Test-UTF8-esc.json"; path = "../Resources/Test-UTF8-esc.json"; sourceTree = "<group>"; };
+		A199FC7513D5D186000170CD /* timer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = timer.hpp; path = ../utilities/timer.hpp; sourceTree = "<group>"; };
+		A199FC7613D5D186000170CD /* timer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = timer.cpp; path = ../utilities/timer.cpp; sourceTree = "<group>"; };
+		A199FC7B13D5DB12000170CD /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		A199FC8013D6FF45000170CD /* JPJsonParserTest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; path = JPJsonParserTest.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		A199FCA013D7094C000170CD /* testString.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = testString.txt; path = ../Resources/testString.txt; sourceTree = "<group>"; };
+		A199FCB013D74363000170CD /* JPJsonWriterTest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; path = JPJsonWriterTest.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		A19F3A6C142877E400266273 /* semaphore_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = semaphore_test.cpp; sourceTree = "<group>"; };
+		A1A1BE6A142B448B00335044 /* unicode_detect_bom_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = unicode_detect_bom_test.cpp; sourceTree = "<group>"; };
+		A1AF4B371461A3490065B048 /* TestJson */ = {isa = PBXFileReference; lastKnownFileType = folder; name = TestJson; path = ../Resources/TestJson; sourceTree = "<group>"; };
+		A1AF4B3F1462B4960065B048 /* AllTests */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = AllTests; sourceTree = BUILT_PRODUCTS_DIR; };
+		A1AF4B421462B4970065B048 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		A1AF4B7F1462D4D30065B048 /* Test-UTF8-esc.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = "Test-UTF8-esc.json"; path = "../Resources/Test-UTF8-esc.json"; sourceTree = "<group>"; };
+		A1D2529013DDA2AE00960381 /* unicode_test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = unicode_test; sourceTree = BUILT_PRODUCTS_DIR; };
+		A1D2529413DDA3A100960381 /* utilities_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = utilities_test.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		A1DC4BE414582BB700CE28F2 /* ObjC_private_test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ObjC_private_test; sourceTree = BUILT_PRODUCTS_DIR; };
+		A1DC4BEB14582BB800CE28F2 /* ObjC_private_test-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ObjC_private_test-Prefix.pch"; sourceTree = "<group>"; };
+		A1DC52B914582CDA00CE28F2 /* CFDataCacheTest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; path = CFDataCacheTest.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		A1DC52BA14582CDA00CE28F2 /* SemanticActionsTest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; path = SemanticActionsTest.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		A1DC52BD14582D6C00CE28F2 /* SemanticActionsBaseTest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SemanticActionsBaseTest.mm; sourceTree = "<group>"; };
+		A1E4ADDB1450610E000F4E21 /* json_path_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = json_path_test.cpp; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A164224613D4424300796785 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A164224713D4424300796785 /* gtest.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A16718A713EA86DF00A39091 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A18DFC131426492600DAFE2E /* CoreFoundation.framework in Frameworks */,
+				A103FB6B13EA8BF8009FA571 /* gtest.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A171E6C213D45E3800260A6B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A171E6C313D45E3800260A6B /* gtest.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A171E6D213D4859500260A6B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A171E6E113D4863100260A6B /* gtest.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A171E74D13D4966E00260A6B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A12BA48E1452CF0C0083BAA6 /* libjson.a in Frameworks */,
+				A199FC7C13D5DB12000170CD /* Foundation.framework in Frameworks */,
+				A171E77713D497E700260A6B /* CoreFoundation.framework in Frameworks */,
+				A171E74E13D4966E00260A6B /* gtest.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A1AF4B3C1462B4960065B048 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A1AF4B771462C73E0065B048 /* libicudata.46.1.dylib in Frameworks */,
+				A1AF4B781462C73E0065B048 /* libicuio.46.1.dylib in Frameworks */,
+				A1AF4B791462C73E0065B048 /* libicui18n.46.1.dylib in Frameworks */,
+				A1AF4B7A1462C73E0065B048 /* libicule.46.1.dylib in Frameworks */,
+				A1AF4B7B1462C73E0065B048 /* libiculx.46.1.dylib in Frameworks */,
+				A1AF4B7C1462C73E0065B048 /* libicuuc.46.1.dylib in Frameworks */,
+				A1AF4B761462C5A20065B048 /* Foundation.framework in Frameworks */,
+				A1AF4B751462C59B0065B048 /* CoreFoundation.framework in Frameworks */,
+				A1AF4B711462B7630065B048 /* libjson.a in Frameworks */,
+				A1AF4B741462B7940065B048 /* gtest.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A1D2528713DDA2AE00960381 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A194FBA113E0450200847B90 /* libicudata.46.1.dylib in Frameworks */,
+				A194FBA213E0450200847B90 /* libicui18n.46.1.dylib in Frameworks */,
+				A194FBA313E0450200847B90 /* libicuio.46.1.dylib in Frameworks */,
+				A194FBA413E0450200847B90 /* libicule.46.1.dylib in Frameworks */,
+				A194FBA513E0450200847B90 /* libiculx.46.1.dylib in Frameworks */,
+				A194FBA613E0450200847B90 /* libicuuc.46.1.dylib in Frameworks */,
+				A1D2528A13DDA2AE00960381 /* gtest.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A1DC4BE114582BB700CE28F2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A1DC4BE614582BB700CE28F2 /* Foundation.framework in Frameworks */,
+				A1DC52C0145836D000CE28F2 /* gtest.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A154A8E413D44EBD00CF312F /* unused */ = {
+			isa = PBXGroup;
+			children = (
+				A164227D13D442A300796785 /* JsonTextTest.cpp */,
+			);
+			name = unused;
+			sourceTree = "<group>";
+		};
+		A159B2A6142C795700ADCEA9 /* unused */ = {
+			isa = PBXGroup;
+			children = (
+				A18DFC0F14260F8400DAFE2E /* sync_queue_iterator_test.cpp */,
+			);
+			name = unused;
+			sourceTree = "<group>";
+		};
+		A15D897F1467F7A10001E08D /* Scripts */ = {
+			isa = PBXGroup;
+			children = (
+				A15D89801467F7A10001E08D /* RunAllTests.sh */,
+			);
+			path = Scripts;
+			sourceTree = "<group>";
+		};
+		A16421F813D4354300796785 = {
+			isa = PBXGroup;
+			children = (
+				A16718A513EA85F700A39091 /* Tests */,
+				A199FC9F13D7092A000170CD /* Resources */,
+				A199FC7313D5D156000170CD /* utilities */,
+				A15D897F1467F7A10001E08D /* Scripts */,
+				A171E77813D497F000260A6B /* Frameworks */,
+				A164220F13D4357400796785 /* UnitTest Setup */,
+				A164220413D4354300796785 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A164220413D4354300796785 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A164224C13D4424300796785 /* JsonContainerTest */,
+				A171E6C813D45E3800260A6B /* BufferQueueTest */,
+				A171E6D513D4859500260A6B /* json_parser_test */,
+				A171E75313D4966E00260A6B /* ObjC_Test */,
+				A1D2529013DDA2AE00960381 /* unicode_test */,
+				A16718AA13EA86DF00A39091 /* utilities_test */,
+				A1DC4BE414582BB700CE28F2 /* ObjC_private_test */,
+				A1AF4B3F1462B4960065B048 /* AllTests */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A164220F13D4357400796785 /* UnitTest Setup */ = {
+			isa = PBXGroup;
+			children = (
+				A164221013D4357400796785 /* gtest_main.cc */,
+				A164221113D4357400796785 /* gtest.framework */,
+			);
+			name = "UnitTest Setup";
+			path = "/Users/agrosam/Develop/C++/JSON/json_parser/json_parser_test";
+			sourceTree = "<absolute>";
+		};
+		A164224E13D4427000796785 /* JsonContainerTest */ = {
+			isa = PBXGroup;
+			children = (
+				A16532B213ED2C8B00FA8A0A /* unused */,
+				A164224F13D4427000796785 /* JsonArrayTest.cpp */,
+				A164225013D4427000796785 /* JsonBooleanTest.cpp */,
+				A164225113D4427000796785 /* JsonContainerMoveSematicsTest.cpp */,
+				A164225213D4427000796785 /* JsonContainerTest.cpp */,
+				A164225413D4427000796785 /* JsonCustomObjectTest.cpp */,
+				A164225513D4427000796785 /* JsonNullTest.cpp */,
+				A164225613D4427000796785 /* JsonNumberTest.cpp */,
+				A164225713D4427000796785 /* JsonObjectTest.cpp */,
+				A164225813D4427000796785 /* JsonStringTest.cpp */,
+				A164225A13D4427000796785 /* JsonValueTest.cpp */,
+				A164225B13D4427000796785 /* ObjectTest.cpp */,
+				A164225313D4427000796785 /* JsonContainerTest_prefix.pch */,
+				A164225C13D4427000796785 /* SafeBool.hpp */,
+				A164225D13D4427000796785 /* utf16BE_test.txt */,
+				A164225E13D4427000796785 /* utf16LE_test.txt */,
+				A164225F13D4427000796785 /* utf8_test.txt */,
+			);
+			path = JsonContainerTest;
+			sourceTree = "<group>";
+		};
+		A164227813D442A300796785 /* json_parser_test */ = {
+			isa = PBXGroup;
+			children = (
+				A154A8E413D44EBD00CF312F /* unused */,
+				A164227913D442A300796785 /* ByteSwapTest.cpp */,
+				A164227A13D442A300796785 /* IteratorTest.cpp */,
+				A164227B13D442A300796785 /* JsonParserTest.cpp */,
+				A164227C13D442A300796785 /* JsonSemanticActionsTest.cpp */,
+				A164227E13D442A300796785 /* StringBufferTest.cpp */,
+				A1E4ADDB1450610E000F4E21 /* json_path_test.cpp */,
+			);
+			path = json_parser_test;
+			sourceTree = "<group>";
+		};
+		A16532B213ED2C8B00FA8A0A /* unused */ = {
+			isa = PBXGroup;
+			children = (
+				A164225913D4427000796785 /* JsonTextTest.cpp */,
+			);
+			name = unused;
+			sourceTree = "<group>";
+		};
+		A16718A513EA85F700A39091 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				A16718AC13EA86DF00A39091 /* utilities_test */,
+				A1C2077E13D4594E00C0ACBD /* BufferQueueTest */,
+				A1D2529313DDA35E00960381 /* unicode_test */,
+				A164224E13D4427000796785 /* JsonContainerTest */,
+				A164227813D442A300796785 /* json_parser_test */,
+				A1DC4BE714582BB800CE28F2 /* ObjC_private_test */,
+				A171E77113D496E200260A6B /* ObjC_Test */,
+				A1AF4B411462B4970065B048 /* AllTests */,
+			);
+			name = Tests;
+			sourceTree = "<group>";
+		};
+		A16718AC13EA86DF00A39091 /* utilities_test */ = {
+			isa = PBXGroup;
+			children = (
+				A159B2A6142C795700ADCEA9 /* unused */,
+				A16718B413EA880100A39091 /* logger_test.cpp */,
+				A1995FAB141FCC2F00595100 /* atomic_test.cpp */,
+				A1995FAE141FD75900595100 /* producer_consumer_queue_test.cpp */,
+				A18DFC0B1425C6DA00DAFE2E /* synchronous_queue_test.cpp */,
+				A18DFC111426416800DAFE2E /* syncqueue_streambuf_test.cpp */,
+				A19F3A6C142877E400266273 /* semaphore_test.cpp */,
+			);
+			path = utilities_test;
+			sourceTree = "<group>";
+		};
+		A171E77113D496E200260A6B /* ObjC_Test */ = {
+			isa = PBXGroup;
+			children = (
+				A12BA49114541AD40083BAA6 /* JPSemanticActionsBaseTest.mm */,
+				A12BA48F145417900083BAA6 /* JPSemanticActionsTest.mm */,
+				A199FC8013D6FF45000170CD /* JPJsonParserTest.mm */,
+				A192C71114239B59002EE32F /* JPAsyncJsonParserTest.mm */,
+				A199FCB013D74363000170CD /* JPJsonWriterTest.mm */,
+			);
+			path = ObjC_Test;
+			sourceTree = "<group>";
+		};
+		A171E77813D497F000260A6B /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A12BA48D1452CF0C0083BAA6 /* libjson.a */,
+				A194FB9B13E0450200847B90 /* libicudata.46.1.dylib */,
+				A194FB9C13E0450200847B90 /* libicui18n.46.1.dylib */,
+				A194FB9D13E0450200847B90 /* libicuio.46.1.dylib */,
+				A194FB9E13E0450200847B90 /* libicule.46.1.dylib */,
+				A194FB9F13E0450200847B90 /* libiculx.46.1.dylib */,
+				A194FBA013E0450200847B90 /* libicuuc.46.1.dylib */,
+				A194FB9913E044BB00847B90 /* libicui18n.a */,
+				A199FC7B13D5DB12000170CD /* Foundation.framework */,
+				A171E77613D497E700260A6B /* CoreFoundation.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		A199FC7313D5D156000170CD /* utilities */ = {
+			isa = PBXGroup;
+			children = (
+				A199FC7513D5D186000170CD /* timer.hpp */,
+				A199FC7613D5D186000170CD /* timer.cpp */,
+			);
+			name = utilities;
+			path = ../Source/utilities;
+			sourceTree = "<group>";
+		};
+		A199FC9F13D7092A000170CD /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				A1AF4B371461A3490065B048 /* TestJson */,
+				A1AF4B7F1462D4D30065B048 /* Test-UTF8-esc.json */,
+				A199EFC91444729600B53269 /* Test-UTF8-esc.json */,
+				A18FD42E14447222003E6EBA /* Test-UTF8-esc.json */,
+				A18FD42B144471AD003E6EBA /* Test-UTF8-esc.json */,
+				A199FCA013D7094C000170CD /* testString.txt */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		A1AF4B411462B4970065B048 /* AllTests */ = {
+			isa = PBXGroup;
+			children = (
+				A1AF4B421462B4970065B048 /* main.cpp */,
+				A177AB6B14630A8800BA3AED /* AllTests-Prefix.pch */,
+			);
+			path = AllTests;
+			sourceTree = "<group>";
+		};
+		A1C2077E13D4594E00C0ACBD /* BufferQueueTest */ = {
+			isa = PBXGroup;
+			children = (
+				A171E6B613D45A1B00260A6B /* buffer_queue_Test.cpp */,
+			);
+			path = BufferQueueTest;
+			sourceTree = "<group>";
+		};
+		A1D2529313DDA35E00960381 /* unicode_test */ = {
+			isa = PBXGroup;
+			children = (
+				A1D2529413DDA3A100960381 /* utilities_test.cpp */,
+				A105D10513F687CB006DE4C7 /* code_point_conversions_test.cpp */,
+				A140DD1C13E94E36009DBB8C /* unicode_conversions_test.cpp */,
+				A187ACF913FE7E6800BCCB01 /* UTF_to_UTF_test.cpp */,
+				A1A1BE6A142B448B00335044 /* unicode_detect_bom_test.cpp */,
+			);
+			path = unicode_test;
+			sourceTree = "<group>";
+		};
+		A1DC4BE714582BB800CE28F2 /* ObjC_private_test */ = {
+			isa = PBXGroup;
+			children = (
+				A1DC52B914582CDA00CE28F2 /* CFDataCacheTest.mm */,
+				A1DC52BD14582D6C00CE28F2 /* SemanticActionsBaseTest.mm */,
+				A1DC52BA14582CDA00CE28F2 /* SemanticActionsTest.mm */,
+				A1DC4BEA14582BB800CE28F2 /* Supporting Files */,
+			);
+			path = ObjC_private_test;
+			sourceTree = "<group>";
+		};
+		A1DC4BEA14582BB800CE28F2 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				A1DC4BEB14582BB800CE28F2 /* ObjC_private_test-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A164224213D4424300796785 /* JsonContainerTest */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A164224913D4424300796785 /* Build configuration list for PBXNativeTarget "JsonContainerTest" */;
+			buildPhases = (
+				A164224313D4424300796785 /* Sources */,
+				A164224613D4424300796785 /* Frameworks */,
+				A164224813D4424300796785 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = JsonContainerTest;
+			productName = Test;
+			productReference = A164224C13D4424300796785 /* JsonContainerTest */;
+			productType = "com.apple.product-type.tool";
+		};
+		A16718A913EA86DF00A39091 /* utilities_test */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A16718B113EA86DF00A39091 /* Build configuration list for PBXNativeTarget "utilities_test" */;
+			buildPhases = (
+				A16718A613EA86DF00A39091 /* Sources */,
+				A16718A713EA86DF00A39091 /* Frameworks */,
+				A16718A813EA86DF00A39091 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = utilities_test;
+			productName = utilities_test;
+			productReference = A16718AA13EA86DF00A39091 /* utilities_test */;
+			productType = "com.apple.product-type.tool";
+		};
+		A171E6BA13D45E3800260A6B /* BufferQueueTest */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A171E6C513D45E3800260A6B /* Build configuration list for PBXNativeTarget "BufferQueueTest" */;
+			buildPhases = (
+				A171E6BB13D45E3800260A6B /* Sources */,
+				A171E6C213D45E3800260A6B /* Frameworks */,
+				A171E6C413D45E3800260A6B /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = BufferQueueTest;
+			productName = Test;
+			productReference = A171E6C813D45E3800260A6B /* BufferQueueTest */;
+			productType = "com.apple.product-type.tool";
+		};
+		A171E6D413D4859500260A6B /* json_parser_test */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A171E6DB13D4859500260A6B /* Build configuration list for PBXNativeTarget "json_parser_test" */;
+			buildPhases = (
+				A171E6D113D4859500260A6B /* Sources */,
+				A171E6D213D4859500260A6B /* Frameworks */,
+				A171E6D313D4859500260A6B /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = json_parser_test;
+			productName = json_parser_test;
+			productReference = A171E6D513D4859500260A6B /* json_parser_test */;
+			productType = "com.apple.product-type.tool";
+		};
+		A171E74913D4966E00260A6B /* ObjC_Test */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A171E75013D4966E00260A6B /* Build configuration list for PBXNativeTarget "ObjC_Test" */;
+			buildPhases = (
+				A171E74A13D4966E00260A6B /* Sources */,
+				A171E74D13D4966E00260A6B /* Frameworks */,
+				A171E74F13D4966E00260A6B /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ObjC_Test;
+			productName = Test;
+			productReference = A171E75313D4966E00260A6B /* ObjC_Test */;
+			productType = "com.apple.product-type.tool";
+		};
+		A1AF4B3E1462B4960065B048 /* AllTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A1AF4B461462B4970065B048 /* Build configuration list for PBXNativeTarget "AllTests" */;
+			buildPhases = (
+				A1AF4B3B1462B4960065B048 /* Sources */,
+				A1AF4B3C1462B4960065B048 /* Frameworks */,
+				A1AF4B3D1462B4960065B048 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = AllTests;
+			productName = AllTests;
+			productReference = A1AF4B3F1462B4960065B048 /* AllTests */;
+			productType = "com.apple.product-type.tool";
+		};
+		A1D2527C13DDA2AE00960381 /* unicode_test */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A1D2528D13DDA2AE00960381 /* Build configuration list for PBXNativeTarget "unicode_test" */;
+			buildPhases = (
+				A1D2527D13DDA2AE00960381 /* Sources */,
+				A1D2528713DDA2AE00960381 /* Frameworks */,
+				A1D2528B13DDA2AE00960381 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = unicode_test;
+			productName = Test;
+			productReference = A1D2529013DDA2AE00960381 /* unicode_test */;
+			productType = "com.apple.product-type.tool";
+		};
+		A1DC4BE314582BB700CE28F2 /* ObjC_private_test */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A1DC4BEE14582BB800CE28F2 /* Build configuration list for PBXNativeTarget "ObjC_private_test" */;
+			buildPhases = (
+				A1DC4BE014582BB700CE28F2 /* Sources */,
+				A1DC4BE114582BB700CE28F2 /* Frameworks */,
+				A1DC4BE214582BB700CE28F2 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ObjC_private_test;
+			productName = ObjC_private_test;
+			productReference = A1DC4BE414582BB700CE28F2 /* ObjC_private_test */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A16421FA13D4354300796785 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0420;
+			};
+			buildConfigurationList = A16421FD13D4354300796785 /* Build configuration list for PBXProject "Test" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = A16421F813D4354300796785;
+			productRefGroup = A164220413D4354300796785 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A16718A913EA86DF00A39091 /* utilities_test */,
+				A1D2527C13DDA2AE00960381 /* unicode_test */,
+				A164224213D4424300796785 /* JsonContainerTest */,
+				A171E6BA13D45E3800260A6B /* BufferQueueTest */,
+				A171E6D413D4859500260A6B /* json_parser_test */,
+				A1DC4BE314582BB700CE28F2 /* ObjC_private_test */,
+				A171E74913D4966E00260A6B /* ObjC_Test */,
+				A1AF4B3E1462B4960065B048 /* AllTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A164224313D4424300796785 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A171E6D013D4853600260A6B /* gtest_main.cc in Sources */,
+				A199FC7713D5D186000170CD /* timer.cpp in Sources */,
+				A1A9C7C713F006510046FF43 /* JsonStringTest.cpp in Sources */,
+				A1834ECB140536EA00AD5A2C /* JsonArrayTest.cpp in Sources */,
+				A1834ECC140536EF00AD5A2C /* JsonBooleanTest.cpp in Sources */,
+				A1834ECD140536F300AD5A2C /* JsonContainerMoveSematicsTest.cpp in Sources */,
+				A1834ECE140536F600AD5A2C /* JsonContainerTest.cpp in Sources */,
+				A1834ED01405371200AD5A2C /* JsonNullTest.cpp in Sources */,
+				A1834ED11405371200AD5A2C /* JsonNumberTest.cpp in Sources */,
+				A1834ED21405371200AD5A2C /* JsonObjectTest.cpp in Sources */,
+				A1834ED31405371200AD5A2C /* JsonValueTest.cpp in Sources */,
+				A1834ED41405371200AD5A2C /* ObjectTest.cpp in Sources */,
+				A1E228061408E58B0048FE07 /* JsonCustomObjectTest.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A16718A613EA86DF00A39091 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A103FB6A13EA8BC4009FA571 /* gtest_main.cc in Sources */,
+				A19F3A6D142877E400266273 /* semaphore_test.cpp in Sources */,
+				A13B27B8142B93A200744884 /* logger_test.cpp in Sources */,
+				A13B27BA142B93A700744884 /* atomic_test.cpp in Sources */,
+				A13B27BB142B93B300744884 /* synchronous_queue_test.cpp in Sources */,
+				A13B27BD142B93BD00744884 /* syncqueue_streambuf_test.cpp in Sources */,
+				A14BE8E3146818470077EA5C /* timer.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A171E6BB13D45E3800260A6B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A171E6CE13D4853300260A6B /* gtest_main.cc in Sources */,
+				A171E77913D4996A00260A6B /* buffer_queue_Test.cpp in Sources */,
+				A199FC7813D5D186000170CD /* timer.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A171E6D113D4859500260A6B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A171E6DE13D485AB00260A6B /* gtest_main.cc in Sources */,
+				A199FC7913D5D186000170CD /* timer.cpp in Sources */,
+				A11D44A713DDD5AE00AF45A6 /* StringBufferTest.cpp in Sources */,
+				A16532B313ED2CCD00FA8A0A /* ByteSwapTest.cpp in Sources */,
+				A16532B413ED2CCD00FA8A0A /* IteratorTest.cpp in Sources */,
+				A16532B513ED2CCD00FA8A0A /* JsonParserTest.cpp in Sources */,
+				A16532B613ED2CCD00FA8A0A /* JsonSemanticActionsTest.cpp in Sources */,
+				A1E4ADDC1450610E000F4E21 /* json_path_test.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A171E74A13D4966E00260A6B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A171E74C13D4966E00260A6B /* gtest_main.cc in Sources */,
+				A199FC7A13D5D186000170CD /* timer.cpp in Sources */,
+				A167EB621440716700BD2A58 /* JPJsonWriterTest.mm in Sources */,
+				A1DC4BDC14582A3E00CE28F2 /* JPAsyncJsonParserTest.mm in Sources */,
+				A1DC4BDD14582A5D00CE28F2 /* JPJsonParserTest.mm in Sources */,
+				A1DC4BDE14582A8D00CE28F2 /* JPSemanticActionsTest.mm in Sources */,
+				A1DC4BDF14582AC400CE28F2 /* JPSemanticActionsBaseTest.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A1AF4B3B1462B4960065B048 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A1AF4B491462B5AB0065B048 /* logger_test.cpp in Sources */,
+				A1AF4B4A1462B5AB0065B048 /* atomic_test.cpp in Sources */,
+				A1AF4B4C1462B5AB0065B048 /* synchronous_queue_test.cpp in Sources */,
+				A1AF4B4D1462B5AB0065B048 /* syncqueue_streambuf_test.cpp in Sources */,
+				A1AF4B4E1462B5AB0065B048 /* semaphore_test.cpp in Sources */,
+				A1AF4B501462B5AB0065B048 /* utilities_test.cpp in Sources */,
+				A1AF4B511462B5AB0065B048 /* code_point_conversions_test.cpp in Sources */,
+				A1AF4B521462B5AB0065B048 /* unicode_conversions_test.cpp in Sources */,
+				A1AF4B531462B5AB0065B048 /* UTF_to_UTF_test.cpp in Sources */,
+				A1AF4B541462B5AB0065B048 /* unicode_detect_bom_test.cpp in Sources */,
+				A1AF4B551462B5AB0065B048 /* JsonArrayTest.cpp in Sources */,
+				A1AF4B561462B5AB0065B048 /* JsonBooleanTest.cpp in Sources */,
+				A1AF4B571462B5AB0065B048 /* JsonContainerMoveSematicsTest.cpp in Sources */,
+				A1AF4B581462B5AB0065B048 /* JsonContainerTest.cpp in Sources */,
+				A1AF4B591462B5AB0065B048 /* JsonCustomObjectTest.cpp in Sources */,
+				A1AF4B5A1462B5AB0065B048 /* JsonNullTest.cpp in Sources */,
+				A1AF4B5B1462B5AB0065B048 /* JsonNumberTest.cpp in Sources */,
+				A1AF4B5C1462B5AB0065B048 /* JsonObjectTest.cpp in Sources */,
+				A1AF4B5D1462B5AB0065B048 /* JsonStringTest.cpp in Sources */,
+				A1AF4B5E1462B5AB0065B048 /* JsonValueTest.cpp in Sources */,
+				A1AF4B5F1462B5AB0065B048 /* ObjectTest.cpp in Sources */,
+				A1AF4B621462B5AB0065B048 /* ByteSwapTest.cpp in Sources */,
+				A1AF4B631462B5AB0065B048 /* IteratorTest.cpp in Sources */,
+				A1AF4B641462B5AB0065B048 /* JsonParserTest.cpp in Sources */,
+				A1AF4B651462B5AB0065B048 /* JsonSemanticActionsTest.cpp in Sources */,
+				A1AF4B661462B5AB0065B048 /* StringBufferTest.cpp in Sources */,
+				A1AF4B671462B5AB0065B048 /* json_path_test.cpp in Sources */,
+				A1AF4B681462B5AB0065B048 /* CFDataCacheTest.mm in Sources */,
+				A1AF4B691462B5AB0065B048 /* SemanticActionsBaseTest.mm in Sources */,
+				A1AF4B6A1462B5AB0065B048 /* SemanticActionsTest.mm in Sources */,
+				A1AF4B6B1462B5AB0065B048 /* JPSemanticActionsBaseTest.mm in Sources */,
+				A1AF4B6C1462B5AB0065B048 /* JPSemanticActionsTest.mm in Sources */,
+				A1AF4B6D1462B5AB0065B048 /* JPJsonParserTest.mm in Sources */,
+				A1AF4B6E1462B5AB0065B048 /* JPAsyncJsonParserTest.mm in Sources */,
+				A1AF4B6F1462B5AB0065B048 /* JPJsonWriterTest.mm in Sources */,
+				A1AF4B431462B4970065B048 /* main.cpp in Sources */,
+				A14BE8E4146818A70077EA5C /* timer.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A1D2527D13DDA2AE00960381 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A1D2527E13DDA2AE00960381 /* gtest_main.cc in Sources */,
+				A1A1BE6B142B448B00335044 /* unicode_detect_bom_test.cpp in Sources */,
+				A13B27BE142B93CD00744884 /* utilities_test.cpp in Sources */,
+				A13B27BF142B93D300744884 /* code_point_conversions_test.cpp in Sources */,
+				A13B27C0142B93D600744884 /* unicode_conversions_test.cpp in Sources */,
+				A13B27C1142B93DA00744884 /* UTF_to_UTF_test.cpp in Sources */,
+				A14BE8E2146818460077EA5C /* timer.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A1DC4BE014582BB700CE28F2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A144F303145871230062D5E9 /* timer.cpp in Sources */,
+				A1DC52BB14582CDA00CE28F2 /* CFDataCacheTest.mm in Sources */,
+				A1DC52BE14582D6C00CE28F2 /* SemanticActionsBaseTest.mm in Sources */,
+				A1DC52BC14582CDA00CE28F2 /* SemanticActionsTest.mm in Sources */,
+				A1DC52BF1458368200CE28F2 /* gtest_main.cc in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		A164220A13D4354300796785 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				FRAMEWORK_SEARCH_PATHS = "\"$(GTEST_ROOT)/xcode/build/Release\"";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					BOOST_STRICT_CONFIG,
+					DEBUG,
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = "";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				GTEST_ROOT = "$(HOME)/Develop/GTest/gtest-1.6.0";
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		A164220B13D4354300796785 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				FRAMEWORK_SEARCH_PATHS = "\"$(GTEST_ROOT)/xcode/build/Release\"";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PREPROCESSOR_DEFINITIONS = BOOST_STRICT_CONFIG;
+				GCC_VERSION = "";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				GTEST_ROOT = "$(HOME)/Develop/GTest/gtest-1.6.0";
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		A164224A13D4424300796785 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(GTEST_ROOT)/xcode/build/Release\"",
+				);
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				HEADER_SEARCH_PATHS = (
+					"\"$(JP_ROOT)\"",
+					"\"$(BOOST_ROOT)\"",
+					"\"$(GTEST_ROOT)/include\"",
+				);
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CFLAGS = "-v";
+				PRODUCT_NAME = JsonContainerTest;
+			};
+			name = Debug;
+		};
+		A164224B13D4424300796785 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(GTEST_ROOT)/xcode/build/Release\"",
+				);
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					BOOST_STRICT_CONFIG,
+					NDEBUG,
+				);
+				HEADER_SEARCH_PATHS = (
+					"\"$(JP_ROOT)\"",
+					"\"$(BOOST_ROOT)\"",
+					"\"$(GTEST_ROOT)/include\"",
+				);
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CFLAGS = "-v";
+				PRODUCT_NAME = JsonContainerTest;
+			};
+			name = Release;
+		};
+		A16718B213EA86DF00A39091 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../../../GTest/gtest-1.6.0/xcode/build/Release\"",
+				);
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				HEADER_SEARCH_PATHS = (
+					"\"$(GTEST_ROOT)/include\"",
+					"$(JP_ROOT)",
+					"$(BOOST_ROOT)",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		A16718B313EA86DF00A39091 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../../../GTest/gtest-1.6.0/xcode/build/Release\"",
+				);
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 2;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				HEADER_SEARCH_PATHS = (
+					"\"$(GTEST_ROOT)/include\"",
+					"$(JP_ROOT)",
+					"$(BOOST_ROOT)",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		A171E6C613D45E3800260A6B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(GTEST_ROOT)/xcode/build/Release\"",
+				);
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				HEADER_SEARCH_PATHS = (
+					"\"$(JP_ROOT)\"",
+					"\"$(BOOST_ROOT)\"",
+					"\"$(GTEST_ROOT)/include\"",
+				);
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CFLAGS = "-v";
+				PRODUCT_NAME = BufferQueueTest;
+			};
+			name = Debug;
+		};
+		A171E6C713D45E3800260A6B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(GTEST_ROOT)/xcode/build/Release\"",
+				);
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = NDEBUG;
+				HEADER_SEARCH_PATHS = (
+					"\"$(JP_ROOT)\"",
+					"\"$(BOOST_ROOT)\"",
+					"\"$(GTEST_ROOT)/include\"",
+				);
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CFLAGS = "-v";
+				PRODUCT_NAME = BufferQueueTest;
+			};
+			name = Release;
+		};
+		A171E6DC13D4859500260A6B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(GTEST_ROOT)/xcode/build/Release\"",
+				);
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				HEADER_SEARCH_PATHS = (
+					"\"$(JP_ROOT)\"",
+					"\"$(BOOST_ROOT)\"",
+					"\"$(GTEST_ROOT)/include\"",
+				);
+				LIBRARY_SEARCH_PATHS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		A171E6DD13D4859500260A6B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(GTEST_ROOT)/xcode/build/Release\"",
+				);
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = NDEBUG;
+				HEADER_SEARCH_PATHS = (
+					"\"$(JP_ROOT)\"",
+					"\"$(BOOST_ROOT)\"",
+					"\"$(GTEST_ROOT)/include\"",
+				);
+				LIBRARY_SEARCH_PATHS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		A171E75113D4966E00260A6B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(GTEST_ROOT)/xcode/build/Release\"",
+				);
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(BUILT_PRODUCTS_DIR)",
+					"\"$(BOOST_ROOT)\"",
+					"\"$(GTEST_ROOT)/include\"",
+				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				OTHER_CFLAGS = "-v";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-lstdc++",
+				);
+				PRODUCT_NAME = ObjC_Test;
+			};
+			name = Debug;
+		};
+		A171E75213D4966E00260A6B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(GTEST_ROOT)/xcode/build/Release\"",
+				);
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PREPROCESSOR_DEFINITIONS = NDEBUG;
+				HEADER_SEARCH_PATHS = (
+					"$(BUILT_PRODUCTS_DIR)",
+					"\"$(BOOST_ROOT)\"",
+					"\"$(GTEST_ROOT)/include\"",
+				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				OTHER_CFLAGS = "-v";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-lstdc++",
+				);
+				PRODUCT_NAME = ObjC_Test;
+			};
+			name = Release;
+		};
+		A1AF4B471462B4970065B048 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
+				CLANG_CXX_LIBRARY = "compiler-default";
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../../../GTest/gtest-1.6.0/xcode/build/Release\"",
+				);
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "AllTests/AllTests-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				HEADER_SEARCH_PATHS = (
+					"\"$(JP_ROOT)\"",
+					"\"$(GTEST_ROOT)/include\"",
+					"\"$(BOOST_ROOT)\"",
+					"$(BUILT_PRODUCTS_DIR)",
+					/opt/local/include,
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../../../../Library/Developer/Xcode/DerivedData/Json-erlsofcekspqczcasdatcdjvtiuv/Build/Products/Debug\"",
+					/opt/local/lib,
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				OTHER_LDFLAGS = (
+					"-lstdc++",
+					"-ObjC",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		A1AF4B481462B4970065B048 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
+				CLANG_CXX_LIBRARY = "compiler-default";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../../../GTest/gtest-1.6.0/xcode/build/Release\"",
+				);
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "AllTests/AllTests-Prefix.pch";
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				HEADER_SEARCH_PATHS = (
+					"\"$(JP_ROOT)\"",
+					"\"$(GTEST_ROOT)/include\"",
+					"\"$(BOOST_ROOT)\"",
+					"$(BUILT_PRODUCTS_DIR)",
+					/opt/local/include,
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../../../../Library/Developer/Xcode/DerivedData/Json-erlsofcekspqczcasdatcdjvtiuv/Build/Products/Debug\"",
+					/opt/local/lib,
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				OTHER_LDFLAGS = (
+					"-lstdc++",
+					"-ObjC",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		A1D2528E13DDA2AE00960381 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(GTEST_ROOT)/xcode/build/Release\"",
+				);
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				HEADER_SEARCH_PATHS = (
+					"\"$(JP_ROOT)\"",
+					"\"$(BOOST_ROOT)\"",
+					"\"$(GTEST_ROOT)/include\"",
+					/opt/local/include,
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/opt/local/lib,
+				);
+				OTHER_CFLAGS = "-v";
+				PRODUCT_NAME = unicode_test;
+			};
+			name = Debug;
+		};
+		A1D2528F13DDA2AE00960381 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(GTEST_ROOT)/xcode/build/Release\"",
+				);
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PREPROCESSOR_DEFINITIONS = NDEBUG;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				HEADER_SEARCH_PATHS = (
+					"\"$(JP_ROOT)\"",
+					"\"$(BOOST_ROOT)\"",
+					"\"$(GTEST_ROOT)/include\"",
+					/opt/local/include,
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/opt/local/lib,
+				);
+				OTHER_CFLAGS = "-v";
+				PRODUCT_NAME = unicode_test;
+			};
+			name = Release;
+		};
+		A1DC4BEF14582BB800CE28F2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../../../GTest/gtest-1.6.0/xcode/build/Release\"",
+				);
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "ObjC_private_test/ObjC_private_test-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				HEADER_SEARCH_PATHS = (
+					"\"$(GTEST_ROOT)/include\"",
+					"$(JP_ROOT)",
+					"$(BOOST_ROOT)",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../usr/lib\"",
+					"\"$(SRCROOT)/../../../TestVis/build/Debug\"",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		A1DC4BF014582BB800CE28F2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../../../GTest/gtest-1.6.0/xcode/build/Release\"",
+				);
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "ObjC_private_test/ObjC_private_test-Prefix.pch";
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				HEADER_SEARCH_PATHS = (
+					"\"$(GTEST_ROOT)/include\"",
+					"$(JP_ROOT)",
+					"$(BOOST_ROOT)",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../usr/lib\"",
+					"\"$(SRCROOT)/../../../TestVis/build/Debug\"",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A16421FD13D4354300796785 /* Build configuration list for PBXProject "Test" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A164220A13D4354300796785 /* Debug */,
+				A164220B13D4354300796785 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A164224913D4424300796785 /* Build configuration list for PBXNativeTarget "JsonContainerTest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A164224A13D4424300796785 /* Debug */,
+				A164224B13D4424300796785 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A16718B113EA86DF00A39091 /* Build configuration list for PBXNativeTarget "utilities_test" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A16718B213EA86DF00A39091 /* Debug */,
+				A16718B313EA86DF00A39091 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A171E6C513D45E3800260A6B /* Build configuration list for PBXNativeTarget "BufferQueueTest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A171E6C613D45E3800260A6B /* Debug */,
+				A171E6C713D45E3800260A6B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A171E6DB13D4859500260A6B /* Build configuration list for PBXNativeTarget "json_parser_test" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A171E6DC13D4859500260A6B /* Debug */,
+				A171E6DD13D4859500260A6B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A171E75013D4966E00260A6B /* Build configuration list for PBXNativeTarget "ObjC_Test" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A171E75113D4966E00260A6B /* Debug */,
+				A171E75213D4966E00260A6B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A1AF4B461462B4970065B048 /* Build configuration list for PBXNativeTarget "AllTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A1AF4B471462B4970065B048 /* Debug */,
+				A1AF4B481462B4970065B048 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A1D2528D13DDA2AE00960381 /* Build configuration list for PBXNativeTarget "unicode_test" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A1D2528E13DDA2AE00960381 /* Debug */,
+				A1D2528F13DDA2AE00960381 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A1DC4BEE14582BB800CE28F2 /* Build configuration list for PBXNativeTarget "ObjC_private_test" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A1DC4BEF14582BB800CE28F2 /* Debug */,
+				A1DC4BF014582BB800CE28F2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A16421FA13D4354300796785 /* Project object */;
+}

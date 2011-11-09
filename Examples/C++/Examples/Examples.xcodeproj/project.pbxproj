@@ -1,0 +1,332 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A1769BBF13BCCB1400F0F4B8 /* HelloJson.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1F3FC0113BC9C7A0012E263 /* HelloJson.cpp */; };
+		A1769BD313BCCCCD00F0F4B8 /* Sample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1769BD113BCCCCD00F0F4B8 /* Sample.cpp */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		A1769BC113BCCB1400F0F4B8 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		A1769BCB13BCCC9500F0F4B8 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		A1769B9713BCC67600F0F4B8 /* Examples_prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Examples_prefix.pch; sourceTree = "<group>"; };
+		A1769BC513BCCB1400F0F4B8 /* HelloJson */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = HelloJson; sourceTree = BUILT_PRODUCTS_DIR; };
+		A1769BCF13BCCC9500F0F4B8 /* Sample */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Sample; sourceTree = BUILT_PRODUCTS_DIR; };
+		A1769BD113BCCCCD00F0F4B8 /* Sample.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Sample.cpp; sourceTree = "<group>"; };
+		A1B77EC713C4361700EC9184 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		A1B77EC913C4361700EC9184 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		A1B77ECB13C4361700EC9184 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		A1B77ECD13C4361700EC9184 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		A1F3FC0113BC9C7A0012E263 /* HelloJson.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HelloJson.cpp; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A1769BC013BCCB1400F0F4B8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A1769BCA13BCCC9500F0F4B8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A1B77EC613C4361700EC9184 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A1B77EC713C4361700EC9184 /* UIKit.framework */,
+				A1B77EC913C4361700EC9184 /* Foundation.framework */,
+				A1B77ECB13C4361700EC9184 /* CoreGraphics.framework */,
+				A1B77ECD13C4361700EC9184 /* CoreData.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		A1F3FBF213BC9C7A0012E263 = {
+			isa = PBXGroup;
+			children = (
+				A1F3FC0013BC9C7A0012E263 /* Examples */,
+				A1B77EC613C4361700EC9184 /* Frameworks */,
+				A1F3FBFE13BC9C7A0012E263 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A1F3FBFE13BC9C7A0012E263 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A1769BC513BCCB1400F0F4B8 /* HelloJson */,
+				A1769BCF13BCCC9500F0F4B8 /* Sample */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A1F3FC0013BC9C7A0012E263 /* Examples */ = {
+			isa = PBXGroup;
+			children = (
+				A1769B9713BCC67600F0F4B8 /* Examples_prefix.pch */,
+				A1F3FC0113BC9C7A0012E263 /* HelloJson.cpp */,
+				A1769BD113BCCCCD00F0F4B8 /* Sample.cpp */,
+			);
+			path = Examples;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A1769BBD13BCCB1400F0F4B8 /* HelloJson */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A1769BC213BCCB1400F0F4B8 /* Build configuration list for PBXNativeTarget "HelloJson" */;
+			buildPhases = (
+				A1769BBE13BCCB1400F0F4B8 /* Sources */,
+				A1769BC013BCCB1400F0F4B8 /* Frameworks */,
+				A1769BC113BCCB1400F0F4B8 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = HelloJson;
+			productName = Examples;
+			productReference = A1769BC513BCCB1400F0F4B8 /* HelloJson */;
+			productType = "com.apple.product-type.tool";
+		};
+		A1769BC713BCCC9500F0F4B8 /* Sample */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A1769BCC13BCCC9500F0F4B8 /* Build configuration list for PBXNativeTarget "Sample" */;
+			buildPhases = (
+				A1769BC813BCCC9500F0F4B8 /* Sources */,
+				A1769BCA13BCCC9500F0F4B8 /* Frameworks */,
+				A1769BCB13BCCC9500F0F4B8 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Sample;
+			productName = Examples;
+			productReference = A1769BCF13BCCC9500F0F4B8 /* Sample */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A1F3FBF413BC9C7A0012E263 /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = A1F3FBF713BC9C7A0012E263 /* Build configuration list for PBXProject "Examples" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = A1F3FBF213BC9C7A0012E263;
+			productRefGroup = A1F3FBFE13BC9C7A0012E263 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A1769BBD13BCCB1400F0F4B8 /* HelloJson */,
+				A1769BC713BCCC9500F0F4B8 /* Sample */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A1769BBE13BCCB1400F0F4B8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A1769BBF13BCCB1400F0F4B8 /* HelloJson.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A1769BC813BCCC9500F0F4B8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A1769BD313BCCCCD00F0F4B8 /* Sample.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		A1769BC313BCCB1400F0F4B8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				HEADER_SEARCH_PATHS = (
+					/opt/local/include,
+					"$(JSON_ROOT)",
+				);
+				OTHER_CFLAGS = "-v";
+				PRODUCT_NAME = HelloJson;
+			};
+			name = Debug;
+		};
+		A1769BC413BCCB1400F0F4B8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				HEADER_SEARCH_PATHS = (
+					/opt/local/include,
+					"$(JSON_ROOT)",
+				);
+				OTHER_CFLAGS = "-v";
+				PRODUCT_NAME = HelloJson;
+			};
+			name = Release;
+		};
+		A1769BCD13BCCC9500F0F4B8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				HEADER_SEARCH_PATHS = (
+					/opt/local/include,
+					"$(JSON_ROOT)",
+				);
+				OTHER_CFLAGS = "-v";
+				PRODUCT_NAME = Sample;
+			};
+			name = Debug;
+		};
+		A1769BCE13BCCC9500F0F4B8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				HEADER_SEARCH_PATHS = (
+					/opt/local/include,
+					"$(JSON_ROOT)",
+				);
+				OTHER_CFLAGS = "-v";
+				PRODUCT_NAME = Sample;
+			};
+			name = Release;
+		};
+		A1F3FC0413BC9C7A0012E263 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = Examples/Examples_prefix.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					/opt/local/include,
+					"\\\"$(JSON_ROOT)\\\"",
+				);
+				JSON_ROOT = "$(HOME)/Develop/C++/JSON/json_parser\n";
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		A1F3FC0513BC9C7A0012E263 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = Examples/Examples_prefix.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = NDEBUG;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					/opt/local/include,
+					"\\\"$(JSON_ROOT)\\\"",
+				);
+				JSON_ROOT = "$(HOME)/Develop/C++/JSON/json_parser\n";
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A1769BC213BCCB1400F0F4B8 /* Build configuration list for PBXNativeTarget "HelloJson" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A1769BC313BCCB1400F0F4B8 /* Debug */,
+				A1769BC413BCCB1400F0F4B8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A1769BCC13BCCC9500F0F4B8 /* Build configuration list for PBXNativeTarget "Sample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A1769BCD13BCCC9500F0F4B8 /* Debug */,
+				A1769BCE13BCCC9500F0F4B8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A1F3FBF713BC9C7A0012E263 /* Build configuration list for PBXProject "Examples" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A1F3FC0413BC9C7A0012E263 /* Debug */,
+				A1F3FC0513BC9C7A0012E263 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A1F3FBF413BC9C7A0012E263 /* Project object */;
+}

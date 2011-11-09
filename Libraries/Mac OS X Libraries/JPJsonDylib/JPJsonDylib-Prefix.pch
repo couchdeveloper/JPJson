@@ -1,0 +1,7 @@
+//
+// Prefix header for all source files of the 'JPJsonDylib' target in the 'JPJsonDylib' project
+//
+
+#ifdef __OBJC__
+    #import <CoreFoundation/CoreFoundation.h>
+#endif

@@ -1,0 +1,9 @@
+//
+// Prefix header for all source files of the 'AllTests' target 
+//
+
+#ifdef __OBJC__
+#import <Foundation/Foundation.h>
+#endif
+
+#include "gtest/gtest.h"

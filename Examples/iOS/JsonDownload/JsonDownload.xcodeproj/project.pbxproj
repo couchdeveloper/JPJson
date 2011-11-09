@@ -1,0 +1,306 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A11D2181144B1BF700D24AA8 /* libjson-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A11D2180144B1BF700D24AA8 /* libjson-iOS.a */; };
+		A1753F8E13C5B76D00F9440B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A1753F8D13C5B76D00F9440B /* main.m */; };
+		A1B77F2A13C4399900EC9184 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1B77F2913C4399900EC9184 /* UIKit.framework */; };
+		A1B77F2C13C4399900EC9184 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1B77F2B13C4399900EC9184 /* Foundation.framework */; };
+		A1B77F2E13C4399900EC9184 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1B77F2D13C4399900EC9184 /* CoreGraphics.framework */; };
+		A1B77F3413C4399900EC9184 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = A1B77F3213C4399900EC9184 /* InfoPlist.strings */; };
+		A1B77F3A13C4399900EC9184 /* JsonDownloadAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A1B77F3913C4399900EC9184 /* JsonDownloadAppDelegate.m */; };
+		A1B77F3D13C4399900EC9184 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1B77F3B13C4399900EC9184 /* MainWindow.xib */; };
+		A1B77F4813C43A5A00EC9184 /* ReadMe.rtf in Resources */ = {isa = PBXBuildFile; fileRef = A1B77F4713C43A5A00EC9184 /* ReadMe.rtf */; };
+		A1B7803A13C4C6F200EC9184 /* MyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A1B7803813C4C6F100EC9184 /* MyViewController.m */; };
+		A1B7803B13C4C6F200EC9184 /* MyViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1B7803913C4C6F100EC9184 /* MyViewController.xib */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		A11D2180144B1BF700D24AA8 /* libjson-iOS.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libjson-iOS.a"; path = "../../../../../../../Library/Developer/Xcode/DerivedData/Json-erlsofcekspqczcasdatcdjvtiuv/Build/Products/Debug-iphoneos/libjson-iOS.a"; sourceTree = "<group>"; };
+		A1753F8D13C5B76D00F9440B /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = main.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		A1B77F2513C4399900EC9184 /* JsonDownload.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JsonDownload.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A1B77F2913C4399900EC9184 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		A1B77F2B13C4399900EC9184 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		A1B77F2D13C4399900EC9184 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		A1B77F3113C4399900EC9184 /* JsonDownload-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "JsonDownload-Info.plist"; sourceTree = "<group>"; };
+		A1B77F3313C4399900EC9184 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		A1B77F3513C4399900EC9184 /* JsonDownload-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "JsonDownload-Prefix.pch"; sourceTree = "<group>"; };
+		A1B77F3813C4399900EC9184 /* JsonDownloadAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = JsonDownloadAppDelegate.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		A1B77F3913C4399900EC9184 /* JsonDownloadAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = JsonDownloadAppDelegate.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		A1B77F3C13C4399900EC9184 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainWindow.xib; sourceTree = "<group>"; };
+		A1B77F4713C43A5A00EC9184 /* ReadMe.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = ReadMe.rtf; sourceTree = "<group>"; };
+		A1B7803713C4C6F100EC9184 /* MyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = MyViewController.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		A1B7803813C4C6F100EC9184 /* MyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = MyViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		A1B7803913C4C6F100EC9184 /* MyViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MyViewController.xib; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A1B77F2213C4399900EC9184 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A11D2181144B1BF700D24AA8 /* libjson-iOS.a in Frameworks */,
+				A1B77F2A13C4399900EC9184 /* UIKit.framework in Frameworks */,
+				A1B77F2C13C4399900EC9184 /* Foundation.framework in Frameworks */,
+				A1B77F2E13C4399900EC9184 /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A1B77F1A13C4399900EC9184 = {
+			isa = PBXGroup;
+			children = (
+				A1B77F4713C43A5A00EC9184 /* ReadMe.rtf */,
+				A1B77F2F13C4399900EC9184 /* JsonDownload */,
+				A1B77F2813C4399900EC9184 /* Frameworks */,
+				A1B77F2613C4399900EC9184 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A1B77F2613C4399900EC9184 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A1B77F2513C4399900EC9184 /* JsonDownload.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A1B77F2813C4399900EC9184 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A11D2180144B1BF700D24AA8 /* libjson-iOS.a */,
+				A1B77F2913C4399900EC9184 /* UIKit.framework */,
+				A1B77F2B13C4399900EC9184 /* Foundation.framework */,
+				A1B77F2D13C4399900EC9184 /* CoreGraphics.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		A1B77F2F13C4399900EC9184 /* JsonDownload */ = {
+			isa = PBXGroup;
+			children = (
+				A1B77F3813C4399900EC9184 /* JsonDownloadAppDelegate.h */,
+				A1B77F3913C4399900EC9184 /* JsonDownloadAppDelegate.m */,
+				A1B77F3B13C4399900EC9184 /* MainWindow.xib */,
+				A1B77F3013C4399900EC9184 /* Supporting Files */,
+				A1B7803713C4C6F100EC9184 /* MyViewController.h */,
+				A1B7803813C4C6F100EC9184 /* MyViewController.m */,
+				A1B7803913C4C6F100EC9184 /* MyViewController.xib */,
+			);
+			path = JsonDownload;
+			sourceTree = "<group>";
+		};
+		A1B77F3013C4399900EC9184 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				A1B77F3113C4399900EC9184 /* JsonDownload-Info.plist */,
+				A1B77F3213C4399900EC9184 /* InfoPlist.strings */,
+				A1B77F3513C4399900EC9184 /* JsonDownload-Prefix.pch */,
+				A1753F8D13C5B76D00F9440B /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A1B77F2413C4399900EC9184 /* JsonDownload */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A1B77F4013C4399900EC9184 /* Build configuration list for PBXNativeTarget "JsonDownload" */;
+			buildPhases = (
+				A1B77F2113C4399900EC9184 /* Sources */,
+				A1B77F2213C4399900EC9184 /* Frameworks */,
+				A1B77F2313C4399900EC9184 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = JsonDownload;
+			productName = JsonDownload;
+			productReference = A1B77F2513C4399900EC9184 /* JsonDownload.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A1B77F1C13C4399900EC9184 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0420;
+			};
+			buildConfigurationList = A1B77F1F13C4399900EC9184 /* Build configuration list for PBXProject "JsonDownload" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = A1B77F1A13C4399900EC9184;
+			productRefGroup = A1B77F2613C4399900EC9184 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A1B77F2413C4399900EC9184 /* JsonDownload */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A1B77F2313C4399900EC9184 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A1B77F3413C4399900EC9184 /* InfoPlist.strings in Resources */,
+				A1B77F3D13C4399900EC9184 /* MainWindow.xib in Resources */,
+				A1B77F4813C43A5A00EC9184 /* ReadMe.rtf in Resources */,
+				A1B7803B13C4C6F200EC9184 /* MyViewController.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A1B77F2113C4399900EC9184 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A1B77F3A13C4399900EC9184 /* JsonDownloadAppDelegate.m in Sources */,
+				A1B7803A13C4C6F200EC9184 /* MyViewController.m in Sources */,
+				A1753F8E13C5B76D00F9440B /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		A1B77F3213C4399900EC9184 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A1B77F3313C4399900EC9184 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		A1B77F3B13C4399900EC9184 /* MainWindow.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A1B77F3C13C4399900EC9184 /* en */,
+			);
+			name = MainWindow.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		A1B77F3E13C4399900EC9184 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		A1B77F3F13C4399900EC9184 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+			};
+			name = Release;
+		};
+		A1B77F4113C4399900EC9184 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = (
+					armv6,
+					"$(ARCHS_STANDARD_32_BIT)",
+				);
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "JsonDownload/JsonDownload-Prefix.pch";
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				INFOPLIST_FILE = "JsonDownload/JsonDownload-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
+				JP_ROOT = ../../../;
+				OTHER_LDFLAGS = "-lstdc++";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				USER_HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		A1B77F4213C4399900EC9184 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = (
+					armv6,
+					"$(ARCHS_STANDARD_32_BIT)",
+				);
+				COPY_PHASE_STRIP = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "JsonDownload/JsonDownload-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = NDEBUG;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				INFOPLIST_FILE = "JsonDownload/JsonDownload-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
+				JP_ROOT = ../../../;
+				OTHER_LDFLAGS = "-lstdc++";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				USER_HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)";
+				VALIDATE_PRODUCT = YES;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A1B77F1F13C4399900EC9184 /* Build configuration list for PBXProject "JsonDownload" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A1B77F3E13C4399900EC9184 /* Debug */,
+				A1B77F3F13C4399900EC9184 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A1B77F4013C4399900EC9184 /* Build configuration list for PBXNativeTarget "JsonDownload" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A1B77F4113C4399900EC9184 /* Debug */,
+				A1B77F4213C4399900EC9184 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A1B77F1C13C4399900EC9184 /* Project object */;
+}

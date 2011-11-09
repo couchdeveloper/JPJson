@@ -1,0 +1,135 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXAggregateTarget section */
+		A1D1C05F14652DCE000C145F /* Documentation */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = A1D1C06014652DCE000C145F /* Build configuration list for PBXAggregateTarget "Documentation" */;
+			buildPhases = (
+				A1D1C06314652DDE000C145F /* ShellScript */,
+			);
+			dependencies = (
+			);
+			name = Documentation;
+			productName = JPJsonDocumentation;
+		};
+/* End PBXAggregateTarget section */
+
+/* Begin PBXFileReference section */
+		A15D892B146592250001E08D /* CreateDoc.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = CreateDoc.rb; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		A15D892A146592250001E08D /* Scripts */ = {
+			isa = PBXGroup;
+			children = (
+				A15D892B146592250001E08D /* CreateDoc.rb */,
+			);
+			path = Scripts;
+			sourceTree = "<group>";
+		};
+		A1D1C05614652D9B000C145F = {
+			isa = PBXGroup;
+			children = (
+				A15D892A146592250001E08D /* Scripts */,
+			);
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXProject section */
+		A1D1C05814652D9B000C145F /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0420;
+			};
+			buildConfigurationList = A1D1C05B14652D9B000C145F /* Build configuration list for PBXProject "Documentation" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = A1D1C05614652D9B000C145F;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A1D1C05F14652DCE000C145F /* Documentation */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		A1D1C06314652DDE000C145F /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = "${SRCROOT}/Scripts/CreateDoc.rb";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		A1D1C05D14652D9B000C145F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		A1D1C05E14652D9B000C145F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Release;
+		};
+		A1D1C06114652DCE000C145F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		A1D1C06214652DCE000C145F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A1D1C05B14652D9B000C145F /* Build configuration list for PBXProject "Documentation" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A1D1C05D14652D9B000C145F /* Debug */,
+				A1D1C05E14652D9B000C145F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A1D1C06014652DCE000C145F /* Build configuration list for PBXAggregateTarget "Documentation" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A1D1C06114652DCE000C145F /* Debug */,
+				A1D1C06214652DCE000C145F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A1D1C05814652D9B000C145F /* Project object */;
+}

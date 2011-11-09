@@ -1,0 +1,57 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1038\cocoasubrtf350
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+\paperw12240\paperh15840\margl1440\margr1440\vieww9000\viewh8400\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\ql\qnatural\pardirnatural
+
+\f0\b\fs36 \cf0 Project JsonDownload
+\b0\fs24 \
+\
+
+\b Build Requirement:
+\b0  		Mac OS X 10.6, Xcode 4, iOS 4.0\
+
+\b Runtime Requirements:
+\b0 	iOS 4.0\
+\
+\
+JsonDownload shows how to download and asynchronously parse one or more Json documents using a NSURLConnection. The example emphasizes on how to setup and use the JPJsonParser and accompanied classes rather than demonstrating how to handle NSURLConnections.\
+\
+\
+\
+Xcode project setup:\
+\
+- use LLVM compiler, gcc will not compile.\
+- link against the stdc++ library\
+- include header search path to JPJsonParser lib.\
+\
+\
+Compile time dependencies: boost <www.boost.org>\
+The JPJsonParser library internally is implemented using C++ classes. This implementation itself makes use of the boost library (www.boost.org). But don't worry, the glory details are completely hidden when you use the JPJsonParser library in an Objective-C project.\
+\
+\
+The source uses most recent Objective-C language features which requires you to use the LLVM compiler. gcc will fail to compile the new Objective-C language features.\
+\
+\
+\
+When linking against the static JPJsonParser Lib you also need to link against the C++ runtime, that is link against the standard C++ library. This can be achieved through:\
+1) renaming the main.m file to main.mm. This way, the build system automatically performs any required steps to link agains the C++ library.\
+2) add to "Other Linker Flags" in the target build setting the option "-lstdc++".\
+\
+When compiling a project using the JPJsonParser library it requires you to \
+- have the boost library installed on your 
+\i development machine,  
+\i0 \
+- define a header search path to the JPJsonParser headers and a header search path to the boost library.\
+\
+\
+Once you have installed the boost library and the JPJsonParser library, add the corresponding  header search paths to the boost library and the header search path to the JPJsonParser library to the target settings of your project. The recommended way to achieve this, is as follows:\
+\
+In the target build settings, add a user defined setting with the name you may choose like JP_ROOT. The value of this setting shall be set to the folder where the "json" folder is located. If you did not modify the folder structure when you downloaded the package, this is the path to the folder "json_parser" which is itself included in the JPJsonParser package, for example:\
+JP_ROOT = $(HOME)/MyDevelop/JPJsonParser-v1.0/json_parser\
+\
+Similar, add a custom build setting which you may name "BOOST_ROOT". The value of this setting shall be set to the path where the boost root folder is located. For instance, say you have installed boost via MacPorts, and the boost root folder is located in /opt/local/include:\
+BOOST_ROOT = "/opt/local/include"\
+\
+Once you have defined and set the two custom build settings, add those variables to the header search path of your target.\
+}

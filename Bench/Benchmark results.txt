@@ -1,0 +1,95 @@
+Benchmark results:
+
+g++-mp-4.6: 	0.228 ms
+Version: g++-mp-4.6 (GCC) 4.6.1 20110325 (prerelease), Free Software Foundation
+Command line: g++-mp-4.6 -O3 -fpermissive -mdynamic-no-pic -DNDEBUG -fvisibility=hidden -fvisibility-inlines-hidden timer.cpp JsonParser.cpp main.cpp -o json_parser
+
+
+g++-mp-4.5: 	0.230 ms 
+Version: g++-mp-4.5 (GCC) 4.5.2, Free Software Foundation
+Command line: g++-mp-4.5 -O3 -fpermissive -mdynamic-no-pic -DNDEBUG -fvisibility=hidden -fvisibility-inlines-hidden timer.cpp JsonParser.cpp main.cpp -o json_parser
+
+
+g++-mp-4.4: 	0.232 ms
+Version: g++-mp-4.4 (GCC) 4.4.5, Free Software Foundation
+Command line: g++-mp-4.4 -O3 -fpermissive -DNDEBUG -fvisibility=hidden -fvisibility-inlines-hidden timer.cpp JsonParser.cpp main.cpp -o json_parser
+
+
+g++-4.2: 	0.277 ms
+Version: i686-apple-darwin10-g++-4.2.1 (GCC) 4.2.1 (Apple Inc. build 5666) (dot 3)
+Command line: /Xcode4/usr/bin/g++-4.2 -x c++ -arch x86_64 -O3 -DNDEBUG -mdynamic-no-pic -fvisibility=hidden -fvisibility-inlines-hidden timer.cpp JsonParser.cpp main.cpp -o json_parser
+
+
+llvm-g++: 	0.280 ms
+Version: i686-apple-darwin10-llvm-g++-4.2 (GCC) 4.2.1 (Based on Apple Inc. build 5658) (LLVM build 2335.9)
+Command line: /Xcode4/usr/bin/llvm-g++ -x c++ -arch x86_64 -O3 -DNDEBUG -mdynamic-no-pic -fvisibility=hidden -fvisibility-inlines-hidden timer.cpp JsonParser.cpp main.cpp -o json_parser
+
+clang++: 	0.267 ms
+Version: Apple clang version 2.0 (tags/Apple/clang-137) (based on LLVM 2.9svn)
+Command line: /Xcode4/usr/bin/clang++ -x c++ -arch x86_64 -O3 -DNDEBUG -mdynamic-no-pic -fvisibility=hidden -fvisibility-inlines-hidden timer.cpp JsonParser.cpp main.cpp -o json_parser
+
+
+ 
+
+clang++  0.359 ms
+Versions: clang version 2.9 (tags/RELEASE_29/final)
+/opt/local/bin/clang++ -O3 -DNDEBUG -mdynamic-no-pic -fvisibility=hidden -fvisibility-inlines-hidden timer.cpp JsonParser.cpp main.cpp -o json_parser
+
+
+clang++  0.269 ms
+Versions: clang version 2.9 (tags/RELEASE_29/final)
+/opt/local/bin/clang++ -O2 -DNDEBUG -mdynamic-no-pic -fvisibility=hidden -fvisibility-inlines-hidden timer.cpp JsonParser.cpp main.cpp -o json_parser
+
+
+clang++: 0.268 ms
+Versions: clang version 2.9 (tags/RELEASE_29/final)
+-O3 -std=c++0x -stdlib=libc++
+/opt/local/bin/clang++ -O3 -std=c++0x -stdlib=libc++ -DNDEBUG -mdynamic-no-pic -fvisibility=hidden -fvisibility-inlines-hidden timer.cpp JsonParser.cpp main.cpp -o json_parser
+
+clang++: 0.184 ms
+Versions: clang version 2.9 (tags/RELEASE_29/final)
+-O2 -std=c++0x -stdlib=libc++
+/opt/local/bin/clang++ -O2 -std=c++0x -stdlib=libc++ -DNDEBUG -mdynamic-no-pic -fvisibility=hidden -fvisibility-inlines-hidden timer.cpp JsonParser.cpp main.cpp -o json_parser
+
+
+
+/opt/local/bin/clang++ -std=c++0x -O3 -DNDEBUG timer.cpp JsonParser.cpp main.cpp -o json_parser
+
+
+
+======================================================
+
+g++-mp-4.6 -O3 -fpermissive -mdynamic-no-pic -DNDEBUG -fvisibility=hidden -fvisibility-inlines-hidden timer.cpp number_main.cpp -o spirit_test
+
+
+/opt/local/bin/clang++ -O2 -DNDEBUG -mdynamic-no-pic -fvisibility=hidden -fvisibility-inlines-hidden timer.cpp number_main.cpp -I/opt/local/include -o spirit_test
+
+
+/Xcode4/usr/bin/clang++ -x c++ -arch x86_64 -O3 -DNDEBUG -mdynamic-no-pic -fvisibility=hidden -fvisibility-inlines-hidden timer.cpp number_main.cpp -I/opt/local/include -o spirit_test
+
+
+clang++: ms
+Versions: clang version 2.9 (tags/RELEASE_29/final)
+-O2 -std=c++0x -stdlib=libc++
+/opt/local/bin/clang++ -O2 -std=c++0x -stdlib=libc++ -DNDEBUG -mdynamic-no-pic -fvisibility=hidden -fvisibility-inlines-hidden timer.cpp number_main.cpp -I/opt/local/include -o spirit_test -U__STRICT_ANSI__
+
+
+==============================================
+JsonContainer Bench
+
+clang++:
+Versions: clang version 2.9 (tags/RELEASE_29/final)
+-O3 -std=c++0x -stdlib=libc++
+/opt/local/bin/clang++ -O3 -std=c++0x -stdlib=libc++ -U__STRICT_ANSI__ -DNDEBUG -mdynamic-no-pic -fvisibility=hidden -fvisibility-inlines-hidden -I/opt/local/include -I../boost_test -I../utilities ../boost_test/JsonContainer.cpp ../utilities/timer.cpp main.cpp -o bench 
+
+
+=============================================
+boost::variant test
+
+gcc:
+/opt/local/bin/g++-mp-4.6 -O3 -std=c++0x -U__STRICT_ANSI__ -DNDEBUG -mdynamic-no-pic -fvisibility=hidden -fvisibility-inlines-hidden -I/opt/local/include -I../utilities ../utilities/timer.cpp main.cpp -o test
+
+/opt/local/bin/clang++ -O3 -std=c++0x -stdlib=libc++ -U__STRICT_ANSI__ -DNDEBUG -mdynamic-no-pic -fvisibility=hidden -fvisibility-inlines-hidden -I/opt/local/include -I../utilities ../utilities/timer.cpp main.cpp -o test
+
+system clang:
+/Xcode4/usr/bin/clang++ -O3 -DNDEBUG -mdynamic-no-pic -fvisibility=hidden -fvisibility-inlines-hidden -I/opt/local/include -I../utilities ../utilities/timer.cpp main.cpp -o test

@@ -1,0 +1,10 @@
+[
+    {"name1" : "Andreas", "name2" : "Siri"},  
+    {},
+    false,
+    true,
+    null,
+    1.0
+]
+ 
+   

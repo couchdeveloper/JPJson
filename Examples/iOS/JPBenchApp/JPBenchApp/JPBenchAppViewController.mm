@@ -1,0 +1,475 @@
+//
+//  JPBenchAppViewController.m
+//  JPBenchApp
+//
+//  Created by Andreas Grosam on 7/15/11.
+//  Copyright 2011 Andreas Grosam
+//
+//  Licensed under the Apache License, Version 2.0 (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at
+//
+//  http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  See the License for the specific language governing permissions and
+//  limitations under the License.
+//
+
+#import "JPBenchAppViewController.h"
+#import "JPJson/JPJsonParser.h"
+#import "JPJson/JPJsonWriter.h"
+#include <mach/mach.h>
+#include <mach/mach_time.h>
+#include <unistd.h>
+#include <dispatch/dispatch.h>
+#include "utilities/timer.hpp"
+#include <utility>
+#include <algorithm>
+
+#import "JSONKit.h"
+
+
+#if !defined (NS_BLOCK_ASSERTIONS)
+#warning NS_BLOCK_ASSERTIONS not defined
+#endif
+
+#if !defined (NDEBUG)
+#warning NDEBUG not defined
+#endif
+
+
+namespace {
+    
+    template <typename T>
+    class MinMaxAvg {
+    public:  
+        MinMaxAvg() : count_(0), min_(0), max_(0), sum_(0) {};
+        T min() const { return min_; }
+        T max() const { return max_; }
+        double avg() const { return count_ ? sum_/count_ : 0; }
+        
+        void set(const T& v) {
+            if (count_ == 0) {
+                sum_ = v;
+                min_ = v;
+                max_ = v;
+            } else {
+                sum_ += v;
+                min_ = std::min(v, min_);
+                max_ = std::max(v, max_);
+            }
+            ++count_;
+        }
+        
+    private:
+        size_t count_;
+        T min_;
+        T max_;
+        T sum_;
+    };
+
+}
+
+typedef     MinMaxAvg<double> MinMaxAvgTime;
+
+
+static uint64_t absoluteTimeToNanoseconds(uint64_t t) 
+{    
+    // If this is the first time we've run, get the timebase.
+    // We can use denom == 0 to indicate that sTimebaseInfo is 
+    // uninitialised because it makes no sense to have a zero 
+    // denominator is a fraction.
+    static mach_timebase_info_data_t sTimebaseInfo;
+    
+    if ( sTimebaseInfo.denom == 0 ) {
+        (void) mach_timebase_info(&sTimebaseInfo);
+    }
+    uint64_t elapsedNano = t * sTimebaseInfo.numer / sTimebaseInfo.denom;
+    return elapsedNano;
+}
+
+
+
+
+
+@interface JPBenchAppViewController ()
+
+@property (nonatomic, retain) JPAsyncJsonParser* parser;
+@property (nonatomic, retain) IBOutlet UILabel*  messageLabel;
+@property (nonatomic, retain) IBOutlet UITextView*  textView;
+
+- (void) handleError:(NSError*)error;
+//- (void) runBench;
+//- (void) runBench2;
+//- (void) runBenchJSONKit;
+
+
+
+- (MinMaxAvgTime) bench_JsonParser1WithN:(int)N;
+- (MinMaxAvgTime) bench_JsonParser2WithN:(int)N;
+
+- (MinMaxAvgTime) bench_JSONKit1WithN:(int)N;
+- (MinMaxAvgTime) bench_JSONKit2WithN:(int)N;
+
+
+@end
+
+
+
+@implementation JPBenchAppViewController
+
+
+
+@synthesize parser = parser_;
+@synthesize messageLabel = messageLabel_;
+@synthesize textView = textView_;
+
+
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self) {
+        // Custom initialization
+    }
+    return self;
+}
+
+
+- (void)dealloc
+{
+    [super dealloc];
+}
+
+- (void)didReceiveMemoryWarning
+{
+    // Releases the view if it doesn't have a superview.
+    [super didReceiveMemoryWarning];
+    
+    // Release any cached data, images, etc that aren't in use.
+}
+
+#pragma mark - View lifecycle
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    NSAssert(messageLabel_, @"IBOutlet 'messageLable_' is nil");
+    NSAssert(textView_, @"IBOutlet 'textView_' is nil");
+    
+    self.messageLabel.text = @"";    
+    self.textView.editable = NO;    
+}
+
+- (void)viewDidUnload
+{
+    [super viewDidUnload];
+    // Release any retained subviews of the main view.
+    // e.g. self.myOutlet = nil;
+    self.messageLabel = nil;
+    self.textView = nil;
+}
+
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
+    // Return YES for supported orientations
+    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+}
+
+
+
+-(IBAction) startBench:(id)sender
+{
+    if (running_) {
+        NSLog(@"Bench is already running.");
+        return;
+    }
+    self.textView.text = nil;
+    
+    
+#if 0    
+    NSString* what = @"AGJsonParser";
+    MinMaxAvgTime te = [self bench_JsonParser1WithN:100];    
+#elif 0
+    NSString* what = @"AGJsonParser";
+    MinMaxAvgTime te = [self bench_JsonParser2WithN:100];    
+#else    
+    NSString* what = @"JSONKit";
+    MinMaxAvgTime te = [self bench_JSONKit1WithN:100];        
+#endif    
+    
+    NSString* msg = [[NSString alloc] initWithFormat:
+                     @"%@: elapsed time for parsing:\n"
+                     @"min: %.3f ms\n"
+                     @"max: %0.3f ms\n"
+                     @"avg: %0.3f ms\n", 
+                     what, te.min()*1e3, te.max()*1e3, te.avg()*1e3];
+    self.messageLabel.text = msg;
+    [msg release];
+}
+
+
+
+- (void) handleError:(NSError*)error 
+{
+    NSString* errorMessage = [error localizedDescription];
+    NSLog(@"ERROR: %@", errorMessage);
+    
+    UIAlertView* alertView =
+    [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error Title", nil)
+                               message:errorMessage
+                              delegate:nil
+                     cancelButtonTitle:@"OK"
+                     otherButtonTitles:nil];
+    [alertView show];
+    [alertView release];
+}
+
+
+#pragma mark - Bench
+
+- (MinMaxAvgTime) bench_JsonParser1WithN:(int)N
+{
+    using namespace utilities;
+    
+    NSString* fileName = [[[NSBundle mainBundle] resourcePath] 
+                          stringByAppendingPathComponent:@"Test-UTF8-esc.json"];
+    NSError* error;
+    NSData* data = [[NSData alloc] initWithContentsOfFile:fileName
+                                                  options:NSDataReadingUncached 
+                                                    error:&error];
+    if (data == nil) {
+        NSLog(@"ERROR: could not load file. %@", error);
+        NSFileManager* fileManager = [[NSFileManager alloc] init];
+        NSLog(@"current working directory: %@", [fileManager currentDirectoryPath]);
+        abort();
+    }
+    
+    
+    printf("--------------------------------------------\n");
+    printf("Running AGJsonParser bench %d times.\n", N);
+    printf("--------------------------------------------\n");    
+    printf("Using a NSData with UTF-8 content as input and interface method:\n"
+           "+parseData:options:error: (class JPJsonParser)\n"
+           "Automatic detection of input encoding, immutable containers\n");
+        
+    
+    
+    MinMaxAvg<double> te;
+    timer t = timer();
+    
+    BOOL gotError = NO;
+    for (int i = 0; i < N; ++i) 
+    {
+        NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+        t.start();
+        // This method creates and destroys the internal semantic actions
+        // instance.
+        id result = [JPJsonParser parseData:data 
+                                    options:(JPJsonParserOptions)0
+                                      error:&error];
+        [result retain];
+        t.stop();
+        te.set(t.seconds());
+        t.reset();
+        [result release];
+        [pool release];
+        
+        if (!result)
+            break;
+    }
+    
+    if (gotError) {
+        NSLog(@"ERROR: %@", error);
+    }
+    else {
+        NSLog(@"AGJsonParser: elapsed time for parsing:\n"
+              "min: %.3f ms, max: %0.3f ms, avg: %0.3f ms\n", 
+              te.min()*1e3, te.max()*1e3, te.avg()*1e3);
+    }
+    
+    return te;
+}
+
+
+- (MinMaxAvgTime) bench_JsonParser2WithN:(int)N
+{
+    using namespace utilities;
+    
+    NSString* fileName = [[[NSBundle mainBundle] resourcePath] 
+                          stringByAppendingPathComponent:@"Test-UTF8-esc.json"];
+    NSError* error;
+    NSData* data = [[NSData alloc] initWithContentsOfFile:fileName
+                                                  options:NSDataReadingUncached 
+                                                    error:&error];
+    if (data == nil) {
+        NSLog(@"ERROR: could not load file. %@", error);
+        NSFileManager* fileManager = [[NSFileManager alloc] init];
+        NSLog(@"current working directory: %@", [fileManager currentDirectoryPath]);
+        abort();
+    }
+    
+
+    printf("--------------------------------------------\n");
+    printf("Running AGJsonParser bench %d times.\n", N);
+    printf("--------------------------------------------\n");    
+    printf("Timing includes destruction of objects, too\n");
+    printf("Using a NSData with UTF-8 content as input and interface method:\n"
+           "+parseData:options:error: (class JPJsonParser)\n"
+           "Automatic detection of input encoding, immutable containers\n");
+    
+    MinMaxAvgTime te;
+    timer t = timer();
+    
+    t.start();
+    BOOL gotError = NO;
+    for (int i = 0; i < N; ++i) 
+    {
+        NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+        // This method creates and destroys the internal semantic actions
+        // instance.
+        id result = [JPJsonParser parseData:data 
+                                    options:(JPJsonParserOptions)0
+                                      error:&error];
+        [pool release];
+        
+        t.stop();
+        te.set(t.seconds());
+        if (!result)
+            break;
+    }
+    
+    if (gotError) {
+        NSLog(@"ERROR: %@", error);
+    }
+    else {
+        NSLog(@"AGJsonParser: elapsed time for parsing:\n"
+              "min: %.3f ms, max: %0.3f ms, avg: %0.3f ms\n", 
+              te.min()*1e3, te.max()*1e3, te.avg()*1e3);
+    }
+    
+    return te;
+}
+
+
+- (MinMaxAvgTime) bench_JSONKit1WithN:(int)N
+{
+    using namespace utilities;
+    
+    NSString* fileName = [[[NSBundle mainBundle] resourcePath] 
+                          stringByAppendingPathComponent:@"Test-UTF8-esc.json"];
+    NSError* error;
+    NSData* data = [[NSData alloc] initWithContentsOfFile:fileName
+                                                  options:NSDataReadingUncached 
+                                                    error:&error];
+    if (data == nil) {
+        NSLog(@"ERROR: could not load file. %@", error);
+        NSFileManager* fileManager = [[NSFileManager alloc] init];
+        NSLog(@"current working directory: %@", [fileManager currentDirectoryPath]);
+        abort();
+    }
+    
+    
+    printf("--------------------------------------------\n");
+    printf("Running JSONKit bench %d times.\n", N);
+    printf("--------------------------------------------\n");    
+    printf("using a NSData with UTF-8 content as input,\n"
+           "interface method: objectWithData: (JSONDecoder),\n"
+           "JKParseOptionFlags = 0\n");
+    
+    MinMaxAvg<double> te;
+    timer t = timer();
+    
+    BOOL gotError = NO;
+    for (int i = 0; i < N; ++i) 
+    {
+        NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+        t.start();
+        JSONDecoder* decoder = [[JSONDecoder alloc] initWithParseOptions:(JKParseOptionFlags)JKParseOptionNone];
+        id result = [decoder objectWithData:data];
+        [result retain];
+        [decoder release];
+        t.stop();
+        te.set(t.seconds());
+        t.reset();
+        [result release];
+        [pool release];
+        
+        if (!result)
+            break;
+    }
+    
+    if (gotError) {
+        NSLog(@"ERROR: %@", error);
+    }
+    else {
+        NSLog(@"JSONKit: elapsed time for parsing: min:\n"
+              "%.3f ms, max: %0.3f ms, avg: %0.3f ms\n", 
+              te.min()*1e3, te.max()*1e3, te.avg()*1e3);
+    }
+    
+    return te;
+}
+
+-(MinMaxAvgTime) bench_JSONKit2WithN:(int)N
+{
+    using namespace utilities;
+    
+    NSString* fileName = [[[NSBundle mainBundle] resourcePath] 
+                          stringByAppendingPathComponent:@"Test-UTF8-esc.json"];
+    NSError* error;
+    NSData* data = [[NSData alloc] initWithContentsOfFile:fileName
+                                                  options:NSDataReadingUncached 
+                                                    error:&error];
+    if (data == nil) {
+        NSLog(@"ERROR: could not load file. %@", error);
+        NSFileManager* fileManager = [[NSFileManager alloc] init];
+        NSLog(@"current working directory: %@", [fileManager currentDirectoryPath]);
+        abort();
+    }
+    
+    printf("--------------------------------------------\n");
+    printf("Running JSONKit bench %d times.\n", N);
+    printf("--------------------------------------------\n");  
+    printf("Timing includes destruction of objects, too\n");
+    printf("using a NSData with UTF-8 content as input,\n"
+           "interface method: mutableObjectWithData: (JSONDecoder),\n"
+           "JKParseOptionFlags = 0\n");
+    
+    MinMaxAvg<double> te;
+    timer t = timer();
+    
+    t.start();
+    BOOL gotError = NO;
+    for (int i = 0; i < N; ++i) 
+    {
+        NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+        JSONDecoder* decoder = [[JSONDecoder alloc] initWithParseOptions:(JKParseOptionFlags)JKParseOptionNone];
+        id result = [decoder objectWithData:data];
+        [result retain];
+        [decoder release];
+        [result release];
+        [pool release];
+        
+        if (!result)
+            break;
+    }
+    t.stop();
+    te.set(t.seconds());
+    
+    if (gotError) {
+        NSLog(@"ERROR: %@", error);
+    }
+    else {
+        NSLog(@"JSONKit: elapsed time for parsing %d documents:\n"
+              "%.3f s\n\n", N, t.seconds());
+    }
+    
+    return te;
+}
+
+
+
+@end

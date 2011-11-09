@@ -1,0 +1,7 @@
+//
+// Prefix header for all source files of the 'ObjC_private_test' target in the 'ObjC_private_test' project
+//
+
+#ifdef __OBJC__
+    #import <Foundation/Foundation.h>
+#endif
