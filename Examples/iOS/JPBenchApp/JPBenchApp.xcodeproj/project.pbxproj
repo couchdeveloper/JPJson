@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A1116362146C383700D094E9 /* timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1116360146C383700D094E9 /* timer.cpp */; };
 		A1116366146C392600D094E9 /* libjson-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A1116365146C392600D094E9 /* libjson-iOS.a */; };
 		A138814113D0D57B0006461E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A138814013D0D57B0006461E /* UIKit.framework */; };
 		A138814313D0D57B0006461E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A138814213D0D57B0006461E /* Foundation.framework */; };
@@ -19,13 +18,12 @@
 		A138815713D0D57B0006461E /* JPBenchAppViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = A138815613D0D57B0006461E /* JPBenchAppViewController.mm */; };
 		A138815A13D0D57B0006461E /* JPBenchAppViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A138815813D0D57B0006461E /* JPBenchAppViewController.xib */; };
 		A156BE94146C181400BE6E82 /* Test-UTF8-esc.json in Resources */ = {isa = PBXBuildFile; fileRef = A156BE93146C181400BE6E82 /* Test-UTF8-esc.json */; };
+		A167D83A146C3CD300C7FAD3 /* timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A167D838146C3CD300C7FAD3 /* timer.cpp */; };
 		A188393F13DC5FAD00FD90AA /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = A188393E13DC5FAD00FD90AA /* JSONKit.m */; };
 		A1FAF1DD143F225500CD2CCB /* UIDevice-Hardware.m in Sources */ = {isa = PBXBuildFile; fileRef = A1FAF1DC143F225500CD2CCB /* UIDevice-Hardware.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		A1116360146C383700D094E9 /* timer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = timer.cpp; sourceTree = "<group>"; };
-		A1116361146C383700D094E9 /* timer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = timer.hpp; sourceTree = "<group>"; };
 		A1116365146C392600D094E9 /* libjson-iOS.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libjson-iOS.a"; path = "../../../../../../Library/Developer/Xcode/DerivedData/Json-hiazqngtzsfxawgakamtpamfsytx/Build/Products/Release-iphoneos/libjson-iOS.a"; sourceTree = "<group>"; };
 		A138813C13D0D57B0006461E /* JPBenchApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JPBenchApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A138814013D0D57B0006461E /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -42,6 +40,8 @@
 		A138815613D0D57B0006461E /* JPBenchAppViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; path = JPBenchAppViewController.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		A138815913D0D57B0006461E /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/JPBenchAppViewController.xib; sourceTree = "<group>"; };
 		A156BE93146C181400BE6E82 /* Test-UTF8-esc.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "Test-UTF8-esc.json"; path = "../../../Resources/Test-UTF8-esc.json"; sourceTree = "<group>"; };
+		A167D838146C3CD300C7FAD3 /* timer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = timer.cpp; sourceTree = "<group>"; };
+		A167D839146C3CD300C7FAD3 /* timer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = timer.hpp; sourceTree = "<group>"; };
 		A17DD7B7146AE95B000AD974 /* timer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = timer.cpp; path = ../../../../Source/utilities/timer.cpp; sourceTree = "<group>"; };
 		A17DD7B8146AE95B000AD974 /* timer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = timer.hpp; path = ../../../../Source/utilities/timer.hpp; sourceTree = "<group>"; };
 		A188393D13DC5FAD00FD90AA /* JSONKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONKit.h; sourceTree = "<group>"; };
@@ -65,19 +65,10 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		A111635F146C383700D094E9 /* utilities */ = {
-			isa = PBXGroup;
-			children = (
-				A1116360146C383700D094E9 /* timer.cpp */,
-				A1116361146C383700D094E9 /* timer.hpp */,
-			);
-			path = utilities;
-			sourceTree = "<group>";
-		};
 		A138813113D0D57B0006461E = {
 			isa = PBXGroup;
 			children = (
-				A111635F146C383700D094E9 /* utilities */,
+				A167D837146C3CD300C7FAD3 /* utilities */,
 				A188393C13DC5F8800FD90AA /* JSONKit */,
 				A138816413D0DD680006461E /* Resources */,
 				A138814613D0D57B0006461E /* JPBenchApp */,
@@ -140,6 +131,16 @@
 				A156BE93146C181400BE6E82 /* Test-UTF8-esc.json */,
 			);
 			name = Resources;
+			sourceTree = "<group>";
+		};
+		A167D837146C3CD300C7FAD3 /* utilities */ = {
+			isa = PBXGroup;
+			children = (
+				A167D838146C3CD300C7FAD3 /* timer.cpp */,
+				A167D839146C3CD300C7FAD3 /* timer.hpp */,
+			);
+			name = utilities;
+			path = ../../../Source/utilities;
 			sourceTree = "<group>";
 		};
 		A17DD7B6146AE90D000AD974 /* Libraries */ = {
@@ -228,7 +229,7 @@
 				A138815713D0D57B0006461E /* JPBenchAppViewController.mm in Sources */,
 				A188393F13DC5FAD00FD90AA /* JSONKit.m in Sources */,
 				A1FAF1DD143F225500CD2CCB /* UIDevice-Hardware.m in Sources */,
-				A1116362146C383700D094E9 /* timer.cpp in Sources */,
+				A167D83A146C3CD300C7FAD3 /* timer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -276,6 +277,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "$(JP_ROOT)";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				JP_ROOT = "$(SRCROOT)/../../../Source";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -291,6 +293,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "$(JP_ROOT)";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				JP_ROOT = "$(SRCROOT)/../../../Source";
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				SDKROOT = iphoneos;
 			};
@@ -309,7 +312,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "JPBenchApp/JPBenchApp-Prefix.pch";
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
-				HEADER_SEARCH_PATHS = "$(SRCROOT)";
+				HEADER_SEARCH_PATHS = "$(JP_ROOT)";
 				INFOPLIST_FILE = "JPBenchApp/JPBenchApp-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
 				LIBRARY_SEARCH_PATHS = (
@@ -340,7 +343,7 @@
 					NDEBUG,
 				);
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
-				HEADER_SEARCH_PATHS = "$(SRCROOT)";
+				HEADER_SEARCH_PATHS = "$(JP_ROOT)";
 				INFOPLIST_FILE = "JPBenchApp/JPBenchApp-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
 				LIBRARY_SEARCH_PATHS = (
