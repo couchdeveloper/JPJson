@@ -1464,12 +1464,16 @@ namespace json {
         
         stringBuffer.reset();
         ++p_;
-        while (p_ != last_) 
+        while (__builtin_expect(p_ != last_, 1)) 
         {
             code_t c = *p_;
-            if ((uint32_t(c) - 0x20u) < 0x60u)  // ASCII except control-char?
+            if (__builtin_expect((uint32_t(c) - 0x20u) < 0x60u, 1))  // ASCII except control-char?
             {
                 switch (c) {
+                    default:
+                        string_buffer_pushback_ASCII(stringBuffer, c);
+                        ++p_;
+                        continue;
                     case '"':
                         ++p_;
                         skip_whitespaces();
@@ -1481,11 +1485,6 @@ namespace json {
                             // error parsing escape sequence
                             return; // error state already set
                         }
-                        continue;
-                        
-                    default:
-                        string_buffer_pushback_ASCII(stringBuffer, c);
-                        ++p_;
                         continue;
                 }
             }
