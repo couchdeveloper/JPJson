@@ -295,7 +295,8 @@
 				A1290F1C144305E7003F6AA8 /* json */,
 			);
 			name = JPJsonLib;
-			sourceTree = JP_ROOT;
+			path = ../../Source;
+			sourceTree = SOURCE_ROOT;
 		};
 		A1290F1B144305E7003F6AA8 /* Exported Headers */ = {
 			isa = PBXGroup;
@@ -822,9 +823,10 @@
 			buildSettings = {
 				GCC_PREPROCESSOR_DEFINITIONS = BOOST_STRICT_CONFIG;
 				HEADER_SEARCH_PATHS = (
-					"$(BOOST_ROOT)",
-					"$(JP_ROOT)",
+					"\"$(JP_ROOT)\"",
+					"\"$(BOOST_ROOT)\"",
 				);
+				JP_ROOT = ../../Source;
 			};
 			name = Debug;
 		};
@@ -834,9 +836,10 @@
 				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_PREPROCESSOR_DEFINITIONS = BOOST_STRICT_CONFIG;
 				HEADER_SEARCH_PATHS = (
-					"$(BOOST_ROOT)",
-					"$(JP_ROOT)",
+					"\"$(JP_ROOT)\"",
+					"\"$(BOOST_ROOT)\"",
 				);
+				JP_ROOT = ../../Source;
 			};
 			name = Release;
 		};
@@ -856,8 +859,8 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "JPJson/JPJson-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
 					"DEBUG=1",
+					"$(inherited)",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -871,7 +874,6 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
-				WARNING_CFLAGS = "";
 				WRAPPER_EXTENSION = framework;
 			};
 			name = Debug;
@@ -901,12 +903,10 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = "JPJson/JPJson-Info.plist";
-				LLVM_LTO = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
-				WARNING_CFLAGS = "";
 				WRAPPER_EXTENSION = framework;
 			};
 			name = Release;
@@ -916,8 +916,6 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
-				CLANG_CXX_LIBRARY = "compiler-default";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = YES;
@@ -953,8 +951,6 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
-				CLANG_CXX_LIBRARY = "compiler-default";
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -965,9 +961,9 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "JPJsonLib/JPJsonLib-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					NS_BLOCK_ASSERTIONS,
 					NDEBUG,
+					NS_BLOCK_ASSERTIONS,
+					"$(inherited)",
 				);
 				GCC_STRICT_ALIASING = YES;
 				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
@@ -977,7 +973,6 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INSTALL_PATH = "$(BUILT_PRODUCTS_DIR)";
-				LLVM_LTO = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = json;
@@ -1033,16 +1028,15 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "JPJsonDylib/JPJsonDylib-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
 					NDEBUG,
 					NS_BLOCK_ASSERTIONS,
+					"$(inherited)",
 				);
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				LLVM_LTO = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = json;

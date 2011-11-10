@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A11D2184144B1C0200D24AA8 /* libjson-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A11D2183144B1C0200D24AA8 /* libjson-iOS.a */; };
 		A16B74B313C5E02A00169FCD /* TestMD.json in Resources */ = {isa = PBXBuildFile; fileRef = A16B74B113C5E02A00169FCD /* TestMD.json */; };
 		A16B74B413C5E02A00169FCD /* TestString.json in Resources */ = {isa = PBXBuildFile; fileRef = A16B74B213C5E02A00169FCD /* TestString.json */; };
 		A1769BE413BCF55200F0F4B8 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1769BE313BCF55200F0F4B8 /* UIKit.framework */; };
@@ -25,6 +24,7 @@
 		A1769C0E13BCF55200F0F4B8 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = A1769C0C13BCF55200F0F4B8 /* InfoPlist.strings */; };
 		A1769C1113BCF55200F0F4B8 /* JsonTestAppTests.h in Resources */ = {isa = PBXBuildFile; fileRef = A1769C1013BCF55200F0F4B8 /* JsonTestAppTests.h */; };
 		A1769C1313BCF55200F0F4B8 /* JsonTestAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A1769C1213BCF55200F0F4B8 /* JsonTestAppTests.m */; };
+		A17DD7C0146AEBF4000AD974 /* libjson-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A17DD7BF146AEBF4000AD974 /* libjson-iOS.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,7 +38,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		A11D2183144B1C0200D24AA8 /* libjson-iOS.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libjson-iOS.a"; path = "../../../../../../../Library/Developer/Xcode/DerivedData/Json-erlsofcekspqczcasdatcdjvtiuv/Build/Products/Debug-iphoneos/libjson-iOS.a"; sourceTree = "<group>"; };
 		A16B74B113C5E02A00169FCD /* TestMD.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = TestMD.json; sourceTree = "<group>"; };
 		A16B74B213C5E02A00169FCD /* TestString.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = TestString.json; sourceTree = "<group>"; };
 		A1769BDF13BCF55200F0F4B8 /* JsonTestApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JsonTestApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -61,6 +60,7 @@
 		A1769C0F13BCF55200F0F4B8 /* JsonTestAppTests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "JsonTestAppTests-Prefix.pch"; sourceTree = "<group>"; };
 		A1769C1013BCF55200F0F4B8 /* JsonTestAppTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = JsonTestAppTests.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		A1769C1213BCF55200F0F4B8 /* JsonTestAppTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = JsonTestAppTests.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		A17DD7BF146AEBF4000AD974 /* libjson-iOS.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libjson-iOS.a"; path = "../../../../../../Library/Developer/Xcode/DerivedData/Json-hiazqngtzsfxawgakamtpamfsytx/Build/Products/Debug-iphoneos/libjson-iOS.a"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,7 +68,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A11D2184144B1C0200D24AA8 /* libjson-iOS.a in Frameworks */,
+				A17DD7C0146AEBF4000AD974 /* libjson-iOS.a in Frameworks */,
 				A1769BE413BCF55200F0F4B8 /* UIKit.framework in Frameworks */,
 				A1769BE613BCF55200F0F4B8 /* Foundation.framework in Frameworks */,
 				A1769BE813BCF55200F0F4B8 /* CoreGraphics.framework in Frameworks */,
@@ -103,6 +103,7 @@
 				A1769BE913BCF55200F0F4B8 /* JsonTestApp */,
 				A1769C0913BCF55200F0F4B8 /* JsonTestAppTests */,
 				A16B74B013C5DFFA00169FCD /* Resources */,
+				A17DD7C1146AEBFB000AD974 /* Libraries */,
 				A1769BE213BCF55200F0F4B8 /* Frameworks */,
 				A1769BE013BCF55200F0F4B8 /* Products */,
 			);
@@ -120,7 +121,6 @@
 		A1769BE213BCF55200F0F4B8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				A11D2183144B1C0200D24AA8 /* libjson-iOS.a */,
 				A1769BE313BCF55200F0F4B8 /* UIKit.framework */,
 				A1769BE513BCF55200F0F4B8 /* Foundation.framework */,
 				A1769BE713BCF55200F0F4B8 /* CoreGraphics.framework */,
@@ -171,6 +171,14 @@
 				A1769C0F13BCF55200F0F4B8 /* JsonTestAppTests-Prefix.pch */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		A17DD7C1146AEBFB000AD974 /* Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				A17DD7BF146AEBF4000AD974 /* libjson-iOS.a */,
+			);
+			name = Libraries;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

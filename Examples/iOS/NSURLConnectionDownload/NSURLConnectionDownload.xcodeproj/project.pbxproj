@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A11D217B144B1B1F00D24AA8 /* libjson-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A11D217A144B1B1F00D24AA8 /* libjson-iOS.a */; };
 		A1615B63143F2FE300DA0A11 /* UIDevice-Hardware.m in Sources */ = {isa = PBXBuildFile; fileRef = A1615B62143F2FE300DA0A11 /* UIDevice-Hardware.m */; };
+		A17DD7BD146AEBC3000AD974 /* libjson-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A11D217A144B1B1F00D24AA8 /* libjson-iOS.a */; };
 		A1ED08ED1428F0B800B276C4 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1ED08EC1428F0B800B276C4 /* UIKit.framework */; };
 		A1ED08EF1428F0B800B276C4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1ED08EE1428F0B800B276C4 /* Foundation.framework */; };
 		A1ED08F11428F0B800B276C4 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1ED08F01428F0B800B276C4 /* CoreGraphics.framework */; };
@@ -45,7 +45,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A11D217B144B1B1F00D24AA8 /* libjson-iOS.a in Frameworks */,
+				A17DD7BD146AEBC3000AD974 /* libjson-iOS.a in Frameworks */,
 				A1ED08ED1428F0B800B276C4 /* UIKit.framework in Frameworks */,
 				A1ED08EF1428F0B800B276C4 /* Foundation.framework in Frameworks */,
 				A1ED08F11428F0B800B276C4 /* CoreGraphics.framework in Frameworks */,
@@ -65,11 +65,20 @@
 			path = ../../../../../../JSONKit/JSONKit;
 			sourceTree = "<group>";
 		};
+		A17DD7BB146AEB7F000AD974 /* Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				A11D217A144B1B1F00D24AA8 /* libjson-iOS.a */,
+			);
+			name = Libraries;
+			sourceTree = "<group>";
+		};
 		A1ED08DD1428F0B800B276C4 = {
 			isa = PBXGroup;
 			children = (
 				A150AE87142A1B8B00D3EF1D /* JSONKit */,
 				A1ED08F21428F0B800B276C4 /* NSURLConnectionDownload */,
+				A17DD7BB146AEB7F000AD974 /* Libraries */,
 				A1ED08EB1428F0B800B276C4 /* Frameworks */,
 				A1ED08E91428F0B800B276C4 /* Products */,
 			);
@@ -86,7 +95,6 @@
 		A1ED08EB1428F0B800B276C4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				A11D217A144B1B1F00D24AA8 /* libjson-iOS.a */,
 				A1ED08EC1428F0B800B276C4 /* UIKit.framework */,
 				A1ED08EE1428F0B800B276C4 /* Foundation.framework */,
 				A1ED08F01428F0B800B276C4 /* CoreGraphics.framework */,
@@ -268,7 +276,6 @@
 				GCC_PREFIX_HEADER = "NSURLConnectionDownload/NSURLConnectionDownload-Prefix.pch";
 				INFOPLIST_FILE = "NSURLConnectionDownload/NSURLConnectionDownload-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				LLVM_LTO = NO;
 				OTHER_CFLAGS = "-v";
 				OTHER_LDFLAGS = (
@@ -298,7 +305,6 @@
 				);
 				INFOPLIST_FILE = "NSURLConnectionDownload/NSURLConnectionDownload-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				LLVM_LTO = NO;
 				OTHER_CFLAGS = "-v";
 				OTHER_LDFLAGS = (

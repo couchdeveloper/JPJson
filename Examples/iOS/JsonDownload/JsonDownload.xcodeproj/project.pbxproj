@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A11D2181144B1BF700D24AA8 /* libjson-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A11D2180144B1BF700D24AA8 /* libjson-iOS.a */; };
 		A1753F8E13C5B76D00F9440B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A1753F8D13C5B76D00F9440B /* main.m */; };
+		A17DD7C3146AEC4E000AD974 /* libjson-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A17DD7C2146AEC4E000AD974 /* libjson-iOS.a */; };
 		A1B77F2A13C4399900EC9184 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1B77F2913C4399900EC9184 /* UIKit.framework */; };
 		A1B77F2C13C4399900EC9184 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1B77F2B13C4399900EC9184 /* Foundation.framework */; };
 		A1B77F2E13C4399900EC9184 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1B77F2D13C4399900EC9184 /* CoreGraphics.framework */; };
@@ -21,8 +21,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		A11D2180144B1BF700D24AA8 /* libjson-iOS.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libjson-iOS.a"; path = "../../../../../../../Library/Developer/Xcode/DerivedData/Json-erlsofcekspqczcasdatcdjvtiuv/Build/Products/Debug-iphoneos/libjson-iOS.a"; sourceTree = "<group>"; };
 		A1753F8D13C5B76D00F9440B /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = main.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		A17DD7C2146AEC4E000AD974 /* libjson-iOS.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libjson-iOS.a"; path = "../../../../../../Library/Developer/Xcode/DerivedData/Json-hiazqngtzsfxawgakamtpamfsytx/Build/Products/Debug-iphoneos/libjson-iOS.a"; sourceTree = "<group>"; };
 		A1B77F2513C4399900EC9184 /* JsonDownload.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JsonDownload.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A1B77F2913C4399900EC9184 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		A1B77F2B13C4399900EC9184 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -44,7 +44,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A11D2181144B1BF700D24AA8 /* libjson-iOS.a in Frameworks */,
+				A17DD7C3146AEC4E000AD974 /* libjson-iOS.a in Frameworks */,
 				A1B77F2A13C4399900EC9184 /* UIKit.framework in Frameworks */,
 				A1B77F2C13C4399900EC9184 /* Foundation.framework in Frameworks */,
 				A1B77F2E13C4399900EC9184 /* CoreGraphics.framework in Frameworks */,
@@ -54,11 +54,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A17DD7C4146AEC55000AD974 /* Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				A17DD7C2146AEC4E000AD974 /* libjson-iOS.a */,
+			);
+			name = Libraries;
+			sourceTree = "<group>";
+		};
 		A1B77F1A13C4399900EC9184 = {
 			isa = PBXGroup;
 			children = (
 				A1B77F4713C43A5A00EC9184 /* ReadMe.rtf */,
 				A1B77F2F13C4399900EC9184 /* JsonDownload */,
+				A17DD7C4146AEC55000AD974 /* Libraries */,
 				A1B77F2813C4399900EC9184 /* Frameworks */,
 				A1B77F2613C4399900EC9184 /* Products */,
 			);
@@ -75,7 +84,6 @@
 		A1B77F2813C4399900EC9184 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				A11D2180144B1BF700D24AA8 /* libjson-iOS.a */,
 				A1B77F2913C4399900EC9184 /* UIKit.framework */,
 				A1B77F2B13C4399900EC9184 /* Foundation.framework */,
 				A1B77F2D13C4399900EC9184 /* CoreGraphics.framework */,
@@ -248,6 +256,10 @@
 				INFOPLIST_FILE = "JsonDownload/JsonDownload-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
 				JP_ROOT = ../../../;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../../../../../Library/Developer/Xcode/DerivedData/Json-hiazqngtzsfxawgakamtpamfsytx/Build/Products/Debug-iphoneos\"",
+				);
 				OTHER_LDFLAGS = "-lstdc++";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				USER_HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)";
@@ -271,6 +283,10 @@
 				INFOPLIST_FILE = "JsonDownload/JsonDownload-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
 				JP_ROOT = ../../../;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../../../../../Library/Developer/Xcode/DerivedData/Json-hiazqngtzsfxawgakamtpamfsytx/Build/Products/Debug-iphoneos\"",
+				);
 				OTHER_LDFLAGS = "-lstdc++";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				USER_HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)";

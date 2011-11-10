@@ -397,6 +397,7 @@
 					"$(ARCHS_STANDARD_32_BIT)",
 				);
 				GCC_PREPROCESSOR_DEFINITIONS = BOOST_STRICT_CONFIG;
+				JP_ROOT = ../../Source;
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -409,6 +410,7 @@
 					"$(ARCHS_STANDARD_32_BIT)",
 				);
 				GCC_PREPROCESSOR_DEFINITIONS = BOOST_STRICT_CONFIG;
+				JP_ROOT = ../../Source;
 				SDKROOT = iphoneos;
 			};
 			name = Release;
@@ -438,8 +440,8 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
-					"$(JP_ROOT)",
-					"$(BOOST_ROOT)",
+					"\"$(JP_ROOT)\"",
+					"\"$(BOOST_ROOT)\"",
 				);
 				INSTALL_PATH = "$(BUILT_PRODUCTS_DIR)";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
@@ -474,8 +476,8 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
-					"$(JP_ROOT)",
-					"$(BOOST_ROOT)",
+					"\"$(JP_ROOT)\"",
+					"\"$(BOOST_ROOT)\"",
 				);
 				INSTALL_PATH = "$(BUILT_PRODUCTS_DIR)";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.2;

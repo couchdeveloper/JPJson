@@ -7,7 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A11D217F144B1BEA00D24AA8 /* libjson-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A11D217E144B1BEA00D24AA8 /* libjson-iOS.a */; };
+		A1116362146C383700D094E9 /* timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1116360146C383700D094E9 /* timer.cpp */; };
+		A1116366146C392600D094E9 /* libjson-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A1116365146C392600D094E9 /* libjson-iOS.a */; };
 		A138814113D0D57B0006461E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A138814013D0D57B0006461E /* UIKit.framework */; };
 		A138814313D0D57B0006461E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A138814213D0D57B0006461E /* Foundation.framework */; };
 		A138814513D0D57B0006461E /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A138814413D0D57B0006461E /* CoreGraphics.framework */; };
@@ -17,15 +18,15 @@
 		A138815413D0D57B0006461E /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = A138815213D0D57B0006461E /* MainWindow.xib */; };
 		A138815713D0D57B0006461E /* JPBenchAppViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = A138815613D0D57B0006461E /* JPBenchAppViewController.mm */; };
 		A138815A13D0D57B0006461E /* JPBenchAppViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A138815813D0D57B0006461E /* JPBenchAppViewController.xib */; };
-		A138816713D0DD960006461E /* TestMD.json in Resources */ = {isa = PBXBuildFile; fileRef = A138816513D0DD960006461E /* TestMD.json */; };
-		A138816813D0DD960006461E /* TestString.json in Resources */ = {isa = PBXBuildFile; fileRef = A138816613D0DD960006461E /* TestString.json */; };
+		A156BE94146C181400BE6E82 /* Test-UTF8-esc.json in Resources */ = {isa = PBXBuildFile; fileRef = A156BE93146C181400BE6E82 /* Test-UTF8-esc.json */; };
 		A188393F13DC5FAD00FD90AA /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = A188393E13DC5FAD00FD90AA /* JSONKit.m */; };
-		A1A8E250142A516600AB673A /* timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1A8E24E142A516600AB673A /* timer.cpp */; };
 		A1FAF1DD143F225500CD2CCB /* UIDevice-Hardware.m in Sources */ = {isa = PBXBuildFile; fileRef = A1FAF1DC143F225500CD2CCB /* UIDevice-Hardware.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		A11D217E144B1BEA00D24AA8 /* libjson-iOS.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libjson-iOS.a"; path = "../../../../../../../Library/Developer/Xcode/DerivedData/Json-erlsofcekspqczcasdatcdjvtiuv/Build/Products/Debug-iphoneos/libjson-iOS.a"; sourceTree = "<group>"; };
+		A1116360146C383700D094E9 /* timer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = timer.cpp; sourceTree = "<group>"; };
+		A1116361146C383700D094E9 /* timer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = timer.hpp; sourceTree = "<group>"; };
+		A1116365146C392600D094E9 /* libjson-iOS.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libjson-iOS.a"; path = "../../../../../../Library/Developer/Xcode/DerivedData/Json-hiazqngtzsfxawgakamtpamfsytx/Build/Products/Release-iphoneos/libjson-iOS.a"; sourceTree = "<group>"; };
 		A138813C13D0D57B0006461E /* JPBenchApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JPBenchApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A138814013D0D57B0006461E /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		A138814213D0D57B0006461E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -40,14 +41,13 @@
 		A138815513D0D57B0006461E /* JPBenchAppViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = JPBenchAppViewController.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		A138815613D0D57B0006461E /* JPBenchAppViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; path = JPBenchAppViewController.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		A138815913D0D57B0006461E /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/JPBenchAppViewController.xib; sourceTree = "<group>"; };
-		A138816513D0DD960006461E /* TestMD.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = TestMD.json; sourceTree = "<group>"; };
-		A138816613D0DD960006461E /* TestString.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = TestString.json; sourceTree = "<group>"; };
+		A156BE93146C181400BE6E82 /* Test-UTF8-esc.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "Test-UTF8-esc.json"; path = "../../../Resources/Test-UTF8-esc.json"; sourceTree = "<group>"; };
+		A17DD7B7146AE95B000AD974 /* timer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = timer.cpp; path = ../../../../Source/utilities/timer.cpp; sourceTree = "<group>"; };
+		A17DD7B8146AE95B000AD974 /* timer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = timer.hpp; path = ../../../../Source/utilities/timer.hpp; sourceTree = "<group>"; };
 		A188393D13DC5FAD00FD90AA /* JSONKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONKit.h; sourceTree = "<group>"; };
 		A188393E13DC5FAD00FD90AA /* JSONKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSONKit.m; sourceTree = "<group>"; };
-		A1A8E24E142A516600AB673A /* timer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = timer.cpp; path = ../../../utilities/timer.cpp; sourceTree = "<group>"; };
-		A1A8E24F142A516600AB673A /* timer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = timer.hpp; path = ../../../utilities/timer.hpp; sourceTree = "<group>"; };
-		A1FAF1DB143F225500CD2CCB /* UIDevice-Hardware.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIDevice-Hardware.h"; sourceTree = "<group>"; };
-		A1FAF1DC143F225500CD2CCB /* UIDevice-Hardware.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIDevice-Hardware.m"; sourceTree = "<group>"; };
+		A1FAF1DB143F225500CD2CCB /* UIDevice-Hardware.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIDevice-Hardware.h"; path = "../UIDevice-Hardware.h"; sourceTree = "<group>"; };
+		A1FAF1DC143F225500CD2CCB /* UIDevice-Hardware.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIDevice-Hardware.m"; path = "../UIDevice-Hardware.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,7 +55,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A11D217F144B1BEA00D24AA8 /* libjson-iOS.a in Frameworks */,
+				A1116366146C392600D094E9 /* libjson-iOS.a in Frameworks */,
 				A138814113D0D57B0006461E /* UIKit.framework in Frameworks */,
 				A138814313D0D57B0006461E /* Foundation.framework in Frameworks */,
 				A138814513D0D57B0006461E /* CoreGraphics.framework in Frameworks */,
@@ -65,16 +65,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A111635F146C383700D094E9 /* utilities */ = {
+			isa = PBXGroup;
+			children = (
+				A1116360146C383700D094E9 /* timer.cpp */,
+				A1116361146C383700D094E9 /* timer.hpp */,
+			);
+			path = utilities;
+			sourceTree = "<group>";
+		};
 		A138813113D0D57B0006461E = {
 			isa = PBXGroup;
 			children = (
-				A1FAF1DB143F225500CD2CCB /* UIDevice-Hardware.h */,
-				A1FAF1DC143F225500CD2CCB /* UIDevice-Hardware.m */,
-				A1A8E24E142A516600AB673A /* timer.cpp */,
-				A1A8E24F142A516600AB673A /* timer.hpp */,
+				A111635F146C383700D094E9 /* utilities */,
 				A188393C13DC5F8800FD90AA /* JSONKit */,
 				A138816413D0DD680006461E /* Resources */,
 				A138814613D0D57B0006461E /* JPBenchApp */,
+				A17DD7B6146AE90D000AD974 /* Libraries */,
 				A138813F13D0D57B0006461E /* Frameworks */,
 				A138813D13D0D57B0006461E /* Products */,
 			);
@@ -91,7 +98,6 @@
 		A138813F13D0D57B0006461E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				A11D217E144B1BEA00D24AA8 /* libjson-iOS.a */,
 				A138814013D0D57B0006461E /* UIKit.framework */,
 				A138814213D0D57B0006461E /* Foundation.framework */,
 				A138814413D0D57B0006461E /* CoreGraphics.framework */,
@@ -102,6 +108,10 @@
 		A138814613D0D57B0006461E /* JPBenchApp */ = {
 			isa = PBXGroup;
 			children = (
+				A17DD7B7146AE95B000AD974 /* timer.cpp */,
+				A17DD7B8146AE95B000AD974 /* timer.hpp */,
+				A1FAF1DB143F225500CD2CCB /* UIDevice-Hardware.h */,
+				A1FAF1DC143F225500CD2CCB /* UIDevice-Hardware.m */,
 				A138814F13D0D57B0006461E /* JPBenchAppAppDelegate.h */,
 				A138815013D0D57B0006461E /* JPBenchAppAppDelegate.m */,
 				A138815213D0D57B0006461E /* MainWindow.xib */,
@@ -127,10 +137,17 @@
 		A138816413D0DD680006461E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				A138816513D0DD960006461E /* TestMD.json */,
-				A138816613D0DD960006461E /* TestString.json */,
+				A156BE93146C181400BE6E82 /* Test-UTF8-esc.json */,
 			);
 			name = Resources;
+			sourceTree = "<group>";
+		};
+		A17DD7B6146AE90D000AD974 /* Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				A1116365146C392600D094E9 /* libjson-iOS.a */,
+			);
+			name = Libraries;
 			sourceTree = "<group>";
 		};
 		A188393C13DC5F8800FD90AA /* JSONKit */ = {
@@ -195,8 +212,7 @@
 				A138814B13D0D57B0006461E /* InfoPlist.strings in Resources */,
 				A138815413D0D57B0006461E /* MainWindow.xib in Resources */,
 				A138815A13D0D57B0006461E /* JPBenchAppViewController.xib in Resources */,
-				A138816713D0DD960006461E /* TestMD.json in Resources */,
-				A138816813D0DD960006461E /* TestString.json in Resources */,
+				A156BE94146C181400BE6E82 /* Test-UTF8-esc.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -211,8 +227,8 @@
 				A138815113D0D57B0006461E /* JPBenchAppAppDelegate.m in Sources */,
 				A138815713D0D57B0006461E /* JPBenchAppViewController.mm in Sources */,
 				A188393F13DC5FAD00FD90AA /* JSONKit.m in Sources */,
-				A1A8E250142A516600AB673A /* timer.cpp in Sources */,
 				A1FAF1DD143F225500CD2CCB /* UIDevice-Hardware.m in Sources */,
+				A1116362146C383700D094E9 /* timer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -258,6 +274,7 @@
 				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "$(JP_ROOT)";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				SDKROOT = iphoneos;
 			};
@@ -272,6 +289,7 @@
 				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "$(JP_ROOT)";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				SDKROOT = iphoneos;
@@ -291,9 +309,13 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "JPBenchApp/JPBenchApp-Prefix.pch";
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				HEADER_SEARCH_PATHS = "$(SRCROOT)";
 				INFOPLIST_FILE = "JPBenchApp/JPBenchApp-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
-				JP_ROOT = ../../../;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../../../../../Library/Developer/Xcode/DerivedData/Json-hiazqngtzsfxawgakamtpamfsytx/Build/Products/Release-iphoneos\"",
+				);
 				OTHER_LDFLAGS = "-lstdc++";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				USER_HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)";
@@ -318,9 +340,13 @@
 					NDEBUG,
 				);
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				HEADER_SEARCH_PATHS = "$(SRCROOT)";
 				INFOPLIST_FILE = "JPBenchApp/JPBenchApp-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
-				JP_ROOT = ../../../;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../../../../../Library/Developer/Xcode/DerivedData/Json-hiazqngtzsfxawgakamtpamfsytx/Build/Products/Release-iphoneos\"",
+				);
 				OTHER_LDFLAGS = "-lstdc++";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				USER_HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)";
