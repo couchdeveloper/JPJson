@@ -87,7 +87,7 @@ namespace {
         NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
                 
         semantic_actions_type sa; 
-        sa.error(error_t(-1, "Test error"));
+        sa.error(-1, "Test error");
         
         EXPECT_FALSE(sa.ok());
         EXPECT_EQ(-1, sa.error().code());
