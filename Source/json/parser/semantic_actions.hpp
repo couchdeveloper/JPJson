@@ -652,8 +652,8 @@ namespace json {
             boolean_count = null_count = number_count = max_stack_size = 0;            
         } 
         
-        void error_imp(const error_t& error) {
-            error_ = error;
+        void error_imp(int code, const char* description) {
+            error_.set(code, description);
         }
         
         const error_t& error_imp() const {

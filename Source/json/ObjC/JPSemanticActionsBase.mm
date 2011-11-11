@@ -188,7 +188,7 @@ typedef JPSemanticActions_ErrorHandlerBlockType       ErrorHandlerBlockType;
 
 - (void) setErrorCode:(int)code description:(NSString*)description
 {
-    self.imp->error(SemanticActionsBase::error_t(code, [description UTF8String]));
+    self.imp->error(code, [description UTF8String]);
 }
 
 

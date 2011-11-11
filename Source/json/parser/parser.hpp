@@ -318,7 +318,7 @@ namespace json {
                     else {
                         state_.error() = JP_UNICODE_REJECTED_BY_FILTER;
                     }
-                    sa_.error(sa_error_t(state_.error(), state_.error_str()));
+                    sa_.error(state_.error(), state_.error_str());
                     return -1;
                 }
             }
@@ -437,7 +437,7 @@ namespace json {
         
         if (sa_.is_canceled()) {
             state_.error() = JP_CANCELED;
-            sa_.error(sa_error_t(state_.error(), state_.error_str()));
+            sa_.error(state_.error(), state_.error_str());
             return;
         }            
         
@@ -446,7 +446,7 @@ namespace json {
         
         if (p_ == last_) {
             state_.error() = JP_EMPTY_TEXT_ERROR;
-            sa_.error(sa_error_t(state_.error(), state_.error_str()));
+            sa_.error(state_.error(), state_.error_str());
             return;
         }
 
@@ -476,7 +476,7 @@ namespace json {
                         // false is that a key already exists.
                         // ERROR: insertion failed due to double key error
                         state_.error() = JP_JSON_KEY_EXISTS_ERROR;
-                        sa_.error(sa_error_t(state_.error(), state_.error_str()));
+                        sa_.error(state_.error(), state_.error_str());
                     }
                 }
             }
@@ -488,7 +488,7 @@ namespace json {
                 } else {
                     state_.error() = JP_EXPECTED_ARRAY_OR_OBJECT_ERROR;
                 }
-                sa_.error(sa_error_t(state_.error(), state_.error_str()));
+                sa_.error(state_.error(), state_.error_str());
         }        
     }
     
@@ -574,7 +574,7 @@ namespace json {
         }
         
         if (!state_) {
-            sa_.error(sa_error_t(state_.error(), state_.error_str()));
+            sa_.error(state_.error(), state_.error_str());
         }
     }    
     
@@ -634,7 +634,7 @@ namespace json {
         }
         
         assert(state_.error() != 0);
-        sa_.error(sa_error_t(state_.error(), state_.error_str()));
+        sa_.error(state_.error(), state_.error_str());
     }
     
     
@@ -746,7 +746,7 @@ namespace json {
             state_.error() = JP_UNEXPECTED_END_ERROR;
         }
         assert(state_.error() != 0);
-        sa_.error(sa_error_t(state_.error(), state_.error_str()));
+        sa_.error(state_.error(), state_.error_str());
     }
     
     
@@ -789,7 +789,7 @@ namespace json {
                         // false is that a key already exists.
                         // ERROR: insertion failed due to double key error
                         state_.error() = JP_JSON_KEY_EXISTS_ERROR;
-                        sa_.error(sa_error_t(state_.error(), state_.error_str()));
+                        sa_.error(state_.error(), state_.error_str());
                     }
                     ++p_;
                     skip_whitespaces();
@@ -850,12 +850,12 @@ namespace json {
                 
             case 0:
                 state_.error() = JP_UNICODE_NULL_NOT_ALLOWED_ERROR;
-                sa_.error(sa_error_t(state_.error(), state_.error_str()));
+                sa_.error(state_.error(), state_.error_str());
                 break;
                 
             default:
                 state_.error() = JP_EXPECTED_VALUE_ERROR;
-                sa_.error(sa_error_t(state_.error(), state_.error_str()));
+                sa_.error(state_.error(), state_.error_str());
         }
         /*
         if (state_) {
@@ -888,7 +888,7 @@ namespace json {
             else {
                 state_.error() = JP_EXPECTED_VALUE_ERROR;
             }
-            sa_.error(sa_error_t(state_.error(), state_.error_str()));
+            sa_.error(state_.error(), state_.error_str());
             return false;
         } else  {
             return true;
@@ -931,13 +931,13 @@ namespace json {
                     case 'A' ... 'F': uc = (uc << 4) + ((unsigned int)(c - 'A') + 10U); break;
                     default:
                         state_.error() = JP_INVALID_HEX_VALUE_ERROR;
-                        sa_.error(sa_error_t(state_.error(), state_.error_str()));
+                        sa_.error(state_.error(), state_.error_str());
                         return 0;
                 }
             }
             else {
                 state_.error() = JP_UNEXPECTED_END_ERROR;
-                sa_.error(sa_error_t(state_.error(), state_.error_str()));
+                sa_.error(state_.error(), state_.error_str());
                 return 0;
             }
         }
@@ -1028,7 +1028,7 @@ namespace json {
             }
             
             assert(state_.error() != 0);
-            sa_.error(sa_error_t(state_.error(), state_.error_str()));
+            sa_.error(state_.error(), state_.error_str());
         }
         else {
             // state already set.
@@ -1148,7 +1148,7 @@ namespace json {
         }
         
         assert(state_.error() != 0);
-        sa_.error(sa_error_t(state_.error(), state_.error_str()));
+        sa_.error(state_.error(), state_.error_str());
     }
     
     
@@ -1220,7 +1220,7 @@ namespace json {
                 default:
                     state_.error() = JP_ILLFORMED_UNICODE_SEQUENCE_ERROR;
             }
-            sa_.error(sa_error_t(state_.error(), state_.error_str()));
+            sa_.error(state_.error(), state_.error_str());
             return  0; // ERROR: UTF-8 sequence invalid                    
         }
     }
@@ -1309,7 +1309,7 @@ namespace json {
             state_.error() = JP_UNEXPECTED_END_ERROR;
         }
         assert(state_.error() != 0);
-        sa_.error(sa_error_t(state_.error(), state_.error_str()));
+        sa_.error(state_.error(), state_.error_str());
     }
     
     
@@ -1433,7 +1433,7 @@ namespace json {
             state_.error() = JP_UNEXPECTED_END_ERROR;
         }
         assert(state_.error() != 0);
-        sa_.error(sa_error_t(state_.error(), state_.error_str()));
+        sa_.error(state_.error(), state_.error_str());
         
     }  
     
@@ -1517,7 +1517,7 @@ namespace json {
             state_.error() = JP_UNEXPECTED_END_ERROR;
         }
         assert(state_.error() != 0);
-        sa_.error(sa_error_t(state_.error(), state_.error_str()));
+        sa_.error(state_.error(), state_.error_str());
         
     }  
 
@@ -1754,7 +1754,7 @@ namespace json {
                 
             default:
                 state_.error() = JP_BADNUMBER_ERROR;
-                sa_.error(sa_error_t(state_.error(), state_.error_str()));
+                sa_.error(state_.error(), state_.error_str());
         }        
     }
         

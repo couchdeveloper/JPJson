@@ -208,7 +208,7 @@ namespace json { namespace parse_internal {
                             // Anyway, this is defined bogus:
                             result = false;
                             done = true;
-                            sa.error(sa_error_t(JP_JSON_EXTRA_CHARACTERS_AT_END, JP_JSON_EXTRA_CHARACTERS_AT_END_String));
+                            sa.error(JP_JSON_EXTRA_CHARACTERS_AT_END, JP_JSON_EXTRA_CHARACTERS_AT_END_String);
                         }
                         else {
                             // The parse loop was terminated through an Unicode

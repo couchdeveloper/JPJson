@@ -380,18 +380,18 @@ namespace {
         catch (parser_runtime_error& ex) {
             typedef SemanticActionsBase::error_t error_t;
             killed_ = true;
-            sa_imp_ptr->error(error_t(json::JP_PARSER_CLIENT, ex.what()));
+            sa_imp_ptr->error(json::JP_PARSER_CLIENT, ex.what());
         }
         catch (std::exception& ex) {            
             typedef SemanticActionsBase::error_t error_t;
             killed_ = true;
-            sa_imp_ptr->error(error_t(json::JP_UNEXPECTED_ERROR, ex.what()));
+            sa_imp_ptr->error(json::JP_UNEXPECTED_ERROR, ex.what());
         }
         catch (...) {
             typedef SemanticActionsBase::error_t error_t;
             killed_ = true;
-            sa_imp_ptr->error(error_t(json::JP_UNKNOWN_ERROR, 
-                                      json::parser_error_str(json::JP_UNKNOWN_ERROR)));
+            sa_imp_ptr->error(json::JP_UNKNOWN_ERROR, 
+                                      json::parser_error_str(json::JP_UNKNOWN_ERROR));
         }
         if (not success) 
         {

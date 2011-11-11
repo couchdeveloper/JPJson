@@ -111,7 +111,7 @@ namespace json { namespace objc {
                 
         virtual void parse_begin_imp() {
             error_.reset();
-            error_str_.clear();
+            //error_str_.clear();
             [delegate_ parserFoundJsonBegin];
         }
         
@@ -173,21 +173,21 @@ namespace json { namespace objc {
         
         virtual void clear_imp() {
             error_.reset();
-            error_str_.clear();
+            //error_str_.clear();
         } 
         
         virtual void print_imp(std::ostream& os) { 
             os << *this; 
         }
 
-        virtual void error_imp(const error_t& error) {
-            error_.first = error.first;
+        virtual void error_imp(int code, const char* description) {
+            error_.first = code;
             // make a copy of the error string
-            error_str_ = error.second;
-            error_.second = error_str_.c_str();
+            //error_str_ = error.second;
+            error_.second = description;
             [delegate_ parserDetectedError];
         }
-        
+
         virtual const error_t& error_imp() const {
             return error_;
         }
@@ -199,7 +199,7 @@ namespace json { namespace objc {
         
     private:    
         error_t         error_;
-        std::string     error_str_;
+        //std::string     error_str_;
 
         
 #pragma mark - Friend Stream Output Operator

@@ -92,35 +92,32 @@ namespace json {
     template <typename DerivedT, typename StringBufferEncodingT>
     class semantic_actions_base
     {
+
         struct error_info : std::pair<int, std::string> 
         {
             typedef std::pair<int, std::string> base;
             
-            error_info() : base(JP_NO_ERROR, std::string()) {}
-            
-            explicit error_info(json::parser_error_type code, const char* description)  
-            : base(code,description) 
-            {}
+            error_info() : base(0, std::string()) {}
             
             explicit error_info(int code, const char* description)  
             : base(code,description) 
-            {
-                assert(code <= 0 or code >= static_cast<int>(json::JP_PARSER_CLIENT));
-            }
+            {}
+            
             
             int code() const { return this->first; }
             
             const char* c_str() const { return this->second.c_str(); }
             std::string description() const { return this->second; }
             
-            void set(json::parser_error_type code, const char* description) {
+            void set(int code, const char* description) {
                 this->first = code;
                 this->second = description;
             }
             void reset() { 
-                this->first = JP_NO_ERROR;
+                this->first = 0;
                 this->second.clear();
             }
+
         };
         
     public:    
@@ -174,6 +171,29 @@ namespace json {
         
         void print(std::ostream& os)                    { this->derived().print_imp(os); }
         
+        void error(json::parser_error_type code, const char* description)  
+        {
+            if (canceled_) {
+                this->derived().error_imp(static_cast<int>(JP_CANCELED), parser_error_str(JP_CANCELED));
+            } else {
+                this->derived().error_imp(static_cast<int>(code), description);
+            }
+            logger_.log(json::utility::LOG_ERROR, "ERROR: json::parser (%d): %s", code, description);
+        }
+        
+        void error(int code, const char* description)  
+        {
+            assert(code <= 0 or code >= static_cast<int>(json::JP_PARSER_CLIENT));
+            if (canceled_) {
+                this->derived().error_imp(static_cast<int>(JP_CANCELED), parser_error_str(JP_CANCELED));
+            } else {
+                this->derived().error_imp(code, description);
+            }
+            logger_.log(json::utility::LOG_ERROR, "ERROR: json::parser (%d): %s", code, description);
+        }
+        
+        
+/*        
         void error(const error_t& error) { 
             if (canceled_) {
                 this->derived().error_imp(error_t(JP_CANCELED, parser_error_str(JP_CANCELED)));
@@ -182,6 +202,8 @@ namespace json {
             }
             logger_.log(json::utility::LOG_ERROR, "ERROR: json::parser (%d): %s", error.code(), error.c_str());
         }
+*/ 
+        
         const error_t& error() const { 
             return this->derived().error_imp(); 
         }
@@ -376,6 +398,11 @@ namespace json {
         void pop_value_push_back_into_array()               {}
         void clear_imp() 
         {} 
+        
+        void error_imp(int code, const char* description) {
+            error_.set(code, description);
+        }
+        
         void error_imp(const error_t& error) {
             error_ = error;
         }        

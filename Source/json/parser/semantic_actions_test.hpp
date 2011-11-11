@@ -167,8 +167,8 @@ namespace json { namespace internal {
             result_ = result_type(); 
         }
         
-        void error_imp(const error_t& error) {
-            error_ = error;
+        void error_imp(int code, const char* description) {
+            error_.set(code, description);
         }
         
         const error_t& error_imp() const {

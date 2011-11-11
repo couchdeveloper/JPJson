@@ -324,6 +324,11 @@
            error:(NSError**)error;
 
 
++ (id) parseData:(NSData*)data 
+        encoding:(JPUnicodeEncoding) encoding
+         options:(JPJsonParserOptions)options
+           error:(NSError**)error;
+
 
 
 
