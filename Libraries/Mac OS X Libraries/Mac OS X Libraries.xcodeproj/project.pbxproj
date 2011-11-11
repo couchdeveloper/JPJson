@@ -23,147 +23,154 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		A11B450514546E9E006329A1 /* JPStreamSemanticActions.h in Headers */ = {isa = PBXBuildFile; fileRef = A11B450414546E9E006329A1 /* JPStreamSemanticActions.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A11B450714546E9E006329A1 /* JPStreamSemanticActions.h in Headers */ = {isa = PBXBuildFile; fileRef = A11B450414546E9E006329A1 /* JPStreamSemanticActions.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A11B450914546EC1006329A1 /* JPStreamSemanticActions.mm in Sources */ = {isa = PBXBuildFile; fileRef = A11B450814546EC1006329A1 /* JPStreamSemanticActions.mm */; };
-		A11B450B14546EC1006329A1 /* JPStreamSemanticActions.mm in Sources */ = {isa = PBXBuildFile; fileRef = A11B450814546EC1006329A1 /* JPStreamSemanticActions.mm */; };
-		A12681061455681400131E77 /* JPSemanticActionsBase.mm in Sources */ = {isa = PBXBuildFile; fileRef = A19642361445D6A100ECB4C2 /* JPSemanticActionsBase.mm */; };
-		A12681071455681400131E77 /* JPSemanticActions.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1290F2D144305E7003F6AA8 /* JPSemanticActions.mm */; };
-		A12681081455681400131E77 /* JPStreamSemanticActions.mm in Sources */ = {isa = PBXBuildFile; fileRef = A11B450814546EC1006329A1 /* JPStreamSemanticActions.mm */; };
-		A12681091455681400131E77 /* JPJsonParser.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1290F2A144305E7003F6AA8 /* JPJsonParser.mm */; };
-		A126810A1455681400131E77 /* JPAsyncJsonParser.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1290F2B144305E7003F6AA8 /* JPAsyncJsonParser.mm */; };
-		A126810B1455681400131E77 /* JPJsonWriter.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1290F2C144305E7003F6AA8 /* JPJsonWriter.mm */; };
-		A126810C1455681400131E77 /* NSData+JPJsonDetectEncoding.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1290F27144305E7003F6AA8 /* NSData+JPJsonDetectEncoding.mm */; };
-		A126810D1455683700131E77 /* JPJsonCommon.h in Headers */ = {isa = PBXBuildFile; fileRef = A1290F1E144305E7003F6AA8 /* JPJsonCommon.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A126810E1455683700131E77 /* JPSemanticActionsProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = A19642371445D6A100ECB4C2 /* JPSemanticActionsProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A126810F1455683700131E77 /* JPSemanticActionsBase.h in Headers */ = {isa = PBXBuildFile; fileRef = A19642351445D6A100ECB4C2 /* JPSemanticActionsBase.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A12681101455683700131E77 /* JPSemanticActions.h in Headers */ = {isa = PBXBuildFile; fileRef = A1290F22144305E7003F6AA8 /* JPSemanticActions.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A12681111455683700131E77 /* JPStreamSemanticActions.h in Headers */ = {isa = PBXBuildFile; fileRef = A11B450414546E9E006329A1 /* JPStreamSemanticActions.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A12681121455683700131E77 /* JPJsonParser.h in Headers */ = {isa = PBXBuildFile; fileRef = A1290F1F144305E7003F6AA8 /* JPJsonParser.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A12681131455683700131E77 /* JPAsyncJsonParser.h in Headers */ = {isa = PBXBuildFile; fileRef = A1290F20144305E7003F6AA8 /* JPAsyncJsonParser.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A12681141455683700131E77 /* JPJsonWriter.h in Headers */ = {isa = PBXBuildFile; fileRef = A1290F21144305E7003F6AA8 /* JPJsonWriter.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A12681151455683700131E77 /* NSData+JPJsonDetectEncoding.h in Headers */ = {isa = PBXBuildFile; fileRef = A1290F23144305E7003F6AA8 /* NSData+JPJsonDetectEncoding.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A1290F48144305E7003F6AA8 /* JPJsonCommon.h in Headers */ = {isa = PBXBuildFile; fileRef = A1290F1E144305E7003F6AA8 /* JPJsonCommon.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A1290F4A144305E7003F6AA8 /* JPJsonCommon.h in Headers */ = {isa = PBXBuildFile; fileRef = A1290F1E144305E7003F6AA8 /* JPJsonCommon.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A1290F4B144305E7003F6AA8 /* JPJsonParser.h in Headers */ = {isa = PBXBuildFile; fileRef = A1290F1F144305E7003F6AA8 /* JPJsonParser.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A1290F4D144305E7003F6AA8 /* JPJsonParser.h in Headers */ = {isa = PBXBuildFile; fileRef = A1290F1F144305E7003F6AA8 /* JPJsonParser.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A1290F51144305E7003F6AA8 /* JPJsonWriter.h in Headers */ = {isa = PBXBuildFile; fileRef = A1290F21144305E7003F6AA8 /* JPJsonWriter.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A1290F53144305E7003F6AA8 /* JPJsonWriter.h in Headers */ = {isa = PBXBuildFile; fileRef = A1290F21144305E7003F6AA8 /* JPJsonWriter.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A1290F54144305E7003F6AA8 /* JPSemanticActions.h in Headers */ = {isa = PBXBuildFile; fileRef = A1290F22144305E7003F6AA8 /* JPSemanticActions.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A1290F56144305E7003F6AA8 /* JPSemanticActions.h in Headers */ = {isa = PBXBuildFile; fileRef = A1290F22144305E7003F6AA8 /* JPSemanticActions.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A1290F57144305E7003F6AA8 /* NSData+JPJsonDetectEncoding.h in Headers */ = {isa = PBXBuildFile; fileRef = A1290F23144305E7003F6AA8 /* NSData+JPJsonDetectEncoding.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A1290F59144305E7003F6AA8 /* NSData+JPJsonDetectEncoding.h in Headers */ = {isa = PBXBuildFile; fileRef = A1290F23144305E7003F6AA8 /* NSData+JPJsonDetectEncoding.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A1290F5A144305E7003F6AA8 /* NSData+JPJsonDetectEncoding.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1290F27144305E7003F6AA8 /* NSData+JPJsonDetectEncoding.mm */; };
-		A1290F5C144305E7003F6AA8 /* NSData+JPJsonDetectEncoding.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1290F27144305E7003F6AA8 /* NSData+JPJsonDetectEncoding.mm */; };
-		A1290F5D144305E7003F6AA8 /* CFDataBuffer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A1290F28144305E7003F6AA8 /* CFDataBuffer.hpp */; };
-		A1290F5F144305E7003F6AA8 /* CFDataBuffer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A1290F28144305E7003F6AA8 /* CFDataBuffer.hpp */; };
-		A1290F60144305E7003F6AA8 /* CFDataCache.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A1290F29144305E7003F6AA8 /* CFDataCache.hpp */; };
-		A1290F62144305E7003F6AA8 /* CFDataCache.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A1290F29144305E7003F6AA8 /* CFDataCache.hpp */; };
-		A1290F63144305E7003F6AA8 /* JPJsonParser.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1290F2A144305E7003F6AA8 /* JPJsonParser.mm */; };
-		A1290F65144305E7003F6AA8 /* JPJsonParser.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1290F2A144305E7003F6AA8 /* JPJsonParser.mm */; };
-		A1290F69144305E7003F6AA8 /* JPJsonWriter.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1290F2C144305E7003F6AA8 /* JPJsonWriter.mm */; };
-		A1290F6B144305E7003F6AA8 /* JPJsonWriter.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1290F2C144305E7003F6AA8 /* JPJsonWriter.mm */; };
-		A1290F6C144305E7003F6AA8 /* JPSemanticActions.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1290F2D144305E7003F6AA8 /* JPSemanticActions.mm */; };
-		A1290F6E144305E7003F6AA8 /* JPSemanticActions.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1290F2D144305E7003F6AA8 /* JPSemanticActions.mm */; };
-		A1290F6F144305E7003F6AA8 /* JPSemanticActionsBase_private.h in Headers */ = {isa = PBXBuildFile; fileRef = A1290F2E144305E7003F6AA8 /* JPSemanticActionsBase_private.h */; };
-		A1290F71144305E7003F6AA8 /* JPSemanticActionsBase_private.h in Headers */ = {isa = PBXBuildFile; fileRef = A1290F2E144305E7003F6AA8 /* JPSemanticActionsBase_private.h */; };
-		A1290F72144305E7003F6AA8 /* mutex.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A1290F2F144305E7003F6AA8 /* mutex.hpp */; };
-		A1290F74144305E7003F6AA8 /* mutex.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A1290F2F144305E7003F6AA8 /* mutex.hpp */; };
-		A1290F75144305E7003F6AA8 /* semaphore.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A1290F30144305E7003F6AA8 /* semaphore.hpp */; };
-		A1290F77144305E7003F6AA8 /* semaphore.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A1290F30144305E7003F6AA8 /* semaphore.hpp */; };
-		A1290F78144305E7003F6AA8 /* SemanticActions.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A1290F31144305E7003F6AA8 /* SemanticActions.hpp */; };
-		A1290F7A144305E7003F6AA8 /* SemanticActions.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A1290F31144305E7003F6AA8 /* SemanticActions.hpp */; };
-		A1290F7B144305E7003F6AA8 /* parse.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A1290F32144305E7003F6AA8 /* parse.hpp */; };
-		A1290F7D144305E7003F6AA8 /* parse.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A1290F32144305E7003F6AA8 /* parse.hpp */; };
-		A1290F7E144305E7003F6AA8 /* parser.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A1290F33144305E7003F6AA8 /* parser.hpp */; };
-		A1290F80144305E7003F6AA8 /* parser.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A1290F33144305E7003F6AA8 /* parser.hpp */; };
-		A1290F81144305E7003F6AA8 /* parser_errors.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A1290F34144305E7003F6AA8 /* parser_errors.hpp */; };
-		A1290F83144305E7003F6AA8 /* parser_errors.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A1290F34144305E7003F6AA8 /* parser_errors.hpp */; };
-		A1290F84144305E7003F6AA8 /* semantic_actions.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A1290F35144305E7003F6AA8 /* semantic_actions.hpp */; };
-		A1290F86144305E7003F6AA8 /* semantic_actions.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A1290F35144305E7003F6AA8 /* semantic_actions.hpp */; };
-		A1290F87144305E7003F6AA8 /* semantic_actions_base.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A1290F36144305E7003F6AA8 /* semantic_actions_base.hpp */; };
-		A1290F89144305E7003F6AA8 /* semantic_actions_base.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A1290F36144305E7003F6AA8 /* semantic_actions_base.hpp */; };
-		A1290F8A144305E7003F6AA8 /* semantic_actions_test.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A1290F37144305E7003F6AA8 /* semantic_actions_test.hpp */; };
-		A1290F8C144305E7003F6AA8 /* semantic_actions_test.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A1290F37144305E7003F6AA8 /* semantic_actions_test.hpp */; };
-		A1290F8D144305E7003F6AA8 /* istreambuf_iterator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A1290F38144305E7003F6AA8 /* istreambuf_iterator.hpp */; };
-		A1290F8F144305E7003F6AA8 /* istreambuf_iterator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A1290F38144305E7003F6AA8 /* istreambuf_iterator.hpp */; };
-		A1290F90144305E7003F6AA8 /* synchronous_queue.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A1290F39144305E7003F6AA8 /* synchronous_queue.hpp */; };
-		A1290F92144305E7003F6AA8 /* synchronous_queue.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A1290F39144305E7003F6AA8 /* synchronous_queue.hpp */; };
-		A1290F93144305E7003F6AA8 /* syncqueue_streambuf.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A1290F3A144305E7003F6AA8 /* syncqueue_streambuf.hpp */; };
-		A1290F95144305E7003F6AA8 /* syncqueue_streambuf.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A1290F3A144305E7003F6AA8 /* syncqueue_streambuf.hpp */; };
-		A1290F9F144305E7003F6AA8 /* atomic.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A1290F3E144305E7003F6AA8 /* atomic.hpp */; };
-		A1290FA1144305E7003F6AA8 /* atomic.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A1290F3E144305E7003F6AA8 /* atomic.hpp */; };
-		A1290FAB144305E7003F6AA8 /* flags.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A1290F42144305E7003F6AA8 /* flags.hpp */; };
-		A1290FAD144305E7003F6AA8 /* flags.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A1290F42144305E7003F6AA8 /* flags.hpp */; };
-		A1290FAE144305E7003F6AA8 /* number_builder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A1290F43144305E7003F6AA8 /* number_builder.hpp */; };
-		A1290FB0144305E7003F6AA8 /* number_builder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A1290F43144305E7003F6AA8 /* number_builder.hpp */; };
-		A1290FB1144305E7003F6AA8 /* simple_log.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A1290F44144305E7003F6AA8 /* simple_log.hpp */; };
-		A1290FB3144305E7003F6AA8 /* simple_log.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A1290F44144305E7003F6AA8 /* simple_log.hpp */; };
-		A1290FB4144305E7003F6AA8 /* string_buffer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A1290F45144305E7003F6AA8 /* string_buffer.hpp */; };
-		A1290FB6144305E7003F6AA8 /* string_buffer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A1290F45144305E7003F6AA8 /* string_buffer.hpp */; };
-		A1290FB7144305E7003F6AA8 /* string_hasher.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A1290F46144305E7003F6AA8 /* string_hasher.hpp */; };
-		A1290FB9144305E7003F6AA8 /* string_hasher.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A1290F46144305E7003F6AA8 /* string_hasher.hpp */; };
-		A1485EF41447016000A88A92 /* JPAsyncJsonParser.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1290F2B144305E7003F6AA8 /* JPAsyncJsonParser.mm */; };
-		A1485EF51447017500A88A92 /* JPSemanticActionsBase.mm in Sources */ = {isa = PBXBuildFile; fileRef = A19642361445D6A100ECB4C2 /* JPSemanticActionsBase.mm */; };
-		A1485EF61447019500A88A92 /* JPAsyncJsonParser.h in Headers */ = {isa = PBXBuildFile; fileRef = A1290F20144305E7003F6AA8 /* JPAsyncJsonParser.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A1485EF81447021900A88A92 /* JPAsyncJsonParser.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1290F2B144305E7003F6AA8 /* JPAsyncJsonParser.mm */; };
-		A1485EF91447024700A88A92 /* JPAsyncJsonParser.h in Headers */ = {isa = PBXBuildFile; fileRef = A1290F20144305E7003F6AA8 /* JPAsyncJsonParser.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A15E637A14570218000F22F6 /* unicode_traits.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A15E637914570218000F22F6 /* unicode_traits.hpp */; };
-		A15E637B14570218000F22F6 /* unicode_traits.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A15E637914570218000F22F6 /* unicode_traits.hpp */; };
-		A15E637C14570218000F22F6 /* unicode_traits.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A15E637914570218000F22F6 /* unicode_traits.hpp */; };
-		A16E35EB14430878009B0A89 /* CFDataBuffer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A1290F28144305E7003F6AA8 /* CFDataBuffer.hpp */; };
-		A16E35EC14430878009B0A89 /* CFDataCache.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A1290F29144305E7003F6AA8 /* CFDataCache.hpp */; };
-		A16E35EE14430878009B0A89 /* JPSemanticActionsBase_private.h in Headers */ = {isa = PBXBuildFile; fileRef = A1290F2E144305E7003F6AA8 /* JPSemanticActionsBase_private.h */; };
-		A16E35EF14430878009B0A89 /* mutex.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A1290F2F144305E7003F6AA8 /* mutex.hpp */; };
-		A16E35F014430878009B0A89 /* semaphore.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A1290F30144305E7003F6AA8 /* semaphore.hpp */; };
-		A16E35F114430878009B0A89 /* SemanticActions.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A1290F31144305E7003F6AA8 /* SemanticActions.hpp */; };
-		A16E35F214430878009B0A89 /* parse.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A1290F32144305E7003F6AA8 /* parse.hpp */; };
-		A16E35F314430878009B0A89 /* parser.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A1290F33144305E7003F6AA8 /* parser.hpp */; };
-		A16E35F414430878009B0A89 /* parser_errors.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A1290F34144305E7003F6AA8 /* parser_errors.hpp */; };
-		A16E35F514430878009B0A89 /* semantic_actions.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A1290F35144305E7003F6AA8 /* semantic_actions.hpp */; };
-		A16E35F614430878009B0A89 /* semantic_actions_base.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A1290F36144305E7003F6AA8 /* semantic_actions_base.hpp */; };
-		A16E35F714430878009B0A89 /* semantic_actions_test.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A1290F37144305E7003F6AA8 /* semantic_actions_test.hpp */; };
-		A16E35F814430878009B0A89 /* istreambuf_iterator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A1290F38144305E7003F6AA8 /* istreambuf_iterator.hpp */; };
-		A16E35F914430878009B0A89 /* synchronous_queue.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A1290F39144305E7003F6AA8 /* synchronous_queue.hpp */; };
-		A16E35FA14430878009B0A89 /* syncqueue_streambuf.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A1290F3A144305E7003F6AA8 /* syncqueue_streambuf.hpp */; };
-		A16E35FE14430878009B0A89 /* atomic.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A1290F3E144305E7003F6AA8 /* atomic.hpp */; };
-		A16E360214430878009B0A89 /* flags.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A1290F42144305E7003F6AA8 /* flags.hpp */; };
-		A16E360314430878009B0A89 /* number_builder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A1290F43144305E7003F6AA8 /* number_builder.hpp */; };
-		A16E360414430878009B0A89 /* simple_log.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A1290F44144305E7003F6AA8 /* simple_log.hpp */; };
-		A16E360514430878009B0A89 /* string_buffer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A1290F45144305E7003F6AA8 /* string_buffer.hpp */; };
-		A16E360614430878009B0A89 /* string_hasher.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A1290F46144305E7003F6AA8 /* string_hasher.hpp */; };
-		A17B2222145AF515008EEFF9 /* byte_swap.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A17B221A145AF514008EEFF9 /* byte_swap.hpp */; };
-		A17B2223145AF515008EEFF9 /* byte_swap.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A17B221A145AF514008EEFF9 /* byte_swap.hpp */; };
-		A17B2224145AF515008EEFF9 /* byte_swap.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A17B221A145AF514008EEFF9 /* byte_swap.hpp */; };
-		A17B2225145AF515008EEFF9 /* byte_swap_iterator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A17B221B145AF514008EEFF9 /* byte_swap_iterator.hpp */; };
-		A17B2226145AF515008EEFF9 /* byte_swap_iterator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A17B221B145AF514008EEFF9 /* byte_swap_iterator.hpp */; };
-		A17B2227145AF515008EEFF9 /* byte_swap_iterator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A17B221B145AF514008EEFF9 /* byte_swap_iterator.hpp */; };
-		A17B2228145AF515008EEFF9 /* endian.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A17B221C145AF514008EEFF9 /* endian.hpp */; };
-		A17B2229145AF515008EEFF9 /* endian.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A17B221C145AF514008EEFF9 /* endian.hpp */; };
-		A17B222A145AF515008EEFF9 /* endian.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A17B221C145AF514008EEFF9 /* endian.hpp */; };
-		A17B222B145AF515008EEFF9 /* unicode_conversions.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A17B221E145AF515008EEFF9 /* unicode_conversions.hpp */; };
-		A17B222C145AF515008EEFF9 /* unicode_conversions.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A17B221E145AF515008EEFF9 /* unicode_conversions.hpp */; };
-		A17B222D145AF515008EEFF9 /* unicode_conversions.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A17B221E145AF515008EEFF9 /* unicode_conversions.hpp */; };
-		A17B222E145AF515008EEFF9 /* unicode_detect_bom.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A17B221F145AF515008EEFF9 /* unicode_detect_bom.hpp */; };
-		A17B222F145AF515008EEFF9 /* unicode_detect_bom.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A17B221F145AF515008EEFF9 /* unicode_detect_bom.hpp */; };
-		A17B2230145AF515008EEFF9 /* unicode_detect_bom.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A17B221F145AF515008EEFF9 /* unicode_detect_bom.hpp */; };
-		A17B2234145AF515008EEFF9 /* unicode_utilities.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A17B2221145AF515008EEFF9 /* unicode_utilities.hpp */; };
-		A17B2235145AF515008EEFF9 /* unicode_utilities.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A17B2221145AF515008EEFF9 /* unicode_utilities.hpp */; };
-		A17B2236145AF515008EEFF9 /* unicode_utilities.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A17B2221145AF515008EEFF9 /* unicode_utilities.hpp */; };
-		A17B2238145AF556008EEFF9 /* json_path.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A17B2237145AF555008EEFF9 /* json_path.hpp */; };
-		A17B2239145AF556008EEFF9 /* json_path.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A17B2237145AF555008EEFF9 /* json_path.hpp */; };
-		A17B223A145AF556008EEFF9 /* json_path.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A17B2237145AF555008EEFF9 /* json_path.hpp */; };
-		A17B223D145AF636008EEFF9 /* generate.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A17B223C145AF636008EEFF9 /* generate.hpp */; };
-		A17B223E145AF636008EEFF9 /* generate.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A17B223C145AF636008EEFF9 /* generate.hpp */; };
-		A17B223F145AF636008EEFF9 /* generate.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A17B223C145AF636008EEFF9 /* generate.hpp */; };
-		A19642381445D6A100ECB4C2 /* JPSemanticActionsBase.h in Headers */ = {isa = PBXBuildFile; fileRef = A19642351445D6A100ECB4C2 /* JPSemanticActionsBase.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A19642391445D6A100ECB4C2 /* JPSemanticActionsBase.mm in Sources */ = {isa = PBXBuildFile; fileRef = A19642361445D6A100ECB4C2 /* JPSemanticActionsBase.mm */; };
-		A196423A1445D6A100ECB4C2 /* JPSemanticActionsProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = A19642371445D6A100ECB4C2 /* JPSemanticActionsProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A196423C1445D6D400ECB4C2 /* JPSemanticActionsProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = A19642371445D6A100ECB4C2 /* JPSemanticActionsProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A196423E1445D6DF00ECB4C2 /* JPSemanticActionsBase.h in Headers */ = {isa = PBXBuildFile; fileRef = A19642351445D6A100ECB4C2 /* JPSemanticActionsBase.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A19642401445D78A00ECB4C2 /* SemanticActionsBase.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A196423F1445D78A00ECB4C2 /* SemanticActionsBase.hpp */; };
-		A19642411445D78A00ECB4C2 /* SemanticActionsBase.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A196423F1445D78A00ECB4C2 /* SemanticActionsBase.hpp */; };
-		A19642421445D78A00ECB4C2 /* SemanticActionsBase.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A196423F1445D78A00ECB4C2 /* SemanticActionsBase.hpp */; };
+		A110B69F146D26E90017B77F /* byte_swap.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B642146D26E90017B77F /* byte_swap.hpp */; };
+		A110B6A0146D26E90017B77F /* byte_swap.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B642146D26E90017B77F /* byte_swap.hpp */; };
+		A110B6A1146D26E90017B77F /* byte_swap.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B642146D26E90017B77F /* byte_swap.hpp */; };
+		A110B6A2146D26E90017B77F /* byte_swap_iterator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B643146D26E90017B77F /* byte_swap_iterator.hpp */; };
+		A110B6A3146D26E90017B77F /* byte_swap_iterator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B643146D26E90017B77F /* byte_swap_iterator.hpp */; };
+		A110B6A4146D26E90017B77F /* byte_swap_iterator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B643146D26E90017B77F /* byte_swap_iterator.hpp */; };
+		A110B6A5146D26E90017B77F /* endian.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B644146D26E90017B77F /* endian.hpp */; };
+		A110B6A6146D26E90017B77F /* endian.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B644146D26E90017B77F /* endian.hpp */; };
+		A110B6A7146D26E90017B77F /* endian.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B644146D26E90017B77F /* endian.hpp */; };
+		A110B6A8146D26E90017B77F /* generate.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B646146D26E90017B77F /* generate.hpp */; };
+		A110B6A9146D26E90017B77F /* generate.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B646146D26E90017B77F /* generate.hpp */; };
+		A110B6AA146D26E90017B77F /* generate.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B646146D26E90017B77F /* generate.hpp */; };
+		A110B6AB146D26E90017B77F /* CFDataBuffer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B648146D26E90017B77F /* CFDataBuffer.hpp */; };
+		A110B6AC146D26E90017B77F /* CFDataBuffer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B648146D26E90017B77F /* CFDataBuffer.hpp */; };
+		A110B6AD146D26E90017B77F /* CFDataBuffer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B648146D26E90017B77F /* CFDataBuffer.hpp */; };
+		A110B6AE146D26E90017B77F /* CFDataCache.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B649146D26E90017B77F /* CFDataCache.hpp */; };
+		A110B6AF146D26E90017B77F /* CFDataCache.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B649146D26E90017B77F /* CFDataCache.hpp */; };
+		A110B6B0146D26E90017B77F /* CFDataCache.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B649146D26E90017B77F /* CFDataCache.hpp */; };
+		A110B6B1146D26E90017B77F /* JPAsyncJsonParser.h in Headers */ = {isa = PBXBuildFile; fileRef = A110B64A146D26E90017B77F /* JPAsyncJsonParser.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A110B6B2146D26E90017B77F /* JPAsyncJsonParser.h in Headers */ = {isa = PBXBuildFile; fileRef = A110B64A146D26E90017B77F /* JPAsyncJsonParser.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A110B6B3146D26E90017B77F /* JPAsyncJsonParser.h in Headers */ = {isa = PBXBuildFile; fileRef = A110B64A146D26E90017B77F /* JPAsyncJsonParser.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A110B6B4146D26E90017B77F /* JPAsyncJsonParser.mm in Sources */ = {isa = PBXBuildFile; fileRef = A110B64B146D26E90017B77F /* JPAsyncJsonParser.mm */; };
+		A110B6B5146D26E90017B77F /* JPAsyncJsonParser.mm in Sources */ = {isa = PBXBuildFile; fileRef = A110B64B146D26E90017B77F /* JPAsyncJsonParser.mm */; };
+		A110B6B6146D26E90017B77F /* JPAsyncJsonParser.mm in Sources */ = {isa = PBXBuildFile; fileRef = A110B64B146D26E90017B77F /* JPAsyncJsonParser.mm */; };
+		A110B6B7146D26E90017B77F /* JPBufferQueueProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = A110B64C146D26E90017B77F /* JPBufferQueueProtocol.h */; };
+		A110B6B8146D26E90017B77F /* JPBufferQueueProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = A110B64C146D26E90017B77F /* JPBufferQueueProtocol.h */; };
+		A110B6BA146D26E90017B77F /* JPJsonCommon.h in Headers */ = {isa = PBXBuildFile; fileRef = A110B64D146D26E90017B77F /* JPJsonCommon.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A110B6BB146D26E90017B77F /* JPJsonCommon.h in Headers */ = {isa = PBXBuildFile; fileRef = A110B64D146D26E90017B77F /* JPJsonCommon.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A110B6BC146D26E90017B77F /* JPJsonCommon.h in Headers */ = {isa = PBXBuildFile; fileRef = A110B64D146D26E90017B77F /* JPJsonCommon.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A110B6BD146D26E90017B77F /* JPJsonParser.h in Headers */ = {isa = PBXBuildFile; fileRef = A110B64E146D26E90017B77F /* JPJsonParser.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A110B6BE146D26E90017B77F /* JPJsonParser.h in Headers */ = {isa = PBXBuildFile; fileRef = A110B64E146D26E90017B77F /* JPJsonParser.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A110B6BF146D26E90017B77F /* JPJsonParser.h in Headers */ = {isa = PBXBuildFile; fileRef = A110B64E146D26E90017B77F /* JPJsonParser.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A110B6C0146D26E90017B77F /* JPJsonParser.mm in Sources */ = {isa = PBXBuildFile; fileRef = A110B64F146D26E90017B77F /* JPJsonParser.mm */; };
+		A110B6C1146D26E90017B77F /* JPJsonParser.mm in Sources */ = {isa = PBXBuildFile; fileRef = A110B64F146D26E90017B77F /* JPJsonParser.mm */; };
+		A110B6C2146D26E90017B77F /* JPJsonParser.mm in Sources */ = {isa = PBXBuildFile; fileRef = A110B64F146D26E90017B77F /* JPJsonParser.mm */; };
+		A110B6C3146D26E90017B77F /* JPJsonWriter.h in Headers */ = {isa = PBXBuildFile; fileRef = A110B650146D26E90017B77F /* JPJsonWriter.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A110B6C4146D26E90017B77F /* JPJsonWriter.h in Headers */ = {isa = PBXBuildFile; fileRef = A110B650146D26E90017B77F /* JPJsonWriter.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A110B6C5146D26E90017B77F /* JPJsonWriter.h in Headers */ = {isa = PBXBuildFile; fileRef = A110B650146D26E90017B77F /* JPJsonWriter.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A110B6C6146D26E90017B77F /* JPJsonWriter.mm in Sources */ = {isa = PBXBuildFile; fileRef = A110B651146D26E90017B77F /* JPJsonWriter.mm */; };
+		A110B6C7146D26E90017B77F /* JPJsonWriter.mm in Sources */ = {isa = PBXBuildFile; fileRef = A110B651146D26E90017B77F /* JPJsonWriter.mm */; };
+		A110B6C8146D26E90017B77F /* JPJsonWriter.mm in Sources */ = {isa = PBXBuildFile; fileRef = A110B651146D26E90017B77F /* JPJsonWriter.mm */; };
+		A110B6C9146D26E90017B77F /* JPSemanticActions.h in Headers */ = {isa = PBXBuildFile; fileRef = A110B652146D26E90017B77F /* JPSemanticActions.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A110B6CA146D26E90017B77F /* JPSemanticActions.h in Headers */ = {isa = PBXBuildFile; fileRef = A110B652146D26E90017B77F /* JPSemanticActions.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A110B6CB146D26E90017B77F /* JPSemanticActions.h in Headers */ = {isa = PBXBuildFile; fileRef = A110B652146D26E90017B77F /* JPSemanticActions.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A110B6CC146D26E90017B77F /* JPSemanticActions.mm in Sources */ = {isa = PBXBuildFile; fileRef = A110B653146D26E90017B77F /* JPSemanticActions.mm */; };
+		A110B6CD146D26E90017B77F /* JPSemanticActions.mm in Sources */ = {isa = PBXBuildFile; fileRef = A110B653146D26E90017B77F /* JPSemanticActions.mm */; };
+		A110B6CE146D26E90017B77F /* JPSemanticActions.mm in Sources */ = {isa = PBXBuildFile; fileRef = A110B653146D26E90017B77F /* JPSemanticActions.mm */; };
+		A110B6CF146D26E90017B77F /* JPSemanticActionsBase.h in Headers */ = {isa = PBXBuildFile; fileRef = A110B654146D26E90017B77F /* JPSemanticActionsBase.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A110B6D0146D26E90017B77F /* JPSemanticActionsBase.h in Headers */ = {isa = PBXBuildFile; fileRef = A110B654146D26E90017B77F /* JPSemanticActionsBase.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A110B6D1146D26E90017B77F /* JPSemanticActionsBase.h in Headers */ = {isa = PBXBuildFile; fileRef = A110B654146D26E90017B77F /* JPSemanticActionsBase.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A110B6D2146D26E90017B77F /* JPSemanticActionsBase.mm in Sources */ = {isa = PBXBuildFile; fileRef = A110B655146D26E90017B77F /* JPSemanticActionsBase.mm */; };
+		A110B6D3146D26E90017B77F /* JPSemanticActionsBase.mm in Sources */ = {isa = PBXBuildFile; fileRef = A110B655146D26E90017B77F /* JPSemanticActionsBase.mm */; };
+		A110B6D4146D26E90017B77F /* JPSemanticActionsBase.mm in Sources */ = {isa = PBXBuildFile; fileRef = A110B655146D26E90017B77F /* JPSemanticActionsBase.mm */; };
+		A110B6D5146D26E90017B77F /* JPSemanticActionsBase_private.h in Headers */ = {isa = PBXBuildFile; fileRef = A110B656146D26E90017B77F /* JPSemanticActionsBase_private.h */; };
+		A110B6D6146D26E90017B77F /* JPSemanticActionsBase_private.h in Headers */ = {isa = PBXBuildFile; fileRef = A110B656146D26E90017B77F /* JPSemanticActionsBase_private.h */; };
+		A110B6D7146D26E90017B77F /* JPSemanticActionsBase_private.h in Headers */ = {isa = PBXBuildFile; fileRef = A110B656146D26E90017B77F /* JPSemanticActionsBase_private.h */; };
+		A110B6D8146D26E90017B77F /* JPSemanticActionsProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = A110B657146D26E90017B77F /* JPSemanticActionsProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A110B6D9146D26E90017B77F /* JPSemanticActionsProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = A110B657146D26E90017B77F /* JPSemanticActionsProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A110B6DA146D26E90017B77F /* JPSemanticActionsProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = A110B657146D26E90017B77F /* JPSemanticActionsProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A110B6DB146D26E90017B77F /* JPStreamSemanticActions.h in Headers */ = {isa = PBXBuildFile; fileRef = A110B658146D26E90017B77F /* JPStreamSemanticActions.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A110B6DC146D26E90017B77F /* JPStreamSemanticActions.h in Headers */ = {isa = PBXBuildFile; fileRef = A110B658146D26E90017B77F /* JPStreamSemanticActions.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A110B6DD146D26E90017B77F /* JPStreamSemanticActions.h in Headers */ = {isa = PBXBuildFile; fileRef = A110B658146D26E90017B77F /* JPStreamSemanticActions.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A110B6DE146D26E90017B77F /* JPStreamSemanticActions.mm in Sources */ = {isa = PBXBuildFile; fileRef = A110B659146D26E90017B77F /* JPStreamSemanticActions.mm */; };
+		A110B6DF146D26E90017B77F /* JPStreamSemanticActions.mm in Sources */ = {isa = PBXBuildFile; fileRef = A110B659146D26E90017B77F /* JPStreamSemanticActions.mm */; };
+		A110B6E0146D26E90017B77F /* JPStreamSemanticActions.mm in Sources */ = {isa = PBXBuildFile; fileRef = A110B659146D26E90017B77F /* JPStreamSemanticActions.mm */; };
+		A110B6E1146D26E90017B77F /* mutex.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B65A146D26E90017B77F /* mutex.hpp */; };
+		A110B6E2146D26E90017B77F /* mutex.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B65A146D26E90017B77F /* mutex.hpp */; };
+		A110B6E3146D26E90017B77F /* mutex.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B65A146D26E90017B77F /* mutex.hpp */; };
+		A110B6E4146D26E90017B77F /* NSData+JPJsonDetectEncoding.h in Headers */ = {isa = PBXBuildFile; fileRef = A110B65B146D26E90017B77F /* NSData+JPJsonDetectEncoding.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A110B6E5146D26E90017B77F /* NSData+JPJsonDetectEncoding.h in Headers */ = {isa = PBXBuildFile; fileRef = A110B65B146D26E90017B77F /* NSData+JPJsonDetectEncoding.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A110B6E6146D26E90017B77F /* NSData+JPJsonDetectEncoding.h in Headers */ = {isa = PBXBuildFile; fileRef = A110B65B146D26E90017B77F /* NSData+JPJsonDetectEncoding.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A110B6E7146D26E90017B77F /* NSData+JPJsonDetectEncoding.mm in Sources */ = {isa = PBXBuildFile; fileRef = A110B65C146D26E90017B77F /* NSData+JPJsonDetectEncoding.mm */; };
+		A110B6E8146D26E90017B77F /* NSData+JPJsonDetectEncoding.mm in Sources */ = {isa = PBXBuildFile; fileRef = A110B65C146D26E90017B77F /* NSData+JPJsonDetectEncoding.mm */; };
+		A110B6E9146D26E90017B77F /* NSData+JPJsonDetectEncoding.mm in Sources */ = {isa = PBXBuildFile; fileRef = A110B65C146D26E90017B77F /* NSData+JPJsonDetectEncoding.mm */; };
+		A110B6EA146D26E90017B77F /* SemanticActions.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B65D146D26E90017B77F /* SemanticActions.hpp */; };
+		A110B6EB146D26E90017B77F /* SemanticActions.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B65D146D26E90017B77F /* SemanticActions.hpp */; };
+		A110B6EC146D26E90017B77F /* SemanticActions.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B65D146D26E90017B77F /* SemanticActions.hpp */; };
+		A110B6ED146D26E90017B77F /* SemanticActionsBase.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B65E146D26E90017B77F /* SemanticActionsBase.hpp */; };
+		A110B6EE146D26E90017B77F /* SemanticActionsBase.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B65E146D26E90017B77F /* SemanticActionsBase.hpp */; };
+		A110B6EF146D26E90017B77F /* SemanticActionsBase.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B65E146D26E90017B77F /* SemanticActionsBase.hpp */; };
+		A110B6F0146D26E90017B77F /* semaphore.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B65F146D26E90017B77F /* semaphore.hpp */; };
+		A110B6F1146D26E90017B77F /* semaphore.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B65F146D26E90017B77F /* semaphore.hpp */; };
+		A110B6F2146D26E90017B77F /* semaphore.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B65F146D26E90017B77F /* semaphore.hpp */; };
+		A110B6F3146D26E90017B77F /* unicode_traits.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B660146D26E90017B77F /* unicode_traits.hpp */; };
+		A110B6F4146D26E90017B77F /* unicode_traits.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B660146D26E90017B77F /* unicode_traits.hpp */; };
+		A110B6F5146D26E90017B77F /* unicode_traits.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B660146D26E90017B77F /* unicode_traits.hpp */; };
+		A110B714146D26E90017B77F /* json_path.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B66D146D26E90017B77F /* json_path.hpp */; };
+		A110B715146D26E90017B77F /* json_path.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B66D146D26E90017B77F /* json_path.hpp */; };
+		A110B716146D26E90017B77F /* json_path.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B66D146D26E90017B77F /* json_path.hpp */; };
+		A110B717146D26E90017B77F /* parse.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B66E146D26E90017B77F /* parse.hpp */; };
+		A110B718146D26E90017B77F /* parse.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B66E146D26E90017B77F /* parse.hpp */; };
+		A110B719146D26E90017B77F /* parse.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B66E146D26E90017B77F /* parse.hpp */; };
+		A110B71A146D26E90017B77F /* parser.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B66F146D26E90017B77F /* parser.hpp */; };
+		A110B71B146D26E90017B77F /* parser.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B66F146D26E90017B77F /* parser.hpp */; };
+		A110B71C146D26E90017B77F /* parser.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B66F146D26E90017B77F /* parser.hpp */; };
+		A110B71D146D26E90017B77F /* parser_errors.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B670146D26E90017B77F /* parser_errors.hpp */; };
+		A110B71E146D26E90017B77F /* parser_errors.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B670146D26E90017B77F /* parser_errors.hpp */; };
+		A110B71F146D26E90017B77F /* parser_errors.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B670146D26E90017B77F /* parser_errors.hpp */; };
+		A110B720146D26E90017B77F /* semantic_actions.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B671146D26E90017B77F /* semantic_actions.hpp */; };
+		A110B721146D26E90017B77F /* semantic_actions.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B671146D26E90017B77F /* semantic_actions.hpp */; };
+		A110B722146D26E90017B77F /* semantic_actions.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B671146D26E90017B77F /* semantic_actions.hpp */; };
+		A110B723146D26E90017B77F /* semantic_actions_base.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B672146D26E90017B77F /* semantic_actions_base.hpp */; };
+		A110B724146D26E90017B77F /* semantic_actions_base.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B672146D26E90017B77F /* semantic_actions_base.hpp */; };
+		A110B725146D26E90017B77F /* semantic_actions_base.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B672146D26E90017B77F /* semantic_actions_base.hpp */; };
+		A110B726146D26E90017B77F /* semantic_actions_test.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B673146D26E90017B77F /* semantic_actions_test.hpp */; };
+		A110B727146D26E90017B77F /* semantic_actions_test.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B673146D26E90017B77F /* semantic_actions_test.hpp */; };
+		A110B728146D26E90017B77F /* semantic_actions_test.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B673146D26E90017B77F /* semantic_actions_test.hpp */; };
+		A110B729146D26E90017B77F /* unicode_conversions.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B675146D26E90017B77F /* unicode_conversions.hpp */; };
+		A110B72A146D26E90017B77F /* unicode_conversions.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B675146D26E90017B77F /* unicode_conversions.hpp */; };
+		A110B72B146D26E90017B77F /* unicode_conversions.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B675146D26E90017B77F /* unicode_conversions.hpp */; };
+		A110B72C146D26E90017B77F /* unicode_detect_bom.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B676146D26E90017B77F /* unicode_detect_bom.hpp */; };
+		A110B72D146D26E90017B77F /* unicode_detect_bom.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B676146D26E90017B77F /* unicode_detect_bom.hpp */; };
+		A110B72E146D26E90017B77F /* unicode_detect_bom.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B676146D26E90017B77F /* unicode_detect_bom.hpp */; };
+		A110B72F146D26E90017B77F /* unicode_iterator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B677146D26E90017B77F /* unicode_iterator.hpp */; };
+		A110B730146D26E90017B77F /* unicode_iterator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B677146D26E90017B77F /* unicode_iterator.hpp */; };
+		A110B731146D26E90017B77F /* unicode_iterator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B677146D26E90017B77F /* unicode_iterator.hpp */; };
+		A110B732146D26E90017B77F /* unicode_utilities.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B678146D26E90017B77F /* unicode_utilities.hpp */; };
+		A110B733146D26E90017B77F /* unicode_utilities.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B678146D26E90017B77F /* unicode_utilities.hpp */; };
+		A110B734146D26E90017B77F /* unicode_utilities.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B678146D26E90017B77F /* unicode_utilities.hpp */; };
+		A110B735146D26E90017B77F /* atomic.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B67A146D26E90017B77F /* atomic.hpp */; };
+		A110B736146D26E90017B77F /* atomic.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B67A146D26E90017B77F /* atomic.hpp */; };
+		A110B737146D26E90017B77F /* atomic.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B67A146D26E90017B77F /* atomic.hpp */; };
+		A110B738146D26E90017B77F /* flags.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B67B146D26E90017B77F /* flags.hpp */; };
+		A110B739146D26E90017B77F /* flags.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B67B146D26E90017B77F /* flags.hpp */; };
+		A110B73A146D26E90017B77F /* flags.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B67B146D26E90017B77F /* flags.hpp */; };
+		A110B73B146D26E90017B77F /* istreambuf_iterator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B67C146D26E90017B77F /* istreambuf_iterator.hpp */; };
+		A110B73C146D26E90017B77F /* istreambuf_iterator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B67C146D26E90017B77F /* istreambuf_iterator.hpp */; };
+		A110B73D146D26E90017B77F /* istreambuf_iterator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B67C146D26E90017B77F /* istreambuf_iterator.hpp */; };
+		A110B73E146D26E90017B77F /* lru_cache.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B67D146D26E90017B77F /* lru_cache.hpp */; };
+		A110B73F146D26E90017B77F /* lru_cache.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B67D146D26E90017B77F /* lru_cache.hpp */; };
+		A110B741146D26E90017B77F /* number_builder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B67E146D26E90017B77F /* number_builder.hpp */; };
+		A110B742146D26E90017B77F /* number_builder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B67E146D26E90017B77F /* number_builder.hpp */; };
+		A110B743146D26E90017B77F /* number_builder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B67E146D26E90017B77F /* number_builder.hpp */; };
+		A110B744146D26E90017B77F /* simple_log.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B67F146D26E90017B77F /* simple_log.hpp */; };
+		A110B745146D26E90017B77F /* simple_log.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B67F146D26E90017B77F /* simple_log.hpp */; };
+		A110B746146D26E90017B77F /* simple_log.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B67F146D26E90017B77F /* simple_log.hpp */; };
+		A110B747146D26E90017B77F /* string_buffer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B680146D26E90017B77F /* string_buffer.hpp */; };
+		A110B748146D26E90017B77F /* string_buffer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B680146D26E90017B77F /* string_buffer.hpp */; };
+		A110B749146D26E90017B77F /* string_buffer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B680146D26E90017B77F /* string_buffer.hpp */; };
+		A110B74A146D26E90017B77F /* string_hasher.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B681146D26E90017B77F /* string_hasher.hpp */; };
+		A110B74B146D26E90017B77F /* string_hasher.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B681146D26E90017B77F /* string_hasher.hpp */; };
+		A110B74C146D26E90017B77F /* string_hasher.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B681146D26E90017B77F /* string_hasher.hpp */; };
+		A110B74D146D26E90017B77F /* synchronous_queue.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B682146D26E90017B77F /* synchronous_queue.hpp */; };
+		A110B74E146D26E90017B77F /* synchronous_queue.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B682146D26E90017B77F /* synchronous_queue.hpp */; };
+		A110B74F146D26E90017B77F /* synchronous_queue.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B682146D26E90017B77F /* synchronous_queue.hpp */; };
+		A110B750146D26E90017B77F /* syncqueue_streambuf.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B683146D26E90017B77F /* syncqueue_streambuf.hpp */; };
+		A110B751146D26E90017B77F /* syncqueue_streambuf.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B683146D26E90017B77F /* syncqueue_streambuf.hpp */; };
+		A110B752146D26E90017B77F /* syncqueue_streambuf.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B683146D26E90017B77F /* syncqueue_streambuf.hpp */; };
 		A1CA8B861441E4860076C0CB /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = A1CA8B841441E4860076C0CB /* InfoPlist.strings */; };
 		A1CA8BAE1441E9120076C0CB /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1CA8BAC1441E9120076C0CB /* CoreFoundation.framework */; };
 		A1CA8BAF1441E9120076C0CB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1CA8BAD1441E9120076C0CB /* Foundation.framework */; };
@@ -198,53 +205,56 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		A11B450414546E9E006329A1 /* JPStreamSemanticActions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JPStreamSemanticActions.h; path = json/ObjC/JPStreamSemanticActions.h; sourceTree = "<group>"; };
-		A11B450814546EC1006329A1 /* JPStreamSemanticActions.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = JPStreamSemanticActions.mm; sourceTree = "<group>"; };
-		A1290F1E144305E7003F6AA8 /* JPJsonCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JPJsonCommon.h; path = json/ObjC/JPJsonCommon.h; sourceTree = "<group>"; };
-		A1290F1F144305E7003F6AA8 /* JPJsonParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = JPJsonParser.h; path = json/ObjC/JPJsonParser.h; sourceTree = "<group>"; };
-		A1290F20144305E7003F6AA8 /* JPAsyncJsonParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = JPAsyncJsonParser.h; path = json/ObjC/JPAsyncJsonParser.h; sourceTree = "<group>"; };
-		A1290F21144305E7003F6AA8 /* JPJsonWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = JPJsonWriter.h; path = json/ObjC/JPJsonWriter.h; sourceTree = "<group>"; };
-		A1290F22144305E7003F6AA8 /* JPSemanticActions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = JPSemanticActions.h; path = json/ObjC/JPSemanticActions.h; sourceTree = "<group>"; };
-		A1290F23144305E7003F6AA8 /* NSData+JPJsonDetectEncoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSData+JPJsonDetectEncoding.h"; path = "json/ObjC/NSData+JPJsonDetectEncoding.h"; sourceTree = "<group>"; };
-		A1290F27144305E7003F6AA8 /* NSData+JPJsonDetectEncoding.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "NSData+JPJsonDetectEncoding.mm"; sourceTree = "<group>"; };
-		A1290F28144305E7003F6AA8 /* CFDataBuffer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = CFDataBuffer.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		A1290F29144305E7003F6AA8 /* CFDataCache.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = CFDataCache.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		A1290F2A144305E7003F6AA8 /* JPJsonParser.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; path = JPJsonParser.mm; sourceTree = "<group>"; };
-		A1290F2B144305E7003F6AA8 /* JPAsyncJsonParser.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; path = JPAsyncJsonParser.mm; sourceTree = "<group>"; };
-		A1290F2C144305E7003F6AA8 /* JPJsonWriter.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; path = JPJsonWriter.mm; sourceTree = "<group>"; };
-		A1290F2D144305E7003F6AA8 /* JPSemanticActions.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; path = JPSemanticActions.mm; sourceTree = "<group>"; };
-		A1290F2E144305E7003F6AA8 /* JPSemanticActionsBase_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = JPSemanticActionsBase_private.h; sourceTree = "<group>"; };
-		A1290F2F144305E7003F6AA8 /* mutex.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = mutex.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		A1290F30144305E7003F6AA8 /* semaphore.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = semaphore.hpp; sourceTree = "<group>"; };
-		A1290F31144305E7003F6AA8 /* SemanticActions.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = SemanticActions.hpp; sourceTree = "<group>"; };
-		A1290F32144305E7003F6AA8 /* parse.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = parse.hpp; sourceTree = "<group>"; };
-		A1290F33144305E7003F6AA8 /* parser.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = parser.hpp; sourceTree = "<group>"; };
-		A1290F34144305E7003F6AA8 /* parser_errors.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = parser_errors.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		A1290F35144305E7003F6AA8 /* semantic_actions.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = semantic_actions.hpp; sourceTree = "<group>"; };
-		A1290F36144305E7003F6AA8 /* semantic_actions_base.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = semantic_actions_base.hpp; sourceTree = "<group>"; };
-		A1290F37144305E7003F6AA8 /* semantic_actions_test.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = semantic_actions_test.hpp; sourceTree = "<group>"; };
-		A1290F38144305E7003F6AA8 /* istreambuf_iterator.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = istreambuf_iterator.hpp; sourceTree = "<group>"; };
-		A1290F39144305E7003F6AA8 /* synchronous_queue.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = synchronous_queue.hpp; sourceTree = "<group>"; };
-		A1290F3A144305E7003F6AA8 /* syncqueue_streambuf.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = syncqueue_streambuf.hpp; sourceTree = "<group>"; };
-		A1290F3E144305E7003F6AA8 /* atomic.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = atomic.hpp; sourceTree = "<group>"; };
-		A1290F42144305E7003F6AA8 /* flags.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = flags.hpp; sourceTree = "<group>"; };
-		A1290F43144305E7003F6AA8 /* number_builder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = number_builder.hpp; sourceTree = "<group>"; };
-		A1290F44144305E7003F6AA8 /* simple_log.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = simple_log.hpp; sourceTree = "<group>"; };
-		A1290F45144305E7003F6AA8 /* string_buffer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = string_buffer.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		A1290F46144305E7003F6AA8 /* string_hasher.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = string_hasher.hpp; sourceTree = "<group>"; };
-		A15E637914570218000F22F6 /* unicode_traits.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = unicode_traits.hpp; sourceTree = "<group>"; };
-		A17B221A145AF514008EEFF9 /* byte_swap.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = byte_swap.hpp; sourceTree = "<group>"; };
-		A17B221B145AF514008EEFF9 /* byte_swap_iterator.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = byte_swap_iterator.hpp; sourceTree = "<group>"; };
-		A17B221C145AF514008EEFF9 /* endian.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = endian.hpp; sourceTree = "<group>"; };
-		A17B221E145AF515008EEFF9 /* unicode_conversions.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = unicode_conversions.hpp; sourceTree = "<group>"; };
-		A17B221F145AF515008EEFF9 /* unicode_detect_bom.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = unicode_detect_bom.hpp; sourceTree = "<group>"; };
-		A17B2221145AF515008EEFF9 /* unicode_utilities.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = unicode_utilities.hpp; sourceTree = "<group>"; };
-		A17B2237145AF555008EEFF9 /* json_path.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = json_path.hpp; sourceTree = "<group>"; };
-		A17B223C145AF636008EEFF9 /* generate.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = generate.hpp; sourceTree = "<group>"; };
-		A19642351445D6A100ECB4C2 /* JPSemanticActionsBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JPSemanticActionsBase.h; path = json/ObjC/JPSemanticActionsBase.h; sourceTree = "<group>"; };
-		A19642361445D6A100ECB4C2 /* JPSemanticActionsBase.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = JPSemanticActionsBase.mm; sourceTree = "<group>"; };
-		A19642371445D6A100ECB4C2 /* JPSemanticActionsProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JPSemanticActionsProtocol.h; path = json/ObjC/JPSemanticActionsProtocol.h; sourceTree = "<group>"; };
-		A196423F1445D78A00ECB4C2 /* SemanticActionsBase.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SemanticActionsBase.hpp; sourceTree = "<group>"; };
+		A110B642146D26E90017B77F /* byte_swap.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = byte_swap.hpp; sourceTree = "<group>"; };
+		A110B643146D26E90017B77F /* byte_swap_iterator.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = byte_swap_iterator.hpp; sourceTree = "<group>"; };
+		A110B644146D26E90017B77F /* endian.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = endian.hpp; sourceTree = "<group>"; };
+		A110B646146D26E90017B77F /* generate.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = generate.hpp; sourceTree = "<group>"; };
+		A110B648146D26E90017B77F /* CFDataBuffer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CFDataBuffer.hpp; sourceTree = "<group>"; };
+		A110B649146D26E90017B77F /* CFDataCache.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CFDataCache.hpp; sourceTree = "<group>"; };
+		A110B64A146D26E90017B77F /* JPAsyncJsonParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JPAsyncJsonParser.h; path = ../../Source/json/ObjC/JPAsyncJsonParser.h; sourceTree = "<group>"; };
+		A110B64B146D26E90017B77F /* JPAsyncJsonParser.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = JPAsyncJsonParser.mm; sourceTree = "<group>"; };
+		A110B64C146D26E90017B77F /* JPBufferQueueProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JPBufferQueueProtocol.h; sourceTree = "<group>"; };
+		A110B64D146D26E90017B77F /* JPJsonCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JPJsonCommon.h; path = ../../Source/json/ObjC/JPJsonCommon.h; sourceTree = "<group>"; };
+		A110B64E146D26E90017B77F /* JPJsonParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JPJsonParser.h; path = ../../Source/json/ObjC/JPJsonParser.h; sourceTree = "<group>"; };
+		A110B64F146D26E90017B77F /* JPJsonParser.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = JPJsonParser.mm; sourceTree = "<group>"; };
+		A110B650146D26E90017B77F /* JPJsonWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JPJsonWriter.h; path = ../../Source/json/ObjC/JPJsonWriter.h; sourceTree = "<group>"; };
+		A110B651146D26E90017B77F /* JPJsonWriter.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = JPJsonWriter.mm; sourceTree = "<group>"; };
+		A110B652146D26E90017B77F /* JPSemanticActions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JPSemanticActions.h; path = ../../Source/json/ObjC/JPSemanticActions.h; sourceTree = "<group>"; };
+		A110B653146D26E90017B77F /* JPSemanticActions.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = JPSemanticActions.mm; sourceTree = "<group>"; };
+		A110B654146D26E90017B77F /* JPSemanticActionsBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JPSemanticActionsBase.h; path = ../../Source/json/ObjC/JPSemanticActionsBase.h; sourceTree = "<group>"; };
+		A110B655146D26E90017B77F /* JPSemanticActionsBase.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = JPSemanticActionsBase.mm; sourceTree = "<group>"; };
+		A110B656146D26E90017B77F /* JPSemanticActionsBase_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JPSemanticActionsBase_private.h; sourceTree = "<group>"; };
+		A110B657146D26E90017B77F /* JPSemanticActionsProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JPSemanticActionsProtocol.h; path = ../../Source/json/ObjC/JPSemanticActionsProtocol.h; sourceTree = "<group>"; };
+		A110B658146D26E90017B77F /* JPStreamSemanticActions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JPStreamSemanticActions.h; path = ../../Source/json/ObjC/JPStreamSemanticActions.h; sourceTree = "<group>"; };
+		A110B659146D26E90017B77F /* JPStreamSemanticActions.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = JPStreamSemanticActions.mm; sourceTree = "<group>"; };
+		A110B65A146D26E90017B77F /* mutex.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = mutex.hpp; sourceTree = "<group>"; };
+		A110B65B146D26E90017B77F /* NSData+JPJsonDetectEncoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSData+JPJsonDetectEncoding.h"; path = "../../Source/json/ObjC/NSData+JPJsonDetectEncoding.h"; sourceTree = "<group>"; };
+		A110B65C146D26E90017B77F /* NSData+JPJsonDetectEncoding.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "NSData+JPJsonDetectEncoding.mm"; sourceTree = "<group>"; };
+		A110B65D146D26E90017B77F /* SemanticActions.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SemanticActions.hpp; sourceTree = "<group>"; };
+		A110B65E146D26E90017B77F /* SemanticActionsBase.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SemanticActionsBase.hpp; sourceTree = "<group>"; };
+		A110B65F146D26E90017B77F /* semaphore.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = semaphore.hpp; sourceTree = "<group>"; };
+		A110B660146D26E90017B77F /* unicode_traits.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = unicode_traits.hpp; sourceTree = "<group>"; };
+		A110B66D146D26E90017B77F /* json_path.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = json_path.hpp; sourceTree = "<group>"; };
+		A110B66E146D26E90017B77F /* parse.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = parse.hpp; sourceTree = "<group>"; };
+		A110B66F146D26E90017B77F /* parser.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = parser.hpp; sourceTree = "<group>"; };
+		A110B670146D26E90017B77F /* parser_errors.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = parser_errors.hpp; sourceTree = "<group>"; };
+		A110B671146D26E90017B77F /* semantic_actions.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = semantic_actions.hpp; sourceTree = "<group>"; };
+		A110B672146D26E90017B77F /* semantic_actions_base.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = semantic_actions_base.hpp; sourceTree = "<group>"; };
+		A110B673146D26E90017B77F /* semantic_actions_test.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = semantic_actions_test.hpp; sourceTree = "<group>"; };
+		A110B675146D26E90017B77F /* unicode_conversions.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = unicode_conversions.hpp; sourceTree = "<group>"; };
+		A110B676146D26E90017B77F /* unicode_detect_bom.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = unicode_detect_bom.hpp; sourceTree = "<group>"; };
+		A110B677146D26E90017B77F /* unicode_iterator.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = unicode_iterator.hpp; sourceTree = "<group>"; };
+		A110B678146D26E90017B77F /* unicode_utilities.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = unicode_utilities.hpp; sourceTree = "<group>"; };
+		A110B67A146D26E90017B77F /* atomic.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = atomic.hpp; sourceTree = "<group>"; };
+		A110B67B146D26E90017B77F /* flags.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = flags.hpp; sourceTree = "<group>"; };
+		A110B67C146D26E90017B77F /* istreambuf_iterator.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = istreambuf_iterator.hpp; sourceTree = "<group>"; };
+		A110B67D146D26E90017B77F /* lru_cache.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lru_cache.hpp; sourceTree = "<group>"; };
+		A110B67E146D26E90017B77F /* number_builder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = number_builder.hpp; sourceTree = "<group>"; };
+		A110B67F146D26E90017B77F /* simple_log.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = simple_log.hpp; sourceTree = "<group>"; };
+		A110B680146D26E90017B77F /* string_buffer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = string_buffer.hpp; sourceTree = "<group>"; };
+		A110B681146D26E90017B77F /* string_hasher.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = string_hasher.hpp; sourceTree = "<group>"; };
+		A110B682146D26E90017B77F /* synchronous_queue.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = synchronous_queue.hpp; sourceTree = "<group>"; };
+		A110B683146D26E90017B77F /* syncqueue_streambuf.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = syncqueue_streambuf.hpp; sourceTree = "<group>"; };
 		A1CA8B831441E4860076C0CB /* JPJson-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "JPJson-Info.plist"; sourceTree = "<group>"; };
 		A1CA8B851441E4860076C0CB /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		A1CA8B871441E4860076C0CB /* JPJson-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "JPJson-Prefix.pch"; sourceTree = "<group>"; };
@@ -288,129 +298,132 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		A1290F1A144305E7003F6AA8 /* JPJsonLib */ = {
+		A110B63C146D26E90017B77F /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				A1290F1B144305E7003F6AA8 /* Exported Headers */,
-				A1290F1C144305E7003F6AA8 /* json */,
+				A110B640146D26E90017B77F /* json */,
 			);
-			name = JPJsonLib;
+			name = Source;
 			path = ../../Source;
-			sourceTree = SOURCE_ROOT;
-		};
-		A1290F1B144305E7003F6AA8 /* Exported Headers */ = {
-			isa = PBXGroup;
-			children = (
-				A1290F1E144305E7003F6AA8 /* JPJsonCommon.h */,
-				A19642371445D6A100ECB4C2 /* JPSemanticActionsProtocol.h */,
-				A19642351445D6A100ECB4C2 /* JPSemanticActionsBase.h */,
-				A1290F22144305E7003F6AA8 /* JPSemanticActions.h */,
-				A11B450414546E9E006329A1 /* JPStreamSemanticActions.h */,
-				A1290F1F144305E7003F6AA8 /* JPJsonParser.h */,
-				A1290F20144305E7003F6AA8 /* JPAsyncJsonParser.h */,
-				A1290F21144305E7003F6AA8 /* JPJsonWriter.h */,
-				A1290F23144305E7003F6AA8 /* NSData+JPJsonDetectEncoding.h */,
-			);
-			name = "Exported Headers";
 			sourceTree = "<group>";
 		};
-		A1290F1C144305E7003F6AA8 /* json */ = {
+		A110B640146D26E90017B77F /* json */ = {
 			isa = PBXGroup;
 			children = (
-				A17B2219145AF514008EEFF9 /* endian */,
-				A1290F26144305E7003F6AA8 /* utility */,
-				A17B221D145AF514008EEFF9 /* unicode */,
-				A17B223B145AF635008EEFF9 /* generator */,
-				A1290F25144305E7003F6AA8 /* parser */,
-				A1290F24144305E7003F6AA8 /* ObjC */,
+				A110B641146D26E90017B77F /* endian */,
+				A110B645146D26E90017B77F /* generator */,
+				A110B647146D26E90017B77F /* ObjC */,
+				A110B66C146D26E90017B77F /* parser */,
+				A110B674146D26E90017B77F /* unicode */,
+				A110B679146D26E90017B77F /* utility */,
 			);
 			path = json;
 			sourceTree = "<group>";
 		};
-		A1290F24144305E7003F6AA8 /* ObjC */ = {
+		A110B641146D26E90017B77F /* endian */ = {
 			isa = PBXGroup;
 			children = (
-				A15E637914570218000F22F6 /* unicode_traits.hpp */,
-				A1290F2F144305E7003F6AA8 /* mutex.hpp */,
-				A1290F30144305E7003F6AA8 /* semaphore.hpp */,
-				A1290F28144305E7003F6AA8 /* CFDataBuffer.hpp */,
-				A1290F29144305E7003F6AA8 /* CFDataCache.hpp */,
-				A196423F1445D78A00ECB4C2 /* SemanticActionsBase.hpp */,
-				A1290F31144305E7003F6AA8 /* SemanticActions.hpp */,
-				A1290F2E144305E7003F6AA8 /* JPSemanticActionsBase_private.h */,
-				A19642361445D6A100ECB4C2 /* JPSemanticActionsBase.mm */,
-				A1290F2D144305E7003F6AA8 /* JPSemanticActions.mm */,
-				A11B450814546EC1006329A1 /* JPStreamSemanticActions.mm */,
-				A1290F2A144305E7003F6AA8 /* JPJsonParser.mm */,
-				A1290F2B144305E7003F6AA8 /* JPAsyncJsonParser.mm */,
-				A1290F2C144305E7003F6AA8 /* JPJsonWriter.mm */,
-				A1290F27144305E7003F6AA8 /* NSData+JPJsonDetectEncoding.mm */,
-			);
-			path = ObjC;
-			sourceTree = "<group>";
-		};
-		A1290F25144305E7003F6AA8 /* parser */ = {
-			isa = PBXGroup;
-			children = (
-				A17B2237145AF555008EEFF9 /* json_path.hpp */,
-				A1290F32144305E7003F6AA8 /* parse.hpp */,
-				A1290F33144305E7003F6AA8 /* parser.hpp */,
-				A1290F34144305E7003F6AA8 /* parser_errors.hpp */,
-				A1290F35144305E7003F6AA8 /* semantic_actions.hpp */,
-				A1290F36144305E7003F6AA8 /* semantic_actions_base.hpp */,
-				A1290F37144305E7003F6AA8 /* semantic_actions_test.hpp */,
-			);
-			path = parser;
-			sourceTree = "<group>";
-		};
-		A1290F26144305E7003F6AA8 /* utility */ = {
-			isa = PBXGroup;
-			children = (
-				A1290F38144305E7003F6AA8 /* istreambuf_iterator.hpp */,
-				A1290F39144305E7003F6AA8 /* synchronous_queue.hpp */,
-				A1290F3A144305E7003F6AA8 /* syncqueue_streambuf.hpp */,
-				A1290F3E144305E7003F6AA8 /* atomic.hpp */,
-				A1290F42144305E7003F6AA8 /* flags.hpp */,
-				A1290F43144305E7003F6AA8 /* number_builder.hpp */,
-				A1290F44144305E7003F6AA8 /* simple_log.hpp */,
-				A1290F45144305E7003F6AA8 /* string_buffer.hpp */,
-				A1290F46144305E7003F6AA8 /* string_hasher.hpp */,
-			);
-			path = utility;
-			sourceTree = "<group>";
-		};
-		A17B2219145AF514008EEFF9 /* endian */ = {
-			isa = PBXGroup;
-			children = (
-				A17B221A145AF514008EEFF9 /* byte_swap.hpp */,
-				A17B221B145AF514008EEFF9 /* byte_swap_iterator.hpp */,
-				A17B221C145AF514008EEFF9 /* endian.hpp */,
+				A110B642146D26E90017B77F /* byte_swap.hpp */,
+				A110B643146D26E90017B77F /* byte_swap_iterator.hpp */,
+				A110B644146D26E90017B77F /* endian.hpp */,
 			);
 			path = endian;
 			sourceTree = "<group>";
 		};
-		A17B221D145AF514008EEFF9 /* unicode */ = {
+		A110B645146D26E90017B77F /* generator */ = {
 			isa = PBXGroup;
 			children = (
-				A17B221E145AF515008EEFF9 /* unicode_conversions.hpp */,
-				A17B221F145AF515008EEFF9 /* unicode_detect_bom.hpp */,
-				A17B2221145AF515008EEFF9 /* unicode_utilities.hpp */,
+				A110B646146D26E90017B77F /* generate.hpp */,
+			);
+			path = generator;
+			sourceTree = "<group>";
+		};
+		A110B647146D26E90017B77F /* ObjC */ = {
+			isa = PBXGroup;
+			children = (
+				A110B648146D26E90017B77F /* CFDataBuffer.hpp */,
+				A110B649146D26E90017B77F /* CFDataCache.hpp */,
+				A110B64B146D26E90017B77F /* JPAsyncJsonParser.mm */,
+				A110B64C146D26E90017B77F /* JPBufferQueueProtocol.h */,
+				A110B64F146D26E90017B77F /* JPJsonParser.mm */,
+				A110B651146D26E90017B77F /* JPJsonWriter.mm */,
+				A110B653146D26E90017B77F /* JPSemanticActions.mm */,
+				A110B655146D26E90017B77F /* JPSemanticActionsBase.mm */,
+				A110B656146D26E90017B77F /* JPSemanticActionsBase_private.h */,
+				A110B659146D26E90017B77F /* JPStreamSemanticActions.mm */,
+				A110B65A146D26E90017B77F /* mutex.hpp */,
+				A110B65C146D26E90017B77F /* NSData+JPJsonDetectEncoding.mm */,
+				A110B65D146D26E90017B77F /* SemanticActions.hpp */,
+				A110B65E146D26E90017B77F /* SemanticActionsBase.hpp */,
+				A110B65F146D26E90017B77F /* semaphore.hpp */,
+				A110B660146D26E90017B77F /* unicode_traits.hpp */,
+			);
+			path = ObjC;
+			sourceTree = "<group>";
+		};
+		A110B66C146D26E90017B77F /* parser */ = {
+			isa = PBXGroup;
+			children = (
+				A110B66D146D26E90017B77F /* json_path.hpp */,
+				A110B66E146D26E90017B77F /* parse.hpp */,
+				A110B66F146D26E90017B77F /* parser.hpp */,
+				A110B670146D26E90017B77F /* parser_errors.hpp */,
+				A110B671146D26E90017B77F /* semantic_actions.hpp */,
+				A110B672146D26E90017B77F /* semantic_actions_base.hpp */,
+				A110B673146D26E90017B77F /* semantic_actions_test.hpp */,
+			);
+			path = parser;
+			sourceTree = "<group>";
+		};
+		A110B674146D26E90017B77F /* unicode */ = {
+			isa = PBXGroup;
+			children = (
+				A110B675146D26E90017B77F /* unicode_conversions.hpp */,
+				A110B676146D26E90017B77F /* unicode_detect_bom.hpp */,
+				A110B677146D26E90017B77F /* unicode_iterator.hpp */,
+				A110B678146D26E90017B77F /* unicode_utilities.hpp */,
 			);
 			path = unicode;
 			sourceTree = "<group>";
 		};
-		A17B223B145AF635008EEFF9 /* generator */ = {
+		A110B679146D26E90017B77F /* utility */ = {
 			isa = PBXGroup;
 			children = (
-				A17B223C145AF636008EEFF9 /* generate.hpp */,
+				A110B67A146D26E90017B77F /* atomic.hpp */,
+				A110B67B146D26E90017B77F /* flags.hpp */,
+				A110B67C146D26E90017B77F /* istreambuf_iterator.hpp */,
+				A110B67D146D26E90017B77F /* lru_cache.hpp */,
+				A110B67E146D26E90017B77F /* number_builder.hpp */,
+				A110B67F146D26E90017B77F /* simple_log.hpp */,
+				A110B680146D26E90017B77F /* string_buffer.hpp */,
+				A110B681146D26E90017B77F /* string_hasher.hpp */,
+				A110B682146D26E90017B77F /* synchronous_queue.hpp */,
+				A110B683146D26E90017B77F /* syncqueue_streambuf.hpp */,
 			);
-			path = generator;
+			path = utility;
+			sourceTree = "<group>";
+		};
+		A110B789146D27390017B77F /* Public Headers */ = {
+			isa = PBXGroup;
+			children = (
+				A110B64A146D26E90017B77F /* JPAsyncJsonParser.h */,
+				A110B64D146D26E90017B77F /* JPJsonCommon.h */,
+				A110B64E146D26E90017B77F /* JPJsonParser.h */,
+				A110B650146D26E90017B77F /* JPJsonWriter.h */,
+				A110B652146D26E90017B77F /* JPSemanticActions.h */,
+				A110B654146D26E90017B77F /* JPSemanticActionsBase.h */,
+				A110B657146D26E90017B77F /* JPSemanticActionsProtocol.h */,
+				A110B658146D26E90017B77F /* JPStreamSemanticActions.h */,
+				A110B65B146D26E90017B77F /* NSData+JPJsonDetectEncoding.h */,
+			);
+			name = "Public Headers";
 			sourceTree = "<group>";
 		};
 		A1CA8B6A1441E45E0076C0CB = {
 			isa = PBXGroup;
 			children = (
-				A1290F1A144305E7003F6AA8 /* JPJsonLib */,
+				A110B789146D27390017B77F /* Public Headers */,
+				A110B63C146D26E90017B77F /* Source */,
 				A1CA8B811441E4860076C0CB /* JPJson - Framework */,
 				A1CA8B941441E4A20076C0CB /* JPJsonLib - Static Library */,
 				A1CA8BA31441E4E30076C0CB /* JPJsonDylib - Dynamic Library */,
@@ -498,46 +511,49 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A1290F48144305E7003F6AA8 /* JPJsonCommon.h in Headers */,
-				A196423A1445D6A100ECB4C2 /* JPSemanticActionsProtocol.h in Headers */,
-				A19642381445D6A100ECB4C2 /* JPSemanticActionsBase.h in Headers */,
-				A1290F54144305E7003F6AA8 /* JPSemanticActions.h in Headers */,
-				A1290F4B144305E7003F6AA8 /* JPJsonParser.h in Headers */,
-				A1485EF91447024700A88A92 /* JPAsyncJsonParser.h in Headers */,
-				A1290F51144305E7003F6AA8 /* JPJsonWriter.h in Headers */,
-				A1290F57144305E7003F6AA8 /* NSData+JPJsonDetectEncoding.h in Headers */,
-				A1290F5D144305E7003F6AA8 /* CFDataBuffer.hpp in Headers */,
-				A1290F60144305E7003F6AA8 /* CFDataCache.hpp in Headers */,
-				A1290F6F144305E7003F6AA8 /* JPSemanticActionsBase_private.h in Headers */,
-				A1290F72144305E7003F6AA8 /* mutex.hpp in Headers */,
-				A1290F75144305E7003F6AA8 /* semaphore.hpp in Headers */,
-				A1290F78144305E7003F6AA8 /* SemanticActions.hpp in Headers */,
-				A1290F7B144305E7003F6AA8 /* parse.hpp in Headers */,
-				A1290F7E144305E7003F6AA8 /* parser.hpp in Headers */,
-				A1290F81144305E7003F6AA8 /* parser_errors.hpp in Headers */,
-				A1290F84144305E7003F6AA8 /* semantic_actions.hpp in Headers */,
-				A1290F87144305E7003F6AA8 /* semantic_actions_base.hpp in Headers */,
-				A1290F8A144305E7003F6AA8 /* semantic_actions_test.hpp in Headers */,
-				A1290F8D144305E7003F6AA8 /* istreambuf_iterator.hpp in Headers */,
-				A1290F90144305E7003F6AA8 /* synchronous_queue.hpp in Headers */,
-				A1290F93144305E7003F6AA8 /* syncqueue_streambuf.hpp in Headers */,
-				A1290F9F144305E7003F6AA8 /* atomic.hpp in Headers */,
-				A1290FAB144305E7003F6AA8 /* flags.hpp in Headers */,
-				A1290FAE144305E7003F6AA8 /* number_builder.hpp in Headers */,
-				A1290FB1144305E7003F6AA8 /* simple_log.hpp in Headers */,
-				A1290FB4144305E7003F6AA8 /* string_buffer.hpp in Headers */,
-				A1290FB7144305E7003F6AA8 /* string_hasher.hpp in Headers */,
-				A19642401445D78A00ECB4C2 /* SemanticActionsBase.hpp in Headers */,
-				A11B450514546E9E006329A1 /* JPStreamSemanticActions.h in Headers */,
-				A15E637A14570218000F22F6 /* unicode_traits.hpp in Headers */,
-				A17B2222145AF515008EEFF9 /* byte_swap.hpp in Headers */,
-				A17B2225145AF515008EEFF9 /* byte_swap_iterator.hpp in Headers */,
-				A17B2228145AF515008EEFF9 /* endian.hpp in Headers */,
-				A17B222B145AF515008EEFF9 /* unicode_conversions.hpp in Headers */,
-				A17B222E145AF515008EEFF9 /* unicode_detect_bom.hpp in Headers */,
-				A17B2234145AF515008EEFF9 /* unicode_utilities.hpp in Headers */,
-				A17B2238145AF556008EEFF9 /* json_path.hpp in Headers */,
-				A17B223D145AF636008EEFF9 /* generate.hpp in Headers */,
+				A110B6B1146D26E90017B77F /* JPAsyncJsonParser.h in Headers */,
+				A110B6BA146D26E90017B77F /* JPJsonCommon.h in Headers */,
+				A110B6BD146D26E90017B77F /* JPJsonParser.h in Headers */,
+				A110B6C3146D26E90017B77F /* JPJsonWriter.h in Headers */,
+				A110B6C9146D26E90017B77F /* JPSemanticActions.h in Headers */,
+				A110B6CF146D26E90017B77F /* JPSemanticActionsBase.h in Headers */,
+				A110B6D8146D26E90017B77F /* JPSemanticActionsProtocol.h in Headers */,
+				A110B6DB146D26E90017B77F /* JPStreamSemanticActions.h in Headers */,
+				A110B6E4146D26E90017B77F /* NSData+JPJsonDetectEncoding.h in Headers */,
+				A110B69F146D26E90017B77F /* byte_swap.hpp in Headers */,
+				A110B6A2146D26E90017B77F /* byte_swap_iterator.hpp in Headers */,
+				A110B6A5146D26E90017B77F /* endian.hpp in Headers */,
+				A110B6A8146D26E90017B77F /* generate.hpp in Headers */,
+				A110B6AB146D26E90017B77F /* CFDataBuffer.hpp in Headers */,
+				A110B6AE146D26E90017B77F /* CFDataCache.hpp in Headers */,
+				A110B6B7146D26E90017B77F /* JPBufferQueueProtocol.h in Headers */,
+				A110B6D5146D26E90017B77F /* JPSemanticActionsBase_private.h in Headers */,
+				A110B6E1146D26E90017B77F /* mutex.hpp in Headers */,
+				A110B6EA146D26E90017B77F /* SemanticActions.hpp in Headers */,
+				A110B6ED146D26E90017B77F /* SemanticActionsBase.hpp in Headers */,
+				A110B6F0146D26E90017B77F /* semaphore.hpp in Headers */,
+				A110B6F3146D26E90017B77F /* unicode_traits.hpp in Headers */,
+				A110B714146D26E90017B77F /* json_path.hpp in Headers */,
+				A110B717146D26E90017B77F /* parse.hpp in Headers */,
+				A110B71A146D26E90017B77F /* parser.hpp in Headers */,
+				A110B71D146D26E90017B77F /* parser_errors.hpp in Headers */,
+				A110B720146D26E90017B77F /* semantic_actions.hpp in Headers */,
+				A110B723146D26E90017B77F /* semantic_actions_base.hpp in Headers */,
+				A110B726146D26E90017B77F /* semantic_actions_test.hpp in Headers */,
+				A110B729146D26E90017B77F /* unicode_conversions.hpp in Headers */,
+				A110B72C146D26E90017B77F /* unicode_detect_bom.hpp in Headers */,
+				A110B72F146D26E90017B77F /* unicode_iterator.hpp in Headers */,
+				A110B732146D26E90017B77F /* unicode_utilities.hpp in Headers */,
+				A110B735146D26E90017B77F /* atomic.hpp in Headers */,
+				A110B738146D26E90017B77F /* flags.hpp in Headers */,
+				A110B73B146D26E90017B77F /* istreambuf_iterator.hpp in Headers */,
+				A110B73E146D26E90017B77F /* lru_cache.hpp in Headers */,
+				A110B741146D26E90017B77F /* number_builder.hpp in Headers */,
+				A110B744146D26E90017B77F /* simple_log.hpp in Headers */,
+				A110B747146D26E90017B77F /* string_buffer.hpp in Headers */,
+				A110B74A146D26E90017B77F /* string_hasher.hpp in Headers */,
+				A110B74D146D26E90017B77F /* synchronous_queue.hpp in Headers */,
+				A110B750146D26E90017B77F /* syncqueue_streambuf.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -545,46 +561,49 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A126810D1455683700131E77 /* JPJsonCommon.h in Headers */,
-				A126810E1455683700131E77 /* JPSemanticActionsProtocol.h in Headers */,
-				A126810F1455683700131E77 /* JPSemanticActionsBase.h in Headers */,
-				A12681101455683700131E77 /* JPSemanticActions.h in Headers */,
-				A12681111455683700131E77 /* JPStreamSemanticActions.h in Headers */,
-				A12681121455683700131E77 /* JPJsonParser.h in Headers */,
-				A12681131455683700131E77 /* JPAsyncJsonParser.h in Headers */,
-				A12681141455683700131E77 /* JPJsonWriter.h in Headers */,
-				A12681151455683700131E77 /* NSData+JPJsonDetectEncoding.h in Headers */,
-				A16E35EB14430878009B0A89 /* CFDataBuffer.hpp in Headers */,
-				A16E35EC14430878009B0A89 /* CFDataCache.hpp in Headers */,
-				A16E35EE14430878009B0A89 /* JPSemanticActionsBase_private.h in Headers */,
-				A16E35EF14430878009B0A89 /* mutex.hpp in Headers */,
-				A16E35F014430878009B0A89 /* semaphore.hpp in Headers */,
-				A16E35F114430878009B0A89 /* SemanticActions.hpp in Headers */,
-				A16E35F214430878009B0A89 /* parse.hpp in Headers */,
-				A16E35F314430878009B0A89 /* parser.hpp in Headers */,
-				A16E35F414430878009B0A89 /* parser_errors.hpp in Headers */,
-				A16E35F514430878009B0A89 /* semantic_actions.hpp in Headers */,
-				A16E35F614430878009B0A89 /* semantic_actions_base.hpp in Headers */,
-				A16E35F714430878009B0A89 /* semantic_actions_test.hpp in Headers */,
-				A16E35F814430878009B0A89 /* istreambuf_iterator.hpp in Headers */,
-				A16E35F914430878009B0A89 /* synchronous_queue.hpp in Headers */,
-				A16E35FA14430878009B0A89 /* syncqueue_streambuf.hpp in Headers */,
-				A16E35FE14430878009B0A89 /* atomic.hpp in Headers */,
-				A16E360214430878009B0A89 /* flags.hpp in Headers */,
-				A16E360314430878009B0A89 /* number_builder.hpp in Headers */,
-				A16E360414430878009B0A89 /* simple_log.hpp in Headers */,
-				A16E360514430878009B0A89 /* string_buffer.hpp in Headers */,
-				A16E360614430878009B0A89 /* string_hasher.hpp in Headers */,
-				A19642411445D78A00ECB4C2 /* SemanticActionsBase.hpp in Headers */,
-				A15E637B14570218000F22F6 /* unicode_traits.hpp in Headers */,
-				A17B2223145AF515008EEFF9 /* byte_swap.hpp in Headers */,
-				A17B2226145AF515008EEFF9 /* byte_swap_iterator.hpp in Headers */,
-				A17B2229145AF515008EEFF9 /* endian.hpp in Headers */,
-				A17B222C145AF515008EEFF9 /* unicode_conversions.hpp in Headers */,
-				A17B222F145AF515008EEFF9 /* unicode_detect_bom.hpp in Headers */,
-				A17B2235145AF515008EEFF9 /* unicode_utilities.hpp in Headers */,
-				A17B2239145AF556008EEFF9 /* json_path.hpp in Headers */,
-				A17B223E145AF636008EEFF9 /* generate.hpp in Headers */,
+				A110B6B2146D26E90017B77F /* JPAsyncJsonParser.h in Headers */,
+				A110B6BB146D26E90017B77F /* JPJsonCommon.h in Headers */,
+				A110B6BE146D26E90017B77F /* JPJsonParser.h in Headers */,
+				A110B6C4146D26E90017B77F /* JPJsonWriter.h in Headers */,
+				A110B6CA146D26E90017B77F /* JPSemanticActions.h in Headers */,
+				A110B6D0146D26E90017B77F /* JPSemanticActionsBase.h in Headers */,
+				A110B6D9146D26E90017B77F /* JPSemanticActionsProtocol.h in Headers */,
+				A110B6DC146D26E90017B77F /* JPStreamSemanticActions.h in Headers */,
+				A110B6E5146D26E90017B77F /* NSData+JPJsonDetectEncoding.h in Headers */,
+				A110B6A0146D26E90017B77F /* byte_swap.hpp in Headers */,
+				A110B6A3146D26E90017B77F /* byte_swap_iterator.hpp in Headers */,
+				A110B6A6146D26E90017B77F /* endian.hpp in Headers */,
+				A110B6A9146D26E90017B77F /* generate.hpp in Headers */,
+				A110B6AC146D26E90017B77F /* CFDataBuffer.hpp in Headers */,
+				A110B6AF146D26E90017B77F /* CFDataCache.hpp in Headers */,
+				A110B6B8146D26E90017B77F /* JPBufferQueueProtocol.h in Headers */,
+				A110B6D6146D26E90017B77F /* JPSemanticActionsBase_private.h in Headers */,
+				A110B6E2146D26E90017B77F /* mutex.hpp in Headers */,
+				A110B6EB146D26E90017B77F /* SemanticActions.hpp in Headers */,
+				A110B6EE146D26E90017B77F /* SemanticActionsBase.hpp in Headers */,
+				A110B6F1146D26E90017B77F /* semaphore.hpp in Headers */,
+				A110B6F4146D26E90017B77F /* unicode_traits.hpp in Headers */,
+				A110B715146D26E90017B77F /* json_path.hpp in Headers */,
+				A110B718146D26E90017B77F /* parse.hpp in Headers */,
+				A110B71B146D26E90017B77F /* parser.hpp in Headers */,
+				A110B71E146D26E90017B77F /* parser_errors.hpp in Headers */,
+				A110B721146D26E90017B77F /* semantic_actions.hpp in Headers */,
+				A110B724146D26E90017B77F /* semantic_actions_base.hpp in Headers */,
+				A110B727146D26E90017B77F /* semantic_actions_test.hpp in Headers */,
+				A110B72A146D26E90017B77F /* unicode_conversions.hpp in Headers */,
+				A110B72D146D26E90017B77F /* unicode_detect_bom.hpp in Headers */,
+				A110B730146D26E90017B77F /* unicode_iterator.hpp in Headers */,
+				A110B733146D26E90017B77F /* unicode_utilities.hpp in Headers */,
+				A110B736146D26E90017B77F /* atomic.hpp in Headers */,
+				A110B739146D26E90017B77F /* flags.hpp in Headers */,
+				A110B73C146D26E90017B77F /* istreambuf_iterator.hpp in Headers */,
+				A110B73F146D26E90017B77F /* lru_cache.hpp in Headers */,
+				A110B742146D26E90017B77F /* number_builder.hpp in Headers */,
+				A110B745146D26E90017B77F /* simple_log.hpp in Headers */,
+				A110B748146D26E90017B77F /* string_buffer.hpp in Headers */,
+				A110B74B146D26E90017B77F /* string_hasher.hpp in Headers */,
+				A110B74E146D26E90017B77F /* synchronous_queue.hpp in Headers */,
+				A110B751146D26E90017B77F /* syncqueue_streambuf.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -592,46 +611,47 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A1290F4A144305E7003F6AA8 /* JPJsonCommon.h in Headers */,
-				A196423C1445D6D400ECB4C2 /* JPSemanticActionsProtocol.h in Headers */,
-				A1290F56144305E7003F6AA8 /* JPSemanticActions.h in Headers */,
-				A196423E1445D6DF00ECB4C2 /* JPSemanticActionsBase.h in Headers */,
-				A1290F4D144305E7003F6AA8 /* JPJsonParser.h in Headers */,
-				A1485EF61447019500A88A92 /* JPAsyncJsonParser.h in Headers */,
-				A1290F53144305E7003F6AA8 /* JPJsonWriter.h in Headers */,
-				A1290F59144305E7003F6AA8 /* NSData+JPJsonDetectEncoding.h in Headers */,
-				A1290F5F144305E7003F6AA8 /* CFDataBuffer.hpp in Headers */,
-				A1290F62144305E7003F6AA8 /* CFDataCache.hpp in Headers */,
-				A1290F71144305E7003F6AA8 /* JPSemanticActionsBase_private.h in Headers */,
-				A1290F74144305E7003F6AA8 /* mutex.hpp in Headers */,
-				A1290F77144305E7003F6AA8 /* semaphore.hpp in Headers */,
-				A1290F7A144305E7003F6AA8 /* SemanticActions.hpp in Headers */,
-				A1290F7D144305E7003F6AA8 /* parse.hpp in Headers */,
-				A1290F80144305E7003F6AA8 /* parser.hpp in Headers */,
-				A1290F83144305E7003F6AA8 /* parser_errors.hpp in Headers */,
-				A1290F86144305E7003F6AA8 /* semantic_actions.hpp in Headers */,
-				A1290F89144305E7003F6AA8 /* semantic_actions_base.hpp in Headers */,
-				A1290F8C144305E7003F6AA8 /* semantic_actions_test.hpp in Headers */,
-				A1290F8F144305E7003F6AA8 /* istreambuf_iterator.hpp in Headers */,
-				A1290F92144305E7003F6AA8 /* synchronous_queue.hpp in Headers */,
-				A1290F95144305E7003F6AA8 /* syncqueue_streambuf.hpp in Headers */,
-				A1290FA1144305E7003F6AA8 /* atomic.hpp in Headers */,
-				A1290FAD144305E7003F6AA8 /* flags.hpp in Headers */,
-				A1290FB0144305E7003F6AA8 /* number_builder.hpp in Headers */,
-				A1290FB3144305E7003F6AA8 /* simple_log.hpp in Headers */,
-				A1290FB6144305E7003F6AA8 /* string_buffer.hpp in Headers */,
-				A1290FB9144305E7003F6AA8 /* string_hasher.hpp in Headers */,
-				A19642421445D78A00ECB4C2 /* SemanticActionsBase.hpp in Headers */,
-				A11B450714546E9E006329A1 /* JPStreamSemanticActions.h in Headers */,
-				A15E637C14570218000F22F6 /* unicode_traits.hpp in Headers */,
-				A17B2224145AF515008EEFF9 /* byte_swap.hpp in Headers */,
-				A17B2227145AF515008EEFF9 /* byte_swap_iterator.hpp in Headers */,
-				A17B222A145AF515008EEFF9 /* endian.hpp in Headers */,
-				A17B222D145AF515008EEFF9 /* unicode_conversions.hpp in Headers */,
-				A17B2230145AF515008EEFF9 /* unicode_detect_bom.hpp in Headers */,
-				A17B2236145AF515008EEFF9 /* unicode_utilities.hpp in Headers */,
-				A17B223A145AF556008EEFF9 /* json_path.hpp in Headers */,
-				A17B223F145AF636008EEFF9 /* generate.hpp in Headers */,
+				A110B6B3146D26E90017B77F /* JPAsyncJsonParser.h in Headers */,
+				A110B6BC146D26E90017B77F /* JPJsonCommon.h in Headers */,
+				A110B6BF146D26E90017B77F /* JPJsonParser.h in Headers */,
+				A110B6C5146D26E90017B77F /* JPJsonWriter.h in Headers */,
+				A110B6CB146D26E90017B77F /* JPSemanticActions.h in Headers */,
+				A110B6D1146D26E90017B77F /* JPSemanticActionsBase.h in Headers */,
+				A110B6DA146D26E90017B77F /* JPSemanticActionsProtocol.h in Headers */,
+				A110B6DD146D26E90017B77F /* JPStreamSemanticActions.h in Headers */,
+				A110B6E6146D26E90017B77F /* NSData+JPJsonDetectEncoding.h in Headers */,
+				A110B6A1146D26E90017B77F /* byte_swap.hpp in Headers */,
+				A110B6A4146D26E90017B77F /* byte_swap_iterator.hpp in Headers */,
+				A110B6A7146D26E90017B77F /* endian.hpp in Headers */,
+				A110B6AA146D26E90017B77F /* generate.hpp in Headers */,
+				A110B6AD146D26E90017B77F /* CFDataBuffer.hpp in Headers */,
+				A110B6B0146D26E90017B77F /* CFDataCache.hpp in Headers */,
+				A110B6D7146D26E90017B77F /* JPSemanticActionsBase_private.h in Headers */,
+				A110B6E3146D26E90017B77F /* mutex.hpp in Headers */,
+				A110B6EC146D26E90017B77F /* SemanticActions.hpp in Headers */,
+				A110B6EF146D26E90017B77F /* SemanticActionsBase.hpp in Headers */,
+				A110B6F2146D26E90017B77F /* semaphore.hpp in Headers */,
+				A110B6F5146D26E90017B77F /* unicode_traits.hpp in Headers */,
+				A110B716146D26E90017B77F /* json_path.hpp in Headers */,
+				A110B719146D26E90017B77F /* parse.hpp in Headers */,
+				A110B71C146D26E90017B77F /* parser.hpp in Headers */,
+				A110B71F146D26E90017B77F /* parser_errors.hpp in Headers */,
+				A110B722146D26E90017B77F /* semantic_actions.hpp in Headers */,
+				A110B725146D26E90017B77F /* semantic_actions_base.hpp in Headers */,
+				A110B728146D26E90017B77F /* semantic_actions_test.hpp in Headers */,
+				A110B72B146D26E90017B77F /* unicode_conversions.hpp in Headers */,
+				A110B72E146D26E90017B77F /* unicode_detect_bom.hpp in Headers */,
+				A110B731146D26E90017B77F /* unicode_iterator.hpp in Headers */,
+				A110B734146D26E90017B77F /* unicode_utilities.hpp in Headers */,
+				A110B737146D26E90017B77F /* atomic.hpp in Headers */,
+				A110B73A146D26E90017B77F /* flags.hpp in Headers */,
+				A110B73D146D26E90017B77F /* istreambuf_iterator.hpp in Headers */,
+				A110B743146D26E90017B77F /* number_builder.hpp in Headers */,
+				A110B746146D26E90017B77F /* simple_log.hpp in Headers */,
+				A110B749146D26E90017B77F /* string_buffer.hpp in Headers */,
+				A110B74C146D26E90017B77F /* string_hasher.hpp in Headers */,
+				A110B74F146D26E90017B77F /* synchronous_queue.hpp in Headers */,
+				A110B752146D26E90017B77F /* syncqueue_streambuf.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -734,13 +754,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A1290F5A144305E7003F6AA8 /* NSData+JPJsonDetectEncoding.mm in Sources */,
-				A19642391445D6A100ECB4C2 /* JPSemanticActionsBase.mm in Sources */,
-				A1290F6C144305E7003F6AA8 /* JPSemanticActions.mm in Sources */,
-				A11B450914546EC1006329A1 /* JPStreamSemanticActions.mm in Sources */,
-				A1290F63144305E7003F6AA8 /* JPJsonParser.mm in Sources */,
-				A1485EF81447021900A88A92 /* JPAsyncJsonParser.mm in Sources */,
-				A1290F69144305E7003F6AA8 /* JPJsonWriter.mm in Sources */,
+				A110B6B4146D26E90017B77F /* JPAsyncJsonParser.mm in Sources */,
+				A110B6C0146D26E90017B77F /* JPJsonParser.mm in Sources */,
+				A110B6C6146D26E90017B77F /* JPJsonWriter.mm in Sources */,
+				A110B6CC146D26E90017B77F /* JPSemanticActions.mm in Sources */,
+				A110B6D2146D26E90017B77F /* JPSemanticActionsBase.mm in Sources */,
+				A110B6DE146D26E90017B77F /* JPStreamSemanticActions.mm in Sources */,
+				A110B6E7146D26E90017B77F /* NSData+JPJsonDetectEncoding.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -748,13 +768,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A12681061455681400131E77 /* JPSemanticActionsBase.mm in Sources */,
-				A12681071455681400131E77 /* JPSemanticActions.mm in Sources */,
-				A12681081455681400131E77 /* JPStreamSemanticActions.mm in Sources */,
-				A12681091455681400131E77 /* JPJsonParser.mm in Sources */,
-				A126810A1455681400131E77 /* JPAsyncJsonParser.mm in Sources */,
-				A126810B1455681400131E77 /* JPJsonWriter.mm in Sources */,
-				A126810C1455681400131E77 /* NSData+JPJsonDetectEncoding.mm in Sources */,
+				A110B6B5146D26E90017B77F /* JPAsyncJsonParser.mm in Sources */,
+				A110B6C1146D26E90017B77F /* JPJsonParser.mm in Sources */,
+				A110B6C7146D26E90017B77F /* JPJsonWriter.mm in Sources */,
+				A110B6CD146D26E90017B77F /* JPSemanticActions.mm in Sources */,
+				A110B6D3146D26E90017B77F /* JPSemanticActionsBase.mm in Sources */,
+				A110B6DF146D26E90017B77F /* JPStreamSemanticActions.mm in Sources */,
+				A110B6E8146D26E90017B77F /* NSData+JPJsonDetectEncoding.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -762,13 +782,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A1290F5C144305E7003F6AA8 /* NSData+JPJsonDetectEncoding.mm in Sources */,
-				A1485EF51447017500A88A92 /* JPSemanticActionsBase.mm in Sources */,
-				A1290F65144305E7003F6AA8 /* JPJsonParser.mm in Sources */,
-				A1290F6E144305E7003F6AA8 /* JPSemanticActions.mm in Sources */,
-				A11B450B14546EC1006329A1 /* JPStreamSemanticActions.mm in Sources */,
-				A1485EF41447016000A88A92 /* JPAsyncJsonParser.mm in Sources */,
-				A1290F6B144305E7003F6AA8 /* JPJsonWriter.mm in Sources */,
+				A110B6B6146D26E90017B77F /* JPAsyncJsonParser.mm in Sources */,
+				A110B6C2146D26E90017B77F /* JPJsonParser.mm in Sources */,
+				A110B6C8146D26E90017B77F /* JPJsonWriter.mm in Sources */,
+				A110B6CE146D26E90017B77F /* JPSemanticActions.mm in Sources */,
+				A110B6D4146D26E90017B77F /* JPSemanticActionsBase.mm in Sources */,
+				A110B6E0146D26E90017B77F /* JPStreamSemanticActions.mm in Sources */,
+				A110B6E9146D26E90017B77F /* NSData+JPJsonDetectEncoding.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

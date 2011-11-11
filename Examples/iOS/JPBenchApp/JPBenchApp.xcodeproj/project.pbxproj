@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A1116366146C392600D094E9 /* libjson-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A1116365146C392600D094E9 /* libjson-iOS.a */; };
+		A110B835146D3A340017B77F /* libjson-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A1116365146C392600D094E9 /* libjson-iOS.a */; };
 		A138814113D0D57B0006461E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A138814013D0D57B0006461E /* UIKit.framework */; };
 		A138814313D0D57B0006461E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A138814213D0D57B0006461E /* Foundation.framework */; };
 		A138814513D0D57B0006461E /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A138814413D0D57B0006461E /* CoreGraphics.framework */; };
@@ -24,6 +24,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A110B833146D37520017B77F /* libiOS-OLD.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libiOS-OLD.a"; path = "../../../../../../Library/Developer/Xcode/DerivedData/Json-hiazqngtzsfxawgakamtpamfsytx/Build/Products/Release-iphoneos/libiOS-OLD.a"; sourceTree = "<group>"; };
 		A1116365146C392600D094E9 /* libjson-iOS.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libjson-iOS.a"; path = "../../../../../../Library/Developer/Xcode/DerivedData/Json-hiazqngtzsfxawgakamtpamfsytx/Build/Products/Release-iphoneos/libjson-iOS.a"; sourceTree = "<group>"; };
 		A138813C13D0D57B0006461E /* JPBenchApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JPBenchApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A138814013D0D57B0006461E /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -55,7 +56,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A1116366146C392600D094E9 /* libjson-iOS.a in Frameworks */,
+				A110B835146D3A340017B77F /* libjson-iOS.a in Frameworks */,
 				A138814113D0D57B0006461E /* UIKit.framework in Frameworks */,
 				A138814313D0D57B0006461E /* Foundation.framework in Frameworks */,
 				A138814513D0D57B0006461E /* CoreGraphics.framework in Frameworks */,
@@ -68,6 +69,7 @@
 		A138813113D0D57B0006461E = {
 			isa = PBXGroup;
 			children = (
+				A110B833146D37520017B77F /* libiOS-OLD.a */,
 				A167D837146C3CD300C7FAD3 /* utilities */,
 				A188393C13DC5F8800FD90AA /* JSONKit */,
 				A138816413D0DD680006461E /* Resources */,
@@ -315,10 +317,6 @@
 				HEADER_SEARCH_PATHS = "$(JP_ROOT)";
 				INFOPLIST_FILE = "JPBenchApp/JPBenchApp-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../../../../../../Library/Developer/Xcode/DerivedData/Json-hiazqngtzsfxawgakamtpamfsytx/Build/Products/Release-iphoneos\"",
-				);
 				OTHER_LDFLAGS = "-lstdc++";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				USER_HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)";
@@ -346,10 +344,6 @@
 				HEADER_SEARCH_PATHS = "$(JP_ROOT)";
 				INFOPLIST_FILE = "JPBenchApp/JPBenchApp-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../../../../../../Library/Developer/Xcode/DerivedData/Json-hiazqngtzsfxawgakamtpamfsytx/Build/Products/Release-iphoneos\"",
-				);
 				OTHER_LDFLAGS = "-lstdc++";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				USER_HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)";
