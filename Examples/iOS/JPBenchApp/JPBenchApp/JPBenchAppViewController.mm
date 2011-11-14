@@ -189,7 +189,7 @@ static uint64_t absoluteTimeToNanoseconds(uint64_t t)
     self.textView.text = nil;
     
     
-#if 0    
+#if 1    
     NSString* what = @"AGJsonParser";
     MinMaxAvgTime te = [self bench_JsonParser1WithN:100];    
 #elif 0
@@ -253,6 +253,7 @@ static uint64_t absoluteTimeToNanoseconds(uint64_t t)
     printf("--------------------------------------------\n");    
     printf("Using a NSData with UTF-8 content as input and interface method:\n"
            "+parseData:options:error: (class JPJsonParser)\n"
+           "options: 0\n"
            "Automatic detection of input encoding, immutable containers\n");
         
     
@@ -318,6 +319,7 @@ static uint64_t absoluteTimeToNanoseconds(uint64_t t)
     printf("Timing includes destruction of objects, too\n");
     printf("Using a NSData with UTF-8 content as input and interface method:\n"
            "+parseData:options:error: (class JPJsonParser)\n"
+           "options: 0\n"
            "Automatic detection of input encoding, immutable containers\n");
     
     MinMaxAvgTime te;
