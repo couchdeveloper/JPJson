@@ -39,20 +39,18 @@
 		A110B639146D11D10017B77F /* unicode_traits.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A1ECC3E9146D0B9000124779 /* unicode_traits.hpp */; };
 		A16AEB361441FB2700FDB7B2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A16AEB351441FB2700FDB7B2 /* Foundation.framework */; };
 		A16AEB8F1441FDBE00FDB7B2 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A16AEB8E1441FDBE00FDB7B2 /* CoreFoundation.framework */; };
+		A1E95DE014710A9100A78D3F /* JPStreamSemanticActions.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1ECC3CD146D0B9000124779 /* JPStreamSemanticActions.mm */; };
+		A1E95DE114710A9100A78D3F /* JPAsyncJsonParser.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1ECC3D3146D0B9000124779 /* JPAsyncJsonParser.mm */; };
 		A1ECC429146D0B9000124779 /* JPSemanticActionsBase.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1ECC3CB146D0B9000124779 /* JPSemanticActionsBase.mm */; };
-		A1ECC42B146D0B9000124779 /* JPStreamSemanticActions.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1ECC3CD146D0B9000124779 /* JPStreamSemanticActions.mm */; };
 		A1ECC42D146D0B9000124779 /* JPSemanticActions.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1ECC3CF146D0B9000124779 /* JPSemanticActions.mm */; };
 		A1ECC42F146D0B9000124779 /* JPJsonParser.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1ECC3D1146D0B9000124779 /* JPJsonParser.mm */; };
-		A1ECC431146D0B9000124779 /* JPAsyncJsonParser.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1ECC3D3146D0B9000124779 /* JPAsyncJsonParser.mm */; };
 		A1ECC433146D0B9000124779 /* JPJsonWriter.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1ECC3D5146D0B9000124779 /* JPJsonWriter.mm */; };
 		A1ECC435146D0B9000124779 /* NSData+JPJsonDetectEncoding.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1ECC3D7146D0B9000124779 /* NSData+JPJsonDetectEncoding.mm */; };
 		A1ECC437146D0C9A00124779 /* JPJsonCommon.h in Headers */ = {isa = PBXBuildFile; fileRef = A1ECC3C8146D0B9000124779 /* JPJsonCommon.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A1ECC438146D0C9A00124779 /* JPSemanticActionsProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = A1ECC3C9146D0B9000124779 /* JPSemanticActionsProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A1ECC439146D0C9A00124779 /* JPSemanticActionsBase.h in Headers */ = {isa = PBXBuildFile; fileRef = A1ECC3CA146D0B9000124779 /* JPSemanticActionsBase.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A1ECC43A146D0C9A00124779 /* JPStreamSemanticActions.h in Headers */ = {isa = PBXBuildFile; fileRef = A1ECC3CC146D0B9000124779 /* JPStreamSemanticActions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A1ECC43B146D0C9A00124779 /* JPSemanticActions.h in Headers */ = {isa = PBXBuildFile; fileRef = A1ECC3CE146D0B9000124779 /* JPSemanticActions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A1ECC43C146D0C9A00124779 /* JPJsonParser.h in Headers */ = {isa = PBXBuildFile; fileRef = A1ECC3D0146D0B9000124779 /* JPJsonParser.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A1ECC43D146D0C9A00124779 /* JPAsyncJsonParser.h in Headers */ = {isa = PBXBuildFile; fileRef = A1ECC3D2146D0B9000124779 /* JPAsyncJsonParser.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A1ECC43E146D0C9A00124779 /* JPJsonWriter.h in Headers */ = {isa = PBXBuildFile; fileRef = A1ECC3D4146D0B9000124779 /* JPJsonWriter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A1ECC43F146D0C9A00124779 /* NSData+JPJsonDetectEncoding.h in Headers */ = {isa = PBXBuildFile; fileRef = A1ECC3D6146D0B9000124779 /* NSData+JPJsonDetectEncoding.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
@@ -89,13 +87,11 @@
 		A1ECC3C9146D0B9000124779 /* JPSemanticActionsProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JPSemanticActionsProtocol.h; path = ../../Source/json/ObjC/JPSemanticActionsProtocol.h; sourceTree = "<group>"; };
 		A1ECC3CA146D0B9000124779 /* JPSemanticActionsBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JPSemanticActionsBase.h; path = ../../Source/json/ObjC/JPSemanticActionsBase.h; sourceTree = "<group>"; };
 		A1ECC3CB146D0B9000124779 /* JPSemanticActionsBase.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = JPSemanticActionsBase.mm; sourceTree = "<group>"; };
-		A1ECC3CC146D0B9000124779 /* JPStreamSemanticActions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JPStreamSemanticActions.h; path = ../../Source/json/ObjC/JPStreamSemanticActions.h; sourceTree = "<group>"; };
 		A1ECC3CD146D0B9000124779 /* JPStreamSemanticActions.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = JPStreamSemanticActions.mm; sourceTree = "<group>"; };
 		A1ECC3CE146D0B9000124779 /* JPSemanticActions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JPSemanticActions.h; path = ../../Source/json/ObjC/JPSemanticActions.h; sourceTree = "<group>"; };
 		A1ECC3CF146D0B9000124779 /* JPSemanticActions.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = JPSemanticActions.mm; sourceTree = "<group>"; };
 		A1ECC3D0146D0B9000124779 /* JPJsonParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JPJsonParser.h; path = ../../Source/json/ObjC/JPJsonParser.h; sourceTree = "<group>"; };
 		A1ECC3D1146D0B9000124779 /* JPJsonParser.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = JPJsonParser.mm; sourceTree = "<group>"; };
-		A1ECC3D2146D0B9000124779 /* JPAsyncJsonParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JPAsyncJsonParser.h; path = ../../Source/json/ObjC/JPAsyncJsonParser.h; sourceTree = "<group>"; };
 		A1ECC3D3146D0B9000124779 /* JPAsyncJsonParser.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = JPAsyncJsonParser.mm; sourceTree = "<group>"; };
 		A1ECC3D4146D0B9000124779 /* JPJsonWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JPJsonWriter.h; path = ../../Source/json/ObjC/JPJsonWriter.h; sourceTree = "<group>"; };
 		A1ECC3D5146D0B9000124779 /* JPJsonWriter.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = JPJsonWriter.mm; sourceTree = "<group>"; };
@@ -285,10 +281,8 @@
 				A1ECC3C8146D0B9000124779 /* JPJsonCommon.h */,
 				A1ECC3C9146D0B9000124779 /* JPSemanticActionsProtocol.h */,
 				A1ECC3CA146D0B9000124779 /* JPSemanticActionsBase.h */,
-				A1ECC3CC146D0B9000124779 /* JPStreamSemanticActions.h */,
 				A1ECC3CE146D0B9000124779 /* JPSemanticActions.h */,
 				A1ECC3D0146D0B9000124779 /* JPJsonParser.h */,
-				A1ECC3D2146D0B9000124779 /* JPAsyncJsonParser.h */,
 				A1ECC3D4146D0B9000124779 /* JPJsonWriter.h */,
 				A1ECC3D6146D0B9000124779 /* NSData+JPJsonDetectEncoding.h */,
 			);
@@ -305,10 +299,8 @@
 				A1ECC437146D0C9A00124779 /* JPJsonCommon.h in Headers */,
 				A1ECC438146D0C9A00124779 /* JPSemanticActionsProtocol.h in Headers */,
 				A1ECC439146D0C9A00124779 /* JPSemanticActionsBase.h in Headers */,
-				A1ECC43A146D0C9A00124779 /* JPStreamSemanticActions.h in Headers */,
 				A1ECC43B146D0C9A00124779 /* JPSemanticActions.h in Headers */,
 				A1ECC43C146D0C9A00124779 /* JPJsonParser.h in Headers */,
-				A1ECC43D146D0C9A00124779 /* JPAsyncJsonParser.h in Headers */,
 				A1ECC43E146D0C9A00124779 /* JPJsonWriter.h in Headers */,
 				A1ECC43F146D0C9A00124779 /* NSData+JPJsonDetectEncoding.h in Headers */,
 				A110B61C146D11D10017B77F /* byte_swap.hpp in Headers */,
@@ -394,11 +386,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A1E95DE014710A9100A78D3F /* JPStreamSemanticActions.mm in Sources */,
+				A1E95DE114710A9100A78D3F /* JPAsyncJsonParser.mm in Sources */,
 				A1ECC429146D0B9000124779 /* JPSemanticActionsBase.mm in Sources */,
-				A1ECC42B146D0B9000124779 /* JPStreamSemanticActions.mm in Sources */,
 				A1ECC42D146D0B9000124779 /* JPSemanticActions.mm in Sources */,
 				A1ECC42F146D0B9000124779 /* JPJsonParser.mm in Sources */,
-				A1ECC431146D0B9000124779 /* JPAsyncJsonParser.mm in Sources */,
 				A1ECC433146D0B9000124779 /* JPJsonWriter.mm in Sources */,
 				A1ECC435146D0B9000124779 /* NSData+JPJsonDetectEncoding.mm in Sources */,
 			);
