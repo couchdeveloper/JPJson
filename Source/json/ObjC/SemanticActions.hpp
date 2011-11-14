@@ -26,7 +26,8 @@
 // using Foundation objects leveraging "toll-free-bridging".
 // This is a workaround for poorly performing CFMutableDictionaries when created 
 // via CF functions. CFMutbaleDictionaries created via Foundation do not expose 
-// this poor performance.
+// this poor performance. 
+// Note: iOS 4 does not seem to have this issue.
 #define SEMANTIC_ACTIONS_NO_CREATE_MUTABLE_DICTIONARY_USING_CF
 
 
