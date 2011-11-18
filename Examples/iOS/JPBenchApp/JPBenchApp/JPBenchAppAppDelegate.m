@@ -23,6 +23,22 @@
 #import "JPBenchAppViewController.h"
 #import "UIDevice-Hardware.h"
 
+#include <stdlib.h>
+#include <string.h>
+#include <mach-o/dyld.h>
+
+
+static void PrintExecutablePath() {
+    uint32_t bufsize = 0;
+    _NSGetExecutablePath(NULL, &bufsize);
+    char* path = (char*)malloc(bufsize);
+    _NSGetExecutablePath(path, &bufsize);                
+    char* real_path = realpath(path, NULL);
+    free(path);
+    NSLog(@"%s", real_path);
+    free(real_path);
+}
+
 
 static NSString* deviceInformationString()
 {
@@ -72,6 +88,7 @@ static NSString* deviceInformationString()
      
     self.window.rootViewController = self.viewController;
     [self.window makeKeyAndVisible];    
+    PrintExecutablePath();
     NSLog(@"Starting Bench for Device: %@\n", deviceInformationString());
     
     return YES;

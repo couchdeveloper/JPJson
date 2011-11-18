@@ -99,7 +99,6 @@ static uint64_t absoluteTimeToNanoseconds(uint64_t t)
 
 @property (nonatomic, retain) JPAsyncJsonParser* parser;
 @property (nonatomic, retain) IBOutlet UILabel*  messageLabel;
-@property (nonatomic, retain) IBOutlet UITextView*  textView;
 
 - (void) handleError:(NSError*)error;
 //- (void) runBench;
@@ -125,7 +124,6 @@ static uint64_t absoluteTimeToNanoseconds(uint64_t t)
 
 @synthesize parser = parser_;
 @synthesize messageLabel = messageLabel_;
-@synthesize textView = textView_;
 
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -157,10 +155,8 @@ static uint64_t absoluteTimeToNanoseconds(uint64_t t)
 {
     [super viewDidLoad];
     NSAssert(messageLabel_, @"IBOutlet 'messageLable_' is nil");
-    NSAssert(textView_, @"IBOutlet 'textView_' is nil");
     
     self.messageLabel.text = @"";    
-    self.textView.editable = NO;    
 }
 
 - (void)viewDidUnload
@@ -169,7 +165,6 @@ static uint64_t absoluteTimeToNanoseconds(uint64_t t)
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
     self.messageLabel = nil;
-    self.textView = nil;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -186,7 +181,6 @@ static uint64_t absoluteTimeToNanoseconds(uint64_t t)
         NSLog(@"Bench is already running.");
         return;
     }
-    self.textView.text = nil;
     
     
 #if 1    
