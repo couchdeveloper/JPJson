@@ -37,6 +37,7 @@
 		A110B637146D11D10017B77F /* CFDataBuffer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A1ECC3E7146D0B9000124779 /* CFDataBuffer.hpp */; };
 		A110B638146D11D10017B77F /* JPSemanticActionsBase_private.h in Headers */ = {isa = PBXBuildFile; fileRef = A1ECC3E8146D0B9000124779 /* JPSemanticActionsBase_private.h */; };
 		A110B639146D11D10017B77F /* unicode_traits.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A1ECC3E9146D0B9000124779 /* unicode_traits.hpp */; };
+		A16318871476B0D0007C5B3B /* JPAsyncJsonParser.h in Headers */ = {isa = PBXBuildFile; fileRef = A16318861476B0D0007C5B3B /* JPAsyncJsonParser.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A16AEB361441FB2700FDB7B2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A16AEB351441FB2700FDB7B2 /* Foundation.framework */; };
 		A16AEB8F1441FDBE00FDB7B2 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A16AEB8E1441FDBE00FDB7B2 /* CoreFoundation.framework */; };
 		A1E95DE014710A9100A78D3F /* JPStreamSemanticActions.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1ECC3CD146D0B9000124779 /* JPStreamSemanticActions.mm */; };
@@ -56,6 +57,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A16318861476B0D0007C5B3B /* JPAsyncJsonParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JPAsyncJsonParser.h; path = ../../Source/json/ObjC/JPAsyncJsonParser.h; sourceTree = "<group>"; };
 		A16AEB321441FB2700FDB7B2 /* libjson-iOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libjson-iOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A16AEB351441FB2700FDB7B2 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		A16AEB391441FB2700FDB7B2 /* JPJsonLib-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "JPJsonLib-Prefix.pch"; path = "JPJsonLib/JPJsonLib-Prefix.pch"; sourceTree = "<group>"; };
@@ -278,6 +280,7 @@
 		A1ECC436146D0BB600124779 /* Public Headers */ = {
 			isa = PBXGroup;
 			children = (
+				A16318861476B0D0007C5B3B /* JPAsyncJsonParser.h */,
 				A1ECC3C8146D0B9000124779 /* JPJsonCommon.h */,
 				A1ECC3C9146D0B9000124779 /* JPSemanticActionsProtocol.h */,
 				A1ECC3CA146D0B9000124779 /* JPSemanticActionsBase.h */,
@@ -333,6 +336,7 @@
 				A110B637146D11D10017B77F /* CFDataBuffer.hpp in Headers */,
 				A110B638146D11D10017B77F /* JPSemanticActionsBase_private.h in Headers */,
 				A110B639146D11D10017B77F /* unicode_traits.hpp in Headers */,
+				A16318871476B0D0007C5B3B /* JPAsyncJsonParser.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
