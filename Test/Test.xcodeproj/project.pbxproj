@@ -11,10 +11,6 @@
 		A103FB6B13EA8BF8009FA571 /* gtest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A164221113D4357400796785 /* gtest.framework */; };
 		A11D44A713DDD5AE00AF45A6 /* StringBufferTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A164227E13D442A300796785 /* StringBufferTest.cpp */; };
 		A12AC927146BE78F00AED943 /* NSData+JPJsonDetectEncodingTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A12AC926146BE78F00AED943 /* NSData+JPJsonDetectEncodingTest.mm */; };
-		A13B27B8142B93A200744884 /* logger_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A16718B413EA880100A39091 /* logger_test.cpp */; };
-		A13B27BA142B93A700744884 /* atomic_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1995FAB141FCC2F00595100 /* atomic_test.cpp */; };
-		A13B27BB142B93B300744884 /* synchronous_queue_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A18DFC0B1425C6DA00DAFE2E /* synchronous_queue_test.cpp */; };
-		A13B27BD142B93BD00744884 /* syncqueue_streambuf_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A18DFC111426416800DAFE2E /* syncqueue_streambuf_test.cpp */; };
 		A13B27BE142B93CD00744884 /* utilities_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1D2529413DDA3A100960381 /* utilities_test.cpp */; };
 		A13B27BF142B93D300744884 /* code_point_conversions_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A105D10513F687CB006DE4C7 /* code_point_conversions_test.cpp */; };
 		A13B27C0142B93D600744884 /* unicode_conversions_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A140DD1C13E94E36009DBB8C /* unicode_conversions_test.cpp */; };
@@ -60,7 +56,6 @@
 		A199FC7913D5D186000170CD /* timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A199FC7613D5D186000170CD /* timer.cpp */; };
 		A199FC7A13D5D186000170CD /* timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A199FC7613D5D186000170CD /* timer.cpp */; };
 		A199FC7C13D5DB12000170CD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A199FC7B13D5DB12000170CD /* Foundation.framework */; };
-		A19F3A6D142877E400266273 /* semaphore_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A19F3A6C142877E400266273 /* semaphore_test.cpp */; };
 		A1A1BE6B142B448B00335044 /* unicode_detect_bom_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1A1BE6A142B448B00335044 /* unicode_detect_bom_test.cpp */; };
 		A1A9C7C713F006510046FF43 /* JsonStringTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A164225813D4427000796785 /* JsonStringTest.cpp */; };
 		A1AF4B381461A3490065B048 /* TestJson in CopyFiles */ = {isa = PBXBuildFile; fileRef = A1AF4B371461A3490065B048 /* TestJson */; };
@@ -117,6 +112,7 @@
 		A1DC52C0145836D000CE28F2 /* gtest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A164221113D4357400796785 /* gtest.framework */; };
 		A1E228061408E58B0048FE07 /* JsonCustomObjectTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A164225413D4427000796785 /* JsonCustomObjectTest.cpp */; };
 		A1E4ADDC1450610E000F4E21 /* json_path_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1E4ADDB1450610E000F4E21 /* json_path_test.cpp */; };
+		A1E95E10147288E100A78D3F /* base64_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1E95E0F147288E100A78D3F /* base64_test.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -272,6 +268,7 @@
 		A1DC52BA14582CDA00CE28F2 /* SemanticActionsTest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; path = SemanticActionsTest.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		A1DC52BD14582D6C00CE28F2 /* SemanticActionsBaseTest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SemanticActionsBaseTest.mm; sourceTree = "<group>"; };
 		A1E4ADDB1450610E000F4E21 /* json_path_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = json_path_test.cpp; sourceTree = "<group>"; };
+		A1E95E0F147288E100A78D3F /* base64_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = base64_test.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -287,8 +284,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A18DFC131426492600DAFE2E /* CoreFoundation.framework in Frameworks */,
 				A103FB6B13EA8BF8009FA571 /* gtest.framework in Frameworks */,
+				A18DFC131426492600DAFE2E /* CoreFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -484,6 +481,7 @@
 				A18DFC0B1425C6DA00DAFE2E /* synchronous_queue_test.cpp */,
 				A18DFC111426416800DAFE2E /* syncqueue_streambuf_test.cpp */,
 				A19F3A6C142877E400266273 /* semaphore_test.cpp */,
+				A1E95E0F147288E100A78D3F /* base64_test.cpp */,
 			);
 			path = utilities_test;
 			sourceTree = "<group>";
@@ -773,12 +771,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				A103FB6A13EA8BC4009FA571 /* gtest_main.cc in Sources */,
-				A19F3A6D142877E400266273 /* semaphore_test.cpp in Sources */,
-				A13B27B8142B93A200744884 /* logger_test.cpp in Sources */,
-				A13B27BA142B93A700744884 /* atomic_test.cpp in Sources */,
-				A13B27BB142B93B300744884 /* synchronous_queue_test.cpp in Sources */,
-				A13B27BD142B93BD00744884 /* syncqueue_streambuf_test.cpp in Sources */,
 				A14BE8E3146818470077EA5C /* timer.cpp in Sources */,
+				A1E95E10147288E100A78D3F /* base64_test.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -990,7 +984,7 @@
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../../../GTest/gtest-1.6.0/xcode/build/Release\"",
+					"\"$(SRCROOT)/../../../GTest/gtest-1.6.0/xcode/build/Release\"",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
@@ -1019,14 +1013,11 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../../../GTest/gtest-1.6.0/xcode/build/Release\"",
+					"\"$(SRCROOT)/../../../GTest/gtest-1.6.0/xcode/build/Release\"",
 				);
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_OPTIMIZATION_LEVEL = 3;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					NDEBUG,
-					BOOST_STRICT_CONFIG,
-				);
+				GCC_PREPROCESSOR_DEFINITIONS = BOOST_STRICT_CONFIG;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				HEADER_SEARCH_PATHS = (
 					"\"$(JP_ROOT)\"",
