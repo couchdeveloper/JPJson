@@ -21,6 +21,7 @@
 #define JSON_UNICODE_UTILITIES_HPP
 
 
+#include "json/config.hpp"
 #include <assert.h>
 #include <boost/iterator/iterator_traits.hpp>
 #include <boost/type_traits.hpp>
@@ -47,7 +48,6 @@ namespace json { namespace unicode {
     using json::internal::host_endianness;
     
   
-    
     enum UNICODE_ENCODING {
         UNICODE_ENCODING_UTF_8 =    1,
         UNICODE_ENCODING_UTF_16BE = 2,
@@ -55,7 +55,6 @@ namespace json { namespace unicode {
         UNICODE_ENCODING_UTF_32BE = 4,
         UNICODE_ENCODING_UTF_32LE = 5
     };
-    
     
     
     //
@@ -176,6 +175,87 @@ namespace json { namespace unicode {
 }}    
     
 namespace json { namespace unicode {
+    
+    
+    //
+    //  Maps json::unicode encoding types to constants
+    //
+    
+    enum Encoding {
+        UnicodeEncoding_UTF8        = 1,
+        UnicodeEncoding_UTF16BE,
+        UnicodeEncoding_UTF16LE,
+        UnicodeEncoding_UTF32BE,
+        UnicodeEncoding_UTF32LE
+    };
+    
+    
+    template <typename EncodingT>
+    struct unicode_encoding_traits {};
+    
+    template <>
+    struct unicode_encoding_traits<UTF_8_encoding_tag> {
+        static const Encoding value = UnicodeEncoding_UTF8;
+    };
+    
+    template <>
+    struct unicode_encoding_traits<UTF_16BE_encoding_tag> {
+        static const Encoding value = UnicodeEncoding_UTF16BE;
+    };
+    
+    template <>
+    struct unicode_encoding_traits<UTF_16LE_encoding_tag> {
+        static const Encoding value = UnicodeEncoding_UTF16LE;
+    };
+    
+    template <>
+    struct unicode_encoding_traits<UTF_32BE_encoding_tag> {
+        static const Encoding value = UnicodeEncoding_UTF32BE;
+    };
+    
+    template <>
+    struct unicode_encoding_traits<UTF_32LE_encoding_tag> {
+        static const Encoding value = UnicodeEncoding_UTF32LE;
+    };
+    
+
+    //
+    //
+    //
+    
+    template <int E>
+    struct encoding_to_tag {};
+        
+    template <>
+    struct encoding_to_tag<UnicodeEncoding_UTF8> {
+        typedef UTF_8_encoding_tag type;
+    };
+    
+    template <>
+    struct encoding_to_tag<UnicodeEncoding_UTF16BE> {
+        typedef UTF_16BE_encoding_tag type;
+    };
+    
+    template <>
+    struct encoding_to_tag<UnicodeEncoding_UTF16LE> {
+        typedef UTF_16LE_encoding_tag type;
+    };
+    
+    template <>
+    struct encoding_to_tag<UnicodeEncoding_UTF32BE> {
+        typedef UTF_32BE_encoding_tag type;
+    };
+    
+    template <>
+    struct encoding_to_tag<UnicodeEncoding_UTF32LE> {
+        typedef UTF_32LE_encoding_tag type;
+    };
+    
+    
+    
+}}
+
+namespace json { namespace unicode {
 #pragma mark -
 #pragma mark to_host_endianness
     
@@ -228,6 +308,7 @@ namespace json { namespace unicode {
     
 }}    
     
+
 
 namespace json { namespace unicode {
 #pragma mark - add_endianness
@@ -648,35 +729,208 @@ namespace json { namespace unicode {
     // 
     // Returns [0 .. 3] (number of trail bytes.)
     // (note: returns 0, if parameter first is a single byte)
+    
+    // Small Lookup Table:
     //
-    // Bit-pattern  returns  #trail    start>>3    is_single  is_lead  is_trail  well-formed
-    // b0xxx.xxxx      0        0     b0000.xxxx     true      false     false     true
-    // b110x.xxxx      1        1     b0001.10xx     false     true *)   false     ?
-    // b1110.xxxx      2        2     b0001.110x     false     true      false     ?
-    // b1111.0xxx      3        3     b0001.1110     false     true      false     ?
-    // b1111.10xx    undef      4     b0000.1111     false     false     false     false
-    // b1111.110x    undef      5     b0000.1111     false     false     false     false
-    // b1111.1110    undef    undef   b0000.1111     false     false     false     false
+    // Bit-pattern      returns  #trail    start>>3    is_single  is_lead  is_trail  well-formed
+    // b0xxx.xxxx           0        0     b0000.xxxx     true      false     false     true
+    // b10xx.xxxx          -1       n.a.   b0001.0xxx     false     false     false     false
+    // b110x.xxxx           1        1     b0001.10xx     false     true *)   false     ?
+    // b1100.0000 (C0)      1       n.a.   b0001.1000     false     false     false     false
+    // b1100.0001 (C1)      1       n.a.   b0001.1000     false     false     false     false
+    // b1110.xxxx           2        2     b0001.110x     false     true      false     ?
+    // b1111.0xxx           3        3     b0001.1110     false     true      false     ?
+    // b1111.0100           3        3     b0001.1110     false     true      false     ?
+    // b1111.0101 (F5)      3       n.a.   b0001.1110     false     false     false     false
+    // b1111.0110 (F6)      3       n.a.   b0001.1110     false     false     false     false
+    // b1111.0111 (F7)      3       n.a.   b0001.1110     false     false     false     false
+    // b1111.1xxx          -1       n.a.   b0000.1111     false     false     false     false
     //
     //  *) exception: false for: b1100.0000 (0xC0) and b1100.0001 (0xC1)  (overlong ASCII)
     //
-    // TODO: Implementaiton notes:
-    // We could even shift-right by 4, thus reducing the size of the
-    // jump table by halve. According the description of the function, we
-    // still get valid values for an actual lead byte, but the range of
-    // error detection is smaller.
-    inline int utf8_num_trails(utf8_code_unit first) {
+    inline int utf8_num_trails_unsafe(utf8_code_unit first) {
         // assertion: utf8_is_lead(first) == true
-        static int const table[32] = {
+        const int E = -1;
+        static int8_t const table[32] = {
             0,0,0,0,0,0,0,0,
             0,0,0,0,0,0,0,0,
-            0,0,0,0,0,0,0,0,
-            1,1,1,1,2,2,3,-1            
+            E,E,E,E,E,E,E,E,
+            1,1,1,1,2,2,3,E            
         };   
-        unsigned idx = static_cast<uint8_t>(first)>>3;
-        assert(idx <= sizeof(table)/sizeof(int));
-        return table[idx];        
+        int result = table[static_cast<uint8_t>(first)>>3];
+        // Note: the following assertion is for testing the **caller** code!
+        // utf8_num_trails_unsafe() will return an undefined result if this assertion is not met.
+        assert(result >= 0 and (utf8_is_single(first) or utf8_is_lead(first)) );
+        return result;
+    }    
+    
+    
+    // The following utf8_num_trails() functions are safe, that is if parameter
+    // 'first' is not a valid lead byte or not a single byte the function will 
+    // return -1. Otherwise, it returns 0, 1, 2 or 3.
+    inline int utf8_num_trails(utf8_code_unit first) {
+#if 1
+        const int8_t E = -1;
+        static int8_t const table[256] = {
+            0,0,0,0,0,0,0,0,  0,0,0,0,0,0,0,0,  0,0,0,0,0,0,0,0,  0,0,0,0,0,0,0,0,   //   0 ..  31
+            0,0,0,0,0,0,0,0,  0,0,0,0,0,0,0,0,  0,0,0,0,0,0,0,0,  0,0,0,0,0,0,0,0,   //  32 ..  63
+            0,0,0,0,0,0,0,0,  0,0,0,0,0,0,0,0,  0,0,0,0,0,0,0,0,  0,0,0,0,0,0,0,0,   //  64 ..  95
+            0,0,0,0,0,0,0,0,  0,0,0,0,0,0,0,0,  0,0,0,0,0,0,0,0,  0,0,0,0,0,0,0,0,   //  96 .. 127
+            E,E,E,E,E,E,E,E,  E,E,E,E,E,E,E,E,  E,E,E,E,E,E,E,E,  E,E,E,E,E,E,E,E,   // 128 .. 159
+            E,E,E,E,E,E,E,E,  E,E,E,E,E,E,E,E,  E,E,E,E,E,E,E,E,  E,E,E,E,E,E,E,E,   // 160 .. 191
+            E,E,1,1,1,1,1,1,  1,1,1,1,1,1,1,1,  1,1,1,1,1,1,1,1,  1,1,1,1,1,1,1,1,   // 192 .. 223
+            2,2,2,2,2,2,2,2,  2,2,2,2,2,2,2,2,  3,3,3,3,3,E,E,E,  E,E,E,E,E,E,E,E    // 224 .. 255
+        };   
+        return table[static_cast<uint8_t>(first)]; 
+        
+#elif 0
+        uint8_t ch = static_cast<uint8_t>(first);        
+        if (ch < 0x80u)
+            return 0;
+        const int8_t E = -1;
+        static int8_t const table[128] = {
+            E,E,E,E,E,E,E,E,  E,E,E,E,E,E,E,E,  E,E,E,E,E,E,E,E,  E,E,E,E,E,E,E,E,   // 128 .. 159
+            E,E,E,E,E,E,E,E,  E,E,E,E,E,E,E,E,  E,E,E,E,E,E,E,E,  E,E,E,E,E,E,E,E,   // 160 .. 191
+            E,E,1,1,1,1,1,1,  1,1,1,1,1,1,1,1,  1,1,1,1,1,1,1,1,  1,1,1,1,1,1,1,1,   // 192 .. 223
+            2,2,2,2,2,2,2,2,  2,2,2,2,2,2,2,2,  3,3,3,3,3,E,E,E,  E,E,E,E,E,E,E,E    // 224 .. 255
+        };   
+        return table[static_cast<uint8_t>(first)-0x80u];        
+
+#elif 0
+        uint8_t ch = static_cast<uint8_t>(first);        
+        if (ch < 0x80u)
+            return 0;
+        if (ch < 0xC0u)
+            return -1;
+        const int8_t E = -1;
+        static int8_t const table[64] = {
+            E,E,1,1,1,1,1,1,  1,1,1,1,1,1,1,1,  1,1,1,1,1,1,1,1,  1,1,1,1,1,1,1,1,   // 192 .. 223
+            2,2,2,2,2,2,2,2,  2,2,2,2,2,2,2,2,  3,3,3,3,3,E,E,E,  E,E,E,E,E,E,E,E    // 224 .. 255
+        };   
+        return table[static_cast<uint8_t>(first)-0xC0u];   
+        
+#elif 0     
+        const int8_t E = -1;        
+        static int8_t const table[32] = {
+            0,0,0,0,0,0,0,0,
+            0,0,0,0,0,0,0,0,
+            E,E,E,E,E,E,E,E,
+            1,1,1,1,2,2,3,E            
+        };   
+        int result = table[static_cast<uint8_t>(first)>>3];
+        if (result > 0 and !utf8_is_lead((static_cast<uint8_t>(first))))
+            return -1;
+        return result;
+                
+        
+#elif 0
+        uint8_t ch = static_cast<uint8_t>(first);
+        if (ch < 0x80u)
+            return 0;
+        if (ch < 0xC2u)
+            return -1;
+        if (ch < 0xE0u)
+            return 1;
+        if (ch < 0xF0u)
+            return 2;
+        if (ch < 0xF5)
+            return 3;
+        return -1;
+        
+        
+#endif        
+        
     }
+    
+    
+    // The following utf8_num_trails_no_ctrl() functions are safe, that is if parameter
+    // 'first' is not a valid lead byte or not a single byte the function will 
+    // return -1. Otherwise, it returns -2 for an ASCII Control Character, otherwise 
+    // it returns 0, 1, 2 or 3.
+    inline int utf8_num_trails_no_ctrl(utf8_code_unit first) {
+#if 1
+        const int8_t E = -1;
+        const int8_t C = -2;
+        static int8_t const table[256] = {
+            C,C,C,C,C,C,C,C,  C,C,C,C,C,C,C,C,  C,C,C,C,C,C,C,C,  C,C,C,C,C,C,C,C,   //   0 ..  31
+            0,0,0,0,0,0,0,0,  0,0,0,0,0,0,0,0,  0,0,0,0,0,0,0,0,  0,0,0,0,0,0,0,0,   //  32 ..  63
+            0,0,0,0,0,0,0,0,  0,0,0,0,0,0,0,0,  0,0,0,0,0,0,0,0,  0,0,0,0,0,0,0,0,   //  64 ..  95
+            0,0,0,0,0,0,0,0,  0,0,0,0,0,0,0,0,  0,0,0,0,0,0,0,0,  0,0,0,0,0,0,0,0,   //  96 .. 127
+            E,E,E,E,E,E,E,E,  E,E,E,E,E,E,E,E,  E,E,E,E,E,E,E,E,  E,E,E,E,E,E,E,E,   // 128 .. 159
+            E,E,E,E,E,E,E,E,  E,E,E,E,E,E,E,E,  E,E,E,E,E,E,E,E,  E,E,E,E,E,E,E,E,   // 160 .. 191
+            E,E,1,1,1,1,1,1,  1,1,1,1,1,1,1,1,  1,1,1,1,1,1,1,1,  1,1,1,1,1,1,1,1,   // 192 .. 223
+            2,2,2,2,2,2,2,2,  2,2,2,2,2,2,2,2,  3,3,3,3,3,E,E,E,  E,E,E,E,E,E,E,E    // 224 .. 255
+        };   
+        return table[static_cast<uint8_t>(first)]; 
+        
+#elif 0
+        uint8_t ch = static_cast<uint8_t>(first); 
+        if (ch < 0x20)
+            return -2;
+        if (ch < 0x80u)
+            return 0;
+        const int8_t E = -1;
+        const int8_t C = -2;
+        static int8_t const table[128] = {
+            E,E,E,E,E,E,E,E,  E,E,E,E,E,E,E,E,  E,E,E,E,E,E,E,E,  E,E,E,E,E,E,E,E,   // 128 .. 159
+            E,E,E,E,E,E,E,E,  E,E,E,E,E,E,E,E,  E,E,E,E,E,E,E,E,  E,E,E,E,E,E,E,E,   // 160 .. 191
+            E,E,1,1,1,1,1,1,  1,1,1,1,1,1,1,1,  1,1,1,1,1,1,1,1,  1,1,1,1,1,1,1,1,   // 192 .. 223
+            2,2,2,2,2,2,2,2,  2,2,2,2,2,2,2,2,  3,3,3,3,3,E,E,E,  E,E,E,E,E,E,E,E    // 224 .. 255
+        };   
+        return table[static_cast<uint8_t>(first)-0x80u];        
+        
+#elif 0
+        uint8_t ch = static_cast<uint8_t>(first);
+        if (ch < 0x20)
+            return -2;
+        if (ch < 0x80u)
+            return 0;
+        if (ch < 0xC0u)
+            return -1;
+        const int8_t E = -1;
+        static int8_t const table[64] = {
+            E,E,1,1,1,1,1,1,  1,1,1,1,1,1,1,1,  1,1,1,1,1,1,1,1,  1,1,1,1,1,1,1,1,   // 192 .. 223
+            2,2,2,2,2,2,2,2,  2,2,2,2,2,2,2,2,  3,3,3,3,3,E,E,E,  E,E,E,E,E,E,E,E    // 224 .. 255
+        };   
+        return table[static_cast<uint8_t>(first)-0xC0u];   
+        
+#elif 0        
+        const int8_t E = -1;
+        const int8_t C = -2;
+        static int8_t const table[32] = {
+            C,C,C,0,0,0,0,0,
+            0,0,0,0,0,0,0,0,
+            0,0,0,0,0,0,0,0,
+            1,1,1,1,2,2,3,E            
+        };   
+        int result = table[static_cast<uint8_t>(first)>>3];
+        if (result > 0 and !utf8_is_lead((static_cast<uint8_t>(first))))
+            return -1;
+        return result;
+        
+        
+#elif 0
+        uint8_t ch = static_cast<uint8_t>(first);
+        if (ch < 0x20)
+            return -2;
+        if (ch < 0x80u)
+            return 0;
+        if (ch < 0xC2u)
+            return -1;
+        if (ch < 0xE0u)
+            return 1;
+        if (ch < 0xF0u)
+            return 2;
+        if (ch < 0xF5)
+            return 3;
+        return -1;
+        
+        
+#endif        
+        
+    }
+        
+    
     
 }}  // namespace json::internal
     
@@ -802,7 +1056,7 @@ namespace json { namespace unicode {
     
     const utf32_code_unit UTF32_BOM = 0xFeFFu;
     
-}}  // namespace json::internal
+}}  // namespace json::unicode
 
 
 #endif // JSON_UNICODE_UTILITIES_HPP

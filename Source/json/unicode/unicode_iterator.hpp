@@ -23,6 +23,7 @@
 #ifndef JSON_UNICODE_UNICODE_ITERATOR_HPP
 #define JSON_UNICODE_UNICODE_ITERATOR_HPP
 
+#include "json/config.hpp"
 #include <boost/config.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/iterator/iterator_facade.hpp>

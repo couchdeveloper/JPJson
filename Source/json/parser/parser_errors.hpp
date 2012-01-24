@@ -22,6 +22,9 @@
 #define JSON_PARSER_ERRORS_HPP
 
 
+#include "json/config.hpp"
+
+
 namespace json {
 
     // parse errors

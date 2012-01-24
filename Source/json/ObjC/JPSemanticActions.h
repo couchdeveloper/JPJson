@@ -21,9 +21,9 @@
 #define JSON_OBJC_JP_SEMANTIC_ACTIONS_H
 
 
-#import <Foundation/Foundation.h>
 #import "JPSemanticActionsBase.h"
 #import "JPJsonCommon.h"
+#import <Foundation/Foundation.h>
 #include <dispatch/dispatch.h>
 
 

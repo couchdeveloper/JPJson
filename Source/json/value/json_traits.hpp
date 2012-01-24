@@ -21,6 +21,7 @@
 #define JSON_JSON_TRAITS_HPP
 
 
+#include "json/config.hpp"
 #include <boost/config.hpp>
 #include <boost/type_traits.hpp>
 #include <boost/mpl/bool.hpp>

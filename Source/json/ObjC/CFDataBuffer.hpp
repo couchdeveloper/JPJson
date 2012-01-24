@@ -21,6 +21,7 @@
 #define JSON_OBJC_CFDATA_BUFFERS_HPP
 
 
+#include "json/config.hpp"
 #import <CoreFoundation/CoreFoundation.h>
 #include "semaphore.hpp"
 #include "mutex.hpp"

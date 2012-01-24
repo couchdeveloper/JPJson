@@ -22,6 +22,7 @@
 #define JSON_UTILITY_SIMPLE_LOG_HPP
 
 
+#include "json/config.hpp"
 #include <cstdio>
 #include <cstdarg>
 #include <ctime>

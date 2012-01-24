@@ -22,6 +22,7 @@
 #define JSON_OBJC_UNICODE_TRAITS_HPP
 
 
+#include "json/config.hpp"
 #import <Foundation/Foundation.h>
 #import <CoreFoundation/CoreFoundation.h>
 

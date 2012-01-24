@@ -21,6 +21,7 @@
 #define JSON_OBJECT_HPP
 
 
+#include "json/config.hpp"
 #include <boost/config.hpp>
 #include <boost/mpl/apply.hpp>
 #include <boost/mpl/placeholders.hpp>

@@ -22,6 +22,7 @@
 #define JSON_UTILITY_STRING_HASHER_HPP
 
 
+#include "json/config.hpp"
 #include <boost/config.hpp>
 #include <boost/functional/hash.hpp>
 

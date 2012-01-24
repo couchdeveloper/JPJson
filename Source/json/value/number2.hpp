@@ -22,6 +22,7 @@
 #define JSON_NUMBER2_HPP
 
 
+#include "json/config.hpp"
 #include <boost/config.hpp>
 #include <boost/utility/enable_if.hpp>
 #if !defined (JSON_NO_BOOST_LEXICAL_CAST)

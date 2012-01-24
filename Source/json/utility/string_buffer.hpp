@@ -20,6 +20,7 @@
 //  limitations under the License.
 //
 
+#include "json/config.hpp"
 #include <alloca.h>
 #include <stdlib.h>
 #include <string.h>
@@ -33,6 +34,42 @@
 #include "json/unicode/unicode_utilities.hpp"
 #include "json/unicode/unicode_conversions.hpp"
 
+
+
+/** 
+        Synopsis: 
+    
+        template <typename EncodingT> 
+        class  string_buffer_base {
+        public:
+            typedef typename EncodingT::code_unit_type  code_unit_t;
+            typedef          code_unit_t*               buffer_type;
+            typedef size_t                              size_type;
+            typedef typename host_endianness::type      from_endian_t;            
+            typedef typename EncodingT::endian_tag      to_endian_t;
+            
+        public:
+            explicit string_buffer_base(buffer_type autoBuffer, size_type autoBufferSize);
+            ~string_buffer_base();
+            
+            size_type   left() const;
+            bool        avail() const;            
+            const code_unit_t* buffer() const;
+ 
+            bool        reset(size_type capazity);
+            void        reserve(size_t size);
+            void        append(code_unit_t v);
+            void        append_ascii(char ch);
+            size_type   append_cstr(const char* cstr, std::size_t len);
+            size_type   append_cstr(const char* cstr);
+            size_type   append_unicode(json::unicode::code_point_t codepoint);
+            size_type   append_unicode_replacement_character();            
+            bool        terminate_if();
+        };
+    
+*/ 
+ 
+ 
 
 
 namespace json 

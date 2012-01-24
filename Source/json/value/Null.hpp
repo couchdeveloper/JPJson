@@ -21,6 +21,7 @@
 #define JSON_NULL_HPP
 
 
+#include "json/config.hpp"
 #include <boost/config.hpp>
 #include <boost/mpl/bool.hpp>
 #include <iostream>

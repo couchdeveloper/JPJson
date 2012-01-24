@@ -21,6 +21,7 @@
 #define JSON_ENDIAN_HPP
 
 
+#include "json/config.hpp"
 #include <boost/config.hpp>
 #include <boost/detail/endian.hpp>
 #include <stdint.h>

@@ -21,6 +21,7 @@
 #define JSON_OBJC_JP_SEMANTIC_ACTIONS_BASE_PRIVATE_HPP
 
 
+#include "json/config.hpp"
 #import "json/ObjC/SemanticActionsBase.hpp"
 #include "json/unicode/unicode_utilities.hpp"
 

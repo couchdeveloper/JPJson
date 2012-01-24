@@ -21,6 +21,7 @@
 #define JSON_BYTE_SWAP_ITERATOR_HPP
 
 
+#include "json/config.hpp"
 #include <boost/config.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/iterator/iterator_adaptor.hpp>

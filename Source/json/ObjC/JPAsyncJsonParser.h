@@ -21,8 +21,8 @@
 #define JSON_OBJC_JP_ASYNC_JSON_PARSER_H  
 
 
-#import <Foundation/Foundation.h>
 #import "JPJsonCommon.h"   // for JPJsonParserOptions
+#import <Foundation/Foundation.h>
 
 
 /** 

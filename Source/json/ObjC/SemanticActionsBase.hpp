@@ -22,6 +22,7 @@
 #define JSON_OBJC_SEMANTIC_ACTIONS_BASE_HPP 
 
 
+#include "json/config.hpp"
 #include <vector>
 #include <string>
 #include <stdexcept>
@@ -50,16 +51,25 @@ namespace json { namespace objc {
     //  Class SemanticActionsBase is the (abstract) base class of all concrete 
     //  definitions of a semantic actions class. An instance of a subclass will 
     //  be created by an Objective-C semantic actions object which itself is a 
-    //  subclass of JPSemanticActionsBase.
+    //  subclass of JPSemanticActionsBase. The creater sets itself as the 
+    //  "delegate" for this class. 
     //
     //  The purpose of the SemanticActionsBase class is to provide a common
-    //  base class for a) the parser and b) the Objective-C semantic actions
+    //  interface for a) the parser and b) the Objective-C semantic actions
     //  class. To accomplish this, the SemanticActionsBase class simply maps
     //  "parser events" to corresponding virtual member functions, which are
     //  - with a few excpetions - emtpy by default. (This is in contrast to 
     //  the pure C++ version, where semantic action classes are template para-
     //  meters and use the curiously recurring template pattern (CRTP) to 
     //  provide static polymorphism).
+    //
+    //  These virtual member functions eventually notify the parser events by
+    //  sending the "delegate", that is the JPSemanticActions instance, the 
+    //  corresponding message via Objective-C dispatching. Here, only the 
+    //  *required* delegate methods will actually be forwarded to the Objective-
+    //  C instance. Other delegate methods must be invoked by sub classes if
+    //  required.
+    //  
     // 
     //  The concrete C++ subclass is required to implement the virtual member
     //  functions accordingly. Most of the features of a Objective-C Semantic 
@@ -88,9 +98,7 @@ namespace json { namespace objc {
           , EncodingT
         >                                           base;
         
-#if defined (JSON_OBJC_SEMANTIC_ACTIONS_BASE_JSON_PATH)
-        typedef json_path<EncodingT>                json_path_t;
-#endif        
+
     public:    
         typedef typename base::error_t              error_t;
         typedef typename base::nb_number_t          nb_number_t;
@@ -116,7 +124,6 @@ namespace json { namespace objc {
         }
         
         virtual void parse_end_imp() {
-            // notify Objc wraper object:
             [delegate_ parserFoundJsonEnd];
         }
         
@@ -124,52 +131,26 @@ namespace json { namespace objc {
             [delegate_ parserFinished];
         }
         
-
-        virtual void push_string_imp(const char_t* s, std::size_t len) {
-        }        
+        virtual void begin_array_imp() {}
+        virtual void end_array_imp() {}
         
-        virtual void push_key_imp(const char_t* s, std::size_t len) {
-        }
-        
-        virtual void push_number_imp(const nb_number_t& number) {
-        }
-        
-        virtual void push_boolean_imp(bool b) {
-        }
-        
-        virtual void push_null_imp() {
-        }
-        
-        virtual void begin_array_imp() {
-        }
-        
-        virtual void end_array_imp() {
-        }
-        
-        virtual void begin_object_imp() {
-        }
-        
+        virtual void begin_object_imp() {}
         virtual bool end_object_imp() {            
             bool duplicateKeyError = false;
             return not duplicateKeyError;                
         }
 
-        virtual void begin_value_at_index_imp(size_t index) {
-        }
+        virtual void begin_value_at_index_imp(size_t index) {}        
+        virtual void end_value_at_index_imp(size_t) {}
         
-        virtual void end_value_at_index_imp(size_t) {
-        }
-        
-        virtual void begin_value_with_key_imp(const char_t* s, size_t len, size_t nth) {
-        }
-        
-        virtual void end_value_with_key_imp(const char_t* s, size_t len, size_t nth) {
-        }
+        virtual void begin_value_with_key_imp(const char_t* s, size_t len, size_t nth) {}
+        virtual void end_value_with_key_imp(const char_t* s, size_t len, size_t nth) {}
                 
-        
-        virtual void pop_imp() {
-            //stack_.pop_back();
-        }
+        virtual void value_string_imp(const char_t* s, std::size_t len) {}                
+        virtual void value_number_imp(const nb_number_t& number) {}
+        virtual void value_null_imp() {}
+        virtual void value_boolean_imp(bool b) {}
+
         
         virtual void clear_imp() {
             error_.reset();

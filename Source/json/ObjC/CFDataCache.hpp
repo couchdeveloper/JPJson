@@ -21,8 +21,8 @@
 #define JSON_OBJC_CFDATA_CACHE_HPP
 
 
+#include "json/config.hpp"
 #include <CoreFoundation/CoreFoundation.h>
-#include <map>
 #include <functional>
 #include <assert.h>
 #include <cstring>
@@ -143,7 +143,6 @@ namespace json { namespace objc {
             , map_allocator_type 
         >                                       map_t;        
         
-        
     public:
         
         typedef typename map_t::iterator       iterator;        
@@ -166,15 +165,37 @@ namespace json { namespace objc {
         
         size_t  size() const { return map_.size(); }
         
-        iterator find(const key_type& key) {
+        iterator find(key_type const& key) {
             return map_.find(key);
         }
         
-        const_iterator find(const key_type& key) const {
+        iterator find(key_type const& key) const {
             return map_.find(key);
         }
                 
-        bool insert(const key_type& key, mapped_type v);
+        std::pair<iterator, bool> 
+        insert(const key_type& key, mapped_type v)
+        {     
+            // TODO: use a faster block allocator
+            CharT* p = (CharT*)pool_.malloc(key.second*sizeof(CharT));
+            std::copy(key.first, key.first + key.second, p); 
+            //std::memcpy(p, key.first, key.second*sizeof(CharT));
+            key_type map_key;
+            map_key.first = p;
+            map_key.second = key.second;
+            
+            std::pair<iterator, bool> result = 
+                    map_.insert(value_type(map_key, v));
+            if (result.second) {
+                if (v)
+                    CFRetain(v);
+                return result;
+            } 
+            else
+            {
+                return result;
+            }
+        }
         
         bool erase(const key_type& key);
                 
@@ -194,32 +215,6 @@ namespace json { namespace objc {
 namespace json { namespace objc {
     
         
-    template <typename CharT>
-    inline bool 
-    CFDataCache<CharT>::insert(const key_type& key, mapped_type v)
-    {     
-        // TODO: use a faster block allocator
-        CharT* p = (CharT*)pool_.malloc(key.second*sizeof(CharT));
-        std::copy(key.first, key.first + key.second, p); 
-        //std::memcpy(p, key.first, key.second*sizeof(CharT));
-        key_type map_key;
-        map_key.first = p;
-        map_key.second = key.second;
-        
-        typename std::pair<typename map_t::iterator, bool> result = 
-            map_.insert(typename map_t::value_type(map_key, v));
-        if (result.second) {
-            if (v)
-                CFRetain(v);
-            return true;
-        } 
-        else
-        {
-            return false;
-        }
-    }
-    
-    
     
     // Note: Usually, an erase function is not required for a cache (rather,
     // a resize function, which changes the capacity of the cache).

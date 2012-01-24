@@ -22,6 +22,7 @@
 #define JSON_UTILITY_SYNCHRONOUS_QUEUE_HPP
 
 
+#include "json/config.hpp"
 #include <boost/utility.hpp>
 #include <utility>
 #include <iostream>
@@ -85,7 +86,7 @@ namespace json { namespace utility {
         ~synchronous_queue() {
             if (not empty_) {
 #if defined (DEBUG)                
-                std::cerr << "WARNING: synchronous_queue buffer not commited while in dtor: " 
+                std::cerr << "WARNING: synchronous_queue buffer not committed while in dtor: " 
                     << *reinterpret_cast<T const*>(storage_) << std::endl; 
 #endif                
                 reinterpret_cast<T*>(storage_)->~T();

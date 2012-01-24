@@ -22,6 +22,7 @@
 #define JSON_GENERATE_HPP
 
 
+#include "json/config.hpp"
 #include <assert.h>
 #include <boost/static_assert.hpp>
 #include <boost/type_traits.hpp>

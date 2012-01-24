@@ -22,6 +22,7 @@
 #define JSON_UTILITY_FLAGS_HPP
 
 
+#include "json/config.hpp"
 #include <boost/type_traits.hpp>
 #include <boost/utility.hpp>
 #include <boost/mpl/bool.hpp>

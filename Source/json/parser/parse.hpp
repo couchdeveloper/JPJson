@@ -22,6 +22,7 @@
 #define JSON_PARSE_HPP
 
 
+#include "json/config.hpp"
 #include <boost/config.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/iterator/iterator_traits.hpp>
@@ -471,10 +472,10 @@ namespace json {
         typedef typename SemanticActions::error_t                    sa_error_t;
         
         // No policies specified, use default json parser policies:
-        typedef parser_policies                                        Policies;
+        //typedef parser_policies                                        Policies;
         
         // Create the parser type:
-        typedef parser<IteratorT, SourceEncoding, SemanticActions, Policies> parser_t;
+        typedef parser<IteratorT, SourceEncoding, SemanticActions> parser_t;
         
         
         BOOST_STATIC_ASSERT( (boost::is_base_and_derived<utf_encoding_tag, SourceEncoding>::value) );
@@ -539,10 +540,10 @@ namespace json {
         typedef typename SemanticActionsT::error_t sa_error_t;
         
         // No policies specified, use default json parser policies:
-        typedef parser_policies                             Policies;
+        //typedef parser_policies                             Policies;
         
         // Finally, create the parser type:
-        typedef parser<IteratorT, SourceEncoding, SemanticActionsT, Policies> parser_t;
+        typedef parser<IteratorT, SourceEncoding, SemanticActionsT> parser_t;
         
         
         //BOOST_STATIC_ASSERT( (boost::is_base_and_derived<json::semantic_actions_base, SemanticActionsT>::value) );
@@ -604,10 +605,10 @@ namespace json {
         typedef typename SemanticActionsT::error_t sa_error_t;
         
         // No policies specified, use default json parser policies:
-        typedef parser_policies                             Policies;
+        //typedef parser_policies                             Policies;
         
         // Finally, create the parser type:
-        typedef parser<IteratorT, EncodingT, SemanticActionsT, Policies> parser_t;
+        typedef parser<IteratorT, EncodingT, SemanticActionsT> parser_t;
         
         // TODO: make a static assert which checks the semantic actions. For now, 
         // we simply assume the user's semantic actions class inherits from 

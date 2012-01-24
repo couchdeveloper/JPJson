@@ -279,6 +279,8 @@ namespace {
 //  The string should not contain large amount of text. The performance of
 //  the implementation may not be optimal for this use case. For better
 //  results of large amount of text use parseData: methods.
+//
+//  Parameter 'string' shall not be nil.
 // 
 + (id) parseString:(NSString*)string 
            options:(JPJsonParserOptions)options 
@@ -301,10 +303,11 @@ namespace {
     const void* bytes = string ? CFStringGetCharactersPtr(CFStringRef(string)) : NULL;
     size_t length = bytes ? [string length]*2 : 0; // length equals number of bytes 
     if (not bytes and string) {
-        // Performance may be suboptimal - even if we choose to use
-        // UTF-16 encoding - this may CFString require to internally 
-        // allocate a contigues buffer and copy bytes.
-        bytes = [string UTF8String];
+        bytes = CFStringGetCStringPtr(CFStringRef(string), kCFStringEncodingUTF8);
+        if (not bytes) {
+            // Performance may be suboptimal
+            bytes = [string UTF8String];
+        }
         length = [string lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
         encoding = JPUnicodeEncoding_UTF8;
     }

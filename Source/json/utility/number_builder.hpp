@@ -21,6 +21,7 @@
 //  limitations under the License.
 //
 
+#include "json/config.hpp"
 #include <limits>
 #include <stdlib.h>
 #include <xlocale.h>

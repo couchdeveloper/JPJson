@@ -22,6 +22,7 @@
 #define JSON_UTILITY_ISTREAMBUF_ITERATOR_HPP
 
 
+#include "json/config.hpp"
 #include <iterator>
 
 

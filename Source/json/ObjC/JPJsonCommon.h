@@ -22,6 +22,7 @@
 #define JSON_OBJC_JP_JPJSON_H
 
 
+#include <Foundation/Foundation.h>
 
 /// JPUnicodeEncoding 
 /// Defines constants for an Unicode encoding scheme

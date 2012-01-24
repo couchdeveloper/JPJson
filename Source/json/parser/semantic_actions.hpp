@@ -22,6 +22,7 @@
 #define JSON_INTERNAL_SEMANTIC_ACTIONS_HPP 
 
 
+#include "json/config.hpp"
 #include <boost/config.hpp>
 #include <boost/tr1/unordered_map.hpp>
 #include <iostream>
@@ -419,7 +420,7 @@ namespace json {
         
         void parse_begin_imp() {
             //error_.first = 0;
-            error_.second = 0;
+            error_.reset();
             stack_.reserve(200);
             markers_.reserve(20);
             string_cache_.rehash(64);
@@ -438,63 +439,8 @@ namespace json {
         
         void finished_imp() {}
         
-        void push_string_cached(const char_t* s, std::size_t len) 
+        void begin_array_imp() 
         {
-            // (performance critical function)
-            const std::size_t hash = json::utility::string_hasher<char_t>()(s, len);
-            map_c_iter_t iter = string_cache_.find(hash);
-            if (iter == string_cache_.end()) {
-                std::pair<map_c_iter_t, bool> result = 
-                    string_cache_.insert(map_elem_t(hash, map_mapped_value_t(s, len)));
-                iter = result.first;
-            }
-            stack_.push_back( (*iter).second );
-        }        
-        
-        void push_string_imp(const char_t* s, std::size_t len) 
-        {
-            //t0_.start();            
-            //++c0_;
-            //++string_count;
-            stack_.push_back(String(s, len));
-            //t0_.pause();
-        }
-
-        void push_key_imp(const char_t* s, std::size_t len) 
-        { 
-            //t0_.start();
-            //++c0_;
-            //++string_count;
-            push_string_cached(s, len); 
-            //t0_.pause();
-        }
-        
-        void push_number_imp(const nb_number_t& number) {
-            //t0_.start();
-            //++c0_;
-            //++number_count;
-            stack_.push_back(Number(number.string_));
-            //t0_.pause();
-        }
-        
-        
-        void push_boolean_imp(bool b) {
-            //t0_.start();
-            //++c0_;
-            //++boolean_count;
-            stack_.push_back(Value(b));
-            //t0_.pause();
-        }
-        
-        void push_null_imp() {
-            //t0_.start();
-            //++c0_;
-            //++null_count;
-            stack_.push_back(Null());
-            //t0_.pause();
-        }
-        
-        void begin_array_imp() {
             //t0_.start();
             //++c0_;
             //++array_count;
@@ -529,7 +475,8 @@ namespace json {
             //t1_.pause();
         }
         
-        void begin_object_imp() {
+        void begin_object_imp() 
+        {
             //t0_.start();
             //++c0_;
             //++object_count;
@@ -620,15 +567,50 @@ namespace json {
         void begin_value_at_index_imp(size_t index) {}
         void end_value_at_index_imp(size_t index) {}
         
-        void begin_value_with_key_imp(const char_t* s, size_t len, size_t nth) {}
+        void begin_value_with_key_imp(const char_t* s, size_t len, size_t nth) 
+        {
+            push_key(s, len);
+        }
         void end_value_with_key_imp(const char_t* s, size_t len, size_t nth) {}
                 
         
-        void pop_imp() {
-            //t3_.start();
-            stack_.pop_back();
-            //t3_.pause();
+        
+        void value_string_imp(const char_t* s, std::size_t len) 
+        {
+            //t0_.start();            
+            //++c0_;
+            //++string_count;
+            stack_.push_back(String(s, len));
+            //t0_.pause();
         }
+        
+        void value_number_imp(const nb_number_t& number) 
+        {
+            //t0_.start();
+            //++c0_;
+            //++number_count;
+            stack_.push_back(Number(number.string_));
+            //t0_.pause();
+        }
+        
+        void value_boolean_imp(bool b) 
+        {
+            //t0_.start();
+            //++c0_;
+            //++boolean_count;
+            stack_.push_back(Value(b));
+            //t0_.pause();
+        }
+        
+        void value_null_imp() 
+        {
+            //t0_.start();
+            //++c0_;
+            //++null_count;
+            stack_.push_back(Null());
+            //t0_.pause();
+        }
+        
         
         void print_imp(std::ostream& os) { 
             os << *this; 
@@ -640,7 +622,7 @@ namespace json {
             string_cache_.clear();            
             result_ = result_type();
             //error_.first = 0;
-            error_.second = 0;
+            error_.reset();
             markers_.clear();
             t_.reset();
             t0_.reset();
@@ -674,6 +656,33 @@ namespace json {
         size_t              c0() const          { return c0_; }
         size_t              c1() const          { return c1_; }
         size_t              c2() const          { return c2_; }
+        
+        
+    protected:
+        
+        void push_string_cached(const char_t* s, std::size_t len) 
+        {
+            // (performance critical function)
+            const std::size_t hash = json::utility::string_hasher<char_t>()(s, len);
+            map_c_iter_t iter = string_cache_.find(hash);
+            if (iter == string_cache_.end()) {
+                std::pair<map_c_iter_t, bool> result = 
+                string_cache_.insert(map_elem_t(hash, map_mapped_value_t(s, len)));
+                iter = result.first;
+            }
+            stack_.push_back( (*iter).second );
+        }        
+        
+        
+        void push_key(const char_t* s, std::size_t len) 
+        { 
+            //t0_.start();
+            //++c0_;
+            //++string_count;
+            push_string_cached(s, len); 
+            //t0_.pause();
+        }
+        
         
         
     protected:

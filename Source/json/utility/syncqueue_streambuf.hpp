@@ -22,6 +22,7 @@
 #define JSON_UTILITY_SYNCQUEUE_STREAMBUF_HPP
 
 
+#include "json/config.hpp"
 #include <streambuf>
 #include <ios>
 #include <utility>

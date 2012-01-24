@@ -22,6 +22,7 @@
 #define JSON_SEMANTIC_ACTIONS_BASE_HPP
 
 
+#include "json/config.hpp"
 #include <string>
 #include <iostream>
 #include <boost/config.hpp>
@@ -146,12 +147,6 @@ namespace json {
         void parse_end()                                { this->derived().parse_end_imp(); }
         void finished()                                 { this->derived().finished_imp(); }
         
-        void push_key(const char_t* s, std::size_t len) { this->derived().push_key_imp(s, len); }
-        void push_string(const char_t* s, std::size_t len) { this->derived().push_string_imp(s, len); }
-        void push_number(const nb_number_t& number)     { this->derived().push_number_imp(number); }
-        void push_null()                                { this->derived().push_null_imp(); }
-        void push_boolean(bool b)                       { this->derived().push_boolean_imp(b); }
-        
         void begin_array()                              { this->derived().begin_array_imp(); }
         void end_array()                                { this->derived().end_array_imp(); }
         
@@ -165,10 +160,14 @@ namespace json {
         void end_value_with_key(const char_t* s, size_t len, size_t nth) { this->derived().end_value_with_key_imp(s, len, nth); }
         
         
-        void pop()                                      { this->derived().pop_imp(); }
+        void value_string(const char_t* s, std::size_t len) { this->derived().value_string_imp(s, len); }
+        void value_number(const nb_number_t& number)     { this->derived().value_number_imp(number); }
+        void value_null()                                { this->derived().value_null_imp(); }
+        void value_boolean(bool b)                       { this->derived().value_boolean_imp(b); }
+        
         
         void clear()                                    { canceled_ = false; inputEncoding_.clear(); this->derived().clear_imp(); }
-        
+
         void print(std::ostream& os)                    { this->derived().print_imp(os); }
         
         void error(json::parser_error_type code, const char* description)  
@@ -192,17 +191,6 @@ namespace json {
             logger_.log(json::utility::LOG_ERROR, "ERROR: json::parser (%d): %s", code, description);
         }
         
-        
-/*        
-        void error(const error_t& error) { 
-            if (canceled_) {
-                this->derived().error_imp(error_t(JP_CANCELED, parser_error_str(JP_CANCELED)));
-            } else {
-                this->derived().error_imp(error);
-            }
-            logger_.log(json::utility::LOG_ERROR, "ERROR: json::parser (%d): %s", error.code(), error.c_str());
-        }
-*/ 
         
         const error_t& error() const { 
             return this->derived().error_imp(); 
@@ -296,6 +284,8 @@ namespace json {
             inputEncoding_ = encoding;
         }
         
+        void* result() const { return static_cast<void*>(0); }
+        
     protected:
         logger_t                logger_;
         noncharacter_handling_option nch_option_;
@@ -380,29 +370,26 @@ namespace json {
         void parse_begin_imp()                              {}
         void parse_end_imp()                                {}
         void finished_imp()                                 {}
-        void push_key_imp(const char_t*, std::size_t)       {}        
-        void push_string_imp(const char_t*, std::size_t)    {}        
-        void push_number_imp(const nb_number_t& number)     {}
-        void push_boolean_imp(bool b)                       {}
-        void push_null_imp()                                {}
         void begin_array_imp()                              {}
         void end_array_imp()                                {}
         void begin_object_imp()                             {}
         bool end_object_imp()                               { return true; }
         void begin_value_at_index_imp(size_t index) {}
         void end_value_at_index_imp(size_t index) {}        
-        void begin_value_with_key_imp(const char_t* s, size_t len, size_t nth) {}
-        void end_value_with_key_imp(const char_t* s, size_t len, size_t nth) {}
+        void begin_value_with_key_imp(const char_t*, size_t len, size_t) {}
+        void end_value_with_key_imp(const char_t*, size_t len, size_t) {}
+        void value_string_imp(const char_t*, std::size_t)    {}        
+        void value_number_imp(const nb_number_t& number)     {}
+        void value_boolean_imp(bool b)                       {}
+        void value_null_imp()                                {}
+        
                 
-        void pop_imp()                                      {}
-        void pop_value_push_back_into_array()               {}
         void clear_imp() 
         {} 
         
         void error_imp(int code, const char* description) {
             error_.set(code, description);
         }
-        
         void error_imp(const error_t& error) {
             error_ = error;
         }        

@@ -22,6 +22,7 @@
 #define JSON_UNICODE_UNICODE_CONVERSIONS_HPP
 
 
+#include "json/config.hpp"
 #include "unicode_utilities.hpp"
 #include <boost/mpl/if.hpp>
 #include <boost/utility.hpp>
@@ -141,7 +142,8 @@ namespace json { namespace unicode { namespace filter {
         }
         
         bool operator() (code_point_t cp) const {
-            return cp == 0 or isNonCharacter(cp); 
+            bool result = cp == 0 or isNonCharacter(cp); 
+            return result;
         }
         bool replace() const { return replacement_ != 0; }
         
@@ -204,11 +206,14 @@ namespace json {  namespace unicode { namespace internal {
         >::type
     >
     {
-        BOOST_STATIC_ASSERT(sizeof(typename boost::iterator_value<IteratorT>::type)
-                            == sizeof(typename EncodingT::code_unit_type));
+        // Cant't check size of an output iterator!
+        //        BOOST_STATIC_ASSERT(sizeof(typename boost::iterator_value<IteratorT>::type)
+        //                            == sizeof(typename EncodingT::code_unit_type));
+        
 
     private:
         
+#if 0 // unused        
         inline int read_trails1(uint8_t ch1, IteratorT& first, IteratorT last, 
                          code_point_t&   code_point) const 
         {
@@ -244,26 +249,38 @@ namespace json {  namespace unicode { namespace internal {
             return 1;
         }
         
-        inline int read_trails(IteratorT& first, IteratorT last, 
-                        code_point_t&   code_point) const
+        // Parameter 'code_point*' is is assigned ch0
+        inline int read_trails(IteratorT& first, IteratorT last, code_point_t& code_point) const
         {
-            code_point_t ch1 = static_cast<utf8_code_unit>(*first);
-            switch (utf8_num_trails(utf8_code_unit(ch1))) {
-                case 1: {
-                    return read_trails1(ch1, first, last, code_point);
+            code_point_t ch1 = static_cast<utf8_code_unit>(*first++);
+            switch (utf8_num_trails(static_cast<utf8_code_unit>(code_point))) {
+                default: {
+                    code_point = ((code_point << 6) & 0x7FFu) + ((ch1) & 0x3Fu);
+                    return 1;
                     break;
                 }
                 case 2: {
-                    return read_trails2(ch1, first, last, code_point);
+                    code_point_t cp = ((code_point << 12) & 0xFFFFu) + ((ch1 << 6) & 0xFFFu);
+                    code_point_t ch2 = static_cast<utf8_code_unit>(*first++);
+                    cp += ch2 & 0x3Fu;
+                    code_point = cp;
+                    return 1;
                     break;
                 }
                 case 3: {
-                    return read_trails3(ch1, first, last, code_point);
+                    code_point_t cp = ((code_point << 18) & 0x1FFFFFu) + ((ch1 << 12) & 0x3FFFFu);                
+                    code_point_t ch2 = static_cast<utf8_code_unit>(*first++);
+                    cp += (ch2 << 6) & 0xFFFu;
+                    code_point_t ch3 = static_cast<utf8_code_unit>(*first++);
+                    cp += ch3 & 0x3Fu; 
+                    code_point = cp;
+                    return 1;
                     break;
                 }
             }
-            return -1;
         }
+#endif        
+        
         
     public:        
         
@@ -286,21 +303,53 @@ namespace json {  namespace unicode { namespace internal {
         //
         //
         // Implementation notes:
-        // The algorithm must work with either signed or usigned UTF-8 code units.
+        // The algorithm must work with either signed or unsigned UTF-8 code units.
         int operator()(
             IteratorT&       first, 
             IteratorT        last, 
             code_point_t&   code_point) const
         {
-            code_point_t ch1 = static_cast<utf8_code_unit>(*first);
-            if (utf8_is_single(utf8_code_unit(ch1))) {
-                code_point = ch1;
-                ++first;
+            BOOST_STATIC_ASSERT(sizeof(typename boost::iterator_value<IteratorT>::type)
+                                == sizeof(typename EncodingT::code_unit_type));
+            
+            assert(first != last);
+
+            code_point = static_cast<uint8_t>(*first++);
+            int num_trails = utf8_num_trails_unsafe(code_point);
+            assert(num_trails <= 3 and num_trails >= 0);
+            if (num_trails == 0) {
                 return 1;
             }
-            else {
-                return read_trails(first, last, code_point);
+            
+            assert(first != last);
+            code_point_t ch_next = static_cast<uint8_t>(*first++);
+            code_point_t cp = code_point;
+            switch (num_trails) {
+                case 1:
+                    cp = ((cp << 6) & 0x7FFu) + ((ch_next) & 0x3Fu);
+                    code_point = cp;
+                    return 1;
+                case 2:
+                    cp = ((cp << 12) & 0xFFFFu) + ((ch_next << 6) & 0xFFFu);
+                    assert(first != last);
+                    ch_next = static_cast<utf8_code_unit>(*first++);
+                    cp += ch_next & 0x3Fu;
+                    code_point = cp;
+                    return 1;
+                case 3:
+                    cp = ((cp << 18) & 0x1FFFFFu) + ((ch_next << 12) & 0x3FFFFu);                
+                    assert(first != last);
+                    ch_next = static_cast<utf8_code_unit>(*first++);
+                    cp += (ch_next << 6) & 0xFFFu;
+                    assert(first != last);
+                    ch_next = static_cast<utf8_code_unit>(*first++);
+                    cp += ch_next & 0x3Fu; 
+                    code_point = cp;
+                    return 1;
             }
+            
+            assert(first == last);
+            return 1;
         }
         
 #pragma mark Codepoint to UTF-8 
@@ -376,12 +425,14 @@ namespace json {  namespace unicode { namespace internal {
         >::type
     >
     {
-        BOOST_STATIC_ASSERT(sizeof(typename boost::iterator_value<IteratorT>::type)
-                            == sizeof(typename EncodingT::code_unit_type));
+        // Can't check size of an output iterator!
+        //        BOOST_STATIC_ASSERT(sizeof(typename boost::iterator_value<IteratorT>::type)
+        //                            == sizeof(typename EncodingT::code_unit_type));
         
         
     private:
         
+#if 0 /* not used */        
         int read_trails3(uint8_t ch0, IteratorT& first, IteratorT last, 
                          code_point_t&   code_point) const 
         {
@@ -462,21 +513,17 @@ namespace json {  namespace unicode { namespace internal {
             code_point = result;
             return 1;
         }
+#endif        
         
         
-#if 1
-        inline int read_trails(IteratorT& first, IteratorT last, 
+        // parameter 'code_point' is initialized with ch0
+        // parameter 'first' points past the first ch
+        inline int read_trails(int32_t num_trails, IteratorT& first, IteratorT last, 
                                code_point_t&   code_point) const 
         {
-            // assert: *first is a valid lead byte and utf8_num_trails() returns [1..3] for a valid lead byte
-            assert(utf8_is_lead(*first));
-            
-            const uint32_t ch0 = static_cast<uint8_t>(*first);
-            ++first;  // valid lead byte, consume it.
-            
             if (first == last) {
                 return E_UNEXPECTED_ENDOFINPUT;
-            }
+            }            
             const uint32_t ch1 = static_cast<uint8_t>(*first);
             if (not utf8_is_trail(ch1)) {
                 return E_TRAIL_EXPECTED;
@@ -484,26 +531,27 @@ namespace json {  namespace unicode { namespace internal {
             
             // determine the length of the mb sequence and read n trail bytes 
             //const int num_trails = utf8_num_trails(ch0);
-            switch (utf8_num_trails(ch0))               
+            switch (num_trails)               
             {
                 case 1: {
                     // there are no other restrictions for ch1, so
+                    code_point = ((code_point << 6) & 0x7FFu) + (ch1 & 0x3Fu); 
                     ++first;  // consume it.
-                    code_point = ((ch0 << 6) & 0x7FFu) + (ch1 & 0x3Fu); 
                     return 1;
                     break;
                 }
                 case 2: {
-                    if (ch0 == 0xE0u) {
+                    if (code_point == 0xE0u) {
                         if (ch1 < 0xA0u)
                             return E_UNCONVERTABLE_OFFSET;
                     }
-                    else if (ch0 == 0xEDu) {
+                    else if (code_point == 0xEDu) {
                         if (ch1 > 0x9F) {
                             return E_UNCONVERTABLE_OFFSET;
                         }
                     }
                     ++first;
+                    code_point = ((code_point << 12) & 0xFFFFu) + ((ch1 << 6) & 0xFFFu);
                     
                     if (first == last) {
                         return E_UNEXPECTED_ENDOFINPUT;
@@ -512,23 +560,24 @@ namespace json {  namespace unicode { namespace internal {
                     if (not utf8_is_trail(ch2)) {
                         return E_TRAIL_EXPECTED;
                     }
-                    ++first;
 
-                    code_point = ((ch0 << 12) & 0xFFFFu) + ((ch1 << 6) & 0xFFFu);
                     code_point += ch2 & 0x3Fu;
+                    ++first;
                     return 1;
                     break;
                 }
                 case 3: {
-                    if (ch0 == 0xF0u) {
+                    if (code_point == 0xF0u) {
                         if (ch1 < 0x90u) {
                             return E_UNCONVERTABLE_OFFSET;
                         }
                     }
-                    else if (ch0 == 0xF4 and ch1 > 0x8Fu) {
+                    else if (code_point == 0xF4 and ch1 > 0x8Fu) {
                         return E_UNCONVERTABLE_OFFSET;
                     }
+                    
                     ++first;                            
+                    code_point = ((code_point << 18) & 0x1FFFFFu) + ((ch1 << 12) & 0x3FFFFu);                        
                     
                     if (first == last) {
                         return E_UNEXPECTED_ENDOFINPUT;
@@ -538,7 +587,7 @@ namespace json {  namespace unicode { namespace internal {
                         return E_TRAIL_EXPECTED;
                     }
                     ++first;
-
+                    code_point += (ch2 << 6) & 0xFFFu;
                     
                     if (first == last) {
                         return E_UNEXPECTED_ENDOFINPUT;
@@ -547,12 +596,9 @@ namespace json {  namespace unicode { namespace internal {
                     if (not utf8_is_trail(ch3)) {
                         return E_TRAIL_EXPECTED;
                     }
-                    ++first;
-                    
-                    
-                    code_point = ((ch0 << 18) & 0x1FFFFFu) + ((ch1 << 12) & 0x3FFFFu);                        
-                    code_point += (ch2 << 6) & 0xFFFu;
+                                        
                     code_point += ch3 & 0x3Fu; 
+                    ++first;
                     return 1;
                     break;
                 }
@@ -561,45 +607,8 @@ namespace json {  namespace unicode { namespace internal {
             }
         }
         
-#else        
-        inline int read_trails(IteratorT& first, IteratorT last, 
-                        code_point_t&   code_point) const 
-        {
-            // determine the length of the mb sequence and read n trail bytes 
-            uint8_t ch0 = static_cast<uint8_t>(*first);
-            ++first;  // valid lead byte, consume it.
-            
-            const int num_trails = utf8_num_trails(uint8_t(ch0));
-            assert(num_trails <= 3 and num_trails >= 1);
-            
-            switch (num_trails)                
-            {
-                case 1: {
-                    if (first == last)
-                        return E_UNEXPECTED_ENDOFINPUT;
-                    utf8_code_unit ch1 = static_cast<utf8_code_unit>(*first);
-                    if (not utf8_is_trail(ch1)) {
-                        return E_TRAIL_EXPECTED;
-                    }
-                    // there are no other restrictions for ch1, so
-                    ++first;  // consume it.
-                    code_point = ((ch0 << 6) & 0x7FFu) + (ch1 & 0x3Fu);
-                    return 1;
-                    break;
-                }
-                case 2: {
-                    return read_trails2(ch0, first, last, code_point);
-                    break;
-                }
-                case 3: {
-                    return read_trails3(ch0, first, last, code_point);
-                    break;
-                }
-                default:
-                    return E_UNKNOWN_ERROR;
-            }
-        }
-#endif
+        
+        
         
     public:
         
@@ -632,19 +641,94 @@ namespace json {  namespace unicode { namespace internal {
             IteratorT       last, 
             code_point_t&   code_point) const
         {
-            assert(first != last);
+            BOOST_STATIC_ASSERT(sizeof(typename boost::iterator_value<IteratorT>::type)
+                                == sizeof(typename EncodingT::code_unit_type));
             
-            uint8_t ch0 = static_cast<uint8_t>(*first);
-            if (utf8_is_single(ch0)) {
-                code_point = ch0;
+            assert(first != last);            
+
+            code_point = static_cast<uint8_t>(*first);
+            int32_t num_trails = utf8_num_trails(static_cast<utf8_code_unit>(code_point));
+            if (num_trails == 0) {
                 ++first;
                 return 1;
             }
-            else if (utf8_is_lead(ch0)) {
-                return read_trails(first, last, code_point);
-            } else {
-                return E_INVALID_START_BYTE;  // not a valid start byte of a well-formed UTF-8 sequence
+            if (num_trails < 0) {
+                return E_INVALID_START_BYTE;
             }
+            ++first;
+            return read_trails(num_trails, first, last, code_point);
+            
+#if 0            
+            // Read trailing bytes:
+            if (first == last) {
+                return E_UNEXPECTED_ENDOFINPUT;
+            }
+            code_point_t ch_next = static_cast<uint8_t>(*first); 
+            if (not utf8_is_trail(ch_next)) {
+                return E_TRAIL_EXPECTED;
+            }     
+            code_point_t cp = code_point;
+            switch (num_trails) {
+                case 1:
+                    cp = ((cp << 6) & 0x7FFu) + ((ch_next) & 0x3Fu);
+                    code_point = cp;
+                    ++first;
+                    return 1;
+                case 2:
+                    if (cp == 0xE0u) {
+                        if (ch_next < 0xA0u)
+                            return E_UNCONVERTABLE_OFFSET;
+                    }
+                    else if (cp == 0xEDu) {
+                        if (ch_next > 0x9F) {
+                            return E_UNCONVERTABLE_OFFSET;
+                        }
+                    }
+                    ++first;
+                    cp = ((cp << 12) & 0xFFFFu) + ((ch_next << 6) & 0xFFFu);
+                    if (first == last) {
+                        return E_UNEXPECTED_ENDOFINPUT;
+                    }
+                    ch_next = static_cast<utf8_code_unit>(*first++);
+                    if (not utf8_is_trail(ch_next)) {
+                        return E_TRAIL_EXPECTED;
+                    }                        
+                    cp += ch_next & 0x3Fu;
+                    code_point = cp;
+                    return 1;
+                case 3:
+                    if (cp == 0xF0u) {
+                        if (ch_next < 0x90u) {
+                            return E_UNCONVERTABLE_OFFSET;
+                        }
+                    }
+                    else if (cp == 0xF4 and ch_next > 0x8Fu) {
+                        return E_UNCONVERTABLE_OFFSET;
+                    }
+                    ++first;
+                    cp = ((cp << 18) & 0x1FFFFFu) + ((ch_next << 12) & 0x3FFFFu);
+                    if (first == last) {
+                        return E_UNEXPECTED_ENDOFINPUT;
+                    }
+                    ch_next = static_cast<utf8_code_unit>(*first++);
+                    if (not utf8_is_trail(ch_next)) {
+                        return E_TRAIL_EXPECTED;
+                    }                        
+                    cp += (ch_next << 6) & 0xFFFu;
+                    if (first == last) {
+                        return E_UNEXPECTED_ENDOFINPUT;
+                    }
+                    ch_next = static_cast<utf8_code_unit>(*first++);
+                    if (not utf8_is_trail(ch_next)) {
+                        return E_TRAIL_EXPECTED;
+                    }                        
+                    cp += ch_next & 0x3Fu; 
+                    code_point = cp;
+                    return 1;
+            }
+            
+            return E_INVALID_START_BYTE;
+#endif            
         }    
         
         
@@ -715,8 +799,9 @@ namespace json {  namespace unicode { namespace internal {
         >::type
     >
     {
-        BOOST_STATIC_ASSERT(sizeof(typename boost::iterator_value<IteratorT>::type)
-                            == sizeof(typename EncodingT::code_unit_type));
+        // Cant't check size of an output iterator!
+        //        BOOST_STATIC_ASSERT(sizeof(typename boost::iterator_value<IteratorT>::type)
+        //                            == sizeof(typename EncodingT::code_unit_type));
 
         // Convert the UTF-16 sequence starting at first to an Unicode code point.
         // Endianness may be explicitly specified, or if not, the Encoding will be
@@ -734,6 +819,10 @@ namespace json {  namespace unicode { namespace internal {
             IteratorT       last, 
             code_point_t&   code_point) const
         {            
+            BOOST_STATIC_ASSERT(sizeof(typename boost::iterator_value<IteratorT>::type)
+                                == sizeof(typename EncodingT::code_unit_type));
+            
+            
             // Upgrade Encoding to include endianness if required:
             typedef typename boost::mpl::if_<
                 boost::is_same<UTF_16_encoding_tag, EncodingT>,
@@ -825,8 +914,9 @@ namespace json {  namespace unicode { namespace internal {
         >::type
     >
     {
-        BOOST_STATIC_ASSERT(sizeof(typename boost::iterator_value<IteratorT>::type)
-                            == sizeof(typename EncodingT::code_unit_type));
+        // Cant't check size of an output iterator!
+        //        BOOST_STATIC_ASSERT(sizeof(typename boost::iterator_value<IteratorT>::type)
+        //                            == sizeof(typename EncodingT::code_unit_type));
         
         // Convert the UTF-16 sequence starting at first to an Unicode code point.
         // Endianness may be explicitly specified, or if not, the Encoding will be
@@ -844,6 +934,9 @@ namespace json {  namespace unicode { namespace internal {
             IteratorT       last, 
             code_point_t&   code_point) const
         {
+            BOOST_STATIC_ASSERT(sizeof(typename boost::iterator_value<IteratorT>::type)
+                                == sizeof(typename EncodingT::code_unit_type));
+            
             // Upgrade Encoding to include endianness if required:
             typedef typename boost::mpl::if_<
                 boost::is_same<UTF_16_encoding_tag, EncodingT>,
@@ -953,8 +1046,9 @@ namespace json {  namespace unicode { namespace internal {
         >::type
     >
     {
-        BOOST_STATIC_ASSERT(sizeof(typename boost::iterator_value<IteratorT>::type)
-                            == sizeof(typename EncodingT::code_unit_type));
+        // Cant't check size of an output iterator!
+        //        BOOST_STATIC_ASSERT(sizeof(typename boost::iterator_value<IteratorT>::type)
+        //                            == sizeof(typename EncodingT::code_unit_type));
         
 
         // Convert one UTF-32 code unit using Encoding to an Unicode code point 
@@ -974,6 +1068,9 @@ namespace json {  namespace unicode { namespace internal {
             IteratorT       last, 
             code_point_t&   code_point) const
         {
+            BOOST_STATIC_ASSERT(sizeof(typename boost::iterator_value<IteratorT>::type)
+                                == sizeof(typename EncodingT::code_unit_type));            
+            
             // Upgrade Encoding to include endianness if required:
             typedef typename boost::mpl::if_<
                 boost::is_same<UTF_32_encoding_tag, EncodingT>,
@@ -1037,8 +1134,9 @@ namespace json {  namespace unicode { namespace internal {
         >::type
     >
     {
-        BOOST_STATIC_ASSERT(sizeof(typename boost::iterator_value<IteratorT>::type)
-                            == sizeof(typename EncodingT::code_unit_type));
+        // Cant't check size of an output iterator!
+        //        BOOST_STATIC_ASSERT(sizeof(typename boost::iterator_value<IteratorT>::type)
+        //                            == sizeof(typename EncodingT::code_unit_type));
         
         // Convert one UTF-32 code unit using Encoding to an Unicode code point 
         // and copy the result into paramerer code_point.
@@ -1064,6 +1162,9 @@ namespace json {  namespace unicode { namespace internal {
             IteratorT       last, 
             code_point_t&   code_point) const
         {
+            BOOST_STATIC_ASSERT(sizeof(typename boost::iterator_value<IteratorT>::type)
+                                == sizeof(typename EncodingT::code_unit_type));
+
             // Upgrade Encoding to include endianness if required:
             typedef typename boost::mpl::if_<
                 boost::is_same<UTF_32_encoding_tag, EncodingT>,
@@ -2583,25 +2684,23 @@ namespace json { namespace unicode { namespace internal {
         >
     >::type>
     {
+        BOOST_STATIC_ASSERT(sizeof(typename boost::iterator_value<InIteratorT>::type)
+                            == sizeof(typename InEncodingT::code_unit_type));
+        typedef InEncodingT                         from_encoding_t;
+        typedef OutEncodingT                        to_encoding_t;
+        
+        
         inline int
         operator() (
                     InIteratorT&     first, 
                     InIteratorT      last, 
-                    InEncodingT      inEncoding,
                     OutIteratorT&    dest,
-                    OutEncodingT     outEncoding,
                     FilterT          filter = FilterT()) const
         {
-            BOOST_STATIC_ASSERT(sizeof(typename boost::iterator_value<InIteratorT>::type)
-                                == sizeof(typename InEncodingT::code_unit_type));
-            // Output iterators do not strictly require a value_type!
-            //BOOST_STATIC_ASSERT(sizeof(typename boost::iterator_value<OutIteratorT>::type)
-            //                    == sizeof(typename OutEncodingT::code_unit_type));
-            
             code_point_t cp;
-            int result = json::unicode::convert_one_unsafe(first, last, inEncoding, cp, filter);
+            int result = json::unicode::convert_one_unsafe(first, last, from_encoding_t(), cp, filter);
             if (result > 0) {
-                result = json::unicode::convert_one_unsafe(cp, dest, outEncoding);
+                result = json::unicode::convert_one_unsafe(cp, dest, to_encoding_t());
             }            
             return result;
         }   
@@ -2621,29 +2720,25 @@ namespace json { namespace unicode { namespace internal {
         >
     >::type>
     {
-        typedef json::unicode::filter::None  NoFilter; 
+        BOOST_STATIC_ASSERT(sizeof(typename boost::iterator_value<InIteratorT>::type)
+                            == sizeof(typename InEncodingT::code_unit_type));
+        
+        typedef json::unicode::filter::None         NoFilter; 
+        typedef InEncodingT                         from_encoding_t;
+        typedef OutEncodingT                        to_encoding_t;
         
         inline int
         operator() (
                     InIteratorT&     first, 
                     InIteratorT      last, 
-                    InEncodingT      inEncoding,
                     OutIteratorT&    dest,
-                    OutEncodingT     outEncoding,
                     NoFilter         filter = NoFilter()) const
         {
-            BOOST_STATIC_ASSERT(sizeof(typename boost::iterator_value<InIteratorT>::type)
-                                == sizeof(typename InEncodingT::code_unit_type));
-            // Output iterators do not strictly require a value_type!
-            //BOOST_STATIC_ASSERT(sizeof(typename boost::iterator_value<OutIteratorT>::type)
-            //                    == sizeof(typename OutEncodingT::code_unit_type));
-            
             // assuming start byte
-            int count = 1;
-            *dest++ = *first++;
-            while (utf8_is_trail(*first)) {
+            const int count = utf8_num_trails(static_cast<uint8_t>(*first)) + 1;
+            int i = count;
+            while (i--) {
                 *dest++ = *first++;
-                ++count;
             }
             return count;
         }   
@@ -2668,42 +2763,39 @@ namespace json { namespace unicode { namespace internal {
     //      E_NONCHARACTER:             input character is an Unicode noncharacter
     //
     template <
-    typename InIteratorT, typename InEncodingT, 
-    typename OutIteratorT, typename OutEncodingT, 
-    typename FilterT
+        typename InIteratorT, typename InEncodingT, 
+        typename OutIteratorT, typename OutEncodingT, 
+        typename FilterT
     >
     struct convert_one<
         InIteratorT, InEncodingT, OutIteratorT, OutEncodingT, FilterT,
         typename boost::enable_if<
             boost::mpl::and_<
-            boost::is_same<UTF_8_encoding_tag, InEncodingT>,
-            boost::is_base_of<UTF_8_encoding_tag, OutEncodingT>
-        >
-    >::type    
+                boost::is_same<UTF_8_encoding_tag, InEncodingT>,
+                boost::is_base_of<UTF_8_encoding_tag, OutEncodingT>
+            >
+        >::type    
     > 
     {
+        BOOST_STATIC_ASSERT(sizeof(typename boost::iterator_value<InIteratorT>::type)
+                            == sizeof(typename InEncodingT::code_unit_type));
+        typedef InEncodingT                             from_encoding_t;
+        typedef OutEncodingT                            to_encoding_t;
+        
         inline int
         operator() (
                     InIteratorT&     first, 
                     InIteratorT      last, 
-                    InEncodingT      inEncoding,
                     OutIteratorT&    dest,
-                    OutEncodingT     outEncoding,
                     FilterT          filter = FilterT()) const
         {
-            BOOST_STATIC_ASSERT(sizeof(typename boost::iterator_value<InIteratorT>::type)
-                                == sizeof(typename InEncodingT::code_unit_type));
-            // Output iterators do not strictly require a value_type!
-            //BOOST_STATIC_ASSERT(sizeof(typename boost::iterator_value<OutIteratorT>::type)
-            //                    == sizeof(typename OutEncodingT::code_unit_type));
-            
             // TODO: possibly not the fastest algorithm. Would need to use a buffer
             // where the input is stored after the first conversion, so that we 
             // can just copy the content to dest.
             code_point_t cp;
-            int result = json::unicode::convert_one(first, last, inEncoding, cp, filter);
+            int result = json::unicode::convert_one(first, last, from_encoding_t(), cp, filter);
             if (result > 0) {
-                result = json::unicode::convert_one_unsafe(cp, dest, outEncoding);
+                result = json::unicode::convert_one_unsafe(cp, dest, to_encoding_t());
             }
             return result;
         }    
@@ -2750,46 +2842,72 @@ namespace json { namespace unicode { namespace internal {
             >
         >::type>
     {
+        BOOST_STATIC_ASSERT(sizeof(typename boost::iterator_value<InIteratorT>::type)
+                            == sizeof(typename InEncodingT::code_unit_type));
+        
+        typedef InEncodingT                             from_encoding_t;
+        // Upgrade Target Encoding to include endiannes if required:
+        typedef typename boost::mpl::if_<
+            boost::is_same<UTF_16_encoding_tag, OutEncodingT>,
+            typename to_host_endianness<OutEncodingT>::type,
+            OutEncodingT 
+        >::type                                         to_encoding_t;        
+        typedef typename host_endianness::type          from_endian_t;
+        typedef typename to_encoding_t::endian_tag      to_endian_t;
+        
+    private:        
+        int
+        slow_path(
+                    InIteratorT&     first, 
+                    InIteratorT      last, 
+                    OutIteratorT&    dest,
+                    FilterT          filter = FilterT()) const
+        {     
+            code_point_t cp;
+            int result = json::unicode::convert_one_unsafe(first, last, from_encoding_t(), cp, filter);
+            if (result > 0) {
+                if (cp < 0x10000u) {
+                    *dest++ = byte_swap<from_endian_t, to_endian_t>(static_cast<typename to_encoding_t::code_unit_type>(cp));
+                    return 1;
+                } else {
+                    *dest++ = byte_swap<from_endian_t, to_endian_t>(utf16_get_lead(cp));
+                    *dest++ = byte_swap<from_endian_t, to_endian_t>(utf16_get_trail(cp));
+                    return 2;
+                }
+            }
+            return result;
+        }        
+        
+    public:        
         inline int
         operator() (
             InIteratorT&     first, 
             InIteratorT      last, 
-            InEncodingT      inEncoding,
             OutIteratorT&    dest,
-            OutEncodingT     outEncoding,
             FilterT          filter = FilterT()) const
-        {
-            BOOST_STATIC_ASSERT(sizeof(typename boost::iterator_value<InIteratorT>::type)
-                                == sizeof(typename InEncodingT::code_unit_type));
-            // Output iterators do not strictly require a value_type!
-            //BOOST_STATIC_ASSERT(sizeof(typename boost::iterator_value<OutIteratorT>::type)
-            //                    == sizeof(typename OutEncodingT::code_unit_type));
-            
-            // Upgrade Target Encoding to include endiannes if required:
-            typedef typename boost::mpl::if_<
-                    boost::is_same<UTF_16_encoding_tag, OutEncodingT>,
-                    typename to_host_endianness<OutEncodingT>::type,
-                    OutEncodingT 
-            >::type                                         to_encoding_t;        
-            
-            typedef typename host_endianness::type          from_endian_t;
-            typedef typename to_encoding_t::endian_tag      to_endian_t;
-
+        {     
+#if 1                
+            if (static_cast<uint8_t>(*first) < 0x80u) {
+                *dest++ = byte_swap<from_endian_t, to_endian_t>(static_cast<typename OutEncodingT::code_unit_type>(static_cast<uint8_t>(*first++)));
+                return 1;
+            } else {
+                return slow_path(first, last, dest, filter);
+            }
+#else                
             code_point_t cp;
-            int result = json::unicode::convert_one_unsafe(first, last, inEncoding, cp, filter);
+            int result = json::unicode::convert_one_unsafe(first, last, from_encoding_t(), cp, filter);
             if (result > 0) {
-                if (cp >= 0x10000u) {
+                if (cp < 0x10000u) {
+                    *dest++ = byte_swap<from_endian_t, to_endian_t>(static_cast<typename to_encoding_t::code_unit_type>(cp));
+                    return 1;
+                } else {
                     *dest++ = byte_swap<from_endian_t, to_endian_t>(utf16_get_lead(cp));
                     *dest++ = byte_swap<from_endian_t, to_endian_t>(utf16_get_trail(cp));
                     return 2;
-                    
-                } else {
-                    *dest++ = byte_swap<from_endian_t, to_endian_t>(static_cast<typename OutEncodingT::code_unit_type>(cp));
-                    return 1;
                 }
             }
-            
             return result;
+#endif                
         }   
     };
     
@@ -2827,44 +2945,92 @@ namespace json { namespace unicode { namespace internal {
         >::type    
     > 
     {
+        typedef InEncodingT                             from_encoding_t;
+        // Upgrade Target Encoding to include endiannes if required:
+        typedef typename boost::mpl::if_<
+            boost::is_same<UTF_16_encoding_tag, OutEncodingT>,
+            typename to_host_endianness<OutEncodingT>::type,
+            OutEncodingT 
+        >::type                                         to_encoding_t;        
+        
+        typedef typename host_endianness::type          from_endian_t;
+        typedef typename to_encoding_t::endian_tag      to_endian_t;
+
+        
+        
+    private: 
+        static
+        int slow_path(
+                    InIteratorT&     first, 
+                    InIteratorT      last, 
+                    OutIteratorT&    dest,
+                    FilterT          filter = FilterT())
+        {
+            code_point_t cp;
+            int result = json::unicode::convert_one(first, last, from_encoding_t(), cp, filter);
+            if (__builtin_expect(result > 0, 1)) {
+                if (__builtin_expect(cp < 0x10000u, 1)) {
+                    *dest++ = byte_swap<from_endian_t, to_endian_t>(static_cast<typename to_encoding_t::code_unit_type>(cp));
+                    return 1;
+                } else {
+                    *dest++ = byte_swap<from_endian_t, to_endian_t>(utf16_get_lead(cp));
+                    *dest++ = byte_swap<from_endian_t, to_endian_t>(utf16_get_trail(cp));
+                    return 2;
+                }
+            }
+            return result;
+        }
+        
+        int write(code_point_t      codepoint,
+                  OutIteratorT&     dest) const
+        {
+            if (__builtin_expect(codepoint < 0x10000u, 1)) {
+                *dest++ = byte_swap<from_endian_t, to_endian_t>(static_cast<typename to_encoding_t::code_unit_type>(codepoint));
+                return 1;
+            } else {
+                *dest++ = byte_swap<from_endian_t, to_endian_t>(utf16_get_lead(codepoint));
+                *dest++ = byte_swap<from_endian_t, to_endian_t>(utf16_get_trail(codepoint));
+                return 2;
+            }
+        }
+
+        
+    public:        
         inline int
         operator() (
             InIteratorT&     first, 
             InIteratorT      last, 
-            InEncodingT      inEncoding,
             OutIteratorT&    dest,
-            OutEncodingT     outEncoding,
             FilterT          filter = FilterT()) const
         {
             BOOST_STATIC_ASSERT(sizeof(typename boost::iterator_value<InIteratorT>::type)
                                 == sizeof(typename InEncodingT::code_unit_type));
-            // Output iterators do not strictly require a value_type!
-            //BOOST_STATIC_ASSERT(sizeof(typename boost::iterator_value<OutIteratorT>::type)
-            //                    == sizeof(typename OutEncodingT::code_unit_type));
-
-            // Upgrade Target Encoding to include endiannes if required:
-            typedef typename boost::mpl::if_<
-                    boost::is_same<UTF_16_encoding_tag, OutEncodingT>,
-                    typename to_host_endianness<OutEncodingT>::type,
-                    OutEncodingT 
-            >::type                                         to_encoding_t;        
             
-            typedef typename host_endianness::type          from_endian_t;
-            typedef typename to_encoding_t::endian_tag      to_endian_t;
-            
-            code_point_t cp;
-            int result = json::unicode::convert_one(first, last, inEncoding, cp, filter);
-            if (result > 0) {
-                if (cp >= 0x10000u) {
-                    *dest++ = byte_swap<from_endian_t, to_endian_t>(utf16_get_lead(cp));
-                    *dest++ = byte_swap<from_endian_t, to_endian_t>(utf16_get_trail(cp));
-                    result = 2;
-                    
-                } else {
-                    *dest++ = byte_swap<from_endian_t, to_endian_t>(static_cast<typename OutEncodingT::code_unit_type>(cp));
+#if 1            
+            // TODO: filter is not applied to ASCII
+            if (static_cast<uint8_t>(*first) < 0x80u) {
+                *dest++ = byte_swap<from_endian_t, to_endian_t>(static_cast<typename to_encoding_t::code_unit_type>(static_cast<uint8_t>(*first++)));
+                return 1;
+            } else {
+                code_point_t cp;
+                int result = json::unicode::convert_one(first, last, cp, filter);
+                if (result) {
+                    return write(cp, dest);
+                }
+                else {
+                    return result;
                 }
             }
-            return result;
+#else
+            code_point_t cp;
+            int result = json::unicode::convert_one(first, last, cp, filter);
+            if (result) {
+                return write(cp, dest);
+            }
+            else {
+                return result;
+            }            
+#endif            
         }    
     };    
     
@@ -2909,10 +3075,8 @@ namespace json { namespace unicode { namespace internal {
     {
         BOOST_STATIC_ASSERT(sizeof(typename boost::iterator_value<InIteratorT>::type)
                             == sizeof(typename InEncodingT::code_unit_type));
-        // Output iterators do not strictly require a value_type!
-        // BOOST_STATIC_ASSERT(sizeof(typename boost::iterator_value<OutIteratorT>::type)
-        //                    == sizeof(typename OutEncodingT::code_unit_type));        
-
+        
+        typedef InEncodingT                             from_encoding_t;
         // Upgrade Target Encoding to include endianness if required:
         typedef typename boost::mpl::if_<
             boost::is_same<UTF_32_encoding_tag, OutEncodingT>,
@@ -2928,14 +3092,12 @@ namespace json { namespace unicode { namespace internal {
         operator() (
             InIteratorT&     first, 
             InIteratorT      last, 
-            InEncodingT      inEncoding,
             OutIteratorT&    dest,
-            OutEncodingT     outEncoding,
             FilterT          filter = FilterT()) const
         {
             code_point_t cp;        
             int result = json::unicode::convert_one_unsafe(
-                    first, last, inEncoding, cp, filter);
+                    first, last, from_encoding_t(), cp, filter);
             if (result > 0) {
                 *dest++ = byte_swap<from_endian_t, to_endian_t>(cp);
             }
@@ -2977,10 +3139,8 @@ namespace json { namespace unicode { namespace internal {
     {
         BOOST_STATIC_ASSERT(sizeof(typename boost::iterator_value<InIteratorT>::type)
                             == sizeof(typename InEncodingT::code_unit_type));
-        // Output iterators do not strictly require a value_type!
-        //BOOST_STATIC_ASSERT(sizeof(typename boost::iterator_value<OutIteratorT>::type)
-        //                    == sizeof(typename OutEncodingT::code_unit_type));
         
+        typedef InEncodingT                             from_encoding_t;
         // Upgrade Target Encoding to include endianness if required:
         typedef typename boost::mpl::if_<
             boost::is_same<UTF_32_encoding_tag, OutEncodingT>,
@@ -2996,14 +3156,12 @@ namespace json { namespace unicode { namespace internal {
         operator() (
             InIteratorT&     first, 
             InIteratorT      last, 
-            InEncodingT      inEncoding,
             OutIteratorT&    dest,
-            OutEncodingT     outEncoding,
             FilterT          filter = FilterT()) const
         {
             code_point_t cp;
             int result = json::unicode::convert_one(
-                    first, last, inEncoding, 
+                    first, last, from_encoding_t(), 
                     cp, filter);
             if (result > 0) {
                 *dest = byte_swap<from_endian_t, to_endian_t>(cp);
@@ -3057,9 +3215,7 @@ namespace json { namespace unicode { namespace internal {
     {
         BOOST_STATIC_ASSERT(sizeof(typename boost::iterator_value<InIteratorT>::type)
                             == sizeof(typename InEncodingT::code_unit_type));
-        // Output iterators do not strictly require a value_type!
-        //BOOST_STATIC_ASSERT(sizeof(typename boost::iterator_value<OutIteratorT>::type)
-        //                    == sizeof(typename OutEncodingT::code_unit_type));
+
         
         // Upgrade Source Encoding to include endianness if required:
         typedef typename boost::mpl::if_<
@@ -3067,7 +3223,7 @@ namespace json { namespace unicode { namespace internal {
             typename to_host_endianness<InEncodingT>::type,
             InEncodingT 
         >::type                                         from_encoding_t;        
-        
+        typedef OutEncodingT                            to_encoding_t;
         typedef typename from_encoding_t::endian_tag    from_endian_t;
         typedef typename host_endianness::type          to_endian_t;
         
@@ -3076,9 +3232,7 @@ namespace json { namespace unicode { namespace internal {
         operator() (
             InIteratorT&     first, 
             InIteratorT      last, 
-            InEncodingT      inEncoding,
             OutIteratorT&    dest,
-            OutEncodingT     outEncoding,
             FilterT          filter = FilterT()) const
         {
             
@@ -3087,14 +3241,14 @@ namespace json { namespace unicode { namespace internal {
             ++first;  // consume single or high surrogate
             //int n = utf8_encoded_length(static_cast<code_point_t>(ch));  // Returns zero if this is a surrogate or not a valid Unicode code point
             if (utf16_is_single(ch)) {
-                return json::unicode::convert_one_unsafe(static_cast<code_point_t>(ch), dest, outEncoding, filter);
+                return json::unicode::convert_one_unsafe(static_cast<code_point_t>(ch), dest, to_encoding_t(), filter);
             }
             else {
                 // assuming: utf16_is_lead(ch)
                 utf16_code_unit ch2 = byte_swap<from_endian_t, to_endian_t>(static_cast<utf16_code_unit>(*first)); 
                 ++first;  // consume low surrogate
                 code_point_t cp = utf16_surrogate_pair_to_code_point(ch, ch2);
-                return json::unicode::convert_one_unsafe(cp, dest, outEncoding, filter);
+                return json::unicode::convert_one_unsafe(cp, dest, to_encoding_t(), filter);
             }
 #else            
             utf16_code_unit ch = byte_swap<from_endian_t, to_endian_t>(static_cast<utf16_code_unit>(*first));
@@ -3166,16 +3320,14 @@ namespace json { namespace unicode { namespace internal {
     {
         BOOST_STATIC_ASSERT(sizeof(typename boost::iterator_value<InIteratorT>::type)
                             == sizeof(typename InEncodingT::code_unit_type));
-        // Output iterators do not strictly require a value_type!
-        //BOOST_STATIC_ASSERT(sizeof(typename boost::iterator_value<OutIteratorT>::type)
-        //                    == sizeof(typename OutEncodingT::code_unit_type));
-        
+
         // Upgrade Source Encoding to include endianness if required:
         typedef typename boost::mpl::if_<
             boost::is_same<UTF_16_encoding_tag, InEncodingT>,
             typename to_host_endianness<InEncodingT>::type,
             InEncodingT 
-        >::type                                         from_encoding_t;        
+        >::type                                         from_encoding_t;   
+        typedef OutEncodingT                            to_encoding_t;
         
         typedef typename from_encoding_t::endian_tag    from_endian_t;
         typedef typename host_endianness::type          to_endian_t;
@@ -3185,9 +3337,7 @@ namespace json { namespace unicode { namespace internal {
         operator() (
             InIteratorT&     first, 
             InIteratorT      last, 
-            InEncodingT      inEncoding,
             OutIteratorT&    dest,
-            OutEncodingT     outEncoding,
             FilterT          filter = FilterT()
                 ) const
         {
@@ -3198,7 +3348,7 @@ namespace json { namespace unicode { namespace internal {
             ++first;  // consume single or high surrogate
             //int n = utf8_encoded_length(static_cast<code_point_t>(ch));  // Returns zero if this is a surrogate or not a valid Unicode code point
             if (utf16_is_single(ch)) {
-                return json::unicode::convert_one(static_cast<code_point_t>(ch), dest, outEncoding, filter);
+                return json::unicode::convert_one(static_cast<code_point_t>(ch), dest, to_encoding_t(), filter);
             }
             else if (utf16_is_lead(ch))
             {
@@ -3211,7 +3361,7 @@ namespace json { namespace unicode { namespace internal {
                 }
                 ++first;  // consume low surrogate
                 code_point_t cp = utf16_surrogate_pair_to_code_point(ch, ch2);
-                return json::unicode::convert_one(cp, dest, outEncoding, filter);
+                return json::unicode::convert_one(cp, dest, to_encoding_t(), filter);
             }
             else {
                 return E_INVALID_START_BYTE;
@@ -3288,23 +3438,22 @@ namespace json { namespace unicode { namespace internal {
     {
         BOOST_STATIC_ASSERT(sizeof(typename boost::iterator_value<InIteratorT>::type)
                             == sizeof(typename InEncodingT::code_unit_type));
-        // Output iterators do not strictly require a value_type!
-        //BOOST_STATIC_ASSERT(sizeof(typename boost::iterator_value<OutIteratorT>::type)
-        //                    == sizeof(typename OutEncodingT::code_unit_type));
-        
+
+        // Upgrade Source and Target Encoding to include endianness if required:        
+        typedef typename add_endianness<InEncodingT>::type      from_encoding_t;        
+        typedef typename add_endianness<OutEncodingT>::type     to_encoding_t;                
+
         inline int
         operator() (
             InIteratorT&     first, 
             InIteratorT      last, 
-            InEncodingT      inEncoding,
             OutIteratorT&    dest,
-            OutEncodingT     outEncoding,
             FilterT          filter = FilterT()) const
         {
             code_point_t cp;            
-            int result = json::unicode::convert_one_unsafe(first, last, inEncoding, cp, filter);
+            int result = json::unicode::convert_one_unsafe(first, last, from_encoding_t(), cp, filter);
             if (result > 0) {
-                result = json::unicode::convert_one_unsafe(cp, dest, outEncoding);
+                result = json::unicode::convert_one_unsafe(cp, dest, to_encoding_t());
             }
             return result;
         }    
@@ -3327,11 +3476,8 @@ namespace json { namespace unicode { namespace internal {
     {
         BOOST_STATIC_ASSERT(sizeof(typename boost::iterator_value<InIteratorT>::type)
                             == sizeof(typename InEncodingT::code_unit_type));
-        // Output iterators do not strictly require a value_type!
-        //BOOST_STATIC_ASSERT(sizeof(typename boost::iterator_value<OutIteratorT>::type)
-        //                    == sizeof(typename OutEncodingT::code_unit_type));
-        
-        // Upgrade Target Encoding to include endianness if required:        
+
+        // Upgrade Source and Target Encoding to include endianness if required:        
         typedef typename add_endianness<InEncodingT>::type      from_encoding_t;        
         typedef typename add_endianness<OutEncodingT>::type     to_encoding_t;        
         typedef typename from_encoding_t::endian_tag            from_endian_t;
@@ -3344,9 +3490,7 @@ namespace json { namespace unicode { namespace internal {
         operator() (
                     InIteratorT&     first, 
                     InIteratorT      last, 
-                    InEncodingT      inEncoding,
                     OutIteratorT&    dest,
-                    OutEncodingT     outEncoding,
                     NoFilter         filter = NoFilter()) const
         {
             utf16_code_unit cu = byte_swap<from_endian_t, host_endian_t>(static_cast<utf16_code_unit>(*first));
@@ -3383,23 +3527,22 @@ namespace json { namespace unicode { namespace internal {
     {
         BOOST_STATIC_ASSERT(sizeof(typename boost::iterator_value<InIteratorT>::type)
                             == sizeof(typename InEncodingT::code_unit_type));
-        // Output iterators do not strictly require a value_type!
-        //BOOST_STATIC_ASSERT(sizeof(typename boost::iterator_value<OutIteratorT>::type)
-        //                    == sizeof(typename OutEncodingT::code_unit_type));
+
+        // Upgrade Source and Target Encoding to include endianness if required:        
+        typedef typename add_endianness<InEncodingT>::type      from_encoding_t;        
+        typedef typename add_endianness<OutEncodingT>::type     to_encoding_t;        
         
         inline int    
         operator() (
             InIteratorT&     first, 
             InIteratorT      last, 
-            InEncodingT      inEncoding,
             OutIteratorT&    dest,
-            OutEncodingT     outEncoding,
             FilterT          filter = FilterT()) const 
         {
             code_point_t cp;            
-            int result = json::unicode::convert_one(first, last, inEncoding, cp, filter);
+            int result = json::unicode::convert_one(first, last, from_encoding_t(), cp, filter);
             if (result > 0) {
-                result = json::unicode::convert_one_unsafe(cp, dest, outEncoding);
+                result = json::unicode::convert_one_unsafe(cp, dest, to_encoding_t());
             }
             return result;
         }    
@@ -3449,16 +3592,10 @@ namespace json { namespace unicode { namespace internal {
     {
         BOOST_STATIC_ASSERT(sizeof(typename boost::iterator_value<InIteratorT>::type)
                             == sizeof(typename InEncodingT::code_unit_type));
-        // Output iterators do not strictly require a value_type!
-        //BOOST_STATIC_ASSERT(sizeof(typename boost::iterator_value<OutIteratorT>::type)
-        //                    == sizeof(typename OutEncodingT::code_unit_type));
-        
-        // Upgrade Target Encoding to include endianness if required:
-        typedef typename boost::mpl::if_<
-            boost::is_same<UTF_32_encoding_tag, OutEncodingT>,
-            typename to_host_endianness<OutEncodingT>::type,
-            OutEncodingT 
-        >::type                                         to_encoding_t;        
+
+        // Upgrade Source and Target Encoding to include endianness if required:        
+        typedef typename add_endianness<InEncodingT>::type      from_encoding_t;        
+        typedef typename add_endianness<OutEncodingT>::type     to_encoding_t;        
         
         typedef typename host_endianness::type          from_endian_t;
         typedef typename to_encoding_t::endian_tag      to_endian_t;
@@ -3467,14 +3604,12 @@ namespace json { namespace unicode { namespace internal {
         operator() (
             InIteratorT&     first, 
             InIteratorT      last, 
-            InEncodingT      inEncoding,
             OutIteratorT&    dest,
-            OutEncodingT     outEncoding,
             FilterT          filter = FilterT()) const
         {
             code_point_t cp;            
             int result = json::unicode::convert_one_unsafe(
-                first, last, inEncoding, cp, filter);
+                first, last, from_encoding_t(), cp, filter);
             if (result > 0) {
                 *dest++ = byte_swap<from_endian_t, to_endian_t>(cp);
             }
@@ -3520,16 +3655,10 @@ namespace json { namespace unicode { namespace internal {
     {
         BOOST_STATIC_ASSERT(sizeof(typename boost::iterator_value<InIteratorT>::type)
                             == sizeof(typename InEncodingT::code_unit_type));
-        // Output iterators do not strictly require a value_type!
-        //BOOST_STATIC_ASSERT(sizeof(typename boost::iterator_value<OutIteratorT>::type)
-        //                    == sizeof(typename OutEncodingT::code_unit_type));
         
-        // Upgrade Target Encoding to include endianness if required:
-        typedef typename boost::mpl::if_<
-            boost::is_same<UTF_32_encoding_tag, OutEncodingT>,
-            typename to_host_endianness<OutEncodingT>::type,
-            OutEncodingT 
-        >::type                                         to_encoding_t;        
+        // Upgrade Source and Target Encoding to include endianness if required:        
+        typedef typename add_endianness<InEncodingT>::type      from_encoding_t;        
+        typedef typename add_endianness<OutEncodingT>::type     to_encoding_t;        
         
         typedef typename host_endianness::type          from_endian_t;
         typedef typename to_encoding_t::endian_tag      to_endian_t;
@@ -3539,14 +3668,12 @@ namespace json { namespace unicode { namespace internal {
         operator() (
             InIteratorT&     first, 
             InIteratorT      last, 
-            InEncodingT      inEncoding,
             OutIteratorT&    dest,
-            OutEncodingT     outEncoding,
             FilterT          filter = FilterT()) const 
         {
             code_point_t cp;
             int result = json::unicode::convert_one(
-                first, last, inEncoding, cp, filter);
+                first, last, from_encoding_t(), cp, filter);
             if (result > 0) {
                 *dest = byte_swap<from_endian_t, to_endian_t>(cp);
                 ++dest;
@@ -3598,12 +3725,9 @@ namespace json { namespace unicode { namespace internal {
         //BOOST_STATIC_ASSERT(sizeof(typename boost::iterator_value<OutIteratorT>::type)
         //                    == sizeof(typename OutEncodingT::code_unit_type));
         
-        // Upgrade Source Encoding to include endianness if required:
-        typedef typename boost::mpl::if_<
-            boost::is_same<UTF_32_encoding_tag, InEncodingT>,
-            typename to_host_endianness<InEncodingT>::type,
-            InEncodingT 
-        >::type                                         from_encoding_t;        
+        // Upgrade Source and Target Encoding to include endianness if required:        
+        typedef typename add_endianness<InEncodingT>::type      from_encoding_t;        
+        typedef OutEncodingT                                    to_encoding_t;        
         
         typedef typename from_encoding_t::endian_tag    from_endian_t;
         typedef typename host_endianness::type          to_endian_t;
@@ -3613,13 +3737,11 @@ namespace json { namespace unicode { namespace internal {
         operator() (
             InIteratorT&     first, 
             InIteratorT      last, 
-            InEncodingT      inEncoding,
             OutIteratorT&    dest,
-            OutEncodingT     outEncoding,
             FilterT          filter = FilterT()) const
         {
             code_point_t cp = static_cast<code_point_t>(byte_swap<from_endian_t, to_endian_t>(*first));
-            int result = json::unicode::convert_one_unsafe(cp, dest, outEncoding, filter);
+            int result = json::unicode::convert_one_unsafe(cp, dest, to_encoding_t(), filter);
             if (result > 0) {
                 ++first;
             }
@@ -3658,16 +3780,11 @@ namespace json { namespace unicode { namespace internal {
     {
         BOOST_STATIC_ASSERT(sizeof(typename boost::iterator_value<InIteratorT>::type)
                             == sizeof(typename InEncodingT::code_unit_type));
-        // Output iterators do not strictly require a value_type!
-        //BOOST_STATIC_ASSERT(sizeof(typename boost::iterator_value<OutIteratorT>::type)
-        //                    == sizeof(typename OutEncodingT::code_unit_type));
+
         
-        // Upgrade Source Encoding to include endianness if required:
-        typedef typename boost::mpl::if_<
-            boost::is_same<UTF_32_encoding_tag, InEncodingT>,
-            typename to_host_endianness<InEncodingT>::type,
-            InEncodingT 
-        >::type                                         from_encoding_t;        
+        // Upgrade Source and Target Encoding to include endianness if required:        
+        typedef typename add_endianness<InEncodingT>::type      from_encoding_t;        
+        typedef OutEncodingT                                    to_encoding_t;        
         
         typedef typename from_encoding_t::endian_tag    from_endian_t;
         typedef typename host_endianness::type          to_endian_t;
@@ -3677,13 +3794,11 @@ namespace json { namespace unicode { namespace internal {
         operator() (
             InIteratorT&     first, 
             InIteratorT      last, 
-            InEncodingT      inEncoding,
             OutIteratorT&    dest,
-            OutEncodingT     outEncoding,
             FilterT          filter = FilterT()) const
         {
             code_point_t cp = static_cast<code_point_t>(byte_swap<from_endian_t, to_endian_t>(*first));
-            int result = json::unicode::convert_one(cp, dest, outEncoding, filter);
+            int result = json::unicode::convert_one(cp, dest, to_encoding_t(), filter);
             if (result > 0) {
                 ++first;
             }
@@ -3733,17 +3848,11 @@ namespace json { namespace unicode { namespace internal {
     {
         BOOST_STATIC_ASSERT(sizeof(typename boost::iterator_value<InIteratorT>::type)
                             == sizeof(typename InEncodingT::code_unit_type));
-        // Output iterators do not strictly require a value_type!
-        //BOOST_STATIC_ASSERT(sizeof(typename boost::iterator_value<OutIteratorT>::type)
-        //                    == sizeof(typename OutEncodingT::code_unit_type));
-        
-        // Upgrade Source Encoding to include endianness if required:
-        typedef typename boost::mpl::if_<
-            boost::is_same<UTF_32_encoding_tag, InEncodingT>,
-            typename to_host_endianness<InEncodingT>::type,
-            InEncodingT 
-        >::type                                         from_encoding_t;        
-        
+
+        // Upgrade Source and Target Encoding to include endianness if required:        
+        typedef typename add_endianness<InEncodingT>::type      from_encoding_t;        
+        typedef typename add_endianness<OutEncodingT>::type     to_encoding_t;        
+                
         typedef typename from_encoding_t::endian_tag    from_endian_t;
         typedef typename host_endianness::type          to_endian_t;
         
@@ -3751,13 +3860,11 @@ namespace json { namespace unicode { namespace internal {
         operator() (
             InIteratorT&     first, 
             InIteratorT      last, 
-            InEncodingT      inEncoding,
             OutIteratorT&    dest,
-            OutEncodingT     outEncoding,
             FilterT          filter = FilterT()) const
         {
             code_point_t cp = static_cast<code_point_t>(byte_swap<from_endian_t, to_endian_t>(*first));
-            int result = json::unicode::convert_one_unsafe(cp, dest, outEncoding);
+            int result = json::unicode::convert_one_unsafe(cp, dest, to_encoding_t());
             if (result > 0) {
                 ++first;
             }
@@ -3796,16 +3903,10 @@ namespace json { namespace unicode { namespace internal {
     {
         BOOST_STATIC_ASSERT(sizeof(typename boost::iterator_value<InIteratorT>::type)
                             == sizeof(typename InEncodingT::code_unit_type));
-        // Output iterators do not strictly require a value_type!
-        //BOOST_STATIC_ASSERT(sizeof(typename boost::iterator_value<OutIteratorT>::type)
-        //                    == sizeof(typename OutEncodingT::code_unit_type));
-        
-        // Upgrade Source Encoding to include endianness if required:
-        typedef typename boost::mpl::if_<
-            boost::is_same<UTF_32_encoding_tag, InEncodingT>,
-            typename to_host_endianness<InEncodingT>::type,
-            InEncodingT 
-        >::type                                         from_encoding_t;        
+
+        // Upgrade Source and Target Encoding to include endianness if required:        
+        typedef typename add_endianness<InEncodingT>::type      from_encoding_t;        
+        typedef typename add_endianness<OutEncodingT>::type     to_encoding_t;        
         
         typedef typename from_encoding_t::endian_tag    from_endian_t;
         typedef typename host_endianness::type          to_endian_t;
@@ -3815,13 +3916,11 @@ namespace json { namespace unicode { namespace internal {
         operator() (
             InIteratorT&     first, 
             InIteratorT      last, 
-            InEncodingT      inEncoding,
             OutIteratorT&    dest,
-            OutEncodingT     outEncoding,
             FilterT          filter = FilterT()) const
         {
             code_point_t cp = static_cast<code_point_t>(byte_swap<from_endian_t, to_endian_t>(*first));
-            int result = json::unicode::convert_one(cp, dest, outEncoding);
+            int result = json::unicode::convert_one(cp, dest, to_encoding_t());
             if (result > 0) {
                 ++first;                
             }
@@ -3871,9 +3970,6 @@ namespace json { namespace unicode { namespace internal {
     {
         BOOST_STATIC_ASSERT(sizeof(typename boost::iterator_value<InIteratorT>::type)
                             == sizeof(typename InEncodingT::code_unit_type));
-        // Output iterators do not strictly require a value_type!
-        //BOOST_STATIC_ASSERT(sizeof(typename boost::iterator_value<OutIteratorT>::type)
-        //                    == sizeof(typename OutEncodingT::code_unit_type));
         
         // Upgrade Source Encoding to include endianness if required:
         typedef typename add_endianness<InEncodingT>::type      from_encoding_t;        
@@ -3887,13 +3983,11 @@ namespace json { namespace unicode { namespace internal {
         operator() (
                     InIteratorT&     first, 
                     InIteratorT      last, 
-                    InEncodingT      inEncoding,
                     OutIteratorT&    dest,
-                    OutEncodingT     outEncoding,
                     FilterT          filter = FilterT()) const
         {
             code_point_t cp = static_cast<code_point_t>(byte_swap<from_endian_t, host_endian_t>(*first));
-            int result = json::unicode::convert_one_unsafe(cp, dest, outEncoding, filter);
+            int result = json::unicode::convert_one_unsafe(cp, dest, to_encoding_t(), filter);
             if (result > 0) {
                 ++first;
             }
@@ -3935,10 +4029,7 @@ namespace json { namespace unicode { namespace internal {
     {
         BOOST_STATIC_ASSERT(sizeof(typename boost::iterator_value<InIteratorT>::type)
                             == sizeof(typename InEncodingT::code_unit_type));
-        // Output iterators do not strictly require a value_type!
-        //BOOST_STATIC_ASSERT(sizeof(typename boost::iterator_value<OutIteratorT>::type)
-        //                    == sizeof(typename OutEncodingT::code_unit_type));
-        
+
         // Upgrade Source Encoding to include endianness if required:
         typedef typename add_endianness<InEncodingT>::type      from_encoding_t;        
         typedef typename add_endianness<OutEncodingT>::type     to_encoding_t;        
@@ -3951,13 +4042,11 @@ namespace json { namespace unicode { namespace internal {
         operator() (
                     InIteratorT&     first, 
                     InIteratorT      last, 
-                    InEncodingT      inEncoding,
                     OutIteratorT&    dest,
-                    OutEncodingT     outEncoding,
                     FilterT          filter = FilterT()) const
         {
             code_point_t cp = static_cast<code_point_t>(byte_swap<from_endian_t, host_endian_t>(*first));
-            int result = json::unicode::convert_one_unsafe(cp, dest, outEncoding, filter);
+            int result = json::unicode::convert_one_unsafe(cp, dest, to_encoding_t(), filter);
             if (result > 0) {
                 ++first;
             }
@@ -4000,9 +4089,7 @@ namespace json { namespace unicode { namespace internal {
     {
         BOOST_STATIC_ASSERT(sizeof(typename boost::iterator_value<InIteratorT>::type)
                             == sizeof(typename InEncodingT::code_unit_type));
-        // Output iterators do not strictly require a value_type!
-        //BOOST_STATIC_ASSERT(sizeof(typename boost::iterator_value<OutIteratorT>::type)
-        //                    == sizeof(typename OutEncodingT::code_unit_type));
+
         
         // Upgrade Source Encoding to include endianness if required:
         typedef typename add_endianness<InEncodingT>::type      from_encoding_t;        
@@ -4018,9 +4105,7 @@ namespace json { namespace unicode { namespace internal {
         operator() (
                     InIteratorT&     first, 
                     InIteratorT      last, 
-                    InEncodingT      inEncoding,
                     OutIteratorT&    dest,
-                    OutEncodingT     outEncoding,
                     NoFilter         filter = NoFilter()) const
         {
             *dest++ = static_cast<utf32_code_unit>(byte_swap<from_endian_t, to_endian_t>(*first++));
@@ -4057,10 +4142,7 @@ namespace json { namespace unicode { namespace internal {
     {
         BOOST_STATIC_ASSERT(sizeof(typename boost::iterator_value<InIteratorT>::type)
                             == sizeof(typename InEncodingT::code_unit_type));
-        // Output iterators do not strictly require a value_type!
-        //BOOST_STATIC_ASSERT(sizeof(typename boost::iterator_value<OutIteratorT>::type)
-        //                    == sizeof(typename OutEncodingT::code_unit_type));
-        
+
         // Upgrade Source Encoding to include endianness if required:
         typedef typename add_endianness<InEncodingT>::type      from_encoding_t;        
         typedef typename add_endianness<OutEncodingT>::type     to_encoding_t;        
@@ -4075,9 +4157,7 @@ namespace json { namespace unicode { namespace internal {
         operator() (
                     InIteratorT&     first, 
                     InIteratorT      last, 
-                    InEncodingT      inEncoding,
                     OutIteratorT&    dest,
-                    OutEncodingT     outEncoding,
                     NoFilter         filter = NoFilter()) const
         {
             code_point_t cp = static_cast<code_point_t>(byte_swap<from_endian_t, host_endian_t>(*first));
@@ -4275,7 +4355,7 @@ namespace json { namespace unicode {
             OutIteratorT, OutEncodingT, 
             filter::None>                    converter_t;
 
-        return converter_t()(first, last, inEncoding, dest, outEncoding);
+        return converter_t()(first, last, dest);
     }
     
     // A.2
@@ -4305,7 +4385,7 @@ namespace json { namespace unicode {
             OutIteratorT, OutEncodingT, 
         FilterT>                    converter_t;
         
-        return converter_t()(first, last, inEncoding, dest, outEncoding, filter);
+        return converter_t()(first, last, dest, filter);
     }
 
     // A.3
@@ -4328,7 +4408,7 @@ namespace json { namespace unicode {
             OutIteratorT, OutEncoding, 
         filter::None>                    converter_t;
         
-        return converter_t()(first, last, InEncoding(), dest, OutEncoding());
+        return converter_t()(first, last, dest);
     }
     
     // A.4
@@ -4356,7 +4436,7 @@ namespace json { namespace unicode {
             OutIteratorT, OutEncoding, 
         FilterT>                    converter_t;
         
-        return converter_t()(first, last, InEncoding(), dest, OutEncoding(), filter);
+        return converter_t()(first, last, dest, filter);
     }
     
     
@@ -4380,7 +4460,7 @@ namespace json { namespace unicode {
             OutIteratorT, OutEncoding, 
         filter::None>                    converter_t;
         
-        return converter_t()(first, last, inEncoding, dest, OutEncoding());
+        return converter_t()(first, last, dest);
     }
     
     
@@ -4412,7 +4492,7 @@ namespace json { namespace unicode {
             OutIteratorT, OutEncoding, 
             FilterT>                    converter_t;
         
-        return converter_t()(first, last, inEncoding, dest, OutEncoding(), filter);
+        return converter_t()(first, last, dest, filter);
     }
     
     
@@ -4438,7 +4518,7 @@ namespace json { namespace unicode {
             OutIteratorT, OutEncodingT, 
             filter::None>                    converter_t;
         
-        return converter_t()(first, last, InEncoding(), dest, outEncoding);
+        return converter_t()(first, last, dest);
     }
     
     //
@@ -4466,7 +4546,7 @@ namespace json { namespace unicode {
             OutIteratorT, OutEncodingT, 
             FilterT>                    converter_t;
         
-        return converter_t()(first, last, InEncoding(), dest, outEncoding, filter);
+        return converter_t()(first, last, dest, filter);
     }
 
     
@@ -4496,7 +4576,7 @@ namespace json { namespace unicode {
             OutIteratorT, OutEncodingT, 
             filter::None>                    converter_t;
         
-        return converter_t()(first, last, inEncoding, dest, outEncoding);
+        return converter_t()(first, last, dest);
     }
     
     
@@ -4528,7 +4608,7 @@ namespace json { namespace unicode {
             OutIteratorT, OutEncodingT, 
             FilterT>                    converter_t;
         
-        return converter_t()(first, last, inEncoding, dest, outEncoding, filter);
+        return converter_t()(first, last, dest, filter);
     }
     
     // B.3
@@ -4551,7 +4631,7 @@ namespace json { namespace unicode {
             OutIteratorT, OutEncoding, 
         filter::None>                    converter_t;
         
-        return converter_t()(first, last, InEncoding(), dest, OutEncoding());
+        return converter_t()(first, last, dest);
     }
     
     // B.4
@@ -4579,7 +4659,7 @@ namespace json { namespace unicode {
             OutIteratorT, OutEncoding, 
         FilterT>                    converter_t;
         
-        return converter_t()(first, last, InEncoding(), dest, OutEncoding(), filter);
+        return converter_t()(first, last, dest, filter);
     }
     
     
@@ -4603,7 +4683,7 @@ namespace json { namespace unicode {
             OutIteratorT, OutEncoding, 
         filter::None>                    converter_t;
         
-        return converter_t()(first, last, inEncoding, dest, OutEncoding());
+        return converter_t()(first, last, dest);
     }
     
     
@@ -4635,7 +4715,7 @@ namespace json { namespace unicode {
             OutIteratorT, OutEncoding, 
         FilterT>                    converter_t;
         
-        return converter_t()(first, last, inEncoding, dest, OutEncoding(), filter);
+        return converter_t()(first, last, dest, filter);
     }
     
     
@@ -4661,7 +4741,7 @@ namespace json { namespace unicode {
             OutIteratorT, OutEncodingT, 
         filter::None>                    converter_t;
         
-        return converter_t()(first, last, InEncoding(), dest, outEncoding);
+        return converter_t()(first, last, dest);
     }
     
     //
@@ -4689,7 +4769,7 @@ namespace json { namespace unicode {
             OutIteratorT, OutEncodingT, 
         FilterT>                    converter_t;
         
-        return converter_t()(first, last, InEncoding(), dest, outEncoding, filter);
+        return converter_t()(first, last, dest, filter);
     }
     
     
@@ -4794,35 +4874,6 @@ namespace json { namespace unicode {
         return count;
     }    
     
-    template <
-        typename InIteratorT, typename InEncodingT, 
-        typename OutIteratorT, typename OutEncodingT>
-    inline std::size_t
-    convert(
-           InIteratorT&     first, 
-           InIteratorT      last, 
-           InEncodingT      inEncoding,
-           OutIteratorT&    dest,
-           OutEncodingT     outEncoding)
-    {
-        std::size_t count = 0;
-        while (first != last) {
-            int result = convert_one(first, last, inEncoding, 
-                                            dest, outEncoding);
-            if (result > 0)
-                count += result;
-            else {
-                if (first != last)
-                    ++first;
-                result = convert_one_unsafe(kReplacementCharacter, dest, outEncoding);
-                assert(result > 0);
-                count += result;                
-            }
-        }
-        return count;
-    }    
-    
-    
     
     // Convert the characters contained in the possibly malformed UTF sequence 
     // [first, last) encoded in inEncoding to a sequence of code units 
@@ -4911,6 +4962,61 @@ namespace json { namespace unicode {
     }    
     
     
+    //
+    //  Convert Safe
+    //
+    // Convert the characters contained in the possibly malformed UTF sequence 
+    // [first, last) encoded in inEncoding to a sequence of code units 
+    // encoded in outEncoding and copy the result to the sequence starting at 
+    // dest.
+    //
+    // If a malformed Unicode sequence, or an invalid Unicode character will be 
+    // detected, the function replaces it with the Unicode replacement 
+    // character. There will be no filter applied to the characters, that is, 
+    // Unicode noncharacters will be converted.
+    //
+    // Parameter first should point to the start of a UTF multi byte sequence
+    // or to an Unicode code point.
+    // The output sequence shall be large enough to hold the generated code 
+    // points.
+    //
+    // On exit, parameter first will be advanced until last, and dest will be 
+    // advanced as much as needed to store the generated code points. 
+    //
+    // Returns the number of generated code units. If the function fails, it 
+    // returns zero, however the value "0" may also be a valid number of 
+    // generated code units IFF the input string is empty. The result state of 
+    // the conversion is always indicated by paramerer error, though.
+    template <
+        typename InIteratorT, typename InEncodingT, 
+        typename OutIteratorT, typename OutEncodingT>
+    inline std::size_t
+    convert_safe(
+            InIteratorT&     first, 
+            InIteratorT      last, 
+            InEncodingT      inEncoding,
+            OutIteratorT&    dest,
+            OutEncodingT     outEncoding)
+    {
+        std::size_t count = 0;
+        while (first != last) {
+            int result = convert_one(first, last, inEncoding, dest, outEncoding);
+            if (result > 0)
+                count += result;
+            else {
+                if (first != last)
+                    ++first;
+                result = convert_one_unsafe(kReplacementCharacter, dest, outEncoding);
+                assert(result > 0);
+                count += result;                
+            }
+        }
+        return count;
+    }    
+    
+    
+    
+    
 #pragma mark - Unicode Code Point to UTF
     
     
@@ -4939,16 +5045,20 @@ namespace json { namespace unicode {
     //      
     //
     template <
-    typename InIteratorT, 
-    typename OutIteratorT, typename OutEncodingT>
+        typename InIteratorT, 
+        typename OutIteratorT, typename OutEncodingT
+    >
     inline std::size_t
-    convert(
+    convert_codepoints(
             InIteratorT&     first, 
             InIteratorT      last, 
             OutIteratorT&    dest,
             OutEncodingT     outEncoding,
             int&             error)
     {
+        BOOST_STATIC_ASSERT(sizeof(typename boost::iterator_value<InIteratorT>::type)
+                            == sizeof(code_point_t));
+        
         std::size_t count = 0;
         while (first != last) {
             int result = convert_one(static_cast<code_point_t>(*first),
@@ -4968,11 +5078,12 @@ namespace json { namespace unicode {
     }    
     
     template <
-    typename InIteratorT,
-    typename OutIteratorT, typename OutEncodingT,
-    typename FilterT>
+        typename InIteratorT,
+        typename OutIteratorT, typename OutEncodingT,
+        typename FilterT
+    >
     inline std::size_t
-    convert(
+    convert_codepoints(
             InIteratorT&     first, 
             InIteratorT      last, 
             OutIteratorT&    dest,
@@ -4980,6 +5091,9 @@ namespace json { namespace unicode {
             FilterT          filter,
             int&             error)
     {
+        BOOST_STATIC_ASSERT(sizeof(typename boost::iterator_value<InIteratorT>::type)
+                            == sizeof(code_point_t));
+        
         std::size_t count = 0;
         while (first != last) {
             int result = convert_one(static_cast<code_point_t>(*first),
@@ -4998,6 +5112,41 @@ namespace json { namespace unicode {
         return count;
     }    
     
+    
+    template <
+        typename InIteratorT, 
+        typename OutIteratorT, typename OutEncodingT
+    >
+    inline std::size_t
+    convert_codepoints_unsafe(
+            InIteratorT&     first, 
+            InIteratorT      last, 
+            OutIteratorT&    dest,
+            OutEncodingT     outEncoding,
+            int&             error)
+    {
+        BOOST_STATIC_ASSERT(sizeof(typename boost::iterator_value<InIteratorT>::type)
+                            == sizeof(code_point_t));
+        
+        
+        std::size_t count = 0;
+        while (first != last) {
+            int result = convert_one_unsafe(static_cast<code_point_t>(*first),
+                                     dest, outEncoding);
+            if (result > 0) {
+                count += result;
+                ++first;
+            }
+            else {
+                error = result;
+                return 0;
+                break;
+            }
+        }
+        error = 0;
+        return count;
+    }    
+
     
 }}
 

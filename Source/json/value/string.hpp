@@ -21,10 +21,11 @@
 #define JSON_STRING_HPP
 
 
+#include "json/config.hpp"
+
 #if !defined (BOOST_SP_USE_QUICK_ALLOCATOR)
     #define BOOST_SP_USE_QUICK_ALLOCATOR
 #endif
-
 
 #include <boost/config.hpp>
 #include <boost/checked_delete.hpp>

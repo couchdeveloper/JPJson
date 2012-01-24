@@ -22,6 +22,7 @@
 #define JSON_PARSER_HPP
 
 
+#include "json/config.hpp"
 #include <boost/config.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/iterator/iterator_traits.hpp>
@@ -50,10 +51,16 @@
 #endif
 
 
-#if defined (BOOST_DISABLE_THREADS)
-#warning boost threading disabled
-#endif
 
+// JSON_PARSER_USE_JSON_PATH
+// Should be defined only for testing. The json path feature will be implemented
+// in the semantic actions class.
+// define JSON_PARSER_USE_JSON_PATH
+
+
+#if defined (JSON_PARSER_USE_JSON_PATH)
+#include "json_path.hpp"
+#endif
 
 
 
@@ -110,7 +117,6 @@ namespace json {
           typename InputIterator
         , typename SourceEncoding
         , typename SemanticActions = json::semantic_actions_noop<UTF_8_encoding_tag>
-        , typename Policies = parser_policies
     >
     class parser 
     {
@@ -202,8 +208,7 @@ namespace json {
             sa_.inputEncoding(source_encoding().name());
             //semanticactions::non_conformance_flags ncon_flags = sa.extensions();
         }
-        
-        
+                
     protected:
         SemanticActions&        sa_;
         iterator                p_;     // iterator adapter
@@ -212,6 +217,10 @@ namespace json {
         string_buffer_t         string_buffer_;
         number_builder_t        number_builder_;
         unicode::filter::NoncharacterOrNULL unicode_filter_;
+        
+#if defined (JSON_PARSER_USE_JSON_PATH)
+        json_internal::json_path<string_buffer_encoding> json_path_;
+#endif
         
     private:        
         void parse_text();
@@ -226,6 +235,8 @@ namespace json {
         //  Three variants for each of the possible input encoding forms UTF-8, 
         //  UTF-16 and UTF-32 respectively.
         //
+        
+#if OLD        
         template <typename SourceEncodingT>
         void parse_string_imp(string_buffer_base_t& stringBuffer, 
                               typename boost::enable_if<
@@ -243,13 +254,103 @@ namespace json {
                               typename boost::enable_if<
                                 boost::is_base_of<UTF_32_encoding_tag, SourceEncodingT>
                               >::type* = 0 );
+#endif
 
-        // mapps to the corresponding specialization.
-        void parse_string(string_buffer_base_t& stringBuffer) {
-            this->parse_string_imp<source_encoding>(stringBuffer);
+        void parse_string(string_buffer_base_t& stringBuffer) 
+        {
+            assert(state_.error() == JP_NO_ERROR); 
+            assert(p_ != last_);
+            assert(*p_ == code_t('"'));
+            
+            stringBuffer.reset();
+            
+            ++p_;
+            uint32_t c;
+            while (__builtin_expect(p_ != last_, 1)) 
+            {
+                // fast path: read ASCII (no control characters)
+                c = static_cast<uint32_t>(*p_);
+                if (__builtin_expect((c - 0x20u) < 0x60u, 1))  // ASCII except control-char
+                {
+                    switch (c) {
+                        default:
+                            ++p_;
+                            string_buffer_pushback_ASCII(stringBuffer, c);
+                            continue;
+                        case '\\': // escape sequence
+                            ++p_;
+                            escape_sequence_2(stringBuffer);
+                            if (!state_) {
+                                // error parsing escape sequence
+                                return; // error state already set
+                            }
+                            continue;
+                        case '"':
+                            ++p_;
+                            skip_whitespaces();
+                            return; // done
+                    }
+                }
+                
+                // slow path: reading UTF multi byte sequences and any other UTF encoding form                
+                // read the UTF character into a code point:
+                // Use a conversions which does not accept surrogates and noncharacters. 
+                // Per default, the filter shall signal errors if it matches characters.
+                //  //Replace invalid characters with Unicode Replacement Character.
+                // The "safe" conversion does not accept surrogates, so we only need to
+                // check for Unicode noncharacters and ASCII control characters:
+                
+                // Need to check for ASCII control chars here
+                if ((c - 1u) < (0x20u - 1u)) {
+                    state_.error() =  JP_CONTROL_CHAR_NOT_ALLOWED_ERROR;  // error: control character not allowed
+                    break;
+                }
+                unicode::code_point_t cp;
+                int result = unicode::convert_one(p_, last_, SourceEncoding(), cp, unicode_filter_);
+                // Possible errors:
+                //      E_TRAIL_EXPECTED:           trail byte expected
+                //      E_UNEXPECTED_ENDOFINPUT:    unexpected and of input
+                //      E_INVALID_START_BYTE:       invalid start byte
+                //      E_INVALID_CODE_POINT:       detected surrogate or code point is invalid Unicode 
+                //      E_PREDICATE_FAILED          got a noncharacter or an ASCII control character
+                if (__builtin_expect(result > 0, 1)) {
+                    result = (int)stringBuffer.append_unicode(cp); 
+                    continue;
+                }
+                else {
+                    if (result == unicode::E_UNEXPECTED_ENDOFINPUT) {
+                        state_.error() = JP_UNEXPECTED_END_ERROR;
+                    } else if (result == unicode::E_PREDICATE_FAILED) {
+                        // Filtered invalid Unicode code point and did not
+                        // replace it. This forces the parser to stop.
+                        if (unicode::isNonCharacter(cp))
+                            state_.error() = JP_UNICODE_NONCHARACTER_ERROR;
+                        else if (cp == 0){
+                            state_.error() = JP_UNICODE_NULL_NOT_ALLOWED_ERROR;
+                        }
+                        else if (cp < 0x20u)
+                            state_.error() =  JP_CONTROL_CHAR_NOT_ALLOWED_ERROR;  // error: control character not allowed
+                        else {
+                            state_.error() = JP_UNICODE_REJECTED_BY_FILTER;
+                        }
+                    } else {
+                        // E_TRAIL_EXPECTED:
+                        // E_INVALID_START_BYTE:
+                        // E_INVALID_CODE_POINT:
+                        state_.error() = JP_ILLFORMED_UNICODE_SEQUENCE_ERROR;
+                    }
+                    break;  // while
+                }
+            }
+                
+            if (state_.error() == 0) {
+                state_.error() = JP_UNEXPECTED_END_ERROR;
+            }
+            sa_.error(state_.error(), state_.error_str());
         }
         
         
+#if OLD        
         // Parse a multi byte UTF-8 sequence and push back the result
         // into the specified string buffer.
         // Prerequisites:
@@ -259,8 +360,8 @@ namespace json {
         // sequence [2 .. 4]. Otherwise, returns zero indicating an error.
         // If an error was detected, error state is set.
         // 
-        int parse_string_utf8_mb(string_buffer_base_t& stringBuffer);
-        
+        inline int parse_string_utf8_mb(string_buffer_base_t& stringBuffer);
+#endif // OLD        
         
         
 #pragma mark -
@@ -273,6 +374,7 @@ namespace json {
         unicode::code_point_t escaped_unicode();
         uint16_t hex();
         void escape_sequence(string_buffer_base_t& stringBuffer);
+        void escape_sequence_2(string_buffer_base_t& stringBuffer);
         
         
 #pragma mark - String Buffer       
@@ -353,11 +455,10 @@ namespace json {
           typename InputIterator
         , typename SourceEncoding
         , typename SemanticActions
-        , typename Policies
     >
     inline 
     parser_error_type 
-        parser<InputIterator, SourceEncoding, SemanticActions, Policies>::
+        parser<InputIterator, SourceEncoding, SemanticActions>::
     parse(InputIterator& first, InputIterator last, bool skipTrailingWhitespaces) 
     {
         p_ = iterator(first);
@@ -379,11 +480,10 @@ namespace json {
           typename InputIterator
         , typename SourceEncoding
         , typename SemanticActions
-        , typename Policies
     >
     inline 
     void 
-        parser<InputIterator, SourceEncoding, SemanticActions, Policies>::
+        parser<InputIterator, SourceEncoding, SemanticActions>::
     reset() {
         sa_.clear();
         state_.clear();
@@ -396,11 +496,10 @@ namespace json {
           typename InputIterator
         , typename SourceEncoding
         , typename SemanticActions
-        , typename Policies
     >
     inline 
     void 
-        parser<InputIterator, SourceEncoding, SemanticActions, Policies>::
+        parser<InputIterator, SourceEncoding, SemanticActions>::
     skip_whitespaces() 
     {
         assert(state_.error() == JP_NO_ERROR);
@@ -426,11 +525,10 @@ namespace json {
           typename InputIterator
         , typename SourceEncoding
         , typename SemanticActions
-        , typename Policies
     >
     inline 
     void 
-        parser<InputIterator, SourceEncoding, SemanticActions, Policies>::
+        parser<InputIterator, SourceEncoding, SemanticActions>::
     parse_text() 
     {
         assert(state_.error() == JP_NO_ERROR);
@@ -496,11 +594,10 @@ namespace json {
           typename InputIterator
         , typename SourceEncoding
         , typename SemanticActions
-        , typename Policies
     >
     inline 
     void 
-        parser<InputIterator, SourceEncoding, SemanticActions, Policies>::
+        parser<InputIterator, SourceEncoding, SemanticActions>::
     parse_array() 
     {
         assert(state_.error() == JP_NO_ERROR);
@@ -519,6 +616,9 @@ namespace json {
                 state_.error() = JP_UNICODE_NULL_NOT_ALLOWED_ERROR;
             } else {
                 size_t index = 0;
+#if defined JSON_PARSER_USE_JSON_PATH
+                json_path_.push_index(0);
+#endif                
                 // parse value_list
                 while (1) {
                     sa_.begin_value_at_index(index);
@@ -532,6 +632,9 @@ namespace json {
                                 skip_whitespaces();
                                 if (p_ != last_) {
                                     ++index;
+#if defined JSON_PARSER_USE_JSON_PATH
+                                    json_path_.back_index() = index;
+#endif                
                                     continue;
                                 }
                                 else {
@@ -558,6 +661,9 @@ namespace json {
                         code_t c = *p_;
                         if (c == code_t(']')) {
                             // end of array
+#if defined JSON_PARSER_USE_JSON_PATH
+                            json_path_.pop_component();
+#endif                
                             return;
                         }
                         else {
@@ -582,11 +688,10 @@ namespace json {
           typename InputIterator
         , typename SourceEncoding
         , typename SemanticActions
-        , typename Policies
     >
     inline 
     void 
-        parser<InputIterator, SourceEncoding, SemanticActions, Policies>::
+        parser<InputIterator, SourceEncoding, SemanticActions>::
     parse_object() 
     {
         assert(state_.error() == JP_NO_ERROR);
@@ -643,11 +748,10 @@ namespace json {
           typename InputIterator
         , typename SourceEncoding
         , typename SemanticActions
-        , typename Policies
     >
     inline 
     void 
-        parser<InputIterator, SourceEncoding, SemanticActions, Policies>::
+        parser<InputIterator, SourceEncoding, SemanticActions>::
     parse_key_value_list() 
     {
         assert(state_.error() == JP_NO_ERROR);
@@ -659,6 +763,10 @@ namespace json {
                 
         //bool done = false;
         size_t index = 0;
+#if defined JSON_PARSER_USE_JSON_PATH
+        key_string_char_t dummy = key_string_char_t(0);
+        json_path_.push_key(&dummy, &dummy + 1);
+#endif                
         while (__builtin_expect(p_ != last_, 1)) {
             code_t c = *p_;
             if (c == code_t('"')) 
@@ -666,9 +774,9 @@ namespace json {
                 // first, get the key ...
                 parse_string(keyStringBuffer);
                 if (state_) {
-                    // make a string_t and push it onto the stack
-                    //keyStringBuffer.terminate_if();
-                    sa_.push_key(keyStringBuffer.buffer(), keyStringBuffer.size());
+#if defined JSON_PARSER_USE_JSON_PATH
+                    json_path_.back_key_assign(keyStringBuffer.buffer(), keyStringBuffer.buffer() + keyStringBuffer.size());
+#endif                
                     if (p_ != last_) {
                         // ... then, eat the key_value separator ...
                         c = *p_;                        
@@ -697,6 +805,9 @@ namespace json {
                                             // Seems we are done with no errors.
                                             // note: p() points to start of next token, which shall be '}'
                                             // or it points to last_, which will be detected later.
+#if defined JSON_PARSER_USE_JSON_PATH
+                                            json_path_.pop_component();
+#endif                
                                             return; 
                                         }
                                     } else {
@@ -755,11 +866,10 @@ namespace json {
           typename InputIterator
         , typename SourceEncoding
         , typename SemanticActions
-        , typename Policies
     >
     inline 
     void 
-        parser<InputIterator, SourceEncoding, SemanticActions, Policies>::
+        parser<InputIterator, SourceEncoding, SemanticActions>::
     parse_value() 
     {                
         assert(state_.error() == JP_NO_ERROR);
@@ -773,7 +883,7 @@ namespace json {
                     // action_string_end
                     // note: p() points to the start of next token
                     //string_buffer_.terminate_if();
-                    sa_.push_string(string_buffer_.buffer(), string_buffer_.size());
+                    sa_.value_string(string_buffer_.buffer(), string_buffer_.size());
                 } else {
                     // handle error string
                 }
@@ -806,7 +916,7 @@ namespace json {
                     // parse_number does not skip whitespaces
                     skip_whitespaces();
                     // note: p() points to the start of next token
-                    sa_.push_number(number_builder_.number());
+                    sa_.value_number(number_builder_.number());
                 } else {
                     // handle error number
                     assert(state_.error() != 0);
@@ -827,7 +937,7 @@ namespace json {
                 if (match("true", 4)) {
                     // got a "true"
                     // action_value_true
-                    sa_.push_boolean(true);
+                    sa_.value_boolean(true);
                     skip_whitespaces();
                 }
                 break;
@@ -835,7 +945,7 @@ namespace json {
             case code_t('f'):
                 if (match("false", 5)) {
                     // action_value_false
-                    sa_.push_boolean(false);
+                    sa_.value_boolean(false);
                     skip_whitespaces();
                 } 
                 break;
@@ -843,7 +953,7 @@ namespace json {
             case code_t('n'):
                 if (match("null", 4)) {
                     // action_value_null
-                    sa_.push_null();
+                    sa_.value_null();
                     skip_whitespaces();
                 }
                 break;    
@@ -869,11 +979,10 @@ namespace json {
           typename InputIterator
         , typename SourceEncoding
         , typename SemanticActions
-        , typename Policies
     >
     inline 
     bool 
-        parser<InputIterator, SourceEncoding, SemanticActions, Policies>::
+        parser<InputIterator, SourceEncoding, SemanticActions>::
     match(const char* s, size_t n)
     {
         while (n != 0 and p_ != last_ and code_t(*s) == *p_) {
@@ -897,6 +1006,8 @@ namespace json {
     
 #pragma mark - parse string
     
+#define USE_LOOKUP_TABLE
+    
     //
     // Read four consequtive digits and return the corresponding value
     // as a uint16_t number. This is part of parsing escaped unicode sequences.
@@ -909,31 +1020,51 @@ namespace json {
           typename InputIterator
         , typename SourceEncoding
         , typename SemanticActions
-        , typename Policies
     >
     inline 
     uint16_t 
-        parser<InputIterator, SourceEncoding, SemanticActions, Policies>::
+        parser<InputIterator, SourceEncoding, SemanticActions>::
     hex() 
     {
         assert(state_.error() == JP_NO_ERROR);
-        assert(p_ != last_);
         
+#if defined (USE_LOOKUP_TABLE)        
+        static const int8_t lookupTable[] = {
+             0, 1, 2, 3, 4, 5, 6, 7,    8, 9,-1,-1,-1,-1,-1,-1, // 48 .. 63
+            -1,10,11,12,13,14,15,-1,   -1,-1,-1,-1,-1,-1,-1,-1, // 64 .. 79
+            -1,-1,-1,-1,-1,-1,-1,-1,   -1,-1,-1,-1,-1,-1,-1,-1, // 80 .. 64 
+            -1, 0, 1, 2, 3, 4, 5, 6,    7, 8, 9,-1,-1,-1,-1,-1  // 96 .. 111 
+        };
+#endif        
         uint16_t uc = 0;        
         // expecting 4 hex digits:
         for (int i = 0; i < 4; ++i, ++p_) {
             if (__builtin_expect(p_ != last_, 1)) 
             {
+#if defined (USE_LOOKUP_TABLE)
+                uint32_t c = static_cast<uint32_t>(*p_) - 48u;
+                // check range:
+                int v;
+                if ( (c) < (111-48) and (v = lookupTable[c]) >= 0) {
+                    uc = (uc << 4) + v;
+                }
+                else {
+                    state_.error() = JP_INVALID_HEX_VALUE_ERROR;
+                    sa_.error(state_.error(), state_.error_str());
+                    return 0;
+                }
+#else                
                 code_t  c = *p_;
                 switch (c) {
                     case '0' ... '9': uc = (uc << 4) + (unsigned int)(c - '0'); break;
-                    case 'a' ... 'f': uc = (uc << 4) + ((unsigned int)(c - 'a') + 10U); break;
                     case 'A' ... 'F': uc = (uc << 4) + ((unsigned int)(c - 'A') + 10U); break;
+                    case 'a' ... 'f': uc = (uc << 4) + ((unsigned int)(c - 'a') + 10U); break;
                     default:
                         state_.error() = JP_INVALID_HEX_VALUE_ERROR;
                         sa_.error(state_.error(), state_.error_str());
                         return 0;
                 }
+#endif                
             }
             else {
                 state_.error() = JP_UNEXPECTED_END_ERROR;
@@ -941,7 +1072,6 @@ namespace json {
                 return 0;
             }
         }
-        
         return uc;
     }
 
@@ -976,11 +1106,10 @@ namespace json {
           typename InputIterator
         , typename SourceEncoding
         , typename SemanticActions
-        , typename Policies
     >
     inline 
     unicode::code_point_t 
-        parser<InputIterator, SourceEncoding, SemanticActions, Policies>::
+        parser<InputIterator, SourceEncoding, SemanticActions>::
     escaped_unicode() 
     {
         assert(state_.error() == JP_NO_ERROR);
@@ -1047,11 +1176,10 @@ namespace json {
           typename InputIterator
         , typename SourceEncoding
         , typename SemanticActions
-        , typename Policies
     >
     inline 
     void 
-        parser<InputIterator, SourceEncoding, SemanticActions, Policies>::
+        parser<InputIterator, SourceEncoding, SemanticActions>::
     escape_sequence(string_buffer_base_t& stringBuffer) 
     {
         assert(state_.error() == JP_NO_ERROR);        
@@ -1074,7 +1202,6 @@ namespace json {
                 case code_t('u'):  { // escaped unicode
                     unicode::code_point_t unicode = escaped_unicode();
                     if (state_) {
-#if 1                        
                         int result = string_buffer_pushback_unicode(stringBuffer, unicode);
                         if (result > 0) {
                             return;  // success 
@@ -1086,49 +1213,6 @@ namespace json {
                             // could not append unicode to internal string buffer
                             state_.error() = JP_INTERNAL_LOGIC_ERROR;
                         } 
-#else
-                        {
-                        // Got a valid Unicode scalar value.
-                        // Check whether this unicode is allowed (e.g., filter
-                        // noncharacters or any other Unicode code points not
-                        // allowed):
-                        if (unicode_filter_(unicode)) {
-                            if (unicode_filter_.replace()) {
-                                unicode = unicode_filter_.replacement(unicode);
-                                assert(unicode != 0);
-                            } 
-                            else 
-                            {
-                                // Filtered invalid Unicode code point and did not
-                                // replace it. This forces the parser to stop.
-                                if (unicode::isNonCharacter(unicode)) {
-                                    state_.error() = JP_UNICODE_NONCHARACTER_ERROR;
-                                }
-                                else if (unicode == 0) {
-                                    state_.error() = JP_UNICODE_NULL_NOT_ALLOWED_ERROR;  // TODO: use better error code
-                                }
-                                else {
-                                    state_.error() = JP_UNICODE_REJECTED_BY_FILTER;
-                                }
-                                break;
-                            }
-                        }
-                        // Validity of the unicode code point is checked above 
-                        // already.
-                        // append_unicode() should succeed here. Otherwise this 
-                        // is a logic error and we throw an exception, or signal 
-                        // the corresponding error.
-                        assert(state_.error() == 0);
-                        size_t result = stringBuffer.append_unicode(unicode);
-                        }
-                        if (result > 0) {
-                            return;  // success, exit
-                        }
-                        else {
-                            state_.error() = JP_INTERNAL_LOGIC_ERROR;
-                        }
-#endif                        
-                        
                     } 
                     else {
                         // malformed unicode: not an Unicode scalar value,
@@ -1152,6 +1236,74 @@ namespace json {
     }
     
     
+
+    //
+    // Parse an escape sequence
+    //
+    // p_ shall point to the initial escape character ('\').
+    template <
+    typename InputIterator
+    , typename SourceEncoding
+    , typename SemanticActions
+    >
+    inline 
+    void 
+    parser<InputIterator, SourceEncoding, SemanticActions>::
+    escape_sequence_2(string_buffer_base_t& stringBuffer) 
+    {
+        assert(state_.error() == JP_NO_ERROR);        
+        
+        if (__builtin_expect(p_ != last_, 1)) 
+        {
+            code_t c = *p_;
+            switch (c) {
+                case code_t('"'): string_buffer_pushback_ASCII(stringBuffer, '"');  ++p_; return;
+                case code_t('\\'):string_buffer_pushback_ASCII(stringBuffer, '\\'); ++p_; return;
+                case code_t('/'): string_buffer_pushback_ASCII(stringBuffer, '/');  ++p_; return;
+                case code_t('b'): string_buffer_pushback_ASCII(stringBuffer, '\b'); ++p_; return;
+                case code_t('f'): string_buffer_pushback_ASCII(stringBuffer, '\f'); ++p_; return;
+                case code_t('n'): string_buffer_pushback_ASCII(stringBuffer, '\n'); ++p_; return;
+                case code_t('r'): string_buffer_pushback_ASCII(stringBuffer, '\r'); ++p_; return;
+                case code_t('t'): string_buffer_pushback_ASCII(stringBuffer, '\t'); ++p_; return;
+                case code_t('u'):  { // escaped unicode
+                    unicode::code_point_t unicode = escaped_unicode();
+                    if (state_) {
+                        int result = string_buffer_pushback_unicode(stringBuffer, unicode);
+                        if (result > 0) {
+                            return;  // success 
+                        } else if (result < 0) {
+                            // detected Unicode noncharacter and rejected it,
+                            // or U+0000 which is not allowed
+                            assert(state_.error() != 0);                            
+                        } else  {
+                            // could not append unicode to internal string buffer
+                            state_.error() = JP_INTERNAL_LOGIC_ERROR;
+                        } 
+                    } 
+                    else {
+                        // malformed unicode: not an Unicode scalar value,
+                        // or unexpected end.
+                        assert(state_.error() != 0);
+                        return;
+                    }
+                    break;
+                }
+                default:
+                    state_.error() = JP_INVALID_ESCAPE_SEQ_ERROR;
+                    
+            } // switch
+        }
+        else {
+            state_.error() = JP_UNEXPECTED_END_ERROR;
+        }
+        
+        assert(state_.error() != 0);
+        sa_.error(state_.error(), state_.error_str());
+    }
+
+    
+#if OLD    
+    
     //
     // Pushes a UTF-8 multi-byte sequence from the input onto the string buffer.
     // Returns the number of bytes for multi-byte character.
@@ -1167,11 +1319,10 @@ namespace json {
           typename InputIterator
         , typename SourceEncoding
         , typename SemanticActions
-        , typename Policies
     >
     inline 
     int 
-        parser<InputIterator, SourceEncoding, SemanticActions, Policies>::
+        parser<InputIterator, SourceEncoding, SemanticActions>::
     parse_string_utf8_mb(string_buffer_base_t& stringBuffer) 
     {
         assert(state_.error() == JP_NO_ERROR);
@@ -1192,7 +1343,7 @@ namespace json {
         //      E_INVALID_START_BYTE:       invalid start byte
         //      E_INVALID_CODE_POINT:       detected surrogate or code point is invalid Unicode 
         //      E_PREDICATE_FAILED          got a noncharacter
-        if (result > 0) {
+        if (__builtin_expect(result > 0, 1)) {
             result = (int)stringBuffer.append_unicode(cp); 
             assert(result > 0);
             return result;
@@ -1233,12 +1384,11 @@ namespace json {
           typename InputIterator
         , typename SourceEncoding
         , typename SemanticActions
-        , typename Policies
     >
     template <typename EncodingT>
     inline 
     void 
-        parser<InputIterator, SourceEncoding, SemanticActions, Policies>::
+        parser<InputIterator, SourceEncoding, SemanticActions>::
     parse_string_imp(string_buffer_base_t& stringBuffer, 
                      typename boost::enable_if<
                         boost::is_base_of<UTF_8_encoding_tag, EncodingT> 
@@ -1254,16 +1404,15 @@ namespace json {
         while (__builtin_expect(p_ != last_, 1)) 
         {
             code_t c = *p_;
-            // if (__builtin_expect( (unsigned(c) - 0x20u) < 0x60u, 1))
             // if (unsigned)c >= 0x20u and (unsigend)c < 0x80u)
-            if ( (unsigned(c) - 0x20u) < 0x60u) 
+            // if ( (unsigned(c) - 0x20u) < 0x60u) 
+            if (__builtin_expect( (unsigned(c) - 0x20u) < 0x60u, 1))
             {
                 switch (c) {
-                    case '"':
+                    default:
+                        string_buffer_pushback_ASCII(stringBuffer, c);
                         ++p_;
-                        skip_whitespaces();
-                        return; // done
-                        
+                        continue;
                     case '\\': // escape sequence
                         escape_sequence(stringBuffer);
                         if (!state_) {
@@ -1271,11 +1420,10 @@ namespace json {
                             return; // error state already set
                         }
                         continue;
-
-                    default:
-                        string_buffer_pushback_ASCII(stringBuffer, c);
+                    case '"':
                         ++p_;
-                        continue;
+                        skip_whitespaces();
+                        return; // done
                 }
             }
             else if (unicode::utf8_is_lead(c)) {
@@ -1324,12 +1472,11 @@ namespace json {
     typename InputIterator
       , typename SourceEncoding
       , typename SemanticActions
-      , typename Policies
     >
     template <typename EncodingT>
     inline 
     void 
-        parser<InputIterator, SourceEncoding, SemanticActions, Policies>::
+        parser<InputIterator, SourceEncoding, SemanticActions>::
     parse_string_imp(string_buffer_base_t& stringBuffer, 
                      typename boost::enable_if<
                         boost::is_base_of<UTF_16_encoding_tag, EncodingT>
@@ -1347,6 +1494,10 @@ namespace json {
             if ((unsigned(c) - 0x20u) < 0x60u)  // ASCII except control-char?
             {
                 switch (c) {
+                    default:
+                        string_buffer_pushback_ASCII(stringBuffer, c);
+                        ++p_;
+                        continue;
                     case '"':
                         ++p_;
                         skip_whitespaces();
@@ -1358,11 +1509,6 @@ namespace json {
                             // error parsing escape sequence
                             return; // error state already set
                         }
-                        continue;
-                        
-                    default:
-                        string_buffer_pushback_ASCII(stringBuffer, c);
-                        ++p_;
                         continue;
                 }
             }
@@ -1447,12 +1593,11 @@ namespace json {
     typename InputIterator
     , typename SourceEncoding
     , typename SemanticActions
-    , typename Policies
     >
     template <typename EncodingT>
     inline 
     void 
-    parser<InputIterator, SourceEncoding, SemanticActions, Policies>::
+    parser<InputIterator, SourceEncoding, SemanticActions>::
     parse_string_imp(string_buffer_base_t& stringBuffer, 
                      typename boost::enable_if<
                      boost::is_base_of<UTF_32_encoding_tag, EncodingT>
@@ -1520,6 +1665,8 @@ namespace json {
         sa_.error(state_.error(), state_.error_str());
         
     }  
+#endif // OLD    
+    
 
 #pragma mark -
     
@@ -1527,11 +1674,10 @@ namespace json {
           typename InputIterator
         , typename SourceEncoding
         , typename SemanticActions
-        , typename Policies
     >    
     inline 
     void 
-        parser<InputIterator, SourceEncoding, SemanticActions, Policies>::
+        parser<InputIterator, SourceEncoding, SemanticActions>::
     parse_number() 
     {
         assert(p_ != last_);
@@ -1763,11 +1909,10 @@ namespace json {
         typename InputIterator
       , typename SourceEncoding
       , typename SemanticActions
-      , typename Policies
     >    
     inline 
     void 
-        parser<InputIterator, SourceEncoding, SemanticActions, Policies>::
+        parser<InputIterator, SourceEncoding, SemanticActions>::
     throwLogicError(const char* msg) {
         throw std::logic_error(msg);
     }

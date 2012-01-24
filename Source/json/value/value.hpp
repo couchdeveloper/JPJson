@@ -21,6 +21,7 @@
 #define JSON_VALUE_HPP
 
 
+#include "json/config.hpp"
 #include <boost/config.hpp>
 #include <boost/type_traits.hpp>
 #include <boost/utility/enable_if.hpp> 

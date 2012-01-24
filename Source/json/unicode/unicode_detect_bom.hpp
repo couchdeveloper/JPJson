@@ -22,6 +22,7 @@
 #define JSON_UNICODE_DETECT_ENCODING_HPP
 
 
+#include "json/config.hpp"
 #include <stdint.h>
 #include <iterator>
 #include "unicode_utilities.hpp"

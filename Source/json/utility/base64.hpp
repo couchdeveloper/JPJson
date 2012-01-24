@@ -58,7 +58,9 @@ namespace json { namespace utility {
     }
 
         
-        
+    // Encode a sequence of bytes starting at 'first' into its base64 representation
+    // using the usual alphabet and write the result into output iterator 'result'.
+    // Note: this encoding does not embed new lines.
     template <class InputIterator, class OutputIterator>
     OutputIterator encodeBase64(InputIterator first, InputIterator last, OutputIterator result)
     {
@@ -142,6 +144,9 @@ namespace json { namespace utility {
     }
 
     
+    // Decode a base64 encoded sequence starting at 'first' into its binary
+    // repesentation and write it into output iterator 'result'.
+    // The base62 sequence shall not contain new lines.
     template <class InputIterator, class OutputIterator>
     OutputIterator decodeBase64(InputIterator first, InputIterator last, OutputIterator result)
     {

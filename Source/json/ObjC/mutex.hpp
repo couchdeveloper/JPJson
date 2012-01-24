@@ -21,6 +21,7 @@
 #define JSON_OBJC_GCD_MUTEX_HPP
 
 
+#include "json/config.hpp"
 #include <dispatch/dispatch.h>
 #include <boost/utility.hpp>
 #include <assert.h>
