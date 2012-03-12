@@ -25,8 +25,8 @@
 
 
 // mutex and semaphores
-#include "json/ObjC/mutex.hpp"
-#include "json/ObjC/semaphore.hpp"
+//#include "json/ObjC/mutex.hpp"
+//#include "json/ObjC/semaphore.hpp"
 
 
 // for testing
@@ -36,6 +36,7 @@
 #include <stdio.h>
 #include <stdexcept>
 #include "utilities/timer.hpp"
+#include <map>
 #include <boost/tr1/unordered_map.hpp>
 #include <algorithm>
 
@@ -105,6 +106,13 @@ namespace {
     {
         CFDataCache<char> cache; 
         EXPECT_EQ(0, cache.size());
+        
+        typedef CFDataCache<char>::iterator iterator;
+        
+        iterator first = cache.begin();
+        iterator last = cache.end();                
+        EXPECT_TRUE(first == last);        
+        EXPECT_EQ(0, cache.size());        
     }
     
     
@@ -113,17 +121,27 @@ namespace {
         CFDataCache<char> cache(1000*2); 
         
         typedef CFDataCache<char>::key_type key_t;
+        typedef CFDataCache<char>::iterator iterator;
+        typedef CFDataCache<char>::value_type value_t;
         
         char buffer[245];
         const int N = 1000;
         
         for (int i = 0; i < N; ++i) {
             snprintf(buffer, sizeof(buffer), "key-%12.d", i);
-            cache.insert(key_t(buffer, strlen(buffer)), NULL);            
+            std::pair<iterator, bool> result = cache.insert(key_t(buffer, strlen(buffer)), NULL);
+            iterator iter = result.first;
+            value_t value = *iter;
+            EXPECT_TRUE(buffer != value.first.first);
+            EXPECT_EQ(strlen(buffer), value.first.second);
+            EXPECT_TRUE(memcmp(buffer, value.first.first, value.first.second) == 0);
+            EXPECT_EQ(true, result.second);
         }
         
         EXPECT_EQ(N, cache.size());
     }
+    
+    
     
     TEST_F(CFDataCacheTest, Find) 
     {
@@ -484,5 +502,6 @@ namespace {
         EXPECT_LT( t0.seconds(), t2.seconds() );
         EXPECT_LT( t0.seconds(), t3.seconds() );
     }
+    
     
 }  //namespace

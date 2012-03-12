@@ -1,0 +1,9 @@
+//
+//  unicode_conversion.release.xcconfig
+//  Bench
+//
+//  Created by Andreas Grosam on 12/2/11.
+//  Copyright (c) 2011 __MyCompanyName__. All rights reserved.
+//
+
+#include "../../Xcode.config/ICU.xcconfig"

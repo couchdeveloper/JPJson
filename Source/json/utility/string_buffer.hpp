@@ -32,7 +32,7 @@
 #include <boost/mpl/or.hpp>
 #include <boost/mpl/identity.hpp>
 #include "json/unicode/unicode_utilities.hpp"
-#include "json/unicode/unicode_conversions.hpp"
+#include "json/unicode/unicode_conversion.hpp"
 
 
 
@@ -77,6 +77,8 @@ namespace json
     namespace internal 
     {
         
+        using namespace json;
+        
         using unicode::UTF_8_encoding_tag;
         using unicode::UTF_16_encoding_tag;
         using unicode::UTF_16LE_encoding_tag;
@@ -85,20 +87,20 @@ namespace json
         using unicode::UTF_32LE_encoding_tag;
         using unicode::UTF_32BE_encoding_tag;
         using unicode::platform_encoding_tag;
-        using unicode::utf8_code_unit;
-        using unicode::utf16_code_unit;
-        using unicode::utf32_code_unit;
 
+        using unicode::encoding_traits;
         
         
         template <typename EncodingT> 
         class string_buffer_base {
         public:
-            typedef typename EncodingT::code_unit_type  code_unit_t;
-            typedef          code_unit_t*               buffer_type;
-            typedef size_t                              size_type;
-            typedef typename host_endianness::type      from_endian_t;            
-            typedef typename EncodingT::endian_tag      to_endian_t;
+            typedef typename encoding_traits<EncodingT>::code_unit_type code_unit_t;
+            typedef code_unit_t*                                        buffer_type;
+            typedef size_t                                              size_type;
+            typedef typename host_endianness::type                      from_endian_t;            
+            typedef typename encoding_traits<EncodingT>::endian_tag     to_endian_t;
+            
+            typedef typename encoding_traits<UTF_8_encoding_tag>::code_unit_type utf8_code_unit;
             
         private:
             buffer_type         auto_buffer_;
@@ -179,42 +181,28 @@ namespace json
             
             void reserve(size_t size) {
                 if (left() < size) {
-                    if (not grow(size - left())) {
+                    if (__builtin_expect(not grow(size - left()), 0)) {
                         throwGrowError();
                     }
                 }
             }
             
+            
+            //
+            // append            
+            //
+            
+            
             // Appends a code unit. Does not check the validity of the code unit
             // nor the validity of the code unit in the context of the string.
             void append(code_unit_t v) {
                 if (__builtin_expect(p_ == buffer_end_, 0)) {
-                    if (not grow(size() + 1)) {
+                    if (__builtin_expect(not grow(size() + 1), 0)) {
                         throwGrowError();
                     }
                 }                
                 *p_++ = v;
             }
-            
-            // Appends a sequence of code units to its buffer. The function does 
-            // not check the validity of this sequence nor does it check the 
-            // validity of this sequence in the context of the existing string.
-            // (currently not endian aware)
-            void append(const code_unit_t* p, size_type len) {
-                if (len > (std::numeric_limits<size_type>::max()>>3)) {
-                    // on 32-bit, this is roughly 1GByte
-                    throwTooBigError();
-                } 
-                size_type required = size() + len;
-                if (left() < required) {
-                    if (not grow(required)) {
-                        throwGrowError();
-                    }
-                }                
-                memcpy(p_, p, len*sizeof(code_unit_t)); //std::copy(p, p + len, p_); 
-                p_ += len;
-            }
-            
             
             // Appends an ASCII character to its internal buffer. The value
             // of ch shall be in the range of valid ASCII characters, that is
@@ -226,6 +214,58 @@ namespace json
                 append(static_cast<code_unit_t>(ch));
             }
             
+            
+            // Converts the Unicode code point to its internal encoding and 
+            // pushes the result to its buffer.
+            // Uses "unsafe" conversion rules. The validity of the code point
+            // shall be checked by the caller. The function may not reliably
+            // detect error conditions.
+            // Returns the number of code units appended into its internal buffer.
+            size_type append_unicode(json::unicode::code_point_t codepoint) 
+            {                
+                // Use an unsafe converter which converts one code point to ist destination
+                typedef unicode::converter<
+                    unicode::code_point_t, EncodingT, 
+                    unicode::Validation::UNSAFE, unicode::Stateful::No, unicode::ParseOne::Yes> 
+                cvt_t;
+                
+                reserve(size() + encoding_traits<EncodingT>::buffer_size);
+                unicode::code_point_t* first = &codepoint;
+                unicode::code_point_t* last = first + 1;
+                code_unit_t* p_saved = p_;
+                int result = cvt_t().convert(first, last, p_);
+                assert(p_ <= buffer_end_);
+                if (__builtin_expect(result == unicode::NO_ERROR, 1)) {
+                    return std::distance(p_saved, p_);
+                } else {
+                    return 0; // TODO: need thread specific error info for unicode::convert functions
+                }
+            }
+            
+            
+            
+            // Appends a sequence of code units with length 'len' to its buffer. 
+            // The function does not check the validity of this sequence nor does 
+            // it check the validity of this sequence in the context of the 
+            // existing string.
+            // (currently not endian aware)
+            void append(const code_unit_t* p, size_type len) 
+            {
+                if (__builtin_expect(len <= (std::numeric_limits<size_type>::max()>>3), 1)) {
+                    size_type required = size() + len;
+                    if (__builtin_expect(left() < required, 0)) {
+                        if (__builtin_expect(not grow(required), 0)) {
+                            throwGrowError();
+                        }
+                    }                
+                    memcpy(p_, p, len*sizeof(code_unit_t)); //std::copy(p, p + len, p_); 
+                    p_ += len;
+                } else  {
+                    // on 32-bit, this is roughly 1GByte
+                    throwTooBigError();
+                } 
+
+            }
             
             // Appends a zero terminated UTF-8 (including ASCII) encoded string 
             // to the buffer.
@@ -239,10 +279,11 @@ namespace json
             // applied to convert from the cstr into the buffer's encoding.
             // Returns the number of appended code units to the buffer.
             size_type append_cstr(const char* cstr, std::size_t len) {
-                if (len > (std::numeric_limits<size_t>::max()>>3))
+                if (__builtin_expect(len > (std::numeric_limits<size_t>::max()>>3), 0))
                     throwTooBigError();
                 return append_cstr_impl<EncodingT>(cstr, len);
             }
+            
             size_type append_cstr(const char* cstr) {
                 size_t len = strlen(cstr);
                 return append_cstr(cstr, len);
@@ -280,24 +321,7 @@ namespace json
 //                return append_utf_str_impl(str, len, StringEncoding());
 //            }                        
             
-            
-            // Converts the Unicode code point to its internal encoding and 
-            // pushes the result to its buffer.
-            // Uses "unsafe" conversion rules. The validity of the code point
-            // shall be checked by the caller. The function may not reliably
-            // detect error conditions.
-            // Returns the number of code units appended.
-            size_type append_unicode(json::unicode::code_point_t codepoint) 
-            {
-                reserve(size() + EncodingT::buffer_size);
-                int len = json::unicode::convert_one_unsafe(codepoint, p_, EncodingT());
-                assert(p_ <= buffer_end_);
-                if (len <= 0) {
-                    return 0; // TODO: need thread specific error info for unicode::convert functions
-                } else {
-                    return len;
-                }
-            }
+       
             
             // Appends the Unicode replacement character U+FFFD to its buffer.
             // Returns the number of code units appended.
@@ -322,18 +346,25 @@ namespace json
             
         private:
             
+            // Append a UTF-8 encoded byte sequence with length 'len' (which
+            // is well-formed UTF-8) to the internal buffer encoded in UTF-8.
+            // If the input sequence is not well-formed, the result is undefined.
+            // Returns the number of generated code units.
             template <typename Encoding>
             size_t append_cstr_impl(const char* str, std::size_t len,
                              typename boost::enable_if<boost::is_base_of<UTF_8_encoding_tag, Encoding>
                              >::type* = 0 ) 
             {
-                append(reinterpret_cast<typename UTF_8_encoding_tag::code_unit_type const*>(str), len);
+                typedef unicode::encoding_traits<UTF_8_encoding_tag>::code_unit_type code_unit_t;
+                append(reinterpret_cast<code_unit_t const*>(str), len);
                 return len;
             }
             
 
-            // Append an ASCII string (which is a well-formed UTF-8 string) to 
-            // the internal buffer encoded in UTF-16/UTF-32
+            // Append a UTF-8 encoded byte sequence with length 'len' (which
+            // is well-formed UTF-8) to the internal buffer encoded in UTF-16/UTF-32.
+            // If the input sequence is not well-formed, the result is undefined.
+            // Returns the number of generated code units.
             template <typename Encoding>
             size_t append_cstr_impl(const char* str, std::size_t len,
                              typename boost::enable_if<
@@ -343,60 +374,45 @@ namespace json
                                   >
                              >::type* = 0 ) 
             {
-                const char* first = str;
-#if !defined (DEBUG)
-                std::size_t length = strlen(str);
-                this->reserve(this->size() + length);
-                first = str;
-                // UTF-8 encoding seems to be much safer, and not that much
-                // slower than just plain copying the ASCII sequence to the 
-                // buffer.
-                int error = 0;
-                std::size_t count = unicode::convert_unsafe(first, first + len, UTF_8_encoding_tag(), 
-                                                            p_, Encoding(), error);
-                assert(error == 0);
-#else
-                int error = 0;
-                std::size_t length = unicode::count(first, first + len, UTF_8_encoding_tag(), Encoding(), error);
-                if (length != strlen(str)) {
-                    throw std::logic_error("input string not well formed UTF-8");
-                }
-                std::size_t count = 0;
-                if (error == 0) {
-                    this->reserve(this->size() + length);
-                    first = str;
-                    count = unicode::convert(first, first + len, UTF_8_encoding_tag(), p_, Encoding(), error);
-                }
+                // Use an unsafe, stateless converter which converts UTF-8 sequence to its destination
+                typedef unicode::converter<
+                    UTF_8_encoding_tag, EncodingT, 
+                    unicode::Validation::UNSAFE, unicode::Stateful::No> 
+                cvt_t;
                 
-                if (error != 0 or count != length) {
-                    throw std::logic_error("input string not well formed UTF-8");
-                }
-#endif                                
-                return count;
+                this->reserve(this->size() + len); // grow for worst case                
+                const char* first = str;
+                code_unit_t* p_saved = p_;
+                cvt_t().convert(first, first + len, p_);                
+                return static_cast<size_t>(std::distance(p_saved, p_));
             }
             
-            
+            // Append a zero terminated Unicode sequence whose encoding is the
+            // same as the internal.
             template <typename StringEncoding> 
             size_t append_utf_str_impl(
                const typename StringEncoding::code_unit_type* str,
                StringEncoding encoding,
                typename boost::enable_if<
-               boost::is_same<typename StringEncoding::code_unit_type, typename EncodingT::code_unit_type>
+                boost::is_same<StringEncoding, EncodingT>
                >::type* = 0 )
             {
                 size_t count = 0;
                 while (*str != 0) {
-                    append(*++str);
+                    append(*str++);
                     ++count;
                 }
                 return count;
             }
+            
+            // Append a Unicode sequence with length 'len' whose encoding is the
+            // same as the internal.
             template <typename StringEncoding> 
             size_t append_utf_str_impl(
                const typename StringEncoding::code_unit_type* str, std::size_t len,
                StringEncoding encoding,
                typename boost::enable_if<
-               boost::is_same<typename StringEncoding::code_unit_type, typename EncodingT::code_unit_type>
+                boost::is_same<StringEncoding,EncodingT>
                >::type* = 0 )
             {
                 append(str, len);
@@ -421,11 +437,18 @@ namespace json
             {
                 typedef typename StringEncoding::code_unit_type  code_unit_t;  
                 
+                // Use an unsafe, stateless converter which converts one UTF-8 character to its destination
+                typedef unicode::converter<
+                    UTF_8_encoding_tag, EncodingT, 
+                unicode::Validation::UNSAFE, unicode::Stateful::No, unicode::ParseOne::Yes> 
+                cvt_t;
+                
+                cvt_t cvt;
                 const code_unit_t* first = str;
                 size_t count = 0;
                 while (*first) {
                     reserve(size() + 4); // grow for max code units that can be generated
-                    int result = unicode::convert_one_unsafe(first, first + 4, StringEncoding(), p_, buffer_end_, EncodingT());
+                    int result = cvt.convert(first, first + 4, p_);
                     if (result > 0) {
                         count += result;
                     }
@@ -454,18 +477,26 @@ namespace json
                         >
                    >::type* = 0 )
             {
-                typedef typename StringEncoding::code_unit_type  code_unit_t;  
+                typedef typename StringEncoding::code_unit_type  code_unit_t;
                 
+                // Use an unsafe, stateless converter which converts one UTF-8
+                // character to its destination
+                typedef unicode::converter<
+                    UTF_8_encoding_tag, EncodingT, 
+                    unicode::Validation::UNSAFE, unicode::Stateful::No, unicode::ParseOne::Yes> 
+                cvt_t;
+                
+                cvt_t cvt;
                 const code_unit_t* first = str;
                 const code_unit_t* last = str + len;
                 size_t count = 0;
                 reserve(len); // reasonable grow, like reserve.
                 while (first < last) {
                     reserve(size() + 4); // if required, grow for max code units that can be generated
-                    int result = unicode::convert_one_unsafe(first, last, StringEncoding(), 
-                                                         p_, EncodingT());
+                    code_unit_t const* p_saved = p_;
+                    int result = cvt.convert(first, last, p_);
                     if (result > 0) {
-                        count += result;
+                        count += std::distance(p_saved, p_);
                     }
                     else {
                         break;  // ERROR:

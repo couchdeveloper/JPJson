@@ -27,7 +27,7 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/any.hpp>
 #include "json/unicode/unicode_utilities.hpp"
-#include "json/unicode/unicode_conversions.hpp"
+#include "json/unicode/unicode_conversion.hpp"
 #include "json/generator/generate.hpp"
 #include "json/value/string.hpp"
 #include <map>
@@ -95,6 +95,7 @@ namespace json { namespace internal {
             markers_.push_back(stack_.size());
             stack_.push_back(value_t(new boost::any(array_t()))); 
         }
+        
         void end_array_imp() {
             typedef typename stack_t::iterator iterator;
             string_representation_.append(1, ']');
@@ -107,12 +108,14 @@ namespace json { namespace internal {
             stack_.erase(container_iter+1, stack_.end());
             markers_.pop_back();
         }
+        
         void begin_object_imp() { 
             ++object_count_; 
             string_representation_.append(1, '{');
             markers_.push_back(stack_.size());
             stack_.push_back(value_t(new boost::any(object_t()))); 
         }
+        
         bool end_object_imp() 
         {            
             typedef typename stack_t::iterator iterator;
@@ -136,12 +139,15 @@ namespace json { namespace internal {
             markers_.pop_back();
             return result; 
         }
+        
         void begin_value_at_index_imp(size_t index) {
             if (index > 0) {
                 string_representation_.append(1, ',');
             }
         }
+        
         void end_value_at_index_imp(size_t index) {}
+        
         void begin_value_with_key_imp(const char_t* s, size_t len, size_t nth) {
             // push the key
             ++string_count_; 
@@ -149,47 +155,52 @@ namespace json { namespace internal {
                 string_representation_.append(1, ',');
             }
             string_representation_.append(1, '"');
-            int error;
             const char_t* first = s;
             std::back_insert_iterator<std::string> dest(string_representation_);
-            size_t count = json::generator_internal::escape_convert_unsafe(
-                s, s+len, EncodingT(),
+            int result = json::generator_internal::escape_convert_unsafe(
+                first, first+len, EncodingT(),
                 dest, json::unicode::UTF_8_encoding_tag(), 
-                false /*escape solidus*/,
-                error);   
-            assert(error==0);
+                false /*escape solidus*/);   
+            if (result != 0) {
+                throw std::runtime_error("escaping JSON string failed");
+            }
             string_representation_.append("\":");
-            stack_.push_back(value_t(new boost::any(make_string(first, len)))); 
+            stack_.push_back(value_t(new boost::any(make_string(s, len)))); 
         }
+        
         void end_value_with_key_imp(const char_t* s, size_t len, size_t nth) {}
+        
         void value_string_imp(const char_t* s, std::size_t len) { 
             assert(s != 0 and *s != 0 and len > 0);
             ++string_count_; 
             string_representation_.append(1, '"');
-            int error;
             const char_t* first = s;
             std::back_insert_iterator<std::string> dest(string_representation_);
-            size_t count = json::generator_internal::escape_convert_unsafe(
-                s, s+len, EncodingT(),
+            int result = json::generator_internal::escape_convert_unsafe(
+                first, first+len, EncodingT(),
                 dest, json::unicode::UTF_8_encoding_tag(), 
-                false /*escape solidus*/,
-                error);   
-            assert(error == 0);
+                false /*escape solidus*/);   
+            if (result != 0) {
+                throw std::runtime_error("escaping JSON string failed");
+            }
             string_representation_.append(1, '"');
-            std::string value = make_string(first, len);
+            std::string value = make_string(s, len);
             stack_.push_back(value_t(new boost::any(value))); 
         }
+        
         void value_number_imp(const nb_number_t& number) { 
             ++number_count_; 
             string_representation_.append(number.c_str(), number.c_str_len());
             stack_.push_back(value_t(new boost::any(number_t(number.c_str(), number.c_str_len())))); 
         }
+        
         void value_boolean_imp(bool b) { 
             ++boolean_count_; 
             const char* v = b ? "true" : "false";
             string_representation_.append(v);
             stack_.push_back(value_t(new boost::any(boolean_t(b)))); 
         }
+        
         void value_null_imp() { 
             ++null_count_; 
             string_representation_.append("null");
@@ -239,13 +250,11 @@ namespace json { namespace internal {
         {
             assert(s != 0 and *s != 0 and len > 0);
             std::string result;
-            int error;
             std::back_insert_iterator<std::string> dest(result);
-            size_t count = json::unicode::convert_unsafe(
-                s, s+len, EncodingT(),
-                dest, json::unicode::UTF_8_encoding_tag(), 
-                error);   
-            assert(error==0 and count > 0);
+            const char_t* first = s;
+            int cvt_result = unicode::convert(first, first + len, EncodingT(), 
+                                              dest, json::unicode::UTF_8_encoding_tag());
+            assert(cvt_result==unicode::NO_ERROR);
             return result;
         }
         

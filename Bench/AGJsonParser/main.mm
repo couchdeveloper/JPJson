@@ -18,6 +18,11 @@
 //  limitations under the License.
 //
 
+
+
+// The bench links against the static library libjson.a.
+
+
 #import <Foundation/Foundation.h>
 #import "JPJson/JPSemanticActions.h"
 #import "JPJson/JPStreamSemanticActions.h"
@@ -40,16 +45,6 @@
 
 
 
-
-#if defined (BOOST_STRICT_CONFIG)
-#warning BOOST_STRICT_CONFIG defined
-#endif
-
-#if defined (BOOST_DISABLE_THREADS)
-#warning BOOST_DISABLE_THREADS defined
-#endif
-
-
 //------------------------------------------------------------------------------
 //
 //  Runs benchmark test using the JPJsonLib Interface Methods 
@@ -57,8 +52,21 @@
 //------------------------------------------------------------------------------
 
 
-
 namespace {
+    
+    const char* NSStringEncodingToString(NSStringEncoding encoding) {
+        switch (encoding) 
+        {
+            case NSUTF8StringEncoding: return "NSUTF8StringEncoding";
+            case NSUTF16StringEncoding: return "NSUTF16StringEncoding";
+            case NSUTF16BigEndianStringEncoding: return "NSUTF16BigEndianStringEncoding";
+            case NSUTF16LittleEndianStringEncoding: return "NSUTF16LittleEndianStringEncoding";
+            case NSUTF32StringEncoding: return "NSUTF32StringEncoding";
+            case NSUTF32BigEndianStringEncoding: return "NSUTF32BigEndianStringEncoding";
+            case NSUTF32LittleEndianStringEncoding: return "NSUTF32LittleEndianStringEncoding";
+            default: return "invalid encoding";                
+        }
+    }
 
     // Path to a JSON file which is used globally for all tests.
     NSString* JSON_TEST_FILE = @"Test-UTF8-esc.json";
@@ -96,9 +104,12 @@ namespace {
     
     typedef     MinMaxAvg<double> MinMaxAvgTime;
     
+} // namespace     
     
+
+
 #pragma mark -
-    
+namespace {    
     
     // -----------------------------------------------------------------------------
     //  bench_AGJsonParserString1()
@@ -127,14 +138,21 @@ namespace {
             NSLog(@"ERROR: could not load file. %@", error);
             NSFileManager* fileManager = [[NSFileManager alloc] init];
             NSLog(@"current working directory: %@", [fileManager currentDirectoryPath]);
+            [fileManager release];
             abort();
         }    
-        
+                
         NSStringEncoding encoding = [data jpj_detectUnicodeNSStringEncoding];
+        printf("Input file: %s, size: %d, encoding: %s\n", 
+               [JSON_TEST_FILE UTF8String], (int)[data length], NSStringEncodingToString(encoding));
+        
         if (encoding == -1) {
             NSLog(@"ERROR: NSData doesn't contain text encoded in Unicode");
             abort();
         }
+        
+        
+        
         NSString* input = [[NSString alloc] initWithBytes:[data bytes] length:[data length] encoding:encoding];
         [data release]; data = nil;
         
@@ -150,7 +168,7 @@ namespace {
             // This method creates and destroys the internal semantic actions
             // instance.
             id result = [JPJsonParser parseString:input 
-                                          options:(JPJsonParserOptions)(0)
+                                          options:(JPJsonParserOptions)(JPJsonParserCreateMutableContainers)
                                             error:&error];
             [result retain];
             t.stop();
@@ -174,7 +192,7 @@ namespace {
             NSLog(@"ERROR: %@", error);
         }
         else {
-            NSLog(@"AGJsonParser: elapsed time for parsing:\nmin: %.3f ms, max: %0.3f ms, avg: %0.3f ms\n", 
+            printf("AGJsonParser: elapsed time for parsing:\nmin: %.3f ms, max: %0.3f ms, avg: %0.3f ms\n", 
                   te.min()*1e3, te.max()*1e3, te.avg()*1e3);
         }
     }
@@ -214,6 +232,15 @@ namespace {
             abort();
         }
         
+        NSStringEncoding encoding = [data jpj_detectUnicodeNSStringEncoding];
+        printf("Input file: %s, size: %d, encoding: %s\n", 
+               [JSON_TEST_FILE UTF8String], (int)[data length], NSStringEncodingToString(encoding));
+        
+        if (encoding == -1) {
+            NSLog(@"ERROR: NSData doesn't contain text encoded in Unicode");
+            abort();
+        }
+        
         
         MinMaxAvg<double> te;
         timer t = timer();
@@ -251,6 +278,8 @@ namespace {
             NSLog(@"JPJsonParser: elapsed time for parsing:\nmin: %.3f ms, max: %0.3f ms, avg: %0.3f ms\n", 
                   te.min()*1e3, te.max()*1e3, te.avg()*1e3);
         }
+        
+        [data release];
     }
     
     
@@ -289,6 +318,16 @@ namespace {
             abort();
         }
         
+        NSStringEncoding encoding = [data jpj_detectUnicodeNSStringEncoding];
+        printf("Input file: %s, size: %d, encoding: %s\n", 
+               [JSON_TEST_FILE UTF8String], (int)[data length], NSStringEncodingToString(encoding));
+        
+        if (encoding == -1) {
+            NSLog(@"ERROR: NSData doesn't contain text encoded in Unicode");
+            abort();
+        }
+        
+        
         MinMaxAvg<double> te;
         timer t = timer();
         
@@ -325,6 +364,8 @@ namespace {
             NSLog(@"JPJsonParser: elapsed time for parsing:\nmin: %.3f ms, max: %0.3f ms, avg: %0.3f ms\n", 
                   te.min()*1e3, te.max()*1e3, te.avg()*1e3);
         }
+        
+        [data release];
     }
     
     
@@ -362,6 +403,15 @@ namespace {
             abort();
         }
         
+        NSStringEncoding encoding = [data jpj_detectUnicodeNSStringEncoding];
+        printf("Input file: %s, size: %d, encoding: %s\n", 
+               [JSON_TEST_FILE UTF8String], (int)[data length], NSStringEncodingToString(encoding));
+        
+        if (encoding == -1) {
+            NSLog(@"ERROR: NSData doesn't contain text encoded in Unicode");
+            abort();
+        }
+        
         MinMaxAvg<double> te;
         timer t = timer();
         
@@ -380,6 +430,7 @@ namespace {
             t.reset();
             if (!success) {
                 error = sa.error;
+                [sa release];
                 break;
             }
             [sa release];
@@ -393,6 +444,8 @@ namespace {
             NSLog(@"AGJsonParser: elapsed time for parsing:\nmin: %.3f ms, max: %0.3f ms, avg: %0.3f ms\n", 
                   te.min()*1e3, te.max()*1e3, te.avg()*1e3);
         }
+        
+        [data release];
     }
     
     
@@ -428,6 +481,15 @@ namespace {
             NSLog(@"current working directory: %@", [fileManager currentDirectoryPath]);
             abort();
         }
+        
+        NSStringEncoding encoding = [data jpj_detectUnicodeNSStringEncoding];
+        printf("Input file: %s, size: %d, encoding: %s\n", 
+               [JSON_TEST_FILE UTF8String], (int)[data length], NSStringEncodingToString(encoding));
+        
+        if (encoding == -1) {
+            NSLog(@"ERROR: NSData doesn't contain text encoded in Unicode");
+            abort();
+        }
 
         MinMaxAvg<double> te;
         timer t = timer();
@@ -460,6 +522,8 @@ namespace {
             NSLog(@"JPJsonParser: elapsed time for parsing:\nmin: %.3f ms, max: %0.3f ms, avg: %0.3f ms\n", 
                   te.min()*1e3, te.max()*1e3, te.avg()*1e3);
         }
+        
+        [data release];
     }
     
     
@@ -497,6 +561,14 @@ namespace {
             abort();
         }
         
+        NSStringEncoding encoding = [data jpj_detectUnicodeNSStringEncoding];
+        printf("Input file: %s, size: %d, encoding: %s\n", 
+               [JSON_TEST_FILE UTF8String], (int)[data length], NSStringEncodingToString(encoding));
+        
+        if (encoding == -1) {
+            NSLog(@"ERROR: NSData doesn't contain text encoded in Unicode");
+            abort();
+        }
         
         MinMaxAvg<double> te;
         timer t = timer();
@@ -528,6 +600,8 @@ namespace {
             NSLog(@"JPJsonParser: elapsed time for parsing:\nmin: %.3f ms, max: %0.3f ms, avg: %0.3f ms\n", 
                   te.min()*1e3, te.max()*1e3, te.avg()*1e3);
         }
+        
+        [data release];
     }
     
 
@@ -565,6 +639,16 @@ namespace {
             NSLog(@"current working directory: %@", [fileManager currentDirectoryPath]);
             abort();
         }
+        
+        NSStringEncoding encoding = [data jpj_detectUnicodeNSStringEncoding];
+        printf("Input file: %s, size: %d, encoding: %s\n", 
+               [JSON_TEST_FILE UTF8String], (int)[data length], NSStringEncodingToString(encoding));
+        
+        if (encoding == -1) {
+            NSLog(@"ERROR: NSData doesn't contain text encoded in Unicode");
+            abort();
+        }
+        
         
         __block BOOL gotError = NO;
         
@@ -667,10 +751,14 @@ namespace {
         
         
         NSStringEncoding encoding = [data jpj_detectUnicodeNSStringEncoding];
+        printf("Input file: %s, size: %d, encoding: %s\n", 
+               [JSON_TEST_FILE UTF8String], (int)[data length], NSStringEncodingToString(encoding));
+        
         if (encoding == -1) {
             NSLog(@"ERROR: NSData doesn't contain text encoded in Unicode");
             abort();
         }
+        
         NSString* input = [[NSString alloc] initWithBytes:[data bytes] length:[data length] encoding:encoding];
         
         MinMaxAvg<double> te;
@@ -738,6 +826,15 @@ namespace {
             NSLog(@"current working directory: %@", [fileManager currentDirectoryPath]);
             abort();
         }
+        NSStringEncoding encoding = [data jpj_detectUnicodeNSStringEncoding];
+        printf("Input file: %s, size: %d, encoding: %s\n", 
+               [JSON_TEST_FILE UTF8String], (int)[data length], NSStringEncodingToString(encoding));
+        
+        if (encoding == -1) {
+            NSLog(@"ERROR: NSData doesn't contain text encoded in Unicode");
+            abort();
+        }
+        
         MinMaxAvg<double> te;
         timer t = timer();
         
@@ -791,6 +888,15 @@ namespace {
             NSLog(@"ERROR: could not load file. %@", error);
             NSFileManager* fileManager = [[NSFileManager alloc] init];
             NSLog(@"current working directory: %@", [fileManager currentDirectoryPath]);
+            abort();
+        }
+        
+        NSStringEncoding encoding = [data jpj_detectUnicodeNSStringEncoding];
+        printf("Input file: %s, size: %d, encoding: %s\n", 
+               [JSON_TEST_FILE UTF8String], (int)[data length], NSStringEncodingToString(encoding));
+        
+        if (encoding == -1) {
+            NSLog(@"ERROR: NSData doesn't contain text encoded in Unicode");
             abort();
         }
         
@@ -853,6 +959,18 @@ namespace {
             NSLog(@"current working directory: %@", [fileManager currentDirectoryPath]);
             abort();
         }
+        
+        NSStringEncoding encoding = [data jpj_detectUnicodeNSStringEncoding];
+        printf("Input file: %s, size: %d, encoding: %s\n", 
+               [JSON_TEST_FILE UTF8String], (int)[data length], NSStringEncodingToString(encoding));
+        
+        if (encoding == -1) {
+            NSLog(@"ERROR: NSData doesn't contain text encoded in Unicode");
+            abort();
+        }
+        
+        
+        
         MinMaxAvg<double> te;
         timer t = timer();
         
@@ -882,6 +1000,8 @@ namespace {
             NSLog(@"NSJSONSerialization: elapsed time for parsing:\nmin: %.3f ms, max: %0.3f ms, avg: %0.3f ms\n", 
                   te.min()*1e3, te.max()*1e3, te.avg()*1e3);
         }
+        
+        [data release];
     }
     
     void bench_NSJSONSerialization2(const int N, bool printInfo = false)
@@ -908,6 +1028,17 @@ namespace {
             NSLog(@"current working directory: %@", [fileManager currentDirectoryPath]);
             abort();
         }
+        
+        NSStringEncoding encoding = [data jpj_detectUnicodeNSStringEncoding];
+        printf("Input file: %s, size: %d, encoding: %s\n", 
+               [JSON_TEST_FILE UTF8String], (int)[data length], NSStringEncodingToString(encoding));
+        
+        if (encoding == -1) {
+            NSLog(@"ERROR: NSData doesn't contain text encoded in Unicode");
+            abort();
+        }
+        
+        
         MinMaxAvg<double> te;
         timer t = timer();
         
@@ -937,6 +1068,8 @@ namespace {
             NSLog(@"NSJSONSerialization: elapsed time for parsing:\nmin: %.3f ms, max: %0.3f ms, avg: %0.3f ms\n", 
                   te.min()*1e3, te.max()*1e3, te.avg()*1e3);
         }
+        
+        [data release];
     }
     
 
@@ -956,11 +1089,12 @@ int main (int argc, const char * argv[])
 
     
     NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
+    
+    NSLog(@"Start Bench");
         
-    //bench_AGJsonParserCharIter(N);
-    //bench_AGJsonParserString1(N);
+    bench_AGJsonParserString1(N);
     bench_AGJsonParser1a(N);
-/*    
+    bench_AGJsonParser1b(N);
     bench_AGJsonParser1b(N);
     bench_AGJsonParser1x(N);
     bench_AGJsonParser2(N);
@@ -970,9 +1104,10 @@ int main (int argc, const char * argv[])
     bench_JSONKit2(N);
     bench_JSONKitString1(N);
 #endif    
+#if 1    
     bench_NSJSONSerialization1(N);
     bench_NSJSONSerialization2(N);
-*/    
+#endif    
     [pool drain];
     return 0;
 }

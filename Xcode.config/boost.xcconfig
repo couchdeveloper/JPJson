@@ -1,0 +1,10 @@
+//
+//  boost.xcconfig
+//  
+//
+//  Created by Andreas Grosam on 12/1/11.
+//  Copyright (c) 2011 __MyCompanyName__. All rights reserved.
+//
+
+BOOST_HEADER_SEARCH_PATHS = $(BOOST_ROOT)
+BOOST_GCC_PREPROCESSOR_DEFINITIONS = BOOST_DISABLE_THREADS BOOST_STRICT_CONFIG  

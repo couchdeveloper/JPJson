@@ -19,6 +19,7 @@
 //
 
 #include "json/unicode/unicode_utilities.hpp"
+#include "json/unicode/unicode_traits.hpp"
 #include "gtest/gtest.h"
 
 #include <iostream>
@@ -29,8 +30,8 @@
 // for testing
 #include <unicode/ustring.h>
 #include <unicode/utf.h>
-#include <unicode/utf8.h>
-#include <unicode/utf16.h>
+//#include <unicode/utf8.h>
+//#include <unicode/utf16.h>
 #include <limits>
 
 #include <boost/utility.hpp>
@@ -41,10 +42,10 @@
 using namespace json;
 
 
-namespace {
+namespace test {
     
     
-    using namespace json::unicode;
+    using namespace json;
     
     
     template <typename InEncodingT, typename OutEncodingT>
@@ -53,6 +54,123 @@ namespace {
         typedef OutEncodingT    to_encoding_t;
     };
     
+    
+    int inline icu_utf8_count_trail_bytes(uint8_t leadByte) {
+#if 0        
+        uint8_t buffer[5] = {};
+        UChar32 ignored;
+        buffer[0] = leadByte;
+        int offset = 0;
+        U8_NEXT_UNSAFE(buffer, offset, ignored);
+        return offset - 1;
+#else
+        return U8_COUNT_TRAIL_BYTES(leadByte);
+#endif        
+    }
+    
+}
+
+#pragma mark - UTF Encoding Tag
+    
+ 
+namespace test {
+    //    Bytes           Encoding Form
+    //    ---------------------------------------
+    //    00 00 FE FF     UTF-32, big-endian
+    //    FF FE 00 00     UTF-32, little-endian
+    //    FE FF           UTF-16, big-endian
+    //    FF FE           UTF-16, little-endian
+    //    EF BB BF        UTF-8
+    
+    
+    template <typename Encoding>
+    struct bom_bytes {
+    };
+    
+    template <>
+    struct bom_bytes<unicode::UTF_8_encoding_tag> {
+        typedef boost::array<uint8_t, 3> array_t;
+        static array_t bom() { 
+            array_t result = {{0xEF, 0xBB, 0xBF}};
+            return result;
+        }
+    };
+        
+        
+    template <>
+    struct bom_bytes<unicode::UTF_16_encoding_tag> {
+        typedef boost::array<uint8_t, 2> array_t;
+        static array_t bom() { 
+#if defined(BOOST_LITTLE_ENDIAN)
+            array_t result = {{0xFF, 0xFE}};
+#else
+            array_t result = {{0xFE, 0xFF}};
+#endif            
+            return result;
+        }
+    };
+        
+    
+    template <>
+    struct bom_bytes<unicode::UTF_16BE_encoding_tag> {
+        typedef boost::array<uint8_t, 2> array_t;
+        static array_t bom() { 
+            array_t result = {{0xFE, 0xFF}};
+            return result;
+        }
+    };
+    
+    template <>
+    struct bom_bytes<unicode::UTF_16LE_encoding_tag> {
+        typedef boost::array<uint8_t, 2> array_t;
+        static array_t bom() { 
+            array_t result = {{0xFF, 0xFE}};
+            return result;
+        }
+    };
+    
+
+    template <>
+    struct bom_bytes<unicode::UTF_32_encoding_tag> {
+        typedef boost::array<uint8_t, 4> array_t;
+        static array_t bom() { 
+#if defined(BOOST_LITTLE_ENDIAN)
+            array_t result = {{0xFF, 0xFE, 0x00, 0x00}};
+#else
+            array_t result = {{0x00, 0x00, 0xFE, 0xFF}};
+#endif            
+            return result;
+        }
+    };
+                
+    template <>
+    struct bom_bytes<unicode::UTF_32BE_encoding_tag> {
+        typedef boost::array<uint8_t, 4> array_t;
+        static array_t bom() { 
+            array_t result = {{0x00, 0x00, 0xFE, 0xFF}};
+            return result;
+        }
+    };
+    
+    template <>
+    struct bom_bytes<unicode::UTF_32LE_encoding_tag> {
+        typedef boost::array<uint8_t, 4> array_t;
+        static array_t bom() { 
+            array_t result = {{0xFF, 0xFE, 0x00, 0x00}};
+            return result;
+        }
+    };
+    
+    
+}
+
+namespace {
+    
+    using namespace json;
+        
+    typedef unicode::UTF_8_encoding_traits::code_unit_type utf8_code_unit;
+    typedef unicode::UTF_16_encoding_traits::code_unit_type utf16_code_unit;
+    typedef unicode::UTF_32_encoding_traits::code_unit_type utf32_code_unit;
     
     template <typename T>
     class UTF_Encoding_tag_test : public ::testing::Test {
@@ -85,99 +203,8 @@ namespace {
     };
     
     
-    
     TYPED_TEST_CASE_P(UTF_Encoding_tag_test);
-    
-    
-#pragma mark - UTF Encoding Tag
-    
-    
-    //    Bytes           Encoding Form
-    //    ---------------------------------------
-    //    00 00 FE FF     UTF-32, big-endian
-    //    FF FE 00 00     UTF-32, little-endian
-    //    FE FF           UTF-16, big-endian
-    //    FF FE           UTF-16, little-endian
-    //    EF BB BF        UTF-8
-    
-    
-    template <typename Encoding>
-    struct bom_bytes {
-    };
-    
-    template <>
-    struct bom_bytes<UTF_8_encoding_tag> {
-        typedef boost::array<uint8_t, 3> array_t;
-        static array_t bom() { 
-            array_t result = {{0xEF, 0xBB, 0xBF}};
-            return result;
-        }
-    };
         
-        
-    template <>
-    struct bom_bytes<UTF_16_encoding_tag> {
-        typedef boost::array<uint8_t, 2> array_t;
-        static array_t bom() { 
-#if defined(BOOST_LITTLE_ENDIAN)
-            array_t result = {{0xFF, 0xFE}};
-#else
-            array_t result = {{0xFE, 0xFF}};
-#endif            
-            return result;
-        }
-    };
-        
-    
-    template <>
-    struct bom_bytes<UTF_16BE_encoding_tag> {
-        typedef boost::array<uint8_t, 2> array_t;
-        static array_t bom() { 
-            array_t result = {{0xFE, 0xFF}};
-            return result;
-        }
-    };
-    
-    template <>
-    struct bom_bytes<UTF_16LE_encoding_tag> {
-        typedef boost::array<uint8_t, 2> array_t;
-        static array_t bom() { 
-            array_t result = {{0xFF, 0xFE}};
-            return result;
-        }
-    };
-    
-
-    template <>
-    struct bom_bytes<UTF_32_encoding_tag> {
-        typedef boost::array<uint8_t, 4> array_t;
-        static array_t bom() { 
-#if defined(BOOST_LITTLE_ENDIAN)
-            array_t result = {{0xFF, 0xFE, 0x00, 0x00}};
-#else
-            array_t result = {{0x00, 0x00, 0xFE, 0xFF}};
-#endif            
-            return result;
-        }
-    };
-                
-    template <>
-    struct bom_bytes<UTF_32BE_encoding_tag> {
-        typedef boost::array<uint8_t, 4> array_t;
-        static array_t bom() { 
-            array_t result = {{0x00, 0x00, 0xFE, 0xFF}};
-            return result;
-        }
-    };
-    
-    template <>
-    struct bom_bytes<UTF_32LE_encoding_tag> {
-        typedef boost::array<uint8_t, 4> array_t;
-        static array_t bom() { 
-            array_t result = {{0xFF, 0xFE, 0x00, 0x00}};
-            return result;
-        }
-    };
     
     
     
@@ -186,22 +213,22 @@ namespace {
         // Inside a test, refer to TypeParam to get the type parameter.
         
         typedef TypeParam                               EncodingTag;
-        typedef typename EncodingTag::bom_type          bom_type;
-        typedef typename EncodingTag::code_unit_type    code_unit_t;
+        typedef typename unicode::encoding_traits<EncodingTag>::bom_type          bom_type;
+        typedef typename unicode::encoding_traits<EncodingTag>::code_unit_type    code_unit_t;
         
         union bom_t {
             bom_type    bom;
             uint8_t     bytes[8];
         };        
         bom_t bom;
-        bom.bom = EncodingTag::bom();
+        bom.bom = unicode::encoding_traits<EncodingTag>::bom();
         
-        const int test_bom_byte_size = EncodingTag::bom_byte_size;
-        const int ref_bom_byte_size = (int)bom_bytes<EncodingTag>::bom().size();
+        const int test_bom_byte_size = unicode::encoding_traits<EncodingTag>::bom_byte_size;
+        const int ref_bom_byte_size = (int)test::bom_bytes<EncodingTag>::bom().size();
         
         EXPECT_EQ(ref_bom_byte_size, test_bom_byte_size);
         for (int i = 0; i < ref_bom_byte_size; ++i) {
-            EXPECT_EQ(bom_bytes<EncodingTag>::bom()[i], bom.bytes[i]);
+            EXPECT_EQ(test::bom_bytes<EncodingTag>::bom()[i], bom.bytes[i]);
         }
     }
     
@@ -214,18 +241,17 @@ namespace {
     
     // Instantiate test cases:
     typedef ::testing::Types<
-        UTF_8_encoding_tag, 
-        UTF_16_encoding_tag,
-        UTF_16BE_encoding_tag,
-        UTF_16LE_encoding_tag,
-        UTF_32_encoding_tag,
-        UTF_32BE_encoding_tag,
-        UTF_32LE_encoding_tag
+        unicode::UTF_8_encoding_tag, 
+        unicode::UTF_16_encoding_tag,
+        unicode::UTF_16BE_encoding_tag,
+        unicode::UTF_16LE_encoding_tag,
+        unicode::UTF_32_encoding_tag,
+        unicode::UTF_32BE_encoding_tag,
+        unicode::UTF_32LE_encoding_tag
     >  UTF_encodings;
     
     
     INSTANTIATE_TYPED_TEST_CASE_P(BOM_Tests, UTF_Encoding_tag_test, UTF_encodings);
-    
     
 }
 
@@ -267,6 +293,50 @@ namespace {
     };
     
 
+    TEST_F(utilities_test, UTFEncodingConstantToEncodingType) {
+        
+        EXPECT_TRUE( (boost::is_same<
+                      encoding_to_tag<UnicodeEncoding_UTF8>::type,
+                      UTF_8_encoding_tag
+                      >::value ));        
+        
+        EXPECT_TRUE( (boost::is_same<
+                      encoding_to_tag<UnicodeEncoding_UTF16>::type,
+                      UTF_16_encoding_tag
+                      >::value ));        
+        
+        EXPECT_TRUE( (boost::is_same<
+                      encoding_to_tag<UnicodeEncoding_UTF16LE>::type,
+                      UTF_16LE_encoding_tag
+                      >::value ));        
+        
+        EXPECT_TRUE( (boost::is_same<
+                      encoding_to_tag<UnicodeEncoding_UTF16BE>::type,
+                      UTF_16BE_encoding_tag
+                      >::value ));        
+        
+        EXPECT_TRUE( (boost::is_same<
+                      encoding_to_tag<UnicodeEncoding_UTF32>::type,
+                      UTF_32_encoding_tag
+                      >::value ));        
+        
+        EXPECT_TRUE( (boost::is_same<
+                      encoding_to_tag<UnicodeEncoding_UTF32LE>::type,
+                      UTF_32LE_encoding_tag
+                      >::value ));        
+        
+        EXPECT_TRUE( (boost::is_same<
+                      encoding_to_tag<UnicodeEncoding_UTF32BE>::type,
+                      UTF_32BE_encoding_tag
+                      >::value ));        
+        
+        EXPECT_TRUE( (boost::is_same<
+                      encoding_to_tag<PlatformEncoding>::type,
+                      platform_encoding_tag
+                      >::value ));        
+        
+    }
+    
     
     
 #pragma mark - Endian
@@ -281,6 +351,11 @@ namespace {
         typedef UTF_32BE_encoding_tag UTF_32host_encoding_tag;
 #endif        
         
+        EXPECT_TRUE( (boost::is_same<
+                      to_host_endianness<UTF_8_encoding_tag>::type,
+                      UTF_8_encoding_tag
+                      >::value ));
+                
         EXPECT_TRUE( (boost::is_same<
                       to_host_endianness<UTF_16_encoding_tag>::type,
                       UTF_16host_encoding_tag
@@ -312,12 +387,66 @@ namespace {
                       >::value ));
         
         EXPECT_TRUE( (boost::is_same<
-                      to_host_endianness<UTF_8_encoding_tag>::type,
+                      to_host_endianness<platform_encoding_tag>::type,
+                      platform_encoding_tag
+                      >::value ));
+    }
+
+
+    TEST_F(utilities_test, AddHostEndianConversion) {
+        
+#if defined(BOOST_LITTLE_ENDIAN)
+        typedef UTF_16LE_encoding_tag UTF_16host_encoding_tag;
+        typedef UTF_32LE_encoding_tag UTF_32host_encoding_tag;
+#else
+        typedef UTF_16BE_encoding_tag UTF_16host_encoding_tag;
+        typedef UTF_32BE_encoding_tag UTF_32host_encoding_tag;
+#endif        
+        
+        EXPECT_TRUE( (boost::is_same<
+                      add_endianness<UTF_8_encoding_tag>::type,
                       UTF_8_encoding_tag
                       >::value ));
         
+        EXPECT_TRUE( (boost::is_same<
+                      add_endianness<UTF_16_encoding_tag>::type,
+                      UTF_16host_encoding_tag
+                      >::value ));
+        
+        EXPECT_TRUE( (boost::is_same<
+                      add_endianness<UTF_16LE_encoding_tag>::type,
+                      UTF_16LE_encoding_tag
+                      >::value ));
+        
+        EXPECT_TRUE( (boost::is_same<
+                      add_endianness<UTF_16BE_encoding_tag>::type,
+                      UTF_16BE_encoding_tag
+                      >::value ));
+        
+        EXPECT_TRUE( (boost::is_same<
+                      add_endianness<UTF_32_encoding_tag>::type,
+                      UTF_32host_encoding_tag
+                      >::value ));
+        
+        EXPECT_TRUE( (boost::is_same<
+                      add_endianness<UTF_32LE_encoding_tag>::type,
+                      UTF_32LE_encoding_tag
+                      >::value ));
+        
+        EXPECT_TRUE( (boost::is_same<
+                      add_endianness<UTF_32BE_encoding_tag>::type,
+                      UTF_32BE_encoding_tag
+                      >::value ));
+        
+        EXPECT_TRUE( (boost::is_same<
+                      add_endianness<platform_encoding_tag>::type,
+                      platform_encoding_tag
+                      >::value ));
     }
+    
 
+    
+    
     
 #pragma mark -
 #pragma mark Unicode Code Point
@@ -455,7 +584,7 @@ namespace {
         }
     }
     
-    TEST_F(utilities_test, utf8_is_lead_unsigend_char) {
+    TEST_F(utilities_test, utf8_is_lead_unsigned_char) {
         int first = std::numeric_limits<unsigned char>::min();
         int last = std::numeric_limits<unsigned char>::max();
         for (int i = first; i <= last; ++i) {
@@ -467,7 +596,7 @@ namespace {
         }
     }
     
-    TEST_F(utilities_test, utf8_is_lead_sigend_char) 
+    TEST_F(utilities_test, utf8_is_lead_signed_char) 
     {
         int first = std::numeric_limits<signed char>::min();
         int last = std::numeric_limits<signed char>::max();
@@ -562,15 +691,19 @@ namespace {
         }
     }
     
-    TEST_F(utilities_test, utf8_num_trails) {      
+    TEST_F(utilities_test, utf8_num_trails) {   
         int failCount = 0;
         for (code_point_t i = 0; i < 255; ++i) {
+            int ref_result = -1;
             if (utf8_is_single(i) or utf8_is_lead(i)) {
-                int result = utf8_num_trails(i);
-                int icu_result = U8_COUNT_TRAIL_BYTES(i);
-                failCount += result != icu_result ? 1 : 0;
-                EXPECT_EQ(icu_result, result) 
-                << "with UTF-8 code unit: 0x" << std::hex << i;
+                ref_result = test::icu_utf8_count_trail_bytes(static_cast<uint8_t>(i));
+            }
+            int result = utf8_num_trails(i);
+            if (ref_result != result) {
+                ++failCount;
+                EXPECT_EQ(ref_result, result) 
+                << "with UTF-8 code unit: 0x" << std::hex << i << " is single: " << (utf8_is_single(i) ? "yes" : "no  ") 
+                <<  "is lead byte: " << (utf8_is_lead(i) ? "yes" : "no") << std::endl;
                 if (failCount > 10) {
                     break;
                 }

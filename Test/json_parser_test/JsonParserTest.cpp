@@ -29,7 +29,7 @@
 #include "json/endian/byte_swap_iterator.hpp"
 #include "json/parser/semantic_actions.hpp"
 #include "json/parser/semantic_actions_test.hpp"
-#include "json/unicode/unicode_conversions.hpp"
+//#include "json/unicode/unicode_conversion.hpp"
 #include "json/parser/parser_errors.hpp"
 
 
@@ -78,7 +78,10 @@ namespace {
     
     
     // The fixture for testing class JsonParser.
-    class JsonParserTest : public ::testing::Test {
+    class JsonParserTest : public ::testing::Test 
+    {
+        
+        
     protected:
         // You can remove any or all of the following functions if its body
         // is empty.
@@ -111,26 +114,99 @@ namespace {
     };
     
     
-    TEST_F(JsonParserTest, TestDefaultCtor) 
+    typedef json::semantic_actions_noop<unicode::UTF_8_encoding_tag> sa_noop_t;
+    typedef json::internal::semantic_actions_test<unicode::UTF_8_encoding_tag>  sa_test_t;
+    
+    typedef parser<const char*, unicode::UTF_8_encoding_tag, sa_noop_t> NoopParser;
+    typedef parser<const char*, unicode::UTF_8_encoding_tag, sa_test_t> TestParser;
+    
+    
+    TEST_F(JsonParserTest, TestParserDefaultCtor) 
     {
-        typedef json::semantic_actions_noop<UTF_8_encoding_tag> sa_noop_t;
-        typedef parser<const char*, UTF_8_encoding_tag, 
-            json::internal::semantic_actions_test<UTF_8_encoding_tag> > TestParser;
-        typedef parser<const char*, UTF_8_encoding_tag, sa_noop_t> ValidatingParser;
+        typedef TestParser parser_t;
+        typedef parser_t::state_t parse_state_t;
+        typedef parser_t::semantic_actions_type semantic_actions_t;
+        typedef json::parser_error_type error_type;
         
-        TestParser::semantic_actions_t sa;
-        TestParser parser(sa);
-        const TestParser::state_t& state = parser.state();
-        TestParser::result_t result = parser.result();
-        EXPECT_EQ( JP_NO_ERROR, state.error() );
-        EXPECT_EQ("no error", std::string(state.error_str()));
+        semantic_actions_t sa;
+        parser_t parser(sa);
+        EXPECT_EQ(json::JP_NO_ERROR, parser.state().error());
+        EXPECT_EQ("no error", std::string(parser.state().error_str()));
+        EXPECT_TRUE(sa.result() == 0);
         
         parser.reset();
-        result = parser.result();
-        EXPECT_EQ( JP_NO_ERROR, state.error() );
-        EXPECT_EQ("no error", std::string(state.error_str()));
-        result = parser.move_result();
+        EXPECT_EQ( JP_NO_ERROR, parser.state().error() );
+        EXPECT_EQ("no error", std::string(parser.state().error_str()));
+        EXPECT_TRUE(sa.result() == 0);
     }
+    
+    TEST_F(JsonParserTest, NoopParserDefaultCtor) 
+    {
+        typedef NoopParser parser_t;
+        typedef parser_t::state_t parse_state_t;
+        typedef parser_t::semantic_actions_type semantic_actions_t;
+        typedef json::parser_error_type error_type;
+        
+        semantic_actions_t sa;
+        parser_t parser(sa);
+        EXPECT_EQ(json::JP_NO_ERROR, parser.state().error());
+        EXPECT_EQ("no error", std::string(parser.state().error_str()));
+        EXPECT_TRUE(sa.result() == 0);
+        
+        parser.reset();
+        EXPECT_EQ( JP_NO_ERROR, parser.state().error() );
+        EXPECT_EQ("no error", std::string(parser.state().error_str()));
+        EXPECT_TRUE(sa.result() == 0);
+    }
+    
+    
+    
+    
+    TEST_F(JsonParserTest, TestParserBasicErrors)  
+    {
+        typedef TestParser parser_t;
+        typedef parser_t::state_t parse_state_t;
+        typedef parser_t::semantic_actions_type semantic_actions_t;
+        typedef json::parser_error_type error_type;
+        
+        const char* s = "     ";
+        const char* first = s;
+        const char* last = s + strlen(s);
+        
+        semantic_actions_t sa;        
+        sa.log_level(json::semanticactions::LogLevelNone);
+        parser_t parser(sa);
+        error_type error = parser.parse(first, last);
+        const parse_state_t& state = parser.state();
+        EXPECT_TRUE (first == last);
+        EXPECT_EQ(json::JP_EMPTY_TEXT_ERROR, error);
+        EXPECT_EQ(json::JP_EMPTY_TEXT_ERROR, state.error() );
+        EXPECT_TRUE(sa.result() == 0);
+    }
+    
+    TEST_F(JsonParserTest, NoopParserBasicErrors)  
+    {
+        typedef NoopParser parser_t;
+        typedef parser_t::state_t parse_state_t;
+        typedef parser_t::semantic_actions_type semantic_actions_t;
+        typedef json::parser_error_type error_type;
+        
+        const char* s = "     ";
+        const char* first = s;
+        const char* last = s + strlen(s);
+        
+        semantic_actions_t sa;
+        sa.log_level(json::semanticactions::LogLevelNone);
+        parser_t parser(sa);
+        error_type error = parser.parse(first, last);
+        const parse_state_t& state = parser.state();
+        EXPECT_TRUE (first == last);
+        EXPECT_EQ(json::JP_EMPTY_TEXT_ERROR, error);
+        EXPECT_EQ(json::JP_EMPTY_TEXT_ERROR, state.error() );
+        EXPECT_TRUE(sa.result() == 0);
+    }
+    
+   
     
 /*    
     TEST_F(JsonParserTest, TestParseMemberFunction0) 
@@ -155,41 +231,31 @@ namespace {
     //  Test Error Conditions
     // 
      
-    TEST_F(JsonParserTest, TestParse_Error_ENOTEXT)  
-    {
-        // Validating Parser
-        
-        const char* s = "     ";
-        typedef const char* InputIterator;
-        typedef json::parser<InputIterator, UTF_8_encoding_tag> parser_t;
-        
-        InputIterator first = s;
-        InputIterator last = s + strlen(s);
-        
-        int error;
-        ParseOptions options = ParseOptions::None | ParseOptions::LogLevelNone;
-        bool result = json::parse(first, last, options, &error);
-        EXPECT_TRUE (result == false);
-        EXPECT_TRUE (first == last);
-        EXPECT_EQ(json::JP_EMPTY_TEXT_ERROR, error);
-    }
     
     
-    TEST_F(JsonParserTest, DISABLED_TestParse_SyntaxErrors)  
+    TEST_F(JsonParserTest, NoopParser_SyntaxErrors)  
     {
-        //
-        // JSON syntax errors
-        //
+        // use a NOOP parser
+        
+        using namespace json;
+        
+        typedef NoopParser parser_t;
+        typedef parser_t::state_t parse_state_t;
+        typedef parser_t::semantic_actions_type semantic_actions_t;
+        typedef json::parser_error_type error_type;
         
         //
-        // Syntax errors
+        //    Parser Errors:
+        
+        //    type: json::parser_error_type
         //
+        //    // Syntax errors
         //    JP_SYNTAX_ERROR,                        // "syntax error" - general error
         //    JP_EMPTY_TEXT_ERROR,                    // "text is empty"
         //    JP_CONTROL_CHAR_NOT_ALLOWED_ERROR,      // "control character not allowed in json string"
         //    JP_UNEXPECTED_END_ERROR,                // "unexpected end of text" (p_ == last_)
         //    JP_UNICODE_NULL_NOT_ALLOWED_ERROR,      // "encountered U+0000" (An Unicode NULL is not a valid character in this implementation)
-        //    JP_EXPECTED_ARRAY_OR_OBJECT_ERROR,      // "expected array or object"    
+        //    JP_EXPECTED_ARRAY_OR_OBJECT_ERROR,      // "expected array or object"
         //    JP_EXPECTED_TOKEN_OBJECT_END_ERROR,     // "expected end-of-object '}'"
         //    JP_EXPECTED_TOKEN_ARRAY_END_ERROR,      // "expected end-of-array ']'"
         //    JP_EXPECTED_TOKEN_KEY_VALUE_SEP_ERROR,  // "expected key-value-separator ':'"
@@ -199,91 +265,145 @@ namespace {
         //    JP_EXPECTED_STRING_ERROR,               // "expected string"
         //    JP_EXPECTED_NUMBER_ERROR,               // "expected number"
         //    JP_EXPECTED_VALUE_ERROR,                // "expected value"
+        //
         
         
-        // use a validating parser
         
-        struct syntax_error_s {
-            const char input[64];
-            int error_code;
+        struct test_s {
+            char input[64];
+            json::parser_error_type error_code;
             const char* error_str;
             int where;
         };
         
-        syntax_error_s syntax_errors[] = {   
-            {"[\"abc",      json::JP_UNEXPECTED_END_ERROR,    "unexpected end of text",       5},
-            {"[",           json::JP_UNEXPECTED_END_ERROR,    "unexpected end of text",       1},
-            {"{",           json::JP_UNEXPECTED_END_ERROR,    "unexpected end of text",       1},
-            {"{\"a",        json::JP_UNEXPECTED_END_ERROR,    "unexpected end of text",       3},
-            {"{\"a\"",      json::JP_UNEXPECTED_END_ERROR,    "unexpected end of text",       4},
-            {"{\"a\":",     json::JP_UNEXPECTED_END_ERROR,    "unexpected end of text",       5},
-            {"{\"a\":t",    json::JP_UNEXPECTED_END_ERROR,    "unexpected end of text",       6},
-            {"[f",          json::JP_UNEXPECTED_END_ERROR,    "unexpected end of text",       2},
-            {"[fa",         json::JP_UNEXPECTED_END_ERROR,    "unexpected end of text",       3},
-            {"[false",      json::JP_UNEXPECTED_END_ERROR,    "unexpected end of text",       6},
-            {"[[]",         json::JP_UNEXPECTED_END_ERROR,    "unexpected end of text",       3},
+        test_s tests[] = {  
+            // JP_EMPTY_TEXT_ERROR
+            {"",                JP_EMPTY_TEXT_ERROR,          "text is empty",        0},
+            {" ",               JP_EMPTY_TEXT_ERROR,          "text is empty",        1},
+            {"\n",              JP_EMPTY_TEXT_ERROR,          "text is empty",        1},
+            {"\n\t",            JP_EMPTY_TEXT_ERROR,         "text is empty",         2},
+            {"\n\r",            JP_EMPTY_TEXT_ERROR,         "text is empty",         2},
             
-            {"[f]",         json::JP_EXPECTED_VALUE_ERROR,    "expected value",               2},
-            {"[fals]",      json::JP_EXPECTED_VALUE_ERROR,    "expected value",               5},
-            {"[nul]",       json::JP_EXPECTED_VALUE_ERROR,    "expected value",               4},
-            {"[t]",         json::JP_EXPECTED_VALUE_ERROR,    "expected value",               2},
+            // JP_CONTROL_CHAR_NOT_ALLOWED_ERROR
+            {"[\"\aa0\"]",       JP_CONTROL_CHAR_NOT_ALLOWED_ERROR,    "control character not allowed in json string",  2},
+            {"[\"\ba1\"]",       JP_CONTROL_CHAR_NOT_ALLOWED_ERROR,    "control character not allowed in json string",  2},
+            {"[\"\fa2\"]",       JP_CONTROL_CHAR_NOT_ALLOWED_ERROR,    "control character not allowed in json string",  2},
+            {"[\"\na3\"]",       JP_CONTROL_CHAR_NOT_ALLOWED_ERROR,    "control character not allowed in json string",  2},
+            {"[\"\ra4\"]",       JP_CONTROL_CHAR_NOT_ALLOWED_ERROR,    "control character not allowed in json string",  2},
+            {"[\"\ta5\"]",       JP_CONTROL_CHAR_NOT_ALLOWED_ERROR,    "control character not allowed in json string",  2},
+            {"[\"\va6\"]",       JP_CONTROL_CHAR_NOT_ALLOWED_ERROR,    "control character not allowed in json string",  2},
+            {"[\"\aa7\"]",       JP_CONTROL_CHAR_NOT_ALLOWED_ERROR,    "control character not allowed in json string",  2},
+            
+            // JP_UNEXPECTED_END_ERROR
+            {"[\"abc",          JP_UNEXPECTED_END_ERROR,    "unexpected end of text",       5},
+            {"[",               JP_UNEXPECTED_END_ERROR,    "unexpected end of text",       1},
+            {"{",               JP_UNEXPECTED_END_ERROR,    "unexpected end of text",       1},
+            {"{\"a",            JP_UNEXPECTED_END_ERROR,    "unexpected end of text",       3},
+            {"{\"a\"",          JP_UNEXPECTED_END_ERROR,    "unexpected end of text",       4},
+            {"{\"a\":",         JP_UNEXPECTED_END_ERROR,    "unexpected end of text",       5},
+            {"{\"a\":t",        JP_UNEXPECTED_END_ERROR,    "unexpected end of text",       6},
+            {"[f",              JP_UNEXPECTED_END_ERROR,    "unexpected end of text",       2},
+            {"[fa",             JP_UNEXPECTED_END_ERROR,    "unexpected end of text",       3},
+            {"[false",          JP_UNEXPECTED_END_ERROR,    "unexpected end of text",       6},
+            {"[[]",             JP_UNEXPECTED_END_ERROR,    "unexpected end of text",       3},
+            
+            
+            // JP_UNICODE_NULL_NOT_ALLOWED_ERROR
+            // Note: the iterator to the input will be incremented past the Unicode Null character (U+0000),
+            // since the detection of Unicode Nulls will be determined by a filter predicate in the parser.
+            {"[\"a\x00x\"]",    json::JP_UNICODE_NULL_NOT_ALLOWED_ERROR,    "encountered U+0000",       4},
+            
+            // JP_EXPECTED_ARRAY_OR_OBJECT_ERROR
+            {"x",               JP_EXPECTED_ARRAY_OR_OBJECT_ERROR,     "expected array or object",      0},
+            {"]",               JP_EXPECTED_ARRAY_OR_OBJECT_ERROR,     "expected array or object",      0},
+            {"\"a\"",           JP_EXPECTED_ARRAY_OR_OBJECT_ERROR,     "expected array or object",      0},            
+                        
+            //    JP_EXPECTED_TOKEN_OBJECT_END_ERROR
+            {"[{\"k1\":1 ] 2]",  JP_EXPECTED_TOKEN_OBJECT_END_ERROR,        "expected end-of-object '}'",     9},
+            {"[{\"k1\":1 false, 2]",  JP_EXPECTED_TOKEN_OBJECT_END_ERROR,   "expected end-of-object '}'",     9},
+            {"[{\"k1\":1 \"abc\", 2]",  JP_EXPECTED_TOKEN_OBJECT_END_ERROR, "expected end-of-object '}'",     9},
+            
+            //    JP_EXPECTED_TOKEN_ARRAY_END_ERROR
+            {"[1, 2 3]",  JP_EXPECTED_TOKEN_ARRAY_END_ERROR,            "expected end-of-array ']'",    6},
+            {"[1, 2 false]",  JP_EXPECTED_TOKEN_ARRAY_END_ERROR,        "expected end-of-array ']'",    6},
+            {"[1, 2 {}]",  JP_EXPECTED_TOKEN_ARRAY_END_ERROR,           "expected end-of-array ']'",    6},
+            
+            
+            //    JP_EXPECTED_TOKEN_KEY_VALUE_SEP_ERROR
+            {"{\"a\" 1}",       JP_EXPECTED_TOKEN_KEY_VALUE_SEP_ERROR,"expected key-value-separator ':'",  5},
+            
+            //    JP_INVALID_HEX_VALUE_ERROR
+            {"[\"\\u00GKabc\"]",JP_INVALID_HEX_VALUE_ERROR,    "invalid hexadecimal number",  6},
+            
+            //    JP_INVALID_ESCAPE_SEQ_ERROR,            // "invalid escape sequence"
+            {"[\"\\x0123\"]",   JP_INVALID_ESCAPE_SEQ_ERROR,    "invalid escape sequence",  3},
+            {"[\"\\90123\"]",   JP_INVALID_ESCAPE_SEQ_ERROR,    "invalid escape sequence",  3},
+                        
+            //    JP_BADNUMBER_ERROR,                     // "bad number"
+            
+            //    JP_EXPECTED_STRING_ERROR
+            {"{123}",           JP_EXPECTED_STRING_ERROR,   "expected string",              1},
+            
+            //    JP_EXPECTED_NUMBER_ERROR,               // "expected number"
+            
+            
+            // JP_EXPECTED_VALUE_ERROR
+            {"[f]",             JP_EXPECTED_VALUE_ERROR,    "expected value",               2},
+            {"[fals]",          JP_EXPECTED_VALUE_ERROR,    "expected value",               5},
+            {"[nul]",           JP_EXPECTED_VALUE_ERROR,    "expected value",               4},
+            {"[t]",             JP_EXPECTED_VALUE_ERROR,    "expected value",               2},            
+            {"{\"a\" :}",       JP_EXPECTED_VALUE_ERROR,    "expected value",               6}
+            
+            
 
-            
-            {"x",           json::JP_EXPECTED_ARRAY_OR_OBJECT_ERROR,     "expected array or object",            0},
-            {"]",           json::JP_EXPECTED_ARRAY_OR_OBJECT_ERROR,     "expected array or object",            0},
-            {"\"a\"",       json::JP_EXPECTED_ARRAY_OR_OBJECT_ERROR,     "expected array or object",            0},
-            
-            {"{123}",       json::JP_EXPECTED_STRING_ERROR,   "expected string",              1},
-            
-            {"{\"a\" 1}",   json::JP_EXPECTED_TOKEN_KEY_VALUE_SEP_ERROR,"expected key-value-separator ':'",  5},
-            {"{\"a\" :}",   json::JP_EXPECTED_VALUE_ERROR,    "expected value",  6},
-            
-            {"[\"\aa\"]",   json::JP_CONTROL_CHAR_NOT_ALLOWED_ERROR,    "control character not allowed in json string",  2},
-            {"[\"\ba\"]",   json::JP_CONTROL_CHAR_NOT_ALLOWED_ERROR,    "control character not allowed in json string",  2},
-            {"[\"\fa\"]",   json::JP_CONTROL_CHAR_NOT_ALLOWED_ERROR,    "control character not allowed in json string",  2},
-            {"[\"\na\"]",   json::JP_CONTROL_CHAR_NOT_ALLOWED_ERROR,    "control character not allowed in json string",  2},
-            {"[\"\ra\"]",   json::JP_CONTROL_CHAR_NOT_ALLOWED_ERROR,    "control character not allowed in json string",  2},
-            {"[\"\ta\"]",   json::JP_CONTROL_CHAR_NOT_ALLOWED_ERROR,    "control character not allowed in json string",  2},
-            {"[\"\va\"]",   json::JP_CONTROL_CHAR_NOT_ALLOWED_ERROR,    "control character not allowed in json string",  2},
-            {"[\"\aa\"]",   json::JP_CONTROL_CHAR_NOT_ALLOWED_ERROR,    "control character not allowed in json string",  2},
-            
-            {"[\"\\x0123\"]",   json::JP_INVALID_ESCAPE_SEQ_ERROR,    "invalid escape sequence",  3},
-            {"[\"\\90123\"]",   json::JP_INVALID_ESCAPE_SEQ_ERROR,    "invalid escape sequence",  3},
-            
-            {"[\"\\u00GKabc\"]",   json::JP_INVALID_HEX_VALUE_ERROR,    "invalid hexadecimal number",  6},
-            
-
-            //{"\x00[]",        json::JP_UNICODE_NULL_NOT_ALLOWED_ERROR,      "received U+0000", 0},
-            //{"[\"a\x00bc\"]", json::JP_UNICODE_NULL_NOT_ALLOWED_ERROR,      "received U+0000", 9},
-            
-            
-            {"", json::JP_EMPTY_TEXT_ERROR, "text is empty", 0}
+            //{"\x00[]",        JP_UNICODE_NULL_NOT_ALLOWED_ERROR,      "received U+0000", 0},
+            //{"[\"a\x00bc\"]", JP_UNICODE_NULL_NOT_ALLOWED_ERROR,      "received U+0000", 9},
         };
         
         typedef const char* InputIterator;
-        typedef json::parser<InputIterator, UTF_8_encoding_tag> parser_t;
         
-        syntax_error_s* first = syntax_errors;
-        syntax_error_s* last = first + sizeof(syntax_errors) / sizeof(syntax_error_s);
-    
-        while (first != last) {
-            InputIterator p = (*first).input;
+        test_s* first = tests;
+        test_s* last = first + sizeof(tests) / sizeof(test_s);
+        int idx = 0;
+        while (first != last) 
+        {
+            semantic_actions_t sa;
+            sa.log_level(semanticactions::LogLevelNone);
+            parser_t parser(sa);
+                        
+            InputIterator start = &(*first).input[0];
+            InputIterator p = start;
             InputIterator end = p + sizeof((*first).input);
-        
-            ParseOptions options = ParseOptions::None;
-            int error;            
-            bool result = json::parse(p, end, options, &error);
-            EXPECT_TRUE(result == false) << "with input: " << (*first).input;
-            EXPECT_EQ( (*first).where, std::distance((*first).input, p) ) << "with input: " << (*first).input;
-            EXPECT_EQ( (*first).error_code, error ) << "with input: " << (*first).input;
+            while (end > start and *(end-1) == 0) {
+                --end;
+            }
+            
+            json::parser_error_type result = parser.parse(p, end);
+            const parse_state_t& state = parser.state();
+            EXPECT_EQ( (*first).error_code, result )  << "[" << idx << "]: " << "with input: '" << (*first).input << "'";
+            EXPECT_EQ( (*first).error_code, state.error() )<< "[" << idx << "]: "   << "with input: '" << (*first).input << "'";
+            EXPECT_TRUE( sa.result() == 0 )<< "[" << idx << "]: "  << "with input: '" << (*first).input << "'";
+            EXPECT_EQ( (*first).where, std::distance(start, p) )  << "with input: '" << (*first).input << "'";
+            if ((*first).error_code != result or (*first).where != std::distance(start, p)) {
+                while (0) {};
+            }
          
+            ++idx;
             ++first;
         }
     }
     
     
-    TEST_F(JsonParserTest, TestParse_Malformed_UTF8)  
+    TEST_F(JsonParserTest, NoopParser_Malformed_UTF8)  
     {
+        using namespace json;
+        
+        // use a NOOP parser
+        typedef NoopParser parser_t;
+        typedef parser_t::state_t parse_state_t;
+        typedef parser_t::semantic_actions_type semantic_actions_t;
+        typedef json::parser_error_type error_type;
+        
         //
         // ill-formed Unicode sequence
         //
@@ -292,56 +412,63 @@ namespace {
         //  JP_EXPECTED_HIGH_SURROGATE_ERROR,       // "expected high surrogate code point"  - illformed Unicode sequence 
         //  JP_EXPECTED_LOW_SURROGATE_ERROR,        // "expected low surrogate code point" - illformed Unicode sequence
         // 
-        // 
-        // use a validating parser
         
-        struct error_s {
-            const char input[64];
-            int error_code;
+        struct test_s {
+            char input[64];
+            json::parser_error_type error_code;
             const char* error_str;
             int where;
         };
         
-        error_s errors[] = {   
-            {"[\"abc\xC0xyz\"]",    json::JP_ILLFORMED_UNICODE_SEQUENCE_ERROR,    "illformed Unicode sequence", 5},
-            {"[\"abc\xC1xyz\"]",    json::JP_ILLFORMED_UNICODE_SEQUENCE_ERROR,    "illformed Unicode sequence", 5},
-            {"[\"abc\xF5xyz\"]",    json::JP_ILLFORMED_UNICODE_SEQUENCE_ERROR,    "illformed Unicode sequence", 5},
-            {"[\"abc\xF6xyz\"]",    json::JP_ILLFORMED_UNICODE_SEQUENCE_ERROR,    "illformed Unicode sequence", 5},
-            {"[\"abc\xF7xyz\"]",    json::JP_ILLFORMED_UNICODE_SEQUENCE_ERROR,    "illformed Unicode sequence", 5},
-            {"[\"abc\xFAxyz\"]",    json::JP_ILLFORMED_UNICODE_SEQUENCE_ERROR,    "illformed Unicode sequence", 5},
-            {"[\"abc\xFExyz\"]",    json::JP_ILLFORMED_UNICODE_SEQUENCE_ERROR,    "illformed Unicode sequence", 5},
-            {"[\"abc\xFFxyz\"]",    json::JP_ILLFORMED_UNICODE_SEQUENCE_ERROR,    "illformed Unicode sequence", 5},
-            {"[\"abc\x80xyz\"]",    json::JP_ILLFORMED_UNICODE_SEQUENCE_ERROR,    "illformed Unicode sequence", 5},
-            {"[\"abc\xBFxyz\"]",    json::JP_ILLFORMED_UNICODE_SEQUENCE_ERROR,    "illformed Unicode sequence", 5},
-            {"[\"abc\xC2xyz\"]",    json::JP_ILLFORMED_UNICODE_SEQUENCE_ERROR,    "illformed Unicode sequence", 6},
-            {"[\"abc\xC2\x80\x80xyz\"]",    json::JP_ILLFORMED_UNICODE_SEQUENCE_ERROR,    "illformed Unicode sequence", 7},
-            {"[\"abc\xDFxyz\"]",    json::JP_ILLFORMED_UNICODE_SEQUENCE_ERROR,    "illformed Unicode sequence", 6},
-            {"[\"abc\xE0xyz\"]",    json::JP_ILLFORMED_UNICODE_SEQUENCE_ERROR,    "illformed Unicode sequence", 6},
-            {"[\"abc\xE0\x80\x80xyz\"]",json::JP_ILLFORMED_UNICODE_SEQUENCE_ERROR,    "illformed Unicode sequence", 6},
-            {"[\"abc\xE0\x9F\x80xyz\"]",json::JP_ILLFORMED_UNICODE_SEQUENCE_ERROR,    "illformed Unicode sequence", 6},
-            {"[\"abc\xED\xA0\x80xyz\"]",json::JP_ILLFORMED_UNICODE_SEQUENCE_ERROR,    "illformed Unicode sequence", 6},
-            {"[\"abc\xE1\x80\x80\x80xyz\"]",json::JP_ILLFORMED_UNICODE_SEQUENCE_ERROR,    "illformed Unicode sequence", 8},
-            {"[\"abc\xF0\x80\x80\x80xyz\"]",json::JP_ILLFORMED_UNICODE_SEQUENCE_ERROR,    "illformed Unicode sequence", 6},
-            {"[\"abc\xF0\x8F\x80\x80xyz\"]",json::JP_ILLFORMED_UNICODE_SEQUENCE_ERROR,    "illformed Unicode sequence", 6},
-            {"[\"abc\xF0\x90\x80\x80\x80xyz\"]",json::JP_ILLFORMED_UNICODE_SEQUENCE_ERROR,    "illformed Unicode sequence", 9},
-            {"[\"abc\xF4\x90\x80\x80\x80xyz\"]",json::JP_ILLFORMED_UNICODE_SEQUENCE_ERROR,    "illformed Unicode sequence", 6},
-            {"[\"abc\xF4\x80xyz\"]",       json::JP_ILLFORMED_UNICODE_SEQUENCE_ERROR,    "illformed Unicode sequence", 7},
-            {"[\"abc\xF4\x80\x80xyz\"]",   json::JP_ILLFORMED_UNICODE_SEQUENCE_ERROR,    "illformed Unicode sequence", 8},
-            {"[\"abc\xF4\x80\x80\x80\x80xyz\"]",   json::JP_ILLFORMED_UNICODE_SEQUENCE_ERROR,    "illformed Unicode sequence", 9}
+        test_s tests[] = {   
+            {"[\"abc\xC0xyz\"]",                JP_ILLFORMED_UNICODE_SEQUENCE_ERROR,    "illformed Unicode sequence", 5},
+            {"[\"abc\xC1xyz\"]",                JP_ILLFORMED_UNICODE_SEQUENCE_ERROR,    "illformed Unicode sequence", 5},
+            {"[\"abc\xF5xyz\"]",                JP_ILLFORMED_UNICODE_SEQUENCE_ERROR,    "illformed Unicode sequence", 5},
+            {"[\"abc\xF6xyz\"]",                JP_ILLFORMED_UNICODE_SEQUENCE_ERROR,    "illformed Unicode sequence", 5},
+            {"[\"abc\xF7xyz\"]",                JP_ILLFORMED_UNICODE_SEQUENCE_ERROR,    "illformed Unicode sequence", 5},
+            {"[\"abc\xFAxyz\"]",                JP_ILLFORMED_UNICODE_SEQUENCE_ERROR,    "illformed Unicode sequence", 5},
+            {"[\"abc\xFExyz\"]",                JP_ILLFORMED_UNICODE_SEQUENCE_ERROR,    "illformed Unicode sequence", 5},
+            {"[\"abc\xFFxyz\"]",                JP_ILLFORMED_UNICODE_SEQUENCE_ERROR,    "illformed Unicode sequence", 5},
+            {"[\"abc\x80xyz\"]",                JP_ILLFORMED_UNICODE_SEQUENCE_ERROR,    "illformed Unicode sequence", 5},
+            {"[\"abc\xBFxyz\"]",                JP_ILLFORMED_UNICODE_SEQUENCE_ERROR,    "illformed Unicode sequence", 5},
+            {"[\"abc\xC2xyz\"]",                JP_ILLFORMED_UNICODE_SEQUENCE_ERROR,    "illformed Unicode sequence", 6},
+            {"[\"abc\xC2\x80\x80xyz\"]",        JP_ILLFORMED_UNICODE_SEQUENCE_ERROR,    "illformed Unicode sequence", 7},
+            {"[\"abc\xDFxyz\"]",                JP_ILLFORMED_UNICODE_SEQUENCE_ERROR,    "illformed Unicode sequence", 6},
+            {"[\"abc\xE0xyz\"]",                JP_ILLFORMED_UNICODE_SEQUENCE_ERROR,    "illformed Unicode sequence", 6},
+            {"[\"abc\xE0\x80\x80xyz\"]",        JP_ILLFORMED_UNICODE_SEQUENCE_ERROR,    "illformed Unicode sequence", 6},
+            {"[\"abc\xE0\x9F\x80xyz\"]",        JP_ILLFORMED_UNICODE_SEQUENCE_ERROR,    "illformed Unicode sequence", 6},
+            {"[\"abc\xED\xA0\x80xyz\"]",        JP_ILLFORMED_UNICODE_SEQUENCE_ERROR,    "illformed Unicode sequence", 6},
+            {"[\"abc\xE1\x80\x80\x80xyz\"]",    JP_ILLFORMED_UNICODE_SEQUENCE_ERROR,    "illformed Unicode sequence", 8},
+            {"[\"abc\xF0\x80\x80\x80xyz\"]",    JP_ILLFORMED_UNICODE_SEQUENCE_ERROR,    "illformed Unicode sequence", 6},
+            {"[\"abc\xF0\x8F\x80\x80xyz\"]",    JP_ILLFORMED_UNICODE_SEQUENCE_ERROR,    "illformed Unicode sequence", 6},
+            {"[\"abc\xF0\x90\x80\x80\x80xyz\"]",JP_ILLFORMED_UNICODE_SEQUENCE_ERROR,    "illformed Unicode sequence", 9},
+            {"[\"abc\xF4\x90\x80\x80\x80xyz\"]",JP_ILLFORMED_UNICODE_SEQUENCE_ERROR,    "illformed Unicode sequence", 6},
+            {"[\"abc\xF4\x80xyz\"]",            JP_ILLFORMED_UNICODE_SEQUENCE_ERROR,    "illformed Unicode sequence", 7},
+            {"[\"abc\xF4\x80\x80xyz\"]",        JP_ILLFORMED_UNICODE_SEQUENCE_ERROR,    "illformed Unicode sequence", 8},
+            {"[\"abc\xF4\x80\x80\x80\x80xyz\"]",JP_ILLFORMED_UNICODE_SEQUENCE_ERROR,    "illformed Unicode sequence", 9}
                         
         };
         
         typedef const char* InputIterator;
-        typedef json::parser<InputIterator, UTF_8_encoding_tag> parser_t;
         
-        error_s* first = errors;
-        error_s* last = first + sizeof(errors) / sizeof(error_s);
+        test_s* first = tests;
+        test_s* last = first + sizeof(tests) / sizeof(test_s);
 
         
         int idx = 0;
-        while (first != last) {
-            InputIterator p = (*first).input;
-            InputIterator end = p + strlen(p);
+        while (first != last) 
+        {
+            semantic_actions_t sa;
+            sa.log_level(semanticactions::LogLevelNone);
+            parser_t parser(sa);
+            
+            InputIterator start = &(*first).input[0];
+            InputIterator p = start;
+            InputIterator end = p + sizeof((*first).input);
+            while (end > start and *(end-1) == 0) {
+                --end;
+            }
+            
             char buffer[64];
             InputIterator s = p;
             
@@ -349,17 +476,22 @@ namespace {
             // formed sequence by replacing malformed chars with Unicode replacement 
             // characters.
             char* d = buffer;
-            std::size_t count = json::unicode::convert(s, end, UTF_8_encoding_tag(), d, UTF_8_encoding_tag());
-            buffer[count] = 0;
+            int cvt_result = json::unicode::convert(s, end, UTF_8_encoding_tag(), d, UTF_8_encoding_tag(), unicode::ReplaceIllFormed);
+            assert(cvt_result == 0);
+            buffer[d-buffer] = 0;
             
-            ParseOptions options = ParseOptions::LogLevelNone;
-            int error;
-            bool result = json::parse(p, end, options, &error);
-
-            std::size_t consumed = std::distance((*first).input, p);
-            EXPECT_TRUE(result == false) << "with input[" << idx << "]: " << buffer;
-            EXPECT_EQ( (*first).where, consumed ) << "with input[" << idx << "]: " << buffer;
-            EXPECT_EQ( (*first).error_code, error ) << "with input[" << idx << "]: " << buffer;
+            json::parser_error_type result = parser.parse(p, end);
+            const parse_state_t& state = parser.state();
+            std::size_t consumed = std::distance(start, p);
+            
+            EXPECT_EQ( (*first).error_code, result ) << "with input[" << idx << "]: " << buffer;
+            EXPECT_EQ( (*first).error_code, state.error() ) << "with input[" << idx << "]: " << buffer;
+            EXPECT_TRUE( sa.result() == 0 ) << "with input[" << idx << "]: " << buffer;
+            EXPECT_EQ( (*first).where, consumed) << "with input[" << idx << "]: " << buffer;
+            
+            if ((*first).error_code != result) {
+                while (0) {};
+            }
             
             ++first;
             ++idx;
@@ -367,86 +499,251 @@ namespace {
     }
     
     
+    TEST_F(JsonParserTest, DISABLED_NoopParser_Malformed_UTF16) {
+        EXPECT_TRUE(0=="TEST NOT YET IMPLEMENTED");
+    }  
     
-    TEST_F(JsonParserTest, TestParse_Noncharacters)  
+    
+    
+    TEST_F(JsonParserTest, NoopParser_Noncharacters)  
     {
+        using namespace json;
+        
+        typedef NoopParser parser_t;
+        typedef parser_t::state_t parse_state_t;
+        typedef parser_t::semantic_actions_type semantic_actions_t;
+        typedef json::parser_error_type error_type;
+        
         //
         // Invalid Unicode code points in JSON text
         //
         //    JP_UNICODE_NONCHARACTER_ERROR,          // "encountered unicode noncharacter"
         //    JP_UNICODE_REJECTED_BY_FILTER,          // "Unicode code point rejected by filter"
-        
-        // use a validating parser
-        
-        struct error_s {
-            const char input[64];
+                
+        struct test_s {
+            char input[64];
             int error_code;
             const char* error_str;
             int where;
         };
         
-        error_s errors[] = {   
-            {"[\"abc\uFFFExyz\"]",    json::JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 8},
-            {"[\"abc\uFFFFxyz\"]",    json::JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 8},
-            {"[\"abc\U0001FFFExyz\"]",    json::JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
-            {"[\"abc\U0001FFFFxyz\"]",    json::JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
-            {"[\"abc\U0002FFFExyz\"]",    json::JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
-            {"[\"abc\U0002FFFFxyz\"]",    json::JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
-            {"[\"abc\U0003FFFExyz\"]",    json::JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
-            {"[\"abc\U0003FFFFxyz\"]",    json::JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
-            {"[\"abc\U0004FFFExyz\"]",    json::JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
-            {"[\"abc\U0004FFFFxyz\"]",    json::JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
-            {"[\"abc\U0005FFFExyz\"]",    json::JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
-            {"[\"abc\U0005FFFFxyz\"]",    json::JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
-            {"[\"abc\U0006FFFExyz\"]",    json::JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
-            {"[\"abc\U0006FFFFxyz\"]",    json::JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
-            {"[\"abc\U0007FFFExyz\"]",    json::JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
-            {"[\"abc\U0007FFFFxyz\"]",    json::JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
-            {"[\"abc\U0008FFFExyz\"]",    json::JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
-            {"[\"abc\U0008FFFFxyz\"]",    json::JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
-            {"[\"abc\U0009FFFExyz\"]",    json::JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
-            {"[\"abc\U0009FFFFxyz\"]",    json::JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
-            {"[\"abc\U000AFFFExyz\"]",    json::JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
-            {"[\"abc\U000AFFFFxyz\"]",    json::JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
-            {"[\"abc\U000BFFFExyz\"]",    json::JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
-            {"[\"abc\U000BFFFFxyz\"]",    json::JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
-            {"[\"abc\U000CFFFExyz\"]",    json::JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
-            {"[\"abc\U000CFFFFxyz\"]",    json::JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
-            {"[\"abc\U000DFFFExyz\"]",    json::JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
-            {"[\"abc\U000DFFFFxyz\"]",    json::JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
-            {"[\"abc\U000EFFFExyz\"]",    json::JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
-            {"[\"abc\U000EFFFFxyz\"]",    json::JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
-            {"[\"abc\U000FFFFExyz\"]",    json::JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
-            {"[\"abc\U000FFFFFxyz\"]",    json::JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
-            {"[\"abc\U0010FFFExyz\"]",    json::JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
-            {"[\"abc\U0010FFFFxyz\"]",    json::JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9}
+        test_s tests[] = {   
+            {"[\"abc\uFFFExyz\"]",        JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 8},
+            {"[\"abc\uFFFFxyz\"]",        JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 8},
+            {"[\"abc\U0001FFFExyz\"]",    JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
+            {"[\"abc\U0001FFFFxyz\"]",    JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
+            {"[\"abc\U0002FFFExyz\"]",    JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
+            {"[\"abc\U0002FFFFxyz\"]",    JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
+            {"[\"abc\U0003FFFExyz\"]",    JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
+            {"[\"abc\U0003FFFFxyz\"]",    JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
+            {"[\"abc\U0004FFFExyz\"]",    JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
+            {"[\"abc\U0004FFFFxyz\"]",    JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
+            {"[\"abc\U0005FFFExyz\"]",    JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
+            {"[\"abc\U0005FFFFxyz\"]",    JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
+            {"[\"abc\U0006FFFExyz\"]",    JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
+            {"[\"abc\U0006FFFFxyz\"]",    JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
+            {"[\"abc\U0007FFFExyz\"]",    JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
+            {"[\"abc\U0007FFFFxyz\"]",    JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
+            {"[\"abc\U0008FFFExyz\"]",    JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
+            {"[\"abc\U0008FFFFxyz\"]",    JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
+            {"[\"abc\U0009FFFExyz\"]",    JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
+            {"[\"abc\U0009FFFFxyz\"]",    JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
+            {"[\"abc\U000AFFFExyz\"]",    JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
+            {"[\"abc\U000AFFFFxyz\"]",    JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
+            {"[\"abc\U000BFFFExyz\"]",    JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
+            {"[\"abc\U000BFFFFxyz\"]",    JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
+            {"[\"abc\U000CFFFExyz\"]",    JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
+            {"[\"abc\U000CFFFFxyz\"]",    JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
+            {"[\"abc\U000DFFFExyz\"]",    JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
+            {"[\"abc\U000DFFFFxyz\"]",    JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
+            {"[\"abc\U000EFFFExyz\"]",    JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
+            {"[\"abc\U000EFFFFxyz\"]",    JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
+            {"[\"abc\U000FFFFExyz\"]",    JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
+            {"[\"abc\U000FFFFFxyz\"]",    JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
+            {"[\"abc\U0010FFFExyz\"]",    JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
+            {"[\"abc\U0010FFFFxyz\"]",    JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9}
         };
         
         typedef const char* InputIterator;
-        typedef json::parser<InputIterator, UTF_8_encoding_tag> parser_t;
         
-        error_s* first = errors;
-        error_s* last = first + sizeof(errors) / sizeof(error_s);
+        test_s* first = tests;
+        test_s* last = first + sizeof(tests) / sizeof(test_s);
+
         int idx = 0;
-        while (first != last) {
-            InputIterator p = (*first).input;
-            InputIterator end = p + strlen(p);
+        while (first != last) 
+        {
+            // Default behavior for Unicode noncharacters: signal error
+            semantic_actions_t sa;
+            sa.log_level(semanticactions::LogLevelNone);
+            parser_t parser(sa);
+            
+            InputIterator start = &(*first).input[0];
+            InputIterator p = start;
+            InputIterator end = p + sizeof((*first).input);
+            while (end > start and *(end-1) == 0) {
+                --end;
+            }
+            
             char buffer[64];
             InputIterator s = p;
             char* d = buffer;
-            std::size_t count = json::unicode::convert(s, end, UTF_8_encoding_tag(), d, UTF_8_encoding_tag());
+            std::size_t count = json::unicode::convert(s, end, UTF_8_encoding_tag(), d, UTF_8_encoding_tag(), unicode::ReplaceIllFormed);
             buffer[count] = 0;
             
-            ParseOptions options = ParseOptions::LogLevelNone;
-            int error;
-            bool result = json::parse(p, end, options, &error);
-            EXPECT_TRUE(result == false) << "with input[" << idx << "]: " << buffer;
-            EXPECT_EQ( (*first).where, std::distance((*first).input, p) ) << "with input[" << idx << "]: " << buffer;
-            EXPECT_EQ( (*first).error_code, error ) << "with input[" << idx << "]: " << buffer;
+            json::parser_error_type result = parser.parse(p, end);
+            const parse_state_t& state = parser.state();
+            std::size_t consumed = std::distance(start, p);
+            
+            EXPECT_EQ( (*first).error_code, static_cast<int>(result) ) << "with input[" << idx << "]: " << buffer;
+            EXPECT_EQ( (*first).error_code, static_cast<int>(state.error()) ) << "with input[" << idx << "]: " << buffer;
+            EXPECT_TRUE( sa.result() == 0 ) << "with input[" << idx << "]: " << buffer;
+            EXPECT_EQ( (*first).where, consumed) << "with input[" << idx << "]: " << buffer;
             
             ++first;
             ++idx;
         }
+    }
+    
+    
+    //
+    //  Perform a number of tests with a semantic_actions_test class in order
+    //  to verify proper function of the parser and basic semantic actions.
+    //
+    
+    TEST_F(JsonParserTest, TestParserBasicSuccess)  {
+        using namespace json;
+        
+        typedef TestParser parser_t;
+        typedef parser_t::state_t parse_state_t;
+        typedef parser_t::semantic_actions_type semantic_actions_t;
+        typedef json::parser_error_type error_type;
+        
+        
+        struct test_s {
+            std::string input;
+            std::string output;
+            int result;
+            int count_objects;
+            int count_arrays;
+            int count_strings;
+            int count_numbers;
+            int count_booleans;
+            int count_nulls;
+        };
+        
+        test_s tests[] = {   
+            // input | output         
+            {" [ ] ",                           "[]",
+            // err  | objs | arrs | strs | nbrs | bools| nulls 
+                0,      0,     1,    0,      0,     0,     0 },
+            
+            {" { } ",                           "{}",
+            // err  | objs | arrs | strs | nbrs | bools| nulls 
+                0,      1,     0,    0,      0,     0,     0 },
+            
+            {" [ [ [ [ [ [ [ [ [ [ ] ] ] ] ] ] ] ] ] ] ",      "[[[[[[[[[[]]]]]]]]]]",
+            // err  | objs | arrs | strs | nbrs | bools| nulls 
+                0,      0,    10,    0,      0,     0,     0 },
+            
+            {" [\"string\"] ",                  "[\"string\"]",
+            // err  | objs | arrs | strs | nbrs | bools| nulls 
+                0,      0,     1,    1,      0,     0,     0 },
+            
+            {" [1] ",                           "[1]",
+            // err  | objs | arrs | strs | nbrs | bools| nulls 
+                0,      0,     1,    0,      1,     0,     0 },
+            
+            {" [true] ",                        "[true]",
+            // err  | objs | arrs | strs | nbrs | bools| nulls 
+                0,      0,     1,    0,      0,     1,     0 },
+            
+            {" [false] ",                       "[false]",
+            // err  | objs | arrs | strs | nbrs | bools| nulls 
+                0,      0,     1,    0,      0,     1,     0 },
+
+            {" [null] ",                        "[null]",
+            // err  | objs | arrs | strs | nbrs | bools| nulls 
+                0,      0,     1,    0,      0,     0,     1 },
+            
+            {" [{}] ",                          "[{}]",
+                // err  | objs | arrs | strs | nbrs | bools| nulls 
+                0,      1,     1,    0,      0,     0,     0 },
+            
+            {" [{} , {}] ",                     "[{},{}]",
+            // err  | objs | arrs | strs | nbrs | bools| nulls 
+                0,      2,     1,    0,      0,     0,     0 },
+            
+            {" [1, 2, 3] ",                     "[1,2,3]",
+            // err  | objs | arrs | strs | nbrs | bools| nulls 
+                0,      0,     1,    0,      3,     0,     0 },
+
+            {" [{}, \"string\", 1, true, null] ", "[{},\"string\",1,true,null]",
+            // err  | objs | arrs | strs | nbrs | bools| nulls 
+                0,      1,     1,    1,      1,     1,     1 },
+            
+            {" [\"quote '\\\"'\"] ",            "[\"quote '\\\"'\"]",
+            // err  | objs | arrs | strs | nbrs | bools| nulls 
+                0,      0,     1,    1,      0,     0,     0 },
+            
+            {"{\"key0\" : 0}",                  "{\"key0\":0}",
+                // err  | objs | arrs | strs | nbrs | bools| nulls 
+                0,      1,     0,    1,      1,     0,     0 },
+            
+            {"{\"key0\" : 0, \"key1\" : 1}",    "{\"key0\":0,\"key1\":1}",
+            // err  | objs | arrs | strs | nbrs | bools| nulls 
+                0,      1,     0,    2,      2,     0,     0 }
+            
+            
+        };
+        
+        
+        typedef const char* InputIterator;
+        
+        test_s* first = tests;
+        test_s* last = first + sizeof(tests) / sizeof(test_s);
+        
+        int idx = 0;
+        while (first != last) 
+        {
+            // Default behavior for Unicode noncharacters: signal error
+            semantic_actions_t sa;
+            sa.log_level(semanticactions::LogLevelNone);
+            parser_t parser(sa);
+            
+            InputIterator start = &(*first).input[0];
+            InputIterator p = start;
+            InputIterator end = p + (*first).input.size();
+            char buffer[64];
+            InputIterator s = p;
+            char* d = buffer;
+            std::size_t count = json::unicode::convert(s, end, UTF_8_encoding_tag(), d, UTF_8_encoding_tag(), unicode::ReplaceIllFormed);
+            buffer[count] = 0;
+            json::parser_error_type result = parser.parse(p, end);
+            const parse_state_t& state = parser.state();
+            std::size_t consumed = std::distance(start, p);
+            std::string output = sa.str();
+            
+            EXPECT_EQ( (*first).result, static_cast<int>(result) ) << "with input[" << idx << "]: " << buffer;
+            EXPECT_EQ( (*first).result, static_cast<int>(state.error()) ) << "with input[" << idx << "]: " << buffer;
+            EXPECT_EQ( (*first).output, output ) << "with input[" << idx << "]: " << buffer;
+            EXPECT_EQ( (*first).count_objects, sa.object_count() );
+            EXPECT_EQ( (*first).count_arrays, sa.array_count() );
+            EXPECT_EQ( (*first).count_strings, sa.string_count() );
+            EXPECT_EQ( (*first).count_numbers, sa.number_count() );
+            EXPECT_EQ( (*first).count_booleans, sa.boolean_count() );
+            EXPECT_EQ( (*first).count_nulls, sa.null_count() );
+            
+            if ((*first).result != static_cast<int>(result) ) {
+                while (0) {};
+            }
+            
+            
+            //EXPECT_EQ( (*first).where, consumed) << "with input[" << idx << "]: " << buffer;
+            
+            ++first;
+            ++idx;
+        }
+        
     }
     
     
@@ -496,7 +793,7 @@ namespace {
         typedef parser<input_iterator, UTF_8_encoding_tag>  parser_t;
         typedef parser_t::result_t                          result_t;
         typedef parser_t::state_t                           state_t;
-        typedef parser_t::semantic_actions_t                semantic_actions_t;
+        typedef parser_t::semantic_actions_type                semantic_actions_t;
         
         semantic_actions_t sa;
         
@@ -521,7 +818,7 @@ namespace {
         typedef parser<input_iterator, UTF_8_encoding_tag> parser_t;
         typedef parser_t::result_t                         result_t;
         typedef parser_t::state_t                          state_t;
-        typedef parser_t::semantic_actions_t               semantic_actions_t;
+        typedef parser_t::semantic_actions_type               semantic_actions_t;
 
         semantic_actions_t sa;
         parser_t parser(sa);
@@ -543,7 +840,7 @@ namespace {
         typedef parser<input_iterator, UTF_8_encoding_tag>  parser_t;
         typedef parser_t::result_t                          result_t;
         typedef parser_t::state_t                           state_t;
-        typedef parser_t::semantic_actions_t                semantic_actions_t;
+        typedef parser_t::semantic_actions_type                semantic_actions_t;
         
         semantic_actions_t sa;
         parser_t parser(sa);
@@ -565,7 +862,7 @@ namespace {
         typedef parser<input_iterator, UTF_8_encoding_tag>  parser_t;
         typedef parser_t::result_t                          result_t;
         typedef parser_t::state_t                           state_t;
-        typedef parser_t::semantic_actions_t                semantic_actions_t;
+        typedef parser_t::semantic_actions_type                semantic_actions_t;
         
         semantic_actions_t sa;
         parser_t parser(sa);
@@ -588,7 +885,7 @@ namespace {
         typedef parser<input_iterator, UTF_8_encoding_tag>  parser_t;
         typedef parser_t::result_t                          result_t;
         typedef parser_t::state_t                           state_t;
-        typedef parser_t::semantic_actions_t                semantic_actions_t;
+        typedef parser_t::semantic_actions_type                semantic_actions_t;
 
         semantic_actions_t sa;
         parser_t parser(sa);
@@ -610,7 +907,7 @@ namespace {
         typedef parser<input_iterator, UTF_8_encoding_tag>  parser_t;
         typedef parser_t::result_t                          result_t;
         typedef parser_t::state_t                           state_t;
-        typedef parser_t::semantic_actions_t                semantic_actions_t;
+        typedef parser_t::semantic_actions_type                semantic_actions_t;
         
         semantic_actions_t sa;
         sa.log_level(json::semanticactions::LogLevelNone);
@@ -634,7 +931,7 @@ namespace {
         typedef parser<input_iterator, UTF_8_encoding_tag>  parser_t;
         typedef parser_t::result_t                          result_t;
         typedef parser_t::state_t                           state_t;
-        typedef parser_t::semantic_actions_t                semantic_actions_t;
+        typedef parser_t::semantic_actions_type                semantic_actions_t;
         
         semantic_actions_t sa;
         parser_t parser(sa);
@@ -657,7 +954,7 @@ namespace {
         typedef parser<input_iterator, UTF_8_encoding_tag>  parser_t;
         typedef parser_t::result_t                          result_t;
         typedef parser_t::state_t                           state_t;
-        typedef parser_t::semantic_actions_t                semantic_actions_t;
+        typedef parser_t::semantic_actions_type                semantic_actions_t;
         
         semantic_actions_t sa;
         parser_t parser(sa);
@@ -679,7 +976,7 @@ namespace {
         typedef parser<input_iterator, UTF_8_encoding_tag>  parser_t;
         typedef parser_t::result_t                          result_t;
         typedef parser_t::state_t                           state_t;
-        typedef parser_t::semantic_actions_t                semantic_actions_t;
+        typedef parser_t::semantic_actions_type                semantic_actions_t;
         
         semantic_actions_t sa;
         parser_t parser(sa);
@@ -701,7 +998,7 @@ namespace {
         typedef parser<input_iterator, UTF_8_encoding_tag>  parser_t;
         typedef parser_t::result_t                          result_t;
         typedef parser_t::state_t                           state_t;
-        typedef parser_t::semantic_actions_t                semantic_actions_t;
+        typedef parser_t::semantic_actions_type                semantic_actions_t;
         
         semantic_actions_t sa;
         parser_t parser(sa);
@@ -723,7 +1020,7 @@ namespace {
         typedef parser<input_iterator, UTF_8_encoding_tag>  parser_t;
         typedef parser_t::result_t                          result_t;
         typedef parser_t::state_t                           state_t;
-        typedef parser_t::semantic_actions_t                semantic_actions_t;
+        typedef parser_t::semantic_actions_type                semantic_actions_t;
         
         semantic_actions_t sa;
         parser_t parser(sa);
@@ -745,7 +1042,7 @@ namespace {
         typedef parser<input_iterator, UTF_8_encoding_tag>  parser_t;
         typedef parser_t::result_t                          result_t;
         typedef parser_t::state_t                           state_t;
-        typedef parser_t::semantic_actions_t                semantic_actions_t;
+        typedef parser_t::semantic_actions_type                semantic_actions_t;
         
         semantic_actions_t sa;
         parser_t parser(sa);
@@ -809,7 +1106,7 @@ namespace {
         typedef parser<input_iterator, UTF_8_encoding_tag>  parser_t;
         typedef parser_t::result_t                          result_t;
         typedef parser_t::state_t                           state_t;
-        typedef parser_t::semantic_actions_t                semantic_actions_t;
+        typedef parser_t::semantic_actions_type                semantic_actions_t;
         
         semantic_actions_t sa;
         parser_t parser(sa);
@@ -832,7 +1129,7 @@ namespace {
         typedef parser<input_iterator, UTF_8_encoding_tag>  parser_t;
         typedef parser_t::result_t                          result_t;
         typedef parser_t::state_t                           state_t;
-        typedef parser_t::semantic_actions_t                semantic_actions_t;
+        typedef parser_t::semantic_actions_type                semantic_actions_t;
         
         semantic_actions_t sa;
         parser_t parser(sa);
@@ -854,7 +1151,7 @@ namespace {
         typedef parser<input_iterator, UTF_8_encoding_tag>  parser_t;
         typedef parser_t::result_t                          result_t;
         typedef parser_t::state_t                           state_t;
-        typedef parser_t::semantic_actions_t                semantic_actions_t;
+        typedef parser_t::semantic_actions_type                semantic_actions_t;
         
         semantic_actions_t sa;
         parser_t parser(sa);
@@ -876,7 +1173,7 @@ namespace {
         typedef parser<input_iterator, UTF_8_encoding_tag>  parser_t;
         typedef parser_t::result_t                          result_t;
         typedef parser_t::state_t                           state_t;
-        typedef parser_t::semantic_actions_t                semantic_actions_t;
+        typedef parser_t::semantic_actions_type                semantic_actions_t;
         
         
         struct test_s {
@@ -928,7 +1225,7 @@ namespace {
         typedef parser<input_iterator, UTF_8_encoding_tag>  parser_t;
         typedef parser_t::result_t                          result_t;
         typedef parser_t::state_t                           state_t;
-        typedef parser_t::semantic_actions_t                semantic_actions_t;
+        typedef parser_t::semantic_actions_type                semantic_actions_t;
         
         semantic_actions_t sa;
         parser_t parser(sa);

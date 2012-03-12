@@ -179,13 +179,13 @@ static void bench_parser()
     
     std::cout << "using vector<char> iterators" << std::endl;
     
-    std::vector<char> buffer = loadFromFile("Test-UTF8-esc.json");
+    std::vector<char> buffer = loadFromFile("Test-UTF8.json");
     
     timer t = timer();
 #if defined (DEBUG)
     const int N = 1;
 #else    
-    const int N = 1000;
+    const int N = 10000;
 #endif    
     
     typedef std::vector<char>::iterator iterator;

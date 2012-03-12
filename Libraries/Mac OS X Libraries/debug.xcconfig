@@ -1,0 +1,14 @@
+//
+//  debug.xcconfig
+//  Mac OS X Libraries
+//
+//  Created by Andreas Grosam on 1/26/12.
+//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//
+
+#include "common.xcconfig"
+
+
+GCC_OPTIMIZATION_LEVEL = 0
+
+GCC_PREPROCESSOR_DEFINITIONS = DEBUG=1 NS_BLOCK_ASSERTIONS __ASSERT_MACROS_DEFINE_VERSIONS_WITHOUT_UNDERSCORES=0 BOOST_STRICT_CONFIG

@@ -25,11 +25,13 @@
 #include <boost/variant.hpp>
 #include <boost/variant/apply_visitor.hpp>
 #include <json/unicode/unicode_utilities.hpp>
-#include <json/unicode/unicode_conversions.hpp>
+#include <json/unicode/unicode_traits.hpp>
+#include <json/unicode/unicode_converter.hpp>
 
 
 namespace json { namespace objc { namespace objc_internal {
     
+    using json::unicode::encoding_traits;
     
     // A json path is a vector of path components. A path component is either a 
     // string which represents the key of a key-value pair of a JSON object, or
@@ -51,7 +53,7 @@ namespace json { namespace objc { namespace objc_internal {
         
     public:
         typedef IndexT index_type;
-        typedef typename EncodingT::code_unit_type char_type;
+        typedef typename encoding_traits<EncodingT>::code_unit_type char_type;
         typedef std::pair<const char_type*, size_t>  string_buffer_type;
         struct root_component {};
         typedef boost::variant<root_component, index_type, string_buffer_type> component_type;
@@ -90,15 +92,13 @@ namespace json { namespace objc { namespace objc_internal {
             
             void operator()(string_buffer_type const& buffer) {
                 std::ostream_iterator<char> dest(os_);
-                int error;
                 const char_type* first = buffer.first;
                 if (quote_keys_)
                     os_ << '"';
-                std::size_t count = escape_convert_unsafe(
+                int result = escape_convert_unsafe(
                       first, first + buffer.second, EncodingT(),
-                      dest, json::unicode::UTF_8_encoding_tag(),
-                      error);
-                if (count == 0) {
+                      dest, json::unicode::UTF_8_encoding_tag());
+                if (result != 0) {
                     throw std::runtime_error("Unicode conversion failed");
                 }
                 if (quote_keys_)
@@ -110,37 +110,39 @@ namespace json { namespace objc { namespace objc_internal {
             }                        
             
         private:
+            
+            
+            // Returns zero on success, otherwise the a negative integer indicating an error.
             template <
-            typename InIteratorT, typename InEncodingT, 
-            typename OutIteratorT, typename OutEncodingT
+                typename InIteratorT, typename InEncodingT, 
+                typename OutIteratorT, typename OutEncodingT
             >
-            inline std::size_t
+            inline int
             escape_convert_unsafe(
                                   InIteratorT&     first, 
                                   InIteratorT      last, 
                                   InEncodingT      inEncoding,
                                   OutIteratorT&    dest,
-                                  OutEncodingT     outEncoding,
-                                  int&             error) const
+                                  OutEncodingT     outEncoding) const
             {
-                std::size_t count = 0;
+                // !! Requires that encodings are in host endianness!
+                typedef typename encoding_traits<InEncodingT>::code_unit_type in_char_t;
+                typedef typename encoding_traits<OutEncodingT>::code_unit_type out_char_t;
+                typedef json::unicode::converter<
+                    InEncodingT, OutEncodingT, 
+                    json::unicode::Validation::UNSAFE, json::unicode::Stateful::No, json::unicode::ParseOne::Yes
+                > converter_t;
+                converter_t cvt;
                 while (first != last) {
-                    if (*first == static_cast<typename InEncodingT::code_unit_type>('"')) {
-                        *dest++ = static_cast<typename InEncodingT::code_unit_type>('\\');
-                        ++count;
+                    if (*first == static_cast<in_char_t>('"')) {
+                        *dest++ = static_cast<out_char_t>('\\');
                     }
-                    int result = json::unicode::convert_one_unsafe(first, last, inEncoding, 
-                                                                   dest, outEncoding);
-                    if (result > 0)
-                        count += result;
-                    else {
-                        error = result;
-                        return 0;
-                        break;
-                    }
+                    
+                    int result = cvt.convert(first, last, dest);
+                    if (result < 0)
+                        return result;
                 }
-                error = 0;
-                return count;
+                return 0;
             }    
             
         private:

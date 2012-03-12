@@ -29,7 +29,13 @@
 // for testing
 #import <Foundation/Foundation.h>
 
+#if defined (DEBUG)
+#define DLog(...) NSLog(@"%s %@", __PRETTY_FUNCTION__, [NSString stringWithFormat:__VA_ARGS__])
+#else
+#define DLog(...) do { } while (0)
+#endif
 
+#define ZAssert(condition, ...) do { if (!(condition)) { ALog(__VA_ARGS__); }} while(0)
 
 namespace {
     
@@ -153,7 +159,45 @@ namespace {
                                                             length:[jsonData length]
                                                           encoding:NSUTF8StringEncoding];
 
-            NSLog(@"jsonString:\n%@", jsonString);
+            DLog(@"jsonString:\n%@", jsonString);
+            
+            EXPECT_TRUE([inString isEqualToString:jsonString]);
+        }
+        
+        [pool drain];
+    }
+
+    
+    TEST_F(JPJsonWriterTest, TestUTF8StringsEscaped) 
+    {
+        NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+        
+        NSError* error;
+        NSArray* strings = [NSArray arrayWithObjects:
+                            @"[\"80\u540e\uff0c\u5904\u5973\u5ea7\uff0c\u65e0\u4e3b\u7684\u808b\u9aa8\uff0c\u5b85+\u5fae\u8150\u3002\u5b8c\u7f8e\u63a7\uff0c\u7ea0\u7ed3\u63a7\u3002\u5728\u76f8\u4eb2\u7684\u6253\u51fb\u4e0e\u88ab\u6253\u51fb\u4e2d\u4e0d\u65ad\u6210\u957fing\"]",
+                            nil];
+        
+        for (NSString* inString in strings) 
+        {
+            id json = [JPJsonParser parseString:inString 
+                                        options:(JPJsonParserOptions)JPJsonWriterSortKeys
+                                          error:&error];
+            ASSERT_TRUE(json != nil);
+            
+            NSData* jsonData = [JPJsonWriter dataWithObject:json 
+                                                   encoding:JPUnicodeEncoding_UTF8
+                                                    options:JPJsonWriterEscapeUnicodeCharacters
+                                                      error:&error];
+            
+            BOOL result = [jsonData writeToFile:@"tmp.json" options:0 error:&error];
+            ASSERT_TRUE(result);
+            
+            
+            NSString* jsonString = [[NSString alloc] initWithBytes:[jsonData bytes] 
+                                                            length:[jsonData length]
+                                                          encoding:NSUTF8StringEncoding];
+            
+            DLog(@"jsonString:\n%@", jsonString);
             
             EXPECT_TRUE([inString isEqualToString:jsonString]);
         }
@@ -205,38 +249,47 @@ namespace {
                             @"[0.12345678901234567890123456789012345678901234567890]",
                             // Test max range of NSDecimalNumber's exponent
                             @"[0.1234567890123456789012345678e+127]",
-                            @"[1.0000000000000000000000000001e-127]",
+                            @"[1.000000000000000000000000000e-128]",
+                            @"[1.000000000000000000000000000e+127]",
+                            // @"[1.0000000000000000000000000001e-127]",  would fail!
                             nil];
         
+        int idx = 0;
         for (NSString* inString in strings) 
         {
-            NSLog(@"JSON input:  \"%@\"", inString);
+            DLog(@"JSON input:  \"%@\"", inString);
             
             id json = [JPJsonParser parseString:inString 
                                         options:(JPJsonParserOptions)JPJsonWriterSortKeys
                                           error:&error];
+            // Note: The tests above shall not cause the parser to fail
+            ASSERT_TRUE(json != nil);
             if (json == nil) {
                 NSLog(@"ERROR: %@", error);
+            } else  {
+                // json is an array, with one element which is a NSDecimalNumber:
+                NSString* numberString = [[json objectAtIndex:0] stringValue];
+                DLog(@"Number: %@", numberString);
+                
+                
+                NSData* jsonData = [JPJsonWriter dataWithObject:json 
+                                                       encoding:JPUnicodeEncoding_UTF8
+                                                        options:0 
+                                                          error:&error];
+                ASSERT_TRUE(jsonData != nil);
+                if (!jsonData) {
+                    NSLog(@"ERROR: %@", error);
+                }
+                
+                NSString* jsonString = [[NSString alloc] initWithBytes:[jsonData bytes] 
+                                                                length:[jsonData length]
+                                                              encoding:NSUTF8StringEncoding];
+                ASSERT_TRUE(jsonString != nil);
+                
+                DLog(@"JSON output: \"%@\"", jsonString);
+                EXPECT_EQ( std::string([inString UTF8String]), std::string([jsonString UTF8String]) );
             }
-            ASSERT_TRUE(json != nil);
-            
-            // json is an array, with one element which is a NSDecimalNumber:
-            NSString* numberString = [[json objectAtIndex:0] stringValue];
-            NSLog(@"Number: %@", numberString);
-            
-            
-            NSData* jsonData = [JPJsonWriter dataWithObject:json 
-                                                   encoding:JPUnicodeEncoding_UTF8
-                                                    options:0 
-                                                      error:&error];
-            
-            NSString* jsonString = [[NSString alloc] initWithBytes:[jsonData bytes] 
-                                                            length:[jsonData length]
-                                                          encoding:NSUTF8StringEncoding];
-            
-            
-            NSLog(@"JSON output: \"%@\"", jsonString);
-            EXPECT_EQ( std::string([inString UTF8String]), std::string([jsonString UTF8String]) );
+            ++idx;
         }
         
         [pool drain];

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A105900214CEF7D30072B418 /* config.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A105900114CEF7D30072B418 /* config.hpp */; };
 		A110B61C146D11D10017B77F /* byte_swap.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A1ECC39E146D0B9000124779 /* byte_swap.hpp */; };
 		A110B61D146D11D10017B77F /* byte_swap_iterator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A1ECC39F146D0B9000124779 /* byte_swap_iterator.hpp */; };
 		A110B61E146D11D10017B77F /* endian.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A1ECC3A0146D0B9000124779 /* endian.hpp */; };
@@ -57,11 +58,15 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A105900114CEF7D30072B418 /* config.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = config.hpp; sourceTree = "<group>"; };
 		A16318861476B0D0007C5B3B /* JPAsyncJsonParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JPAsyncJsonParser.h; path = ../../Source/json/ObjC/JPAsyncJsonParser.h; sourceTree = "<group>"; };
 		A16AEB321441FB2700FDB7B2 /* libjson-iOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libjson-iOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A16AEB351441FB2700FDB7B2 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		A16AEB391441FB2700FDB7B2 /* JPJsonLib-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "JPJsonLib-Prefix.pch"; path = "JPJsonLib/JPJsonLib-Prefix.pch"; sourceTree = "<group>"; };
 		A16AEB8E1441FDBE00FDB7B2 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
+		A1DDF7CF150658C4005653C2 /* TestLib-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TestLib-Prefix.pch"; sourceTree = "<group>"; };
+		A1DDF7D0150658C4005653C2 /* TestLib.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestLib.h; sourceTree = "<group>"; };
+		A1DDF7D1150658C4005653C2 /* TestLib.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TestLib.m; sourceTree = "<group>"; };
 		A1ECC39E146D0B9000124779 /* byte_swap.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = byte_swap.hpp; sourceTree = "<group>"; };
 		A1ECC39F146D0B9000124779 /* byte_swap_iterator.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = byte_swap_iterator.hpp; sourceTree = "<group>"; };
 		A1ECC3A0146D0B9000124779 /* endian.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = endian.hpp; sourceTree = "<group>"; };
@@ -82,7 +87,7 @@
 		A1ECC3B7146D0B9000124779 /* semantic_actions_test.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = semantic_actions_test.hpp; sourceTree = "<group>"; };
 		A1ECC3B8146D0B9000124779 /* semantic_actions.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = semantic_actions.hpp; sourceTree = "<group>"; };
 		A1ECC3B9146D0B9000124779 /* json_path.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = json_path.hpp; sourceTree = "<group>"; };
-		A1ECC3BA146D0B9000124779 /* parser.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = parser.hpp; sourceTree = "<group>"; };
+		A1ECC3BA146D0B9000124779 /* parser.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = parser.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		A1ECC3BB146D0B9000124779 /* parse.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = parse.hpp; sourceTree = "<group>"; };
 		A1ECC3BC146D0B9000124779 /* generate.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = generate.hpp; sourceTree = "<group>"; };
 		A1ECC3C8146D0B9000124779 /* JPJsonCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JPJsonCommon.h; path = ../../Source/json/ObjC/JPJsonCommon.h; sourceTree = "<group>"; };
@@ -128,6 +133,7 @@
 				A1ECC436146D0BB600124779 /* Public Headers */,
 				A1ECC390146D0B9000124779 /* Source */,
 				A16AEB371441FB2700FDB7B2 /* JPJsonLib */,
+				A1DDF7CD150658C4005653C2 /* TestLib */,
 				A16AEB341441FB2700FDB7B2 /* Frameworks */,
 				A16AEB331441FB2700FDB7B2 /* Products */,
 			);
@@ -166,6 +172,24 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		A1DDF7CD150658C4005653C2 /* TestLib */ = {
+			isa = PBXGroup;
+			children = (
+				A1DDF7D0150658C4005653C2 /* TestLib.h */,
+				A1DDF7D1150658C4005653C2 /* TestLib.m */,
+				A1DDF7CE150658C4005653C2 /* Supporting Files */,
+			);
+			path = TestLib;
+			sourceTree = "<group>";
+		};
+		A1DDF7CE150658C4005653C2 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				A1DDF7CF150658C4005653C2 /* TestLib-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 		A1ECC390146D0B9000124779 /* Source */ = {
 			isa = PBXGroup;
 			children = (
@@ -178,6 +202,7 @@
 		A1ECC393146D0B9000124779 /* json */ = {
 			isa = PBXGroup;
 			children = (
+				A105900114CEF7D30072B418 /* config.hpp */,
 				A1ECC397146D0B9000124779 /* endian */,
 				A1ECC398146D0B9000124779 /* unicode */,
 				A1ECC399146D0B9000124779 /* utility */,
@@ -337,6 +362,7 @@
 				A110B638146D11D10017B77F /* JPSemanticActionsBase_private.h in Headers */,
 				A110B639146D11D10017B77F /* unicode_traits.hpp in Headers */,
 				A16318871476B0D0007C5B3B /* JPAsyncJsonParser.h in Headers */,
+				A105900214CEF7D30072B418 /* config.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -410,7 +436,10 @@
 					armv6,
 					"$(ARCHS_STANDARD_32_BIT)",
 				);
-				GCC_PREPROCESSOR_DEFINITIONS = BOOST_STRICT_CONFIG;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"__ASSERT_MACROS_DEFINE_VERSIONS_WITHOUT_UNDERSCORES=0",
+					BOOST_STRICT_CONFIG,
+				);
 				JP_ROOT = xxx;
 				SDKROOT = iphoneos;
 			};
@@ -423,7 +452,10 @@
 					armv6,
 					"$(ARCHS_STANDARD_32_BIT)",
 				);
-				GCC_PREPROCESSOR_DEFINITIONS = BOOST_STRICT_CONFIG;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"__ASSERT_MACROS_DEFINE_VERSIONS_WITHOUT_UNDERSCORES=0",
+					BOOST_STRICT_CONFIG,
+				);
 				JP_ROOT = xxx;
 				SDKROOT = iphoneos;
 			};

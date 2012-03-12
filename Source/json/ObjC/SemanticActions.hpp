@@ -56,13 +56,16 @@
 #include <limits>
 #include <stdlib.h>  // numeric conversion
 #include <xlocale.h>
+
 #include "SemanticActionsBase.hpp"
 #include "unicode_traits.hpp"
-#include "json/unicode/unicode_utilities.hpp"
+
+#include "json/unicode/unicode_traits.hpp"
 #include "json/utility/simple_log.hpp"
 #include "json/utility/flags.hpp"
-#include "unicode_traits.hpp"
+
 #include <boost/static_assert.hpp>
+
 #import <Foundation/Foundation.h>
 #import <CoreFoundation/CoreFoundation.h>
 
@@ -159,10 +162,11 @@ namespace {
     CFStringRef createString(const CharT* s, std::size_t len, Encoding) 
     {
         typedef typename json::unicode::add_endianness<Encoding>::type encoding_type;
+        typedef typename json::unicode::encoding_traits<encoding_type>::code_unit_type code_unit_t;
         CFStringEncoding cf_encoding = json::cf_unicode_encoding_traits<encoding_type>::value;
         CFStringRef str = CFStringCreateWithBytes(NULL, 
                                                   static_cast<const UInt8*>(static_cast<const void*>(s)), 
-                                                  sizeof(typename encoding_type::code_unit_type)*len, 
+                                                  sizeof(code_unit_t)*len, 
                                                   cf_encoding, 0);
         return str;
     }
@@ -195,6 +199,9 @@ namespace json { namespace objc {
     using json::numberbuilder::normalized_number_t;
     //using json::semanticactions::json_path;
     
+    
+    using json::unicode::UTF_8_encoding_traits;
+    using json::unicode::encoding_traits;
     
 #if defined (JSON_INTERNAL_SEMANTIC_ACTIONS_PERFORMANCE_COUNTER)
     using utilities::timer;
@@ -275,6 +282,7 @@ namespace json { namespace objc {
     public:     
         typedef SemanticActionsBase<EncodingT>      base;
         
+        
 #pragma mark -  struct performance_counter
         struct performance_counter {
             performance_counter() :
@@ -332,6 +340,8 @@ namespace json { namespace objc {
         typedef typename base::char_t               char_t;     // char type of the StringBuffer
         typedef typename base::encoding_t           encoding_t;
         typedef typename base::result_type          result_type;
+        
+        typedef typename UTF_8_encoding_traits::code_unit_type utf8_code_unit;
         
     private:        
         typedef std::vector<size_t>                 markers_t;
@@ -940,7 +950,7 @@ namespace json { namespace objc {
         }
         
         template<typename Encoding>        
-        void push_number_string(const unicode::utf8_code_unit* s, size_t len, Encoding,
+        void push_number_string(const utf8_code_unit* s, size_t len, Encoding,
                                 typename boost::disable_if<
                                 boost::is_same<Encoding, EncodingT>
                                 >::type* = 0)
@@ -951,7 +961,7 @@ namespace json { namespace objc {
             // One caveat here, though: there is no byte-swapping. This is
             // a non-isssue as long the internal encoding's endianness is 
             // limited to host endianness.
-            typedef typename EncodingT::code_unit_type char_t;
+            typedef typename encoding_traits<EncodingT>::code_unit_type char_t;
             char_t buffer[256];
             if(len > 256) {
                 throwRuntimeError("bogus number string");
@@ -967,7 +977,7 @@ namespace json { namespace objc {
         
         // number strings are encoded in ASCII
         template<typename Encoding>        
-        void push_number_string(const unicode::utf8_code_unit* s, size_t len, Encoding,
+        void push_number_string(const utf8_code_unit* s, size_t len, Encoding,
                                 typename boost::enable_if<
                                 boost::is_same<Encoding, EncodingT>
                                 >::type* = 0)

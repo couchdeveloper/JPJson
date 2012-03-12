@@ -28,6 +28,8 @@
 #include <boost/mpl/bool.hpp>
 #include <typeinfo>
 
+#include "json/unicode/unicode_traits.hpp"
+
 
 
 //
@@ -95,11 +97,12 @@ namespace {
         typedef Object::const_iterator const_iterator;
         typedef Object::element element;
         
-        typedef Value::string_encoding_t::code_unit_type char_t;
+        typedef unicode::encoding_traits<Value::string_encoding_t>::code_unit_type char_t;
         typedef boost::mpl::apply<Value::policies_t::string_imp_tt, char_t>::type string_t;
         
         EXPECT_TRUE( (boost::is_same<key_t, String>::value) );
         EXPECT_TRUE( (boost::is_same<String, string_t>::value) );
+        EXPECT_TRUE( (boost::is_same<String::char_type, char_t>::value) );
         
         EXPECT_TRUE( (boost::is_same<value_t, Value>::value) );
         EXPECT_TRUE( (boost::is_same<value_t, Value>::value) );        

@@ -210,7 +210,7 @@ namespace {
     { 
         NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
         
-        NSString* fileName = @"Test-UTF8-esc.json";
+        NSString* fileName = @"Resources/Test-UTF8-esc.json";
         NSError* error;
         NSData* data = [[NSData alloc] initWithContentsOfFile:fileName
                                                       options:NSDataReadingUncached 
@@ -492,16 +492,16 @@ namespace {
         
         test_s tests[] = {
             //          input_                         input_len_   hasBOM_ encding_    parser_result_        
-            { "[]",                                             2,  false,  "UTF-8",    true },
-            { "\xEF\xBB\xBF""[]",                               5,  true,   "UTF-8",    true },
-            { "\x00[\x00]",                                     4,  false,  "UTF-16BE", true },
-            { "\xFE\xFF""\x00[\x00]",                           6,  true,   "UTF-16BE", true },
-            { "[\x00]\x00",                                     4,  false,  "UTF-16LE", true },
-            { "\xFF\xFE""[\x00]\x00",                           6,  true,   "UTF-16LE", true },
-            { "\x00\x00\x00[\x00\x00\x00]",                     8,  false,  "UTF-32BE", true },
-            { "\x00\x00\xFE\xFF""\x00\x00\x00[\x00\x00\x00]",   12, true,   "UTF-32BE", true },
-            { "[\x00\x00\x00]\x00\x00\x00",                     8,  false,  "UTF-32LE", true },
-            { "\xFF\xFE\x00\x00""[\x00\x00\x00]\x00\x00\x00",   12, true,   "UTF-32LE", true }
+//            { "[]",                                             2,  false,  "UTF-8",    true },
+//            { "\xEF\xBB\xBF""[]",                               5,  true,   "UTF-8",    true },
+//            { "\x00[\x00]",                                     4,  false,  "UTF-16BE", true },
+//            { "\xFE\xFF""\x00[\x00]",                           6,  true,   "UTF-16BE", true },
+//            { "[\x00]\x00",                                     4,  false,  "UTF-16LE", true },
+//            { "\xFF\xFE""[\x00]\x00",                           6,  true,   "UTF-16LE", true },
+            { "\x00\x00\x00[\x00\x00\x00]",                     8,  false,  "UTF-32BE", true }
+//            { "\x00\x00\xFE\xFF""\x00\x00\x00[\x00\x00\x00]",   12, true,   "UTF-32BE", true },
+//            { "[\x00\x00\x00]\x00\x00\x00",                     8,  false,  "UTF-32LE", true },
+//            { "\xFF\xFE\x00\x00""[\x00\x00\x00]\x00\x00\x00",   12, true,   "UTF-32LE", true }
         };
         
         const int count = sizeof(tests)/sizeof(test_s);

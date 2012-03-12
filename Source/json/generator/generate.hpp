@@ -27,12 +27,18 @@
 #include <boost/static_assert.hpp>
 #include <boost/type_traits.hpp>
 #include "json/unicode/unicode_utilities.hpp"
-#include "json/unicode/unicode_conversions.hpp"
+#include "json/unicode/unicode_converter.hpp"
+#include "json/endian/byte_swap.hpp"
 #include <algorithm>
 
 
 namespace json { namespace generator_internal {
-   
+    
+    
+    using namespace json::unicode;
+    
+    using json::byte_swap;
+       
     //
     // Copies a BOM for the specified encoding into a range beginning with dest.
     //
@@ -45,16 +51,157 @@ namespace json { namespace generator_internal {
     inline OutputIterator
     copyBOM(OutputIterator dest, EncodingT encoding)
     {
-        BOOST_STATIC_ASSERT( (boost::is_base_and_derived<json::unicode::utf_encoding_tag, EncodingT>::value) );
+        BOOST_STATIC_ASSERT( (boost::is_base_and_derived<utf_encoding_tag, EncodingT>::value) );
         
-        typedef typename EncodingT::bom_type bom_type;
-        bom_type bom = EncodingT::bom();
+        typedef typename encoding_traits<EncodingT>::bom_type bom_type;
+        bom_type bom = encoding_traits<EncodingT>::bom();
         return std::copy(bom.begin(), bom.end(), dest);        
     }
     
     
-    // Escape the Unicode sequence starting with first. 
-    // Only charaters which are required to be escaped according the JSON
+    
+    //
+    // Class string_encoder
+    //  
+    // The operator escapes and converts an Unicode sequence [first, last) 
+    // from encoding 'inEncoding' to encoding 'outEncoding' for proper use as
+    // a JSON String according RFC and copies the result into an output iterator.
+    //
+    // The options parameter specify how the string is encoded:
+    //
+    //  If no flags are set only characters which are required to be escaped 
+    //  according RFC 4627 will be escaped by prefixing it with a reverse solidus.
+    //
+    //  If option EscapeSolidus is set, in addition the solidus character ('/') 
+    //  will be esecaped.
+    // 
+    //  If EscapeNonASCII is set, every non ASCII character will be escaped
+    //  according RFC 4627. This results in an output containing only ASCII
+    //  characters.
+    //
+    // 
+    // Returns: 
+    //  Zero on success, otherwise a negative value indicating an error as decribed
+    //  by json::unicode::ErrorT.
+    //
+    // Requirements:
+    // The Unicode sequence starting with first shall be valid Unicode. Other-
+    // wise the behavior is undefined.
+    
+    // TODO: implement feature "Escape Non-ASCII" 
+    
+    template <
+        typename InIteratorT, typename InEncodingT, 
+        typename OutIteratorT, typename OutEncodingT
+    >
+    class string_encoder 
+    {
+    public:        
+        
+        enum EncodingOptions {
+            EscapeSolidus   = 1 << 0,
+            EscapeNonASCII  = 1 << 1
+        };
+        
+        inline std::size_t
+        operator()(InIteratorT&     first, 
+                   InIteratorT      last, 
+                   InEncodingT      inEncoding,
+                   OutIteratorT&    dest,
+                   OutEncodingT     outEncoding,
+                   EncodingOptions  options) const
+        {
+            typedef typename encoding_traits<UTF_8_encoding_tag>::code_unit_type utf8_char_type;
+            typedef typename encoding_traits<OutEncodingT>::code_unit_type      out_char_type;
+            
+            typedef typename encoding_traits<UTF_8_encoding_tag>::endian_tag    utf8_endian_t;
+            typedef typename add_endianness<OutEncodingT>::type                 to_encoding_t;
+            typedef typename encoding_traits<to_encoding_t>::endian_tag         to_endian_t;
+            
+            typedef utf8_char_type esc_buffer_type[8];
+            
+            assert((options & EscapeNonASCII) == 0);  // feature not yet implemented
+            
+            while (first != last) 
+            {
+                esc_buffer_type escapedSequenceBuffer; 
+                utf8_char_type* startEscaped = &escapedSequenceBuffer[0];
+                utf8_char_type* endEscaped = startEscaped;
+
+                bool escaped = true;                
+                unsigned int ch = encoding_traits<InEncodingT>::to_uint(*first); // ch in platform endianness
+                
+                switch (ch) {
+                    case '"':   *endEscaped++ = '\\'; *endEscaped++ = '"'; break;
+                    case '\\':  *endEscaped++ = '\\'; *endEscaped++ = '\\'; break;
+                    case '/':   
+                        if ((options & EscapeSolidus) != 0) {
+                            *endEscaped++ = '\\'; *endEscaped++ = '/';
+                        } else {
+                            escaped = false;
+                        }
+                        break;
+                    case '\b':  *endEscaped++ = '\\'; *endEscaped++ = 'b'; break;
+                    case '\f':  *endEscaped++ = '\\'; *endEscaped++ = 'f'; break;
+                    case '\n':  *endEscaped++ = '\\'; *endEscaped++ = 'n'; break;
+                    case '\r':  *endEscaped++ = '\\'; *endEscaped++ = 'r'; break;
+                    case '\t':  *endEscaped++ = '\\'; *endEscaped++ = 't'; break;                    
+                    default:
+                        if (ch < 0x20u) {
+                            // escape a control character
+                            *endEscaped++ = '\n';
+                            *endEscaped++ = 'u';
+                            *endEscaped++ = '0';
+                            *endEscaped++ = '0';
+                            *endEscaped++ = ((ch >> 4)+'0');
+                            *endEscaped++ = ((ch & 0x0Fu)+'0');
+                        }
+                        else {
+                            // unescaped
+                            escaped = false;
+                        }
+                } // switch
+                
+                if (escaped) {
+                    // Copy the escaped sequence from internal buffer to dest using encoding 'outEncoding':
+                    // Note, the character within the internal buffer shall be ASCII only.
+                    while (startEscaped != endEscaped) {
+                        assert(encoding_traits<UTF_8_encoding_tag>::to_uint(*startEscaped) <= 0x7Fu);
+                        out_char_type c = byte_swap<utf8_endian_t, to_endian_t>(
+                                static_cast<out_char_type>(encoding_traits<UTF_8_encoding_tag>::to_uint(*startEscaped++)));
+                        *dest++ = c;
+                    }
+                    ++first;
+                }
+                else {
+                    // Use an unsafe, stateless converter which only converts one character:
+                    typedef converter<
+                        InEncodingT, OutEncodingT, 
+                        Validation::UNSAFE, Stateful::No, ParseOne::Yes
+                    >  converter_t;
+                    
+                    int result = converter_t().convert(first, last, dest);
+                    if (result != 0) {
+                        return result;
+                    }
+                }
+            } // while
+            
+            return 0;
+        }    
+    };
+    
+    
+    
+    //
+    //  Deprecated: use class string_encoder.
+    //
+    
+    // Escape and convert a JSON string given as an Unicode sequence [first, last) 
+    // from encoding 'inEncoding' to encoding 'outEncoding' and copy the result 
+    // into dest.
+    //
+    // Only characters which are required to be escaped according the JSON
     // specification RFC 4627 will be escaped through prefixing it with a
     // reverse solidus.
     // These are namely the following characters:
@@ -64,53 +211,54 @@ namespace json { namespace generator_internal {
     // The input range [first .. last) shall contain a wellformed Unicode 
     // sequence in the specified Unicode encoding.
     // 
-    // Returns: 
-    //  The number of inserted code units in the output encoding.
-    //  If an error occured, the out parameter error contains a
-    //  value indicating the error.
-    //  Always check the error on return.
+    // Returns unicode::NO_ERROR on success, otherwise a negative number indicating 
+    // an error code as decribed in unicode::ErrorT.
     //
     template <
         typename InIteratorT, typename InEncodingT, 
         typename OutIteratorT, typename OutEncodingT
     >
-    inline std::size_t
+    inline int
     escape_convert_unsafe(
                           InIteratorT&     first, 
                           InIteratorT      last, 
                           InEncodingT      inEncoding,
                           OutIteratorT&    dest,
                           OutEncodingT     outEncoding,
-                          bool             escapeSolidus,
-                          int&             error)
+                          bool             escapeSolidus)
     {
-        typedef typename boost::iterator_value<InIteratorT>::type in_code_unit;
-        typedef typename boost::make_unsigned<in_code_unit>::type uin_code_unit;        
+        typedef typename encoding_traits<UTF_8_encoding_tag>::code_unit_type utf8_char_type;
+        typedef typename encoding_traits<OutEncodingT>::code_unit_type      out_char_type;
         
-        std::size_t count = 0;
-        while (first != last) {
-            int result;
-            uin_code_unit ch = static_cast<uin_code_unit>(*first);
-            in_code_unit escapedSequence[8];
+        typedef typename encoding_traits<UTF_8_encoding_tag>::endian_tag    utf8_endian_t;
+        typedef typename add_endianness<OutEncodingT>::type                 to_encoding_t;
+        typedef typename encoding_traits<to_encoding_t>::endian_tag         to_endian_t;
+        
+        typedef utf8_char_type esc_buffer_type[8];
+        
+        while (first != last) 
+        {
+            unsigned int ch = encoding_traits<InEncodingT>::to_uint(*first);
+            esc_buffer_type escapedSequenceBuffer;
             
             bool escaped = true;
-            in_code_unit* startEscaped = static_cast<in_code_unit*>(escapedSequence);
-            in_code_unit* endEscaped = startEscaped;
+            utf8_char_type* startEscaped = &escapedSequenceBuffer[0];
+            utf8_char_type* endEscaped = startEscaped;
             switch (ch) {
-                case static_cast<uin_code_unit>('"'):   *endEscaped++ = '\\'; *endEscaped++ = '"'; break;
-                case static_cast<uin_code_unit>('\\'):  *endEscaped++ = '\\'; *endEscaped++ = '\\'; break;
-                case static_cast<uin_code_unit>('/'):   
+                case '"':   *endEscaped++ = '\\'; *endEscaped++ = '"'; break;
+                case '\\':  *endEscaped++ = '\\'; *endEscaped++ = '\\'; break;
+                case '/':   
                     if (escapeSolidus) {
                         *endEscaped++ = '\\'; *endEscaped++ = '/';
                     } else {
                         escaped = false;
                     }
                     break;
-                case static_cast<uin_code_unit>('\b'):  *endEscaped++ = '\\'; *endEscaped++ = 'b'; break;
-                case static_cast<uin_code_unit>('\f'):  *endEscaped++ = '\\'; *endEscaped++ = 'f'; break;
-                case static_cast<uin_code_unit>('\n'):  *endEscaped++ = '\\'; *endEscaped++ = 'n'; break;
-                case static_cast<uin_code_unit>('\r'):  *endEscaped++ = '\\'; *endEscaped++ = 'r'; break;
-                case static_cast<uin_code_unit>('\t'):  *endEscaped++ = '\\'; *endEscaped++ = 't'; break;                    
+                case '\b':  *endEscaped++ = '\\'; *endEscaped++ = 'b'; break;
+                case '\f':  *endEscaped++ = '\\'; *endEscaped++ = 'f'; break;
+                case '\n':  *endEscaped++ = '\\'; *endEscaped++ = 'n'; break;
+                case '\r':  *endEscaped++ = '\\'; *endEscaped++ = 'r'; break;
+                case '\t':  *endEscaped++ = '\\'; *endEscaped++ = 't'; break;                    
                 default:
                     if (ch < 0x20u) {
                         // escape a control character
@@ -128,29 +276,34 @@ namespace json { namespace generator_internal {
             } // switch
             
             if (escaped) {
-                result = (int)json::unicode::convert_unsafe(startEscaped, endEscaped, inEncoding, dest, outEncoding, error);
-                if (result) {
-                    ++first;
+                // Copy the escaped sequence from internal buffer to dest using encoding 'outEncoding':
+                // Note, the character within the internal buffer shall be ASCII only.
+                while (startEscaped != endEscaped) {
+                    assert(encoding_traits<UTF_8_encoding_tag>::to_uint(*startEscaped) <= 0x7Fu);
+                    out_char_type c = byte_swap<utf8_endian_t, to_endian_t>(
+                            static_cast<out_char_type>(encoding_traits<UTF_8_encoding_tag>::to_uint(*startEscaped++)));
+                    *dest++ = c;
                 }
+                ++first;
             }
             else {
-                result = convert_one_unsafe(first, last, inEncoding, dest, outEncoding);
-            }
-            if (result > 0)
-                count += result;
-            else {
-                error = result;
-                return 0;
+                // Use an unsafe, stateless converter which only converts one character:
+                typedef converter<
+                    InEncodingT, OutEncodingT, 
+                    Validation::UNSAFE, Stateful::No, ParseOne::Yes
+                >  converter_t;
+                
+                int result = converter_t().convert(first, last, dest);
+                if (result != unicode::NO_ERROR) {
+                    return result;
+                }
             }
         } // while
         
-        error = 0;
-        return count;
+        return 0;
     }    
     
     
-    
-
     
     
 }} // namespace json::generator_internal

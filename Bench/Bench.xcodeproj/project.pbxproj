@@ -7,10 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A105900514CEFA780072B418 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = A14BE8F414681E8D0077EA5C /* JSONKit.m */; };
 		A11D2190144C9B6300D24AA8 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A11D218F144C9B6300D24AA8 /* main.cpp */; };
+		A122FDE2150CF22600D6C7C7 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1A3399913D96A6B000CE571 /* main.cpp */; };
 		A1485F761447133B00A88A92 /* Test-UTF8-esc.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = A1485F751447133B00A88A92 /* Test-UTF8-esc.json */; };
 		A1485F9F144733B500A88A92 /* Test-UTF8.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = A1485F9E144733B500A88A92 /* Test-UTF8.json */; };
-		A16B4A5513D9B3270021EA8E /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A16B4A5413D9B3270021EA8E /* main.cpp */; };
 		A171E72313D4924D00260A6B /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = A171E72213D4924D00260A6B /* main.mm */; };
 		A171E72913D4938E00260A6B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A171E72813D4938E00260A6B /* Foundation.framework */; };
 		A17DD7C9146AF503000AD974 /* timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A17DD7C7146AF503000AD974 /* timer.cpp */; };
@@ -26,8 +27,6 @@
 		A199EFD314447A6600B53269 /* Test-UTF8-esc.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = A199EFD214447A6600B53269 /* Test-UTF8-esc.json */; };
 		A19F3B1E1428C89D00266273 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A171E72413D4928400260A6B /* CoreFoundation.framework */; };
 		A19F3B211428C89D00266273 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A19F3B201428C89D00266273 /* main.cpp */; };
-		A1C72FA513FDAAD100E02C52 /* libicudata.46.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A1C72F9F13FDAAD100E02C52 /* libicudata.46.1.dylib */; };
-		A1C72FAA13FDAAD100E02C52 /* libicuuc.46.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A1C72FA413FDAAD100E02C52 /* libicuuc.46.1.dylib */; };
 		A1EF0DA1142666BF0083221D /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1EF0DA0142666BF0083221D /* main.cpp */; };
 		A1EF0DA814266A230083221D /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A171E72413D4928400260A6B /* CoreFoundation.framework */; };
 /* End PBXBuildFile section */
@@ -104,26 +103,26 @@
 /* Begin PBXFileReference section */
 		A11D218C144C9B6300D24AA8 /* parse_number */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = parse_number; sourceTree = BUILT_PRODUCTS_DIR; };
 		A11D218F144C9B6300D24AA8 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = main.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		A139AC6F1488B70B003E3881 /* unicode_conversion.debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = unicode_conversion.debug.xcconfig; sourceTree = "<group>"; };
+		A139AC701488B749003E3881 /* unicode_conversion.release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = unicode_conversion.release.xcconfig; sourceTree = "<group>"; };
 		A1485F751447133B00A88A92 /* Test-UTF8-esc.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "Test-UTF8-esc.json"; sourceTree = "<group>"; };
 		A1485F9E144733B500A88A92 /* Test-UTF8.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "Test-UTF8.json"; sourceTree = "<group>"; };
 		A14BE8F314681E8D0077EA5C /* JSONKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONKit.h; sourceTree = "<group>"; };
 		A14BE8F414681E8D0077EA5C /* JSONKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSONKit.m; sourceTree = "<group>"; };
-		A14BE8FE146841760077EA5C /* libjson.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjson.a; path = "../../../../../Library/Developer/Xcode/DerivedData/Json-avyupbfqigfmsihavqhqaqxjccfe/Build/Products/Release/libjson.a"; sourceTree = "<group>"; };
 		A16B4A5113D9B3260021EA8E /* json_parser */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = json_parser; sourceTree = BUILT_PRODUCTS_DIR; };
-		A16B4A5413D9B3270021EA8E /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = main.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		A16EEE3E1487DA3B00D12DA2 /* Bench.debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Bench.debug.xcconfig; sourceTree = "<group>"; };
+		A16EEE3F1487DB6D00D12DA2 /* Bench.release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Bench.release.xcconfig; sourceTree = "<group>"; };
 		A171E71E13D4922600260A6B /* AGJsonParser */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = AGJsonParser; sourceTree = BUILT_PRODUCTS_DIR; };
 		A171E72113D4924D00260A6B /* AGJsonParser-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AGJsonParser-Prefix.pch"; sourceTree = "<group>"; };
 		A171E72213D4924D00260A6B /* main.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; path = main.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		A171E72413D4928400260A6B /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		A171E72813D4938E00260A6B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		A17291B21454A53C00F7F240 /* libjson.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjson.a; path = "../../../../../Library/Developer/Xcode/DerivedData/Json-erlsofcekspqczcasdatcdjvtiuv/Build/Products/Release/libjson.a"; sourceTree = "<group>"; };
 		A17DD75A14698DE9000AD974 /* JPJson.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JPJson.framework; path = "../../../../../Library/Developer/Xcode/DerivedData/Json-avyupbfqigfmsihavqhqaqxjccfe/Build/Products/Release/JPJson.framework"; sourceTree = "<group>"; };
 		A17DD7C7146AF503000AD974 /* timer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = timer.cpp; sourceTree = "<group>"; };
 		A17DD7C8146AF503000AD974 /* timer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = timer.hpp; sourceTree = "<group>"; };
 		A17DD7D0146AF54F000AD974 /* libjson.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjson.a; path = "../../../../Library/Developer/Xcode/DerivedData/Json-hiazqngtzsfxawgakamtpamfsytx/Build/Products/Release/libjson.a"; sourceTree = "<group>"; };
 		A187B4D113FAA7AF00FB63BD /* unicode_conversion */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = unicode_conversion; sourceTree = BUILT_PRODUCTS_DIR; };
 		A187B4D413FAA7AF00FB63BD /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = main.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		A18D70991469877D002C72B5 /* JSONKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONKit.h; sourceTree = "<group>"; };
 		A1995FB81420A96E00595100 /* queue_bench */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = queue_bench; sourceTree = BUILT_PRODUCTS_DIR; };
 		A1995FBB1420A96E00595100 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = main.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		A199EFD214447A6600B53269 /* Test-UTF8-esc.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "Test-UTF8-esc.json"; sourceTree = "<group>"; };
@@ -131,12 +130,9 @@
 		A19F3B1C1428C89D00266273 /* Allocator_bench */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Allocator_bench; sourceTree = BUILT_PRODUCTS_DIR; };
 		A19F3B201428C89D00266273 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		A1A3399913D96A6B000CE571 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = main.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		A1C72F9F13FDAAD100E02C52 /* libicudata.46.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicudata.46.1.dylib; path = /opt/local/lib/libicudata.46.1.dylib; sourceTree = "<absolute>"; };
-		A1C72FA413FDAAD100E02C52 /* libicuuc.46.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicuuc.46.1.dylib; path = /opt/local/lib/libicuuc.46.1.dylib; sourceTree = "<absolute>"; };
-		A1ED08C11428DE6200B276C4 /* libtcmalloc.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libtcmalloc.0.dylib; path = /opt/local/lib/libtcmalloc.0.dylib; sourceTree = "<absolute>"; };
-		A1ED08C41428DEFF00B276C4 /* libtcmalloc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libtcmalloc.a; path = /opt/local/lib/libtcmalloc.a; sourceTree = "<absolute>"; };
 		A1EF0D9D142666BF0083221D /* sync_queue_iterator_bench */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = sync_queue_iterator_bench; sourceTree = BUILT_PRODUCTS_DIR; };
 		A1EF0DA0142666BF0083221D /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		A1FF8C6D14891C07003DF439 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -167,8 +163,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A1C72FA513FDAAD100E02C52 /* libicudata.46.1.dylib in Frameworks */,
-				A1C72FAA13FDAAD100E02C52 /* libicuuc.46.1.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -223,17 +217,11 @@
 			path = JSONKit;
 			sourceTree = "<group>";
 		};
-		A16B4A5313D9B3260021EA8E /* json_parser */ = {
-			isa = PBXGroup;
-			children = (
-				A16B4A5413D9B3270021EA8E /* main.cpp */,
-			);
-			path = json_parser;
-			sourceTree = "<group>";
-		};
 		A171E6E313D488FC00260A6B = {
 			isa = PBXGroup;
 			children = (
+				A16EEE3E1487DA3B00D12DA2 /* Bench.debug.xcconfig */,
+				A16EEE3F1487DB6D00D12DA2 /* Bench.release.xcconfig */,
 				A17DD7E6146BB950000AD974 /* benches */,
 				A17DD7C6146AF503000AD974 /* utilities */,
 				A14BE8F114681E8D0077EA5C /* Vendor */,
@@ -262,7 +250,6 @@
 			children = (
 				A171E72113D4924D00260A6B /* AGJsonParser-Prefix.pch */,
 				A171E72213D4924D00260A6B /* main.mm */,
-				A18D70991469877D002C72B5 /* JSONKit.h */,
 			);
 			path = AGJsonParser;
 			sourceTree = "<group>";
@@ -272,12 +259,6 @@
 			children = (
 				A17DD7D0146AF54F000AD974 /* libjson.a */,
 				A17DD75A14698DE9000AD974 /* JPJson.framework */,
-				A1ED08C11428DE6200B276C4 /* libtcmalloc.0.dylib */,
-				A14BE8FE146841760077EA5C /* libjson.a */,
-				A1ED08C41428DEFF00B276C4 /* libtcmalloc.a */,
-				A17291B21454A53C00F7F240 /* libjson.a */,
-				A1C72F9F13FDAAD100E02C52 /* libicudata.46.1.dylib */,
-				A1C72FA413FDAAD100E02C52 /* libicuuc.46.1.dylib */,
 				A171E72813D4938E00260A6B /* Foundation.framework */,
 				A171E72413D4928400260A6B /* CoreFoundation.framework */,
 			);
@@ -298,8 +279,8 @@
 			isa = PBXGroup;
 			children = (
 				A171E72013D4924D00260A6B /* AGJsonParser */,
+				A1FF8C6C14891C07003DF439 /* JsonContainerBench */,
 				A1A3399813D96A6B000CE571 /* json_parser */,
-				A16B4A5313D9B3260021EA8E /* json_parser */,
 				A187B4D313FAA7AF00FB63BD /* unicode_conversion */,
 				A1995FBA1420A96E00595100 /* queue_bench */,
 				A1EF0D9F142666BF0083221D /* sync_queue_iterator_bench */,
@@ -313,6 +294,8 @@
 			isa = PBXGroup;
 			children = (
 				A187B4D413FAA7AF00FB63BD /* main.cpp */,
+				A139AC6F1488B70B003E3881 /* unicode_conversion.debug.xcconfig */,
+				A139AC701488B749003E3881 /* unicode_conversion.release.xcconfig */,
 			);
 			path = unicode_conversion;
 			sourceTree = "<group>";
@@ -359,6 +342,14 @@
 				A1EF0DA0142666BF0083221D /* main.cpp */,
 			);
 			path = sync_queue_iterator_bench;
+			sourceTree = "<group>";
+		};
+		A1FF8C6C14891C07003DF439 /* JsonContainerBench */ = {
+			isa = PBXGroup;
+			children = (
+				A1FF8C6D14891C07003DF439 /* main.cpp */,
+			);
+			path = JsonContainerBench;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -489,7 +480,7 @@
 		A171E6E513D488FC00260A6B /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0420;
+				LastUpgradeCheck = 0430;
 			};
 			buildConfigurationList = A171E6E813D488FC00260A6B /* Build configuration list for PBXProject "Bench" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -528,8 +519,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A16B4A5513D9B3270021EA8E /* main.cpp in Sources */,
 				A17DD7CA146AF503000AD974 /* timer.cpp in Sources */,
+				A122FDE2150CF22600D6C7C7 /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -539,6 +530,7 @@
 			files = (
 				A171E72313D4924D00260A6B /* main.mm in Sources */,
 				A17DD7C9146AF503000AD974 /* timer.cpp in Sources */,
+				A105900514CEFA780072B418 /* JSONKit.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -587,12 +579,9 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_DYNAMIC_NO_PIC = YES;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				HEADER_SEARCH_PATHS = "$(BOOST_ROOT)";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
@@ -607,10 +596,12 @@
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_DYNAMIC_NO_PIC = YES;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				HEADER_SEARCH_PATHS = "$(BOOST_ROOT)";
+				LLVM_LTO = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -621,26 +612,15 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
-				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
-				CLANG_CXX_LIBRARY = "libc++";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = YES;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					BOOST_DISABLE_THREADS,
-					BOOST_STRICT_CONFIG,
-					DEBUG,
-				);
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				HEADER_SEARCH_PATHS = (
-					"\"$(BOOST_ROOT)\"",
+					"$(inherited)",
 					"\"$(JP_ROOT)\"",
 				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					/opt/local/lib,
-				);
-				LLVM_LTO = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -651,29 +631,16 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
-				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
-				CLANG_CXX_LIBRARY = "libc++";
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_DYNAMIC_NO_PIC = YES;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_OPTIMIZATION_LEVEL = 3;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					NS_BLOCK_ASSERTIONS,
-					BOOST_DISABLE_THREADS,
-					BOOST_STRICT_CONFIG,
-					NDEBUG,
-				);
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				HEADER_SEARCH_PATHS = (
-					"\"$(BOOST_ROOT)\"",
+					"$(inherited)",
 					"\"$(JP_ROOT)\"",
 				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					/opt/local/lib,
-				);
-				LLVM_LTO = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -681,42 +648,54 @@
 		};
 		A171E6F513D488FD00260A6B /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A16EEE3E1487DA3B00D12DA2 /* Bench.debug.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					BOOST_STRICT_CONFIG,
-					DEBUG,
+					"$(BOOST_GCC_PREPROCESSOR_DEFINITIONS)",
+					"$(BENCH_GCC_PREPROCESSOR_DEFINITIONS)",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				JP_ROOT = ../Source;
-				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				HEADER_SEARCH_PATHS = (
+					"$(BENCH_HEADER_SEARCH_PATHS)",
+					"$(BOOST_HEADER_SEARCH_PATHS)",
+				);
+				JP_ROOT = "$(SRCROOT)/../Source";
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
+				USER_HEADER_SEARCH_PATHS = "";
 			};
 			name = Debug;
 		};
 		A171E6F613D488FD00260A6B /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A16EEE3F1487DB6D00D12DA2 /* Bench.release.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					NS_BLOCK_ASSERTIONS,
-					NDEBUG,
+					"$(BOOST_GCC_PREPROCESSOR_DEFINITIONS)",
+					"$(BENCH_GCC_PREPROCESSOR_DEFINITIONS)",
 				);
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				JP_ROOT = ../Source;
-				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				HEADER_SEARCH_PATHS = (
+					"$(BENCH_HEADER_SEARCH_PATHS)",
+					"$(BOOST_HEADER_SEARCH_PATHS)",
+				);
+				JP_ROOT = "$(SRCROOT)/../Source";
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				SDKROOT = macosx;
+				USER_HEADER_SEARCH_PATHS = "";
 			};
 			name = Release;
 		};
@@ -729,21 +708,14 @@
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_DYNAMIC_NO_PIC = YES;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					BOOST_DISABLE_THREADS,
-					XX_BOOST_STRICT_CONFIG,
-					DEBUG,
-				);
 				HEADER_SEARCH_PATHS = (
-					"\"$(SRCROOT)\"",
 					"\"$(JP_ROOT)\"",
-					"\"$(BUILT_PRODUCTS_DIR)\"",
-					"\"$(BOOST_ROOT)\"",
-				);
-				LIBRARY_SEARCH_PATHS = (
+					"\"$(SRCROOT)\"",
 					"$(inherited)",
-					/opt/local/lib,
+					"\"$(BUILT_PRODUCTS_DIR)\"",
+					"$(SRCROOT)/Vendor",
 				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_CFLAGS = "-v";
 				OTHER_LDFLAGS = "-ObjC";
@@ -762,22 +734,14 @@
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_DYNAMIC_NO_PIC = YES;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_OPTIMIZATION_LEVEL = 3;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					NS_BLOCK_ASSERTIONS,
-					NDEBUG,
-					BOOST_STRICT_CONFIG,
-				);
 				HEADER_SEARCH_PATHS = (
-					"$(SRCROOT)",
 					"\"$(JP_ROOT)\"",
-					"\"$(BUILT_PRODUCTS_DIR)\"",
-					"\"$(BOOST_ROOT)\"",
-				);
-				LIBRARY_SEARCH_PATHS = (
+					"\"$(SRCROOT)\"",
 					"$(inherited)",
-					/opt/local/lib,
+					"\"$(BUILT_PRODUCTS_DIR)\"",
+					"$(SRCROOT)/Vendor",
 				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_CFLAGS = "-v";
 				OTHER_LDFLAGS = "-ObjC";
@@ -787,52 +751,85 @@
 		};
 		A187B4D813FAA7AF00FB63BD /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A139AC6F1488B70B003E3881 /* unicode_conversion.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				GCC_DYNAMIC_NO_PIC = YES;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_INPUT_FILETYPE = sourcecode.cpp.objcpp;
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
 					"$(inherited)",
+					"$(ICU_GCC_PREPROCESSOR_DEFINITIONS)",
 				);
+				GCC_STRICT_ALIASING = YES;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = YES;
+				GCC_WARN_SHADOW = YES;
+				GCC_WARN_SIGN_COMPARE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				HEADER_SEARCH_PATHS = (
-					/opt/local/include,
+					"$(ICU_HEADER_SEARCH_PATHS)",
 					"$(JP_ROOT)",
-					"$(BOOST_ROOT)",
+					"$(inherited)",
 				);
 				LIBRARY_SEARCH_PATHS = (
+					"$(ICU_LIBRARY_SEARCH_PATHS)",
 					"$(inherited)",
-					/opt/local/lib,
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				OTHER_CFLAGS = "-v";
+				OTHER_LDFLAGS = (
+					"$(ICU_OTHER_LDFLAGS)",
+					"$(inherited)",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
 		};
 		A187B4D913FAA7AF00FB63BD /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A139AC701488B749003E3881 /* unicode_conversion.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				GCC_DYNAMIC_NO_PIC = YES;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_INPUT_FILETYPE = sourcecode.cpp.objcpp;
 				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"$(ICU_GCC_PREPROCESSOR_DEFINITIONS)",
+				);
+				GCC_STRICT_ALIASING = YES;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = YES;
+				GCC_WARN_SHADOW = YES;
+				GCC_WARN_SIGN_COMPARE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				HEADER_SEARCH_PATHS = (
-					/opt/local/include,
+					"$(ICU_HEADER_SEARCH_PATHS)",
 					"$(JP_ROOT)",
-					"$(BOOST_ROOT)",
+					"$(inherited)",
 				);
 				LIBRARY_SEARCH_PATHS = (
+					"$(ICU_LIBRARY_SEARCH_PATHS)",
 					"$(inherited)",
-					/opt/local/lib,
 				);
 				LLVM_LTO = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				OTHER_CFLAGS = "-v";
+				OTHER_LDFLAGS = (
+					"$(ICU_OTHER_LDFLAGS)",
+					"$(inherited)",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -844,12 +841,9 @@
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_DYNAMIC_NO_PIC = YES;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(BOOST_ROOT)",
@@ -868,7 +862,9 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_DYNAMIC_NO_PIC = YES;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(BOOST_ROOT)",
@@ -885,12 +881,9 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_DYNAMIC_NO_PIC = YES;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				HEADER_SEARCH_PATHS = "$(JP_ROOT)";
 				LIBRARY_SEARCH_PATHS = (
@@ -909,7 +902,9 @@
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_DYNAMIC_NO_PIC = YES;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				HEADER_SEARCH_PATHS = "$(JP_ROOT)";
 				LIBRARY_SEARCH_PATHS = (
@@ -932,10 +927,7 @@
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(BOOST_ROOT)",
@@ -958,7 +950,7 @@
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(BOOST_ROOT)",

@@ -31,6 +31,7 @@
 #include "semantic_actions_base.hpp"
 #include "json/unicode/unicode_detect_bom.hpp"
 #include "json/unicode/unicode_utilities.hpp"
+#include "json/unicode/unicode_traits.hpp"
 #include "json/utility/flags.hpp"
 
 
@@ -93,6 +94,8 @@ UTILITY_DEFINE_FLAG_OPERATORS(json::parse_options);
 
 namespace json { namespace parse_internal {
     
+    using json::unicode::encoding_traits;
+    
     const char* const JP_JSON_EXTRA_CHARACTERS_AT_END_String = "extra characters at end of json document not allowed";
     
     // Parses multiple json documents unless sa.additionalInputIsError()
@@ -101,7 +104,8 @@ namespace json { namespace parse_internal {
     inline
     bool parse_loop(Parser& parser, SemanticActions& sa, Iterator& first, Iterator last) 
     {
-        typedef typename SemanticActions::error_t sa_error_t;
+        typedef typename SemanticActions::error_t       sa_error_t;
+        typedef typename Parser::source_encoding_type   encoding_t;
         
         size_t count = 0;   // count the number of json documents
         bool done = false;  // If true, terminates the parse loop
@@ -140,7 +144,7 @@ namespace json { namespace parse_internal {
                         // terminate the parse loop, regardless if iterator 'first' 
                         // did not yet reach iterator 'last':
                         while (first != last) {
-                            uint32_t c = static_cast<uint32_t>(*first);
+                            uint32_t c = encoding_traits<encoding_t>::to_uint(*first);
                             if (c == uint32_t(' ') 
                                 or c == uint32_t('\t') 
                                 or c == uint32_t('\n')
@@ -181,7 +185,8 @@ namespace json { namespace parse_internal {
                             else 
                             {
                                 // If there is no further JSON document, stop:
-                                if (*first != '{' and *first != '[') {   
+                                uint32_t c = encoding_traits<encoding_t>::to_uint(*first);
+                                if (c != '{' and c != '[') {   
                                     done = true;
                                     result = true;
 #if defined (DEBUG)                    
@@ -446,7 +451,8 @@ namespace json {
 namespace json {
     
     using parse_internal::parse_loop;
-    using parse_internal::semantic_actions_apply_flags;        
+    using parse_internal::semantic_actions_apply_flags;    
+    using unicode::encoding_traits;
     
     //
     //  bool parse(Iterator& first, Iterator last, ParseOptions flags, int* error = NULL)
@@ -479,7 +485,8 @@ namespace json {
         
         
         BOOST_STATIC_ASSERT( (boost::is_base_and_derived<utf_encoding_tag, SourceEncoding>::value) );
-        BOOST_STATIC_ASSERT( (sizeof(typename boost::iterator_value<IteratorT>::type) == sizeof(typename SourceEncoding::code_unit_type)) );
+        BOOST_STATIC_ASSERT( (sizeof(typename boost::iterator_value<IteratorT>::type) 
+                              == sizeof(typename encoding_traits<SourceEncoding>::code_unit_type)) );
         
         SemanticActions sa;
         if (flags) 
@@ -548,7 +555,8 @@ namespace json {
         
         //BOOST_STATIC_ASSERT( (boost::is_base_and_derived<json::semantic_actions_base, SemanticActionsT>::value) );
         BOOST_STATIC_ASSERT( (boost::is_base_and_derived<unicode::utf_encoding_tag, SourceEncoding>::value) );
-        BOOST_STATIC_ASSERT( (sizeof(typename boost::iterator_value<IteratorT>::type) == sizeof(typename SourceEncoding::code_unit_type)) );
+        BOOST_STATIC_ASSERT( (sizeof(typename boost::iterator_value<IteratorT>::type) 
+                              == sizeof(typename encoding_traits<SourceEncoding>::code_unit_type)) );
         
         // TODO: make a static assert which checks the semantic actions. For now, 
         // we simply assume the user's semantic actions class inherits from 

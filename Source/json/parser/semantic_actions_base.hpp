@@ -27,11 +27,13 @@
 #include <iostream>
 #include <boost/config.hpp>
 #include <boost/functional/hash/hash.hpp>
+#include <boost/static_assert.hpp>
 
 #include "parser_errors.hpp"
 #include "json/utility/number_builder.hpp"
 #include "json/utility/simple_log.hpp"
 #include "json/utility/flags.hpp"
+#include "json/unicode/unicode_traits.hpp"
 
 using json::utility::logger;
 #if defined (DEBUG)
@@ -86,6 +88,8 @@ UTILITY_DEFINE_FLAG_OPERATORS(json::semanticactions::extension_options);  // sha
 namespace json { 
     
     using namespace semanticactions;
+    using unicode::encoding_traits;
+    using unicode::utf_encoding_tag;
     
     // Requires:
     // Copy Constructable, Assignable
@@ -93,7 +97,8 @@ namespace json {
     template <typename DerivedT, typename StringBufferEncodingT>
     class semantic_actions_base
     {
-
+        BOOST_STATIC_ASSERT( (boost::is_base_and_derived<utf_encoding_tag, StringBufferEncodingT>::value) );
+        
         struct error_info : std::pair<int, std::string> 
         {
             typedef std::pair<int, std::string> base;
@@ -123,8 +128,8 @@ namespace json {
         
     public:    
         typedef error_info                                  error_t;
-        typedef typename StringBufferEncodingT::code_unit_type   char_t;
         typedef StringBufferEncodingT                       encoding_t;  // specifies the string buffer encoding
+        typedef typename encoding_traits<encoding_t>::code_unit_type   char_t;
         
         typedef json::utility::logger<LOG_MAX_LEVEL>        logger_t;
         typedef typename json::numberbuilder::number_t      nb_number_t;

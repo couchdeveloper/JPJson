@@ -23,6 +23,7 @@
 #import "JPSemanticActions.h"  // Default Semantic Actions
 #include "json/parser/parse.hpp"
 #include "json/unicode/unicode_detect_bom.hpp"
+#include "json/unicode/unicode_traits.hpp"
 #include "json/parser/parser_errors.hpp"
 #include <dispatch/dispatch.h>
 

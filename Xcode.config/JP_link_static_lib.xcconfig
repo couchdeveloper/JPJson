@@ -1,0 +1,24 @@
+//
+//  JP_link_static_lib.xcconfig
+//  
+//
+//  Created by Andreas Grosam on 12/1/11.
+//  Copyright (c) 2011 __MyCompanyName__. All rights reserved.
+//
+
+// Use this build configuration for targets which link to the static library
+// libjson.a. 
+
+// This setting assumes, the public headers are installed as specified.
+JP_PUBLIC_HEADERS = "$(BUILT_PRODUCTS_DIR)"
+
+
+JP_HEADER_SEARCH_PATHS = "$(JP_PUBLIC_HEADERS)"
+JP_OTHER_LDFLAGS = -ObjC
+
+
+// Additional steps:
+// The target must explicitly include the static library in its 
+// "Link Binary With Libraries" Build Phase in order to deduce library type, 
+// path and dependencies.
+

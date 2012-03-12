@@ -61,6 +61,11 @@ namespace {
         
         ByteSwapTest() {
             // You can do set-up work for each test here.
+            
+#if defined (DEBUG)
+            std::cout << "WARNING: Running in DEBUG mode. Benchmark tests will be disabled!\n" ;
+#endif        
+            
         }
         
         virtual ~ByteSwapTest() {
@@ -163,12 +168,14 @@ namespace {
         
     }
     
+    
+    
+#if defined (DEBUG) 
+    TEST_F(ByteSwapTest, DISABLED_BenchByteSwapUInt16) 
+#else
     TEST_F(ByteSwapTest, BenchByteSwapUInt16) 
-    {
-#if !defined (NDEBUG)
-        std::cout << "WARNING: BenchByteSwap: no release build, performance result may be misleading!\n" ;
-#endif        
-        
+#endif    
+    {        
         using utilities::timer;
         
         // no conversions applied:
@@ -197,12 +204,12 @@ namespace {
         
     }
     
+#if defined (DEBUG)
+    TEST_F(ByteSwapTest, DISABLED_BenchByteSwapUInt32) 
+#else
     TEST_F(ByteSwapTest, BenchByteSwapUInt32) 
+#endif    
     {
-#if !defined (NDEBUG)
-        std::cout << "WARNING: BenchByteSwap: no release build, performance result may be misleading!\n" ;
-#endif        
-        
         using utilities::timer;
         
         // no conversions applied:
@@ -232,12 +239,12 @@ namespace {
     }
     
     
+#if defined (DEBUG)    
+    TEST_F(ByteSwapTest, DISABLED_BenchByteSwapUInt64) 
+#else    
     TEST_F(ByteSwapTest, BenchByteSwapUInt64) 
+#endif    
     {
-#if !defined (NDEBUG)
-        std::cout << "WARNING: BenchByteSwap: no release build, performance result may be misleading!\n" ;
-#endif        
-        
         using utilities::timer;
         
         // no conversions applied:

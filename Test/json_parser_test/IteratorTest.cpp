@@ -319,6 +319,11 @@ namespace {
         
         IteratorTestA() {
             // You can do set-up work for each test here.
+            
+#if defined (DEBUG)
+            std::cout << "WARNING: DEBUG mode: Benchmark test will be skipped" << std::endl ;
+#endif      
+            
         }
         
         virtual ~IteratorTestA() {
@@ -499,11 +504,13 @@ namespace {
         EXPECT_TRUE(  (ws + 1) == first );        
     } 
 
+    
+#if defined (DEBUG)    
+    TEST_F(IteratorTestA, DISABLED_BenchByteSwapIterator1) 
+#else
     TEST_F(IteratorTestA, BenchByteSwapIterator1) 
+#endif    
     {
-    #if !defined (NDEBUG)
-        std::cout << "WARNING: BenchByteSwapIterator1 skipped: no release build, performance result may be misleading!\n" ;
-    #else      
         
         using utilities::timer;
         
@@ -577,7 +584,6 @@ namespace {
         // Accepted degradion is 1.0
         EXPECT_LT( degradation, 1.0 );
         
-    #endif        
     }
 
     TEST_F(IteratorTestA, SelectByteSwapIterator) 

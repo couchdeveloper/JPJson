@@ -99,8 +99,6 @@ namespace {
         NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
         
         SemanticActions<UTF_8_encoding_tag> sa; 
-
-        sa.cacheDataStrings(false);        
                 
         sa.parse_begin();
         sa.begin_array();
@@ -115,21 +113,21 @@ namespace {
             for (int i = 0; i < N; ++i) {
                 char buffer[256];
                 std::size_t len = snprintf(buffer, sizeof(buffer), "key#%d", i);
-                sa.push_key(buffer, len);
                 sa.begin_value_with_key(buffer, len, i);
-                sa.push_string("string", 6);
+                sa.value_string("string", 6);
                 sa.end_value_with_key(buffer, len, i);                              
+                //std::cout << sa.json_path() << " = " << std::endl;
             }
             
-            sa.push_key("list", 4);
             sa.begin_value_with_key("list", 4, N);
             sa.begin_array();
             for (int k = 0; k < K; ++k) {
                 sa.begin_value_at_index(k);
                 char buffer[246];
                 std::size_t len = snprintf(buffer, sizeof(buffer), "string#%d", k);
-                sa.push_string(buffer, len);
+                sa.value_string(buffer, len);
                 sa.end_value_at_index(k);
+                //std::cout << sa.json_path() << " = " << std::endl;
             }
             sa.end_array();
             sa.end_value_with_key("list", 4, N);                              

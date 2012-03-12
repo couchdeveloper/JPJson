@@ -375,7 +375,13 @@ namespace {
                 EXPECT_EQ(true, delivered);
             });
             
-            dispatch_semaphore_wait(sem, dispatch_time(DISPATCH_TIME_NOW, 1*NSEC_PER_SEC));
+            dispatch_time_t timeout = 
+#if defined (DEBUG)
+                DISPATCH_TIME_FOREVER;
+#else
+                dispatch_time(DISPATCH_TIME_NOW, 1*NSEC_PER_SEC);
+#endif
+            dispatch_semaphore_wait(sem, timeout);
             
             EXPECT_EQ(true, startCalled) << "at index " << idx;
             EXPECT_EQ(true, endCalled) << "at index " << idx;

@@ -6,6 +6,7 @@
 //  Copyright (c) 2011 __MyCompanyName__. All rights reserved.
 //
 
+#error Obsolete
 #warning This file will become obsolete
 
 #include "gtest/gtest.h"
@@ -20,7 +21,6 @@
 
 
 
-#pragma warning obsolete
 
 namespace {
     

@@ -23,12 +23,15 @@
 #include "SemanticActionsBase.hpp"
 #include "JPSemanticActionsBase_private.h"
 #include "json/unicode/unicode_utilities.hpp"
+#include "json/unicode/unicode_traits.hpp"
 #include "json/ObjC/unicode_traits.hpp"
 
 
 
 namespace {
     
+    
+    using json::unicode::encoding_traits;
     
     //
     // Private Semantic Actions Implementation Class
@@ -39,9 +42,26 @@ namespace {
         public json::objc::SemanticActionsBase<EncodingT>
     {
         typedef json::objc::SemanticActionsBase<EncodingT> base;
+        
     public:
-        typedef typename EncodingT::code_unit_type char_t;
+        typedef typename encoding_traits<EncodingT>::code_unit_type char_t;
         typedef typename base::nb_number_t nb_number_t;
+
+    private:                
+        typedef void (*push_string_imp_func_ptr_t)(id, SEL, const void*, size_t, NSStringEncoding);
+        typedef void (*push_key_imp_func_ptr_t)(id, SEL, const void*, size_t, NSStringEncoding);
+        typedef void (*push_number_imp_func_ptr_t)(id, SEL, const char*, size_t);
+        typedef void (*push_boolean_imp_func_ptr_t)(id, SEL, BOOL);
+        typedef void (*push_null_imp_func_ptr_t)(id, SEL);
+        typedef void (*begin_array_imp_func_ptr_t)(id, SEL);
+        typedef void (*end_array_imp_func_ptr_t)(id, SEL);
+        typedef void (*begin_object_imp_func_ptr_t)(id, SEL);
+        typedef BOOL (*end_object_imp_func_ptr_t)(id, SEL);
+        typedef void (*begin_value_at_index_imp_func_ptr_t)(id, SEL, size_t);
+        typedef void (*end_value_at_index_imp_func_ptr_t)(id, SEL, size_t);
+        typedef void (*begin_value_with_key_imp_func_ptr_t)(id, SEL, const char_t*, size_t, NSStringEncoding, size_t);
+        typedef void (*end_value_with_key_imp_func_ptr_t)(id, SEL, const char_t*, size_t, NSStringEncoding, size_t);
+        
     public:
         StreamSemanticActionsBase(id<JPSemanticActionsProtocol> delegate = nil)
         : base(delegate)
@@ -51,6 +71,46 @@ namespace {
         
         
         virtual void parse_begin_imp() {
+            push_string_imp_ = [this->delegate_ respondsToSelector:@selector(parserFoundJsonString:length:encoding:)] ? 
+                (push_string_imp_func_ptr_t)[(NSObject*)this->delegate_ methodForSelector: @selector(parserFoundJsonString:length:encoding:)]
+                : 0;        
+            push_key_imp_ = [this->delegate_ respondsToSelector:@selector(parserFoundJsonKey:length:encoding:)] ? 
+                (push_key_imp_func_ptr_t)[(NSObject*)this->delegate_ methodForSelector: @selector(parserFoundJsonKey:length:encoding:)]
+                : 0;
+            push_number_imp_ = [this->delegate_ respondsToSelector:@selector(parserFoundJsonNumber:length:)] ? 
+                (push_number_imp_func_ptr_t)[(NSObject*)this->delegate_ methodForSelector:@selector(parserFoundJsonNumber:length:)]
+                : 0;
+            push_boolean_imp_ = [this->delegate_ respondsToSelector:@selector(parserFoundJsonBoolean:)] ? 
+                (push_boolean_imp_func_ptr_t)[(NSObject*)this->delegate_ methodForSelector:@selector(parserFoundJsonBoolean:)]
+                : 0;
+            push_null_imp_ = [this->delegate_ respondsToSelector:@selector(parserFoundJsonNull)] ? 
+                (push_null_imp_func_ptr_t)[(NSObject*)this->delegate_ methodForSelector:@selector(parserFoundJsonNull)]
+                : 0;
+            begin_array_imp_ = [this->delegate_ respondsToSelector:@selector(parserFoundJsonArrayBegin)] ? 
+                (begin_array_imp_func_ptr_t)[(NSObject*)this->delegate_ methodForSelector: @selector(parserFoundJsonArrayBegin)]
+                : 0;
+            end_array_imp_ = [this->delegate_ respondsToSelector:@selector(parserFoundJsonArrayEnd)] ? 
+                (end_array_imp_func_ptr_t)[(NSObject*)this->delegate_ methodForSelector: @selector(parserFoundJsonArrayEnd)]
+                : 0;
+            begin_object_imp_ = [this->delegate_ respondsToSelector:@selector(parserFoundJsonObjectBegin)] ? 
+                (begin_object_imp_func_ptr_t)[(NSObject*)this->delegate_ methodForSelector: @selector(parserFoundJsonObjectBegin)]
+                : 0;
+            end_object_imp_ = [this->delegate_ respondsToSelector:@selector(parserFoundJsonObjectEnd)] ? 
+                (end_object_imp_func_ptr_t)[(NSObject*)this->delegate_ methodForSelector: @selector(parserFoundJsonObjectEnd)]
+                : 0;
+            begin_value_at_index_imp_ = [this->delegate_ respondsToSelector:@selector(parserFoundJsonValueBeginAtIndex:)] ? 
+                (begin_value_at_index_imp_func_ptr_t)[(NSObject*)this->delegate_ methodForSelector: @selector(parserFoundJsonValueBeginAtIndex:)]
+                : 0;
+            end_value_at_index_imp_ = [this->delegate_ respondsToSelector:@selector(parserFoundJsonValueEndAtIndex:)] ? 
+                (end_value_at_index_imp_func_ptr_t)[(NSObject*)this->delegate_ methodForSelector: @selector(parserFoundJsonValueEndAtIndex:)]
+                : 0;
+            begin_value_with_key_imp_ = [this->delegate_ respondsToSelector:@selector(parserFoundJsonValueBeginWithKey:length:encoding:index:)] ? 
+                (begin_value_with_key_imp_func_ptr_t)[(NSObject*)this->delegate_ methodForSelector: @selector(parserFoundJsonValueBeginWithKey:length:encoding:index:)]
+                : 0;
+            end_value_with_key_imp_ = [this->delegate_ respondsToSelector:@selector(parserFoundJsonValueEndWithKey:length:encoding:index:)] ? 
+                (end_value_with_key_imp_func_ptr_t)[(NSObject*)this->delegate_ methodForSelector: @selector(parserFoundJsonValueEndWithKey:length:encoding:index:)]
+                : 0;
+
             base::parse_begin_imp();
         }
         
@@ -62,18 +122,9 @@ namespace {
             base::finished_imp();
         }
         
-        
         virtual void push_string_imp(const char_t* s, std::size_t len) {
-            typedef void (*imp_func_ptr_t)(id, SEL, const void*, size_t, NSStringEncoding);
-            static imp_func_ptr_t imp = reinterpret_cast<imp_func_ptr_t>(0x01);
-            const SEL sel = @selector(parserFoundJsonString:length:encoding:);
-            if (imp == reinterpret_cast<imp_func_ptr_t>(0x01)) {            
-                imp = [this->delegate_ respondsToSelector:sel] ? 
-                (imp_func_ptr_t)[(NSObject*)this->delegate_ methodForSelector: sel]
-                : 0;
-            }
-            if (imp) {
-                imp(this->delegate_, sel, 
+            if (push_string_imp_) {
+                push_string_imp_(this->delegate_, @selector(parserFoundJsonString:length:encoding:), 
                     static_cast<const void*>(s), len*sizeof(char_t), json::ns_unicode_encoding_traits<EncodingT>::value);
                 if (!this->ok()) {
                     throw SemanticActionsStateError();
@@ -82,16 +133,8 @@ namespace {
         }        
         
         virtual void push_key_imp(const char_t* s, std::size_t len) {
-            typedef void (*imp_func_ptr_t)(id, SEL, const void*, size_t, NSStringEncoding);
-            static imp_func_ptr_t imp = reinterpret_cast<imp_func_ptr_t>(0x01);
-            const SEL sel = @selector(parserFoundJsonKey:length:encoding:);
-            if (imp == reinterpret_cast<imp_func_ptr_t>(0x01)) {            
-                imp = [this->delegate_ respondsToSelector:sel] ? 
-                (imp_func_ptr_t)[(NSObject*)this->delegate_ methodForSelector: sel]
-                : 0;
-            }
-            if (imp) {
-                imp(this->delegate_, sel,  
+            if (push_key_imp_) {
+                push_key_imp_(this->delegate_, @selector(parserFoundJsonKey:length:encoding:),  
                     static_cast<const void*>(s), len*sizeof(char_t), json::ns_unicode_encoding_traits<EncodingT>::value);
                 if (!this->ok()) {
                     throw SemanticActionsStateError();
@@ -100,16 +143,8 @@ namespace {
         }
         
         virtual void push_number_imp(const nb_number_t& number) {
-            typedef void (*imp_func_ptr_t)(id, SEL, const char*, size_t);
-            static imp_func_ptr_t imp = reinterpret_cast<imp_func_ptr_t>(0x01);
-            const SEL sel = @selector(parserFoundJsonNumber:length:);
-            if (imp == reinterpret_cast<imp_func_ptr_t>(0x01)) {            
-                imp = [this->delegate_ respondsToSelector:sel] ? 
-                (imp_func_ptr_t)[(NSObject*)this->delegate_ methodForSelector:sel]
-                : 0;
-            }
-            if (imp) {
-                imp(this->delegate_, sel, number.c_str(), number.c_str_len());
+            if (push_number_imp_) {
+                push_number_imp_(this->delegate_, @selector(parserFoundJsonNumber:length:), number.c_str(), number.c_str_len());
                 if (!this->ok()) {
                     throw SemanticActionsStateError();
                 }
@@ -117,16 +152,8 @@ namespace {
         }
         
         virtual void push_boolean_imp(bool b) {
-            typedef void (*imp_func_ptr_t)(id, SEL, BOOL);
-            static imp_func_ptr_t imp = reinterpret_cast<imp_func_ptr_t>(0x01);
-            const SEL sel = @selector(parserFoundJsonBoolean:);
-            if (imp == reinterpret_cast<imp_func_ptr_t>(0x01)) {            
-                imp = [this->delegate_ respondsToSelector:sel] ? 
-                (imp_func_ptr_t)[(NSObject*)this->delegate_ methodForSelector:sel]
-                : 0;
-            }
-            if (imp) {
-                imp(this->delegate_, sel, static_cast<BOOL>(b));
+            if (push_boolean_imp_) {
+                push_boolean_imp_(this->delegate_, @selector(parserFoundJsonBoolean:), static_cast<BOOL>(b));
                 if (!this->ok()) {
                     throw SemanticActionsStateError();
                 }
@@ -134,16 +161,8 @@ namespace {
         }
         
         virtual void push_null_imp() {
-            typedef void (*imp_func_ptr_t)(id, SEL);
-            static imp_func_ptr_t imp = reinterpret_cast<imp_func_ptr_t>(0x01);
-            const SEL sel = @selector(parserFoundJsonNull);
-            if (imp == reinterpret_cast<imp_func_ptr_t>(0x01)) {            
-                imp = [this->delegate_ respondsToSelector:sel] ? 
-                (imp_func_ptr_t)[(NSObject*)this->delegate_ methodForSelector:sel]
-                : 0;
-            }
-            if (imp) {
-                imp(this->delegate_, sel);
+            if (push_null_imp_) {
+                push_null_imp_(this->delegate_, @selector(parserFoundJsonNull));
                 if (!this->ok()) {
                     throw SemanticActionsStateError();
                 }
@@ -151,16 +170,8 @@ namespace {
         }
         
         virtual void begin_array_imp() {
-            typedef void (*imp_func_ptr_t)(id, SEL);
-            static imp_func_ptr_t imp = reinterpret_cast<imp_func_ptr_t>(0x01);
-            const SEL sel = @selector(parserFoundJsonArrayBegin);
-            if (imp == reinterpret_cast<imp_func_ptr_t>(0x01)) {            
-                imp = [this->delegate_ respondsToSelector:sel] ? 
-                (imp_func_ptr_t)[(NSObject*)this->delegate_ methodForSelector: sel]
-                : 0;
-            }
-            if (imp) {
-                imp(this->delegate_, sel);
+            if (begin_array_imp_) {
+                begin_array_imp_(this->delegate_, @selector(parserFoundJsonArrayBegin));
                 if (!this->ok()) {
                     throw SemanticActionsStateError();
                 }
@@ -168,16 +179,8 @@ namespace {
         }
         
         virtual void end_array_imp() {
-            typedef void (*imp_func_ptr_t)(id, SEL);
-            static imp_func_ptr_t imp = reinterpret_cast<imp_func_ptr_t>(0x01);
-            const SEL sel = @selector(parserFoundJsonArrayEnd);
-            if (imp == reinterpret_cast<imp_func_ptr_t>(0x01)) {            
-                imp = [this->delegate_ respondsToSelector:sel] ? 
-                (imp_func_ptr_t)[(NSObject*)this->delegate_ methodForSelector: sel]
-                : 0;
-            }
-            if (imp) {
-                imp(this->delegate_, sel);
+            if (end_array_imp_) {
+                end_array_imp_(this->delegate_, @selector(parserFoundJsonArrayEnd));
                 if (!this->ok()) {
                     throw SemanticActionsStateError();
                 }
@@ -185,16 +188,8 @@ namespace {
         }
         
         virtual void begin_object_imp() {
-            typedef void (*imp_func_ptr_t)(id, SEL);
-            static imp_func_ptr_t imp = reinterpret_cast<imp_func_ptr_t>(0x01);
-            const SEL sel = @selector(parserFoundJsonObjectBegin);
-            if (imp == reinterpret_cast<imp_func_ptr_t>(0x01)) {            
-                imp = [this->delegate_ respondsToSelector:sel] ? 
-                (imp_func_ptr_t)[(NSObject*)this->delegate_ methodForSelector: sel]
-                : 0;
-            }
-            if (imp) {
-                imp(this->delegate_, sel);
+            if (begin_object_imp_) {
+                begin_object_imp_(this->delegate_, @selector(parserFoundJsonObjectBegin));
                 if (!this->ok()) {
                     throw SemanticActionsStateError();
                 }
@@ -202,17 +197,9 @@ namespace {
         }
         
         virtual bool end_object_imp() {
-            typedef BOOL (*imp_func_ptr_t)(id, SEL);
-            static imp_func_ptr_t imp = reinterpret_cast<imp_func_ptr_t>(0x01);
-            const SEL sel = @selector(parserFoundJsonObjectEnd);
-            if (imp == reinterpret_cast<imp_func_ptr_t>(0x01)) {            
-                imp = [this->delegate_ respondsToSelector:sel] ? 
-                (imp_func_ptr_t)[(NSObject*)this->delegate_ methodForSelector: sel]
-                : 0;
-            }
             BOOL result = YES;
-            if (imp) {
-                result = imp(this->delegate_, sel);
+            if (end_object_imp_) {
+                result = end_object_imp_(this->delegate_, @selector(parserFoundJsonObjectEnd));
                 if (!this->ok()) {
                     throw SemanticActionsStateError();
                 }
@@ -221,16 +208,8 @@ namespace {
         }
 
         virtual void begin_value_at_index_imp(size_t index) {
-            typedef void (*imp_func_ptr_t)(id, SEL, size_t);
-            static imp_func_ptr_t imp = reinterpret_cast<imp_func_ptr_t>(0x01);
-            const SEL sel = @selector(parserFoundJsonValueBeginAtIndex:);
-            if (imp == reinterpret_cast<imp_func_ptr_t>(0x01)) {            
-                imp = [this->delegate_ respondsToSelector:sel] ? 
-                (imp_func_ptr_t)[(NSObject*)this->delegate_ methodForSelector: sel]
-                : 0;
-            }
-            if (imp) {
-                imp(this->delegate_, sel, index);
+            if (begin_value_at_index_imp_) {
+                begin_value_at_index_imp_(this->delegate_, @selector(parserFoundJsonValueBeginAtIndex:), index);
                 if (!this->ok()) {
                     throw SemanticActionsStateError();
                 }
@@ -238,16 +217,8 @@ namespace {
         }
         
         virtual void end_value_at_index_imp(size_t index) {
-            typedef void (*imp_func_ptr_t)(id, SEL, size_t);
-            static imp_func_ptr_t imp = reinterpret_cast<imp_func_ptr_t>(0x01);
-            const SEL sel = @selector(parserFoundJsonValueEndAtIndex:);
-            if (imp == reinterpret_cast<imp_func_ptr_t>(0x01)) {            
-                imp = [this->delegate_ respondsToSelector:sel] ? 
-                (imp_func_ptr_t)[(NSObject*)this->delegate_ methodForSelector: sel]
-                : 0;
-            }
-            if (imp) {
-                imp(this->delegate_, sel, index);
+            if (end_value_at_index_imp_) {
+                end_value_at_index_imp_(this->delegate_, @selector(parserFoundJsonValueEndAtIndex:), index);
                 if (!this->ok()) {
                     throw SemanticActionsStateError();
                 }
@@ -255,16 +226,8 @@ namespace {
         }
         
         virtual void begin_value_with_key_imp(const char_t* s, size_t len, size_t nth) {
-            typedef void (*imp_func_ptr_t)(id, SEL, const char_t*, size_t, NSStringEncoding, size_t);
-            static imp_func_ptr_t imp = reinterpret_cast<imp_func_ptr_t>(0x01);
-            const SEL sel = @selector(parserFoundJsonValueBeginWithKey:length:encoding:index:);
-            if (imp == reinterpret_cast<imp_func_ptr_t>(0x01)) {            
-                imp = [this->delegate_ respondsToSelector:sel] ? 
-                (imp_func_ptr_t)[(NSObject*)this->delegate_ methodForSelector: sel]
-                : 0;
-            }
-            if (imp) {
-                imp(this->delegate_, sel, 
+            if (begin_value_with_key_imp_) {
+                begin_value_with_key_imp_(this->delegate_, @selector(parserFoundJsonValueBeginWithKey:length:encoding:index:), 
                     s, len*sizeof(char_t), json::ns_unicode_encoding_traits<EncodingT>::value, nth);
                 if (!this->ok()) {
                     throw SemanticActionsStateError();
@@ -273,16 +236,8 @@ namespace {
         }
         
         virtual void end_value_with_key_imp(const char_t* s, size_t len, size_t nth) {
-            typedef void (*imp_func_ptr_t)(id, SEL, const char_t*, size_t, NSStringEncoding, size_t);
-            static imp_func_ptr_t imp = reinterpret_cast<imp_func_ptr_t>(0x01);
-            const SEL sel = @selector(parserFoundJsonValueEndWithKey:length:encoding:index:);
-            if (imp == reinterpret_cast<imp_func_ptr_t>(0x01)) {            
-                imp = [this->delegate_ respondsToSelector:sel] ? 
-                (imp_func_ptr_t)[(NSObject*)this->delegate_ methodForSelector: sel]
-                : 0;
-            }
-            if (imp) {
-                imp(this->delegate_, sel, 
+            if (end_value_with_key_imp_) {
+                end_value_with_key_imp_(this->delegate_, @selector(parserFoundJsonValueEndWithKey:length:encoding:index:), 
                     s, len*sizeof(char_t), json::ns_unicode_encoding_traits<EncodingT>::value, nth);
                 if (!this->ok()) {
                     throw SemanticActionsStateError();
@@ -311,6 +266,21 @@ namespace {
         virtual void print_imp(std::ostream& os) { 
             os << *this; 
         }
+        
+    private:        
+        push_string_imp_func_ptr_t          push_string_imp_;        
+        push_key_imp_func_ptr_t             push_key_imp_;
+        push_number_imp_func_ptr_t          push_number_imp_;
+        push_boolean_imp_func_ptr_t         push_boolean_imp_;
+        push_null_imp_func_ptr_t            push_null_imp_;
+        begin_array_imp_func_ptr_t          begin_array_imp_;
+        end_array_imp_func_ptr_t            end_array_imp_;
+        begin_object_imp_func_ptr_t         begin_object_imp_;
+        end_object_imp_func_ptr_t           end_object_imp_;
+        begin_value_at_index_imp_func_ptr_t begin_value_at_index_imp_;
+        end_value_at_index_imp_func_ptr_t   end_value_at_index_imp_;
+        begin_value_with_key_imp_func_ptr_t begin_value_with_key_imp_;
+        end_value_with_key_imp_func_ptr_t   end_value_with_key_imp_;
 
         
 #pragma mark - Friend Stream Output Operator

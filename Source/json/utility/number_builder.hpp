@@ -25,7 +25,7 @@
 #include <limits>
 #include <stdlib.h>
 #include <xlocale.h>
-#include "json/unicode/unicode_utilities.hpp"
+#include "json/unicode/unicode_traits.hpp"
 #include "string_buffer.hpp"
 #include <boost/static_assert.hpp>
 #include <stdexcept>
@@ -39,7 +39,7 @@ namespace json {
         // TODO: make template with CharT
         struct number_parts 
         {
-            typedef json::unicode::utf8_code_unit char_t;
+            typedef json::unicode::UTF_8_encoding_traits::code_unit_type char_t;
             
             number_parts()  {
                 clear();
@@ -73,7 +73,7 @@ namespace json {
             // char_t shall not be templetized. It shall remain an 8-bit wide
             // integer.
             //
-            typedef json::unicode::utf8_code_unit char_t;
+            typedef json::unicode::UTF_8_encoding_traits::code_unit_type char_t;
             
             
             
@@ -93,7 +93,7 @@ namespace json {
             
             int exp() const {
                 int exponent = 0;
-                const char* p = parts_.exponent_.first;
+                const char_t* p = parts_.exponent_.first;
                 if (p != parts_.exponent_.second) {
                     if (*p == '-' or *p == '+') {
                         ++p;

@@ -1,0 +1,15 @@
+//
+//  Bench.release.xcconfig
+//  Bench
+//
+//  Created by Andreas Grosam on 12/1/11.
+//  Copyright (c) 2011 __MyCompanyName__. All rights reserved.
+//
+
+#include "../Xcode.config/boost.xcconfig"
+
+
+GCC_OPTIMIZATION_LEVEL = 3
+
+BENCH_GCC_PREPROCESSOR_DEFINITIONS = NDEBUG NS_BLOCK_ASSERTIONS
+

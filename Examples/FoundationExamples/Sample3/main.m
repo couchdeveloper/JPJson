@@ -113,13 +113,13 @@ int main (int argc, const char * argv[])
         // If parsing was successful, result shall not be nil:
         assert(result);
         
-        
+
         // We convert the JSON representation provided in variable 'result' to a 
         // JSON text again:
         NSError* error;
         NSData* jsonData = [JPJsonWriter dataWithObject:result
                                                encoding:JPUnicodeEncoding_UTF8
-                                                options:(JPJsonWriterOptions)(JPJsonWriterPrettyPrint)
+                                                options:(JPJsonWriterOptions)(JPJsonWriterEscapeUnicodeCharacters)
                                                   error:&error];
         if (!jsonData) {
             NSLog(@"Extracting JSON into string failed with error: %@", error);
@@ -127,8 +127,27 @@ int main (int argc, const char * argv[])
         }
         else {
             NSError* error;
-            NSString* filePath = @"Out-UTF8-pretty.json";
+            NSString* filePath = @"Out-UTF8.json";
             BOOL result = [jsonData writeToFile:filePath options:0 error:&error];
+            if (!result) {
+                NSLog(@"Writing JSON document to file '%@' failed with error: %@", filePath, error);
+            }
+        }
+        
+        // We convert the JSON representation provided in variable 'result' to a 
+        // JSON text again, now using pritty printing:
+        NSData* jsonDataPretty = [JPJsonWriter dataWithObject:result
+                                               encoding:JPUnicodeEncoding_UTF8
+                                                options:(JPJsonWriterOptions)(JPJsonWriterPrettyPrint|JPJsonWriterEscapeUnicodeCharacters)
+                                                  error:&error];
+        if (!jsonDataPretty) {
+            NSLog(@"Extracting JSON into string failed with error: %@", error);
+            return -1;
+        }
+        else {
+            NSError* error;
+            NSString* filePath = @"Out-UTF8-pretty.json";
+            BOOL result = [jsonDataPretty writeToFile:filePath options:0 error:&error];
             if (!result) {
                 NSLog(@"Writing JSON document to file '%@' failed with error: %@", filePath, error);
             }

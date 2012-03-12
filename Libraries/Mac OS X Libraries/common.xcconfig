@@ -1,0 +1,23 @@
+//
+//  common.xcconfig
+//  Mac OS X Libraries
+//
+//  Created by Andreas Grosam on 1/26/12.
+//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//
+
+// Source Root Path
+JP_ROOT = ../../Source
+
+//
+// Compiler and std libraries
+//
+GCC_VERSION = com.apple.compilers.llvm.clang.1_0
+//CLANG_CXX_LANGUAGE_STANDARD = compiler-default
+//CLANG_CXX_LIBRARY = compiler-default
+CLANG_CXX_LANGUAGE_STANDARD = c++0x
+CLANG_CXX_LIBRARY = libc++
+
+
+// Header search paths
+HEADER_SEARCH_PATHS = "$(JP_ROOT)" "$(BOOST_ROOT)"

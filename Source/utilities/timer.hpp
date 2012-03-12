@@ -70,9 +70,9 @@ namespace utilities {
         
         uint64_t nanoSeconds() const {
             if (_t1)
-                return (_t1 - _t0 + _t) * _k;
+                return static_cast<uint64_t>((_t1 - _t0 + _t) * _k);
             else 
-                return (mach_absolute_time() - _t0 + _t) * _k;
+                return static_cast<uint64_t>((mach_absolute_time() - _t0 + _t) * _k);
         }
         
         double  seconds() const {

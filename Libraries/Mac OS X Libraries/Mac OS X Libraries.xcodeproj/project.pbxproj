@@ -23,6 +23,9 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		A1058FFE14CEF6A30072B418 /* config.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A1058FFD14CEF6A30072B418 /* config.hpp */; };
+		A1058FFF14CEF6A30072B418 /* config.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A1058FFD14CEF6A30072B418 /* config.hpp */; };
+		A105900014CEF6A30072B418 /* config.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A1058FFD14CEF6A30072B418 /* config.hpp */; };
 		A110B69F146D26E90017B77F /* byte_swap.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B642146D26E90017B77F /* byte_swap.hpp */; };
 		A110B6A0146D26E90017B77F /* byte_swap.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B642146D26E90017B77F /* byte_swap.hpp */; };
 		A110B6A1146D26E90017B77F /* byte_swap.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B642146D26E90017B77F /* byte_swap.hpp */; };
@@ -109,9 +112,6 @@
 		A110B6F3146D26E90017B77F /* unicode_traits.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B660146D26E90017B77F /* unicode_traits.hpp */; };
 		A110B6F4146D26E90017B77F /* unicode_traits.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B660146D26E90017B77F /* unicode_traits.hpp */; };
 		A110B6F5146D26E90017B77F /* unicode_traits.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B660146D26E90017B77F /* unicode_traits.hpp */; };
-		A110B714146D26E90017B77F /* json_path.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B66D146D26E90017B77F /* json_path.hpp */; };
-		A110B715146D26E90017B77F /* json_path.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B66D146D26E90017B77F /* json_path.hpp */; };
-		A110B716146D26E90017B77F /* json_path.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B66D146D26E90017B77F /* json_path.hpp */; };
 		A110B717146D26E90017B77F /* parse.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B66E146D26E90017B77F /* parse.hpp */; };
 		A110B718146D26E90017B77F /* parse.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B66E146D26E90017B77F /* parse.hpp */; };
 		A110B719146D26E90017B77F /* parse.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A110B66E146D26E90017B77F /* parse.hpp */; };
@@ -205,6 +205,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A1058FFD14CEF6A30072B418 /* config.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = config.hpp; sourceTree = "<group>"; };
 		A110B642146D26E90017B77F /* byte_swap.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = byte_swap.hpp; sourceTree = "<group>"; };
 		A110B643146D26E90017B77F /* byte_swap_iterator.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = byte_swap_iterator.hpp; sourceTree = "<group>"; };
 		A110B644146D26E90017B77F /* endian.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = endian.hpp; sourceTree = "<group>"; };
@@ -234,9 +235,8 @@
 		A110B65E146D26E90017B77F /* SemanticActionsBase.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SemanticActionsBase.hpp; sourceTree = "<group>"; };
 		A110B65F146D26E90017B77F /* semaphore.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = semaphore.hpp; sourceTree = "<group>"; };
 		A110B660146D26E90017B77F /* unicode_traits.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = unicode_traits.hpp; sourceTree = "<group>"; };
-		A110B66D146D26E90017B77F /* json_path.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = json_path.hpp; sourceTree = "<group>"; };
 		A110B66E146D26E90017B77F /* parse.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = parse.hpp; sourceTree = "<group>"; };
-		A110B66F146D26E90017B77F /* parser.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = parser.hpp; sourceTree = "<group>"; };
+		A110B66F146D26E90017B77F /* parser.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = parser.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		A110B670146D26E90017B77F /* parser_errors.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = parser_errors.hpp; sourceTree = "<group>"; };
 		A110B671146D26E90017B77F /* semantic_actions.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = semantic_actions.hpp; sourceTree = "<group>"; };
 		A110B672146D26E90017B77F /* semantic_actions_base.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = semantic_actions_base.hpp; sourceTree = "<group>"; };
@@ -255,6 +255,9 @@
 		A110B681146D26E90017B77F /* string_hasher.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = string_hasher.hpp; sourceTree = "<group>"; };
 		A110B682146D26E90017B77F /* synchronous_queue.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = synchronous_queue.hpp; sourceTree = "<group>"; };
 		A110B683146D26E90017B77F /* syncqueue_streambuf.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = syncqueue_streambuf.hpp; sourceTree = "<group>"; };
+		A1C9660314D1587800DF4C00 /* common.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = common.xcconfig; sourceTree = "<group>"; };
+		A1C9660514D1589200DF4C00 /* debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = debug.xcconfig; sourceTree = "<group>"; };
+		A1C9660614D158A000DF4C00 /* release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = release.xcconfig; sourceTree = "<group>"; };
 		A1CA8B831441E4860076C0CB /* JPJson-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "JPJson-Info.plist"; sourceTree = "<group>"; };
 		A1CA8B851441E4860076C0CB /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		A1CA8B871441E4860076C0CB /* JPJson-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "JPJson-Prefix.pch"; sourceTree = "<group>"; };
@@ -264,7 +267,7 @@
 		A1CA8BAD1441E9120076C0CB /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = SDKs/MacOSX10.7.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		A1EFE0CC1441F19300F94F03 /* JPJson.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = JPJson.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A1EFE0CD1441F19300F94F03 /* libjson.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libjson.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		A1EFE0CE1441F19300F94F03 /* json.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = json.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		A1EFE0CE1441F19300F94F03 /* libjson.A.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libjson.A.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -310,6 +313,7 @@
 		A110B640146D26E90017B77F /* json */ = {
 			isa = PBXGroup;
 			children = (
+				A1058FFD14CEF6A30072B418 /* config.hpp */,
 				A110B641146D26E90017B77F /* endian */,
 				A110B645146D26E90017B77F /* generator */,
 				A110B647146D26E90017B77F /* ObjC */,
@@ -364,7 +368,6 @@
 		A110B66C146D26E90017B77F /* parser */ = {
 			isa = PBXGroup;
 			children = (
-				A110B66D146D26E90017B77F /* json_path.hpp */,
 				A110B66E146D26E90017B77F /* parse.hpp */,
 				A110B66F146D26E90017B77F /* parser.hpp */,
 				A110B670146D26E90017B77F /* parser_errors.hpp */,
@@ -422,6 +425,9 @@
 		A1CA8B6A1441E45E0076C0CB = {
 			isa = PBXGroup;
 			children = (
+				A1C9660314D1587800DF4C00 /* common.xcconfig */,
+				A1C9660614D158A000DF4C00 /* release.xcconfig */,
+				A1C9660514D1589200DF4C00 /* debug.xcconfig */,
 				A110B789146D27390017B77F /* Public Headers */,
 				A110B63C146D26E90017B77F /* Source */,
 				A1CA8B811441E4860076C0CB /* JPJson - Framework */,
@@ -499,7 +505,7 @@
 			children = (
 				A1EFE0CC1441F19300F94F03 /* JPJson.framework */,
 				A1EFE0CD1441F19300F94F03 /* libjson.a */,
-				A1EFE0CE1441F19300F94F03 /* json.dylib */,
+				A1EFE0CE1441F19300F94F03 /* libjson.A.dylib */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -533,7 +539,6 @@
 				A110B6ED146D26E90017B77F /* SemanticActionsBase.hpp in Headers */,
 				A110B6F0146D26E90017B77F /* semaphore.hpp in Headers */,
 				A110B6F3146D26E90017B77F /* unicode_traits.hpp in Headers */,
-				A110B714146D26E90017B77F /* json_path.hpp in Headers */,
 				A110B717146D26E90017B77F /* parse.hpp in Headers */,
 				A110B71A146D26E90017B77F /* parser.hpp in Headers */,
 				A110B71D146D26E90017B77F /* parser_errors.hpp in Headers */,
@@ -554,6 +559,7 @@
 				A110B74A146D26E90017B77F /* string_hasher.hpp in Headers */,
 				A110B74D146D26E90017B77F /* synchronous_queue.hpp in Headers */,
 				A110B750146D26E90017B77F /* syncqueue_streambuf.hpp in Headers */,
+				A1058FFE14CEF6A30072B418 /* config.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -583,7 +589,6 @@
 				A110B6EE146D26E90017B77F /* SemanticActionsBase.hpp in Headers */,
 				A110B6F1146D26E90017B77F /* semaphore.hpp in Headers */,
 				A110B6F4146D26E90017B77F /* unicode_traits.hpp in Headers */,
-				A110B715146D26E90017B77F /* json_path.hpp in Headers */,
 				A110B718146D26E90017B77F /* parse.hpp in Headers */,
 				A110B71B146D26E90017B77F /* parser.hpp in Headers */,
 				A110B71E146D26E90017B77F /* parser_errors.hpp in Headers */,
@@ -604,6 +609,7 @@
 				A110B74B146D26E90017B77F /* string_hasher.hpp in Headers */,
 				A110B74E146D26E90017B77F /* synchronous_queue.hpp in Headers */,
 				A110B751146D26E90017B77F /* syncqueue_streambuf.hpp in Headers */,
+				A1058FFF14CEF6A30072B418 /* config.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -632,7 +638,6 @@
 				A110B6EF146D26E90017B77F /* SemanticActionsBase.hpp in Headers */,
 				A110B6F2146D26E90017B77F /* semaphore.hpp in Headers */,
 				A110B6F5146D26E90017B77F /* unicode_traits.hpp in Headers */,
-				A110B716146D26E90017B77F /* json_path.hpp in Headers */,
 				A110B719146D26E90017B77F /* parse.hpp in Headers */,
 				A110B71C146D26E90017B77F /* parser.hpp in Headers */,
 				A110B71F146D26E90017B77F /* parser_errors.hpp in Headers */,
@@ -652,6 +657,7 @@
 				A110B74C146D26E90017B77F /* string_hasher.hpp in Headers */,
 				A110B74F146D26E90017B77F /* synchronous_queue.hpp in Headers */,
 				A110B752146D26E90017B77F /* syncqueue_streambuf.hpp in Headers */,
+				A105900014CEF6A30072B418 /* config.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -707,7 +713,7 @@
 			);
 			name = JPJsonDylib;
 			productName = JPJsonDylib;
-			productReference = A1EFE0CE1441F19300F94F03 /* json.dylib */;
+			productReference = A1EFE0CE1441F19300F94F03 /* libjson.A.dylib */;
 			productType = "com.apple.product-type.library.dynamic";
 		};
 /* End PBXNativeTarget section */
@@ -841,12 +847,16 @@
 		A1CA8B711441E45E0076C0CB /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				GCC_PREPROCESSOR_DEFINITIONS = BOOST_STRICT_CONFIG;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"__ASSERT_MACROS_DEFINE_VERSIONS_WITHOUT_UNDERSCORES=0",
+					BOOST_STRICT_CONFIG,
+				);
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				HEADER_SEARCH_PATHS = (
 					"\"$(JP_ROOT)\"",
 					"\"$(BOOST_ROOT)\"",
 				);
-				JP_ROOT = ../../Source;
+				JP_ROOT = "$(SRCROOT)/../../Source";
 			};
 			name = Debug;
 		};
@@ -854,12 +864,16 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_OPTIMIZATION_LEVEL = 3;
-				GCC_PREPROCESSOR_DEFINITIONS = BOOST_STRICT_CONFIG;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"__ASSERT_MACROS_DEFINE_VERSIONS_WITHOUT_UNDERSCORES=0",
+					BOOST_STRICT_CONFIG,
+				);
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				HEADER_SEARCH_PATHS = (
 					"\"$(JP_ROOT)\"",
 					"\"$(BOOST_ROOT)\"",
 				);
-				JP_ROOT = ../../Source;
+				JP_ROOT = "$(SRCROOT)/../../Source";
 			};
 			name = Release;
 		};
@@ -872,22 +886,21 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				FRAMEWORK_VERSION = A;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "JPJson/JPJson-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
 					"$(inherited)",
+					"DEBUG=1",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "JPJson/JPJson-Info.plist";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				ONLY_ACTIVE_ARCH = YES;
@@ -908,7 +921,6 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				FRAMEWORK_VERSION = A;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "JPJson/JPJson-Prefix.pch";
@@ -917,11 +929,11 @@
 					NDEBUG,
 					NS_BLOCK_ASSERTIONS,
 				);
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "JPJson/JPJson-Info.plist";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_LDFLAGS = "-ObjC";
@@ -937,7 +949,6 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COPY_PHASE_STRIP = NO;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = YES;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
@@ -945,18 +956,16 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "JPJsonLib/JPJsonLib-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
 					"$(inherited)",
+					"DEBUG=1",
 				);
-				GCC_STRICT_ALIASING = YES;
 				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "$(inherited)";
 				INSTALL_PATH = "$(BUILT_PRODUCTS_DIR)";
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = json;
@@ -973,7 +982,6 @@
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = YES;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
@@ -981,19 +989,17 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "JPJsonLib/JPJsonLib-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
 					NDEBUG,
 					NS_BLOCK_ASSERTIONS,
-					"$(inherited)",
 				);
-				GCC_STRICT_ALIASING = YES;
 				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "$(inherited)";
 				INSTALL_PATH = "$(BUILT_PRODUCTS_DIR)";
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = json;
 				PUBLIC_HEADERS_FOLDER_PATH = JPJson;
@@ -1010,15 +1016,15 @@
 				COPY_PHASE_STRIP = NO;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
+				EXECUTABLE_PREFIX = lib;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "JPJsonDylib/JPJsonDylib-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
 					"$(inherited)",
+					"DEBUG=1",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -1026,10 +1032,12 @@
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "$(inherited)";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = json;
+				PRODUCT_NAME = "json.$(FRAMEWORK_VERSION)";
+				PUBLIC_HEADERS_FOLDER_PATH = JPJson;
 				SDKROOT = macosx;
 			};
 			name = Debug;
@@ -1043,23 +1051,25 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
+				EXECUTABLE_PREFIX = lib;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "JPJsonDylib/JPJsonDylib-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
 					NDEBUG,
 					NS_BLOCK_ASSERTIONS,
-					"$(inherited)",
 				);
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "$(inherited)";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = json;
+				PRODUCT_NAME = "json.$(FRAMEWORK_VERSION)";
+				PUBLIC_HEADERS_FOLDER_PATH = JPJson;
 				SDKROOT = macosx;
 			};
 			name = Release;

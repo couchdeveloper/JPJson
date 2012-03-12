@@ -18,6 +18,8 @@
 //  limitations under the License.
 //
 
+#error Obsolete
+
 #include "json/unicode/unicode_conversions.hpp"
 #include "gtest/gtest.h"
 
@@ -46,15 +48,71 @@ using namespace json;
 
 namespace json { namespace unicode { namespace test {
     
+    using namespace json;    
+    
+    // Return a vector of Unicode codepoints with
+    std::vector<code_point_t> 
+    create_codepoint_source(code_point_t lower_bound, code_point_t upper_bound, 
+                            bool validOnly = true, bool shuffle = false)
+    {
+        using unicode::code_point_t;
+        using unicode::isUnicodeScalarValue
+        
+        typename std::vector<code_point_t> result;
+        
+        for (code_point_t cp = lower_bound; cp <= upper_bound; ++cp) {
+            if (validOnly and !isUnicodeScalarValue(cp))
+                continue;
+            result.push_back(cp);
+        }
+        if (shuffle) {
+            std::random_shuffle(result.begin(), result.end());
+        }
+        return result;
+    }
     
     
-    using json::unicode::code_point_t;
-    using json::unicode::UTF_8_encoding_tag;
-    using json::unicode::UTF_16_encoding_tag;
-    using json::unicode::UTF_32_encoding_tag;
-    using json::unicode::utf_encoding_tag;
-    using json::unicode::to_host_endianness;
+    // Return a vector of code units in encoding 'EncodingT', whose corresponding
+    // Unicode code points are in the range [lower_bound .. upper_bound].
+    template <typename EncodingT>
+    std::vector<typename unicode::encoding_traits<EncodingT>::code_unit_type>
+    create_utf_source(code_point_t lower_bound, code_point_t upper_bound, 
+                      bool validOnly = true, bool shuffle = false)
+    {
+        using unicode::code_point_t;
+        using unicode::add_endianness;
+        using unicode::encoding_traits;
+        
+        typedef typename add_endianness<EncodingT>::type encoding_type;
+        typedef typename encoding_traits<encoding_type>::code_unit_type char_t;
+        typedef std::vector<char_t> result_t;
+        
+        
+        std::vector<code_point_t> source = create_codepoint_source(lower_bound, upper_bound,
+                                                                   validOnly, shuffle);
+        
+        // Now convert the code points into the specified encoding and return
+        // the result. Note: Unicode code points can be seen as Unicode code 
+        // units encoded in UTF-32 in host endianness.
+        result_t result;        
+        std::vector<code_point_t>::iterator first = source.begin();
+        std::back_insert_iterator<result_t> dest = std::back_inserter(result);
+        // convert code_point to UTF
+        int state = 0; // state shall be initially zero
+        int res = unicode::convert(first, source.end(), unicode::UTF_32_encoding_tag(), 
+                                   dest, encoding_type(), 
+                                   state);     
+        if (res < 0) {
+            throw std::runtime_error("error while creating UTF source");
+        }
+        
+        return result;
+    }
     
+}}    
+    
+    
+namespace json { namespace unicode { namespace test {
     template <typename EncodingT, class Enable = void>
     class wellformed_generator 
     {
@@ -107,7 +165,7 @@ namespace json { namespace unicode { namespace test {
         value_type next() {
             value_type result;
             iterator dest = result.first.begin();
-            int res = convert_one_unsafe(current_, dest);
+            int res = convert_from_codepoint_unsafe(current_, dest);
             assert( (utf8_encoded_length(current_) == res) and res <= 4 and res >= 1);
             assert( std::distance(result.first.begin(), dest) == res );
             ++current_;
@@ -170,7 +228,7 @@ namespace json { namespace unicode { namespace test {
         value_type next() {
             value_type result;
             iterator dest = result.first.begin();
-            int res = convert_one_unsafe(current_, dest, to_encoding_t());
+            int res = convert_from_codepoint_unsafe(current_, dest, to_encoding_t());
             assert( (utf16_encoded_length(current_) == res) and res <= 2 and res >= 1);
             assert( std::distance(result.first.begin(), dest) == res );
             ++current_;
@@ -233,7 +291,7 @@ namespace json { namespace unicode { namespace test {
         value_type next() {
             value_type result;
             iterator dest = result.first.begin();
-            int res = convert_one_unsafe(current_, dest, to_encoding_t());
+            int res = convert_from_codepoint_unsafe(current_, dest, to_encoding_t());
             assert(1 == res);
             assert( std::distance(result.first.begin(), dest) == res );
             ++current_;
@@ -323,14 +381,12 @@ namespace {
         typedef typename add_endianness<InEncoding>::type   from_encoding_t;        
         typedef typename add_endianness<OutEncoding>::type  to_encoding_t;        
         
-        
-        typedef wellformed_generator<InEncoding>            generator_t;
-        typedef typename generator_t::code_unit_type        code_unit_t;
-        typedef typename generator_t::buffer_type           buffer_t;
-        typedef typename generator_t::value_type            value_t;
-        
+                
         typedef typename from_encoding_t::code_unit_type    in_code_unit_t;
         typedef typename to_encoding_t::code_unit_type      out_code_unit_t;
+        
+
+        
         
         
         generator_t generator = generator_t(0x000000);

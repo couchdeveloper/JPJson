@@ -46,6 +46,7 @@
 #include "object.hpp"
 #include "string.hpp"
 #include "json/unicode/unicode_utilities.hpp"
+#include "json/unicode/unicode_traits.hpp"
 
 #if defined (BOOST_VARIANT_NO_FULL_RECURSIVE_VARIANT_SUPPORT)
 #warning BOOST_VARIANT_NO_FULL_RECURSIVE_VARIANT_SUPPORT
@@ -113,7 +114,7 @@ namespace json {
     class value
     {
     private:
-        typedef typename StringEncondingT::code_unit_type   string_char_t;
+        typedef typename unicode::encoding_traits<StringEncondingT>::code_unit_type   string_char_t;
         typedef typename PoliciesT::array_imp_tt            array_imp_tt;
         typedef typename PoliciesT::object_imp_tt           object_imp_tt;  
         typedef typename PoliciesT::string_imp_tt           string_imp_tt;  

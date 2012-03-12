@@ -9,18 +9,21 @@
 #ifndef JSON_PARSER_INTERNAL_STRING_BUFFER_HPP
 #define JSON_PARSER_INTERNAL_STRING_BUFFER_HPP
 
+#warning Not Yet Finished
 
 #include "json/config.hpp"
 #include "json/unicode/unicode_utilities.hpp"
-#include "json/unicode/unicode_conversions.hpp"
+#include "json/unicode/unicode_conversion.hpp"
 
 namespace json { namespace parser_internal {
     
     
     using json::unicode::Encoding;
     using json::unicode::UTF_8_encoding_tag;
+    using json::unicode::UTF_16_encoding_tag;
     using json::unicode::UTF_16LE_encoding_tag;
     using json::unicode::UTF_16BE_encoding_tag;
+    using json::unicode::UTF_32_encoding_tag;
     using json::unicode::UTF_32LE_encoding_tag;
     using json::unicode::UTF_32BE_encoding_tag;
     
@@ -79,6 +82,10 @@ namespace json { namespace parser_internal {
                 case json::unicode::UnicodeEncoding_UTF8:
                     count = inplace_encode_imp(json::unicode::encoding_to_tag<json::unicode::UnicodeEncoding_UTF8>::type(), error);
                     break;
+                case json::unicode::UnicodeEncoding_UTF16:
+                    count = inplace_encode_imp(json::unicode::encoding_to_tag<json::unicode::UnicodeEncoding_UTF16>::type(), error);
+                    count *= 2;
+                    break;
                 case json::unicode::UnicodeEncoding_UTF16BE:
                     count = inplace_encode_imp(json::unicode::encoding_to_tag<json::unicode::UnicodeEncoding_UTF16BE>::type(), error);
                     count *= 2;
@@ -86,6 +93,10 @@ namespace json { namespace parser_internal {
                 case json::unicode::UnicodeEncoding_UTF16LE:
                     count = inplace_encode_imp(json::unicode::encoding_to_tag<json::unicode::UnicodeEncoding_UTF16LE>::type(), error);
                     count *= 2;
+                    break;
+                case json::unicode::UnicodeEncoding_UTF32:
+                    count = inplace_encode_imp(json::unicode::encoding_to_tag<json::unicode::UnicodeEncoding_UTF32>::type(), error);
+                    count *= 4;
                     break;
                 case json::unicode::UnicodeEncoding_UTF32BE:
                     count = inplace_encode_imp(json::unicode::encoding_to_tag<json::unicode::UnicodeEncoding_UTF32BE>::type(), error);
@@ -95,6 +106,8 @@ namespace json { namespace parser_internal {
                     count = inplace_encode_imp(json::unicode::encoding_to_tag<json::unicode::UnicodeEncoding_UTF32LE>::type(), error);
                     count *= 4;
                     break;
+                default:
+                    throw std::runtime_error("unknown encoding");
             }
             
             buffer_type result(buffer_, count);

@@ -79,6 +79,7 @@ namespace {
         // log_level
     }
     
+    
     TEST_F(SemanticActionsBaseTest, SimpleTest) 
     {
         typedef SemanticActionsBase<UTF_8_encoding_tag> semantic_actions_type; 

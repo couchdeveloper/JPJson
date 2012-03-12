@@ -47,6 +47,7 @@
 #include "json_traits.hpp"
 #include "json/utility/string_hasher.hpp"
 #include "json/unicode/unicode_utilities.hpp"
+#include "json/unicode/unicode_traits.hpp"
 
 
 
@@ -151,13 +152,14 @@ namespace json {
 namespace json {
     
     using unicode::UTF_8_encoding_tag;
+    using unicode::encoding_traits;
     
     template<>
-    struct char_traits<UTF_8_encoding_tag::code_unit_type>
+    struct char_traits<encoding_traits<UTF_8_encoding_tag>::code_unit_type>
     {
-        BOOST_STATIC_ASSERT( sizeof(UTF_8_encoding_tag::code_unit_type) == sizeof(char) );
+        BOOST_STATIC_ASSERT( sizeof(encoding_traits<UTF_8_encoding_tag>::code_unit_type) == sizeof(char) );
         
-        typedef UTF_8_encoding_tag::code_unit_type              char_type;
+        typedef encoding_traits<UTF_8_encoding_tag>::code_unit_type              char_type;
         typedef int               int_type;
         typedef std::streampos    pos_type;
         typedef std::streamoff    off_type;
@@ -226,11 +228,12 @@ namespace json {
 namespace json { 
     
     using unicode::UTF_16_encoding_tag;
+    using unicode::encoding_traits;
     
     template<>
-    struct char_traits<UTF_16_encoding_tag::code_unit_type>
+    struct char_traits<encoding_traits<UTF_16_encoding_tag>::code_unit_type>
     {
-        typedef UTF_16_encoding_tag::code_unit_type          char_type;
+        typedef encoding_traits<UTF_16_encoding_tag>::code_unit_type          char_type;
         typedef uint16_t          int_type;
         typedef std::streamoff    off_type;
         typedef std::streampos    pos_type;
@@ -325,11 +328,12 @@ namespace json {
 namespace json {
     
     using unicode::UTF_32_encoding_tag;
+    using unicode::encoding_traits;
 
     template<>
-    struct char_traits<UTF_32_encoding_tag::code_unit_type>
+    struct char_traits<encoding_traits<UTF_32_encoding_tag>::code_unit_type>
     {
-        typedef UTF_32_encoding_tag::code_unit_type          char_type;
+        typedef encoding_traits<UTF_32_encoding_tag>::code_unit_type          char_type;
         typedef uint32_t          int_type;
         typedef std::streamoff    off_type;
         typedef std::streampos    pos_type;
@@ -430,7 +434,8 @@ namespace json {
     using unicode::UTF_32LE_encoding_tag;
     using unicode::UTF_32BE_encoding_tag;
     using unicode::platform_encoding_tag;
-
+    using unicode::encoding_traits;
+    
     //
     // class string
     // 
@@ -455,7 +460,7 @@ namespace json {
     {
         BOOST_STATIC_ASSERT( (boost::is_base_and_derived<utf_encoding_tag, EncodingT>::value) );
     public:
-        typedef typename EncodingT::code_unit_type       char_type;
+        typedef typename encoding_traits<EncodingT>::code_unit_type       char_type;
         BOOST_STATIC_ASSERT( (sizeof(char_type) > 0) );
         
     private:        
@@ -482,8 +487,8 @@ namespace json {
         string(const T* s, std::size_t len,
                typename boost::enable_if<
                boost::mpl::and_<
-               boost::is_same<T, char>,
-               boost::mpl::not_<boost::is_same<T, char_type> >
+                boost::is_same<T, char>,
+                boost::mpl::not_<boost::is_same<T, char_type> >
                >
                >::type* dummy = 0)
         {
@@ -585,7 +590,7 @@ namespace json {
                         boost::is_same<Encoding, EncodingT>
                         >::type* dummy = 0)
         {
-            BOOST_STATIC_ASSERT( (sizeof(Char) == sizeof(typename EncodingT::code_unit_type)) );
+            BOOST_STATIC_ASSERT( (sizeof(Char) == sizeof(typename encoding_traits<EncodingT>::code_unit_type)) );
             
             if (len and s) {
                 // allocate a buffer big enough to hold the struct ref_counted_char_array 
@@ -623,7 +628,7 @@ namespace json {
         friend inline 
         bool        
         operator== (const string<EncodingT>& lhv, const string<EncodingT>& rhv) {
-            typedef typename EncodingT::code_unit_type char_type;
+            typedef typename encoding_traits<EncodingT>::code_unit_type char_type;
             if (lhv.buffer_ == rhv.buffer_) 
                 return true;
             return ( 0 == char_traits<char_type>::compare(lhv.c_str(), rhv.c_str(), std::min(lhv.size(), rhv.size()) + 1 ) );
@@ -632,7 +637,7 @@ namespace json {
         friend inline 
         bool        
         operator< (const string<EncodingT>& lhv, const string<EncodingT>& rhv) {
-            typedef typename EncodingT::code_unit_type char_type;
+            typedef typename encoding_traits<EncodingT>::code_unit_type char_type;
             return ( char_traits<char_type>::compare(lhv.c_str(), rhv.c_str(), std::min(lhv.size(), rhv.size()) + 1) < 0 );
         }
         
@@ -646,7 +651,7 @@ namespace json {
         friend inline 
         bool        
         operator> (const string<EncodingT>& lhv, const string<EncodingT>& rhv) {
-            typedef typename EncodingT::code_unit_type char_type;
+            typedef typename encoding_traits<EncodingT>::code_unit_type char_type;
             return ( char_traits<char_type>::compare(lhv.c_str(), rhv.c_str(), std::min(lhv.size(), rhv.size()) + 1) > 0 );
         }
         
@@ -707,7 +712,7 @@ namespace json {
     template <typename EncodingT>
     inline typename boost::enable_if<boost::is_base_and_derived<utf_encoding_tag, EncodingT>, std::size_t>::type 
     hash_value(const string<EncodingT> s) {
-        typedef typename EncodingT::code_unit_type char_type;
+        typedef typename encoding_traits<EncodingT>::code_unit_type char_type;
         return json::utility::string_hasher<char_type>()(s.c_str(), s.size());
     }
     
