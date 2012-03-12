@@ -20,15 +20,10 @@
 #ifndef JSON_UNICODE_UTILITIES_HPP
 #define JSON_UNICODE_UTILITIES_HPP
 
-
 #include "json/config.hpp"
 #include <assert.h>
-#include <boost/iterator/iterator_traits.hpp>
-#include <boost/type_traits.hpp>
 #include <boost/static_assert.hpp>
-#include <boost/mpl/if.hpp>
-#include <boost/utility.hpp>
-#include <boost/array.hpp>
+#include <boost/type_traits.hpp>
 #include <stdint.h>
 #include "json/endian/endian.hpp"
 #include "json/endian/byte_swap.hpp"
@@ -42,12 +37,14 @@
 //  http://en.wikipedia.org/wiki/UTF-8
 //  RFC 3629, http://tools.ietf.org/html/rfc3629
 
+
+//
+// Unicode Utilities
+// 
 namespace json { namespace unicode {
     
     
-    using json::internal::host_endianness;
-    
-  
+    // deprecated
     enum UNICODE_ENCODING {
         UNICODE_ENCODING_UTF_8 =    1,
         UNICODE_ENCODING_UTF_16BE = 2,
@@ -56,456 +53,14 @@ namespace json { namespace unicode {
         UNICODE_ENCODING_UTF_32LE = 5
     };
     
-    
-    //
-    //  Encoding Tags
-    //
-    //  Types:
-    //
-    //  code_unit_type      The underlaying integer type representing an Unicode 
-    //                      code unit. It is the minimal bit combination that
-    //                      can represent a unit of encoded text for processing
-    //                      or interchange.
-    //
-    //  encode_buffer_type  The minimal buffer required to store one encoded 
-    //                      Unicode code point.
-    //
-    //  endian_tag          The endianess type property of the encoding.
-    //
-    //  bom_type            A static vector of values of code_unit_type which
-    //                      is capable to store a BOM.
-    //
-        
-    struct utf_encoding_tag {};
-    
-    struct UTF_8_encoding_tag : utf_encoding_tag {
-        static const unsigned int   max_bytes = 4;
-        static const unsigned int   min_bytes = 1;
-        typedef char                code_unit_type;
-        static const int            buffer_size = 4;
-        typedef code_unit_type      encode_buffer_type[buffer_size];
-        typedef json::internal::endian_tag  endian_tag;
-        const char*                 name() const { return "UTF-8"; }
-        typedef boost::array<code_unit_type,3>      bom_type;
-        static const bom_type       bom() { bom_type result = {{0xEF, 0xBB, 0xBF}}; return result; };
-        static const int            bom_byte_size  = bom_type::static_size*sizeof(code_unit_type);
-    };
-    
-    struct UTF_16_encoding_tag : utf_encoding_tag {
-        static const unsigned int   max_bytes = 4;
-        static const unsigned int   min_bytes = 2;
-        typedef uint16_t            code_unit_type;
-        static const int            buffer_size = 2;
-        typedef code_unit_type      encode_buffer_type[buffer_size];
-        const char*                 name() const { return "UTF-16"; }
-        typedef boost::array<code_unit_type,1>      bom_type;
-        static const bom_type       bom() { 
-            bom_type result = {{0xFEFFu}}; 
-            return result; 
-        };
-        static const int            bom_byte_size  = bom_type::static_size*sizeof(code_unit_type);
-    }; 
-    struct UTF_16BE_encoding_tag : UTF_16_encoding_tag {
-        typedef json::internal::big_endian_tag      endian_tag;
-        const char*                 name() const { return "UTF-16BE"; }
-        typedef boost::array<code_unit_type,1>      bom_type;
-        static const bom_type       bom() {
-            bom_type result = {{byte_swap<host_endianness::type, endian_tag>(static_cast<code_unit_type>(0xFEFFu))}}; 
-            return result; 
-        };
-        static const int            bom_byte_size  = bom_type::static_size*sizeof(code_unit_type);
-    };
-    struct UTF_16LE_encoding_tag : UTF_16_encoding_tag {
-        typedef json::internal::little_endian_tag   endian_tag;
-        const char*                 name() const { return "UTF-16LE"; }
-        typedef boost::array<code_unit_type,1>      bom_type;
-        static const bom_type       bom() { 
-            bom_type result = {{byte_swap<host_endianness::type, endian_tag>(static_cast<code_unit_type>(0xFEFFu))}}; 
-            return result; 
-        };
-        static const int            bom_byte_size  = bom_type::static_size*sizeof(code_unit_type);
-    };
-    
-    struct platform_encoding_tag : utf_encoding_tag {
-        static const unsigned int   max_bytes = sizeof(wchar_t);
-        static const unsigned int   min_bytes = sizeof(wchar_t);
-        typedef wchar_t             code_unit_type;
-        static const int            buffer_size = 1;
-        typedef wchar_t             encode_buffer_type[buffer_size];
-        typedef host_endianness::type endian_tag;
-        const char*                 name() const { return "platform"; }
-    };
 
-    
-    struct UTF_32_encoding_tag : utf_encoding_tag {
-        static const unsigned int   max_bytes = 4;
-        static const unsigned int   min_bytes = 4;
-        typedef uint32_t            code_unit_type;
-        static const int            buffer_size = 1;
-        typedef code_unit_type      encode_buffer_type[buffer_size];
-        const char*                 name() const { return "UTF-32"; }
-        typedef boost::array<code_unit_type,1>      bom_type;
-        static const bom_type       bom() { 
-            bom_type result = {{static_cast<code_unit_type>(0xFEFFu)}}; 
-            return result; 
-        };
-        static const int            bom_byte_size  = bom_type::static_size*sizeof(code_unit_type);
-    };
-    struct UTF_32BE_encoding_tag : UTF_32_encoding_tag {
-        typedef json::internal::big_endian_tag      endian_tag;
-        const char*                 name() const { return "UTF-32BE"; }
-        typedef boost::array<code_unit_type,1>      bom_type;
-        static const bom_type       bom() { 
-            bom_type result = {{byte_swap<host_endianness::type, endian_tag>(static_cast<code_unit_type>(0xFEFFu))}}; 
-            return result; 
-        };
-        static const int            bom_byte_size  = bom_type::static_size*sizeof(code_unit_type);
-    };
-    struct UTF_32LE_encoding_tag : UTF_32_encoding_tag {
-        typedef json::internal::little_endian_tag   endian_tag;
-        const char*                 name() const { return "UTF-32LE"; }
-        typedef boost::array<code_unit_type,1>      bom_type;
-        static const bom_type       bom() { 
-            bom_type result = {{byte_swap<host_endianness::type, endian_tag>(static_cast<code_unit_type>(0xFEFFu))}}; 
-            return result; 
-        };
-        static const int            bom_byte_size  = bom_type::static_size*sizeof(code_unit_type);
-    };
-    
-}}    
-    
-namespace json { namespace unicode {
-    
-    
-    //
-    //  Maps json::unicode encoding types to constants
-    //
-    
-    enum Encoding {
-        UnicodeEncoding_UTF8        = 1,
-        UnicodeEncoding_UTF16BE,
-        UnicodeEncoding_UTF16LE,
-        UnicodeEncoding_UTF32BE,
-        UnicodeEncoding_UTF32LE
-    };
-    
-    
-    template <typename EncodingT>
-    struct unicode_encoding_traits {};
-    
-    template <>
-    struct unicode_encoding_traits<UTF_8_encoding_tag> {
-        static const Encoding value = UnicodeEncoding_UTF8;
-    };
-    
-    template <>
-    struct unicode_encoding_traits<UTF_16BE_encoding_tag> {
-        static const Encoding value = UnicodeEncoding_UTF16BE;
-    };
-    
-    template <>
-    struct unicode_encoding_traits<UTF_16LE_encoding_tag> {
-        static const Encoding value = UnicodeEncoding_UTF16LE;
-    };
-    
-    template <>
-    struct unicode_encoding_traits<UTF_32BE_encoding_tag> {
-        static const Encoding value = UnicodeEncoding_UTF32BE;
-    };
-    
-    template <>
-    struct unicode_encoding_traits<UTF_32LE_encoding_tag> {
-        static const Encoding value = UnicodeEncoding_UTF32LE;
-    };
-    
-
-    //
-    //
-    //
-    
-    template <int E>
-    struct encoding_to_tag {};
-        
-    template <>
-    struct encoding_to_tag<UnicodeEncoding_UTF8> {
-        typedef UTF_8_encoding_tag type;
-    };
-    
-    template <>
-    struct encoding_to_tag<UnicodeEncoding_UTF16BE> {
-        typedef UTF_16BE_encoding_tag type;
-    };
-    
-    template <>
-    struct encoding_to_tag<UnicodeEncoding_UTF16LE> {
-        typedef UTF_16LE_encoding_tag type;
-    };
-    
-    template <>
-    struct encoding_to_tag<UnicodeEncoding_UTF32BE> {
-        typedef UTF_32BE_encoding_tag type;
-    };
-    
-    template <>
-    struct encoding_to_tag<UnicodeEncoding_UTF32LE> {
-        typedef UTF_32LE_encoding_tag type;
-    };
-    
-    
-    
-}}
-
-namespace json { namespace unicode {
-#pragma mark -
-#pragma mark to_host_endianness
-    
-    using json::internal::host_endianness;
-    using json::internal::little_endian_tag;
-    using json::internal::big_endian_tag;
-    
-    
-    // "Upgrades" or converts an UTF-16 or UTF-32 encoding to its corresponding
-    // encoding decorated with the endianness of the host.
-    
-    template <typename EncodingT, typename Enable = void> 
-    struct to_host_endianness {
-    };
-    
-    template <typename EncodingT> 
-    struct to_host_endianness<
-        EncodingT, 
-        typename boost::enable_if<boost::is_base_of<UTF_16_encoding_tag, EncodingT> >::type
-    >  
-    {
-        typedef typename boost::mpl::if_<
-        boost::is_same<host_endianness::type, little_endian_tag>,
-            UTF_16LE_encoding_tag,
-            UTF_16BE_encoding_tag
-        >::type  type;
-    };
-    
-    template <typename EncodingT> 
-    struct to_host_endianness<
-        EncodingT, 
-        typename boost::enable_if<boost::is_base_of<UTF_32_encoding_tag, EncodingT> >::type 
-    >  
-    {
-        typedef typename boost::mpl::if_<
-            boost::is_same<host_endianness::type, little_endian_tag>,
-            UTF_32LE_encoding_tag,
-            UTF_32BE_encoding_tag
-        >::type  type;
-    };
-    
-    template <typename EncodingT> 
-    struct to_host_endianness<
-        EncodingT, 
-        typename boost::enable_if<boost::is_same<UTF_8_encoding_tag, EncodingT> >::type 
-    >  
-    {
-        typedef EncodingT type;
-    };
-    
-}}    
-    
-
-
-namespace json { namespace unicode {
-#pragma mark - add_endianness
-    
-    using json::internal::host_endianness;
-    using json::internal::little_endian_tag;
-    using json::internal::big_endian_tag;
-    
-    
-    // "Upgrades" an UTF-16 or UTF-32 encoding without endianness
-    // to its corresponding encoding decorated with the endianness 
-    // of the host.
-    // Encodings with endianness will not be changed.
-    
-    template <typename EncodingT, typename Enable = void> 
-    struct add_endianness {
-    };
-    
-    template <typename EncodingT> 
-    struct add_endianness<
-        EncodingT, 
-        typename boost::enable_if<boost::is_same<UTF_16_encoding_tag, EncodingT> >::type
-    >  
-    {
-        typedef typename to_host_endianness<EncodingT>::type type;
-    };
-    
-    template <typename EncodingT> 
-    struct add_endianness<
-        EncodingT, 
-        typename boost::enable_if<boost::is_same<UTF_32_encoding_tag, EncodingT> >::type 
-    >  
-    {
-        typedef typename to_host_endianness<EncodingT>::type type;
-    };
-    
-    template <typename EncodingT> 
-    struct add_endianness<
-        EncodingT, 
-        typename boost::enable_if<
-            boost::mpl::and_<
-                boost::is_base_and_derived<utf_encoding_tag, EncodingT>,
-                boost::mpl::not_<boost::is_same<UTF_16_encoding_tag, EncodingT> >,
-                boost::mpl::not_<boost::is_same<UTF_32_encoding_tag, EncodingT> >
-            >
-        >::type 
-    >  
-    {
-        typedef EncodingT type;
-    };
-    
-}}    
-
-
-
-namespace json { namespace unicode {
-#pragma mark - char_type_to_encoding
-    
-    
-    // Return a default encoding in hostendianess from a given char type.
-    template <typename CharT>
-    struct char_type_to_encoding {};
-    
-    template <>
-    struct char_type_to_encoding<char> {
-        typedef UTF_8_encoding_tag type;
-    };
-    
-    template <>
-    struct char_type_to_encoding<wchar_t> {
-        typedef platform_encoding_tag type;
-    };
-    
-    
-#if __cplusplus > 199711L
-
-    template <>
-    struct char_type_to_encoding<char16_t> {
-        typedef typename to_host_endianness<UTF_16_encoding_tag>::type type;
-    };
-
-    template <>
-    struct char_type_to_encoding<char32_t> {
-        typedef typename to_host_endianness<UTF_32_encoding_tag>::type type;
-    };
-    
-    
-#endif
-    
-}}
-
-
-namespace json { namespace unicode {    
-#pragma mark -
-    
-    // Determines a default encoding based on the iterator's value_type and
-    // the machine endianness:        
-    
-    template <typename Iterator, typename ValueT = typename boost::iterator_value<Iterator>::type >
-    struct iterator_encoding {
-        // If the compiler issues an error here, the specialization
-        // for the given template parameters does not exist.
-        BOOST_STATIC_ASSERT(sizeof(Iterator) == 0); 
-    };
-    
-    
-    
-    template <typename Iterator>
-    struct iterator_encoding<Iterator, char> {
-        typedef UTF_8_encoding_tag type;
-    };
-    template <typename Iterator>
-    struct iterator_encoding<Iterator, signed char> {
-        typedef UTF_8_encoding_tag type;
-    };
-    template <typename Iterator>
-    struct iterator_encoding<Iterator, unsigned char> {
-        typedef UTF_8_encoding_tag type;
-    };
-    
-    template <typename Iterator>
-    struct iterator_encoding<Iterator, wchar_t> {
-        typedef platform_encoding_tag type;
-    };
-    
-    template <typename Iterator>
-    struct iterator_encoding<Iterator, uint16_t> {
-        typedef typename boost::mpl::if_c<
-        json::internal::host_endianness::is_little_endian, 
-        UTF_16LE_encoding_tag, 
-        UTF_16BE_encoding_tag
-        >::type type;
-    };
-    
-    template <typename Iterator>
-    struct iterator_encoding<Iterator, uint32_t> {
-        typedef typename boost::mpl::if_c<
-        json::internal::host_endianness::is_little_endian, 
-        UTF_32LE_encoding_tag, 
-        UTF_32BE_encoding_tag
-        >::type type;
-    };
-    
-
-
-
-    
-    
-    template <typename T, typename U>
-    struct is_encoding {
-        static const bool value = false;
-    };
-    
-    template <>
-    struct is_encoding<UTF_8_encoding_tag, UTF_8_encoding_tag> 
-    {
-        static const bool value = true;
-    };
-    template <>
-    struct is_encoding<UTF_16BE_encoding_tag, UTF_16BE_encoding_tag> 
-    {
-        static const bool value = true;
-    };
-    template <>
-    struct is_encoding<UTF_32LE_encoding_tag, UTF_32LE_encoding_tag> 
-    {
-        static const bool value = true;
-    };
-    template <>
-    struct is_encoding<UTF_32BE_encoding_tag, UTF_32BE_encoding_tag> 
-    {
-        static const bool value = true;
-    };
-    
-    
-    
-    
-    // Stable. Do not change.
-    // Several algorithms may be very picky about whether code units
-    // are signed or unsigned. We check them here and set it in stone.
-    // For UTF-8 all algorithms must work with either signed or usigned 
-    // UTF-8 code units.    
-    //BOOST_STATIC_ASSERT((boost::is_unsigned<UTF_8_encoding_tag::code_unit_type>::value == true));
-    BOOST_STATIC_ASSERT((boost::is_unsigned<UTF_16_encoding_tag::code_unit_type>::value == true));
-    BOOST_STATIC_ASSERT((boost::is_unsigned<UTF_32_encoding_tag::code_unit_type>::value == true));
-    
-    
-}}    // namespace json::unicode
-
-
-namespace json { namespace unicode {
         
     // code_point_t corresponds to a Unicode code point in the Unicode code-
     // space: a range of (unsigned) integers from 0 to 0x10FFFF.
     // (Do not mismatch this type with the UTF-32 "Code Unit" which is as well
     // an unsigend 32-bit integer).
-    typedef uint32_t code_point_t;    
+    typedef uint32_t code_point_t; 
+    BOOST_STATIC_ASSERT((boost::is_unsigned<code_point_t>::value == true));
     
     
     
@@ -518,17 +73,8 @@ namespace json { namespace unicode {
     
     // Stable. Do not change.
     BOOST_STATIC_ASSERT((boost::is_unsigned<code_point_t>::value == true));    
-}}
-
-
-namespace json { namespace unicode {
-    
 
     
-    using json::internal::host_endianness;
-    using json::byte_swap;
-    
-        
     // Returns true if the code point is within range of the
     // Unicode code space [0 .. 0x10FFFF].
     inline bool isCodePoint(code_point_t code_point) {
@@ -541,18 +87,21 @@ namespace json { namespace unicode {
     // D71: Returns true if the Unicode code point is a high-surrogate code point,
     // an Unicode code point in the range U+D800 to U+DBFF.
     inline bool isHighSurrogate(code_point_t code_point) {
-        return (code_point >= 0xD800u and code_point <= 0xDBFFu);  
+        //return (code_point >= 0xD800u and code_point <= 0xDBFFu);  
+        return (code_point - 0xD800u) <= (0xDBFFu - 0xD800u);
     }
     // D73: Returns true if the Unicode code point is a Low-surrogate code point,
     // an Unicode code point in the range U+DC00 to U+DFFF.
     inline bool isLowSurrogate(code_point_t code_point) {
-        return code_point >= 0xDC00u and code_point <= 0xDFFFu;
+        //return code_point >= 0xDC00u and code_point <= 0xDFFFu;
+        return (code_point - 0xDC00u) <= (0xDFFFu - 0xDC00u);
     }
     
     // Returns true if the Unicode code point is either a high-surrogate or
     // a low surrogate.
     inline bool isSurrogate(code_point_t code_point) {
-        return code_point >= 0xD800u and code_point <= 0xDFFFu;
+        //return code_point >= 0xD800u and code_point <= 0xDFFFu;
+        return (code_point - 0xD800u) <= (0xDFFFu - 0xD800u);
     }
     
 
@@ -576,7 +125,8 @@ namespace json { namespace unicode {
     // value implies a valid Unicode code point.
     // D76
     inline bool isUnicodeScalarValue(code_point_t code_point) {
-        bool result = not isSurrogate(code_point) and code_point <= 0x10FFFFu;
+        bool result = code_point < 0xD800u or ((code_point - 0xE000u) <= (0x10FFFFu - 0xE000u));        
+        //bool result = not isSurrogate(code_point) and code_point <= 0x10FFFFu;
         return result;
     }
     
@@ -608,21 +158,18 @@ namespace json { namespace unicode {
 #pragma mark UTF-8
 namespace json { namespace unicode {
     
-    typedef json::unicode::UTF_8_encoding_tag::code_unit_type utf8_code_unit;
     
     //
     // Implementation notes:
-    // The algorithm must work with either signed or usigned UTF-8 code units.
-    //
-    //BOOST_STATIC_ASSERT((boost::is_unsigned<utf8_code_unit>::value == true));
+    // The algorithm must work with either signed or unsigned UTF-8 code units!
     
     
     // Returns true if the code unit can be encoded into a single byte. That is,
     // in this case the code unit's value is within ASCII [0 .. 0x7F] and can 
     // thus be interpreted directly as ASCII.
     //
-    inline bool utf8_is_single(utf8_code_unit cu) {
-        return static_cast<uint8_t>(cu) < 0x80u;
+    inline bool utf8_is_single(uint8_t cu) {
+        return !(static_cast<uint8_t>(cu) & 0x80u);
     }
     
     // Returns true if the given code unit is a valid lead byte.
@@ -656,7 +203,7 @@ namespace json { namespace unicode {
     //
     // The algorithm is strict and takes care of this limitation.
     // 
-    inline bool utf8_is_lead(utf8_code_unit cu) {
+    inline bool utf8_is_lead(uint8_t cu) {
         // Do not remove any explicit typecasts or any "unsigned" modifiers 
         // applied to variables or constants - unless you really know what 
         // you are doing!!
@@ -666,7 +213,7 @@ namespace json { namespace unicode {
     
     // Returns true if the given code unit is a trail byte, e.g. a byte with
     // the bit pattern: b10xx.xxxx
-    inline bool utf8_is_trail(utf8_code_unit cu) {
+    inline bool utf8_is_trail(uint8_t cu) {
         bool result = (static_cast<uint8_t>(cu) & 0xC0u) == 0x80u;
         return result;
     }
@@ -678,7 +225,7 @@ namespace json { namespace unicode {
     // (A well-formed UTF-8 sequence shall not contain surrogates)
     // Parameter code_point: An Unicode code point.
     inline int utf8_encoded_length(code_point_t code_point) {
-        if (code_point <= 0x7Fu) return  1;
+        if ( (code_point & ~0x007Fu) == 0) return  1;
         else if (code_point <= 0x7FFu) return  2;
         else if (code_point <= 0xD7FFu) return 3;
         else if (code_point <= 0xDFFFu or code_point > 0x10FFFFu) return 0;
@@ -748,9 +295,9 @@ namespace json { namespace unicode {
     //
     //  *) exception: false for: b1100.0000 (0xC0) and b1100.0001 (0xC1)  (overlong ASCII)
     //
-    inline int utf8_num_trails_unsafe(utf8_code_unit first) {
+    inline int utf8_num_trails_unsafe(uint8_t first) {
         // assertion: utf8_is_lead(first) == true
-        const int E = -1;
+        const int8_t E = -1;
         static int8_t const table[32] = {
             0,0,0,0,0,0,0,0,
             0,0,0,0,0,0,0,0,
@@ -768,7 +315,7 @@ namespace json { namespace unicode {
     // The following utf8_num_trails() functions are safe, that is if parameter
     // 'first' is not a valid lead byte or not a single byte the function will 
     // return -1. Otherwise, it returns 0, 1, 2 or 3.
-    inline int utf8_num_trails(utf8_code_unit first) {
+    inline int utf8_num_trails(uint8_t first) {
 #if 1
         const int8_t E = -1;
         static int8_t const table[256] = {
@@ -785,7 +332,7 @@ namespace json { namespace unicode {
         
 #elif 0
         uint8_t ch = static_cast<uint8_t>(first);        
-        if (ch < 0x80u)
+        if (utf8_is_single(ch))
             return 0;
         const int8_t E = -1;
         static int8_t const table[128] = {
@@ -798,7 +345,7 @@ namespace json { namespace unicode {
 
 #elif 0
         uint8_t ch = static_cast<uint8_t>(first);        
-        if (ch < 0x80u)
+        if (utf8_is_single(ch))
             return 0;
         if (ch < 0xC0u)
             return -1;
@@ -825,7 +372,7 @@ namespace json { namespace unicode {
         
 #elif 0
         uint8_t ch = static_cast<uint8_t>(first);
-        if (ch < 0x80u)
+        if (utf8_is_single(ch))
             return 0;
         if (ch < 0xC2u)
             return -1;
@@ -833,7 +380,7 @@ namespace json { namespace unicode {
             return 1;
         if (ch < 0xF0u)
             return 2;
-        if (ch < 0xF5)
+        if (ch < 0xF5u)
             return 3;
         return -1;
         
@@ -847,7 +394,7 @@ namespace json { namespace unicode {
     // 'first' is not a valid lead byte or not a single byte the function will 
     // return -1. Otherwise, it returns -2 for an ASCII Control Character, otherwise 
     // it returns 0, 1, 2 or 3.
-    inline int utf8_num_trails_no_ctrl(utf8_code_unit first) {
+    inline int utf8_num_trails_no_ctrl(uint8_t first) {
 #if 1
         const int8_t E = -1;
         const int8_t C = -2;
@@ -865,9 +412,9 @@ namespace json { namespace unicode {
         
 #elif 0
         uint8_t ch = static_cast<uint8_t>(first); 
-        if (ch < 0x20)
+        if (ch < 0x20u)
             return -2;
-        if (ch < 0x80u)
+        if (utf8_is_single(ch))
             return 0;
         const int8_t E = -1;
         const int8_t C = -2;
@@ -881,9 +428,9 @@ namespace json { namespace unicode {
         
 #elif 0
         uint8_t ch = static_cast<uint8_t>(first);
-        if (ch < 0x20)
+        if (ch < 0x20u)
             return -2;
-        if (ch < 0x80u)
+        if (utf8_is_single(ch))
             return 0;
         if (ch < 0xC0u)
             return -1;
@@ -911,9 +458,9 @@ namespace json { namespace unicode {
         
 #elif 0
         uint8_t ch = static_cast<uint8_t>(first);
-        if (ch < 0x20)
+        if (ch < 0x20u)
             return -2;
-        if (ch < 0x80u)
+        if (utf8_is_single(ch))
             return 0;
         if (ch < 0xC2u)
             return -1;
@@ -921,7 +468,7 @@ namespace json { namespace unicode {
             return 1;
         if (ch < 0xF0u)
             return 2;
-        if (ch < 0xF5)
+        if (ch < 0xF5u)
             return 3;
         return -1;
         
@@ -940,28 +487,22 @@ namespace json { namespace unicode {
 namespace json { namespace unicode {
     
     
-    typedef json::unicode::UTF_16_encoding_tag::code_unit_type utf16_code_unit;
-    
-    BOOST_STATIC_ASSERT((boost::is_unsigned<utf16_code_unit>::value == true));
-    
-    
-    
-    inline bool utf16_is_high_surrogate(utf16_code_unit code_unit) {
+    inline bool utf16_is_high_surrogate(uint16_t code_unit) {
         return isHighSurrogate(code_point_t(code_unit));  
     }
-    inline bool utf16_is_lead(utf16_code_unit code_unit) {
+    inline bool utf16_is_lead(uint16_t code_unit) {
         return isHighSurrogate(code_point_t(code_unit));  
     }
 
-    inline bool utf16_is_low_surrogate(utf16_code_unit code_unit) {
+    inline bool utf16_is_low_surrogate(uint16_t code_unit) {
         return isLowSurrogate(code_point_t(code_unit));
     }
-    inline bool utf16_is_trail(utf16_code_unit code_unit) {
+    inline bool utf16_is_trail(uint16_t code_unit) {
         return isLowSurrogate(code_point_t(code_unit));
     }
 
     // Returns true if the specified code unit is a surrogate (U+D800..U+DFFF)
-    inline bool utf16_is_surrogate(utf16_code_unit cu) {
+    inline bool utf16_is_surrogate(uint16_t cu) {
         return (cu & 0xFFFFF800u) == 0xD800u;
     }
     
@@ -969,19 +510,19 @@ namespace json { namespace unicode {
     
     // Returns true if the specified single code unit encodes a 
     // code point (e.g. a BMP).
-    inline bool utf16_is_single(utf16_code_unit cu) {
+    inline bool utf16_is_single(uint16_t cu) {
         // return true if the code unit is not a surrogate (U+D800..U+DFFF)
         return not((cu & 0xFFFFF800u) == 0xD800u);  
     }
     
     /*
     // Returns true if the specified code unit is a lead surrogate (U+D800..U+DBFF).
-    inline bool utf16_is_lead(utf16_code_unit cu) {        
+    inline bool utf16_is_lead(uint16_t cu) {        
         return (cu & 0xFFFFFC00u) == 0xD800u;
     }
     
     // Returns true if the specified code unit is a trail surrogate (U+DC00..U+DFFF).
-    inline bool utf16_is_trail(utf16_code_unit cu) {
+    inline bool utf16_is_trail(uint16_t cu) {
         return (cu & 0xFFFFFC00u) == 0xDC00u;
     }
      */
@@ -992,7 +533,7 @@ namespace json { namespace unicode {
     inline int utf16_encoded_length_unsafe(code_point_t code_point) {
         if (code_point <= 0xFFFFu) 
             return  1;
-        else if (code_point <= 0x10FFFF)
+        else if (code_point <= 0x10FFFFu)
             return  2;
         else 
             return 0;
@@ -1006,7 +547,7 @@ namespace json { namespace unicode {
             return 0;
         if (code_point <= 0xFFFFu) 
             return  1;
-        else if (code_point <= 0x10FFFF)
+        else if (code_point <= 0x10FFFFu)
             return  2;
         else 
             return 0;
@@ -1016,8 +557,9 @@ namespace json { namespace unicode {
     // Convert a valid surrogate pair into a code point and return the result.
     // If either surrogate is invalid, the result is undefined.
     inline code_point_t 
-    utf16_surrogate_pair_to_code_point(utf16_code_unit high, utf16_code_unit low) {
-        return (high - 0xD800u) * 0x400u + (low - 0xDC00u) + 0x10000u;
+    utf16_surrogate_pair_to_code_point(uint16_t high, uint16_t low) {
+        //return (high - 0xD800u) * 0x400u + (low - 0xDC00u) + 0x10000u;
+        return ((high - 0xD800u) << 10) + (low - 0xDC00u) + 0x10000u;
     }
     
     
@@ -1026,7 +568,7 @@ namespace json { namespace unicode {
     // code_point must be a valid supplementary Unicode Code Point (U+10000..U+10FFFF).
     // Returns the lead surrogate (U+D800 .. U+DBFF) for the specified code
     // point.
-    inline utf16_code_unit
+    inline uint16_t
     utf16_get_lead(code_point_t code_point) { 
         return ((code_point >> 10) + 0xD7C0u); 
     }
@@ -1035,7 +577,7 @@ namespace json { namespace unicode {
     // Get the trail surrogate for a supplementary code point.
     // code_point must be a valid suplementary Unicode Code Point (U+10000..U+10FFFF).
     // Returns the trail surrogate for the specified supplementary code point.
-    inline utf16_code_unit
+    inline uint16_t
     utf16_get_trail(code_point_t code_point) { 
         return ((code_point & 0x3FFu) | 0xDC00u); 
     }
@@ -1049,12 +591,8 @@ namespace json { namespace unicode {
 #pragma mark UTF-32
 namespace json { namespace unicode {
     
-    typedef UTF_32_encoding_tag::code_unit_type utf32_code_unit;
     
-    BOOST_STATIC_ASSERT((boost::is_unsigned<utf32_code_unit>::value == true));
-    BOOST_STATIC_ASSERT((boost::is_same<utf32_code_unit, code_point_t>::value == true));
-    
-    const utf32_code_unit UTF32_BOM = 0xFeFFu;
+    const uint32_t UTF32_BOM = 0xFeFFu;
     
 }}  // namespace json::unicode
 
