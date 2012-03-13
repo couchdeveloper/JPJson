@@ -1,0 +1,39 @@
+===============================
+Parser Benchmark
+===============================
+Mon Mar 12 16:28:37 2012
+
+Clang version 3.1 (tags/Apple/clang-318.0.54)
+using vector<char> iterators
+start parsing 1000 times ... 
+SemanticActionsTest average elapsed time for:
+push string (0): 0.000 ms
+pop operations: 0.000 ms
+array push_back operations(0): 0.000 ms
+object insert operations(0): 0.000 ms
+Input encoding: UTF-8
+Unicode noncharacter handling: SignalErrorOnUnicodeNoncharacter
+
+Basic Json Parser Options:
+	Check For Duplicate Keys: YES
+	Parse Multiple Documents: NO
+	Check For Spurious Trailing Bytes: NO
+
+Extensions
+	Allow Comments: NO
+	Allow Control Characters: NO
+	Allow Leading Plus In Numbers: NO
+	Allow Leading Zeros In Integers: NO
+
+Log Level: LogLevelWarning
+Semantic Actions elapsed time:0.000 µs
+Semantic Actions number of parsed items:
+   string-cache size:  35
+   max stack items:  91
+Performance counters: 
+push string: 0.000 µs
+build array: 0.000 µs
+build object: 0.000 µs
+
+... end parsing
+JsonParser: elapsed time:  min: 0.422 ms, max: 5.209 ms, avg: 0.442 ms
