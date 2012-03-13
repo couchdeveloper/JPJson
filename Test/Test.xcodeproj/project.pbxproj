@@ -219,7 +219,6 @@
 		A164225613D4427000796785 /* JsonNumberTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = JsonNumberTest.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		A164225713D4427000796785 /* JsonObjectTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = JsonObjectTest.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		A164225813D4427000796785 /* JsonStringTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = JsonStringTest.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		A164225913D4427000796785 /* JsonTextTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = JsonTextTest.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		A164225A13D4427000796785 /* JsonValueTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = JsonValueTest.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		A164225B13D4427000796785 /* ObjectTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = ObjectTest.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		A164225C13D4427000796785 /* SafeBool.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = SafeBool.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -227,10 +226,8 @@
 		A164225E13D4427000796785 /* utf16LE_test.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = utf16LE_test.txt; sourceTree = "<group>"; };
 		A164225F13D4427000796785 /* utf8_test.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = utf8_test.txt; sourceTree = "<group>"; };
 		A164227913D442A300796785 /* ByteSwapTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = ByteSwapTest.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		A164227A13D442A300796785 /* IteratorTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = IteratorTest.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		A164227B13D442A300796785 /* JsonParserTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = JsonParserTest.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		A164227C13D442A300796785 /* JsonSemanticActionsTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = JsonSemanticActionsTest.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		A164227D13D442A300796785 /* JsonTextTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = JsonTextTest.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		A164227E13D442A300796785 /* StringBufferTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = StringBufferTest.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		A16718AA13EA86DF00A39091 /* utilities_test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = utilities_test; sourceTree = BUILT_PRODUCTS_DIR; };
 		A16718B413EA880100A39091 /* logger_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = logger_test.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -239,15 +236,12 @@
 		A171E75313D4966E00260A6B /* ObjC_Test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ObjC_Test; sourceTree = BUILT_PRODUCTS_DIR; };
 		A171E77613D497E700260A6B /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		A177AB6B14630A8800BA3AED /* AllTests-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AllTests-Prefix.pch"; sourceTree = "<group>"; };
-		A187ACF913FE7E6800BCCB01 /* UTF_to_UTF_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = UTF_to_UTF_test.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		A18DFC0B1425C6DA00DAFE2E /* synchronous_queue_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = synchronous_queue_test.cpp; sourceTree = "<group>"; };
-		A18DFC0F14260F8400DAFE2E /* sync_queue_iterator_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sync_queue_iterator_test.cpp; sourceTree = "<group>"; };
 		A18DFC111426416800DAFE2E /* syncqueue_streambuf_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = syncqueue_streambuf_test.cpp; sourceTree = "<group>"; };
 		A18FD42B144471AD003E6EBA /* Test-UTF8-esc.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = "Test-UTF8-esc.json"; path = "../Resources/Test-UTF8-esc.json"; sourceTree = "<group>"; };
 		A18FD42E14447222003E6EBA /* Test-UTF8-esc.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = "Test-UTF8-esc.json"; path = "../Resources/Test-UTF8-esc.json"; sourceTree = "<group>"; };
 		A192C71114239B59002EE32F /* JPAsyncJsonParserTest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = JPAsyncJsonParserTest.mm; sourceTree = "<group>"; };
 		A1995FAB141FCC2F00595100 /* atomic_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = atomic_test.cpp; sourceTree = "<group>"; };
-		A1995FAE141FD75900595100 /* producer_consumer_queue_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = producer_consumer_queue_test.cpp; sourceTree = "<group>"; };
 		A199EFC91444729600B53269 /* Test-UTF8-esc.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = "Test-UTF8-esc.json"; path = "../Resources/Test-UTF8-esc.json"; sourceTree = "<group>"; };
 		A199FC7513D5D186000170CD /* timer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = timer.hpp; path = ../utilities/timer.hpp; sourceTree = "<group>"; };
 		A199FC7613D5D186000170CD /* timer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = timer.cpp; path = ../utilities/timer.cpp; sourceTree = "<group>"; };
@@ -349,38 +343,12 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		A154A8E413D44EBD00CF312F /* unused */ = {
-			isa = PBXGroup;
-			children = (
-				A164227A13D442A300796785 /* IteratorTest.cpp */,
-				A164227D13D442A300796785 /* JsonTextTest.cpp */,
-			);
-			path = unused;
-			sourceTree = "<group>";
-		};
-		A159B2A6142C795700ADCEA9 /* unused */ = {
-			isa = PBXGroup;
-			children = (
-				A1995FAE141FD75900595100 /* producer_consumer_queue_test.cpp */,
-				A18DFC0F14260F8400DAFE2E /* sync_queue_iterator_test.cpp */,
-			);
-			path = unused;
-			sourceTree = "<group>";
-		};
 		A15D897F1467F7A10001E08D /* Scripts */ = {
 			isa = PBXGroup;
 			children = (
 				A15D89801467F7A10001E08D /* RunAllTests.sh */,
 			);
 			path = Scripts;
-			sourceTree = "<group>";
-		};
-		A16315BC14FFAD5600422AF1 /* unused */ = {
-			isa = PBXGroup;
-			children = (
-				A187ACF913FE7E6800BCCB01 /* UTF_to_UTF_test.cpp */,
-			);
-			path = unused;
 			sourceTree = "<group>";
 		};
 		A16421F813D4354300796785 = {
@@ -441,7 +409,6 @@
 				A164225D13D4427000796785 /* utf16BE_test.txt */,
 				A164225E13D4427000796785 /* utf16LE_test.txt */,
 				A164225F13D4427000796785 /* utf8_test.txt */,
-				A16532B213ED2C8B00FA8A0A /* unused */,
 			);
 			path = JsonContainerTest;
 			sourceTree = "<group>";
@@ -454,17 +421,8 @@
 				A164227B13D442A300796785 /* JsonParserTest.cpp */,
 				A164227C13D442A300796785 /* JsonSemanticActionsTest.cpp */,
 				A164227E13D442A300796785 /* StringBufferTest.cpp */,
-				A154A8E413D44EBD00CF312F /* unused */,
 			);
 			path = json_parser_test;
-			sourceTree = "<group>";
-		};
-		A16532B213ED2C8B00FA8A0A /* unused */ = {
-			isa = PBXGroup;
-			children = (
-				A164225913D4427000796785 /* JsonTextTest.cpp */,
-			);
-			path = unused;
 			sourceTree = "<group>";
 		};
 		A16718A513EA85F700A39091 /* Tests */ = {
@@ -490,7 +448,6 @@
 				A18DFC111426416800DAFE2E /* syncqueue_streambuf_test.cpp */,
 				A19F3A6C142877E400266273 /* semaphore_test.cpp */,
 				A1E95E0F147288E100A78D3F /* base64_test.cpp */,
-				A159B2A6142C795700ADCEA9 /* unused */,
 			);
 			path = utilities_test;
 			sourceTree = "<group>";
@@ -566,7 +523,6 @@
 				A105D10513F687CB006DE4C7 /* unicode_converter_test.cpp */,
 				A140DD1C13E94E36009DBB8C /* unicode_conversion_test.cpp */,
 				A1A1BE6A142B448B00335044 /* unicode_detect_bom_test.cpp */,
-				A16315BC14FFAD5600422AF1 /* unused */,
 			);
 			path = unicode_test;
 			sourceTree = "<group>";
