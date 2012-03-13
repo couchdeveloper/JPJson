@@ -353,11 +353,9 @@
 			isa = PBXGroup;
 			children = (
 				A164227A13D442A300796785 /* IteratorTest.cpp */,
-				A1E4ADDB1450610E000F4E21 /* json_path_test.cpp */,
-				A148127214AA035200CC7BEA /* json_path_parser_test.cpp */,
 				A164227D13D442A300796785 /* JsonTextTest.cpp */,
 			);
-			name = unused;
+			path = unused;
 			sourceTree = "<group>";
 		};
 		A159B2A6142C795700ADCEA9 /* unused */ = {
@@ -366,7 +364,7 @@
 				A1995FAE141FD75900595100 /* producer_consumer_queue_test.cpp */,
 				A18DFC0F14260F8400DAFE2E /* sync_queue_iterator_test.cpp */,
 			);
-			name = unused;
+			path = unused;
 			sourceTree = "<group>";
 		};
 		A15D897F1467F7A10001E08D /* Scripts */ = {
@@ -382,7 +380,7 @@
 			children = (
 				A187ACF913FE7E6800BCCB01 /* UTF_to_UTF_test.cpp */,
 			);
-			name = unused;
+			path = unused;
 			sourceTree = "<group>";
 		};
 		A16421F813D4354300796785 = {
@@ -427,7 +425,6 @@
 		A164224E13D4427000796785 /* JsonContainerTest */ = {
 			isa = PBXGroup;
 			children = (
-				A16532B213ED2C8B00FA8A0A /* unused */,
 				A164224F13D4427000796785 /* JsonArrayTest.cpp */,
 				A164225013D4427000796785 /* JsonBooleanTest.cpp */,
 				A164225113D4427000796785 /* JsonContainerMoveSematicsTest.cpp */,
@@ -444,6 +441,7 @@
 				A164225D13D4427000796785 /* utf16BE_test.txt */,
 				A164225E13D4427000796785 /* utf16LE_test.txt */,
 				A164225F13D4427000796785 /* utf8_test.txt */,
+				A16532B213ED2C8B00FA8A0A /* unused */,
 			);
 			path = JsonContainerTest;
 			sourceTree = "<group>";
@@ -451,12 +449,12 @@
 		A164227813D442A300796785 /* json_parser_test */ = {
 			isa = PBXGroup;
 			children = (
-				A1CCFB09150A4CC70083FE3D /* preliminary */,
-				A154A8E413D44EBD00CF312F /* unused */,
+				A1CCFB09150A4CC70083FE3D /* experimental */,
 				A164227913D442A300796785 /* ByteSwapTest.cpp */,
 				A164227B13D442A300796785 /* JsonParserTest.cpp */,
 				A164227C13D442A300796785 /* JsonSemanticActionsTest.cpp */,
 				A164227E13D442A300796785 /* StringBufferTest.cpp */,
+				A154A8E413D44EBD00CF312F /* unused */,
 			);
 			path = json_parser_test;
 			sourceTree = "<group>";
@@ -466,7 +464,7 @@
 			children = (
 				A164225913D4427000796785 /* JsonTextTest.cpp */,
 			);
-			name = unused;
+			path = unused;
 			sourceTree = "<group>";
 		};
 		A16718A513EA85F700A39091 /* Tests */ = {
@@ -486,13 +484,13 @@
 		A16718AC13EA86DF00A39091 /* utilities_test */ = {
 			isa = PBXGroup;
 			children = (
-				A159B2A6142C795700ADCEA9 /* unused */,
 				A16718B413EA880100A39091 /* logger_test.cpp */,
 				A1995FAB141FCC2F00595100 /* atomic_test.cpp */,
 				A18DFC0B1425C6DA00DAFE2E /* synchronous_queue_test.cpp */,
 				A18DFC111426416800DAFE2E /* syncqueue_streambuf_test.cpp */,
 				A19F3A6C142877E400266273 /* semaphore_test.cpp */,
 				A1E95E0F147288E100A78D3F /* base64_test.cpp */,
+				A159B2A6142C795700ADCEA9 /* unused */,
 			);
 			path = utilities_test;
 			sourceTree = "<group>";
@@ -551,22 +549,24 @@
 			path = AllTests;
 			sourceTree = "<group>";
 		};
-		A1CCFB09150A4CC70083FE3D /* preliminary */ = {
+		A1CCFB09150A4CC70083FE3D /* experimental */ = {
 			isa = PBXGroup;
 			children = (
+				A1E4ADDB1450610E000F4E21 /* json_path_test.cpp */,
+				A148127214AA035200CC7BEA /* json_path_parser_test.cpp */,
 				A1070B9114780A2C00C1847D /* parser_string_buffer_test.cpp */,
 			);
-			name = preliminary;
+			name = experimental;
 			sourceTree = "<group>";
 		};
 		A1D2529313DDA35E00960381 /* unicode_test */ = {
 			isa = PBXGroup;
 			children = (
-				A16315BC14FFAD5600422AF1 /* unused */,
 				A1D2529413DDA3A100960381 /* utilities_test.cpp */,
 				A105D10513F687CB006DE4C7 /* unicode_converter_test.cpp */,
 				A140DD1C13E94E36009DBB8C /* unicode_conversion_test.cpp */,
 				A1A1BE6A142B448B00335044 /* unicode_detect_bom_test.cpp */,
+				A16315BC14FFAD5600422AF1 /* unused */,
 			);
 			path = unicode_test;
 			sourceTree = "<group>";

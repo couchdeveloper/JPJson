@@ -21,7 +21,7 @@
 //  Objectives:
 //
 //  Create a Semantic Actions class which prints JSON paths.
-//
+//  The main part is implemented in @class JsonPathSemanticActions.
 
 
 static NSData* readFile(NSString* fileName)
@@ -50,6 +50,9 @@ int main (int argc, const char * argv[])
         // any Unicode encoding scheme. There may also be a BOM to indicate the
         // encoding. The parser will detect the encoding automatically. So,
         // don't worry about it.
+        // Note: the file "Out-UTF8-pretty.json" will be created in sample 3. If
+        // it does not yet exist, just run Sample3.
+        
         NSData* data = readFile(@"Out-UTF8-pretty.json");
         
         // The Semantic Actions class used: JsonPathSemanticActions

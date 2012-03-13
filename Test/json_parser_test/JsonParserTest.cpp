@@ -26,10 +26,8 @@
 
 
 #include <boost/iterator/iterator_traits.hpp>
-#include "json/endian/byte_swap_iterator.hpp"
 #include "json/parser/semantic_actions.hpp"
 #include "json/parser/semantic_actions_test.hpp"
-//#include "json/unicode/unicode_conversion.hpp"
 #include "json/parser/parser_errors.hpp"
 
 

@@ -617,10 +617,11 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Sample10/Sample10-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
-					"$(BOOST_ROOT)",
 					"$(JP_ROOT)",
+					"$(BOOST_ROOT)",
 					"$(BUILT_PRODUCTS_DIR)",
 				);
+				JP_ROOT = "$(SRCROOT)/../../Source";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lstdc++",
@@ -635,10 +636,11 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Sample10/Sample10-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
-					"$(BOOST_ROOT)",
 					"$(JP_ROOT)",
+					"$(BOOST_ROOT)",
 					"$(BUILT_PRODUCTS_DIR)",
 				);
+				JP_ROOT = "$(SRCROOT)/../../Source";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lstdc++",
@@ -687,9 +689,11 @@
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
 					"$(inherited)",
+					"DEBUG=1",
+					"__ASSERT_MACROS_DEFINE_VERSIONS_WITHOUT_UNDERSCORES=0",
 				);
+				GCC_PREPROCESSOR_DEFINITIONS_NOT_USED_IN_PRECOMPS = "";
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -715,7 +719,9 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					NS_BLOCK_ASSERTIONS,
 					NDEBUG,
+					"__ASSERT_MACROS_DEFINE_VERSIONS_WITHOUT_UNDERSCORES=0",
 				);
+				GCC_PREPROCESSOR_DEFINITIONS_NOT_USED_IN_PRECOMPS = "";
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;

@@ -17,21 +17,25 @@
 // C++ class "json_path" which can be found in the source package. 
 // The reason for doing this is just simple: I'm too lazy to imple-
 // ment an Objective-C class for a JSON path structure. ;)
-// So, this implementation is some sort of hack. But also invaluable.
+// So, this implementation is some sort of hack. But also invaluable
 // if you want to hack into the implementation details yourself.
 
 // Headers found in the source package:
-#include "json/ObjC/JPSemanticActionsBase_private.h"
 #include "json/ObjC/SemanticActionsBase.hpp"
 #include "json/ObjC/JPSemanticActionsBase_private.h"
 #include "json/ObjC/unicode_traits.hpp"
 #include "json/unicode/unicode_utilities.hpp"
-#include "json/unicode/unicode_conversions.hpp"
-#include "json/parser/json_path.hpp"
+#include "json/unicode/unicode_traits.hpp"
+#include "json/unicode/unicode_conversion.hpp"
+#include "json/json_path/json_path.hpp"    // experimental
 #include <algorithm>
 #include <iostream>
 #include <iterator>
 
+
+#if __has_feature(objc_arc) 
+    #error This Objective-C file shall be compiled with ARC disabled.
+#endif
 
 @interface JsonPathSemanticActions () 
 - (void) printBranch;
@@ -39,7 +43,7 @@
 
 
 
-typedef JP_CFStringEncoding::code_unit_type char_t;
+typedef json::unicode::encoding_traits<JP_CFStringEncoding>::code_unit_type char_t;
 
 @implementation JsonPathSemanticActions
 {
@@ -81,6 +85,16 @@ typedef JP_CFStringEncoding::code_unit_type char_t;
     [jsonBranch_ appendBytes:&quote length:sizeof(quote)];    
     [jsonBranch_ appendBytes:bytes length:length];
     [jsonBranch_ appendBytes:&quote length:sizeof(quote)];    
+    
+#if defined (DEBUG)
+//    std::ostream_iterator<char> out_it(std::cout);    
+//    char_t const* first = static_cast<char_t const*>(bytes);
+//    char_t const* last = first + length/sizeof(char_t);
+//    std::cout << "Parser found JSON string value: \"";
+//    int result = json::unicode::convert(first, last, JP_CFStringEncoding(),out_it, json::unicode::UTF_8_encoding_tag());
+//    std::cout << '"' << std::endl;
+//    assert(result == 0);
+#endif 
 }
 
 
@@ -89,20 +103,31 @@ typedef JP_CFStringEncoding::code_unit_type char_t;
 - (void) parserFoundJsonNumber:(const char*)numberString length:(size_t)length
 {
     char_t buffer[128];
-    // We don't really need to elaborately convert the encoding like this:
     char_t* dest = buffer;
-    int error;
-    std::size_t count = json::unicode::convert_unsafe(numberString, numberString+length, json::unicode::UTF_8_encoding_tag(),
-                                  dest, JP_CFStringEncoding(),
-                                  error);
-    // since a number string is pure ASCII the following would suffice:
-    //std::copy(numberString, numberString+length, buffer);
-    [jsonBranch_ appendBytes:buffer length:count*sizeof(char_t)];    
+//    int result = converter_t().convert(numberString, numberString+length, dest);
+//    NSAssert(result == 0, @"Unicode conversion failed");
+//    std::size_t count = dest - buffer;
+    // Note: since JP_CFStringEncoding's endianness is equal the host endianness,
+    // converting an ASCII sequence to Unicode sequence in JP_CFStringEncoding
+    // is really just copying. 
+    //    // Use an unsafe, stateless converter:
+    //    typedef json::unicode::converter<
+    //        json::unicode::UTF_8_encoding_tag, JP_CFStringEncoding, 
+    //        json::unicode::Validation::UNSAFE, json::unicode::Stateful::No
+    //    >  converter_t;
+    
+    const char* first = numberString;
+    const char* last = first + length;    
+    while (first != last) {
+        *dest++ = *first++;
+    }
+    [jsonBranch_ appendBytes:buffer length:length*sizeof(char_t)];    
 }
 
 - (void) parserFoundJsonBoolean:(BOOL)value
 {
-    // Since "true" and "false" is true ASCII, we don't really need to elaborately convert the encoding:
+    // Since "true" and "false" is true ASCII, we don't really need to elaborately convert 
+    // the encoding:
     const char_t true_buffer[] = {'t', 'r', 'u', 'e'};
     const char_t false_buffer[] = {'f', 'a', 'l', 's', 'e'};
     const char_t* bytes = value ? true_buffer : false_buffer;
@@ -145,7 +170,7 @@ typedef JP_CFStringEncoding::code_unit_type char_t;
 {
     if (level_ == 1) {
         json_path_.push_index(index);
-        printf("%s = ", json_path_.path<json::unicode::UTF_8_encoding_tag>().c_str());  
+        printf("%s = ", json_path_.path().c_str());  
         [jsonBranch_ setLength:0];
     }
     else {
@@ -169,13 +194,12 @@ typedef JP_CFStringEncoding::code_unit_type char_t;
 - (void) parserFoundJsonValueBeginWithKey:(const void*)bytes length:(size_t)length encoding:(NSStringEncoding)encoding index:(size_t)index
 {
     assert(encoding_ == encoding);
-    typedef JP_CFStringEncoding::code_unit_type char_t;
     
     if (level_ == 1) {    
         const char_t* s = reinterpret_cast<char_t const*>(bytes);
         const size_t len = length / sizeof(char_t);
         json_path_.push_key(s, s+len);
-        printf("%s = ", json_path_.path<json::unicode::UTF_8_encoding_tag>().c_str());  
+        printf("%s = ", json_path_.path().c_str());  
         [jsonBranch_ setLength:0];
     }
     else {
@@ -214,10 +238,9 @@ typedef JP_CFStringEncoding::code_unit_type char_t;
     std::ostream_iterator<char> out_it(std::cout);    
     char_t const* first = static_cast<char_t const*>([jsonBranch_ bytes]);
     char_t const* last = first + [jsonBranch_ length]/sizeof(char_t);
-    int error;
-    json::unicode::convert_unsafe(first, last, JP_CFStringEncoding(),
-                                  out_it, json::unicode::UTF_8_encoding_tag(),
-                                  error);
+    int result = json::unicode::convert_unsafe(first, last, JP_CFStringEncoding(),
+                                  out_it, json::unicode::UTF_8_encoding_tag());
+    NSAssert(result == 0, @"Unicode conversion failed");
 }
 
 @end

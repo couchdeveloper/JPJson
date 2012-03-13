@@ -15,7 +15,7 @@
 #include <algorithm>
 
 #include <utilities/timer.hpp>
-#include <json/value.hpp>
+#include <json/value/value.hpp>
 
 
 #if defined (BOOST_STRICT_CONFIG)

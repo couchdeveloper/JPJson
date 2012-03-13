@@ -30,7 +30,7 @@
 #include <sstream>
 #include <algorithm>
 
-#include "timer.hpp"
+#include "utilities/timer.hpp"
 
 #include <assert.h>
 #include <string.h>
@@ -545,7 +545,7 @@ namespace {
         // Try boost::mt19937 or boost::ecuyer1988 instead of boost::minstd_rand
         typedef boost::mt19937 base_generator_type;
         
-        const int kN = 1000;  // number of loops
+        const int kN = 100;  // number of loops
         const int kZ = 100000;    // number of number-strings generated
         
         typedef std::vector<std::string> vector_t;
@@ -597,8 +597,9 @@ namespace {
             }
             
         }
-        printf("spirit number bench: elapsed time for parsing:  %.3f µs\n", t.nanoSeconds()*1e-3/(kN*kZ));
+        printf("%25.25s %8.5f µs\n", "spirit parse_number:", t.nanoSeconds()*1e-3/(kN*kZ));
         
+
         t.reset();
         for (int i = 0; i < kN; ++i) 
         {
@@ -619,7 +620,33 @@ namespace {
                 throwRuntimeError("client::validate_number failed");
             }
         }
-        printf("spirit number bench: elapsed time for validating number:  %.3f µs\n", t.nanoSeconds()*1e-3/(kN*kZ));
+        printf("%25.25s %8.5f µs\n", "spirit validate_number:", t.nanoSeconds()*1e-3/(kN*kZ));
+        
+        
+        
+        
+        t.reset();
+        for (int i = 0; i < kN; ++i) 
+        {
+            vector_t::iterator first = v.begin();
+            vector_t::iterator last = v.end();
+            bool done = false;
+            t.start();                            
+            while (first != last) 
+            {
+                double d;
+                bool result = client::parse_double((*first).begin(), (*first).end(), d);
+                if (not result) {
+                    done = true;
+                }
+                ++first;
+            }
+            t.pause();
+            if (first != last) {
+                throwRuntimeError("client::parse_double failed");
+            }
+        }
+        printf("%25.25s %8.5f µs\n", "spirit parse_double:", t.nanoSeconds()*1e-3/(kN*kZ));
         
         
         t.reset();
@@ -642,7 +669,7 @@ namespace {
                 throwRuntimeError("client::validate_double failed");
             }
         }
-        printf("spirit number bench: elapsed time for validating double:  %.3f µs\n", t.nanoSeconds()*1e-3/(kN*kZ));
+        printf("%25.25s %8.5f µs\n", "spirit validate_double:", t.nanoSeconds()*1e-3/(kN*kZ));
 
 
         t.reset();
@@ -665,7 +692,7 @@ namespace {
                 throwRuntimeError("test::validateNumber failed");
             }
         }
-        printf("spirit number bench: elapsed time for hand written parser:  %.5f µs\n", t.nanoSeconds()*1e-3/(kN*kZ));
+        printf("%25.25s %8.5f µs\n", "test::validateNumber:", t.nanoSeconds()*1e-3/(kN*kZ));
 
  
         t.reset();
@@ -688,7 +715,7 @@ namespace {
                 throwRuntimeError("json_test::parse_number failed");
             }
         }
-        printf("spirit number bench: elapsed time for hand written parser (2):  %.5f µs\n", t.nanoSeconds()*1e-3/(kN*kZ));
+        printf("%25.25s %8.5f µs\n", "json_test::parse_number:", t.nanoSeconds()*1e-3/(kN*kZ));
         
         
         t.reset();
@@ -708,7 +735,7 @@ namespace {
             }
             t.pause();
         }
-        printf("spirit number bench: elapsed time for Xpressive parser:  %.5f µs\n", t.nanoSeconds()*1e-3/(kN*kZ));
+        printf("%25.25s %8.5f µs\n", "Xpressive match_number:", t.nanoSeconds()*1e-3/(kN*kZ));
         
         
         return true;

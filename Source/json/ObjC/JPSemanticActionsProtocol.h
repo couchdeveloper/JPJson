@@ -354,6 +354,9 @@
  Sent to the delegate when the parser found the end of a JSON Value 
  belonging to an JSON Array at the specified index.
 
+ The associated value at this index has been notified by the parser by the corres-
+ ponding event which has been sent immediately before this message.
+ 
  @param index The index of at which the value is added to the JSON Array.
 */ 
 - (void) parserFoundJsonValueEndAtIndex:(size_t)index;
@@ -363,10 +366,10 @@
  Sent to the delegate when the parser found the start of the n'th JSON Value 
  belonging to a JSON Object with the specified key.
  
- The json parser will pass the _decoded_ JSON String. _Decoding_ a JSON string 
- involves unescaping, possibly replacing certain Unicode characters with their 
- replacement character as specified in the semantic actions configuration, and 
- possibly converting from the source encoding to the specified Unicode encoding 
+ The json parser will pass the key as a _decoded_ JSON String. _Decoding_ a JSON 
+ string involves unescaping, possibly replacing certain Unicode characters with 
+ their replacement character as specified in the semantic actions configuration, 
+ and possibly converting from the source encoding to the specified Unicode encoding 
  form. 
 
  @warning *Note:* The specified Unicode encoding scheme in parameter `encoding` 
@@ -385,11 +388,14 @@
  Sent to the delegate when the parser found the end of the n'th JSON Value 
  belonging to a JSON Object with the specified key.
 
- The json parser will pass the _decoded_ JSON String. _Decoding_ a JSON string 
- involves unescaping, possibly replacing certain Unicode characters with their 
- replacement character as specified in the semantic actions configuration, and 
- possibly converting from the source encoding to the specified Unicode encoding 
+ The json parser will pass the key as a _decoded_ JSON String. _Decoding_ a JSON 
+ string involves unescaping, possibly replacing certain Unicode characters with 
+ their  replacement character as specified in the semantic actions configuration, 
+ and possibly converting from the source encoding to the specified Unicode encoding 
  form. 
+ 
+ The associated value for the key has been notified by the parser by the corres-
+ ponding event which has been sent immediately before this message.
  
  @warning *Note:* The specified Unicode encoding scheme in parameter `encoding` 
  corresponds to the Library Build Option `JP_JSON_STRING_BUFFER_ENCODING` and

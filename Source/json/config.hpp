@@ -10,10 +10,6 @@
 #define JSON_CONFIG_HPP
 
 
-#if defined (BOOST_STRICT_CONFIG)
-#warning BOOST_STRICT_CONFIG defined
-#endif
-
 
 
 // #define JSON_USE_JSON_PATH  //currently not used

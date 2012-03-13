@@ -14,6 +14,8 @@
 		A1485F9F144733B500A88A92 /* Test-UTF8.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = A1485F9E144733B500A88A92 /* Test-UTF8.json */; };
 		A171E72313D4924D00260A6B /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = A171E72213D4924D00260A6B /* main.mm */; };
 		A171E72913D4938E00260A6B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A171E72813D4938E00260A6B /* Foundation.framework */; };
+		A177EAFE150E430F009A1299 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1FF8C6D14891C07003DF439 /* main.cpp */; };
+		A177EAFF150E44BF009A1299 /* timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A17DD7C7146AF503000AD974 /* timer.cpp */; };
 		A17DD7C9146AF503000AD974 /* timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A17DD7C7146AF503000AD974 /* timer.cpp */; };
 		A17DD7CA146AF503000AD974 /* timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A17DD7C7146AF503000AD974 /* timer.cpp */; };
 		A17DD7CB146AF503000AD974 /* timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A17DD7C7146AF503000AD974 /* timer.cpp */; };
@@ -61,6 +63,15 @@
 				A1485F761447133B00A88A92 /* Test-UTF8-esc.json in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A177EAF1150E42EB009A1299 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
 		};
 		A187B4CF13FAA7AF00FB63BD /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -117,6 +128,7 @@
 		A171E72213D4924D00260A6B /* main.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; path = main.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		A171E72413D4928400260A6B /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		A171E72813D4938E00260A6B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		A177EAF3150E42EB009A1299 /* JsonContainerBench */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = JsonContainerBench; sourceTree = BUILT_PRODUCTS_DIR; };
 		A17DD75A14698DE9000AD974 /* JPJson.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JPJson.framework; path = "../../../../../Library/Developer/Xcode/DerivedData/Json-avyupbfqigfmsihavqhqaqxjccfe/Build/Products/Release/JPJson.framework"; sourceTree = "<group>"; };
 		A17DD7C7146AF503000AD974 /* timer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = timer.cpp; sourceTree = "<group>"; };
 		A17DD7C8146AF503000AD974 /* timer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = timer.hpp; sourceTree = "<group>"; };
@@ -156,6 +168,13 @@
 			files = (
 				A17DD7D1146AF54F000AD974 /* libjson.a in Frameworks */,
 				A171E72913D4938E00260A6B /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A177EAF0150E42EB009A1299 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -241,6 +260,7 @@
 				A1EF0D9D142666BF0083221D /* sync_queue_iterator_bench */,
 				A19F3B1C1428C89D00266273 /* Allocator_bench */,
 				A11D218C144C9B6300D24AA8 /* parse_number */,
+				A177EAF3150E42EB009A1299 /* JsonContainerBench */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -279,8 +299,8 @@
 			isa = PBXGroup;
 			children = (
 				A171E72013D4924D00260A6B /* AGJsonParser */,
-				A1FF8C6C14891C07003DF439 /* JsonContainerBench */,
 				A1A3399813D96A6B000CE571 /* json_parser */,
+				A1FF8C6C14891C07003DF439 /* JsonContainerBench */,
 				A187B4D313FAA7AF00FB63BD /* unicode_conversion */,
 				A1995FBA1420A96E00595100 /* queue_bench */,
 				A1EF0D9F142666BF0083221D /* sync_queue_iterator_bench */,
@@ -406,6 +426,23 @@
 			productReference = A171E71E13D4922600260A6B /* AGJsonParser */;
 			productType = "com.apple.product-type.tool";
 		};
+		A177EAF2150E42EB009A1299 /* JsonContainerBench */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A177EAFC150E42EB009A1299 /* Build configuration list for PBXNativeTarget "JsonContainerBench" */;
+			buildPhases = (
+				A177EAEF150E42EB009A1299 /* Sources */,
+				A177EAF0150E42EB009A1299 /* Frameworks */,
+				A177EAF1150E42EB009A1299 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = JsonContainerBench;
+			productName = JsonContainerBench2;
+			productReference = A177EAF3150E42EB009A1299 /* JsonContainerBench */;
+			productType = "com.apple.product-type.tool";
+		};
 		A187B4D013FAA7AF00FB63BD /* unicode_conversion */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = A187B4DA13FAA7AF00FB63BD /* Build configuration list for PBXNativeTarget "unicode_conversion" */;
@@ -501,6 +538,7 @@
 				A1EF0D9C142666BF0083221D /* sync_queue_iterator_bench */,
 				A19F3B1B1428C89D00266273 /* Allocator_bench */,
 				A11D218B144C9B6300D24AA8 /* parse_number */,
+				A177EAF2150E42EB009A1299 /* JsonContainerBench */,
 			);
 		};
 /* End PBXProject section */
@@ -531,6 +569,15 @@
 				A171E72313D4924D00260A6B /* main.mm in Sources */,
 				A17DD7C9146AF503000AD974 /* timer.cpp in Sources */,
 				A105900514CEFA780072B418 /* JSONKit.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A177EAEF150E42EB009A1299 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A177EAFF150E44BF009A1299 /* timer.cpp in Sources */,
+				A177EAFE150E430F009A1299 /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -583,7 +630,10 @@
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				HEADER_SEARCH_PATHS = "$(BOOST_ROOT)";
+				HEADER_SEARCH_PATHS = (
+					"$(JP_ROOT)",
+					"$(BOOST_ROOT)",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -600,8 +650,10 @@
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				HEADER_SEARCH_PATHS = "$(BOOST_ROOT)";
-				LLVM_LTO = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(JP_ROOT)",
+					"$(BOOST_ROOT)",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -663,6 +715,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
+					"\"$(JP_ROOT)\"",
 					"$(BENCH_HEADER_SEARCH_PATHS)",
 					"$(BOOST_HEADER_SEARCH_PATHS)",
 				);
@@ -689,6 +742,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
+					"\"$(JP_ROOT)\"",
 					"$(BENCH_HEADER_SEARCH_PATHS)",
 					"$(BOOST_HEADER_SEARCH_PATHS)",
 				);
@@ -746,6 +800,46 @@
 				OTHER_CFLAGS = "-v";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = AGJsonParser;
+			};
+			name = Release;
+		};
+		A177EAFA150E42EB009A1299 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(JP_ROOT)",
+					"$(BENCH_HEADER_SEARCH_PATHS)",
+					"$(BOOST_HEADER_SEARCH_PATHS)",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		A177EAFB150E42EB009A1299 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(JP_ROOT)",
+					"$(BENCH_HEADER_SEARCH_PATHS)",
+					"$(BOOST_HEADER_SEARCH_PATHS)",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
 		};
@@ -823,7 +917,6 @@
 					"$(ICU_LIBRARY_SEARCH_PATHS)",
 					"$(inherited)",
 				);
-				LLVM_LTO = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				OTHER_CFLAGS = "-v";
 				OTHER_LDFLAGS = (
@@ -1001,6 +1094,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		A177EAFC150E42EB009A1299 /* Build configuration list for PBXNativeTarget "JsonContainerBench" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A177EAFA150E42EB009A1299 /* Debug */,
+				A177EAFB150E42EB009A1299 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 		A187B4DA13FAA7AF00FB63BD /* Build configuration list for PBXNativeTarget "unicode_conversion" */ = {
 			isa = XCConfigurationList;

@@ -122,52 +122,6 @@ namespace {
             base::finished_imp();
         }
         
-        virtual void push_string_imp(const char_t* s, std::size_t len) {
-            if (push_string_imp_) {
-                push_string_imp_(this->delegate_, @selector(parserFoundJsonString:length:encoding:), 
-                    static_cast<const void*>(s), len*sizeof(char_t), json::ns_unicode_encoding_traits<EncodingT>::value);
-                if (!this->ok()) {
-                    throw SemanticActionsStateError();
-                }
-            }
-        }        
-        
-        virtual void push_key_imp(const char_t* s, std::size_t len) {
-            if (push_key_imp_) {
-                push_key_imp_(this->delegate_, @selector(parserFoundJsonKey:length:encoding:),  
-                    static_cast<const void*>(s), len*sizeof(char_t), json::ns_unicode_encoding_traits<EncodingT>::value);
-                if (!this->ok()) {
-                    throw SemanticActionsStateError();
-                }
-            }
-        }
-        
-        virtual void push_number_imp(const nb_number_t& number) {
-            if (push_number_imp_) {
-                push_number_imp_(this->delegate_, @selector(parserFoundJsonNumber:length:), number.c_str(), number.c_str_len());
-                if (!this->ok()) {
-                    throw SemanticActionsStateError();
-                }
-            }
-        }
-        
-        virtual void push_boolean_imp(bool b) {
-            if (push_boolean_imp_) {
-                push_boolean_imp_(this->delegate_, @selector(parserFoundJsonBoolean:), static_cast<BOOL>(b));
-                if (!this->ok()) {
-                    throw SemanticActionsStateError();
-                }
-            }
-        }
-        
-        virtual void push_null_imp() {
-            if (push_null_imp_) {
-                push_null_imp_(this->delegate_, @selector(parserFoundJsonNull));
-                if (!this->ok()) {
-                    throw SemanticActionsStateError();
-                }
-            }
-        }
         
         virtual void begin_array_imp() {
             if (begin_array_imp_) {
@@ -187,6 +141,7 @@ namespace {
             }
         }
         
+
         virtual void begin_object_imp() {
             if (begin_object_imp_) {
                 begin_object_imp_(this->delegate_, @selector(parserFoundJsonObjectBegin));
@@ -206,7 +161,8 @@ namespace {
             }
             return result;
         }
-
+        
+        
         virtual void begin_value_at_index_imp(size_t index) {
             if (begin_value_at_index_imp_) {
                 begin_value_at_index_imp_(this->delegate_, @selector(parserFoundJsonValueBeginAtIndex:), index);
@@ -228,7 +184,7 @@ namespace {
         virtual void begin_value_with_key_imp(const char_t* s, size_t len, size_t nth) {
             if (begin_value_with_key_imp_) {
                 begin_value_with_key_imp_(this->delegate_, @selector(parserFoundJsonValueBeginWithKey:length:encoding:index:), 
-                    s, len*sizeof(char_t), json::ns_unicode_encoding_traits<EncodingT>::value, nth);
+                                          s, len*sizeof(char_t), json::ns_unicode_encoding_traits<EncodingT>::value, nth);
                 if (!this->ok()) {
                     throw SemanticActionsStateError();
                 }
@@ -238,12 +194,62 @@ namespace {
         virtual void end_value_with_key_imp(const char_t* s, size_t len, size_t nth) {
             if (end_value_with_key_imp_) {
                 end_value_with_key_imp_(this->delegate_, @selector(parserFoundJsonValueEndWithKey:length:encoding:index:), 
-                    s, len*sizeof(char_t), json::ns_unicode_encoding_traits<EncodingT>::value, nth);
+                                        s, len*sizeof(char_t), json::ns_unicode_encoding_traits<EncodingT>::value, nth);
                 if (!this->ok()) {
                     throw SemanticActionsStateError();
                 }
             }
         }
+        
+        
+        
+        virtual void value_string_imp(const char_t* s, std::size_t len) {
+            if (push_string_imp_) {
+                push_string_imp_(this->delegate_, @selector(parserFoundJsonString:length:encoding:), 
+                    static_cast<const void*>(s), len*sizeof(char_t), json::ns_unicode_encoding_traits<EncodingT>::value);
+                if (!this->ok()) {
+                    throw SemanticActionsStateError();
+                }
+            }
+        }        
+        
+        virtual void push_key_imp(const char_t* s, std::size_t len) {
+            if (push_key_imp_) {
+                push_key_imp_(this->delegate_, @selector(parserFoundJsonKey:length:encoding:),  
+                    static_cast<const void*>(s), len*sizeof(char_t), json::ns_unicode_encoding_traits<EncodingT>::value);
+                if (!this->ok()) {
+                    throw SemanticActionsStateError();
+                }
+            }
+        }
+        
+        virtual void value_number_imp(const nb_number_t& number) {
+            if (push_number_imp_) {
+                push_number_imp_(this->delegate_, @selector(parserFoundJsonNumber:length:), number.c_str(), number.c_str_len());
+                if (!this->ok()) {
+                    throw SemanticActionsStateError();
+                }
+            }
+        }
+        
+        virtual void value_null_imp() {
+            if (push_null_imp_) {
+                push_null_imp_(this->delegate_, @selector(parserFoundJsonNull));
+                if (!this->ok()) {
+                    throw SemanticActionsStateError();
+                }
+            }
+        }
+        
+        virtual void value_boolean_imp(bool b) {
+            if (push_boolean_imp_) {
+                push_boolean_imp_(this->delegate_, @selector(parserFoundJsonBoolean:), static_cast<BOOL>(b));
+                if (!this->ok()) {
+                    throw SemanticActionsStateError();
+                }
+            }
+        }
+        
         
 /*        
         virtual void pop_imp() {

@@ -17,13 +17,6 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 //
-#if defined (BOOST_STRICT_CONFIG)
-#warning BOOST_STRICT_CONFIG defined
-#endif
-
-#if defined (BOOST_DISABLE_THREADS)
-#warning BOOST_DISABLE_THREADS defined
-#endif
 
 #include <boost/config.hpp>
 
@@ -39,6 +32,7 @@
 
 #include <cstdio>
 #include <cstdlib>
+#include <ctime>
 #include <errno.h>
 
 // #define JSON_INTERNAL_SEMANTIC_ACTIONS_TESTING
@@ -53,6 +47,9 @@
 
 
 namespace {
+    
+    
+    const char* TEST_JSON = "Test-UTF8-esc.json";
     
     std::vector<char> loadFromFile(const char* fileName) 
     {        
@@ -86,7 +83,7 @@ static void bench_validating_parser()
     using namespace json;
     using namespace utilities;
     
-    std::vector<char> buffer = loadFromFile("Test-UTF8-esc.json");
+    std::vector<char> buffer = loadFromFile(TEST_JSON);
     
     /*
     // Create your string stream.
@@ -99,7 +96,7 @@ static void bench_validating_parser()
 #if defined (DEBUG)
     const int N = 1;
 #else    
-    const int N = 10000;
+    const int N = 1000;
 #endif    
     
     bool result;
@@ -128,7 +125,7 @@ static void bench_test_parser()
     
     std::cout << "using vector<char> iterators" << std::endl;
     
-    std::vector<char> buffer = loadFromFile("Test-UTF8-esc.json");
+    std::vector<char> buffer = loadFromFile(TEST_JSON);
 
     timer t0 = timer();
 #if defined (DEBUG)
@@ -179,13 +176,13 @@ static void bench_parser()
     
     std::cout << "using vector<char> iterators" << std::endl;
     
-    std::vector<char> buffer = loadFromFile("Test-UTF8.json");
+    std::vector<char> buffer = loadFromFile(TEST_JSON);
     
     timer t = timer();
 #if defined (DEBUG)
     const int N = 1;
 #else    
-    const int N = 10000;
+    const int N = 1000;
 #endif    
     
     typedef std::vector<char>::iterator iterator;
@@ -266,7 +263,7 @@ static void bench_parser2()
     
     std::cout << "using istream iterators" << std::endl;    
     
-    std::ifstream ifs("Test-UTF8-esc.json");
+    std::ifstream ifs(TEST_JSON);
     if (!ifs)
         throw std::runtime_error("could not open file");
     
@@ -366,7 +363,7 @@ static void bench_parser3()
     std::cout << "using istream iterators" << std::endl;
 
     
-    std:ifstream ifs("Test-UTF8-esc.json");
+    std:ifstream ifs(TEST_JSON);
     if (!ifs)
         throw std::runtime_error("could not open file");
     
@@ -467,7 +464,7 @@ static void bench_parser4()
     
     std::cout << "using streambuf iterators" << std::endl;
     
-    ifstream ifs("Test-UTF8-esc.json");
+    ifstream ifs(TEST_JSON);
     if (!ifs)
         throw std::runtime_error("could not open file");
     
@@ -556,10 +553,15 @@ static void bench_parser4()
 #endif
 
 int main ()
-{    
+{   
     std::cout << "===============================\n";
     std::cout << "Parser Benchmark\n";
     std::cout << "===============================\n";
+    time_t time_info;    
+    std::time(&time_info);
+    std::cout << ctime(&time_info) << "\n";
+    std::cout << BOOST_COMPILER << "\n";
+    
     try {
         //bench_validating_parser();
         //bench_test_parser();

@@ -26,6 +26,7 @@
 #include "utilities/timer.hpp"
 
 #include <cassert>
+#include <ctime>
 
 // ICU
 #include <unicode/ustring.h>
@@ -1685,6 +1686,10 @@ namespace {
 int main (int argc, const char * argv[])
 {    
     try {
+        time_t time_info;    
+        std::time(&time_info);
+        std::cout << ctime(&time_info) << "\n";
+        
         std::cout << BOOST_COMPILER << "\n";
         
                 //profile();

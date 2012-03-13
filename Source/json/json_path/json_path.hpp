@@ -38,11 +38,13 @@
 #include <boost/variant/apply_visitor.hpp>
 #include <boost/iterator/iterator_traits.hpp>
 #include <json/unicode/unicode_utilities.hpp>
-#include <json/unicode/unicode_conversions.hpp>
+#include <json/unicode/unicode_traits.hpp>
+#include <json/unicode/unicode_converter.hpp>
 
 
 namespace json { namespace json_internal {
     
+    using json::unicode::encoding_traits;
     
     
     template <typename EncodingT, typename IndexT = std::size_t>
@@ -54,7 +56,7 @@ namespace json { namespace json_internal {
         
         // Ensure the start of a sequence of code_units and Index values are propery aligned
         // in the storage:
-        BOOST_STATIC_ASSERT( (sizeof(IndexT) >= sizeof(typename EncodingT::code_unit_type)) ); 
+        BOOST_STATIC_ASSERT( (sizeof(IndexT) >= sizeof(typename encoding_traits<EncodingT>::code_unit_type)) ); 
         typedef typename boost::aligned_storage<sizeof(IndexT), boost::alignment_of<IndexT>::value>::type storage_value_type;
         typedef std::vector<storage_value_type> storage_type;
         
@@ -70,7 +72,7 @@ namespace json { namespace json_internal {
         
     public:
         typedef EncodingT encoding_type;
-        typedef typename EncodingT::code_unit_type char_type;        
+        typedef typename encoding_traits<EncodingT>::code_unit_type char_type;        
         
         struct root_type {};
         typedef std::pair<const char_type*, const char_type*> key_type;
@@ -89,15 +91,13 @@ namespace json { namespace json_internal {
             
             void operator()(key_type& range) {
                 std::ostream_iterator<char> dest(os_);
-                int error;
                 const char_type* first = range.first;
                 if (quote_keys_)
                     os_ << '"';
-                std::size_t count = escape_convert_unsafe(
+                int result = escape_convert_unsafe(
                         first, range.second, EncodingT(),
-                        dest, json::unicode::UTF_8_encoding_tag(),
-                        error);
-                if (count == 0) {
+                        dest, json::unicode::UTF_8_encoding_tag());
+                if (result != 0) {
                     throw std::runtime_error("Unicode conversion failed");
                 }
                 if (quote_keys_)
@@ -110,36 +110,35 @@ namespace json { namespace json_internal {
             
         private:
             template <
-            typename InIteratorT, typename InEncodingT, 
-            typename OutIteratorT, typename OutEncodingT
+                typename InIteratorT, typename InEncodingT, 
+                typename OutIteratorT, typename OutEncodingT
             >
-            inline std::size_t
+            inline int
             escape_convert_unsafe(
                                   InIteratorT&     first, 
                                   InIteratorT      last, 
                                   InEncodingT      inEncoding,
                                   OutIteratorT&    dest,
-                                  OutEncodingT     outEncoding,
-                                  int&             error) const
+                                  OutEncodingT     outEncoding) const
             {
-                std::size_t count = 0;
+                // Use a unsafe, stateless converter which only converts one character:
+                typedef unicode::converter<
+                    InEncodingT, OutEncodingT, 
+                    unicode::Validation::UNSAFE, unicode::Stateful::No, unicode::ParseOne::Yes
+                >  converter_t;
+                typedef typename encoding_traits<InEncodingT>::code_unit_type in_char_t;
+                converter_t cvt;
+                int result = 0;
                 while (first != last) {
-                    if (*first == static_cast<typename InEncodingT::code_unit_type>('"')) {
-                        *dest++ = static_cast<typename InEncodingT::code_unit_type>('\\');
-                        ++count;
+                    if (*first == static_cast<in_char_t>('"')) {
+                        *dest++ = static_cast<in_char_t>('\\');
                     }
-                    int result = json::unicode::convert_one_unsafe(first, last, inEncoding, 
-                                                                   dest, outEncoding);
-                    if (result > 0)
-                        count += result;
-                    else {
-                        error = result;
-                        return 0;
-                        break;
+                    result = cvt.convert(first, last, dest);
+                    if (result != 0) {
+                        return result;
                     }
                 }
-                error = 0;
-                return count;
+                return result;
             }    
             
         private:
@@ -174,7 +173,7 @@ namespace json { namespace json_internal {
         {
             // The iterator's value size shall match the size of the code unit:
             BOOST_STATIC_ASSERT(sizeof(typename boost::iterator_value<IteratorT>::type)
-                                == sizeof(typename EncodingT::code_unit_type));
+                                == sizeof(typename encoding_traits<EncodingT>::code_unit_type));
             assert(first != last);            
             positions_.push_back(pos_type(KeyComponent, storage_.size()));
             const size_t len = std::distance(first, last);

@@ -10,8 +10,8 @@ DerivedData
 *.swp
 
 
-# exclude "unused" folders
-unused/
+## exclude "unused" folders
+#unused/
 
 #exclude generated html files in folder "doc":
 doc/

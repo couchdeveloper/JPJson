@@ -31,7 +31,6 @@
 #include <boost/mpl/and.hpp>
 #include <boost/mpl/or.hpp>
 
-//#include <netinet/in.h>
 #include <assert.h>
 #include <string.h>
 #include <limits>
@@ -39,31 +38,15 @@
 
 #include "parser_errors.hpp"
 #include "semantic_actions_base.hpp"
-//#incldue "json_path.hpp"
 #include "json/utility/string_buffer.hpp"
 #include "json/utility/number_builder.hpp"
 #include "json/unicode/unicode_utilities.hpp"
 #include "json/unicode/unicode_converter.hpp"
 #include "json/endian/endian.hpp"
 
-#if OLD
-#include "json/endian/byte_swap_iterator.hpp"
-#endif
 
 #if defined (DEBUG)
 #include <iostream>
-#endif
-
-
-
-// JSON_PARSER_USE_JSON_PATH
-// Should be defined only for testing. The json path feature will be implemented
-// in the semantic actions class.
-// define JSON_PARSER_USE_JSON_PATH
-
-
-#if defined (JSON_PARSER_USE_JSON_PATH)
-#include "json_path.hpp"
 #endif
 
 
@@ -167,13 +150,7 @@ namespace json {
         typedef parser_state                            state_t;    // Current state of the parser
         typedef typename SemanticActions::result_type   result_t;   // The result of the sematic actions, e.g. a JSON container or AST.
         
-#if OLD        
-        // Create an iterator adapter type which possibly swaps bytes if required
-        // when dereferencing:
-        typedef typename internal::byte_swap_iterator<InputIterator, SourceEncoding>    iterator;
-#else
         typedef InputIterator iterator;
-#endif        
                                                                             
     public:
         
@@ -233,10 +210,6 @@ namespace json {
         string_buffer_t         string_buffer_;
         number_builder_t        number_builder_;
         unicode::filter::NoncharacterOrNULL unicode_filter_;
-        
-#if defined (JSON_PARSER_USE_JSON_PATH)
-        json_internal::json_path<string_buffer_encoding> json_path_;
-#endif
         
     private:        
         void parse_text();
@@ -628,9 +601,6 @@ namespace json {
                 state_.error() = JP_UNICODE_NULL_NOT_ALLOWED_ERROR;
             } else {
                 size_t index = 0;
-#if defined JSON_PARSER_USE_JSON_PATH
-                json_path_.push_index(0);
-#endif                
                 // parse value_list
                 while (1) {
                     sa_.begin_value_at_index(index);
@@ -644,9 +614,6 @@ namespace json {
                                 skip_whitespaces();
                                 if (p_ != last_) {
                                     ++index;
-#if defined JSON_PARSER_USE_JSON_PATH
-                                    json_path_.back_index() = index;
-#endif                
                                     continue;
                                 }
                                 else {
@@ -673,9 +640,6 @@ namespace json {
                         unsigned int c = to_uint(*p_);
                         if (c == ']') {
                             // end of array
-#if defined JSON_PARSER_USE_JSON_PATH
-                            json_path_.pop_component();
-#endif                
                             return;
                         }
                         else {
@@ -775,10 +739,6 @@ namespace json {
                 
         //bool done = false;
         size_t index = 0;
-#if defined JSON_PARSER_USE_JSON_PATH
-        key_string_char_t dummy = key_string_char_t(0);
-        json_path_.push_key(&dummy, &dummy + 1);
-#endif                
         while (__builtin_expect(p_ != last_, 1)) {
             unsigned int c = to_uint(*p_);
             if (c == '"') 
@@ -786,9 +746,6 @@ namespace json {
                 // first, get the key ...
                 parse_string(keyStringBuffer);
                 if (state_) {
-#if defined JSON_PARSER_USE_JSON_PATH
-                    json_path_.back_key_assign(keyStringBuffer.buffer(), keyStringBuffer.buffer() + keyStringBuffer.size());
-#endif                
                     if (p_ != last_) {
                         // ... then, eat the key_value separator ...
                         c = to_uint(*p_);                        
@@ -817,9 +774,6 @@ namespace json {
                                             // Seems we are done with no errors.
                                             // note: p() points to start of next token, which shall be '}'
                                             // or it points to last_, which will be detected later.
-#if defined JSON_PARSER_USE_JSON_PATH
-                                            json_path_.pop_component();
-#endif                
                                             return; 
                                         }
                                     } else {

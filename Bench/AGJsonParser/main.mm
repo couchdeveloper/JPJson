@@ -31,6 +31,9 @@
 #import "JPJson/NSData+JPJsonDetectEncoding.h"
 #include "utilities/timer.hpp"
 #include <algorithm>
+#include <ctime>
+
+#include <boost/config.hpp>
 
 
 
@@ -69,7 +72,7 @@ namespace {
     }
 
     // Path to a JSON file which is used globally for all tests.
-    NSString* JSON_TEST_FILE = @"Test-UTF8-esc.json";
+    NSString* JSON_TEST_FILE = @"Test-UTF8.json";
     
     
     using utilities::timer;
@@ -1090,6 +1093,9 @@ int main (int argc, const char * argv[])
     
     NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
     
+    time_t time_info;    
+    std::time(&time_info);
+    printf("%s\n%s\n", ctime(&time_info), BOOST_COMPILER);
     NSLog(@"Start Bench");
         
     bench_AGJsonParserString1(N);
