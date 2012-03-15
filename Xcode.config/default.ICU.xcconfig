@@ -1,0 +1,18 @@
+//
+//  default.ICU.xcconfig
+//  
+//
+//  This file is meant for a template for user settings. Don't change this file!
+//  In your project, rename this file to user.ICU.xconfig 
+// 
+
+// This configuration is only required in the test suite. The following
+// settings are appropriate if ICU has been installed with HomeBrew.
+
+
+ICU_ROOT = <my/path/to/local/ICU>
+
+ICU_HEADER_SEARCH_PATHS = $(ICU_ROOT)/include
+ICU_LIBRARY_SEARCH_PATHS = $(ICU_ROOT)/lib
+ICU_OTHER_LDFLAGS = -licuuc
+

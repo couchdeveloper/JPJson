@@ -1,0 +1,15 @@
+//
+//  boost.xcconfig
+//  
+//
+//  This file is meant for a template for user settings. Don't change this file!
+//  In your project, rename this file to user.boost.xconfig 
+// 
+
+// Configuration for boost.
+// Define the header search path and boost specific preprocessor macros
+
+BOOST_ROOT = <ma/path/to/local/boost>
+
+BOOST_HEADER_SEARCH_PATHS = $(BOOST_ROOT)
+BOOST_GCC_PREPROCESSOR_DEFINITIONS = BOOST_DISABLE_THREADS BOOST_STRICT_CONFIG  
