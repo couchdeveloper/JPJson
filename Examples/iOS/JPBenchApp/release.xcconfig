@@ -1,0 +1,15 @@
+//
+//  release.xcconfig
+//
+
+// Source Root Path
+JP_ROOT = "$(SRCROOT)/../../../Source"
+
+// Header search paths
+PRJ_HEADER_SEARCH_PATHS = $(BUILT_PRODUCTS_DIR)
+
+// Preprocessor Definitions
+PRJ_GCC_PREPROCESSOR_DEFINITIONS = NDEBUG NS_BLOCK_ASSERTIONS __ASSERT_MACROS_DEFINE_VERSIONS_WITHOUT_UNDERSCORES=0
+
+// Other Linker Flags
+PRJ_OTHER_LDFLAGS = -ObjC -lstdc++

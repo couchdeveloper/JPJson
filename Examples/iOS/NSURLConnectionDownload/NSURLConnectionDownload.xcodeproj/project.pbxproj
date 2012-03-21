@@ -25,6 +25,8 @@
 		A150AE8A142A1B8B00D3EF1D /* JSONKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSONKit.m; sourceTree = "<group>"; };
 		A1615B61143F2FE300DA0A11 /* UIDevice-Hardware.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIDevice-Hardware.h"; sourceTree = "<group>"; };
 		A1615B62143F2FE300DA0A11 /* UIDevice-Hardware.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIDevice-Hardware.m"; sourceTree = "<group>"; };
+		A18A70571511F79400FEB03C /* release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = release.xcconfig; sourceTree = "<group>"; };
+		A18A70591511F7A200FEB03C /* debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = debug.xcconfig; sourceTree = "<group>"; };
 		A1ED08E81428F0B800B276C4 /* NSURLConnectionDownload.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NSURLConnectionDownload.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A1ED08EC1428F0B800B276C4 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		A1ED08EE1428F0B800B276C4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -76,6 +78,8 @@
 		A1ED08DD1428F0B800B276C4 = {
 			isa = PBXGroup;
 			children = (
+				A18A70591511F7A200FEB03C /* debug.xcconfig */,
+				A18A70571511F79400FEB03C /* release.xcconfig */,
 				A150AE87142A1B8B00D3EF1D /* JSONKit */,
 				A1ED08F21428F0B800B276C4 /* NSURLConnectionDownload */,
 				A17DD7BB146AEB7F000AD974 /* Libraries */,
@@ -213,6 +217,7 @@
 /* Begin XCBuildConfiguration section */
 		A1ED09041428F0B900B276C4 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A18A70591511F7A200FEB03C /* debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = (
@@ -240,6 +245,7 @@
 		};
 		A1ED09051428F0B900B276C4 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A18A70571511F79400FEB03C /* release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = (
@@ -274,16 +280,13 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "NSURLConnectionDownload/NSURLConnectionDownload-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = "$(PRJ_GCC_PREPROCESSOR_DEFINITIONS)";
+				HEADER_SEARCH_PATHS = "$(PRJ_HEADER_SEARCH_PATHS)";
 				INFOPLIST_FILE = "NSURLConnectionDownload/NSURLConnectionDownload-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
-				LLVM_LTO = NO;
 				OTHER_CFLAGS = "-v";
-				OTHER_LDFLAGS = (
-					"-ObjC",
-					"-lstdc++",
-				);
+				OTHER_LDFLAGS = "$(PRJ_OTHER_LDFLAGS)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				USER_HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -299,20 +302,13 @@
 				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "NSURLConnectionDownload/NSURLConnectionDownload-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"NS_BLOCK_ASSERTIONS=1",
-					NDEBUG,
-				);
+				GCC_PREPROCESSOR_DEFINITIONS = "$(PRJ_GCC_PREPROCESSOR_DEFINITIONS)";
+				HEADER_SEARCH_PATHS = "$(PRJ_HEADER_SEARCH_PATHS)";
 				INFOPLIST_FILE = "NSURLConnectionDownload/NSURLConnectionDownload-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
-				LLVM_LTO = NO;
 				OTHER_CFLAGS = "-v";
-				OTHER_LDFLAGS = (
-					"-ObjC",
-					"-lstdc++",
-				);
+				OTHER_LDFLAGS = "$(PRJ_OTHER_LDFLAGS)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				USER_HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

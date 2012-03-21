@@ -20,7 +20,6 @@
 #ifndef JSON_UNICODE_TRAITS_HPP
 #define JSON_UNICODE_TRAITS_HPP
 
-
 #include "json/config.hpp"
 #include "unicode_utilities.hpp"
 #include <assert.h>

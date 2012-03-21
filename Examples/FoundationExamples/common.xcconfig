@@ -1,0 +1,10 @@
+//
+//  common.xcconfig
+//
+
+#include "../../Xcode.config/user.boost.xcconfig"
+
+
+// Source Root Path
+JP_ROOT = "$(SRCROOT)/../../Source"
+

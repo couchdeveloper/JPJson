@@ -77,17 +77,6 @@
 
 
 
-
-//#if defined (nil)
-//#undef nil
-//#include <boost/spirit/include/qi.hpp>
-//#define nil NULL
-//#else
-//#include <boost/spirit/include/qi.hpp>
-//#endif
-
-
-
 #if defined (JSON_INTERNAL_SEMANTIC_ACTIONS_PERFORMANCE_COUNTER)
 // for performance counters:
 #include "utilities/timer.hpp"
@@ -107,13 +96,6 @@ namespace  {
 
 #if defined (JSON_OBJC_SEMANTIC_ACTIONS_USE_CACHE)
 #include "CFDataCache.hpp"
-//    #include <boost/tr1/unordered_set.hpp>
-//    #include <boost/pool/pool_alloc.hpp>
-//    #include "json/string.hpp"
-#endif
-
-
-#if defined (JSON_OBJC_SEMANTIC_ACTIONS_USE_CACHE)   
 #endif
 
 

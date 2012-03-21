@@ -115,6 +115,7 @@
 		A199EFDC144480D200B53269 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		A199EFDF144480D200B53269 /* Sample2-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Sample2-Prefix.pch"; sourceTree = "<group>"; };
 		A1CA8B411441D42E0076C0CB /* Readme.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = Readme.rtf; sourceTree = "<group>"; };
+		A1CFB9321510C8CA0010942D /* common.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = common.xcconfig; sourceTree = "<group>"; };
 		A1E2FC1914517346009D68EF /* Out-UTF8-pretty.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "Out-UTF8-pretty.json"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A1F001371440A27E007A72A9 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		A1F001491440A2A0007A72A9 /* Sample1 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Sample1; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -280,6 +281,7 @@
 		A1F001281440A27E007A72A9 = {
 			isa = PBXGroup;
 			children = (
+				A1CFB9321510C8CA0010942D /* common.xcconfig */,
 				A1CA8B411441D42E0076C0CB /* Readme.rtf */,
 				A1F0015A1440A7C3007A72A9 /* Resources */,
 				A1F0014C1440A2A0007A72A9 /* Sample1 */,
@@ -617,11 +619,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Sample10/Sample10-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
-					"$(JP_ROOT)",
-					"$(BOOST_ROOT)",
 					"$(BUILT_PRODUCTS_DIR)",
+					"$(JP_ROOT)",
+					"$(BOOST_HEADER_SEARCH_PATHS)",
 				);
-				JP_ROOT = "$(SRCROOT)/../../Source";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lstdc++",
@@ -636,11 +637,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Sample10/Sample10-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
-					"$(JP_ROOT)",
-					"$(BOOST_ROOT)",
 					"$(BUILT_PRODUCTS_DIR)",
+					"$(JP_ROOT)",
+					"$(BOOST_HEADER_SEARCH_PATHS)",
 				);
-				JP_ROOT = "$(SRCROOT)/../../Source";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lstdc++",
@@ -680,6 +680,7 @@
 		};
 		A1F001401440A27E007A72A9 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A1CFB9321510C8CA0010942D /* common.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
@@ -709,6 +710,7 @@
 		};
 		A1F001411440A27E007A72A9 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A1CFB9321510C8CA0010942D /* common.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";

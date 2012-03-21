@@ -13,6 +13,11 @@ DerivedData
 ## exclude "unused" folders
 #unused/
 
+
+## exclude user specific files and folders
+user.*
+
+
 #exclude generated html files in folder "doc":
 doc/
 

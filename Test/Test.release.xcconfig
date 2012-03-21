@@ -1,0 +1,11 @@
+//
+//  Test.release.xcconfig
+//  Test
+//
+
+// Source Root Path
+JP_ROOT = $(SRCROOT)/../Source
+
+#include "../Xcode.config/user.boost.xcconfig"
+#include "../Xcode.config/user.gtest.xcconfig"
+#include "../Xcode.config/user.ICU.xcconfig"

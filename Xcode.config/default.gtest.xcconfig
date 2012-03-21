@@ -1,17 +1,12 @@
 //
-//  user.gtest.xcconfig
+//  default.gtest.xcconfig
 //  
 //  This file is meant for a template for user settings. Don't change this file!
 //  In your project, rename this file to user.gtest.xconfig 
 // 
 
-GTEST_ROOT = <my/path/to/local/gtest>
 
+// If the gtest framework has been installed properly, JPJson doesn't need 
+// additional configuration settings, except the "Source Tree" setting 
+// `JPJson.GTEST_ROOT` which need to be setup in Xcode preferences.
 
-GTEST_HEADER_SEARCH_PATHS = "$(GTEST_ROOT)/include"
-GTEST_FRAMEWORK_SEARCH_PATHS = "$(GTEST_ROOT)/xcode/build/Release"
-//GTEST_OTHER_LDFLAGS = 
-//GTEST_LIBRARY_SEARCH_PATHS =
-
-// Environment variable specifying the dylib path for the dynamic linker
-GTEST_ENV_DYLD_FRAMEWORK_PATH = $(GTEST_ROOT)/xcode/build/Release

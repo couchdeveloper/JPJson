@@ -1,0 +1,13 @@
+//
+//  iOS.debug.xcconfig
+//
+
+#include "../../Xcode.config/user.boost.xcconfig"
+
+// Source Root Path
+JP_ROOT = "$(SRCROOT)/../../Source"
+
+// Header search paths
+PRJ_HEADER_SEARCH_PATHS = $(JP_ROOT) $(BOOST_HEADER_SEARCH_PATHS)
+
+PRJ_GCC_PREPROCESSOR_DEFINITIONS = DEBUG=1 __ASSERT_MACROS_DEFINE_VERSIONS_WITHOUT_UNDERSCORES=0 $(BOOST_GCC_PREPROCESSOR_DEFINITIONS)

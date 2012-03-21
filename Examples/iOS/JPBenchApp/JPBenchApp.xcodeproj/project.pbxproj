@@ -19,6 +19,7 @@
 		A156BE94146C181400BE6E82 /* Test-UTF8-esc.json in Resources */ = {isa = PBXBuildFile; fileRef = A156BE93146C181400BE6E82 /* Test-UTF8-esc.json */; };
 		A167D83A146C3CD300C7FAD3 /* timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A167D838146C3CD300C7FAD3 /* timer.cpp */; };
 		A188393F13DC5FAD00FD90AA /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = A188393E13DC5FAD00FD90AA /* JSONKit.m */; };
+		A18A705D1512292000FEB03C /* Test-UTF8.json in Resources */ = {isa = PBXBuildFile; fileRef = A18A705C1512292000FEB03C /* Test-UTF8.json */; };
 		A1E95DDF14704AB900A78D3F /* libjson-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A1116365146C392600D094E9 /* libjson-iOS.a */; };
 		A1FAF1DD143F225500CD2CCB /* UIDevice-Hardware.m in Sources */ = {isa = PBXBuildFile; fileRef = A1FAF1DC143F225500CD2CCB /* UIDevice-Hardware.m */; };
 /* End PBXBuildFile section */
@@ -46,6 +47,9 @@
 		A17DD7B8146AE95B000AD974 /* timer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = timer.hpp; path = ../../../../Source/utilities/timer.hpp; sourceTree = "<group>"; };
 		A188393D13DC5FAD00FD90AA /* JSONKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONKit.h; sourceTree = "<group>"; };
 		A188393E13DC5FAD00FD90AA /* JSONKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSONKit.m; sourceTree = "<group>"; };
+		A18A705A1511F9E000FEB03C /* debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = debug.xcconfig; sourceTree = "<group>"; };
+		A18A705B1511F9EE00FEB03C /* release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = release.xcconfig; sourceTree = "<group>"; };
+		A18A705C1512292000FEB03C /* Test-UTF8.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "Test-UTF8.json"; path = "../../../Resources/Test-UTF8.json"; sourceTree = "<group>"; };
 		A1FAF1DB143F225500CD2CCB /* UIDevice-Hardware.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIDevice-Hardware.h"; path = "../UIDevice-Hardware.h"; sourceTree = "<group>"; };
 		A1FAF1DC143F225500CD2CCB /* UIDevice-Hardware.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIDevice-Hardware.m"; path = "../UIDevice-Hardware.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -68,6 +72,8 @@
 		A138813113D0D57B0006461E = {
 			isa = PBXGroup;
 			children = (
+				A18A705A1511F9E000FEB03C /* debug.xcconfig */,
+				A18A705B1511F9EE00FEB03C /* release.xcconfig */,
 				A167D837146C3CD300C7FAD3 /* utilities */,
 				A188393C13DC5F8800FD90AA /* JSONKit */,
 				A138816413D0DD680006461E /* Resources */,
@@ -128,6 +134,7 @@
 		A138816413D0DD680006461E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				A18A705C1512292000FEB03C /* Test-UTF8.json */,
 				A156BE93146C181400BE6E82 /* Test-UTF8-esc.json */,
 			);
 			name = Resources;
@@ -214,6 +221,7 @@
 				A138815413D0D57B0006461E /* MainWindow.xib in Resources */,
 				A138815A13D0D57B0006461E /* JPBenchAppViewController.xib in Resources */,
 				A156BE94146C181400BE6E82 /* Test-UTF8-esc.json in Resources */,
+				A18A705D1512292000FEB03C /* Test-UTF8.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -265,25 +273,24 @@
 /* Begin XCBuildConfiguration section */
 		A138815B13D0D57B0006461E /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A18A705A1511F9E000FEB03C /* debug.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = "$(JP_ROOT)";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
-				JP_ROOT = "$(SRCROOT)/../../../Source";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
 		};
 		A138815C13D0D57B0006461E /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A18A705B1511F9EE00FEB03C /* release.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -291,9 +298,7 @@
 				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = "$(JP_ROOT)";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
-				JP_ROOT = "$(SRCROOT)/../../../Source";
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				SDKROOT = iphoneos;
 			};
@@ -311,8 +316,12 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "JPBenchApp/JPBenchApp-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = "$(PRJ_GCC_PREPROCESSOR_DEFINITIONS)";
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
-				HEADER_SEARCH_PATHS = "$(JP_ROOT)";
+				HEADER_SEARCH_PATHS = (
+					"$(PRJ_HEADER_SEARCH_PATHS)",
+					"$(JP_ROOT)",
+				);
 				INFOPLIST_FILE = "JPBenchApp/JPBenchApp-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
 				OTHER_LDFLAGS = (
@@ -320,7 +329,6 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				USER_HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -337,12 +345,12 @@
 				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "JPBenchApp/JPBenchApp-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					NS_BLOCK_ASSERTIONS,
-					NDEBUG,
-				);
+				GCC_PREPROCESSOR_DEFINITIONS = "$(PRJ_GCC_PREPROCESSOR_DEFINITIONS)";
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
-				HEADER_SEARCH_PATHS = "$(JP_ROOT)";
+				HEADER_SEARCH_PATHS = (
+					"$(PRJ_HEADER_SEARCH_PATHS)",
+					"$(JP_ROOT)",
+				);
 				INFOPLIST_FILE = "JPBenchApp/JPBenchApp-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
 				OTHER_LDFLAGS = (
@@ -350,7 +358,6 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				USER_HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)";
 				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;
 			};

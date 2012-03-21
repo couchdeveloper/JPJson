@@ -6,9 +6,12 @@
 //  Copyright (c) 2011 __MyCompanyName__. All rights reserved.
 //
 
-#include "../Xcode.config/boost.xcconfig"
+JP_ROOT = "$(SRCROOT)/../Source"
 
+#include "../Xcode.config/user.boost.xcconfig"
+#include "../Xcode.config/user.ICU.xcconfig"
 
+BENCH_HEADER_SEARCH_PATHS = $(JP_ROOT) $(BOOST_HEADER_SEARCH_PATHS) $(ICU_HEADER_SEARCH_PATHS)
 
-BENCH_GCC_PREPROCESSOR_DEFINITIONS = DEBUG
+BENCH_GCC_PREPROCESSOR_DEFINITIONS = DEBUG $(BOOST_GCC_PREPROCESSOR_DEFINITIONS)
 

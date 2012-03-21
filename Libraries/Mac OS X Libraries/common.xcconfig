@@ -6,18 +6,24 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
+
+#include "../../Xcode.config/user.boost.xcconfig"
+
+
 // Source Root Path
-JP_ROOT = ../../Source
+JP_ROOT = "$(SRCROOT)/../../Source"
+
+
 
 //
 // Compiler and std libraries
 //
-GCC_VERSION = com.apple.compilers.llvm.clang.1_0
+//GCC_VERSION = com.apple.compilers.llvm.clang.1_0
 //CLANG_CXX_LANGUAGE_STANDARD = compiler-default
 //CLANG_CXX_LIBRARY = compiler-default
-CLANG_CXX_LANGUAGE_STANDARD = c++0x
-CLANG_CXX_LIBRARY = libc++
+//CLANG_CXX_LANGUAGE_STANDARD = c++0x
+//CLANG_CXX_LIBRARY = libc++
 
 
 // Header search paths
-HEADER_SEARCH_PATHS = "$(JP_ROOT)" "$(BOOST_ROOT)"
+PRJ_HEADER_SEARCH_PATHS = $(JP_ROOT) $(BOOST_HEADER_SEARCH_PATHS)
