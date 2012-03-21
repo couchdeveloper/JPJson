@@ -1,7 +1,6 @@
 If not otherwise noted, the content in this package is licensed
 under the following license:  
 
-
 Copyright 2012 Andreas Grosam  
 
 Licensed under the Apache License, Version 2.0 (the "License");  
