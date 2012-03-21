@@ -1,0 +1,498 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <Group
+      location = "container:"
+      name = "JPJson">
+      <Group
+         location = "group:Source"
+         name = "Source">
+         <Group
+            location = "group:Allocators"
+            name = "Allocators (External)">
+            <FileRef
+               location = "group:FSBAllocator.hh">
+            </FileRef>
+         </Group>
+         <Group
+            location = "group:utilities"
+            name = "utilities">
+            <FileRef
+               location = "group:timer.cpp">
+            </FileRef>
+            <FileRef
+               location = "group:timer.hpp">
+            </FileRef>
+         </Group>
+         <Group
+            location = "group:json"
+            name = "json">
+            <FileRef
+               location = "group:config.hpp">
+            </FileRef>
+            <Group
+               location = "group:json_path"
+               name = "json_path">
+               <Group
+                  location = "group:"
+                  name = "experimental">
+                  <FileRef
+                     location = "group:json_path.hpp">
+                  </FileRef>
+                  <FileRef
+                     location = "group:parser.hpp">
+                  </FileRef>
+               </Group>
+               <FileRef
+                  location = "group:intrusive_json_path.hpp">
+               </FileRef>
+            </Group>
+            <Group
+               location = "group:endian"
+               name = "endian">
+               <FileRef
+                  location = "group:byte_swap.hpp">
+               </FileRef>
+               <FileRef
+                  location = "group:endian.hpp">
+               </FileRef>
+            </Group>
+            <Group
+               location = "group:unicode"
+               name = "unicode">
+               <FileRef
+                  location = "group:unicode_utilities.hpp">
+               </FileRef>
+               <FileRef
+                  location = "group:unicode_traits.hpp">
+               </FileRef>
+               <FileRef
+                  location = "group:unicode_filter.hpp">
+               </FileRef>
+               <FileRef
+                  location = "group:unicode_errors.hpp">
+               </FileRef>
+               <FileRef
+                  location = "group:unicode_detect_bom.hpp">
+               </FileRef>
+               <FileRef
+                  location = "group:unicode_converter.hpp">
+               </FileRef>
+               <FileRef
+                  location = "group:unicode_conversion.hpp">
+               </FileRef>
+            </Group>
+            <Group
+               location = "group:utility"
+               name = "utility">
+               <FileRef
+                  location = "group:base64.hpp">
+               </FileRef>
+               <FileRef
+                  location = "group:flags.hpp">
+               </FileRef>
+               <FileRef
+                  location = "group:synchronous_queue.hpp">
+               </FileRef>
+               <FileRef
+                  location = "group:syncqueue_streambuf.hpp">
+               </FileRef>
+               <FileRef
+                  location = "group:istreambuf_iterator.hpp">
+               </FileRef>
+               <FileRef
+                  location = "group:string_hasher.hpp">
+               </FileRef>
+               <FileRef
+                  location = "group:simple_log.hpp">
+               </FileRef>
+               <FileRef
+                  location = "group:number_builder.hpp">
+               </FileRef>
+               <FileRef
+                  location = "group:string_buffer.hpp">
+               </FileRef>
+            </Group>
+            <Group
+               location = "group:parser"
+               name = "parser">
+               <FileRef
+                  location = "group:parser_errors.hpp">
+               </FileRef>
+               <FileRef
+                  location = "group:semantic_actions_base.hpp">
+               </FileRef>
+               <FileRef
+                  location = "group:semantic_actions_test.hpp">
+               </FileRef>
+               <FileRef
+                  location = "group:semantic_actions.hpp">
+               </FileRef>
+               <FileRef
+                  location = "group:parser.hpp">
+               </FileRef>
+               <FileRef
+                  location = "group:parse.hpp">
+               </FileRef>
+               <Group
+                  location = "group:"
+                  name = "preliminary">
+                  <FileRef
+                     location = "group:string_buffer.hpp">
+                  </FileRef>
+                  <FileRef
+                     location = "group:parse_string.hpp">
+                  </FileRef>
+               </Group>
+            </Group>
+            <Group
+               location = "group:generator"
+               name = "generator">
+               <FileRef
+                  location = "group:generate.hpp">
+               </FileRef>
+            </Group>
+            <Group
+               location = "group:value"
+               name = "value">
+               <FileRef
+                  location = "group:json_traits.hpp">
+               </FileRef>
+               <FileRef
+                  location = "group:Null.hpp">
+               </FileRef>
+               <FileRef
+                  location = "group:Boolean.hpp">
+               </FileRef>
+               <FileRef
+                  location = "group:string.hpp">
+               </FileRef>
+               <FileRef
+                  location = "group:number.hpp">
+               </FileRef>
+               <FileRef
+                  location = "group:array.hpp">
+               </FileRef>
+               <FileRef
+                  location = "group:object.hpp">
+               </FileRef>
+               <FileRef
+                  location = "group:value.hpp">
+               </FileRef>
+               <FileRef
+                  location = "group:number2.hpp">
+               </FileRef>
+            </Group>
+            <Group
+               location = "group:ObjC"
+               name = "ObjC">
+               <Group
+                  location = "group:JPJsonParser/json/ObjC"
+                  name = "Private">
+                  <FileRef
+                     location = "group:Source/json/ObjC/mutex.hpp">
+                  </FileRef>
+                  <FileRef
+                     location = "group:Source/json/ObjC/semaphore.hpp">
+                  </FileRef>
+                  <FileRef
+                     location = "group:Source/json/ObjC/SemanticActionsBase.hpp">
+                  </FileRef>
+                  <FileRef
+                     location = "group:Source/json/ObjC/unicode_traits.hpp">
+                  </FileRef>
+                  <FileRef
+                     location = "group:Source/json/ObjC/SemanticActions.hpp">
+                  </FileRef>
+                  <FileRef
+                     location = "group:Source/json/ObjC/CFDataCache.hpp">
+                  </FileRef>
+                  <FileRef
+                     location = "group:Source/json/ObjC/CFDataBuffer.hpp">
+                  </FileRef>
+                  <FileRef
+                     location = "group:Source/json/ObjC/JPSemanticActionsBase_private.h">
+                  </FileRef>
+               </Group>
+               <FileRef
+                  location = "group:JPJsonCommon.h">
+               </FileRef>
+               <FileRef
+                  location = "group:JPSemanticActionsProtocol.h">
+               </FileRef>
+               <FileRef
+                  location = "group:JPSemanticActionsBase.h">
+               </FileRef>
+               <FileRef
+                  location = "group:JPSemanticActionsBase.mm">
+               </FileRef>
+               <FileRef
+                  location = "group:JPStreamSemanticActions.h">
+               </FileRef>
+               <FileRef
+                  location = "group:JPStreamSemanticActions.mm"
+                  assignedFileDataType = "public.objective-c-plus-plus-source">
+               </FileRef>
+               <FileRef
+                  location = "group:JPSemanticActions.h">
+               </FileRef>
+               <FileRef
+                  location = "group:JPSemanticActions.mm">
+               </FileRef>
+               <FileRef
+                  location = "group:JPJsonParser.h">
+               </FileRef>
+               <FileRef
+                  location = "group:JPJsonParser.mm">
+               </FileRef>
+               <FileRef
+                  location = "group:JPAsyncJsonParser.h">
+               </FileRef>
+               <FileRef
+                  location = "group:JPAsyncJsonParser.mm">
+               </FileRef>
+               <FileRef
+                  location = "group:JPJsonWriter.h">
+               </FileRef>
+               <FileRef
+                  location = "group:JPJsonWriter.mm">
+               </FileRef>
+               <FileRef
+                  location = "group:NSData+JPJsonDetectEncoding.h">
+               </FileRef>
+               <FileRef
+                  location = "group:NSData+JPJsonDetectEncoding.mm">
+               </FileRef>
+            </Group>
+         </Group>
+      </Group>
+      <Group
+         location = "group:Libraries"
+         name = "Libraries">
+         <FileRef
+            location = "group:Mac OS X Libraries/JPJson Mac OS X Libraries.xcodeproj">
+         </FileRef>
+         <FileRef
+            location = "group:iOS Libraries/JPJson iOS Libraries.xcodeproj">
+         </FileRef>
+      </Group>
+      <Group
+         location = "group:Test"
+         name = "Test">
+         <FileRef
+            location = "group:Test.xcodeproj">
+         </FileRef>
+      </Group>
+      <Group
+         location = "group:Documentation"
+         name = "Documentation">
+         <Group
+            location = "container:"
+            name = "Generated">
+            <FileRef
+               location = "build:../../Intermediates/Documentation.build/Release/Documentation.build/DerivedSources/html/index.html">
+            </FileRef>
+         </Group>
+         <FileRef
+            location = "group:Documentation/Documentation.xcodeproj">
+         </FileRef>
+      </Group>
+      <Group
+         location = "group:Examples"
+         name = "Examples">
+         <Group
+            location = "group:iOS"
+            name = "iOS 4.2">
+            <FileRef
+               location = "group:JPBenchApp/JPBenchApp.xcodeproj">
+            </FileRef>
+            <FileRef
+               location = "group:NSURLConnectionDownload/NSURLConnectionDownload.xcodeproj">
+            </FileRef>
+         </Group>
+         <FileRef
+            location = "group:FoundationExamples/FoundationExamples.xcodeproj">
+         </FileRef>
+      </Group>
+      <Group
+         location = "group:Bench"
+         name = "Bench">
+         <FileRef
+            location = "group:Bench.xcodeproj">
+         </FileRef>
+      </Group>
+      <Group
+         location = "group:Resources"
+         name = "Resources">
+         <Group
+            location = "group:TestJson"
+            name = "TestJson">
+            <FileRef
+               location = "group:fail1.json">
+            </FileRef>
+            <FileRef
+               location = "group:fail10.json">
+            </FileRef>
+            <FileRef
+               location = "group:fail11.json">
+            </FileRef>
+            <FileRef
+               location = "group:fail12.json">
+            </FileRef>
+            <FileRef
+               location = "group:fail13.json">
+            </FileRef>
+            <FileRef
+               location = "group:fail14.json">
+            </FileRef>
+            <FileRef
+               location = "group:fail15.json">
+            </FileRef>
+            <FileRef
+               location = "group:fail16.json">
+            </FileRef>
+            <FileRef
+               location = "group:fail17.json">
+            </FileRef>
+            <FileRef
+               location = "group:fail18.json">
+            </FileRef>
+            <FileRef
+               location = "group:fail19.json">
+            </FileRef>
+            <FileRef
+               location = "group:fail2.json">
+            </FileRef>
+            <FileRef
+               location = "group:fail20.json">
+            </FileRef>
+            <FileRef
+               location = "group:fail21.json">
+            </FileRef>
+            <FileRef
+               location = "group:fail22.json">
+            </FileRef>
+            <FileRef
+               location = "group:fail23.json">
+            </FileRef>
+            <FileRef
+               location = "group:fail24.json">
+            </FileRef>
+            <FileRef
+               location = "group:fail25.json">
+            </FileRef>
+            <FileRef
+               location = "group:fail26.json">
+            </FileRef>
+            <FileRef
+               location = "group:fail27.json">
+            </FileRef>
+            <FileRef
+               location = "group:fail28.json">
+            </FileRef>
+            <FileRef
+               location = "group:fail29.json">
+            </FileRef>
+            <FileRef
+               location = "group:fail3.json">
+            </FileRef>
+            <FileRef
+               location = "group:fail30.json">
+            </FileRef>
+            <FileRef
+               location = "group:fail31.json">
+            </FileRef>
+            <FileRef
+               location = "group:fail32.json">
+            </FileRef>
+            <FileRef
+               location = "group:fail33.json">
+            </FileRef>
+            <FileRef
+               location = "group:fail4.json">
+            </FileRef>
+            <FileRef
+               location = "group:fail5.json">
+            </FileRef>
+            <FileRef
+               location = "group:fail6.json">
+            </FileRef>
+            <FileRef
+               location = "group:fail7.json">
+            </FileRef>
+            <FileRef
+               location = "group:fail8.json">
+            </FileRef>
+            <FileRef
+               location = "group:fail9.json">
+            </FileRef>
+            <FileRef
+               location = "group:pass1.json">
+            </FileRef>
+            <FileRef
+               location = "group:pass2.json">
+            </FileRef>
+            <FileRef
+               location = "group:pass3.json">
+            </FileRef>
+         </Group>
+         <FileRef
+            location = "group:Test-UTF8.json">
+         </FileRef>
+         <FileRef
+            location = "group:Test-UTF8-esc.json">
+         </FileRef>
+         <FileRef
+            location = "group:testString.txt">
+         </FileRef>
+         <FileRef
+            location = "group:TestMD.json">
+         </FileRef>
+      </Group>
+      <Group
+         location = "group:Xcode.config"
+         name = "Xcode.config">
+         <Group
+            location = "group:"
+            name = "Templates">
+            <FileRef
+               location = "group:default.ICU.xcconfig">
+            </FileRef>
+            <FileRef
+               location = "group:default.boost.xcconfig">
+            </FileRef>
+            <FileRef
+               location = "group:default.gtest.xcconfig">
+            </FileRef>
+         </Group>
+         <FileRef
+            location = "group:user.boost.xcconfig">
+         </FileRef>
+         <FileRef
+            location = "group:user.gtest.xcconfig">
+         </FileRef>
+         <FileRef
+            location = "group:user.ICU.xcconfig">
+         </FileRef>
+         <FileRef
+            location = "group:JP_link_static_lib.xcconfig">
+         </FileRef>
+      </Group>
+      <Group
+         location = "group:Scripts"
+         name = "Scripts">
+      </Group>
+      <FileRef
+         location = "group:LICENSE.md">
+      </FileRef>
+      <FileRef
+         location = "group:CHANGES.md">
+      </FileRef>
+      <FileRef
+         location = "group:README.md">
+      </FileRef>
+      <FileRef
+         location = "group:INSTALL.md">
+      </FileRef>
+   </Group>
+</Workspace>
