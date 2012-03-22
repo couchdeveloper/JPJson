@@ -169,12 +169,18 @@ You probably don't need to make changes to the configuration itself, but in case
 
 ### Setting up an Xcode Project
 
-Use the "Link Binary With Libraries" section in "Build Phases" tab of the target editor and add the library by clicking on the (+) Button and selecting it from within the "Workspace" folder.
+This section decribes how to setup an Xcode project with a binary that links against the JPJson library.
 
-Then, when building your product the JPJson library will be build with its own settings as specified in their corresponding Xcode project with its intended build settings.
+First, create a Xcode workspace and create a project for your own purpose. Then add the JPJson Library project to your workspace:
 
-If you are only interested in the libraries and don't want all the test units or examples, and if you don't need always the up to date sources, you can of course just make a local copy of the 'Source' folder, the 'Libraries' folder and the 'Xcode.config' folder and put it in some folder anywhere on your disk, say "JPJson-v0.1b".
+For Mac OS X projects add `JPJson Mac OS X Libraries` project to the workspace, and for an iOS project add `JPJson iOS Libraries` project to the worksapce. Both projects are located in the corresponding sub folders of the `Libraries` folder within the JPJson package.
 
+
+In order to link a binary to the JPJson library, use the "Link Binary With Libraries" section in "Build Phases" tab of the target editor and add the library by clicking on the (+) Button and selecting it from within the "Workspace" folder.
+
+For iOS targets you can only choose the static library, for Mac OS X you can select either a framework, a dynamic library or a static library. In any case you shall select only *one* JPJson library.
+
+When building your product the JPJson library will be build with its own settings as specified in their corresponding Xcode project with its intended build settings.
 
 Yet, there are still some settings required for the target which links against the JPJson library. Let us refere to this target as the "client", most likely this is your application target.
 
