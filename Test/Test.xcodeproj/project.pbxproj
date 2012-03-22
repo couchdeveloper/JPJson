@@ -60,7 +60,6 @@
 		A1A9415715179E3200AF9548 /* libjson.A.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A1A9415615179E3200AF9548 /* libjson.A.dylib */; };
 		A1A9415915179E5200AF9548 /* libjson.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A1A9415815179E5200AF9548 /* libjson.a */; };
 		A1A9C7C713F006510046FF43 /* JsonStringTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A164225813D4427000796785 /* JsonStringTest.cpp */; };
-		A1AF4B381461A3490065B048 /* TestJson in CopyFiles */ = {isa = PBXBuildFile; fileRef = A1AF4B371461A3490065B048 /* TestJson */; };
 		A1AF4B431462B4970065B048 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1AF4B421462B4970065B048 /* main.cpp */; };
 		A1AF4B491462B5AB0065B048 /* logger_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A16718B413EA880100A39091 /* logger_test.cpp */; };
 		A1AF4B4A1462B5AB0065B048 /* atomic_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1995FAB141FCC2F00595100 /* atomic_test.cpp */; };
@@ -146,13 +145,13 @@
 		};
 		A171E6D313D4859500260A6B /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = /usr/share/man/man1/;
-			dstSubfolderSpec = 0;
+			buildActionMask = 12;
+			dstPath = usr/share/man/man1;
+			dstSubfolderSpec = 16;
 			files = (
 				A18FD42F14447222003E6EBA /* Test-UTF8-esc.json in CopyFiles */,
 			);
-			runOnlyForDeploymentPostprocessing = 1;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		A171E74F13D4966E00260A6B /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -160,7 +159,6 @@
 			dstPath = Resources;
 			dstSubfolderSpec = 16;
 			files = (
-				A1AF4B381461A3490065B048 /* TestJson in CopyFiles */,
 				A18FD42C144471AD003E6EBA /* Test-UTF8-esc.json in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -168,7 +166,7 @@
 		A1AF4B3D1462B4960065B048 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 12;
-			dstPath = "";
+			dstPath = Resources;
 			dstSubfolderSpec = 16;
 			files = (
 				A1AF4B801462D4D30065B048 /* Test-UTF8-esc.json in CopyFiles */,
@@ -245,8 +243,43 @@
 		A199FC7613D5D186000170CD /* timer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = timer.cpp; path = ../utilities/timer.cpp; sourceTree = "<group>"; };
 		A199FC7B13D5DB12000170CD /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		A199FC8013D6FF45000170CD /* JPJsonParserTest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; path = JPJsonParserTest.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		A199FCA013D7094C000170CD /* testString.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = testString.txt; path = ../Resources/testString.txt; sourceTree = "<group>"; };
 		A199FCB013D74363000170CD /* JPJsonWriterTest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; path = JPJsonWriterTest.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		A19AD78E151B657C00D2A086 /* fail1.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = fail1.json; sourceTree = "<group>"; };
+		A19AD78F151B657C00D2A086 /* fail10.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = fail10.json; sourceTree = "<group>"; };
+		A19AD790151B657C00D2A086 /* fail11.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = fail11.json; sourceTree = "<group>"; };
+		A19AD791151B657C00D2A086 /* fail12.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = fail12.json; sourceTree = "<group>"; };
+		A19AD792151B657C00D2A086 /* fail13.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = fail13.json; sourceTree = "<group>"; };
+		A19AD793151B657C00D2A086 /* fail14.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = fail14.json; sourceTree = "<group>"; };
+		A19AD794151B657C00D2A086 /* fail15.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = fail15.json; sourceTree = "<group>"; };
+		A19AD795151B657C00D2A086 /* fail16.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = fail16.json; sourceTree = "<group>"; };
+		A19AD796151B657C00D2A086 /* fail17.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = fail17.json; sourceTree = "<group>"; };
+		A19AD797151B657C00D2A086 /* fail18.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = fail18.json; sourceTree = "<group>"; };
+		A19AD798151B657C00D2A086 /* fail19.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = fail19.json; sourceTree = "<group>"; };
+		A19AD799151B657C00D2A086 /* fail2.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = fail2.json; sourceTree = "<group>"; };
+		A19AD79A151B657C00D2A086 /* fail20.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = fail20.json; sourceTree = "<group>"; };
+		A19AD79B151B657C00D2A086 /* fail21.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = fail21.json; sourceTree = "<group>"; };
+		A19AD79C151B657C00D2A086 /* fail22.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = fail22.json; sourceTree = "<group>"; };
+		A19AD79D151B657C00D2A086 /* fail23.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = fail23.json; sourceTree = "<group>"; };
+		A19AD79E151B657C00D2A086 /* fail24.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = fail24.json; sourceTree = "<group>"; };
+		A19AD79F151B657C00D2A086 /* fail25.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = fail25.json; sourceTree = "<group>"; };
+		A19AD7A0151B657C00D2A086 /* fail26.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = fail26.json; sourceTree = "<group>"; };
+		A19AD7A1151B657C00D2A086 /* fail27.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = fail27.json; sourceTree = "<group>"; };
+		A19AD7A2151B657C00D2A086 /* fail28.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = fail28.json; sourceTree = "<group>"; };
+		A19AD7A3151B657C00D2A086 /* fail29.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = fail29.json; sourceTree = "<group>"; };
+		A19AD7A4151B657C00D2A086 /* fail3.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = fail3.json; sourceTree = "<group>"; };
+		A19AD7A5151B657C00D2A086 /* fail30.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = fail30.json; sourceTree = "<group>"; };
+		A19AD7A6151B657C00D2A086 /* fail31.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = fail31.json; sourceTree = "<group>"; };
+		A19AD7A7151B657C00D2A086 /* fail32.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = fail32.json; sourceTree = "<group>"; };
+		A19AD7A8151B657C00D2A086 /* fail33.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = fail33.json; sourceTree = "<group>"; };
+		A19AD7A9151B657C00D2A086 /* fail4.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = fail4.json; sourceTree = "<group>"; };
+		A19AD7AA151B657C00D2A086 /* fail5.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = fail5.json; sourceTree = "<group>"; };
+		A19AD7AB151B657C00D2A086 /* fail6.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = fail6.json; sourceTree = "<group>"; };
+		A19AD7AC151B657C00D2A086 /* fail7.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = fail7.json; sourceTree = "<group>"; };
+		A19AD7AD151B657C00D2A086 /* fail8.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = fail8.json; sourceTree = "<group>"; };
+		A19AD7AE151B657C00D2A086 /* fail9.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = fail9.json; sourceTree = "<group>"; };
+		A19AD7AF151B657C00D2A086 /* pass1.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = pass1.json; sourceTree = "<group>"; };
+		A19AD7B0151B657C00D2A086 /* pass2.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = pass2.json; sourceTree = "<group>"; };
+		A19AD7B1151B657C00D2A086 /* pass3.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = pass3.json; sourceTree = "<group>"; };
 		A19F3A6C142877E400266273 /* semaphore_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = semaphore_test.cpp; sourceTree = "<group>"; };
 		A1A1BE6A142B448B00335044 /* unicode_detect_bom_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = unicode_detect_bom_test.cpp; sourceTree = "<group>"; };
 		A1A941491517879300AF9548 /* gtest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = gtest.framework; path = Library/Frameworks/gtest.framework; sourceTree = SDKROOT; };
@@ -357,6 +390,7 @@
 		A16421F813D4354300796785 = {
 			isa = PBXGroup;
 			children = (
+				A19AD78D151B657C00D2A086 /* TestJson */,
 				A1CFB92D1510B1FB0010942D /* Test.release.xcconfig */,
 				A1CFB92C1510B1670010942D /* Test.debug.xcconfig */,
 				A16718A513EA85F700A39091 /* Tests */,
@@ -498,9 +532,52 @@
 				A199EFC91444729600B53269 /* Test-UTF8-esc.json */,
 				A18FD42E14447222003E6EBA /* Test-UTF8-esc.json */,
 				A18FD42B144471AD003E6EBA /* Test-UTF8-esc.json */,
-				A199FCA013D7094C000170CD /* testString.txt */,
 			);
 			name = Resources;
+			sourceTree = "<group>";
+		};
+		A19AD78D151B657C00D2A086 /* TestJson */ = {
+			isa = PBXGroup;
+			children = (
+				A19AD78E151B657C00D2A086 /* fail1.json */,
+				A19AD78F151B657C00D2A086 /* fail10.json */,
+				A19AD790151B657C00D2A086 /* fail11.json */,
+				A19AD791151B657C00D2A086 /* fail12.json */,
+				A19AD792151B657C00D2A086 /* fail13.json */,
+				A19AD793151B657C00D2A086 /* fail14.json */,
+				A19AD794151B657C00D2A086 /* fail15.json */,
+				A19AD795151B657C00D2A086 /* fail16.json */,
+				A19AD796151B657C00D2A086 /* fail17.json */,
+				A19AD797151B657C00D2A086 /* fail18.json */,
+				A19AD798151B657C00D2A086 /* fail19.json */,
+				A19AD799151B657C00D2A086 /* fail2.json */,
+				A19AD79A151B657C00D2A086 /* fail20.json */,
+				A19AD79B151B657C00D2A086 /* fail21.json */,
+				A19AD79C151B657C00D2A086 /* fail22.json */,
+				A19AD79D151B657C00D2A086 /* fail23.json */,
+				A19AD79E151B657C00D2A086 /* fail24.json */,
+				A19AD79F151B657C00D2A086 /* fail25.json */,
+				A19AD7A0151B657C00D2A086 /* fail26.json */,
+				A19AD7A1151B657C00D2A086 /* fail27.json */,
+				A19AD7A2151B657C00D2A086 /* fail28.json */,
+				A19AD7A3151B657C00D2A086 /* fail29.json */,
+				A19AD7A4151B657C00D2A086 /* fail3.json */,
+				A19AD7A5151B657C00D2A086 /* fail30.json */,
+				A19AD7A6151B657C00D2A086 /* fail31.json */,
+				A19AD7A7151B657C00D2A086 /* fail32.json */,
+				A19AD7A8151B657C00D2A086 /* fail33.json */,
+				A19AD7A9151B657C00D2A086 /* fail4.json */,
+				A19AD7AA151B657C00D2A086 /* fail5.json */,
+				A19AD7AB151B657C00D2A086 /* fail6.json */,
+				A19AD7AC151B657C00D2A086 /* fail7.json */,
+				A19AD7AD151B657C00D2A086 /* fail8.json */,
+				A19AD7AE151B657C00D2A086 /* fail9.json */,
+				A19AD7AF151B657C00D2A086 /* pass1.json */,
+				A19AD7B0151B657C00D2A086 /* pass2.json */,
+				A19AD7B1151B657C00D2A086 /* pass3.json */,
+			);
+			name = TestJson;
+			path = ../Resources/TestJson;
 			sourceTree = "<group>";
 		};
 		A1AF4B411462B4970065B048 /* AllTests */ = {

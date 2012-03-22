@@ -1,9 +1,5 @@
 //
 //  Bench.release.xcconfig
-//  Bench
-//
-//  Created by Andreas Grosam on 12/1/11.
-//  Copyright (c) 2011 __MyCompanyName__. All rights reserved.
 //
 
 JP_ROOT = "$(SRCROOT)/../Source"

@@ -372,7 +372,8 @@ namespace json {
     // needed.
     
     template <typename Iterator>    
-    inline int detect_encoding(Iterator first, Iterator last) 
+    inline int 
+    detect_encoding(Iterator first, Iterator last) 
     {
         // Assuming the input is Unicode!
         // Assuming first character is ASCII!
