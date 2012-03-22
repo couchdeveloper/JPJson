@@ -9,6 +9,7 @@ Status: Beta *)
 The implementation details are implemented in C++. There is also a fully functional C++ API with a STL compatible JSON representation, which offers superior performance. The C++ API status is Alpha, though.
  
 
+You can view the online Documentation for the Objective-C API at [http://couchdeveloper.github.com/JPJson/](http://couchdeveloper.github.com/JPJson/).
 
 
 
