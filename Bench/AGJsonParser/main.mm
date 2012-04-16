@@ -29,9 +29,13 @@
 #import "JPJson/JPAsyncJsonParser.h"
 #import "JPJson/JPJsonParser.h"
 #import "JPJson/NSData+JPJsonDetectEncoding.h"
+
 #include "utilities/timer.hpp"
+#include "utilities/MinMaxAvg.hpp"
+
 #include <algorithm>
 #include <ctime>
+
 
 #include <boost/config.hpp>
 
@@ -76,34 +80,7 @@ namespace {
     
     
     using utilities::timer;
-    
-    template <typename T>
-    class MinMaxAvg {
-    public:  
-        MinMaxAvg() : count_(0), min_(0), max_(0), sum_(0) {};
-        T min() const { return min_; }
-        T max() const { return max_; }
-        double avg() const { return count_ ? sum_/count_ : 0; }
-        
-        void set(const T& v) {
-            if (count_ == 0) {
-                sum_ = v;
-                min_ = v;
-                max_ = v;
-            } else {
-                sum_ += v;
-                min_ = std::min(v, min_);
-                max_ = std::max(v, max_);
-            }
-            ++count_;
-        }
-        
-    private:
-        size_t count_;
-        T min_;
-        T max_;
-        T sum_;
-    };
+    using utilities::MinMaxAvg;
     
     typedef     MinMaxAvg<double> MinMaxAvgTime;
     

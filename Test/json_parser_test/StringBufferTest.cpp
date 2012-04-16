@@ -24,6 +24,9 @@
 #include "gtest/gtest.h"
 
 
+#warning Deprecated
+
+
 namespace {
     
     using namespace json;

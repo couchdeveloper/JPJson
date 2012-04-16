@@ -340,7 +340,7 @@ static NSString* kDownloadConnectionRunLoopMode = @"MyViewControllerDownloadConn
     // to schedule UIKit methods onto the main thread.
     // 
     
-    NSString* urlString = @"http://ag-MacBookPro.local:3000/download/download";
+    NSString* urlString = @"http://ag-MacBookPro.local:3000/users";
     NSURL* url = [NSURL URLWithString:urlString];
     
     [[NSURLCache sharedURLCache] removeAllCachedResponses];

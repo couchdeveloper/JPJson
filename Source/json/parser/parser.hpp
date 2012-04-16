@@ -38,7 +38,8 @@
 
 #include "parser_errors.hpp"
 #include "semantic_actions_base.hpp"
-#include "json/utility/string_buffer.hpp"
+#include "string_buffer.hpp"
+#include "string_storage.hpp"
 #include "json/utility/number_builder.hpp"
 #include "json/unicode/unicode_utilities.hpp"
 #include "json/unicode/unicode_converter.hpp"
@@ -63,9 +64,13 @@ namespace json {
     using unicode::platform_encoding_tag;
     using unicode::utf_encoding_tag;
     using unicode::is_encoding;
+    using unicode::encoding_traits;
+    using unicode::add_endianness;
+    using json::internal::host_endianness;
     
 
-    using internal::string_buffer;
+    using parser_internal::string_buffer;
+    using parser_internal::string_storage;
     
     
 #pragma mark - Parser Policies    
@@ -107,16 +112,14 @@ namespace json {
     >
     class parser 
     {
-    protected:
+    protected:        
+        typedef typename SemanticActions::error_t               sa_error_t;        
         
-        typedef typename SemanticActions::error_t               sa_error_t;
-        typedef typename SemanticActions::encoding_t            string_buffer_encoding;
-        typedef string_buffer<string_buffer_encoding>           string_buffer_t;
-        typedef typename string_buffer_t::code_unit_t           string_buffer_char_t;
+        typedef typename SemanticActions::encoding_t            string_buffer_encoding;        
+        typedef string_storage<string_buffer_encoding, SemanticActions> string_storage_t;
+        typedef string_buffer<string_storage_t>                 string_buffer_t;
+        
         typedef numberbuilder::number_builder<64>               number_builder_t;        
-        typedef string_buffer<string_buffer_encoding, 128>      key_string_buffer_t;
-        typedef typename key_string_buffer_t::code_unit_t       key_string_char_t;
-        typedef typename string_buffer_t::base_type             string_buffer_base_t;
         
         typedef typename boost::iterator_value<InputIterator>::type iterator_value_type;
         
@@ -134,12 +137,10 @@ namespace json {
         
         // Currently, the parser requires that the endianess of its string_buffer
         // encoding matches the platform endianness or is UTF-8 encoding.
-        BOOST_STATIC_ASSERT( (boost::mpl::or_<
-                                boost::is_same<UTF_8_encoding_tag, string_buffer_encoding>,
-                                boost::is_same<
-                                    typename string_buffer_t::from_endian_t, 
-                                    typename string_buffer_t::to_endian_t> 
-                              >::value ));
+        BOOST_STATIC_ASSERT( (boost::is_same<
+                              typename encoding_traits<typename add_endianness<string_buffer_encoding>::type>::endian_tag,
+                              typename host_endianness::type
+                              >::value == true)  );
         
     public:        
         //
@@ -158,7 +159,7 @@ namespace json {
         //  C-tor
         //
         parser(SemanticActions& sa) 
-        : sa_(sa), unicode_filter_(0)
+        : sa_(sa), string_storage_(sa), string_buffer_(string_storage_), unicode_filter_(0)
         {
             configure();
         }
@@ -184,6 +185,7 @@ namespace json {
         // instance - and vice versa.
         void configure() 
         {
+            string_storage_.enable_partial_strings(true);
             semanticactions::noncharacter_handling_option nch_option = sa_.unicode_noncharacter_handling();
             switch (nch_option) {
                 case semanticactions::SignalErrorOnUnicodeNoncharacter:
@@ -203,10 +205,11 @@ namespace json {
         }
                 
     protected:
-        SemanticActions&        sa_;
         iterator                p_;     
         iterator                last_;  
+        SemanticActions&        sa_;
         state_t                 state_;
+        string_storage_t        string_storage_;
         string_buffer_t         string_buffer_;
         number_builder_t        number_builder_;
         unicode::filter::NoncharacterOrNULL unicode_filter_;
@@ -221,16 +224,13 @@ namespace json {
 #pragma mark Parse String
         //
         //  parse_string()
-        //  Three variants for each of the possible input encoding forms UTF-8, 
-        //  UTF-16 and UTF-32 respectively.
         //
-        void parse_string(string_buffer_base_t& stringBuffer) 
+        void parse_string() 
         {
             assert(state_.error() == JP_NO_ERROR); 
             assert(p_ != last_);
-            assert(to_uint(*p_) == '"');
-            
-            stringBuffer.reset();
+            assert(to_uint(*p_) == '"');            
+            assert(string_buffer_.size() == 0);  // check whether we have a new string on stack of the string storage
             
             ++p_;
             uint32_t c;
@@ -243,12 +243,12 @@ namespace json {
                     switch (c) {
                         default:
                             ++p_;
-                            string_buffer_pushback_ASCII(stringBuffer, c);  
+                            string_buffer_pushback_ASCII(c);  
                                 // note: string_buffer_pushback_ASCII() does not check for Unicode NULL
                             continue;
                         case '\\': // escape sequence
                             ++p_;
-                            escape_sequence(stringBuffer);
+                            escape_sequence();
                             if (!state_) {
                                 // error parsing escape sequence
                                 return; // error state already set
@@ -298,8 +298,8 @@ namespace json {
                         // >0:   success
                         //  0:   string buffer error (possible overflow)
                         // -1:   filter predicate failed (possible Unicode noncharacter) 
-                        result = string_buffer_pushback_unicode(stringBuffer, cp);
-                        if (result > 0)
+                        result = string_buffer_pushback_unicode(cp);
+                        if (result == 0)
                             continue;
                         else {
                             // Error state shall be set according the filter rules,
@@ -353,7 +353,7 @@ namespace json {
         
         unicode::code_point_t escaped_unicode();
         uint16_t hex();
-        void escape_sequence(string_buffer_base_t& stringBuffer);
+        void escape_sequence();
         
         
 #pragma mark - String Buffer       
@@ -361,11 +361,11 @@ namespace json {
         // Pushback an ASCII to a string buffer.
         // Don't use this function to append ASCII NULL, string_buffer_pushback_unicode() in this case.
         void 
-        string_buffer_pushback_ASCII(string_buffer_base_t& stringBuffer, char ch) { 
+        string_buffer_pushback_ASCII(char ch) { 
             assert(ch <= 0x7F);
             // An ASCII can be converted implicitly to any of the encoding forms:
             // UTF-8, UTF-16, and UTF-32.
-            stringBuffer.append_ascii(ch); 
+            string_buffer_.append_ascii(ch); 
         }
         
         //
@@ -375,19 +375,21 @@ namespace json {
         // Parameter unicode shall be a valid unicode scalar value.
         // Test if the given unicode matches the predicate of the parser's
         // unicode filter, and if this evaluates to true, apply the filter's 
-        // replacement policy. If an invalid unicode will be replaced by a
-        // replacement character, the function will not signal an error.
+        // replacement policy. 
+        // If an invalid unicode will be replaced by a replacement character, the 
+        // function will not signal an error.
         // 
-        // Returns the number of appended code units to the string buffer.
-        // In case of an error, returns -1 and sets the parser error state
-        // accordingly.
-        // The function returns 0 in case of an error while appending the
-        // unicode to the string buffer, which in turn only occurs when
-        // the string buffer could not be resized.
+        // Returns zero on success, otherwise returns -1 and sets the parser 
+        // error state accordingly.
+        //        
+        // Since paramerer 'unicode' is assumed to be a valid Unicode Scalar Value,
+        // and the filter has been applied, a possibly required Unicode conversion  
+        // performed while appending to the string buffer will always succeed.
+        //
+        // May throw an exception if internal buffers could not be allocated.
         // 
         int
-        string_buffer_pushback_unicode(string_buffer_base_t& stringBuffer, 
-                                           unicode::code_point_t unicode) 
+        string_buffer_pushback_unicode(unicode::code_point_t unicode) 
         {
             if (unicode_filter_(unicode)) {
                 if (unicode_filter_.replace()) {
@@ -408,9 +410,8 @@ namespace json {
                     return -1;
                 }
             }
-            std::size_t count = stringBuffer.append_unicode(unicode);
-            assert(count > 0);
-            return (int)count;
+            string_buffer_.append_unicode(unicode);  // shall not fail
+            return 0;
         }
         
         void throwLogicError(const char* msg); 
@@ -471,7 +472,7 @@ namespace json {
     reset() {
         sa_.clear();
         state_.clear();
-        string_buffer_.reset();
+        string_storage_.clear();
         number_builder_.clear();
     }
     
@@ -734,9 +735,7 @@ namespace json {
         
         // string ':' value [',' string ':' value]*
         
-        // use a StringBuffer with a small auto buffer for the key string:
-        key_string_buffer_t keyStringBuffer;
-                
+        
         //bool done = false;
         size_t index = 0;
         while (__builtin_expect(p_ != last_, 1)) {
@@ -744,7 +743,10 @@ namespace json {
             if (c == '"') 
             {
                 // first, get the key ...
-                parse_string(keyStringBuffer);
+                // prepare the string storage for a key string:
+                string_storage_.stack_push();
+                string_storage_.set_mode(string_storage_t::Key);
+                parse_string();
                 if (state_) {
                     if (p_ != last_) {
                         // ... then, eat the key_value separator ...
@@ -755,9 +757,10 @@ namespace json {
                             if (p_ != last_)
                             {    
                                 // ... finally, get a value and put it onto sa_'s stack
-                                sa_.begin_value_with_key(keyStringBuffer.buffer(), keyStringBuffer.size(), index);
+                                sa_.begin_key_value_pair(string_buffer_.buffer(), index);
                                 parse_value();  // whitespaces skipped.
-                                sa_.end_value_with_key(keyStringBuffer.buffer(), keyStringBuffer.size(), index);
+                                sa_.end_key_value_pair(string_buffer_.buffer(), index);
+                                string_storage_.stack_pop(); // remove the key from top of the string buffer's stack
                                 if (state_) 
                                 {
                                     // Note: We populate the object at end_object().
@@ -844,15 +847,16 @@ namespace json {
         unsigned int c = to_uint(*p_);
         switch (c) {
             case '"':
-                parse_string(string_buffer_);
-                if (state_) {                    
-                    // action_string_end
-                    // note: p() points to the start of next token
-                    //string_buffer_.terminate_if();
-                    sa_.value_string(string_buffer_.buffer(), string_buffer_.size());
+                // Prepare the string storage to hold a data string:
+                string_storage_.stack_push();
+                string_storage_.set_mode(string_storage_t::Data);
+                parse_string();  // this may send partial strings to the semantic actions object.
+                if (state_) {
+                    string_storage_.flush();  // send the remaining characters in the string buffer to the semantic actions object.
                 } else {
                     // handle error string
                 }
+                string_storage_.stack_pop();
                 break;
                 
             case '{':
@@ -1162,7 +1166,7 @@ namespace json {
 //    __attribute__((always_inline))
 //#endif                
     parser<InputIterator, SourceEncoding, SemanticActions>::
-    escape_sequence(string_buffer_base_t& stringBuffer) 
+    escape_sequence() 
     {
         assert(state_.error() == JP_NO_ERROR);        
         
@@ -1182,10 +1186,10 @@ namespace json {
                 case 'u':  { // escaped unicode
                     unicode::code_point_t cp = escaped_unicode();
                     if (state_) {
-                        int result = string_buffer_pushback_unicode(stringBuffer, cp);
-                        if (result > 0) {
+                        int result = string_buffer_pushback_unicode(cp);
+                        if (result == 0) {
                             return;  // success 
-                        } else if (result <= 0) {
+                        } else if (result < 0) {
                             assert(state_.error() != JP_NO_ERROR);
                             // Error state shall be set already
                             // detected Unicode noncharacter and rejected it,
@@ -1208,7 +1212,7 @@ namespace json {
                     
             } // switch
             
-            string_buffer_pushback_ASCII(stringBuffer, ascii);  
+            string_buffer_pushback_ASCII(ascii);  
             ++p_; 
             return;  // success
         }

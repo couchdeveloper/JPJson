@@ -89,16 +89,18 @@ namespace json
         using unicode::platform_encoding_tag;
 
         using unicode::encoding_traits;
+        using unicode::add_endianness;
         
         
         template <typename EncodingT> 
         class string_buffer_base {
         public:
-            typedef typename encoding_traits<EncodingT>::code_unit_type code_unit_t;
-            typedef code_unit_t*                                        buffer_type;
-            typedef size_t                                              size_type;
-            typedef typename host_endianness::type                      from_endian_t;            
-            typedef typename encoding_traits<EncodingT>::endian_tag     to_endian_t;
+            typedef typename add_endianness<EncodingT>::type                encoding_t;
+            typedef typename encoding_traits<encoding_t>::code_unit_type    code_unit_t;
+            typedef code_unit_t*                                            buffer_type;
+            typedef size_t                                                  size_type;
+            typedef typename host_endianness::type                          from_endian_t;            
+            typedef typename encoding_traits<encoding_t>::endian_tag        to_endian_t;
             
             typedef typename encoding_traits<UTF_8_encoding_tag>::code_unit_type utf8_code_unit;
             
@@ -112,10 +114,7 @@ namespace json
             
             // Currently, string_buffer requires that its encodings's endianness
             // is the same as the host endianness. 
-            BOOST_STATIC_ASSERT( (boost::mpl::or_<
-                                    boost::is_same<EncodingT, unicode::UTF_8_encoding_tag>,
-                                    boost::is_same<from_endian_t, to_endian_t>
-                                  >::value) );
+            BOOST_STATIC_ASSERT( (boost::is_same<from_endian_t, to_endian_t>::value) );
             
         public:    
             explicit string_buffer_base(buffer_type autoBuffer, size_type autoBufferSize)

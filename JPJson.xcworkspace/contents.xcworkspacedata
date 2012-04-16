@@ -18,6 +18,9 @@
             location = "group:utilities"
             name = "utilities">
             <FileRef
+               location = "group:MinMaxAvg.hpp">
+            </FileRef>
+            <FileRef
                location = "group:timer.cpp">
             </FileRef>
             <FileRef
@@ -138,10 +141,22 @@
                   location = "group:"
                   name = "preliminary">
                   <FileRef
-                     location = "group:string_buffer.hpp">
+                     location = "group:string_stack_storage.hpp">
+                  </FileRef>
+                  <FileRef
+                     location = "group:string_chunk_storage.hpp">
                   </FileRef>
                   <FileRef
                      location = "group:parse_string.hpp">
+                  </FileRef>
+                  <FileRef
+                     location = "group:string_storage.hpp">
+                  </FileRef>
+                  <FileRef
+                     location = "group:string_buffer.hpp">
+                  </FileRef>
+                  <FileRef
+                     location = "group:key_string_buffer.hpp">
                   </FileRef>
                </Group>
             </Group>

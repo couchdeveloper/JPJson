@@ -46,26 +46,21 @@
 // 
 namespace json { namespace unicode {
     
-        
-    //
-    //  Encoding Tags
-    //
+#pragma mark - Encoding Tags        
     
     struct encoding_tag {};
     
-    struct utf_encoding_tag : encoding_tag {};
-    
-    struct UTF_8_encoding_tag : utf_encoding_tag {};
-    
-    struct UTF_16_encoding_tag : utf_encoding_tag {}; 
-    struct UTF_16BE_encoding_tag : UTF_16_encoding_tag {};
-    struct UTF_16LE_encoding_tag : UTF_16_encoding_tag {};
+    struct utf_encoding_tag :       encoding_tag {};
 
-    struct UTF_32_encoding_tag : utf_encoding_tag {};
-    struct UTF_32BE_encoding_tag : UTF_32_encoding_tag {};
-    struct UTF_32LE_encoding_tag : UTF_32_encoding_tag {};
+    struct UTF_8_encoding_tag :     utf_encoding_tag {};
+    struct UTF_16_encoding_tag :    utf_encoding_tag {}; 
+    struct UTF_16BE_encoding_tag :  UTF_16_encoding_tag {};
+    struct UTF_16LE_encoding_tag :  UTF_16_encoding_tag {};
+    struct UTF_32_encoding_tag :    utf_encoding_tag {};
+    struct UTF_32BE_encoding_tag :  UTF_32_encoding_tag {};
+    struct UTF_32LE_encoding_tag :  UTF_32_encoding_tag {};
     
-    struct platform_encoding_tag : encoding_tag {};
+    struct platform_encoding_tag :  encoding_tag {};
     
     
 }}    
@@ -75,6 +70,9 @@ namespace json { namespace unicode {
 // Unicode Traits
 //
 namespace json { namespace unicode {
+    
+#pragma mark - encoding_traits synopsis        
+    
     
     using json::internal::host_endianness;
     using json::byte_swap;
@@ -211,6 +209,16 @@ namespace json { namespace unicode {
         BOOST_STATIC_ASSERT(sizeof(EncodingT) == 0);   //      
     };
     
+#pragma mark - encoding_traits<UTF_8_encoding_tag>
+    
+    // Note: UTF-8 encoding's endian_tag is defined and equals host endianness, 
+    // as opposed to UTF-16 and UTF-32 which do not define an endian_tag. For
+    // UTF-16 and UTF-32 endianness must be explicitly added. For UTF-8, adding
+    // endianness would not be possible - thus it is fixed.
+    // This treatment makes sense in applications where byte swapping is required 
+    // and where endianness is deduced from the encoding. If UTF-8's endianness
+    // will be deduced as "host endianness" byte swaping works as expected.
+    
     template <>
     struct encoding_traits<UTF_8_encoding_tag> {
         static const bool is_unicode_encoding = true;
@@ -222,7 +230,7 @@ namespace json { namespace unicode {
         typedef char                code_unit_type;
         static const int            buffer_size = 4;
         typedef code_unit_type      encode_buffer_type[buffer_size];
-        typedef json::internal::endian_tag  endian_tag;
+        typedef json::internal::host_endianness::type endian_tag;
         static const char*          name() { return "UTF-8"; }
         typedef boost::array<code_unit_type,3>      bom_type;
         static const bom_type       bom() { bom_type result = {{code_unit_type(0xEF), code_unit_type(0xBB), code_unit_type(0xBF)}}; return result; };
@@ -237,6 +245,9 @@ namespace json { namespace unicode {
     };
     
     typedef encoding_traits<UTF_8_encoding_tag> UTF_8_encoding_traits;
+    
+    
+#pragma mark - encoding_traits<UTF_16_encoding_tag>
     
     template <>
     struct encoding_traits<UTF_16_encoding_tag> {
@@ -268,6 +279,8 @@ namespace json { namespace unicode {
     
     typedef encoding_traits<UTF_16_encoding_tag> UTF_16_encoding_traits;
     
+    
+#pragma mark - encoding_traits<UTF_16BE_encoding_tag>
     
     template <>
     struct encoding_traits<UTF_16BE_encoding_tag> {
@@ -305,6 +318,9 @@ namespace json { namespace unicode {
     typedef encoding_traits<UTF_16BE_encoding_tag> UTF_16BE_encoding_traits;
     
     
+    
+#pragma mark - encoding_traits<UTF_16LE_encoding_tag>
+    
     template <>
     struct encoding_traits<UTF_16LE_encoding_tag> {
         static const bool is_unicode_encoding = true;
@@ -337,6 +353,8 @@ namespace json { namespace unicode {
     typedef encoding_traits<UTF_16LE_encoding_tag> UTF_16LE_encoding_traits;
     
     
+#pragma mark - encoding_traits<UTF_32_encoding_tag>
+    
     template <>
     struct encoding_traits<UTF_32_encoding_tag> {
         static const bool is_unicode_encoding = true;
@@ -366,6 +384,8 @@ namespace json { namespace unicode {
     
     typedef encoding_traits<UTF_32_encoding_tag> UTF_32_encoding_traits;
     
+    
+#pragma mark - encoding_traits<UTF_32BE_encoding_tag>
     
     template <>
     struct encoding_traits<UTF_32BE_encoding_tag> {
@@ -402,6 +422,9 @@ namespace json { namespace unicode {
     
     typedef encoding_traits<UTF_32BE_encoding_tag> UTF_32BE_encoding_traits;
     
+    
+    
+#pragma mark - encoding_traits<UTF_32LE_encoding_tag>
     
     template <>
     struct encoding_traits<UTF_32LE_encoding_tag> {
@@ -440,6 +463,9 @@ namespace json { namespace unicode {
     
     
     
+    
+#pragma mark - encoding_traits<platform_encoding_tag>
+    
     template <>
     struct encoding_traits<platform_encoding_tag> {
         static const bool is_unicode_encoding = false;
@@ -464,6 +490,10 @@ namespace json { namespace unicode {
     };
     
     typedef encoding_traits<platform_encoding_tag> platform_encoding_traits;
+    
+    
+    
+#pragma mark - encoding_traits<code_point_t>
     
     template <>
     struct encoding_traits<code_point_t> {
@@ -499,6 +529,8 @@ namespace json { namespace unicode {
 //
 namespace json { namespace unicode {
     
+#pragma mark - encoding_to_tag
+
     
     template <int E>
     struct encoding_to_tag {};
@@ -554,24 +586,38 @@ namespace json { namespace unicode {
 #pragma mark -
 #pragma mark to_host_endianness
     
+    // "Upgrades" or converts an UTF-16, UTF-16LE, UTF-16BE, UTF-32, UTF-32LE, 
+    // UTF-32BE, encoding to its corresponding encoding scheme whose endianness 
+    // equals that of the host. 
+    // For UTF-8, platform_encoding and code_poin_t it has no effect.
+
     using json::internal::host_endianness;
     using json::internal::little_endian_tag;
     using json::internal::big_endian_tag;
     
     
-    // "Upgrades" or converts an UTF-16 or UTF-32 encoding form to its corresponding
-    // encoding scheme decorated with the endianness of the host. Encoding schemes
-    // (which include their endianness) shall not be passed as a template parameter.
     
     template <typename EncodingT, typename Enable = void> 
     struct to_host_endianness {
         BOOST_STATIC_ASSERT(sizeof(Enable) == 0);
     };
     
+    // Specialication for UTF-8
     template <typename EncodingT> 
     struct to_host_endianness<
-    EncodingT, 
-    typename boost::enable_if<boost::is_base_of<UTF_16_encoding_tag, EncodingT> >::type
+        EncodingT, 
+        typename boost::enable_if<boost::is_same<UTF_8_encoding_tag, EncodingT> >::type 
+    >  
+    {
+        typedef EncodingT type;
+    };
+    
+    
+    // Specialication for UTF-16, UTF-16BE, UTF-16LE.    
+    template <typename EncodingT> 
+    struct to_host_endianness<
+        EncodingT, 
+        typename boost::enable_if<boost::is_base_of<UTF_16_encoding_tag, EncodingT> >::type
     >  
     {
         typedef typename boost::mpl::if_<
@@ -581,10 +627,11 @@ namespace json { namespace unicode {
         >::type  type;
     };
     
+    // Specialization for UTF-32, UTF-32BE, UTF-32LE.    
     template <typename EncodingT> 
     struct to_host_endianness<
-    EncodingT, 
-    typename boost::enable_if<boost::is_base_of<UTF_32_encoding_tag, EncodingT> >::type 
+        EncodingT, 
+        typename boost::enable_if<boost::is_base_of<UTF_32_encoding_tag, EncodingT> >::type 
     >  
     {
         typedef typename boost::mpl::if_<
@@ -594,19 +641,22 @@ namespace json { namespace unicode {
         >::type  type;
     };
     
+    
+    // Specialization for platform_encoding_tag
     template <typename EncodingT> 
-    struct to_host_endianness<
-    EncodingT, 
-    typename boost::enable_if<boost::is_same<UTF_8_encoding_tag, EncodingT> >::type 
+        struct to_host_endianness<
+        EncodingT, 
+    typename boost::enable_if<boost::is_same<platform_encoding_tag, EncodingT> >::type 
     >  
     {
         typedef EncodingT type;
     };
     
+    // Specialization for code_point_t
     template <typename EncodingT> 
     struct to_host_endianness<
-    EncodingT, 
-    typename boost::enable_if<boost::is_same<platform_encoding_tag, EncodingT> >::type 
+        EncodingT, 
+        typename boost::enable_if<boost::is_same<code_point_t, EncodingT> >::type 
     >  
     {
         typedef EncodingT type;
@@ -626,10 +676,11 @@ namespace json { namespace unicode {
     using json::internal::big_endian_tag;
     
     
-    // "Upgrades" an UTF-16 or UTF-32 encoding without endianness
-    // to its corresponding encoding decorated with the endianness 
-    // of the host.
-    // Encodings with endianness will not be changed.
+    // "Upgrades" an UTF-16 or UTF-32 Unicode encoding form (without endianness)
+    // to its corresponding Unicode encoding scheme whose endianness equals 
+    // host endianness.
+    // Encodings whose endianness is already specified or is not applicable 
+    // will not be changed.
     
     template <typename EncodingT, typename Enable = void> 
     struct add_endianness {
@@ -638,30 +689,29 @@ namespace json { namespace unicode {
     
     template <typename EncodingT> 
     struct add_endianness<
-    EncodingT, 
-        typename boost::enable_if<boost::is_same<UTF_16_encoding_tag, EncodingT> >::type
+        EncodingT, 
+        typename boost::enable_if<
+            boost::mpl::or_<
+                boost::is_same<UTF_16_encoding_tag, EncodingT>,
+                boost::is_same<UTF_32_encoding_tag, EncodingT>
+            >
+        >::type
     >  
     {
         typedef typename to_host_endianness<EncodingT>::type type;
     };
     
-    template <typename EncodingT> 
-    struct add_endianness<
-    EncodingT, 
-        typename boost::enable_if<boost::is_same<UTF_32_encoding_tag, EncodingT> >::type 
-    >  
-    {
-        typedef typename to_host_endianness<EncodingT>::type type;
-    };
     
     template <typename EncodingT> 
     struct add_endianness<
         EncodingT, 
         typename boost::enable_if<
-            boost::mpl::and_<
-                boost::is_base_and_derived<utf_encoding_tag, EncodingT>,
-                boost::mpl::not_<boost::is_same<UTF_16_encoding_tag, EncodingT> >,
-                boost::mpl::not_<boost::is_same<UTF_32_encoding_tag, EncodingT> >
+            boost::mpl::or_<
+                boost::is_same<UTF_8_encoding_tag, EncodingT>,
+                boost::is_same<UTF_16BE_encoding_tag, EncodingT>,
+                boost::is_same<UTF_16LE_encoding_tag, EncodingT>,
+                boost::is_same<UTF_32BE_encoding_tag, EncodingT>,
+                boost::is_same<UTF_32LE_encoding_tag, EncodingT>
             >
         >::type 
     >  
@@ -673,11 +723,17 @@ namespace json { namespace unicode {
     template <typename EncodingT> 
     struct add_endianness<
         EncodingT, 
-        typename boost::enable_if<boost::is_same<platform_encoding_tag, EncodingT> >::type
+        typename boost::enable_if<
+            boost::mpl::or_<
+                boost::is_same<platform_encoding_tag, EncodingT>,
+                boost::is_same<code_point_t, EncodingT>
+            >
+        >::type 
     >  
     {
-        typedef platform_encoding_tag type;
+        typedef EncodingT type;
     };
+    
     
     
     
@@ -818,7 +874,6 @@ namespace json { namespace unicode {
     // are signed or unsigned. We check them here and set it in stone.
     // For UTF-8 all algorithms must work with either signed or usigned 
     // UTF-8 code units.    
-    //BOOST_STATIC_ASSERT((boost::is_unsigned<UTF_8_encoding_traits::code_unit_type>::value == true));
     BOOST_STATIC_ASSERT((boost::is_unsigned<UTF_16_encoding_traits::code_unit_type>::value == true));
     BOOST_STATIC_ASSERT((boost::is_unsigned<UTF_32_encoding_traits::code_unit_type>::value == true));
     

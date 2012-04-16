@@ -28,13 +28,12 @@
 #include "unicode_errors.hpp"
 #include "unicode_filter.hpp"
 
-#include <boost/mpl/if.hpp>
 #include <boost/utility.hpp>
 #include <boost/type_traits.hpp>
+#include <boost/mpl/if.hpp>
 #include <boost/mpl/and.hpp>
 #include <boost/mpl/not.hpp>
 #include <boost/mpl/assert.hpp>
-#include <boost/mpl/if.hpp>
 
 
 #define JP_EXPECT(cond)  __builtin_expect(static_cast<long>(cond), 1)

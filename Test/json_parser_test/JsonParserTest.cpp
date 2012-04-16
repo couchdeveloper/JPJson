@@ -78,8 +78,6 @@ namespace {
     // The fixture for testing class JsonParser.
     class JsonParserTest : public ::testing::Test 
     {
-        
-        
     protected:
         // You can remove any or all of the following functions if its body
         // is empty.
@@ -623,7 +621,8 @@ namespace {
             int result;
             int count_objects;
             int count_arrays;
-            int count_strings;
+            int count_key_strings;
+            int count_data_strings;
             int count_numbers;
             int count_booleans;
             int count_nulls;
@@ -632,64 +631,64 @@ namespace {
         test_s tests[] = {   
             // input | output         
             {" [ ] ",                           "[]",
-            // err  | objs | arrs | strs | nbrs | bools| nulls 
-                0,      0,     1,    0,      0,     0,     0 },
+            // err  | objs | arrs | k-strs | d-strs | nbrs | bools| nulls 
+                0,      0,     1,    0,      0,       0,     0,     0 },
             
             {" { } ",                           "{}",
-            // err  | objs | arrs | strs | nbrs | bools| nulls 
-                0,      1,     0,    0,      0,     0,     0 },
+            // err  | objs | arrs | k-strs | d-strs | nbrs | bools| nulls 
+                0,      1,     0,     0,      0,      0,     0,     0 },
             
             {" [ [ [ [ [ [ [ [ [ [ ] ] ] ] ] ] ] ] ] ] ",      "[[[[[[[[[[]]]]]]]]]]",
-            // err  | objs | arrs | strs | nbrs | bools| nulls 
-                0,      0,    10,    0,      0,     0,     0 },
+            // err  | objs | arrs | k-strs | d-strs | nbrs | bools| nulls 
+                0,      0,    10,    0,      0,       0,     0,     0 },
             
             {" [\"string\"] ",                  "[\"string\"]",
-            // err  | objs | arrs | strs | nbrs | bools| nulls 
-                0,      0,     1,    1,      0,     0,     0 },
+            // err  | objs | arrs | k-strs | d-strs | nbrs | bools| nulls 
+                0,      0,     1,    0,      1,       0,     0,     0 },
             
             {" [1] ",                           "[1]",
-            // err  | objs | arrs | strs | nbrs | bools| nulls 
-                0,      0,     1,    0,      1,     0,     0 },
+            // err  | objs | arrs | k-strs | d-strs | nbrs | bools| nulls 
+                0,      0,     1,    0,      0,       1,     0,     0 },
             
             {" [true] ",                        "[true]",
-            // err  | objs | arrs | strs | nbrs | bools| nulls 
-                0,      0,     1,    0,      0,     1,     0 },
+            // err  | objs | arrs | k-strs | d-strs | nbrs | bools| nulls 
+                0,      0,     1,    0,      0,       0,     1,     0 },
             
             {" [false] ",                       "[false]",
-            // err  | objs | arrs | strs | nbrs | bools| nulls 
-                0,      0,     1,    0,      0,     1,     0 },
+            // err  | objs | arrs | k-strs | d-strs | nbrs | bools| nulls 
+                0,      0,     1,    0,      0,       0,     1,     0 },
 
             {" [null] ",                        "[null]",
-            // err  | objs | arrs | strs | nbrs | bools| nulls 
-                0,      0,     1,    0,      0,     0,     1 },
+            // err  | objs | arrs | k-strs | d-strs | nbrs | bools| nulls 
+                0,      0,     1,    0,      0,       0,     0,     1 },
             
             {" [{}] ",                          "[{}]",
-                // err  | objs | arrs | strs | nbrs | bools| nulls 
-                0,      1,     1,    0,      0,     0,     0 },
+            // err  | objs | arrs | k-strs | d-strs | nbrs | bools| nulls 
+                0,      1,     1,    0,      0,       0,     0,     0 },
             
             {" [{} , {}] ",                     "[{},{}]",
-            // err  | objs | arrs | strs | nbrs | bools| nulls 
-                0,      2,     1,    0,      0,     0,     0 },
+            // err  | objs | arrs | k-strs | d-strs | nbrs | bools| nulls 
+                0,      2,     1,    0,      0,       0,     0,     0 },
             
             {" [1, 2, 3] ",                     "[1,2,3]",
-            // err  | objs | arrs | strs | nbrs | bools| nulls 
-                0,      0,     1,    0,      3,     0,     0 },
+            // err  | objs | arrs | k-strs | d-strs | nbrs | bools| nulls 
+                0,      0,     1,    0,      0,       3,     0,     0 },
 
             {" [{}, \"string\", 1, true, null] ", "[{},\"string\",1,true,null]",
-            // err  | objs | arrs | strs | nbrs | bools| nulls 
-                0,      1,     1,    1,      1,     1,     1 },
+            // err  | objs | arrs | k-strs | d-strs | nbrs | bools| nulls 
+                0,      1,     1,    0,      1,       1,     1,     1 },
             
             {" [\"quote '\\\"'\"] ",            "[\"quote '\\\"'\"]",
-            // err  | objs | arrs | strs | nbrs | bools| nulls 
-                0,      0,     1,    1,      0,     0,     0 },
+            // err  | objs | arrs | k-strs | d-strs | nbrs | bools| nulls 
+                0,      0,     1,    0,      1,       0,     0,     0 },
             
             {"{\"key0\" : 0}",                  "{\"key0\":0}",
-                // err  | objs | arrs | strs | nbrs | bools| nulls 
-                0,      1,     0,    1,      1,     0,     0 },
+            // err  | objs | arrs | k-strs | d-strs | nbrs | bools| nulls 
+                0,      1,     0,    1,      0,       1,     0,     0 },
             
             {"{\"key0\" : 0, \"key1\" : 1}",    "{\"key0\":0,\"key1\":1}",
-            // err  | objs | arrs | strs | nbrs | bools| nulls 
-                0,      1,     0,    2,      2,     0,     0 }
+            // err  | objs | arrs | k-strs | d-strs | nbrs | bools| nulls 
+                0,      1,     0,    2,      0,       2,     0,     0 }
             
             
         };
@@ -726,7 +725,8 @@ namespace {
             EXPECT_EQ( (*first).output, output ) << "with input[" << idx << "]: " << buffer;
             EXPECT_EQ( (*first).count_objects, sa.object_count() );
             EXPECT_EQ( (*first).count_arrays, sa.array_count() );
-            EXPECT_EQ( (*first).count_strings, sa.string_count() );
+            EXPECT_EQ( (*first).count_key_strings, sa.key_string_count() );
+            EXPECT_EQ( (*first).count_data_strings, sa.data_string_count() );
             EXPECT_EQ( (*first).count_numbers, sa.number_count() );
             EXPECT_EQ( (*first).count_booleans, sa.boolean_count() );
             EXPECT_EQ( (*first).count_nulls, sa.null_count() );

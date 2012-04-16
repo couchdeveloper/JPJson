@@ -131,6 +131,9 @@ namespace json {
         typedef StringBufferEncodingT                       encoding_t;  // specifies the string buffer encoding
         typedef typename encoding_traits<encoding_t>::code_unit_type   char_t;
         
+        typedef std::pair<char_t*, size_t>                  buffer_t;
+        typedef std::pair<char_t const*, size_t>            const_buffer_t;
+        
         typedef json::utility::logger<LOG_MAX_LEVEL>        logger_t;
         typedef typename json::numberbuilder::number_t      nb_number_t;
         
@@ -148,26 +151,68 @@ namespace json {
         DerivedT& derived()             { return static_cast<DerivedT&>(*this); }
         const DerivedT& derived() const { return static_cast<const DerivedT&>(*this); }
         
+        // The parser call this function when it encounters the start of a JSON text.
         void parse_begin()                              { this->derived().parse_begin_imp(); }
+        
+        // The parser calls this functions when it encounters end of a JSON text
         void parse_end()                                { this->derived().parse_end_imp(); }
+        
+        // The parser calls this functions when it encunters the of the input
         void finished()                                 { this->derived().finished_imp(); }
         
+        // The parser calls this function when it encounters start of an JSON array, aka `[`        
         void begin_array()                              { this->derived().begin_array_imp(); }
+        
+        // The parser calls this function when it encounters the end of an JSON array, aka `]`        
         void end_array()                                { this->derived().end_array_imp(); }
         
+        // The parser calls this function when it encounters the start of an JSON object, aka `{`        
         void begin_object()                             { this->derived().begin_object_imp(); }
+        
+        // The parser calls this function when it encounters the start of an JSON object, aka `}`        
         bool end_object()                               { return this->derived().end_object_imp(); }
 
+        // The parser calls this function when it encounters the start of a value as an element
+        // of an array at index 'index'.
         void begin_value_at_index(size_t index)         { this->derived().begin_value_at_index_imp(index); }
+
+        // The parser calls this function when it encounters the end of a value as an element
+        // of an array at index 'index'.
         void end_value_at_index(size_t index)           { this->derived().end_value_at_index_imp(index); }
         
-        void begin_value_with_key(const char_t* s, size_t len, size_t nth) { this->derived().begin_value_with_key_imp(s, len, nth); }
-        void end_value_with_key(const char_t* s, size_t len, size_t nth) { this->derived().end_value_with_key_imp(s, len, nth); }
+
+        // The parser calls this function when it encounters the start of a key-value pair 
+        // of a JSON object at position 'nth'. The key is passed in parameter `buffer`.
+        // Subsequently, the parser will call either begin_array(), begin_object(), or 
+        // any of the value_*() function constituting the value which belongs to this key.
+        void begin_key_value_pair(const const_buffer_t& buffer, size_t nth) { this->derived().begin_key_value_pair_imp(buffer, nth); }
+        
+        // The parser calls this function when it encounters the end of a key-value 
+        // pair which is an element of a JSON object at position 'nth'. The key is
+        // passed in parameter `buffer`.
+        void end_key_value_pair(const const_buffer_t& buffer, size_t nth) { this->derived().end_key_value_pair_imp(buffer, nth); }
         
         
-        void value_string(const char_t* s, std::size_t len) { this->derived().value_string_imp(s, len); }
+        // The parser calls this function when it encounters the start of a data string
+        // as a JSON value. Parameter `buffer` contains a possibly partial sequence of 
+        // the string. IFF the string is partial, the function will be repeatedly called
+        // until parameter `hasMore` equals `false` in order to send the continuing
+        // characters. The string is eventually (or immediately) complete if parameter
+        // `hasMore` equals `false`.
+        // The string is properly unescaped, that is it may contain control characters
+        // and does not contain "escaped Unicode". Possibly, the string contains
+        // Unicode replacement characters if the SA has been configured in such a way 
+        // so that it shall perform a replacement when an ill-formed Unicode sequence 
+        // is encountered.
+        void value_string(const const_buffer_t& buffer, bool hasMore = false) { this->derived().value_string_imp(buffer, hasMore); }
+        
+        // The parser calls this function when it encounters a JSON number
         void value_number(const nb_number_t& number)     { this->derived().value_number_imp(number); }
+        
+        // The parser calls this function when it encounters a JSON null.
         void value_null()                                { this->derived().value_null_imp(); }
+        
+        // The parser calls this function when it encounters a JSON boolean.
         void value_boolean(bool b)                       { this->derived().value_boolean_imp(b); }
         
         
@@ -369,6 +414,9 @@ namespace json {
         typedef void                                    result_type;
         typedef typename base::nb_number_t              nb_number_t;
         
+        typedef typename base::buffer_t                 buffer_t;
+        typedef typename base::const_buffer_t           const_buffer_t;
+        
     public:    
         semantic_actions_noop(){}
         bool additionalInputIsError_imp() const             { return true; }
@@ -381,9 +429,9 @@ namespace json {
         bool end_object_imp()                               { return true; }
         void begin_value_at_index_imp(size_t index) {}
         void end_value_at_index_imp(size_t index) {}        
-        void begin_value_with_key_imp(const char_t*, size_t len, size_t) {}
-        void end_value_with_key_imp(const char_t*, size_t len, size_t) {}
-        void value_string_imp(const char_t*, std::size_t)    {}        
+        void begin_key_value_pair_imp(const const_buffer_t&, size_t) {}
+        void end_key_value_pair_imp(const const_buffer_t&, size_t) {}
+        void value_string_imp(const const_buffer_t&, bool)    {}        
         void value_number_imp(const nb_number_t& number)     {}
         void value_boolean_imp(bool b)                       {}
         void value_null_imp()                                {}

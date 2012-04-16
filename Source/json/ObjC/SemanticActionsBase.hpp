@@ -105,6 +105,9 @@ namespace json { namespace objc {
         typedef typename base::char_t               char_t;     // char type of the StringBuffer
         typedef typename base::encoding_t           encoding_t;
         typedef id                                  result_type;
+        
+        typedef typename base::buffer_t             buffer_t;
+        typedef typename base::const_buffer_t       const_buffer_t;
 
     public:    
         
@@ -143,10 +146,10 @@ namespace json { namespace objc {
         virtual void begin_value_at_index_imp(size_t index) {}        
         virtual void end_value_at_index_imp(size_t) {}
         
-        virtual void begin_value_with_key_imp(const char_t* s, size_t len, size_t nth) {}
-        virtual void end_value_with_key_imp(const char_t* s, size_t len, size_t nth) {}
+        virtual void begin_key_value_pair_imp(const const_buffer_t& buffer, size_t nth) {}
+        virtual void end_key_value_pair_imp(const const_buffer_t& buffer, size_t nth) {}
                 
-        virtual void value_string_imp(const char_t* s, std::size_t len) {}                
+        virtual void value_string_imp(const const_buffer_t& buffer, bool hasMore) {}        
         virtual void value_number_imp(const nb_number_t& number) {}
         virtual void value_null_imp() {}
         virtual void value_boolean_imp(bool b) {}

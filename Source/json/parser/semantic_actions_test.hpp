@@ -39,7 +39,13 @@
 namespace json { namespace internal {
     
     //
-    //  Test only
+    //  semantic_actions_test is for testing purposes.
+    //
+    //  semantic_actions_test creates a JSON representation with boost::any
+    //  objects, as well a string representation in UTF-8.
+    //  Furthermore, it counts the number of each JSON value encountered in the
+    //  JSON document.
+    //  
     //  
     // Template parameter EncodingT shall be derived from json::utf_encoding_tag.
     // EncodingT specifies the StringBufferEncoding of the parser.
@@ -56,7 +62,12 @@ namespace json { namespace internal {
         typedef typename base::encoding_t       encoding_t;
         typedef typename base::nb_number_t      nb_number_t;
         
+        typedef typename base::buffer_t         buffer_t;
+        typedef typename base::const_buffer_t   const_buffer_t;
+        
     private:    
+        enum Mode {Key, Data};
+        
         typedef boost::shared_ptr<boost::any>   value_t;
         typedef std::string                     string_t; 
         typedef std::string                     number_t;
@@ -71,8 +82,12 @@ namespace json { namespace internal {
         
     public:    
         semantic_actions_test() 
-        :   array_count_(0), object_count_(0), string_count_(0), boolean_count_(0),
-            null_count_ (0), number_count_(0)
+        :   array_count_(0), object_count_(0), key_string_count_(0), 
+            data_string_count_(0), boolean_count_(0), null_count_ (0), 
+            number_count_(0),
+            max_level_(0),
+            level_(0),
+            data_string_start_(true)
         {
         }
         
@@ -80,17 +95,29 @@ namespace json { namespace internal {
             result_ = other.result_;
         }
         
-        void parse_begin_imp() {}
+        void parse_begin_imp() {
+            array_count_ = object_count_ = key_string_count_ = data_string_count_ 
+            = boolean_count_ = null_count_ = number_count_ = 0;
+            max_level_ = 0;
+            level_ = 0;
+            data_string_start_ = true;
+            tmp_large_string_.clear();
+        }
+        
         void parse_end_imp() { 
             if (stack_.size() != 1) 
                 throw std::logic_error("json::internal::SemanticActionsTest: logic error");
             result_ = stack_.back();
             stack_.pop_back();
-        }        
+            tmp_large_string_.clear();
+        } 
+        
         void finished_imp() {}
         
         void begin_array_imp() {
             ++array_count_; 
+            ++level_;
+            max_level_ = std::max(max_level_, level_);
             string_representation_.append(1, '[');
             markers_.push_back(stack_.size());
             stack_.push_back(value_t(new boost::any(array_t()))); 
@@ -107,10 +134,13 @@ namespace json { namespace internal {
             }
             stack_.erase(container_iter+1, stack_.end());
             markers_.pop_back();
+            --level_;
         }
         
         void begin_object_imp() { 
             ++object_count_; 
+            ++level_;
+            max_level_ = std::max(max_level_, level_);
             string_representation_.append(1, '{');
             markers_.push_back(stack_.size());
             stack_.push_back(value_t(new boost::any(object_t()))); 
@@ -137,6 +167,7 @@ namespace json { namespace internal {
             }
             stack_.erase(container_iter+1, stack_.end());
             markers_.pop_back();
+            --level_;
             return result; 
         }
         
@@ -148,45 +179,115 @@ namespace json { namespace internal {
         
         void end_value_at_index_imp(size_t index) {}
         
-        void begin_value_with_key_imp(const char_t* s, size_t len, size_t nth) {
+        void begin_key_value_pair_imp(const const_buffer_t& buffer, size_t nth) 
+        {
             // push the key
-            ++string_count_; 
+            ++key_string_count_; 
             if (nth > 0) {
                 string_representation_.append(1, ',');
             }
             string_representation_.append(1, '"');
-            const char_t* first = s;
+            const char_t* first = buffer.first;
             std::back_insert_iterator<std::string> dest(string_representation_);
             int result = json::generator_internal::escape_convert_unsafe(
-                first, first+len, EncodingT(),
+                first, first+buffer.second, EncodingT(),
                 dest, json::unicode::UTF_8_encoding_tag(), 
                 false /*escape solidus*/);   
             if (result != 0) {
                 throw std::runtime_error("escaping JSON string failed");
             }
             string_representation_.append("\":");
-            stack_.push_back(value_t(new boost::any(make_string(s, len)))); 
+            stack_.push_back(value_t(new boost::any(make_string(buffer.first, buffer.second)))); 
         }
         
-        void end_value_with_key_imp(const char_t* s, size_t len, size_t nth) {}
+        void end_key_value_pair_imp(const const_buffer_t& buffer, size_t nth) {}
         
-        void value_string_imp(const char_t* s, std::size_t len) { 
-            assert(s != 0 and *s != 0 and len > 0);
-            ++string_count_; 
-            string_representation_.append(1, '"');
-            const char_t* first = s;
-            std::back_insert_iterator<std::string> dest(string_representation_);
-            int result = json::generator_internal::escape_convert_unsafe(
-                first, first+len, EncodingT(),
-                dest, json::unicode::UTF_8_encoding_tag(), 
-                false /*escape solidus*/);   
-            if (result != 0) {
-                throw std::runtime_error("escaping JSON string failed");
+//        void value_string_imp(const char_t* s, std::size_t len) 
+//        { 
+//            assert(s != 0 and *s != 0 and len > 0);
+//            
+//            ++data_string_count_; 
+//            string_representation_.append(1, '"');
+//            const char_t* first = s;
+//            std::back_insert_iterator<std::string> dest(string_representation_);
+//            int result = json::generator_internal::escape_convert_unsafe(
+//                first, first+len, EncodingT(),
+//                dest, json::unicode::UTF_8_encoding_tag(), 
+//                false /*escape solidus*/);   
+//            if (result != 0) {
+//                throw std::runtime_error("escaping JSON string failed");
+//            }
+//            string_representation_.append(1, '"');
+//            std::string value = make_string(s, len);
+//            stack_.push_back(value_t(new boost::any(value))); 
+//        }
+        
+        void value_string_imp(const const_buffer_t& buffer, bool hasMore) 
+        {             
+            if (data_string_start_ and not hasMore) {
+                // small string encountered
+                string_representation_.append(1, '"');
+                const char_t* first = buffer.first;
+                std::back_insert_iterator<std::string> dest(string_representation_);
+                int result = json::generator_internal::escape_convert_unsafe(
+                                                                             first, first+buffer.second, EncodingT(),
+                                                                             dest, json::unicode::UTF_8_encoding_tag(), 
+                                                                             false /*escape solidus*/);   
+                if (result != 0) {
+                    throw std::runtime_error("escaping JSON string failed");
+                }
+                string_representation_.append(1, '"');
+                std::string value = make_string(buffer.first, buffer.second);
+                stack_.push_back(value_t(new boost::any(value))); 
+                ++data_string_count_; 
             }
-            string_representation_.append(1, '"');
-            std::string value = make_string(s, len);
-            stack_.push_back(value_t(new boost::any(value))); 
+            else if (data_string_start_ and hasMore) {
+                // start of large string encountered                
+                string_representation_.append(1, '"');
+                const char_t* first = buffer.first;
+                std::back_insert_iterator<std::string> dest(string_representation_);
+                int result = json::generator_internal::escape_convert_unsafe(
+                                                                             first, first+buffer.second, EncodingT(),
+                                                                             dest, json::unicode::UTF_8_encoding_tag(), 
+                                                                             false /*escape solidus*/);   
+                if (result != 0) {
+                    throw std::runtime_error("escaping JSON string failed");
+                }
+                tmp_large_string_ = make_string(buffer.first, buffer.second);
+                
+            }
+            else if (not data_string_start_ and hasMore) {
+                // continuation of large string
+                const char_t* first = buffer.first;
+                std::back_insert_iterator<std::string> dest(string_representation_);
+                int result = json::generator_internal::escape_convert_unsafe(
+                                                                             first, first+buffer.second, EncodingT(),
+                                                                             dest, json::unicode::UTF_8_encoding_tag(), 
+                                                                             false /*escape solidus*/);   
+                if (result != 0) {
+                    throw std::runtime_error("escaping JSON string failed");
+                }
+                append_to_string(tmp_large_string_, buffer.first, buffer.second);
+            }
+            else if (not data_string_start_ and not hasMore) {
+                // end of large string encountered.
+                const char_t* first = buffer.first;
+                std::back_insert_iterator<std::string> dest(string_representation_);
+                int result = json::generator_internal::escape_convert_unsafe(
+                                                                             first, first+buffer.second, EncodingT(),
+                                                                             dest, json::unicode::UTF_8_encoding_tag(), 
+                                                                             false /*escape solidus*/);   
+                if (result != 0) {
+                    throw std::runtime_error("escaping JSON string failed");
+                }
+                string_representation_.append(1, '"');
+                append_to_string(tmp_large_string_, buffer.first, buffer.second);
+                stack_.push_back(value_t(new boost::any(tmp_large_string_))); 
+                ++data_string_count_; 
+                tmp_large_string_.clear();
+            }
         }
+        
         
         void value_number_imp(const nb_number_t& number) { 
             ++number_count_; 
@@ -209,7 +310,8 @@ namespace json { namespace internal {
         
         
         void clear_imp() { 
-            array_count_ = object_count_ = string_count_ = boolean_count_ = null_count_ = number_count_ = 0;
+            array_count_ = object_count_ = key_string_count_ = data_string_count_ 
+            = boolean_count_ = null_count_ = number_count_ = 0;
             stack_ = stack_t(); 
             result_ = result_type(); 
             string_representation_.clear();
@@ -227,19 +329,19 @@ namespace json { namespace internal {
         }
         
         
-        result_type&        result()          { return result_; }
-        const result_type&  result() const    { return result_; }
+        result_type&        result()        { return result_; }
+        const result_type&  result() const  { return result_; }
         
-        std::string         str() const       { return string_representation_; }
+        std::string         str() const     { return string_representation_; }
         
-        
-        int array_count()   const { return array_count_; }
-        int object_count()  const { return object_count_; }
-        int string_count()  const { return string_count_; }
-        int boolean_count() const { return boolean_count_; }
-        int null_count()    const { return null_count_; }
-        int number_count()  const { return number_count_; }
-
+        int array_count() const             { return array_count_; }
+        int object_count() const            { return object_count_; }
+        int key_string_count() const        { return key_string_count_; }
+        int data_string_count() const       { return data_string_count_; }
+        int boolean_count() const           { return boolean_count_; }
+        int null_count() const              { return null_count_; }
+        int number_count() const            { return number_count_; }
+        int max_level() const               { return max_level_; }
         
         void print_imp(std::ostream& os) { 
             os << *this; 
@@ -258,21 +360,41 @@ namespace json { namespace internal {
             return result;
         }
         
+        void append_to_string(std::string& str, const char_t* s, size_t len) 
+        {
+            if (s == 0 or len == 0)
+                return;
+            std::back_insert_iterator<std::string> dest(str);
+            const char_t* first = s;
+            int cvt_result = unicode::convert(first, first + len, EncodingT(), 
+                                              dest, json::unicode::UTF_8_encoding_tag());
+            assert(cvt_result==unicode::NO_ERROR);
+        }
+        
         
     protected:
-        stack_t                 stack_;
-        std::vector<size_t>     markers_;    
-        result_type             result_;
-        error_t                 error_;        
-        std::string             string_representation_;
+        stack_t             stack_;
+        std::vector<size_t> markers_;    
+        result_type         result_;
+        error_t             error_;        
+        std::string         string_representation_;
         
-        int array_count_;
-        int object_count_;
-        int string_count_;
-        int boolean_count_;
-        int null_count_;
-        int number_count_;
+        int                 array_count_;
+        int                 object_count_;
+        int                 key_string_count_;
+        int                 data_string_count_;
+        int                 boolean_count_;
+        int                 null_count_;
+        int                 number_count_;
+        int                 max_level_;
         
+        int                 level_;
+        
+    private:
+        bool                data_string_start_;   // tracks internal string parsing state
+        std::string         tmp_large_string_;
+        
+    private:
         
         //    
         // Stream Output operator, defined as inline friend:    
@@ -281,13 +403,15 @@ namespace json { namespace internal {
         std::ostream& 
         operator<< (std::ostream& os, const semantic_actions_test& sa) 
         {
-            os << "SemanticActionsTest number of parsed items:\n"
-            << "   object_count:  " << sa.object_count() << '\n'
-            << "   array_count:   " << sa.array_count() << '\n'
-            << "   string_count:  " << sa.string_count() << '\n'
-            << "   number_count:  " << sa.number_count() 
-            << "   boolean_count: " << sa.boolean_count() << '\n'
-            << "   null_count:    " << sa.null_count() << '\n'        
+            os << "SemanticActionsTest number of parsed items:\n\n"
+            << "   object count:       " << sa.object_count() << '\n'
+            << "   array count:        " << sa.array_count() << '\n'
+            << "   key string count:   " << sa.key_string_count() << '\n'
+            << "   data string count:  " << sa.data_string_count() << '\n'
+            << "   number count:       " << sa.number_count() 
+            << "   boolean count:      " << sa.boolean_count() << '\n'
+            << "   null count:         " << sa.null_count() << '\n' << '\n'  
+            << "Max level:             " << sa.max_level() << '\n'        
             << std::endl;
             return os;
         }
