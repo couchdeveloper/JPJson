@@ -1075,22 +1075,22 @@ int main (int argc, const char * argv[])
     printf("%s\n%s\n", ctime(&time_info), BOOST_COMPILER);
     NSLog(@"Start Bench");
         
-    bench_AGJsonParserString1(N);
+//    bench_AGJsonParserString1(N);
     bench_AGJsonParser1a(N);
-    bench_AGJsonParser1b(N);
-    bench_AGJsonParser1b(N);
-    bench_AGJsonParser1x(N);
-    bench_AGJsonParser2(N);
-    bench_AGAsyncJsonParser(N);
-#if defined (USE_JSONKit)    
-    bench_JSONKit1(N);
-    bench_JSONKit2(N);
-    bench_JSONKitString1(N);
-#endif    
-#if 1    
-    bench_NSJSONSerialization1(N);
-    bench_NSJSONSerialization2(N);
-#endif    
+//    bench_AGJsonParser1b(N);
+//    bench_AGJsonParser1b(N);
+//    bench_AGJsonParser1x(N);
+//    bench_AGJsonParser2(N);
+//    bench_AGAsyncJsonParser(N);
+//#if defined (USE_JSONKit)    
+//    bench_JSONKit1(N);
+//    bench_JSONKit2(N);
+//    bench_JSONKitString1(N);
+//#endif    
+//#if 1    
+//    bench_NSJSONSerialization1(N);
+//    bench_NSJSONSerialization2(N);
+//#endif    
     [pool drain];
     return 0;
 }
