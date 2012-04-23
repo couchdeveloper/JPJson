@@ -30,7 +30,7 @@
 
 
 #define WRITE_TO_TEMP_FILE
-
+#define START_CONNECTION_IN_SECONDARY_THREAD
 
 //#define RUN_INFINITE_LOOP
 
@@ -99,7 +99,6 @@ static uint64_t absoluteTimeToNanoseconds(uint64_t t)
 
 @implementation NSURLConnectionDownloadViewController
 {
-    
     NSURLConnection*    connection_;    
     BOOL                runLoopDone_;
 #if !defined (WRITE_TO_TEMP_FILE)
@@ -119,6 +118,7 @@ static uint64_t absoluteTimeToNanoseconds(uint64_t t)
 }
 
 static NSString* kDownloadConnectionRunLoopMode = @"MyViewControllerDownloadConnectionRunMode";
+static NSString* kTempFileName = @"download.data";
 
 @synthesize connection = connection_;
 @synthesize startDownloadButton = startDownloadButton_;
@@ -218,14 +218,32 @@ static NSString* kDownloadConnectionRunLoopMode = @"MyViewControllerDownloadConn
 
     if (connection_) {
         [connection_ cancel];
+        NSLog(@"Connection canceled by user");
 #if !defined (WRITE_TO_TEMP_FILE)        
         [parser_ cancel];
-#endif        
+        NSLog(@"JSON parser canceled");
+#endif                
         self.connection = nil;
         runLoopDone_ = YES;
+        NSLog(@"stopping connection handler thread's run loop");
         [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
         self.startDownloadButton.enabled = YES;
         self.cancelButton.enabled = NO;
+        self.messageLabel.text = @"Connection canceled."; 
+        
+#if defined (WRITE_TO_TEMP_FILE)  
+ #if defined (START_CONNECTION_IN_SECONDARY_THREAD)    
+        // We would like to remove the temporary file here, but unfortunately,
+        // this is a "shared resource" which is concurrently accessed by the
+        // thread where the connection delegate is scheduled and we don't have
+        // the thread, nor do we have synchronization primitives.
+        // We perform the removal of the file in the startConnectionInSecondaryThread
+        // methods when the Run Loop finished.
+ #else        
+        NSLog(@"Removing temp file");
+        [self removeTemporaryFile];
+ #endif        
+#endif
     }
 }
 
@@ -252,7 +270,7 @@ static NSString* kDownloadConnectionRunLoopMode = @"MyViewControllerDownloadConn
     sa.completionHandlerBlock = ^{ 
         t_end_ = mach_absolute_time();
         double secs = absoluteTimeToNanoseconds(t_end_ - t_start_) * 1.0e-9;
-        NSString* msg = [[NSString alloc] initWithFormat:@"Parser finished in %g seconds.\n%d Documents parsed.\n%@", 
+        NSString* msg = [[NSString alloc] initWithFormat:@"Parser finished. Elapsed time: %g seconds.\n%d Documents parsed.\n%@", 
                          secs, numberDocuments_, 
                          (lastError_)?[NSString stringWithFormat:@"Parsing failed: %@",[lastError_ localizedDescription]]:@""];        
         NSLog(@"%@", msg);
@@ -323,7 +341,7 @@ static NSString* kDownloadConnectionRunLoopMode = @"MyViewControllerDownloadConn
     // until after the semantic actions handler blocks have been finshed (when they
     // are called synchronously with respect to the parser's thread) we shouldn't
     // run on the main thread, since this may take a while.
-#if 1    
+#if defined (START_CONNECTION_IN_SECONDARY_THREAD)    
     // Now, start the NSURLConnection in a secondary thread:
     [NSThread detachNewThreadSelector:@selector(startConnectionInSecondaryThread) 
                              toTarget:self withObject:nil]; 
@@ -340,15 +358,22 @@ static NSString* kDownloadConnectionRunLoopMode = @"MyViewControllerDownloadConn
     // to schedule UIKit methods onto the main thread.
     // 
     
-    NSString* urlString = @"http://ag-MacBookPro.local:3000/users";
+    NSString* urlString = @"http://ag-MacBookPro.local:3000/download/download.json";
     NSURL* url = [NSURL URLWithString:urlString];
     
     [[NSURLCache sharedURLCache] removeAllCachedResponses];
     //[[NSURLCache sharedURLCache] setMemoryCapacity:1024*64];   
     [[NSURLCache sharedURLCache] setMemoryCapacity:0];   
     
-    NSTimeInterval request_timeout = 600.0;
+#if defined (DEBUG)    
+    NSTimeInterval request_timeout = 10;
+#else    
+    NSTimeInterval request_timeout = 60;
+#endif    
+    
     NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:url cachePolicy:0 timeoutInterval:request_timeout];
+    NSLog(@"request timeout: %f", request.timeoutInterval);
+
     
     [request setValue:@"gzip,deflate" forHTTPHeaderField:@"Accept-Encoding"];
     NSLog(@"Request header: %@", [request allHTTPHeaderFields]);
@@ -390,13 +415,14 @@ static NSString* kDownloadConnectionRunLoopMode = @"MyViewControllerDownloadConn
     
     // Schedule the connection's delegate methods in the current thread's run loop:
     //[connection_ scheduleInRunLoop: [NSRunLoop currentRunLoop] forMode: NSRunLoopCommonModes];
-    [connection_ scheduleInRunLoop: [NSRunLoop currentRunLoop] forMode: kDownloadConnectionRunLoopMode];
+    [connection_ scheduleInRunLoop: [NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode /*kDownloadConnectionRunLoopMode*/];
     
     // Start the download
     [self.connection start];
 }
 
 
+//#define XXX_DEBUG
 - (void) startConnectionInSecondaryThread
 {
     NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
@@ -410,7 +436,8 @@ static NSString* kDownloadConnectionRunLoopMode = @"MyViewControllerDownloadConn
     // immediately when the connection closes (the parser need to run on it as well):
     [[NSRunLoop currentRunLoop] addPort:[NSMachPort port] forMode:kDownloadConnectionRunLoopMode];    
     do {
-        BOOL processedSource = [[NSRunLoop currentRunLoop] runMode:kDownloadConnectionRunLoopMode beforeDate:[NSDate distantFuture]];
+        BOOL processedSource = [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode /* kDownloadConnectionRunLoopMode */
+                                                        beforeDate:[NSDate dateWithTimeIntervalSinceNow:10]];
 #if defined (XXX_DEBUG)        
         NSLog(@"RunLoop did process source: %@", ( processedSource ? @"YES" : @"NO"));
         if (runLoopDone_) {
@@ -419,6 +446,13 @@ static NSString* kDownloadConnectionRunLoopMode = @"MyViewControllerDownloadConn
 #endif        
     } while (!runLoopDone_);
     
+#if defined (WRITE_TO_TEMP_FILE)
+#if defined (START_CONNECTION_IN_SECONDARY_THREAD)    
+    NSLog(@"Removing temp file");
+    //[self removeTemporaryFile];
+#endif
+#endif    
+
     [pool release];    
 }
 
@@ -440,8 +474,7 @@ static NSString* kDownloadConnectionRunLoopMode = @"MyViewControllerDownloadConn
     
     
 #if defined (WRITE_TO_TEMP_FILE)        
-    [tempFileHandle_ closeFile];
-    self.tempFileHandle = nil;
+    [self removeTemporaryFile];
 #endif        
     
     
@@ -471,30 +504,31 @@ static NSString* kDownloadConnectionRunLoopMode = @"MyViewControllerDownloadConn
 
 - (void) connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response 
 {
-    dispatch_async(dispatch_get_main_queue(), 
-    ^{
-        // check for HTTP status code for proxy authentication failures
-        // anything in the 200 to 299 range is considered successful,
-        // also make sure the MIMEType is correct:
-        //
-        NSHTTPURLResponse* httpResponse = (NSHTTPURLResponse *)response;
-        NSInteger statusCode = [httpResponse statusCode];
-        NSString* mimeType = [response MIMEType];
-        if (statusCode < 200 || statusCode > 300 || ![mimeType isEqual:@"application/json"]) 
-        {
-            NSDictionary* userInfo = 
-            [NSDictionary dictionaryWithObject:NSLocalizedString(@"HTTP Error", nil)
-                                        forKey:NSLocalizedDescriptionKey];
-            NSError* error = [NSError errorWithDomain:@"HTTP" 
-                                                 code:[httpResponse statusCode] 
-                                             userInfo:userInfo];
-            [self handleError:error];
-        }
+    // check for HTTP status code for proxy authentication failures
+    // anything in the 200 to 299 range is considered successful,
+    // also make sure the MIMEType is correct:
+    NSHTTPURLResponse* httpResponse = (NSHTTPURLResponse *)response;
+    NSInteger statusCode = [httpResponse statusCode];
+    NSLog(@"Connection did receive response: status code: %d, headers: %@", 
+          statusCode, [(NSHTTPURLResponse*)response allHeaderFields]);
+    NSString* mimeType = [response MIMEType];
+    if (statusCode < 200 || statusCode > 300 || ![mimeType isEqual:@"application/json"]) 
+    {
+        NSDictionary* userInfo = 
+        [NSDictionary dictionaryWithObject:NSLocalizedString(@"HTTP Error", nil)
+                                    forKey:NSLocalizedDescriptionKey];
+        NSError* error = [NSError errorWithDomain:@"HTTP" 
+                                             code:[httpResponse statusCode] 
+                                         userInfo:userInfo];
+        dispatch_async(dispatch_get_main_queue(), 
+                       ^{
+                           self.messageLabel.text = @"Connection established. Starting downloading ...";                
+                           self.cancelButton.enabled = YES;
+                           [self handleError:error];
+                       });  
         
-        NSLog(@"Connection did receive response: %@", [(NSHTTPURLResponse*)response allHeaderFields]);
-        self.messageLabel.text = @"Connection established. Starting downloading ...";                
-        self.cancelButton.enabled = YES;
-    });    
+        return;  // redirection or error
+    }
     
     totalBytesDownloaded_ = 0;
     con_number_buffers_ = 0;
@@ -505,21 +539,8 @@ static NSString* kDownloadConnectionRunLoopMode = @"MyViewControllerDownloadConn
     [parser_ start];
 #else
     if (tempFileHandle_ == nil) {
-        NSError* error = nil;
-        NSFileManager* fm = [[NSFileManager alloc] init];
-        NSURL* userDocDirURL = [NSURL fileURLWithPath:[@"~/Documents" stringByExpandingTildeInPath] isDirectory:YES];
-        
-        NSAssert(userDocDirURL != nil, @"userDocDirURL is nil");
-        self.tempFileURL = [userDocDirURL URLByAppendingPathComponent:@"file1.txt"];
-        NSAssert(tempFileURL_, @"tempFileURL_ is nil");
-        BOOL success = [fm createFileAtPath:[self.tempFileURL path] contents:nil attributes:nil];
-        NSAssert(success == YES, @"createFileAtPath did fail");
-        
-        tempFileHandle_ = [[NSFileHandle fileHandleForWritingToURL:self.tempFileURL error:&error] retain];
-        [fm release];
-        NSAssert(tempFileHandle_ != nil, @"tempFileHandle_ is nil");
+        [self makeTemporaryFile];
     }
-    
     [tempFileHandle_ truncateFileAtOffset:0];
 #endif    
 }
@@ -530,9 +551,15 @@ static NSString* kDownloadConnectionRunLoopMode = @"MyViewControllerDownloadConn
     size_t size = [data length];
     totalBytesDownloaded_ += size;
     ++con_number_buffers_;
-    //NSLog(@"Connection did receive NSData[%ld](%p), size: %8.ld, total: %8.ld", 
-    //      con_number_buffers_, data, size, totalBytesDownloaded_);
-
+#if defined (DEBUG)
+    NSString* msg = [[NSString alloc] initWithFormat:@"Connection did receive NSData[%ld](%p), size: %8.ld, total: %8.ld", 
+                     con_number_buffers_, data, size, totalBytesDownloaded_];                     
+    NSLog(@"%@", msg);    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.messageLabel.text = msg;
+    });    
+    [msg release];
+#endif    
 #if !defined (WRITE_TO_TEMP_FILE)    
     // Pass the data buffer to the parser
     [parser_ parseBuffer:data];
@@ -560,16 +587,25 @@ static NSString* kDownloadConnectionRunLoopMode = @"MyViewControllerDownloadConn
     // Parse it piece by piece
     [parser_ parseBuffer:nil];    
 #else    
-    // Start the synchronous parser with that big chunk of NSData buffer on 
-    // the global concurrent dispatch queue:
     uint64_t t = mach_absolute_time();
     double secs = absoluteTimeToNanoseconds(t - t_start_) * 1.0e-9;
     unsigned long long pos = [self.tempFileHandle seekToEndOfFile];
     NSLog(@"Finished writing temp file (%llu bytes) in %g s", pos, secs);
+    // We can close and release the file handle
     [self.tempFileHandle closeFile];
     self.tempFileHandle = nil;
     
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    // Start a synchronous JSON parser with a big chunk of NSData buffer which 
+    // is memory mapped on the temporay file and execute it on the global 
+    // concurrent dispatch queue:
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), 
+    ^{
+        NSAssert(self.tempFileURL != nil, @"tempFileURL is nil");
+        NSLog(@"%@", self.tempFileURL); 
+        NSFileManager* fm = [[NSFileManager alloc] init];
+        bool canAccessTempFile = [fm fileExistsAtPath:[tempFileURL_ path]];
+        [fm release];
+        NSAssert(canAccessTempFile, @"could not access temporary file");
         NSError* error;
         NSData* data = [[NSData alloc] initWithContentsOfURL:self.tempFileURL
                                                      options:NSDataReadingMappedIfSafe | NSDataReadingUncached
@@ -581,6 +617,12 @@ static NSString* kDownloadConnectionRunLoopMode = @"MyViewControllerDownloadConn
         JPSemanticActions* sa = [[JPSemanticActions alloc] init];
         [self setupSemanticActions:sa];
         BOOL success = [JPJsonParser parseData:data semanticActions:sa];
+        if (!success) {
+            NSLog(@"JSON Parser Error: %@", sa.error); 
+            // Further error handling is performed in sa's handler blocks.
+        }            
+        // When we are finished we can remove the temporary file, release sa and data:
+        [self removeTemporaryFile];
         [sa release];
         [data release];
     });
@@ -588,7 +630,8 @@ static NSString* kDownloadConnectionRunLoopMode = @"MyViewControllerDownloadConn
 }
 
 
-#pragma -
+#pragma mark - Private Methods
+
 
 // Handle errors in the download by showing an alert to the user. 
 - (void) handleError:(NSError*)error 
@@ -604,6 +647,53 @@ static NSString* kDownloadConnectionRunLoopMode = @"MyViewControllerDownloadConn
                      otherButtonTitles:nil];
     [alertView show];
     [alertView release];
+}
+
+
+
+- (void) makeTemporaryFile
+{
+    if (tempFileHandle_) {
+        [tempFileHandle_ closeFile];
+        [tempFileHandle_ release]; tempFileHandle_ = nil;        
+    }
+    
+    NSFileManager* fm = [[NSFileManager alloc] init];    
+    
+    // Get the URL for a temp file
+    if (tempFileURL_ == nil) {
+        NSURL* tmpDirURL = [[fm URLsForDirectory:NSCachesDirectory inDomains:NSUserDomainMask] lastObject];
+        tempFileURL_ = [[tmpDirURL URLByAppendingPathComponent:kTempFileName] retain];
+        NSAssert(tempFileURL_ != nil, @"Could not locate temp file");
+    }
+    // Create the temporary file:
+    // If a file already exists at path, this method overwrites the contents of that file
+    BOOL success = [fm createFileAtPath:[tempFileURL_ path] contents:nil attributes:nil];
+    NSAssert(success == YES, @"createFileAtPath did fail");
+    
+    // Create a file handle
+    NSError* error;
+    tempFileHandle_ = [[NSFileHandle fileHandleForWritingToURL:tempFileURL_ error:&error] retain];
+    [fm release];
+    NSAssert(tempFileHandle_ != nil, @"temporary file handle is nil");
+}
+
+- (void) removeTemporaryFile 
+{
+    if (tempFileURL_ == nil) {
+        return;
+    }
+    if (tempFileHandle_) {
+        [tempFileHandle_ closeFile];
+        [tempFileHandle_ release]; tempFileHandle_ = nil;        
+    }
+    NSFileManager* fm = [[NSFileManager alloc] init];        
+    if ([fm fileExistsAtPath:[tempFileURL_ path]]) {
+        NSError* error;
+        BOOL result = [fm removeItemAtURL:tempFileURL_ error:&error];
+        NSAssert(result, @"could not remove temporary file");
+    }
+    [fm release];
 }
 
 @end
