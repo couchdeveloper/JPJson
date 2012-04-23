@@ -140,6 +140,8 @@ namespace {
     
 #pragma mark CFString Creation
     
+    // Creates a CFString from a buffer 's' containing 'len' code units encoded 
+    // in 'Encoding'. Ownership of the string folows the "Create" rule.
     template <typename Encoding, typename CharT>
     CFStringRef createString(const CharT* s, std::size_t len, Encoding) 
     {
@@ -155,6 +157,8 @@ namespace {
     }
     
     
+    // Creates a CFMutableString from a buffer 's' containing 'len' code units encoded in
+    // 'Encoding'. Ownership of the string folows the "Create" rule.
     template <typename Encoding, typename CharT>
     CFMutableStringRef createMutableString(const CharT* s, std::size_t len, Encoding) 
     {
@@ -178,6 +182,8 @@ namespace {
     }
     
     
+    // Appends a buffer of code units with length 'len' and encding 'Encoding' to 
+    // the mutable string 'str'.
     template <typename Encoding, typename CharT>
     void appendString(CFMutableStringRef str, const CharT* s, std::size_t len, Encoding) 
     {
@@ -394,7 +400,6 @@ namespace json { namespace objc {
         typedef typename cache_t::iterator          cache_iterator;
         typedef typename cache_t::const_iterator    cache_const_iterator;
 #endif
-        typedef std::pair<const char_t*, size_t>    string_buffer_t;
         
 #if defined (JSON_OBJC_SEMANTIC_ACTIONS_USE_JSON_PATH)
         typedef  objc_internal::intrusive_json_path<encoding_t> json_path_t;
@@ -710,9 +715,9 @@ namespace json { namespace objc {
         virtual void begin_key_value_pair_imp(const const_buffer_t& buffer, size_t nth) 
         {
 #if defined (JSON_OBJC_SEMANTIC_ACTIONS_USE_JSON_PATH)            
-            string_buffer_t string_buffer = 
+            const_buffer_t string_buffer = 
 #endif            
-            push_key(buffer.first, buffer.second);
+            push_key(buffer);
 #if defined (JSON_OBJC_SEMANTIC_ACTIONS_USE_JSON_PATH)
             typedef typename json_path_t::string_buffer_type string_buffer_type;
             json_path_.back_key() = string_buffer_type(string_buffer.first, string_buffer.second);
@@ -724,19 +729,18 @@ namespace json { namespace objc {
 
         virtual void value_string_imp(const const_buffer_t& buffer, bool hasMore) { 
             //++c0_;
-            if (!hasMore) 
-                ++pc_.string_count_;
+            pc_.string_count_ += static_cast<int>(!hasMore);
             
             //t0_.start();
 #if defined (JSON_OBJC_SEMANTIC_ACTIONS_USE_CACHE)
-            if (cacheDataStrings()and not hasMore) {
+            if (cacheDataStrings() and not hasMore) {
                 // Only cache *small* data strings
-                push_string_cached(buffer.first, buffer.second);
+                push_string_cached(buffer);
             } else {
-                push_string_uncached(buffer.first, buffer.second, hasMore);
+                push_string_uncached(buffer, hasMore);
             }
 #else
-            push_string_uncached(buffer.first, buffer.second);
+            push_string_uncached(buffer, hasMore);
 #endif            
             //t0_.pause();
         }
@@ -903,7 +907,7 @@ namespace json { namespace objc {
         bool    keepStringCacheOnClear() const { return opt_keep_string_cache_on_clear_; }
         void    keepStringCacheOnClear(bool set) { opt_keep_string_cache_on_clear_ = set; }
         
-        bool    cacheDataStrings() const { return opt_cache_data_strings_; }
+        bool    cacheDataStrings() const { return opt_cache_data_strings_; }  // TODO: possibly, data string caching is a bad idea anyway, so remove all referenes, flags, ect. including documentation.
         void    cacheDataStrings(bool set) { opt_cache_data_strings_ = set; }
         
         size_t  string_cache_size() const { 
@@ -929,17 +933,18 @@ namespace json { namespace objc {
         
     protected:
         
-        string_buffer_t push_key(const char_t* s, std::size_t len) 
+        const_buffer_t 
+        push_key(const const_buffer_t& buffer) 
         {
             //++c0_;
             ++pc_.string_count_;
             
             //t0_.start();
 #if defined (JSON_OBJC_SEMANTIC_ACTIONS_USE_CACHE)
-            return push_string_cached(s, len); 
+            return push_string_cached(buffer); 
 #else
-            push_string_uncached(s, len);
-            return string_buffer_t(0,0);
+            push_string_uncached(buffer);
+            return const_buffer_t(0,0);
 #endif
             //t0_.pause();
         }
@@ -948,27 +953,16 @@ namespace json { namespace objc {
 #if defined (JSON_OBJC_SEMANTIC_ACTIONS_USE_CACHE)
         // Returns a string buffer, which is the key where the string has been
         // associated in the cache.
-        string_buffer_t push_string_cached(const char_t* s, std::size_t len) 
+        const_buffer_t push_string_cached(const const_buffer_t& buffer) 
         {
-            string_buffer_t result;
             // (performance critical function)
-            cache_key_t cache_key = cache_key_t(s, len);
+            const cache_key_t cache_key = cache_key_t(buffer.first, buffer.second);
             cache_iterator iter = string_cache_.find(cache_key);
             cache_mapped_t str;    // CFTypeRef         
             if (iter == string_cache_.end()) {
                 ++cache_miss_count_;
                 // The string is not in the cache, create one and insert it into the cache:
-#if 1                
-                str = createString(s, len, EncodingT());
-#else
-                // For unknown reasons, CFStringCreateWithBytesNoCopy is slower
-                // than createString - even though the internal encoding would
-                // match.
-                str = CFStringCreateWithBytesNoCopy(kCFAllocatorDefault, 
-                                                    (const UInt8 *)s, len*sizeof(char_t), 
-                                                    json::cf_unicode_encoding_traits<EncodingT>::value,
-                                                    false, kCFAllocatorNull);
-#endif                
+                str = createString(buffer.first, buffer.second, EncodingT());
                 iter = string_cache_.insert(cache_key, str).first;
             } 
             else {
@@ -977,33 +971,31 @@ namespace json { namespace objc {
                 f_cf_retain(str);
             }
             stack_.push_back(id(CFTypeRef(str)));
-            result.first = (*iter).first.first;
-            result.second = (*iter).first.second;
-            return result;
+            return const_buffer_t((*iter).first.first, (*iter).first.second);
         }
 #endif
         
-        void push_string_uncached(const char_t* s, std::size_t len, bool hasMore)
+        void push_string_uncached(const const_buffer_t& buffer, bool hasMore)
         {
             if (tmp_data_str_ == 0 and not hasMore) {
                 // Create an immutable string
-                CFStringRef str = createString(s, len, EncodingT());
+                CFStringRef str = createString(buffer.first, buffer.second, EncodingT());
                 stack_.push_back(id(str));  // Do not release str!
             }
             else if (tmp_data_str_ == 0 and hasMore)
             {
                 // Create a mutable string with the partial characters
-                tmp_data_str_ = createMutableString(s, len, EncodingT());
+                tmp_data_str_ = createMutableString(buffer.first, buffer.second, EncodingT());
             }
             else if (tmp_data_str_ != 0 and not hasMore) {
                 // append to mutable tmp_data_str_ and push it to the stack:
-                appendString(tmp_data_str_, s, len, EncodingT());
+                appendString(tmp_data_str_, buffer.first, buffer.second, EncodingT());
                 stack_.push_back(id(tmp_data_str_));
                 tmp_data_str_ = NULL;  // don't CFRelease!
             }
             else /* tmp_data_str_ != 0 and hasMore */ {
                 // append to mutable tmp_data_str_
-                appendString(tmp_data_str_, s, len, EncodingT());
+                appendString(tmp_data_str_, buffer.first, buffer.second, EncodingT());
             }
         }
         
@@ -1030,7 +1022,7 @@ namespace json { namespace objc {
                 --count;
                 *dest++ = static_cast<uint8_t>(*s++);
             }
-            push_string_uncached(buffer, len, false);
+            push_string_uncached(const_buffer_t(buffer, len), false);
         }
         
         // number strings are encoded in ASCII
@@ -1040,7 +1032,7 @@ namespace json { namespace objc {
                                 boost::is_same<Encoding, EncodingT>
                                 >::type* = 0)
         {
-            push_string_uncached(s, len, false);
+            push_string_uncached(const_buffer_t(s, len), false);
         }
         
         

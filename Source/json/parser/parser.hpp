@@ -39,7 +39,7 @@
 #include "parser_errors.hpp"
 #include "semantic_actions_base.hpp"
 #include "string_buffer.hpp"
-#include "string_storage.hpp"
+#include "string_storage2.hpp"
 #include "json/utility/number_builder.hpp"
 #include "json/unicode/unicode_utilities.hpp"
 #include "json/unicode/unicode_converter.hpp"
@@ -209,10 +209,10 @@ namespace json {
         iterator                last_;  
         SemanticActions&        sa_;
         state_t                 state_;
-        string_storage_t        string_storage_;
-        string_buffer_t         string_buffer_;
         number_builder_t        number_builder_;
         unicode::filter::NoncharacterOrNULL unicode_filter_;
+        string_storage_t        string_storage_;
+        string_buffer_t         string_buffer_;
         
     private:        
         void parse_text();
@@ -227,27 +227,49 @@ namespace json {
         //
         void parse_string() 
         {
+            //TEST: TODO: fix
+            //((void)printf ("%s:%u: test assertion\n", __FILE__, __LINE__), abort());
+            
             assert(state_.error() == JP_NO_ERROR); 
             assert(p_ != last_);
             assert(to_uint(*p_) == '"');            
             assert(string_buffer_.size() == 0);  // check whether we have a new string on stack of the string storage
             
             ++p_;
-            uint32_t c;
             while (__builtin_expect(p_ != last_, 1)) 
             {
                 // fast path: read ASCII (no control characters, and no ASCII NULL)
-                c = to_uint(*p_);
+                uint32_t c = to_uint(*p_);
                 if (__builtin_expect((c - 0x20u) < 0x60u, 1))  // ASCII except control-char, and no ASCII NULL
                 {
+#if 1                    
+                    ++p_;
+                    if (c != '\\' and c != '"') {
+                        string_buffer_pushback_ASCII(c);  
+                        // note: string_buffer_pushback_ASCII() does not check for Unicode NULL
+                        continue;
+                    } 
+                    else if (c == '\\') {
+                        escape_sequence();
+                        if (!state_) {
+                            // error parsing escape sequence
+                            return; // error state already set
+                        }
+                        continue;
+                    }
+                    else {
+                        skip_whitespaces();
+                        return; // done
+                    }
+                        
+#else                        
+                    ++p_;
                     switch (c) {
                         default:
-                            ++p_;
                             string_buffer_pushback_ASCII(c);  
                                 // note: string_buffer_pushback_ASCII() does not check for Unicode NULL
                             continue;
                         case '\\': // escape sequence
-                            ++p_;
                             escape_sequence();
                             if (!state_) {
                                 // error parsing escape sequence
@@ -255,10 +277,10 @@ namespace json {
                             }
                             continue;
                         case '"':
-                            ++p_;
                             skip_whitespaces();
                             return; // done
                     }
+#endif                    
                 }
                 
                 // slow path: reading UTF-8 multi byte sequences, ASCII NULL, and 
@@ -280,7 +302,7 @@ namespace json {
                         unicode::Validation::SAFE, unicode::Stateful::No, unicode::ParseOne::Yes
                     >  converter_t;
                     
-                    unicode::code_point_t cp = -1;
+                    unicode::code_point_t cp;
                     unicode::code_point_t* cp_ptr = &cp;
                     int result = converter_t().convert(p_, last_, cp_ptr);
                     // Possible results:
@@ -744,8 +766,9 @@ namespace json {
             {
                 // first, get the key ...
                 // prepare the string storage for a key string:
-                string_storage_.stack_push();
-                string_storage_.set_mode(string_storage_t::Key);
+                //string_storage_.stack_push();
+                string_storage_.reset();
+                //string_storage_.set_mode(string_storage_t::Key);
                 parse_string();
                 if (state_) {
                     if (p_ != last_) {
@@ -759,8 +782,8 @@ namespace json {
                                 // ... finally, get a value and put it onto sa_'s stack
                                 sa_.begin_key_value_pair(string_buffer_.buffer(), index);
                                 parse_value();  // whitespaces skipped.
-                                sa_.end_key_value_pair(string_buffer_.buffer(), index);
-                                string_storage_.stack_pop(); // remove the key from top of the string buffer's stack
+                                sa_.end_key_value_pair(/*string_buffer_.buffer()*/typename SemanticActions::const_buffer_t(0,0), index);
+                                //string_storage_.stack_pop(); // remove the key from top of the string buffer's stack
                                 if (state_) 
                                 {
                                     // Note: We populate the object at end_object().
@@ -839,27 +862,49 @@ namespace json {
     inline 
     void 
         parser<InputIterator, SourceEncoding, SemanticActions>::
-    parse_value() 
-    {                
+    parse_value()
+    {     
         assert(state_.error() == JP_NO_ERROR);
         assert(p_ != last_);
         
+        enum Token {
+            s = 0,  // '"'
+            O = 1,  // '{'   // a capitalized 'O' (for 'O'bject)
+            n = 2,  // [0..9], '-'
+            A = 3,  // '['
+            t = 4,  // true
+            f = 5,  // false
+            N = 6,  // null
+            E = 7,  // error
+        };
+        static const uint8_t table[] = {
+            E,E,E,E,E,E,E,E,  E,E,E,E,E,E,E,E,  E,E,E,E,E,E,E,E,  E,E,E,E,E,E,E,E,   //  0..31
+            E,E,s,E,E,E,E,E,  E,E,E,E,E,n,E,E,  n,n,n,n,n,n,n,n,  n,n,E,E,E,E,E,E,   // 32..63
+            E,E,E,E,E,E,E,E,  E,E,E,E,E,E,E,E,  E,E,E,E,E,E,E,E,  E,E,E,A,E,E,E,E,   // 64..95
+            E,E,E,E,E,E,f,E,  E,E,E,E,E,E,N,E,  E,E,E,E,t,E,E,E,  E,E,E,O,E,E,E,E    // 96..127
+        };
+        
         unsigned int c = to_uint(*p_);
-        switch (c) {
-            case '"':
+        Token token = c <= 0x7Fu ? static_cast<Token>(table[c]) : E;
+        
+        switch (token) {
+            case s:
+                // Found start of a JSON String
                 // Prepare the string storage to hold a data string:
-                string_storage_.stack_push();
-                string_storage_.set_mode(string_storage_t::Data);
+                //string_storage_.stack_push();
+                string_storage_.reset();
+                //string_storage_.set_mode(string_storage_t::Data);
                 parse_string();  // this may send partial strings to the semantic actions object.
                 if (state_) {
                     string_storage_.flush();  // send the remaining characters in the string buffer to the semantic actions object.
                 } else {
                     // handle error string
                 }
-                string_storage_.stack_pop();
-                break;
+                //string_storage_.stack_pop();
+                return;
                 
-            case '{':
+            case O: // (This is a capitalized 'O')
+                // Found start of a JSON Object
                 sa_.begin_object();
                 parse_object();
                 if (state_) {
@@ -876,10 +921,10 @@ namespace json {
                 } else {
                     // handle error object
                 }
-                break;
+                return;
                 
-            case '0' ... '9':
-            case '-':
+            case n:
+                // Found start of a JSON Number
                 number_builder_.clear();
                 parse_number();
                 if (state_) {
@@ -891,9 +936,10 @@ namespace json {
                     // handle error number
                     assert(state_.error() != 0);
                 }
-                break;
+                return;
                 
-            case '[':
+            case A:
+                // Found start of a JSON Array
                 sa_.begin_array();
                 parse_array();
                 if (state_) {
@@ -901,47 +947,40 @@ namespace json {
                     ++p_;
                     skip_whitespaces();
                 }
-                break;
+                return;
                 
-            case 't':
+            case t:
+                // Found start of JSON true
                 if (match("true", 4)) {
                     // got a "true"
                     // action_value_true
                     sa_.value_boolean(true);
                     skip_whitespaces();
                 }
-                break;
+                return;
                 
-            case 'f':
+            case f:
+                // Found start of JSON false
                 if (match("false", 5)) {
                     // action_value_false
                     sa_.value_boolean(false);
                     skip_whitespaces();
                 } 
-                break;
+                return;
                 
-            case 'n':
+            case N:
+                // Found start of JSON null
                 if (match("null", 4)) {
                     // action_value_null
                     sa_.value_null();
                     skip_whitespaces();
                 }
-                break;    
-                
-            case 0:
-                state_.error() = JP_UNICODE_NULL_NOT_ALLOWED_ERROR;
-                sa_.error(state_.error(), state_.error_str());
-                break;
-                
+                return;    
+                                
             default:
                 state_.error() = JP_EXPECTED_VALUE_ERROR;
                 sa_.error(state_.error(), state_.error_str());
         }
-        /*
-        if (state_) {
-            skip_whitespaces();
-        }
-        */
     }
     
     

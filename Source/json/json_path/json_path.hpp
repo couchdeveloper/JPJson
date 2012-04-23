@@ -127,8 +127,8 @@ namespace json { namespace json_internal {
                     unicode::Validation::UNSAFE, unicode::Stateful::No, unicode::ParseOne::Yes
                 >  converter_t;
                 typedef typename encoding_traits<InEncodingT>::code_unit_type in_char_t;
-                converter_t cvt;
                 int result = 0;
+                converter_t cvt;
                 while (first != last) {
                     if (*first == static_cast<in_char_t>('"')) {
                         *dest++ = static_cast<in_char_t>('\\');

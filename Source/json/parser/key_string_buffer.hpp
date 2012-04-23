@@ -149,7 +149,7 @@ namespace json { namespace parser_internal {
                 string_storage_.extend(4/sizeof(code_unit_type));
             }
             json::unicode::code_point_t* first = &codepoint;
-            cvt_t().convert(first, first+1, string_storage_.dest());            
+            cvt_t::convert(first, first+1, string_storage_.dest());            
         }
         
         

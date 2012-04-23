@@ -73,6 +73,7 @@ namespace json { namespace parser_internal {
         typedef StringStorageT                                      string_storage_type;
         typedef typename string_storage_type::code_unit_type        code_unit_type;
         typedef typename string_storage_type::buffer_type           buffer_type;
+        typedef typename string_storage_type::const_buffer_type     const_buffer_type;
     private:
         typedef typename string_storage_type::encoding_type         encoding_type;
         typedef typename add_endianness<encoding_type>::type        to_encoding_t;        
@@ -89,7 +90,7 @@ namespace json { namespace parser_internal {
         
         
         // Returns the string as a buffer.
-        buffer_type buffer() const      { return string_storage_.buffer(); }
+        const_buffer_type buffer() const      { return string_storage_.buffer(); }
         
         
         // Returns the size of the string (number of code units).
@@ -123,7 +124,8 @@ namespace json { namespace parser_internal {
         append_ascii(char ch)
         {
             assert(ch >= 0 and ch < 0x80);
-            string_storage_.append(byte_swap<host_endian_t, to_endian_t>(static_cast<code_unit_type>(ch)));
+            //string_storage_.append(byte_swap<host_endian_t, to_endian_t>(static_cast<code_unit_type>(ch)));  TODO: fix
+            string_storage_.append(static_cast<code_unit_type>(ch));
         }
         
                 
@@ -135,10 +137,10 @@ namespace json { namespace parser_internal {
         void 
         append_unicode_imp(json::unicode::code_point_t codepoint,
                            typename boost::enable_if<
-                           boost::is_same<
-                           UTF_32_encoding_tag, 
-                           E
-                           >    
+                            boost::is_same<
+                                UTF_32_encoding_tag, 
+                                E
+                            >    
                            >::type* dummy = 0)
         {
             // code_point_t equals code_unit_t if endianness will be adjusted
@@ -149,22 +151,19 @@ namespace json { namespace parser_internal {
         void 
         append_unicode_imp(json::unicode::code_point_t codepoint,
                            typename boost::disable_if<
-                           boost::is_same<
-                           UTF_32_encoding_tag, 
-                           E
-                           >    
+                            boost::is_same<
+                                UTF_32_encoding_tag, 
+                                E
+                            >    
                            >::type* dummy = 0)
         {
             typedef converter<code_point_t, to_encoding_t, Validation::UNSAFE, Stateful::No, ParseOne::Yes> cvt_t;
-            
-            if (string_storage_.storage_avail() < (4/sizeof(code_unit_type))) {
-                string_storage_.extend(4/sizeof(code_unit_type));
-            }
+            string_storage_.extend(4/sizeof(code_unit_type));
             json::unicode::code_point_t* first = &codepoint;
 #if defined (DEBUG)            
             int result =
 #endif            
-            cvt_t().convert(first, first+1, string_storage_.dest());
+            cvt_t::convert(first, first+1, string_storage_.dest());
             assert(result == 0);
         }
     

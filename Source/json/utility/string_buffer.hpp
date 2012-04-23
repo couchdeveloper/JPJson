@@ -232,7 +232,7 @@ namespace json
                 unicode::code_point_t* first = &codepoint;
                 unicode::code_point_t* last = first + 1;
                 code_unit_t* p_saved = p_;
-                int result = cvt_t().convert(first, last, p_);
+                int result = cvt_t::convert(first, last, p_);
                 assert(p_ <= buffer_end_);
                 if (__builtin_expect(result == unicode::NO_ERROR, 1)) {
                     return std::distance(p_saved, p_);

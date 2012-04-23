@@ -158,6 +158,15 @@
                   <FileRef
                      location = "group:key_string_buffer.hpp">
                   </FileRef>
+                  <FileRef
+                     location = "group:string_storage1.hpp">
+                  </FileRef>
+                  <FileRef
+                     location = "group:string_storage2.hpp">
+                  </FileRef>
+                  <FileRef
+                     location = "group:string_storage3.hpp">
+                  </FileRef>
                </Group>
             </Group>
             <Group

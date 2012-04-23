@@ -844,6 +844,7 @@ namespace {
             NSLog(@"JSONKit: elapsed time for parsing:\nmin: %.3f ms, max: %0.3f ms, avg: %0.3f ms\n", 
                   te.min()*1e3, te.max()*1e3, te.avg()*1e3);
         }
+        [data release];
     }
     
     void bench_JSONKit2(const int N, bool printInfo = false)
@@ -909,6 +910,8 @@ namespace {
             NSLog(@"JSONKit: elapsed time for parsing:\nmin: %.3f ms, max: %0.3f ms, avg: %0.3f ms\n", 
                   te.min()*1e3, te.max()*1e3, te.avg()*1e3);
         }
+        
+        [data release];
     }
     
 #endif 
