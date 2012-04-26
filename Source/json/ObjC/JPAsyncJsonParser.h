@@ -212,7 +212,10 @@
 /** @name Canceling an Asynchronously Running Parser */
 
 /**
- Cancels the parser which forces it to exit as soon as possible.
+ Synchronously cancels the parser which forces it to exit as soon as possible. 
+ After returning from cancel, it is guaranteed that no blocks will be invoked 
+ and no delegate will receive any messages. `cancel` will block until the parser's 
+ worker thread has been exited.
  After canceling the parser's result and error state is undefined.
 */ 
 - (void) cancel;
