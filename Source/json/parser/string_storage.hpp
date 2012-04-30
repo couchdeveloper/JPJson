@@ -1,5 +1,5 @@
 //
-//  string_storage0.hpp
+//  string_storage.hpp
 //  
 //
 //  Created by Andreas Grosam on 4/27/12.

@@ -38,7 +38,7 @@
 
 #include "parser_errors.hpp"
 #include "semantic_actions_base.hpp"
-#include "string_buffer0.hpp"
+#include "string_buffer.hpp"
 #include "number_string_buffer.hpp"
 #include "json/unicode/unicode_utilities.hpp"
 #include "json/unicode/unicode_converter.hpp"

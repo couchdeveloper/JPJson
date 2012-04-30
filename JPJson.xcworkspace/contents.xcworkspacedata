@@ -135,10 +135,10 @@
                   location = "group:"
                   name = "internal">
                   <FileRef
-                     location = "group:string_storage0.hpp">
+                     location = "group:string_storage.hpp">
                   </FileRef>
                   <FileRef
-                     location = "group:string_buffer0.hpp">
+                     location = "group:string_buffer.hpp">
                   </FileRef>
                   <FileRef
                      location = "group:number_string_buffer.hpp">

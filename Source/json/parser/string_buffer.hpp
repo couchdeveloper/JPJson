@@ -1,5 +1,5 @@
 //
-//  string_buffer0.hpp
+//  string_buffer.hpp
 //  
 //
 //  Created by Andreas Grosam on 4/27/12.
@@ -15,7 +15,7 @@
 #include "json/unicode/unicode_conversion.hpp"
 #include "json/endian/byte_swap.hpp"
 
-#include "string_storage0.hpp"
+#include "string_storage.hpp"
 
 #include <boost/static_assert.hpp>
 #include <boost/utility/enable_if.hpp>
@@ -29,7 +29,7 @@
 
 
 
-namespace json { namespace internal {
+namespace json { namespace parser_internal {
     
     /**
      Synopsis 
