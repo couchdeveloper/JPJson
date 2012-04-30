@@ -1236,10 +1236,7 @@
 					"$(BUILT_PRODUCTS_DIR)",
 					"$(inherited)",
 				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../../../../Library/Developer/Xcode/DerivedData/Json-hiazqngtzsfxawgakamtpamfsytx/Build/Products/Release\"",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_CFLAGS = "-v";
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -1271,10 +1268,7 @@
 					"$(BUILT_PRODUCTS_DIR)",
 					"$(inherited)",
 				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../../../../Library/Developer/Xcode/DerivedData/Json-hiazqngtzsfxawgakamtpamfsytx/Build/Products/Release\"",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_CFLAGS = "-v";
 				OTHER_LDFLAGS = (
 					"-ObjC",

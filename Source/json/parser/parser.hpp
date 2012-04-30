@@ -38,9 +38,8 @@
 
 #include "parser_errors.hpp"
 #include "semantic_actions_base.hpp"
-#include "string_buffer.hpp"
-#include "string_storage2.hpp"
-#include "json/utility/number_builder.hpp"
+#include "string_buffer0.hpp"
+#include "number_string_buffer.hpp"
 #include "json/unicode/unicode_utilities.hpp"
 #include "json/unicode/unicode_converter.hpp"
 #include "json/endian/endian.hpp"
@@ -68,9 +67,6 @@ namespace json {
     using unicode::add_endianness;
     using json::internal::host_endianness;
     
-
-    using parser_internal::string_buffer;
-    using parser_internal::string_storage;
     
     
 #pragma mark - Parser Policies    
@@ -113,15 +109,17 @@ namespace json {
     class parser 
     {
     protected:        
-        typedef typename SemanticActions::error_t               sa_error_t;        
-        
-        typedef typename SemanticActions::encoding_t            string_buffer_encoding;        
-        typedef string_storage<string_buffer_encoding, SemanticActions> string_storage_t;
-        typedef string_buffer<string_storage_t>                 string_buffer_t;
-        
-        typedef numberbuilder::number_builder<64>               number_builder_t;        
-        
-        typedef typename boost::iterator_value<InputIterator>::type iterator_value_type;
+        typedef typename SemanticActions::error_t               sa_error_t;
+        typedef typename SemanticActions::encoding_t            string_buffer_encoding;   
+        typedef typename SemanticActions::number_info_t         number_info_t;
+
+        typedef parser_internal::string_buffer<
+            string_buffer_encoding, SemanticActions
+        >                                                       string_buffer_t;
+        typedef parser_internal::number_string_buffer<128>      number_string_buffer_t;        
+        typedef typename boost::iterator_value<
+            InputIterator
+        >::type                                                 iterator_value_type;
         
         //
         // Static Assertions:
@@ -146,10 +144,11 @@ namespace json {
         //
         //  Types
         //
-        typedef SourceEncoding                          source_encoding_type;
-        typedef SemanticActions                         semantic_actions_type;
-        typedef parser_state                            state_t;    // Current state of the parser
-        typedef typename SemanticActions::result_type   result_t;   // The result of the sematic actions, e.g. a JSON container or AST.
+        typedef SourceEncoding                              source_encoding_type;
+        typedef SemanticActions                             semantic_actions_type;
+        typedef parser_state                                state_t;    // Current state of the parser
+        typedef typename SemanticActions::result_type       result_t;   // The result of the sematic actions, e.g. a JSON container or AST.
+        
         
         typedef InputIterator iterator;
                                                                             
@@ -159,7 +158,7 @@ namespace json {
         //  C-tor
         //
         parser(SemanticActions& sa) 
-        : sa_(sa), string_storage_(sa), string_buffer_(string_storage_), unicode_filter_(0)
+        : sa_(sa), string_buffer_(sa), unicode_filter_(0)
         {
             configure();
         }
@@ -185,7 +184,7 @@ namespace json {
         // instance - and vice versa.
         void configure() 
         {
-            string_storage_.enable_partial_strings(true);
+            //string_storage_.enable_partial_strings(true);
             semanticactions::noncharacter_handling_option nch_option = sa_.unicode_noncharacter_handling();
             switch (nch_option) {
                 case semanticactions::SignalErrorOnUnicodeNoncharacter:
@@ -205,174 +204,25 @@ namespace json {
         }
                 
     protected:
+#pragma mark - Member Variables        
         iterator                p_;     
         iterator                last_;  
         SemanticActions&        sa_;
         state_t                 state_;
-        number_builder_t        number_builder_;
         unicode::filter::NoncharacterOrNULL unicode_filter_;
-        string_storage_t        string_storage_;
         string_buffer_t         string_buffer_;
-        
+        number_string_buffer_t  number_string_buffer_;
+
     private:        
         void parse_text();
         void parse_key_value_list();
-        void parse_value();
-        
-        
-#pragma mark -
-#pragma mark Parse String
-        //
-        //  parse_string()
-        //
-        void parse_string() 
-        {
-            //TEST: TODO: fix
-            //((void)printf ("%s:%u: test assertion\n", __FILE__, __LINE__), abort());
-            
-            assert(state_.error() == JP_NO_ERROR); 
-            assert(p_ != last_);
-            assert(to_uint(*p_) == '"');            
-            assert(string_buffer_.size() == 0);  // check whether we have a new string on stack of the string storage
-            
-            ++p_;
-            while (__builtin_expect(p_ != last_, 1)) 
-            {
-                // fast path: read ASCII (no control characters, and no ASCII NULL)
-                uint32_t c = to_uint(*p_);
-                if (__builtin_expect((c - 0x20u) < 0x60u, 1))  // ASCII except control-char, and no ASCII NULL
-                {
-#if 1                    
-                    ++p_;
-                    if (c != '\\' and c != '"') {
-                        string_buffer_pushback_ASCII(c);  
-                        // note: string_buffer_pushback_ASCII() does not check for Unicode NULL
-                        continue;
-                    } 
-                    else if (c == '\\') {
-                        escape_sequence();
-                        if (!state_) {
-                            // error parsing escape sequence
-                            return; // error state already set
-                        }
-                        continue;
-                    }
-                    else {
-                        skip_whitespaces();
-                        return; // done
-                    }
-                        
-#else                        
-                    ++p_;
-                    switch (c) {
-                        default:
-                            string_buffer_pushback_ASCII(c);  
-                                // note: string_buffer_pushback_ASCII() does not check for Unicode NULL
-                            continue;
-                        case '\\': // escape sequence
-                            escape_sequence();
-                            if (!state_) {
-                                // error parsing escape sequence
-                                return; // error state already set
-                            }
-                            continue;
-                        case '"':
-                            skip_whitespaces();
-                            return; // done
-                    }
-#endif                    
-                }
-                
-                // slow path: reading UTF-8 multi byte sequences, ASCII NULL, and 
-                // characters in any other UTF encoding scheme which are not ASCII.
-                // Convert the UTF character into a code point:
-                // Use a conversions which does not accept surrogates and noncharacters. 
-                // Per default, the filter shall signal errors if it matches characters.
-                //  //Replace invalid characters with Unicode Replacement Character.
-                // The "safe" conversion does not accept surrogates, so we only need to
-                // check for Unicode noncharacters and ASCII control characters:
-                
-                // Note, no ASCIIs here
-                if ( (c >> 7) != 0 or c == 0) // (not ((c - 1u) < (0x20u - 1u))) 
-                {
-                    // No ASCII control chars - but possibly Unicode NULL
-                    // Use a safe, stateless converter which only converts one character:
-                    typedef unicode::converter<
-                        source_encoding_type, unicode::code_point_t, 
-                        unicode::Validation::SAFE, unicode::Stateful::No, unicode::ParseOne::Yes
-                    >  converter_t;
-                    
-                    unicode::code_point_t cp;
-                    unicode::code_point_t* cp_ptr = &cp;
-                    int result = converter_t().convert(p_, last_, cp_ptr);
-                    // Possible results:
-                    //      unicode::NO_ERROR
-                    //      unicode::E_TRAIL_EXPECTED:           trail byte expected (ill-formed UTF-8)
-                    //      unicode::E_INVALID_START_BYTE:       invalid start byte
-                    //      unicode::E_UNCONVERTABLE_OFFSET      ill-formed UTF-8
-                    //      unicode::E_INVALID_CODE_POINT:       
-                    //      unicode::E_INVALID_UNICODE:      
-                    //      unicode::E_UNEXPECTED_ENDOFINPUT:    unexpected and of input
-                    if (__builtin_expect(result == unicode::NO_ERROR, 1)) {
-                        // Note: the code point may still be an Unicode noncharacter, or a Unicode NULL (U+0000).
-                        // We check this in string_buffer_pushback_unicode():
-                        // Possible return codes:
-                        // >0:   success
-                        //  0:   string buffer error (possible overflow)
-                        // -1:   filter predicate failed (possible Unicode noncharacter) 
-                        result = string_buffer_pushback_unicode(cp);
-                        if (result == 0)
-                            continue;
-                        else {
-                            // Error state shall be set according the filter rules,
-                            // respectively by the string buffer if that failed:
-                            assert(state_.error() != JP_NO_ERROR);
-                            break;  // or error jump out of while loop                        
-                        }
-                    }                
-                    else {
-                        // If we reach here, we got an error during Unicode conversion
-                        // Map the unicode error codes to json error codes:
-                        switch (result) {
-                            case unicode::E_TRAIL_EXPECTED:
-                            case unicode::E_INVALID_START_BYTE:
-                            case unicode::E_UNCONVERTABLE_OFFSET:
-                            case unicode::E_INVALID_CODE_POINT:
-                            case unicode::E_INVALID_UNICODE:        state_.error() = JP_ILLFORMED_UNICODE_SEQUENCE_ERROR; break;
-                            case unicode::E_NO_CHARACTER:           state_.error() = JP_UNICODE_NONCHARACTER_ERROR; break;
-                            case unicode::E_UNEXPECTED_ENDOFINPUT:  state_.error() = JP_UNEXPECTED_END_ERROR; break;
-                            default: state_.error() = JP_INVALID_UNICODE_ERROR;                    
-                        }
-                        
-                        break;  // on error jump out of while loop
-                    }                
-                } 
-                else 
-                {
-                    // Got ASCII Control char
-                    state_.error() =  JP_CONTROL_CHAR_NOT_ALLOWED_ERROR;  // error: control character not allowed
-                    break; // on error jump out of while loop
-                }
-            } // while
-                
-            
-            // If we come to here, we got an error, or we got an unexpected EOF/EOS
-            if (state_.error() == 0) {
-                state_.error() = JP_UNEXPECTED_END_ERROR;
-            }
-            sa_.error(state_.error(), state_.error_str());
-        }
-        
-        
-        
-        
-#pragma mark -
-        void parse_number();
+        void parse_value();        
+        void parse_string(); 
+        void parse_number(number_info_t& number_info);
         void skip_whitespaces();
         void parse_object();
         void parse_array();
-        bool match(const char* bytes, size_t n);
-        
+        bool match(const char* bytes, size_t n);        
         unicode::code_point_t escaped_unicode();
         uint16_t hex();
         void escape_sequence();
@@ -494,8 +344,8 @@ namespace json {
     reset() {
         sa_.clear();
         state_.clear();
-        string_storage_.clear();
-        number_builder_.clear();
+        string_buffer_.clear();
+        number_string_buffer_.clear();
     }
     
     
@@ -767,7 +617,7 @@ namespace json {
                 // first, get the key ...
                 // prepare the string storage for a key string:
                 //string_storage_.stack_push();
-                string_storage_.reset();
+                string_buffer_.clear();
                 //string_storage_.set_mode(string_storage_t::Key);
                 parse_string();
                 if (state_) {
@@ -887,16 +737,18 @@ namespace json {
         unsigned int c = to_uint(*p_);
         Token token = c <= 0x7Fu ? static_cast<Token>(table[c]) : E;
         
+        number_info_t number_info;
+        
         switch (token) {
             case s:
                 // Found start of a JSON String
                 // Prepare the string storage to hold a data string:
                 //string_storage_.stack_push();
-                string_storage_.reset();
+                string_buffer_.clear();
                 //string_storage_.set_mode(string_storage_t::Data);
                 parse_string();  // this may send partial strings to the semantic actions object.
                 if (state_) {
-                    string_storage_.flush();  // send the remaining characters in the string buffer to the semantic actions object.
+                    string_buffer_.flush();  // send the remaining characters in the string buffer to the semantic actions object.
                 } else {
                     // handle error string
                 }
@@ -925,13 +777,13 @@ namespace json {
                 
             case n:
                 // Found start of a JSON Number
-                number_builder_.clear();
-                parse_number();
+                number_string_buffer_.reset();
+                parse_number(number_info);
                 if (state_) {
                     // parse_number does not skip whitespaces
                     skip_whitespaces();
                     // note: p() points to the start of next token
-                    sa_.value_number(number_builder_.number());
+                    sa_.value_number(number_info);
                 } else {
                     // handle error number
                     assert(state_.error() != 0);
@@ -1014,6 +866,152 @@ namespace json {
     }
     
 #pragma mark - parse string
+    
+    template <
+        typename InputIterator
+      , typename SourceEncoding
+      , typename SemanticActions
+    >
+    void 
+        parser<InputIterator, SourceEncoding, SemanticActions>::
+    parse_string() 
+    {
+        //TEST: TODO: fix
+        //((void)printf ("%s:%u: test assertion\n", __FILE__, __LINE__), abort());
+        
+        assert(state_.error() == JP_NO_ERROR); 
+        assert(p_ != last_);
+        assert(to_uint(*p_) == '"');            
+        assert(string_buffer_.size() == 0);  // check whether we have a new string on stack of the string storage
+        
+        ++p_;
+        while (__builtin_expect(p_ != last_, 1)) 
+        {
+            // fast path: read ASCII (no control characters, and no ASCII NULL)
+            uint32_t c = to_uint(*p_);
+            if (__builtin_expect((c - 0x20u) < 0x60u, 1))  // ASCII except control-char, and no ASCII NULL
+            {
+#if 0                    
+                ++p_;
+                if (c != '\\' and c != '"') {
+                    string_buffer_pushback_ASCII(c);  
+                    // note: string_buffer_pushback_ASCII() does not check for Unicode NULL
+                    continue;
+                } 
+                else if (c == '\\') {
+                    escape_sequence();
+                    if (!state_) {
+                        // error parsing escape sequence
+                        return; // error state already set
+                    }
+                    continue;
+                }
+                else {
+                    skip_whitespaces();
+                    return; // done
+                }
+                
+#else                        
+                ++p_;
+                switch (c) {
+                    default:
+                        string_buffer_pushback_ASCII(c);  
+                        // note: string_buffer_pushback_ASCII() does not check for Unicode NULL
+                        continue;
+                    case '\\': // escape sequence
+                        escape_sequence();
+                        if (!state_) {
+                            // error parsing escape sequence
+                            return; // error state already set
+                        }
+                        continue;
+                    case '"':
+                        skip_whitespaces();
+                        return; // done
+                }
+#endif                    
+            }
+            
+            // slow path: reading UTF-8 multi byte sequences, ASCII NULL, and 
+            // characters in any other UTF encoding scheme which are not ASCII.
+            // Convert the UTF character into a code point:
+            // Use a conversions which does not accept surrogates and noncharacters. 
+            // Per default, the filter shall signal errors if it matches characters.
+            //  //Replace invalid characters with Unicode Replacement Character.
+            // The "safe" conversion does not accept surrogates, so we only need to
+            // check for Unicode noncharacters and ASCII control characters:
+            
+            // Note, no ASCIIs here
+            if ( (c >> 7) != 0 or c == 0) // (not ((c - 1u) < (0x20u - 1u))) 
+            {
+                // No ASCII control chars - but possibly Unicode NULL
+                // Use a safe, stateless converter which only converts one character:
+                typedef unicode::converter<
+                source_encoding_type, unicode::code_point_t, 
+                unicode::Validation::SAFE, unicode::Stateful::No, unicode::ParseOne::Yes
+                >  converter_t;
+                
+                unicode::code_point_t cp;
+                unicode::code_point_t* cp_ptr = &cp;
+                int result = converter_t().convert(p_, last_, cp_ptr);
+                // Possible results:
+                //      unicode::NO_ERROR
+                //      unicode::E_TRAIL_EXPECTED:           trail byte expected (ill-formed UTF-8)
+                //      unicode::E_INVALID_START_BYTE:       invalid start byte
+                //      unicode::E_UNCONVERTABLE_OFFSET      ill-formed UTF-8
+                //      unicode::E_INVALID_CODE_POINT:       
+                //      unicode::E_INVALID_UNICODE:      
+                //      unicode::E_UNEXPECTED_ENDOFINPUT:    unexpected and of input
+                if (__builtin_expect(result == unicode::NO_ERROR, 1)) {
+                    // Note: the code point may still be an Unicode noncharacter, or a Unicode NULL (U+0000).
+                    // We check this in string_buffer_pushback_unicode():
+                    // Possible return codes:
+                    // >0:   success
+                    //  0:   string buffer error (possible overflow)
+                    // -1:   filter predicate failed (possible Unicode noncharacter) 
+                    result = string_buffer_pushback_unicode(cp);
+                    if (result == 0)
+                        continue;
+                    else {
+                        // Error state shall be set according the filter rules,
+                        // respectively by the string buffer if that failed:
+                        assert(state_.error() != JP_NO_ERROR);
+                        break;  // or error jump out of while loop                        
+                    }
+                }                
+                else {
+                    // If we reach here, we got an error during Unicode conversion
+                    // Map the unicode error codes to json error codes:
+                    switch (result) {
+                        case unicode::E_TRAIL_EXPECTED:
+                        case unicode::E_INVALID_START_BYTE:
+                        case unicode::E_UNCONVERTABLE_OFFSET:
+                        case unicode::E_INVALID_CODE_POINT:
+                        case unicode::E_INVALID_UNICODE:        state_.error() = JP_ILLFORMED_UNICODE_SEQUENCE_ERROR; break;
+                        case unicode::E_NO_CHARACTER:           state_.error() = JP_UNICODE_NONCHARACTER_ERROR; break;
+                        case unicode::E_UNEXPECTED_ENDOFINPUT:  state_.error() = JP_UNEXPECTED_END_ERROR; break;
+                        default: state_.error() = JP_INVALID_UNICODE_ERROR;                    
+                    }
+                    
+                    break;  // on error jump out of while loop
+                }                
+            } 
+            else 
+            {
+                // Got ASCII Control char
+                state_.error() =  JP_CONTROL_CHAR_NOT_ALLOWED_ERROR;  // error: control character not allowed
+                break; // on error jump out of while loop
+            }
+        } // while
+        
+        
+        // If we come to here, we got an error, or we got an unexpected EOF/EOS
+        if (state_.error() == 0) {
+            state_.error() = JP_UNEXPECTED_END_ERROR;
+        }
+        sa_.error(state_.error(), state_.error_str());
+    }
+
     
 #define USE_LOOKUP_TABLE
     
@@ -1266,7 +1264,7 @@ namespace json {
     
     
 
-#pragma mark -
+#pragma mark - Parse Number
     
     template <
           typename InputIterator
@@ -1276,7 +1274,7 @@ namespace json {
     inline 
     void 
         parser<InputIterator, SourceEncoding, SemanticActions>::
-    parse_number() 
+    parse_number(number_info_t& number_info) 
     {
         assert(p_ != last_);
         
@@ -1292,9 +1290,15 @@ namespace json {
             number_state_exponent,
         };
         
+        
         number_state s = number_state_start;
+        
+        short digits = 0;
         bool isNegative = false;
-        bool exponentIsNegative = false;        
+        bool isDecimal = false;
+        bool hasExponent = false;
+        
+        bool exponentIsNegative = false; 
         while (p_ != last_)
         {
             unsigned int c = to_uint(*p_);
@@ -1304,18 +1308,21 @@ namespace json {
                         case '-': 
                             s = number_state_sign; 
                             isNegative = true; 
-                            number_builder_.push_sign(isNegative);
+                            number_string_buffer_.append_ascii('-');
                             break;
                         case '0': 
                             s = number_int_is_zero; 
-                            number_builder_.push_integer_start(c);
+                            ++digits;
+                            number_string_buffer_.append_ascii('0');
                             break;
                         case '1'...'9': 
                             s = number_state_int; 
-                            number_builder_.push_integer_start(c);
+                            ++digits;
+                            number_string_buffer_.append_ascii(c);
                             ++p_;
                             while (p_ != last_ and ( (c = to_uint(*p_)) >= '0' and c <= '9')) {
-                                number_builder_.push_digit(c);
+                                ++digits;
+                                number_string_buffer_.append_ascii(c);
                                 ++p_;
                             }
                             continue;
@@ -1326,14 +1333,17 @@ namespace json {
                     switch (c) {
                         case '0':       
                             s = number_int_is_zero; 
-                            number_builder_.push_integer_start(c);
+                            ++digits;
+                            number_string_buffer_.append_ascii('0');
                             break;
                         case '1'...'9': 
                             s = number_state_int; 
-                            number_builder_.push_integer_start(c);
+                            ++digits;
+                            number_string_buffer_.append_ascii(c);
                             ++p_;
                             while (p_ != last_ and (c = to_uint(*p_)) >= '0' and c <= '9') {
-                                number_builder_.push_digit(c);
+                                ++digits;
+                                number_string_buffer_.append_ascii(c);
                                 ++p_;
                             }
                             continue;
@@ -1345,14 +1355,14 @@ namespace json {
                     switch (c) {
                         case '.': 
                             s = number_state_point;
-                            number_builder_.integer_end();
-                            number_builder_.push_decimalPoint();
+                            isDecimal = true;
+                            number_string_buffer_.append_ascii('.');
                             break;
                         case 'e':
                         case 'E': 
                             s = number_state_exponent_start;
-                            number_builder_.integer_end();
-                            number_builder_.push_exponentIndicator(c); 
+                            hasExponent = true;
+                            number_string_buffer_.append_ascii('E');
                             break;
                         default: goto Number_done; // finished.
                     }
@@ -1361,14 +1371,14 @@ namespace json {
                     switch (c) {
                         case '.': 
                             s = number_state_point; 
-                            number_builder_.integer_end();
-                            number_builder_.push_decimalPoint();
+                            isDecimal = true;
+                            number_string_buffer_.append_ascii('.');
                             break;
                         case 'e':
                         case 'E': 
                             s = number_state_exponent_start; 
-                            number_builder_.integer_end();
-                            number_builder_.push_exponentIndicator(c); 
+                            hasExponent = true;
+                            number_string_buffer_.append_ascii('E');
                             break;
                         default: goto Number_done; // finished with integer
                     }
@@ -1377,10 +1387,12 @@ namespace json {
                     switch (c) {
                         case '0'...'9': 
                             s = number_state_fractional; 
-                            number_builder_.push_fractional_start(c);
+                            ++digits;
+                            number_string_buffer_.append_ascii(c);
                             ++p_;
                             while (p_ != last_ and (c = to_uint(*p_)) >= '0' and c <= '9') {
-                                number_builder_.push_digit(c);
+                                ++digits;
+                                number_string_buffer_.append_ascii(c);
                                 ++p_;
                             }
                             continue;
@@ -1392,8 +1404,8 @@ namespace json {
                         case 'e':
                         case 'E': 
                             s = number_state_exponent_start; 
-                            number_builder_.fractional_end();
-                            number_builder_.push_exponentIndicator(c); 
+                            hasExponent = true;
+                            number_string_buffer_.append_ascii('E');
                             break;
                         default: goto Number_done; // finished with fractional or start exponent
                     }
@@ -1402,7 +1414,7 @@ namespace json {
 #if 1                    
                     if (c == '-' or c == '+') {
                         s = number_state_exponent_sign; 
-                        number_builder_.push_exponent_start(c);
+                        number_string_buffer_.append_ascii(c);
                         exponentIsNegative = c == '-'; 
                         ++p_;
                         if (p_ == last_) {
@@ -1412,10 +1424,10 @@ namespace json {
                     } 
                     if (c >= '0' and c <= '9') {
                         s = number_state_exponent; 
-                        number_builder_.push_exponent_start(c);
+                        number_string_buffer_.append_ascii(c);
                         ++p_;
                         while (p_ != last_ and (c = to_uint(*p_)) >= '0' and c <= '9') {
-                            number_builder_.push_digit(c);
+                            number_string_buffer_.append_ascii(c);
                             ++p_;
                         }
                         continue;
@@ -1429,20 +1441,20 @@ namespace json {
                             
                         case '-': 
                             s = number_state_exponent_sign; 
-                            number_builder_.push_exponent_start(c);
+                            number_string_buffer_.append_ascii('-');
                             exponentIsNegative = true; 
                             break;
                         case '+': 
                             s = number_state_exponent_sign; 
-                            number_builder_.push_exponent_start(c);
+                            number_string_buffer_.append_ascii('+');
                             break;
                         case '0' ... '9': 
                             s = number_state_exponent; 
-                            number_builder_.push_exponent_start(c);
+                            number_string_buffer_.append_ascii(c);
                             ++p_;
                             while (p_ != last_ and (c = to_uint(*p_)) >= '0' and c <= '9')
                             {
-                                number_builder_.push_digit(c);
+                                number_string_buffer_.append_ascii(c);
                                 ++p_;
                             }
                             continue;
@@ -1479,29 +1491,40 @@ namespace json {
         
         Number_done:        
         
+        
+        typename number_info_t::NumberType numberType;
+        
         switch (s) {
-            case number_int_is_zero:    
+            case number_int_is_zero:
             case number_state_int:
-                number_builder_.integer_end(); 
-                skip_whitespaces();
+                numberType = number_info_t::Integer;
                 break;
-                
             case number_state_fractional:
-                number_builder_.fractional_end(); 
-                skip_whitespaces();
+                numberType = number_info_t::Decimal;
                 break;
-                
             case number_state_exponent:
-                number_builder_.exponent_end(); 
-                skip_whitespaces();
-                break;
-                
+                numberType = number_info_t::Scientific;
+                break;                
             default:
                 state_.error() = JP_BADNUMBER_ERROR;
                 sa_.error(state_.error(), state_.error_str());
+                return;
         }        
+        
+        number_string_buffer_.append_ascii(0);
+
+        typename number_string_buffer_t::const_buffer_type str_buffer =  number_string_buffer_.const_buffer();
+        typename number_info_t::const_buffer_type ni_buffer;
+        ni_buffer.first = str_buffer.first;
+        ni_buffer.second = str_buffer.second;
+        
+        number_info = number_info_t(ni_buffer, numberType, digits);
+        skip_whitespaces();        
     }
         
+    
+    
+#pragma Mark - Errors    
     
     template <
         typename InputIterator

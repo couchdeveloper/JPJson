@@ -128,7 +128,7 @@ namespace {
         const int N = 1000;
         
         for (int i = 0; i < N; ++i) {
-            snprintf(buffer, sizeof(buffer), "key-%12.d", i);
+            snprintf(buffer, sizeof(buffer), "key-%d", i);
             std::pair<iterator, bool> result = cache.insert(key_t(buffer, strlen(buffer)), NULL);
             iterator iter = result.first;
             value_t value = *iter;

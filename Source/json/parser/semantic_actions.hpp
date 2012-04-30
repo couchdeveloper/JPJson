@@ -282,7 +282,7 @@ namespace json {
         
     public:    
         typedef typename base::error_t              error_t;
-        typedef typename base::nb_number_t          nb_number_t;
+        typedef typename base::number_info_t        number_info_t;
         
         typedef value<policies::ValuePolicies>      Value;
         typedef Value::array_t                      Array;
@@ -591,12 +591,12 @@ namespace json {
             //t0_.pause();
         }        
         
-        void value_number_imp(const nb_number_t& number) 
+        void value_number_imp(const number_info_t& number) 
         {
             //t0_.start();
             //++c0_;
             //++number_count;
-            stack_.push_back(Number(number.string_));
+            stack_.push_back(Number(number.c_str()));
             //t0_.pause();
         }
         
@@ -654,7 +654,7 @@ namespace json {
         
         const map_t&        string_cache() const { return string_cache_; }
         
-        double              t() const          { return t_.seconds(); }
+        double              t() const           { return t_.seconds(); }
         double              t0() const          { return t0_.seconds(); }
         double              t1() const          { return t1_.seconds(); }
         double              t2() const          { return t2_.seconds(); }

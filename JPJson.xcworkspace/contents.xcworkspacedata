@@ -109,12 +109,6 @@
                <FileRef
                   location = "group:simple_log.hpp">
                </FileRef>
-               <FileRef
-                  location = "group:number_builder.hpp">
-               </FileRef>
-               <FileRef
-                  location = "group:string_buffer.hpp">
-               </FileRef>
             </Group>
             <Group
                location = "group:parser"
@@ -139,33 +133,15 @@
                </FileRef>
                <Group
                   location = "group:"
-                  name = "preliminary">
+                  name = "internal">
                   <FileRef
-                     location = "group:string_stack_storage.hpp">
+                     location = "group:string_storage0.hpp">
                   </FileRef>
                   <FileRef
-                     location = "group:string_chunk_storage.hpp">
+                     location = "group:string_buffer0.hpp">
                   </FileRef>
                   <FileRef
-                     location = "group:parse_string.hpp">
-                  </FileRef>
-                  <FileRef
-                     location = "group:string_storage.hpp">
-                  </FileRef>
-                  <FileRef
-                     location = "group:string_buffer.hpp">
-                  </FileRef>
-                  <FileRef
-                     location = "group:key_string_buffer.hpp">
-                  </FileRef>
-                  <FileRef
-                     location = "group:string_storage1.hpp">
-                  </FileRef>
-                  <FileRef
-                     location = "group:string_storage2.hpp">
-                  </FileRef>
-                  <FileRef
-                     location = "group:string_storage3.hpp">
+                     location = "group:number_string_buffer.hpp">
                   </FileRef>
                </Group>
             </Group>

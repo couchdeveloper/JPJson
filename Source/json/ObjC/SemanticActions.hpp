@@ -231,7 +231,6 @@ namespace json { namespace objc { namespace sa_options {
 
 namespace json { namespace objc { 
         
-    using json::numberbuilder::normalized_number_t;
     //using json::semanticactions::json_path;
     
     
@@ -371,7 +370,7 @@ namespace json { namespace objc {
         
     public:    
         typedef typename base::error_t              error_t;
-        typedef typename base::nb_number_t          nb_number_t;
+        typedef typename base::number_info_t        number_info_t;
         typedef typename base::char_t               char_t;     // char type of the StringBuffer
         typedef typename base::encoding_t           encoding_t;
         typedef typename base::result_type          result_type;
@@ -406,8 +405,6 @@ namespace json { namespace objc {
 #endif
         
         
-        // nb_number_t's char_t shall be 8-bit wide.
-        BOOST_STATIC_ASSERT(sizeof(typename nb_number_t::char_t) == 1 );
         
     public:    
         
@@ -746,18 +743,20 @@ namespace json { namespace objc {
         }
         
         
-        virtual void value_number_imp(const nb_number_t& number) 
+        virtual void value_number_imp(const number_info_t& number) 
         {
             ++pc_.number_count_;
             switch (number_generator_option_) {
                 case sa_options::NumberGeneratorGenerateString:
-                    push_number_string(number.string_, number.len_, unicode::UTF_8_encoding_tag());
+                    push_number_string(number.c_str(), number.c_str_len(), unicode::UTF_8_encoding_tag());
                     break;
                 case sa_options::NumberGeneratorGenerateAuto: {
                     id num = nil;
                     char* endPtr;
                     
-                    if (number.isInteger()) {
+                    if (number.is_integer()) 
+                    {
+                        // signed or unsigned integers
                         int digits = number.digits();
                         if (digits <= std::numeric_limits<int>::digits10) {
                             int val;
@@ -794,28 +793,38 @@ namespace json { namespace objc {
                         }
                         // finished creating an integer
                     } 
-                    else /* number is float */
+                    else if (number.is_scientific()) 
                     {
-                        // If there is an exponent, and the exponent is greater
-                        // than 127 or smaller then -127 we always use NSNumber
-                        // with an underlaying double:
-                        int exponent;
-                        if ((number.digits() <= std::numeric_limits<double>::digits10) // a double has sufficient precision
-                            or ((exponent = number.exp()) > 127 or exponent < -127))  // A NSDecimalNumber would not accept this 
-                            // exponent, thus generate a NSNumber with double:                            
-                        {                            
+                        // A number with an exponent
+                        // Always use an NSNumber with an underlaying double. If the conversion will possibly loose precision,
+                        // log a message but convert it anyway:
+                        if (number.digits() > std::numeric_limits<double>::digits10) {
+                            // log precision warning:
+                            (this->logger_).log(json::utility::LOG_WARNING, 
+                                "WARNING: JSON number to NSNumber with double conversion may loose precision. Original JSON number: %.*s", 
+                                number.c_str_len(), number.c_str());
+                        }
+                        errno = 0;
+                        double d = strtod_l(number.c_str(), &endPtr, NULL);
+                        if (errno == ERANGE) {
+                            throwRangeError("floating point value out of range");
+                        }
+                        num = (id)CFNumberCreate(NULL, kCFNumberDoubleType, &d);
+                    }
+                    else /* number is decimal*/
+                    {
+                        // If the precision of a double is sufficient to represent the
+                        // decimal number, use an underlaying double, otherwise use
+                        // a NSDecimalNumber:
+                        if (number.digits() <= std::numeric_limits<double>::digits10) // a double has sufficient precision
+                        {      
+                            // use an NSNumber with underlaying double
                             errno = 0;
                             double d = strtod_l(number.c_str(), &endPtr, NULL);
                             if (errno == ERANGE) {
                                 throwRangeError("floating point value out of range");
                             }
                             num = (id)CFNumberCreate(NULL, kCFNumberDoubleType, &d);
-                            if (number.digits() > std::numeric_limits<double>::digits10) {
-                                // log precision warning:
-                                (this->logger_).log(json::utility::LOG_WARNING, 
-                                                    "WARNING: JSON number to NSNumber with double conversion may loose precision. Original JSON number: %.*s", 
-                                                    number.c_str_len(), number.c_str());
-                            }
                         }
                         else 
                         {
@@ -824,8 +833,8 @@ namespace json { namespace objc {
                             if (number.digits() > 38) {
                                 // log precision warning:
                                 (this->logger_).log(json::utility::LOG_WARNING, 
-                                                    "WARNING: JSON number to NSDecimalNumber conversion may loose precision. Original JSON number: %.*s", 
-                                                    number.c_str_len(), number.c_str());
+                                    "WARNING: JSON number to NSDecimalNumber conversion may loose precision. Original JSON number: %.*s", 
+                                    number.c_str_len(), number.c_str());
                             }
                         }
                         // finished generating a float

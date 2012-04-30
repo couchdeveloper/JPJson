@@ -431,9 +431,11 @@ namespace {
 - (void) cancel
 {
     // If the parser is idle, return immediately ...
-    if (dispatch_semaphore_wait(idle_, DISPATCH_TIME_NOW) != 0) {
+    long result = dispatch_semaphore_wait(idle_, DISPATCH_TIME_NOW);
+    if (result == 0) {
+        dispatch_semaphore_signal(idle_);
         return;
-    }    
+    }
     
     // ... otherwise, the parser's thread is executing:    
     killed_ = true;
@@ -472,8 +474,9 @@ namespace {
     // Usually, exiting should happen within milli seconds. Otherwise, this is a
     // sign of a bad error somewhere.
     int count = 0;
-    while (dispatch_semaphore_wait(idle_, dispatch_time(DISPATCH_TIME_NOW, 1*NSEC_PER_SEC))) 
-    {        
+    while ((result = dispatch_semaphore_wait(idle_, dispatch_time(DISPATCH_TIME_NOW, 1*NSEC_PER_SEC)))) 
+    {   
+        // timed out
         // TODO: use logger facility
         ++count;
         if (count > 10) {
@@ -485,6 +488,10 @@ namespace {
     if (count) {
         NSLog(@"JPAsyncJsonParser cancel: parser thread did exit");
     }
+    if (result == 0) {
+        dispatch_semaphore_signal(idle_);
+        return;
+    }    
 }
 
 

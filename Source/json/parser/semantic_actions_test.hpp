@@ -60,7 +60,7 @@ namespace json { namespace internal {
         typedef typename base::error_t          error_t;
         typedef typename base::char_t           char_t;
         typedef typename base::encoding_t       encoding_t;
-        typedef typename base::nb_number_t      nb_number_t;
+        typedef typename base::number_info_t    number_info_t;
         
         typedef typename base::buffer_t         buffer_t;
         typedef typename base::const_buffer_t   const_buffer_t;
@@ -289,7 +289,7 @@ namespace json { namespace internal {
         }
         
         
-        void value_number_imp(const nb_number_t& number) { 
+        void value_number_imp(const number_info_t& number) { 
             ++number_count_; 
             string_representation_.append(number.c_str(), number.c_str_len());
             stack_.push_back(value_t(new boost::any(number_t(number.c_str(), number.c_str_len())))); 

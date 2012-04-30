@@ -45,7 +45,7 @@ namespace {
         
     public:
         typedef typename encoding_traits<EncodingT>::code_unit_type char_t;
-        typedef typename base::nb_number_t                          nb_number_t;
+        typedef typename base::number_info_t                        number_info_t;
         typedef typename base::buffer_t                             buffer_t;
         typedef typename base::const_buffer_t                       const_buffer_t;
 
@@ -231,7 +231,7 @@ namespace {
 //            }
 //        }
         
-        virtual void value_number_imp(const nb_number_t& number) {
+        virtual void value_number_imp(const number_info_t& number) {
             if (push_number_imp_) {
                 push_number_imp_(this->delegate_, @selector(parserFoundNumber:length:), number.c_str(), number.c_str_len());
                 if (!this->ok()) {

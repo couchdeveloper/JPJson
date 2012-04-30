@@ -467,6 +467,27 @@ namespace {
     {
         NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
         JPAsyncJsonParser* parser = [[JPAsyncJsonParser alloc] init];
+        
+        
+        // Setup SA
+        JPSemanticActions* sa = (JPSemanticActions*)(parser.semanticActions);
+        sa.startJsonHandlerBlock = ^{ 
+            NSLog(@"startJsonHandlerBlock called");
+        };
+        
+        sa.endJsonHandlerBlock = ^(id jsonContainer){ 
+            NSLog(@"endJsonHandlerBlock called");
+        };
+        
+        sa.completionHandlerBlock = ^{ 
+            NSLog(@"completionHandlerBlock called");
+        };
+        
+        sa.errorHandlerBlock = ^(NSError* error) {
+            NSLog(@"errorHandlerBlock called");
+        };
+        
+        
         bool started = [parser start];
         EXPECT_EQ(true, started);
         EXPECT_EQ(YES, [parser isRunning]);
