@@ -615,10 +615,9 @@ namespace json {
             if (c == '"') 
             {
                 // first, get the key ...
-                // prepare the string storage for a key string:
-                //string_storage_.stack_push();
+                // prepare the string buffer for a key string:
                 string_buffer_.clear();
-                //string_storage_.set_mode(string_storage_t::Key);
+                string_buffer_.set_allow_partial_strings(false);
                 parse_string();
                 if (state_) {
                     if (p_ != last_) {
@@ -632,8 +631,7 @@ namespace json {
                                 // ... finally, get a value and put it onto sa_'s stack
                                 sa_.begin_key_value_pair(string_buffer_.buffer(), index);
                                 parse_value();  // whitespaces skipped.
-                                sa_.end_key_value_pair(/*string_buffer_.buffer()*/typename SemanticActions::const_buffer_t(0,0), index);
-                                //string_storage_.stack_pop(); // remove the key from top of the string buffer's stack
+                                sa_.end_key_value_pair();
                                 if (state_) 
                                 {
                                     // Note: We populate the object at end_object().
@@ -742,17 +740,15 @@ namespace json {
         switch (token) {
             case s:
                 // Found start of a JSON String
-                // Prepare the string storage to hold a data string:
-                //string_storage_.stack_push();
+                // Prepare the string buffer to hold a data string:
                 string_buffer_.clear();
-                //string_storage_.set_mode(string_storage_t::Data);
+                string_buffer_.set_allow_partial_strings(true);
                 parse_string();  // this may send partial strings to the semantic actions object.
                 if (state_) {
                     string_buffer_.flush();  // send the remaining characters in the string buffer to the semantic actions object.
                 } else {
                     // handle error string
                 }
-                //string_storage_.stack_pop();
                 return;
                 
             case O: // (This is a capitalized 'O')
@@ -1511,7 +1507,7 @@ namespace json {
                 return;
         }        
         
-        number_string_buffer_.append_ascii(0);
+        number_string_buffer_.terminate_if();
 
         typename number_string_buffer_t::const_buffer_type str_buffer =  number_string_buffer_.const_buffer();
         typename number_info_t::const_buffer_type ni_buffer;

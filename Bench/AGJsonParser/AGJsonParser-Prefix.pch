@@ -2,6 +2,8 @@
 // Prefix header for all source files of the 'AGJsonParser' target in the 'AGJsonParser' project
 //
 
+#error This file is not used
+
 #ifdef __OBJC__
     #import <Foundation/Foundation.h>
 #endif

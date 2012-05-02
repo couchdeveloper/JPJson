@@ -43,8 +43,8 @@
  message, indicates the end of the container which referes to the container
  signaled with the "begin" message immediately preceeding this "end" message.
  
- Additionally, there are two events `parserFoundKeyValuePairBeginWithKey` and
- `parserFoundKeyValuePairEndWithKey` which are sent when the parser encountered
+ Additionally, there are two events `parserFoundKeyValuePairBeginWithKey:length:encoding:index:` 
+ and `parserFoundKeyValuePairEnd` which are sent when the parser encountered
  a JSON string which is a key in the key-value pair of a JSON Object, and when
  the parser encountred the end of the JSON Value associated to this key.
  
@@ -68,7 +68,7 @@
                     parserFoundJsonString
                     .. 
                 parserFoundJsonArrayEnd
-            parserFoundKeyValuePairEndWithKey
+            parserFoundKeyValuePairEnd
  
             parserFoundKeyValuePairBeginWithKey
                 parserFoundJsonArrayBegin
@@ -76,7 +76,7 @@
                     parserFoundJsonString
                     ..
                 parserFoundJsonArrayEnd
-            parserFoundKeyValuePairEndWithKey
+            parserFoundKeyValuePairEnd
  
         parserFoundJsonObjectEnd
         parserFoundJsonObjectBegin
@@ -319,28 +319,11 @@
 
 
 /** 
- Sent to the delegate when the parser found the end of the n'th key-value pair 
- of a JSON Object with the specified key.
+ Sent to the delegate when the parser found the end of a key-value pair of a 
+ JSON Object.
  
- The json parser will pass the key as a _decoded_ JSON String. _Decoding_ a JSON 
- string involves unescaping, possibly replacing certain Unicode characters with 
- their  replacement character as specified in the semantic actions configuration, 
- and possibly converting from the source encoding to the specified Unicode encoding 
- form. 
- 
- The associated value for the key has been notified by the parser by the corres-
- ponding event which has been sent immediately before this message.
- 
- @warning *Note:* The specified Unicode encoding scheme in parameter `encoding` 
- corresponds to the Library Build Option `JP_JSON_STRING_BUFFER_ENCODING` and
- cannot be selected at runtime.
- 
- @param bytes A const void pointer to the start of the sequence of the JSON String.
- @param length The number of bytes of the character sequence.
- @param encoding The _Unicode encoding scheme_ for the character sequence.
- @param index The current index of the key-value pair of the JSON Object.
  */ 
-- (void) parserFoundKeyValuePairEndWithKey:(const void*)bytes length:(size_t)length encoding:(NSStringEncoding)encoding index:(size_t)index;
+- (void) parserFoundKeyValuePairEnd;
 
 
 

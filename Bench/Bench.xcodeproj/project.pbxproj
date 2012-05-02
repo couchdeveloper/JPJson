@@ -10,6 +10,7 @@
 		A105900514CEFA780072B418 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = A14BE8F414681E8D0077EA5C /* JSONKit.m */; };
 		A11D2190144C9B6300D24AA8 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A11D218F144C9B6300D24AA8 /* main.cpp */; };
 		A122FDE2150CF22600D6C7C7 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1A3399913D96A6B000CE571 /* main.cpp */; };
+		A126DCC0154FD3AC001E09F0 /* libjson.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A126DCBB154FD366001E09F0 /* libjson.a */; };
 		A1485F761447133B00A88A92 /* Test-UTF8-esc.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = A1485F751447133B00A88A92 /* Test-UTF8-esc.json */; };
 		A1485F9F144733B500A88A92 /* Test-UTF8.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = A1485F9E144733B500A88A92 /* Test-UTF8.json */; };
 		A171E72313D4924D00260A6B /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = A171E72213D4924D00260A6B /* main.mm */; };
@@ -137,6 +138,7 @@
 /* Begin PBXFileReference section */
 		A11D218C144C9B6300D24AA8 /* parse_number */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = parse_number; sourceTree = BUILT_PRODUCTS_DIR; };
 		A11D218F144C9B6300D24AA8 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = main.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		A126DCBB154FD366001E09F0 /* libjson.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjson.a; path = ../Build/Products/Release/libjson.a; sourceTree = "<group>"; };
 		A139AC6F1488B70B003E3881 /* unicode_conversion.debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = unicode_conversion.debug.xcconfig; sourceTree = "<group>"; };
 		A139AC701488B749003E3881 /* unicode_conversion.release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = unicode_conversion.release.xcconfig; sourceTree = "<group>"; };
 		A1485F751447133B00A88A92 /* Test-UTF8-esc.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "Test-UTF8-esc.json"; sourceTree = "<group>"; };
@@ -152,10 +154,8 @@
 		A171E72413D4928400260A6B /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		A171E72813D4938E00260A6B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		A177EAF3150E42EB009A1299 /* JsonContainerBench */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = JsonContainerBench; sourceTree = BUILT_PRODUCTS_DIR; };
-		A17DD75A14698DE9000AD974 /* JPJson.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JPJson.framework; path = "../../../../../Library/Developer/Xcode/DerivedData/Json-avyupbfqigfmsihavqhqaqxjccfe/Build/Products/Release/JPJson.framework"; sourceTree = "<group>"; };
 		A17DD7C7146AF503000AD974 /* timer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = timer.cpp; sourceTree = "<group>"; };
 		A17DD7C8146AF503000AD974 /* timer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = timer.hpp; sourceTree = "<group>"; };
-		A17DD7D0146AF54F000AD974 /* libjson.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjson.a; path = "../../../../Library/Developer/Xcode/DerivedData/Json-hiazqngtzsfxawgakamtpamfsytx/Build/Products/Release/libjson.a"; sourceTree = "<group>"; };
 		A187B4D113FAA7AF00FB63BD /* unicode_conversion */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = unicode_conversion; sourceTree = BUILT_PRODUCTS_DIR; };
 		A187B4D413FAA7AF00FB63BD /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = main.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		A191B50815298149007F9471 /* string_buffer_bench */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = string_buffer_bench; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -194,6 +194,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A126DCC0154FD3AC001E09F0 /* libjson.a in Frameworks */,
 				A1C9A5571541BD39004B4ED6 /* CoreFoundation.framework in Frameworks */,
 				A171E72913D4938E00260A6B /* Foundation.framework in Frameworks */,
 			);
@@ -282,6 +283,7 @@
 		A171E6E313D488FC00260A6B = {
 			isa = PBXGroup;
 			children = (
+				A126DCBB154FD366001E09F0 /* libjson.a */,
 				A16EEE3E1487DA3B00D12DA2 /* Bench.debug.xcconfig */,
 				A16EEE3F1487DB6D00D12DA2 /* Bench.release.xcconfig */,
 				A17DD7E6146BB950000AD974 /* benches */,
@@ -322,8 +324,6 @@
 		A171E72613D4929F00260A6B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				A17DD7D0146AF54F000AD974 /* libjson.a */,
-				A17DD75A14698DE9000AD974 /* JPJson.framework */,
 				A171E72813D4938E00260A6B /* Foundation.framework */,
 				A171E72413D4928400260A6B /* CoreFoundation.framework */,
 			);
@@ -857,7 +857,6 @@
 					"$(inherited)",
 					"$(SRCROOT)/Vendor",
 				);
-				LIBRARY_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_CFLAGS = "-v";
 				OTHER_LDFLAGS = (
@@ -884,7 +883,6 @@
 					"$(inherited)",
 					"$(SRCROOT)/Vendor",
 				);
-				LIBRARY_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_CFLAGS = "-v";
 				OTHER_LDFLAGS = (

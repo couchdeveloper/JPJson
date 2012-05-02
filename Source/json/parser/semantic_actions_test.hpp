@@ -200,7 +200,7 @@ namespace json { namespace internal {
             stack_.push_back(value_t(new boost::any(make_string(buffer.first, buffer.second)))); 
         }
         
-        void end_key_value_pair_imp(const const_buffer_t& buffer, size_t nth) {}
+        void end_key_value_pair_imp() {}
         
 //        void value_string_imp(const char_t* s, std::size_t len) 
 //        { 

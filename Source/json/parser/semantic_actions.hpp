@@ -574,7 +574,7 @@ namespace json {
         {
             push_key(buffer);
         }
-        void end_key_value_pair_imp(const const_buffer_t& buffer, size_t nth) {}
+        void end_key_value_pair_imp() {}
                 
         
         

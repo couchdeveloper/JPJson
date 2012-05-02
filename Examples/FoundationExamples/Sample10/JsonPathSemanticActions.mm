@@ -222,7 +222,7 @@ typedef json::unicode::encoding_traits<JP_CFStringEncoding>::code_unit_type char
     }
 }
 
-- (void) parserFoundKeyValuePairEndWithKey:(const void*)bytes length:(size_t)length encoding:(NSStringEncoding)encoding index:(size_t)index
+- (void) parserFoundKeyValuePairEnd
 {
     if (level_ == 1) {
         json_path_.pop_component();

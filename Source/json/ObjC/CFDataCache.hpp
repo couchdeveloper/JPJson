@@ -24,7 +24,6 @@
 //#define CFDATA_CACHE_USE_FLAT_MAP
 
 #include "json/config.hpp"
-#include <CoreFoundation/CoreFoundation.h>
 #include <functional>
 #include <assert.h>
 #include <cstring>
@@ -38,6 +37,8 @@
     #include <boost/unordered_map.hpp>
     //#include <boost/container/map.hpp>
 #endif
+
+#include <CoreFoundation/CoreFoundation.h>
 
 
 

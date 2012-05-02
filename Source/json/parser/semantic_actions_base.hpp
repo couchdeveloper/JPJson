@@ -115,18 +115,18 @@ namespace json {
         number_info(const_buffer_type const& buffer, NumberType numberType, short precision)
         :  number_string_(buffer), digits_(precision), type_(numberType)
         {
-            assert(number_string_.second > 0 and number_string_.first[number_string_.second-1] == 0);  // null terminated
+            assert(number_string_.second >= 0 and number_string_.first[number_string_.second] == 0);  // null terminated
         }
         
         number_info(const number_info& other)  
         :  number_string_(other.number_string_), digits_(other.digits_), type_(other.type_)
         {
-            assert(number_string_.second > 0 and number_string_.first[number_string_.second-1] == 0);  // null terminated
+            assert(number_string_.second >= 0 and number_string_.first[number_string_.second] == 0);  // null terminated
         }
         
         void assign(const number_info& other) 
         {
-            assert(other.number_string_.second > 0 and other.number_string_.first[other.number_string_.second-1] == 0);  // null terminated
+            assert(other.number_string_.second >= 0 and other.number_string_.first[other.number_string_.second] == 0);  // null terminated
             number_string_ = other.number_string_;
             digits_ = other.digits_;
             type_ = other.type_;
@@ -252,9 +252,10 @@ namespace json {
         void begin_key_value_pair(const const_buffer_t& buffer, size_t nth) { this->derived().begin_key_value_pair_imp(buffer, nth); }
         
         // The parser calls this function when it encounters the end of a key-value 
-        // pair which is an element of a JSON object at position 'nth'. The key is
-        // passed in parameter `buffer`.
-        void end_key_value_pair(const const_buffer_t& buffer, size_t nth) { this->derived().end_key_value_pair_imp(buffer, nth); }
+        // pair which is an element of a JSON object at position 'nth'. The key has
+        // been passed in begin_key_value_pair() which has been called immediately
+        // before this function.
+        void end_key_value_pair() { this->derived().end_key_value_pair_imp(); }
         
         
         // The parser calls this function when it encounters the start of a data string
@@ -494,7 +495,7 @@ namespace json {
         void begin_value_at_index_imp(size_t index) {}
         void end_value_at_index_imp(size_t index) {}        
         void begin_key_value_pair_imp(const const_buffer_t&, size_t) {}
-        void end_key_value_pair_imp(const const_buffer_t&, size_t) {}
+        void end_key_value_pair_imp() {}
         void value_string_imp(const const_buffer_t&, bool)    {}        
         void value_number_imp(const number_info_t& number)    {}
         void value_boolean_imp(bool b)                       {}

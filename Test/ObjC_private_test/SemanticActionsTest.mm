@@ -119,7 +119,7 @@ namespace {
                 std::size_t len = snprintf(buffer, sizeof(buffer), "key#%d", i);
                 sa.begin_key_value_pair(const_buffer_t(buffer, len), i);
                 sa.value_string(const_buffer_t("string", 6));
-                sa.end_key_value_pair(const_buffer_t(buffer, len), i);                              
+                sa.end_key_value_pair();                              
                 //std::cout << sa.json_path() << " = " << std::endl;
             }
             
@@ -134,7 +134,7 @@ namespace {
                 //std::cout << sa.json_path() << " = " << std::endl;
             }
             sa.end_array();
-            sa.end_key_value_pair(const_buffer_t("list", 4), N);                              
+            sa.end_key_value_pair();                              
             
             
             sa.end_object();            

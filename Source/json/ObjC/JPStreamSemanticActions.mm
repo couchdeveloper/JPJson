@@ -18,13 +18,13 @@
 //  limitations under the License.
 //
 
-#import "JPStreamSemanticActions.h"
-#import "JPJsonCommon.h"
-#include "SemanticActionsBase.hpp"
-#include "JPSemanticActionsBase_private.h"
 #include "json/unicode/unicode_utilities.hpp"
 #include "json/unicode/unicode_traits.hpp"
 #include "json/ObjC/unicode_traits.hpp"
+#include "SemanticActionsBase.hpp"
+#import "JPStreamSemanticActions.h"
+#import "JPSemanticActionsBase_private.h"
+#import "JPJsonCommon.h"
 
 
 
@@ -62,8 +62,8 @@ namespace {
         typedef BOOL (*end_object_imp_func_ptr_t)(id, SEL);
         typedef void (*begin_value_at_index_imp_func_ptr_t)(id, SEL, size_t);
         typedef void (*end_value_at_index_imp_func_ptr_t)(id, SEL, size_t);
-        typedef void (*begin_value_with_key_imp_func_ptr_t)(id, SEL, const char_t*, size_t, NSStringEncoding, size_t);
-        typedef void (*end_value_with_key_imp_func_ptr_t)(id, SEL, const char_t*, size_t, NSStringEncoding, size_t);
+        typedef void (*begin_key_value_pair_imp_func_ptr_t)(id, SEL, const char_t*, size_t, NSStringEncoding, size_t);
+        typedef void (*end_key_value_pair_imp_func_ptr_t)(id, SEL);
         
     public:
         StreamSemanticActionsBase(id<JPSemanticActionsProtocol> delegate = nil)
@@ -112,11 +112,11 @@ namespace {
             end_value_at_index_imp_ = [this->delegate_ respondsToSelector:@selector(parserFoundValueEndAtIndex:)] ? 
                 (end_value_at_index_imp_func_ptr_t)[(NSObject*)this->delegate_ methodForSelector: @selector(parserFoundValueEndAtIndex:)]
                 : 0;
-            begin_value_with_key_imp_ = [this->delegate_ respondsToSelector:@selector(parserFoundKeyValuePairBeginWithKey:length:encoding:index:)] ? 
-                (begin_value_with_key_imp_func_ptr_t)[(NSObject*)this->delegate_ methodForSelector: @selector(parserFoundKeyValuePairBeginWithKey:length:encoding:index:)]
+            begin_key_value_pair_imp_ = [this->delegate_ respondsToSelector:@selector(parserFoundKeyValuePairBeginWithKey:length:encoding:index:)] ? 
+                (begin_key_value_pair_imp_func_ptr_t)[(NSObject*)this->delegate_ methodForSelector: @selector(parserFoundKeyValuePairBeginWithKey:length:encoding:index:)]
                 : 0;
-            end_value_with_key_imp_ = [this->delegate_ respondsToSelector:@selector(parserFoundKeyValuePairEndWithKey:length:encoding:index:)] ? 
-                (end_value_with_key_imp_func_ptr_t)[(NSObject*)this->delegate_ methodForSelector: @selector(parserFoundKeyValuePairEndWithKey:length:encoding:index:)]
+            end_key_value_pair_imp_ = [this->delegate_ respondsToSelector:@selector(parserFoundKeyValuePairEnd)] ? 
+                (end_key_value_pair_imp_func_ptr_t)[(NSObject*)this->delegate_ methodForSelector: @selector(parserFoundKeyValuePairEnd)]
                 : 0;
 
             base::parse_begin_imp();
@@ -190,8 +190,8 @@ namespace {
         }
         
         virtual void begin_key_value_pair_imp(const const_buffer_t& buffer, size_t nth) {
-            if (begin_value_with_key_imp_) {
-                begin_value_with_key_imp_(this->delegate_, @selector(parserFoundValueBeginWithKey:length:encoding:index:), 
+            if (begin_key_value_pair_imp_) {
+                begin_key_value_pair_imp_(this->delegate_, @selector(parserFoundKeyValuePairBeginWithKey:length:encoding:index:), 
                                           buffer.first, buffer.second*sizeof(char_t), json::ns_unicode_encoding_traits<EncodingT>::value, nth);
                 if (!this->ok()) {
                     throw SemanticActionsStateError();
@@ -199,10 +199,9 @@ namespace {
             }
         }
         
-        virtual void end_key_value_pair_imp(const const_buffer_t& buffer, size_t nth) {
-            if (end_value_with_key_imp_) {
-                end_value_with_key_imp_(this->delegate_, @selector(parserFoundValueEndWithKey:length:encoding:index:), 
-                                        buffer.first, buffer.second*sizeof(char_t), json::ns_unicode_encoding_traits<EncodingT>::value, nth);
+        virtual void end_key_value_pair_imp() {
+            if (end_key_value_pair_imp_) {
+                end_key_value_pair_imp_(this->delegate_, @selector(parserFoundKeyValuePairEnd));
                 if (!this->ok()) {
                     throw SemanticActionsStateError();
                 }
@@ -294,8 +293,8 @@ namespace {
         end_object_imp_func_ptr_t           end_object_imp_;
         begin_value_at_index_imp_func_ptr_t begin_value_at_index_imp_;
         end_value_at_index_imp_func_ptr_t   end_value_at_index_imp_;
-        begin_value_with_key_imp_func_ptr_t begin_value_with_key_imp_;
-        end_value_with_key_imp_func_ptr_t   end_value_with_key_imp_;
+        begin_key_value_pair_imp_func_ptr_t begin_key_value_pair_imp_;
+        end_key_value_pair_imp_func_ptr_t   end_key_value_pair_imp_;
 
         
 #pragma mark - Friend Stream Output Operator
@@ -403,7 +402,7 @@ typedef StreamSemanticActionsBase<JP_CFStringEncoding>    SemanticActions;
     //
     - (void) parserFoundKeyValuePairBeginWithKey:(const void*)bytes length:(size_t)length encoding:(NSStringEncoding)encoding {
     }
-    - (void) parserFoundKeyValuePairEndWithKey:(const void*)bytes length:(size_t)length encoding:(NSStringEncoding)encoding {
+    - (void) parserFoundKeyValuePairEnd {
     }
 
 

@@ -22,7 +22,7 @@
 #define JSON_OBJC_JP_JPJSON_H
 
 
-#include <Foundation/Foundation.h>
+#include <stdint.h>
 
 /// JPUnicodeEncoding 
 /// Defines constants for an Unicode encoding scheme
@@ -35,7 +35,7 @@ enum {
     JPUnicodeEncoding_UTF32BE = 4,
     JPUnicodeEncoding_UTF32LE = 5
 };
-typedef NSUInteger JPUnicodeEncoding;
+typedef uint32_t JPUnicodeEncoding;
 
 
 
@@ -105,7 +105,7 @@ enum  {
     JPJsonParserNumberGeneratorGenerateStrings |
     JPJsonParserGeneratorGenerateDecimals
 };
-typedef NSUInteger JPJsonParserOptions;
+typedef uint32_t JPJsonParserOptions;
 
 
 

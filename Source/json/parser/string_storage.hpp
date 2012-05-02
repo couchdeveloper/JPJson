@@ -3,13 +3,25 @@
 //  
 //
 //  Created by Andreas Grosam on 4/27/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//  Copyright 2011 Andreas Grosam
+//
+//  Licensed under the Apache License, Version 2.0 (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at
+//
+//  http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  See the License for the specific language governing permissions and
+//  limitations under the License.
 //
 
-#ifndef JSON_PARSER_INTERNAL_STRING_STORAGE0_HPP
-#define JSON_PARSER_INTERNAL_STRING_STORAGE0_HPP
+#ifndef JSON_PARSER_INTERNAL_STRING_STORAGE_HPP
+#define JSON_PARSER_INTERNAL_STRING_STORAGE_HPP
 
-
+//#include "json/config.hpp"
 #include "json/unicode/unicode_traits.hpp"
 #include "json/endian/endian.hpp"
 
@@ -19,12 +31,20 @@
 #include <algorithm>
 #include <assert.h>
 #include <limits>
+#include <stdexcept>
 
 
 #include <boost/utility.hpp>
 #include <boost/type_traits.hpp>
 
 
+#if !defined (JSON_PARSER_INTERNAL_STRING_STORAGE_MIN_CHUNK_SIZE)
+    #define JSON_PARSER_INTERNAL_STRING_STORAGE_MIN_CHUNK_SIZE 4*1024
+#endif
+
+#if !defined (JSON_PARSER_INTERNAL_STRING_STORAGE_MAX_SIZE)
+    #define JSON_PARSER_INTERNAL_STRING_STORAGE_MAX_SIZE 32*1024
+#endif
 
 
 namespace json { namespace parser_internal {
@@ -45,7 +65,6 @@ namespace json { namespace parser_internal {
     using json::unicode::encoding_traits;
     using json::internal::host_endianness;
     using json::unicode::add_endianness;
-    using json::unicode::converter;
     
 
     template <typename EncodingT>
@@ -61,11 +80,13 @@ namespace json { namespace parser_internal {
         
     public:
         string_storage() 
-        :   storage_start_(0), storage_end_(0), storage_cap_(0)
+        :   storage_start_(0), storage_end_(0), storage_cap_(0), 
+            allow_partial_string_(false)
         {
         }
         
         string_storage(std::size_t initial_storage_capacity) 
+        : allow_partial_string_(false)
         {
             storage_end_ = storage_start_ = (code_unit_type*)malloc(initial_storage_capacity*sizeof(code_unit_type));
             storage_cap_ = storage_start_ + initial_storage_capacity;   
@@ -74,6 +95,9 @@ namespace json { namespace parser_internal {
         ~string_storage() {
             free(storage_start_);
         }
+        
+        void set_allow_partial_strings(bool value) { allow_partial_string_ = value; }
+        bool get_allow_partial_strings() const { return allow_partial_string_; }
                 
         // Extend the buffer in order to hold additional 'size' code units. The
         // buffer might possibly grow in order to hold at least 'size' code 
@@ -191,6 +215,11 @@ namespace json { namespace parser_internal {
             while (min_size > newcap) {
                 newcap += std::min(newcap, size_t(MAX_GROW_SIZE));
             }
+            newcap = std::max(size_t(MAX_SIZE), newcap);
+            if (min_size > newcap)
+            {
+                throw std::runtime_error("internal string buffer too large");
+            }
             if (newcap > capacity()) {
                 size_t saved_size = size();
                 code_unit_type* new_start = (code_unit_type*)malloc(newcap*sizeof(code_unit_type));
@@ -210,8 +239,8 @@ namespace json { namespace parser_internal {
         
         void extend_priv(size_t sz)
         {
-            // Nore, when we reach here, the current buffer is full
-            if (this->size() >= MAX_CAPACITY) {
+            // Note, when we reach here, the current buffer is full
+            if (allow_partial_string_ and this->size() >= MIN_CHUNK_SIZE) {
                 sync();
                 if (sz > avail()) {                    
                     storage_grow(sz + size());
@@ -224,13 +253,15 @@ namespace json { namespace parser_internal {
         
     private:
         
-        static const size_t MAX_GROW_SIZE = 16*1024;
-        static const size_t INITIAL_CAPACITY = 4*1024;
-        static const size_t MAX_CAPACITY =  32*1024;
+        static const size_t INITIAL_CAPACITY =  4*1024;
+        static const size_t MIN_CHUNK_SIZE =    JSON_PARSER_INTERNAL_STRING_STORAGE_MIN_CHUNK_SIZE;
+        static const size_t MAX_SIZE =          JSON_PARSER_INTERNAL_STRING_STORAGE_MAX_SIZE;
+        static const size_t MAX_GROW_SIZE =     16*1024;
         
         code_unit_type*         storage_start_;
         code_unit_type*         storage_end_;
         code_unit_type*         storage_cap_;
+        bool                    allow_partial_string_;
         
     };
     
@@ -238,4 +269,4 @@ namespace json { namespace parser_internal {
 
 
 
-#endif  // JSON_PARSER_INTERNAL_STRING_STORAGE2_HPP
+#endif  // JSON_PARSER_INTERNAL_STRING_STORAGE_HPP

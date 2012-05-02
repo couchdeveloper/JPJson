@@ -3,7 +3,19 @@
 //  
 //
 //  Created by Andreas Grosam on 4/27/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//  Copyright 2011 Andreas Grosam
+//
+//  Licensed under the Apache License, Version 2.0 (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at
+//
+//  http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  See the License for the specific language governing permissions and
+//  limitations under the License.
 //
 
 #ifndef JSON_INTERNAL_STRING_BUFFER0_HPP
@@ -34,24 +46,53 @@ namespace json { namespace parser_internal {
     /**
      Synopsis 
      
-     template <typename StringStorageT>
+     template <typename EncodingT, typename SemanticActionsT>
      class string_buffer
      {
      public:
-     typedef StringStorageT         string_storage_type;
-     typedef     type               code_unit_type;
-     typedef     type               buffer_type;
-     
-     string_buffer(string_storage_type& storage);
-     ~string_buffer();
-     
-     buffer_type buffer() const;
-     
-     void append_unicode(json::unicode::code_point_t codepoint)
-     void append(code_unit_type cu);
-     void append_ascii(char ch);
-     
-     };
+         typedef typename base::code_unit_type                       code_unit_type;
+         typedef typename base::buffer_type                          buffer_type;
+         typedef typename base::const_buffer_type                    const_buffer_type;
+         
+         string_buffer(SemanticActionsT& sa)
+         
+         // Returns the string as a buffer.
+         const_buffer_type buffer() const;
+         
+         
+         // Returns the size of the string (number of code units).
+         size_t size() const;
+         
+         
+         // Appends an Unicode code point to the string buffer. Unicode code 
+         // points are always in host endianness and are assumed to be valid 
+         // unicode scalar values.
+         void        
+         append_unicode(json::unicode::code_point_t codepoint);
+         
+         
+         // Appends a code unit whose endianness equals the endiannes of the
+         // underlaying string storage.
+         // It does not check the validity of the code unit nor the validity of 
+         // the code unit in the context of the string.
+         void 
+         append(code_unit_type cu);
+         
+         // Appends an ASCII character to its internal buffer. The value
+         // of ch shall be in the range of valid ASCII characters, that is
+         // [0 .. 0x7F]. The function does not check if the character is
+         // actually valid.
+         void        
+         append_ascii(char ch);
+         
+         
+         void clear();
+         
+         // Causes the remaining bytes from the internal string storage to be send 
+         // to the semantic actions object through calling value_string(buffer, false).
+         // flush() shall only be called when the parser finished parsing a **data** JSON string.        
+         void flush();
+         };
      
      */
     
@@ -113,7 +154,12 @@ namespace json { namespace parser_internal {
         
     public:
         string_buffer(SemanticActionsT& sa)
-        : sa_(sa)
+        : sa_(sa), base()
+        {
+        }
+        
+        string_buffer(SemanticActionsT& sa, std::size_t initial_storage_capacity)
+        : sa_(sa), base(initial_storage_capacity)
         {
         }
         

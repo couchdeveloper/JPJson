@@ -6,9 +6,9 @@
 //  Copyright (c) 2011 __MyCompanyName__. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
 #import "JPJson/JPSemanticActionsBase.h"
 #include "gtest/gtest.h"
+#import <Foundation/Foundation.h>
 
 
 

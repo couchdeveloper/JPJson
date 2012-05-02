@@ -54,8 +54,6 @@
 #include <iostream>  // description
 #include <iomanip>   // description   
 #include <limits>
-#include <stdlib.h>  // numeric conversion
-#include <xlocale.h>
 
 #include "SemanticActionsBase.hpp"
 #include "unicode_traits.hpp"
@@ -63,16 +61,16 @@
 #include "json/unicode/unicode_traits.hpp"
 #include "json/utility/simple_log.hpp"
 #include "json/utility/flags.hpp"
+#include "json/utility/string_to_number.hpp"
 
 #include <boost/static_assert.hpp>
-
-#import <Foundation/Foundation.h>
-#import <CoreFoundation/CoreFoundation.h>
-
 
 #if defined (JSON_OBJC_SEMANTIC_ACTIONS_USE_JSON_PATH)
 #include "json/json_path/intrusive_json_path.hpp"
 #endif
+
+#import <Foundation/Foundation.h>
+#import <CoreFoundation/CoreFoundation.h>
 
 
 
@@ -720,7 +718,7 @@ namespace json { namespace objc {
             json_path_.back_key() = string_buffer_type(string_buffer.first, string_buffer.second);
 #endif                        
         }
-        virtual void end_key_value_pair_imp(const const_buffer_t& buffer, size_t nth) {
+        virtual void end_key_value_pair_imp() {
         }
 
 
@@ -752,30 +750,25 @@ namespace json { namespace objc {
                     break;
                 case sa_options::NumberGeneratorGenerateAuto: {
                     id num = nil;
-                    char* endPtr;
                     
                     if (number.is_integer()) 
                     {
                         // signed or unsigned integers
                         int digits = number.digits();
                         if (digits <= std::numeric_limits<int>::digits10) {
-                            int val;
                             //boost::spirit::qi::parse(number.c_str(), number.c_str() + number.c_str_len(), boost::spirit::int_, val);
-                            val = int(strtol_l(number.c_str(), &endPtr, 10, NULL));
+                            // TODO: revert test code
+                            int val = json::utility::string_to_number<int>(number.c_str(), number.c_str_len());
                             num = (id)CFNumberCreate(NULL, kCFNumberIntType, &val);
                         }
                         else if (digits <= std::numeric_limits<long>::digits10) {
-                            long val;
                             //boost::spirit::qi::parse(number.c_str(), number.c_str() + number.c_str_len(), boost::spirit::long_, val);                            
-                            val = strtol_l(number.c_str(), &endPtr, 10, NULL);
+                            // TODO: revert test code
+                            long val = json::utility::string_to_number<long>(number.c_str(), number.c_str_len());
                             num = (id)CFNumberCreate(NULL, kCFNumberLongType, &val);
                         }
                         else if (digits <= std::numeric_limits<long long>::digits10) {
-                            errno = 0;
-                            long long val = strtoll_l(number.c_str(), &endPtr, 10, NULL);
-                            if (errno != 0) {
-                                perror("ERROR: Conversion to long long failed");
-                            }
+                            long long val = json::utility::string_to_number<long long>(number.c_str(), number.c_str_len());
                             num = (id)CFNumberCreate(NULL, kCFNumberLongLongType, &val);
                         } 
                         else if (digits <= 38){
@@ -804,11 +797,7 @@ namespace json { namespace objc {
                                 "WARNING: JSON number to NSNumber with double conversion may loose precision. Original JSON number: %.*s", 
                                 number.c_str_len(), number.c_str());
                         }
-                        errno = 0;
-                        double d = strtod_l(number.c_str(), &endPtr, NULL);
-                        if (errno == ERANGE) {
-                            throwRangeError("floating point value out of range");
-                        }
+                        double d = json::utility::string_to_number<double>(number.c_str(), number.c_str_len());
                         num = (id)CFNumberCreate(NULL, kCFNumberDoubleType, &d);
                     }
                     else /* number is decimal*/
@@ -819,11 +808,7 @@ namespace json { namespace objc {
                         if (number.digits() <= std::numeric_limits<double>::digits10) // a double has sufficient precision
                         {      
                             // use an NSNumber with underlaying double
-                            errno = 0;
-                            double d = strtod_l(number.c_str(), &endPtr, NULL);
-                            if (errno == ERANGE) {
-                                throwRangeError("floating point value out of range");
-                            }
+                            double d = json::utility::string_to_number<double>(number.c_str(), number.c_str_len());
                             num = (id)CFNumberCreate(NULL, kCFNumberDoubleType, &d);
                         }
                         else 
