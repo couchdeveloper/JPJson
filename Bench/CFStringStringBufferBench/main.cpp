@@ -13,11 +13,10 @@
 #include "json/unicode/unicode_utilities.hpp"
 #include "json/unicode/unicode_traits.hpp"
 #include "json/parser/string_buffer.hpp"
-#include "json/parser/string_chunk_storage.hpp"
-#include "json/parser/string_buffer.hpp"
 
 #include "utilities/timer.hpp"
 #include "utilities/MinMaxAvg.hpp"
+
 
 
 namespace bench {
@@ -95,7 +94,8 @@ namespace bench {
     public:
         typedef EncodingT                                               encoding_t;
         typedef typename encoding_traits<EncodingT>::code_unit_type     char_t;        
-        
+        typedef std::pair<char_t const*, size_t>                        const_buffer_t;
+
         SemanticActions()
         : start_(true), count_(0), small_str_(NULL), large_str_(NULL)
         {}
@@ -111,7 +111,7 @@ namespace bench {
         }
         
     public:
-        void value_string_write(const char_t* s, std::size_t len, bool hasMore) 
+        void value_string(const const_buffer_t& buffer, bool hasMore) 
         { 
             const CFStringEncoding encoding = bench::cf_unicode_encoding_traits<encoding_t>::value;
             
@@ -131,14 +131,14 @@ namespace bench {
                 // create a small immutable string:
                 assert(small_str_ == NULL);
                 assert(large_str_ == NULL);
-                small_str_ = CFStringCreateWithBytes(kCFAllocatorDefault, to_bytes(s), sizeof(char_t)*len, encoding, false);
+                small_str_ = CFStringCreateWithBytes(kCFAllocatorDefault, to_bytes(buffer.first), sizeof(char_t)*buffer.second, encoding, false);
             }
             else if (start_ and hasMore)
             {
                 // create a large mutable string:
                 assert(small_str_ == NULL);
                 assert(large_str_ == NULL);
-                CFStringRef tmp = CFStringCreateWithBytesNoCopy(kCFAllocatorDefault, to_bytes(s), sizeof(char_t)*len, 
+                CFStringRef tmp = CFStringCreateWithBytesNoCopy(kCFAllocatorDefault, to_bytes(buffer.first), sizeof(char_t)*buffer.second, 
                                                                 encoding,
                                                                 false, kCFAllocatorNull);
                 large_str_ = CFStringCreateMutableCopy(kCFAllocatorDefault, 0, tmp);
@@ -148,14 +148,14 @@ namespace bench {
                 // append to the large mutable string:
                 assert(small_str_ == NULL);
                 assert(large_str_ != NULL);
-                CFStringRef tmp = CFStringCreateWithBytesNoCopy(kCFAllocatorDefault, to_bytes(s), sizeof(char_t)*len, 
+                CFStringRef tmp = CFStringCreateWithBytesNoCopy(kCFAllocatorDefault, to_bytes(buffer.first), sizeof(char_t)*buffer.second, 
                                                                 encoding,
                                                                 false, kCFAllocatorNull);
                 CFStringAppend((CFMutableStringRef)(large_str_), tmp);
                 CFRelease(tmp);
             }
             
-            count_ += len;
+            count_ += buffer.second;
             start_ = not hasMore;
         }      
         
@@ -184,7 +184,6 @@ namespace {
     
     using namespace json;
     
-    using parser_internal::string_chunk_storage;
     using parser_internal::string_buffer;
     using utilities::timer;
     using utilities::MinMaxAvg;
@@ -210,15 +209,13 @@ namespace {
         
         
         typedef bench::SemanticActions<SA_EncodingT>            sa_t;
-        typedef string_chunk_storage<SB_EncodingT, sa_t>       storage_t;    
-        typedef string_buffer<storage_t>                        string_buffer_t;
-        typedef typename string_buffer_t::buffer_type           buffer_t;
+        typedef string_buffer<SA_EncodingT, sa_t>               string_buffer_t;
+        typedef typename string_buffer_t::const_buffer_type     buffer_t;
         typedef typename string_buffer_t::code_unit_type        char_t;         
         
         
         sa_t sa;
-        storage_t storage(sa, B/sizeof(char_t));
-        string_buffer_t string_buffer(storage);
+        string_buffer_t string_buffer(sa, B/sizeof(char_t));
         
         const char* ascii = "01234567890ABCDEF";
         const size_t len = strlen(ascii);
@@ -235,7 +232,7 @@ namespace {
                 for (int i = 0; i < S; ++i) {
                     string_buffer.append_ascii(ascii[i%len]);
                 }
-                storage.flush();            
+                string_buffer.flush();            
             }
             t.stop();
             te.set(t.seconds());
@@ -268,15 +265,13 @@ namespace {
         
         
         typedef bench::SemanticActions<SA_EncodingT>            sa_t;
-        typedef string_chunk_storage<SB_EncodingT, sa_t>       storage_t;    
-        typedef string_buffer<storage_t>                        string_buffer_t;
-        typedef typename string_buffer_t::buffer_type           buffer_t;
+        typedef string_buffer<SA_EncodingT, sa_t>               string_buffer_t;
+        typedef typename string_buffer_t::const_buffer_type     buffer_t;
         typedef typename string_buffer_t::code_unit_type        char_t;         
         
         
         sa_t sa;
-        storage_t storage(sa, B/sizeof(char_t));
-        string_buffer_t string_buffer(storage);
+        string_buffer_t string_buffer(sa, B/sizeof(char_t));
         
         
         
@@ -311,7 +306,7 @@ namespace {
                 for (int i = 0; i < S; ++i) {
                     string_buffer.append_unicode(unicodes[i%len]);
                 }
-                storage.flush();            
+                string_buffer.flush();            
             }
             t.stop();
             te.set(t.seconds());

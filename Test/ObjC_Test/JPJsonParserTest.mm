@@ -684,5 +684,49 @@ namespace {
         [pool drain];        
     }
     
+    
+    
+    TEST_F(JPJsonParserTest, LargeJSONString) 
+    {
+        NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+        
+        typedef std::vector<char> json_text_t;
+        
+        // create the JSON input:
+        const size_t Size = 128*1024;
+        json_text_t json_text;
+        json_text.push_back('[');
+        json_text.push_back('\"');
+        
+        for (int i = 0; i < Size; ++i) {
+            json_text.push_back('a');
+        }
+        json_text.push_back('\"');
+        json_text.push_back(']');
+        
+        NSData* jsonText = [NSData dataWithBytes:&json_text[0] length:json_text.size()];
+        
+        
+        NSError* error = nil;
+        id json = [JPJsonParser parseData:jsonText 
+                                    options:(JPJsonParserOptions)0
+                                      error:&error]; 
+        EXPECT_TRUE(json != nil);
+        EXPECT_TRUE(error == nil);        
+        EXPECT_TRUE(([json isKindOfClass:[NSArray class]] == YES));
+        
+        NSUInteger count = [json count];
+        EXPECT_EQ(1U, count);
+        
+        id json_value = [json objectAtIndex:0];
+        EXPECT_TRUE(([json_value isKindOfClass:[NSString class]] == YES));
+
+        NSUInteger length = [json_value lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
+        EXPECT_EQ(Size, length);
+        
+        
+        [pool drain];                
+    }
+    
 
 }
