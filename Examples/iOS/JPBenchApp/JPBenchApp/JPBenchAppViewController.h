@@ -24,14 +24,8 @@
 @class JPAsyncJsonParser;
 
 @interface JPBenchAppViewController : UIViewController {
-    JPAsyncJsonParser*      parser_;    
-    IBOutlet UILabel*       messageLabel_;
-    IBOutlet UITextView*    textView_;
-    BOOL                    running_;
 }
 
-
--(IBAction) startBench:(id)sender;
 
 
 @end
