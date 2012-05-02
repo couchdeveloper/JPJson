@@ -20,6 +20,7 @@
 		A167D83A146C3CD300C7FAD3 /* timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A167D838146C3CD300C7FAD3 /* timer.cpp */; };
 		A188393F13DC5FAD00FD90AA /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = A188393E13DC5FAD00FD90AA /* JSONKit.m */; };
 		A18A705D1512292000FEB03C /* Test-UTF8.json in Resources */ = {isa = PBXBuildFile; fileRef = A18A705C1512292000FEB03C /* Test-UTF8.json */; };
+		A1E06FF9155128BB005C487A /* libjson-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A1E06FF8155128BB005C487A /* libjson-iOS.a */; };
 		A1FAF1DD143F225500CD2CCB /* UIDevice-Hardware.m in Sources */ = {isa = PBXBuildFile; fileRef = A1FAF1DC143F225500CD2CCB /* UIDevice-Hardware.m */; };
 /* End PBXBuildFile section */
 
@@ -48,7 +49,8 @@
 		A18A705A1511F9E000FEB03C /* debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = debug.xcconfig; sourceTree = "<group>"; };
 		A18A705B1511F9EE00FEB03C /* release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = release.xcconfig; sourceTree = "<group>"; };
 		A18A705C1512292000FEB03C /* Test-UTF8.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "Test-UTF8.json"; path = "../../../Resources/Test-UTF8.json"; sourceTree = "<group>"; };
-		A1A779211541BC280030FFC9 /* libjson.a */ = {isa = PBXFileReference; lastKnownFileType = file; name = libjson.a; path = "../../../Libraries/Mac OS X Libraries/build/Release/libjson.a"; sourceTree = "<group>"; };
+		A1E06FF5155127B5005C487A /* libjson.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjson.a; path = ../../../Build/Products/Release/libjson.a; sourceTree = "<group>"; };
+		A1E06FF8155128BB005C487A /* libjson-iOS.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libjson-iOS.a"; path = "../../../Build/Products/Release-iphoneos/libjson-iOS.a"; sourceTree = "<group>"; };
 		A1FAF1DB143F225500CD2CCB /* UIDevice-Hardware.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIDevice-Hardware.h"; path = "../UIDevice-Hardware.h"; sourceTree = "<group>"; };
 		A1FAF1DC143F225500CD2CCB /* UIDevice-Hardware.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIDevice-Hardware.m"; path = "../UIDevice-Hardware.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -58,6 +60,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A1E06FF9155128BB005C487A /* libjson-iOS.a in Frameworks */,
 				A138814113D0D57B0006461E /* UIKit.framework in Frameworks */,
 				A138814313D0D57B0006461E /* Foundation.framework in Frameworks */,
 				A138814513D0D57B0006461E /* CoreGraphics.framework in Frameworks */,
@@ -70,7 +73,7 @@
 		A138813113D0D57B0006461E = {
 			isa = PBXGroup;
 			children = (
-				A1A779211541BC280030FFC9 /* libjson.a */,
+				A1E06FF8155128BB005C487A /* libjson-iOS.a */,
 				A18A705A1511F9E000FEB03C /* debug.xcconfig */,
 				A18A705B1511F9EE00FEB03C /* release.xcconfig */,
 				A167D837146C3CD300C7FAD3 /* utilities */,
@@ -152,6 +155,7 @@
 		A17DD7B6146AE90D000AD974 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				A1E06FF5155127B5005C487A /* libjson.a */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -324,7 +328,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../../Build/Products/Debug\"",
+					"\"$(SRCROOT)/../../../Build/Products/Release-iphoneos\"",
 				);
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
@@ -358,7 +362,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../../Build/Products/Debug\"",
+					"\"$(SRCROOT)/../../../Build/Products/Release-iphoneos\"",
 				);
 				OTHER_LDFLAGS = (
 					"-lstdc++",
