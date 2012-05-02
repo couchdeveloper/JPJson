@@ -183,7 +183,12 @@
  If this option is set the parser's number generator will always create a 
  `NSDecimalNumber` object when encountering a number in the input.
  
+ *Note:* Detailed information about mapping of JSON number to a 
+ corresponding Foundation class can be found in class <JPSemanticActions>.
  
+ 
+   
+   
  #### Other options ####
  
  -  `JPJsonParserKeepStringCacheOnClear`

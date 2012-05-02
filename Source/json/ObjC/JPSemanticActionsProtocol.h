@@ -307,7 +307,7 @@
  associated to the key.
  
  @warning *Note:* The specified Unicode encoding scheme in parameter `encoding` 
- corresponds to the Library Build Option `JP_JSON_STRING_BUFFER_ENCODING` and
+ corresponds to the Library Build Option `JSON_SEMANTIC_ACTIONS_STRING_ENCODING` and
  cannot be selected at runtime.
  
  @param bytes A const void pointer to the start of the sequence of the JSON String.
@@ -367,7 +367,7 @@
  form. 
  
  @warning *Note:* The specified Unicode encoding scheme in parameter `encoding` 
- corresponds to the Library Build Option `JP_JSON_STRING_BUFFER_ENCODING` and
+ corresponds to the Library Build Option `JSON_SEMANTIC_ACTIONS_STRING_ENCODING` and
  cannot be selected at runtime.
  
  @param bytes    A void pointer to the start of the possibly partial sequence of the JSON String.
