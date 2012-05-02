@@ -80,6 +80,14 @@ namespace json { namespace internal {
     public:    
         typedef value_t                         result_type;
         
+        typedef value_t                         json_value_type;
+        typedef object_t                        json_object_type;
+        typedef array_t                         json_array_type;
+        typedef string_t                        json_string_type;
+        typedef number_t                        json_number_type;
+        typedef boolean_t                       json_boolean_type;
+        typedef null_t                          json_null_type;
+        
     public:    
         semantic_actions_test() 
         :   array_count_(0), object_count_(0), key_string_count_(0), 
@@ -254,7 +262,7 @@ namespace json { namespace internal {
                     throw std::runtime_error("escaping JSON string failed");
                 }
                 tmp_large_string_ = make_string(buffer.first, buffer.second);
-                
+                data_string_start_ = false;
             }
             else if (not data_string_start_ and hasMore) {
                 // continuation of large string
@@ -285,6 +293,7 @@ namespace json { namespace internal {
                 stack_.push_back(value_t(new boost::any(tmp_large_string_))); 
                 ++data_string_count_; 
                 tmp_large_string_.clear();
+                data_string_start_ = true;
             }
         }
         
@@ -354,9 +363,14 @@ namespace json { namespace internal {
             std::string result;
             std::back_insert_iterator<std::string> dest(result);
             const char_t* first = s;
-            int cvt_result = unicode::convert(first, first + len, EncodingT(), 
-                                              dest, json::unicode::UTF_8_encoding_tag());
+            
+            int cvt_result = json::generator_internal::escape_convert_unsafe(
+                         first, first+len, EncodingT(),
+                         dest, json::unicode::UTF_8_encoding_tag(), 
+                         false /*escape solidus*/);   
+
             assert(cvt_result==unicode::NO_ERROR);
+            size_t str_len = result.size();
             return result;
         }
         
@@ -366,8 +380,11 @@ namespace json { namespace internal {
                 return;
             std::back_insert_iterator<std::string> dest(str);
             const char_t* first = s;
-            int cvt_result = unicode::convert(first, first + len, EncodingT(), 
-                                              dest, json::unicode::UTF_8_encoding_tag());
+            
+            int cvt_result = json::generator_internal::escape_convert_unsafe(
+                         first, first+len, EncodingT(),
+                         dest, json::unicode::UTF_8_encoding_tag(), 
+                         false /*escape solidus*/);   
             assert(cvt_result==unicode::NO_ERROR);
         }
         

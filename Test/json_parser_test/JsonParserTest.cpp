@@ -1241,5 +1241,57 @@ namespace {
     
     
     
+#pragma mark - Large JSON String
+    
+    
+    TEST_F(JsonParserTest, LargeJSONString) 
+    {
+        typedef std::vector<char> json_text_t;
+        typedef json::internal::semantic_actions_test<UTF_8_encoding_tag>  semantic_actions_t;
+        typedef json_text_t::const_iterator                 input_iterator;
+        typedef parser<input_iterator, UTF_8_encoding_tag, semantic_actions_t>  parser_t;
+        typedef parser_t::result_t                          result_t;
+        typedef parser_t::state_t                           state_t;
+        
+        // create the JSON input:
+        const size_t Size = 128*1024;
+        json_text_t jsonText;
+        jsonText.push_back('[');
+        jsonText.push_back('\"');
+        
+        for (int i = 0; i < Size; ++i) {
+            jsonText.push_back('a');
+        }
+        jsonText.push_back('\"');
+        jsonText.push_back(']');
+        
+        
+        semantic_actions_t sa;
+        parser_t parser(sa);
+        input_iterator first = jsonText.begin();
+        input_iterator last = jsonText.end();
+        
+        parser_error_type err = parser.parse(first, last);
+        EXPECT_EQ(JP_NO_ERROR, err);
+        EXPECT_TRUE( (first == last) );        
+        const state_t& state = parser.state();
+        EXPECT_EQ(JP_NO_ERROR, state.error());
+        EXPECT_EQ("no error", std::string(state.error_str()));
+        
+                
+        typedef semantic_actions_t::json_value_type value_t;
+        typedef semantic_actions_t::json_array_type array_t;
+        typedef semantic_actions_t::json_string_type string_t;
+        
+        value_t json_value = sa.result();
+        
+        boost::any p = (*json_value);
+        array_t array = boost::any_cast<array_t>(p);
+        EXPECT_EQ(1, array.size());
+        
+        string_t str = boost::any_cast<string_t>(*(array[0]));
+        EXPECT_EQ(Size, str.size());
+    }
+
     
 }  // namespace
