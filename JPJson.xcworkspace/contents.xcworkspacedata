@@ -290,10 +290,10 @@
          location = "group:Documentation"
          name = "Documentation">
          <Group
-            location = "container:"
+            location = "build:"
             name = "Generated">
             <FileRef
-               location = "build:../../Intermediates/Documentation.build/Release/Documentation.build/DerivedSources/html/index.html">
+               location = "container:Build/Intermediates/Documentation.build/Release/Documentation.build/DerivedSources/html/index.html">
             </FileRef>
          </Group>
          <FileRef
