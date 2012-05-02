@@ -18,11 +18,11 @@
 //  limitations under the License.
 //
 
-#import "NSData+JPJsonDetectEncoding.h"
-#include <CoreFoundation/CFStringEncodingExt.h>
 #include "json/unicode/unicode_detect_bom.hpp"
 #include "json/parser/parse.hpp"
 #include <algorithm>
+#include <CoreFoundation/CFStringEncodingExt.h>
+#import "NSData+JPJsonDetectEncoding.h"
 
 
 namespace {

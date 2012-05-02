@@ -2,6 +2,11 @@
 // Prefix header for all source files of the 'ObjC_private_test' target in the 'ObjC_private_test' project
 //
 
+// Due to a conflict with macros "Nil" and "nil" defined in Foundation,
+// we need to include certain boost headers before any Foundation header:
+#include "json/utility/string_to_number.hpp"
+
+
 #ifdef __OBJC__
     #import <Foundation/Foundation.h>
 #endif

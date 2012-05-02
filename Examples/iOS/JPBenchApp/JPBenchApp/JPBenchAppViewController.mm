@@ -98,14 +98,14 @@ static uint64_t absoluteTimeToNanoseconds(uint64_t t)
 @interface JPBenchAppViewController ()
 
 @property (nonatomic, retain) JPAsyncJsonParser* parser;
-@property (nonatomic, retain) IBOutlet UILabel*  messageLabel;
+@property (nonatomic, retain) IBOutlet UILabel*  benchJPJsonParserResult1Label;
+@property (nonatomic, retain) IBOutlet UILabel*  benchJPJsonParserResult2Label;
+@property (nonatomic, retain) IBOutlet UILabel*  benchJSONKitResult1Label;
+@property (nonatomic, retain) IBOutlet UILabel*  benchJSONKitResult2Label;
+
+
 
 - (void) handleError:(NSError*)error;
-//- (void) runBench;
-//- (void) runBench2;
-//- (void) runBenchJSONKit;
-
-
 
 - (MinMaxAvgTime) bench_JsonParser1WithN:(int)N;
 - (MinMaxAvgTime) bench_JsonParser2WithN:(int)N;
@@ -118,12 +118,22 @@ static uint64_t absoluteTimeToNanoseconds(uint64_t t)
 
 
 
-@implementation JPBenchAppViewController
+@implementation JPBenchAppViewController {
+    JPAsyncJsonParser*      parser_;    
+    IBOutlet UILabel*       benchJPParserResult1Label_;
+    IBOutlet UILabel*       benchJPParserResult2Label_;
+    IBOutlet UILabel*       benchJSONKitResult1Label_;
+    IBOutlet UILabel*       benchJSONKitResult2Label_;
+    BOOL                    running_;
+}
 
 
 
 @synthesize parser = parser_;
-@synthesize messageLabel = messageLabel_;
+@synthesize benchJPJsonParserResult1Label = benchJPJsonParserResult1Label_;
+@synthesize benchJPJsonParserResult2Label = benchJPJsonParserResult2Label_;
+@synthesize benchJSONKitResult1Label = benchJSONKitResult1Label_;
+@synthesize benchJSONKitResult2Label = benchJSONKitResult2Label_;
 
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -154,9 +164,15 @@ static uint64_t absoluteTimeToNanoseconds(uint64_t t)
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    NSAssert(messageLabel_, @"IBOutlet 'messageLable_' is nil");
+    NSAssert(benchJPJsonParserResult1Label_, @"IBOutlet 'benchJPJsonParserResult1Label_' is nil");
+    NSAssert(benchJPJsonParserResult2Label_, @"IBOutlet 'benchJPJsonParserResult2Label_' is nil");
+    NSAssert(benchJSONKitResult1Label_, @"IBOutlet 'benchJSONKitResult1Label_' is nil");
+    NSAssert(benchJSONKitResult2Label_, @"IBOutlet 'benchJSONKitResult2Label_' is nil");
     
-    self.messageLabel.text = @"";    
+    self.benchJPJsonParserResult1Label.text = @"";    
+    self.benchJPJsonParserResult2Label.text = @"";    
+    self.benchJSONKitResult1Label.text = @"";    
+    self.benchJSONKitResult2Label.text = @"";    
 }
 
 - (void)viewDidUnload
@@ -164,7 +180,10 @@ static uint64_t absoluteTimeToNanoseconds(uint64_t t)
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
-    self.messageLabel = nil;
+    self.benchJPJsonParserResult1Label = nil;
+    self.benchJPJsonParserResult2Label = nil;
+    self.benchJSONKitResult1Label = nil;
+    self.benchJSONKitResult2Label = nil;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -175,34 +194,60 @@ static uint64_t absoluteTimeToNanoseconds(uint64_t t)
 
 
 
--(IBAction) startBench:(id)sender
+
+#pragma mark - Actions
+
+-(IBAction) startBenchJPJsonParser1:(id)sender
 {
     if (running_) {
         NSLog(@"Bench is already running.");
         return;
     }
-    
-    
-#if 1    
-    NSString* what = @"AGJsonParser";
     MinMaxAvgTime te = [self bench_JsonParser1WithN:100];    
-#elif 0
-    NSString* what = @"AGJsonParser";
+    NSString* msg = [[NSString alloc] initWithFormat:@"%.3f ms", te.min()*1e3];
+    self.benchJPJsonParserResult1Label.text = msg;
+    [msg release];
+}    
+
+-(IBAction) startBenchJPJsonParser2:(id)sender 
+{
+    if (running_) {
+        NSLog(@"Bench is already running.");
+        return;
+    }
     MinMaxAvgTime te = [self bench_JsonParser2WithN:100];    
-#else    
-    NSString* what = @"JSONKit";
-    MinMaxAvgTime te = [self bench_JSONKit1WithN:100];        
-#endif    
-    
-    NSString* msg = [[NSString alloc] initWithFormat:
-                     @"%@: elapsed time for parsing:\n"
-                     @"min: %.3f ms\n"
-                     @"max: %0.3f ms\n"
-                     @"avg: %0.3f ms\n", 
-                     what, te.min()*1e3, te.max()*1e3, te.avg()*1e3];
-    self.messageLabel.text = msg;
+    NSString* msg = [[NSString alloc] initWithFormat:@"%.3f ms", te.min()*1e3];
+    self.benchJPJsonParserResult2Label.text = msg;
     [msg release];
 }
+    
+-(IBAction) startBenchJSONKitParser1:(id)sender  
+{
+    if (running_) {
+        NSLog(@"Bench is already running.");
+        return;
+    }
+    MinMaxAvgTime te = [self bench_JSONKit1WithN:100];        
+    NSString* msg = [[NSString alloc] initWithFormat:@"%.3f ms", te.min()*1e3];
+    self.benchJSONKitResult1Label.text = msg;
+    [msg release];
+}
+
+-(IBAction) startBenchJSONKitParser2:(id)sender  
+{
+    if (running_) {
+        NSLog(@"Bench is already running.");
+        return;
+    }
+    MinMaxAvgTime te = [self bench_JSONKit2WithN:100];        
+    NSString* msg = [[NSString alloc] initWithFormat:@"%.3f ms", te.min()*1e3];
+    self.benchJSONKitResult2Label.text = msg;
+    [msg release];
+}
+
+
+
+#pragma mark -
 
 
 
@@ -243,7 +288,7 @@ static uint64_t absoluteTimeToNanoseconds(uint64_t t)
     
     
     printf("--------------------------------------------\n");
-    printf("Running AGJsonParser bench %d times.\n", N);
+    printf("Running JPJsonParser bench %d times.\n", N);
     printf("--------------------------------------------\n");    
     printf("Using a NSData with UTF-8 content as input and interface method:\n"
            "+parseData:options:error: (class JPJsonParser)\n"
@@ -280,7 +325,7 @@ static uint64_t absoluteTimeToNanoseconds(uint64_t t)
         NSLog(@"ERROR: %@", error);
     }
     else {
-        NSLog(@"AGJsonParser: elapsed time for parsing:\n"
+        NSLog(@"JPJsonParser: elapsed time for parsing:\n"
               "min: %.3f ms, max: %0.3f ms, avg: %0.3f ms\n", 
               te.min()*1e3, te.max()*1e3, te.avg()*1e3);
     }
@@ -308,7 +353,7 @@ static uint64_t absoluteTimeToNanoseconds(uint64_t t)
     
 
     printf("--------------------------------------------\n");
-    printf("Running AGJsonParser bench %d times.\n", N);
+    printf("Running JPJsonParser bench %d times.\n", N);
     printf("--------------------------------------------\n");    
     printf("Timing includes destruction of objects, too\n");
     printf("Using a NSData with UTF-8 content as input and interface method:\n"
@@ -341,7 +386,7 @@ static uint64_t absoluteTimeToNanoseconds(uint64_t t)
         NSLog(@"ERROR: %@", error);
     }
     else {
-        NSLog(@"AGJsonParser: elapsed time for parsing:\n"
+        NSLog(@"JPJsonParser: elapsed time for parsing:\n"
               "min: %.3f ms, max: %0.3f ms, avg: %0.3f ms\n", 
               te.min()*1e3, te.max()*1e3, te.avg()*1e3);
     }
@@ -444,16 +489,14 @@ static uint64_t absoluteTimeToNanoseconds(uint64_t t)
         NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
         JSONDecoder* decoder = [[JSONDecoder alloc] initWithParseOptions:(JKParseOptionFlags)JKParseOptionNone];
         id result = [decoder objectWithData:data];
-        [result retain];
         [decoder release];
-        [result release];
         [pool release];
-        
+
+        t.stop();
+        te.set(t.seconds());
         if (!result)
             break;
     }
-    t.stop();
-    te.set(t.seconds());
     
     if (gotError) {
         NSLog(@"ERROR: %@", error);

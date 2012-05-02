@@ -33,49 +33,65 @@
  necessary information for the event. 
   
  Parse events are signaled by the underlaying json parser via messages sent to
- the semantic actions object whose signature begins with "parser". The semantic 
- actions object is supposed to implement a corresponding "semantic action" 
+ the semantic actions object whose signature is prefixed with "parserFound". The 
+ semantic actions object is supposed to implement a corresponding "semantic action" 
  appropriate for the event and the current context and current state.
  
- A "begin" message, that is a `parserFoundJsonArrayBegin` or a `parserFoundJsonObjectBegin`
+ A "begin" message, that is a `parserFoundArrayBegin` or a `parserFoundObjectBegin`
  message, indicates the start of a JSON container (a JSON Array, or a JSON Object).
- An "end" message, that is a `parserFoundJsonArrayEnd` or a `parserFoundJsonObjectEnd`
+ An "end" message, that is a `parserFoundArrayEnd` or a `parserFoundObjectEnd`
  message, indicates the end of the container which referes to the container
  signaled with the "begin" message immediately preceeding this "end" message.
+ 
+ Additionally, there are two events `parserFoundKeyValuePairBeginWithKey:length:encoding:index:` 
+ and `parserFoundKeyValuePairEnd` which are sent when the parser encountered
+ a JSON string which is a key in the key-value pair of a JSON Object, and when
+ the parser encountred the end of the JSON Value associated to this key.
  
  "begin" and "end" messages are strictly balanced and reflect the recursive, 
  respectively hierarchical, structure of a JSON representation.
  
  
- The underlaying parser sends messages parserFoundJson<JSON_primitive>, that is 
- `parserFoundJsonString`, `parserFoundJsonNull`, `parserFoundJsonBoolean`,
- `parserFoundJsonNumber` and `parserFoundJsonKey` when it encounters a 
- corresponding JSON primitive value. JSON strings (and keys) will be unescaped
- by the parser.
+ Finally, the underlaying parser sends messages parserFound<JSON_primitive>, that 
+ is `parserFoundString`, `parserFoundNull`, `parserFoundBoolean` and
+ `parserFoundNumber` when it encounters a corresponding JSON primitive value. 
+ JSON Strings (which inlcude keys) will be unescaped by the parser.
  
  
  A typical flow of messages could be as follows:
  
-    parserFoundJsonArrayBegin
-        parserFoundJsonObjectBegin
-            parserFoundJsonKey
-            parserFoundJsonArrayBegin
-                parserFoundJsonString
-                parserFoundJsonString
-                .. 
-            parserFoundJsonArrayEnd
-            parserFoundJsonKey
-            parserFoundJsonArrayBegin
-                parserFoundJsonString
-                parserFoundJsonString
-                ..
-            parserFoundJsonArrayEnd
+    parserFoundArrayBegin
+        parserFoundObjectBegin
+            parserFoundKeyValuePairBeginWithKey
+                parserFoundJsonArrayBegin
+                    parserFoundJsonString
+                    parserFoundJsonString
+                    .. 
+                parserFoundJsonArrayEnd
+            parserFoundKeyValuePairEnd
+ 
+            parserFoundKeyValuePairBeginWithKey
+                parserFoundJsonArrayBegin
+                    parserFoundJsonString
+                    parserFoundJsonString
+                    ..
+                parserFoundJsonArrayEnd
+            parserFoundKeyValuePairEnd
+ 
         parserFoundJsonObjectEnd
         parserFoundJsonObjectBegin
             ..
         parserFoundJsonObjectEnd
      parserFoundJsonArrayEnd
  
+ 
+ A `parserFoundString` message may be possibly sent repeatedly, if the string
+ is handled in "chunks". The method has a parameter `hasMore` which indicates 
+ when the string is eventually complete. A data string will be split into chunks 
+ if its size becomes large. The exact size of a chunk is dependend on the 
+ implementation. Currently, this equals about 2000 code units. Occasionally, 
+ this may become larger if the implementation can utilize an already allocated 
+ buffer whose size is larger.
  
  
  Implementing actions for "begin", "end" and "found primitive value" messages
@@ -247,45 +263,123 @@
 - (void) parserDetectedError;
 
 
-/**
- Sent to the delegate when the json parser found a JSON String.
- 
- The json parser will pass the _decoded_ JSON String. _Decoding_ a JSON string 
- involves unescaping, possibly replacing certain Unicode characters with their 
- replacement character as specified in the semantic actions configuration, and 
- possibly converting from the source encoding to the specified Unicode encoding 
- form. 
- 
- @warning *Note:* The specified Unicode encoding scheme in parameter `encoding` 
- corresponds to the Library Build Option `JP_JSON_STRING_BUFFER_ENCODING` and
- cannot be selected at runtime.
- 
- @param bytes    A void pointer to the start of the sequence of the JSON String.
- @param length   The number of bytes of the character sequence.
- @param encoding The _Unicode encoding scheme_ for the character sequence.
-*/ 
-- (void) parserFoundJsonString:(const void*)bytes length:(size_t)length encoding:(NSStringEncoding)encoding;
 
 
 /** 
- Sent to the delegate when the json parser found a JSON String which is 
- the "key" of a JSON key-value pair.
+ Sent to the delegate when the json parser found the start of a JSON Array,
+ that is when it encountered the '[' character.
+ */
+- (void) parserFoundArrayBegin;
 
- The json parser will pass the _decoded_ JSON String. _Decoding_ a JSON string 
+
+/** 
+ Sent to the delegate when the json parser found the end of a JSON Array,
+ that is when it encountered the ']' character.
+ */
+- (void) parserFoundArrayEnd;
+
+
+/** 
+ Sent to the delegate when the json parser found the start of a JSON Object,
+ that is when it encountered the '{' character.
+ */
+- (void) parserFoundObjectBegin;
+
+
+/** 
+ Sent to the delegate when the json parser found the end of a JSON Object,
+ that is when it encountered the '}' character.
+ */
+- (bool) parserFoundObjectEnd;
+
+
+
+/** 
+ Sent to the delegate when the parser found the start of the n'th key-value pair
+ within a JSON Object.
+ 
+ The json parser will pass the key as a _decoded_ JSON String. _Decoding_ a JSON 
+ string involves unescaping, possibly replacing certain Unicode characters with 
+ their replacement character as specified in the semantic actions configuration, 
+ and possibly converting from the source encoding to the specified Unicode encoding 
+ form. 
+ Subsequently, the delegate will be sent parse events which constitue the value 
+ associated to the key.
+ 
+ @warning *Note:* The specified Unicode encoding scheme in parameter `encoding` 
+ corresponds to the Library Build Option `JSON_SEMANTIC_ACTIONS_STRING_ENCODING` and
+ cannot be selected at runtime.
+ 
+ @param bytes A const void pointer to the start of the sequence of the JSON String.
+ @param length The number of bytes of the character sequence.
+ @param encoding The _Unicode encoding scheme_ for the character sequence.
+ @param index The current index of the key-value pair of the JSON Object.
+ */ 
+- (void) parserFoundKeyValuePairBeginWithKey:(const void*)bytes length:(size_t)length encoding:(NSStringEncoding)encoding index:(size_t)index;
+
+
+/** 
+ Sent to the delegate when the parser found the end of a key-value pair of a 
+ JSON Object.
+ 
+ */ 
+- (void) parserFoundKeyValuePairEnd;
+
+
+
+
+/** 
+ Sent to the delegate when the parser found the start of a JSON Value 
+ belonging to an JSON Array at the specified index.
+ 
+ @param index The index of at which the value is added to the JSON Array.
+ */ 
+- (void) parserFoundValueBeginAtIndex:(size_t)index;
+
+
+/** 
+ Sent to the delegate when the parser found the end of a JSON Value 
+ belonging to an JSON Array at the specified index.
+ 
+ The associated value at this index has been notified by the parser by the corres-
+ ponding event which has been sent immediately before this message.
+ 
+ @param index The index of at which the value is added to the JSON Array.
+ */ 
+- (void) parserFoundValueEndAtIndex:(size_t)index;
+
+
+
+
+/**
+ Sent to the delegate when the json parser found a JSON String as a value.
+
+ If parameter `hasMore` equals `YES`, the parser found a large string and is 
+ delivering the JSON String in several chunks. Each chunk has been _decoded_ and 
+ in case of multibyte encodings, the byte sequence will end at a complete character 
+ boundary. The parser will send as many chunks as necessary to complement the 
+ string through sending consequtive messages to the receiver.
+  
+ The json parser will send a _decoded_ string. _Decoding_ a JSON string 
  involves unescaping, possibly replacing certain Unicode characters with their 
  replacement character as specified in the semantic actions configuration, and 
  possibly converting from the source encoding to the specified Unicode encoding 
  form. 
  
  @warning *Note:* The specified Unicode encoding scheme in parameter `encoding` 
- corresponds to the Library Build Option `JP_JSON_STRING_BUFFER_ENCODING` and
+ corresponds to the Library Build Option `JSON_SEMANTIC_ACTIONS_STRING_ENCODING` and
  cannot be selected at runtime.
-
- @param bytes    A const void pointer to the start of the sequence of the JSON String.
- @param length   The number of bytes of the character sequence.
+ 
+ @param bytes    A void pointer to the start of the possibly partial sequence of the JSON String.
+ @param length   The number of bytes of the sequence.
+ @param hasMore  A boolean value which equals `YES` in order to indicate that there are more characters available for this JSON string.
  @param encoding The _Unicode encoding scheme_ for the character sequence.
-*/ 
-- (void) parserFoundJsonKey:(const void*)bytes length:(size_t)length encoding:(NSStringEncoding)encoding;
+ */ 
+- (void) parserFoundString:(const void*)bytes 
+                    length:(size_t)length 
+                   hasMore:(BOOL)hasMore 
+                  encoding:(NSStringEncoding)encoding;
+
 
 
 /** 
@@ -297,116 +391,21 @@
  @param numberString A const char pointer to the start of the sequence of the JSON Number encoded in ASCII.
  @param length The number of bytes of the character sequence.
 */
-- (void) parserFoundJsonNumber:(const char*)numberString length:(size_t)length; 
+- (void) parserFoundNumber:(const char*)numberString length:(size_t)length; 
 
 
 /** 
  Sent to the delegate when the json parser found a JSON Boolean.
  @param value    Corresponds to the boolean value of the JSON Boolean.
 */  
-- (void) parserFoundJsonBoolean:(BOOL)value;
+- (void) parserFoundBoolean:(BOOL)value;
 
 
 /** 
  Sent to the delegate when the json parser found a JSON Null. 
 */
-- (void) parserFoundJsonNull;
+- (void) parserFoundNull;
 
-
-/** 
- Sent to the delegate when the json parser found the start of a JSON Array,
- that is when it encountered the '[' character.
-*/
-- (void) parserFoundJsonArrayBegin;
-
-
-/** 
- Sent to the delegate when the json parser found the end of a JSON Array,
- that is when it encountered the ']' character.
-*/
-- (void) parserFoundJsonArrayEnd;
-
-
-/** 
- Sent to the delegate when the json parser found the start of a JSON Object,
- that is when it encountered the '{' character.
-*/
-- (void) parserFoundJsonObjectBegin;
-
-
-/** 
- Sent to the delegate when the json parser found the end of a JSON Object,
- that is when it encountered the '}' character.
-*/
-- (bool) parserFoundJsonObjectEnd;
-
-
-/** 
- Sent to the delegate when the parser found the start of a JSON Value 
- belonging to an JSON Array at the specified index.
-
- @param index The index of at which the value is added to the JSON Array.
-*/ 
-- (void) parserFoundJsonValueBeginAtIndex:(size_t)index;
-
-
-/** 
- Sent to the delegate when the parser found the end of a JSON Value 
- belonging to an JSON Array at the specified index.
-
- The associated value at this index has been notified by the parser by the corres-
- ponding event which has been sent immediately before this message.
- 
- @param index The index of at which the value is added to the JSON Array.
-*/ 
-- (void) parserFoundJsonValueEndAtIndex:(size_t)index;
-
-
-/** 
- Sent to the delegate when the parser found the start of the n'th JSON Value 
- belonging to a JSON Object with the specified key.
- 
- The json parser will pass the key as a _decoded_ JSON String. _Decoding_ a JSON 
- string involves unescaping, possibly replacing certain Unicode characters with 
- their replacement character as specified in the semantic actions configuration, 
- and possibly converting from the source encoding to the specified Unicode encoding 
- form. 
-
- @warning *Note:* The specified Unicode encoding scheme in parameter `encoding` 
- corresponds to the Library Build Option `JP_JSON_STRING_BUFFER_ENCODING` and
- cannot be selected at runtime.
-
- @param bytes A const void pointer to the start of the sequence of the JSON String.
- @param length The number of bytes of the character sequence.
- @param encoding The _Unicode encoding scheme_ for the character sequence.
- @param index The current index of the key-value pair of the JSON Object.
- */ 
-- (void) parserFoundJsonValueBeginWithKey:(const void*)bytes length:(size_t)length encoding:(NSStringEncoding)encoding index:(size_t)index;
-
-
-/** 
- Sent to the delegate when the parser found the end of the n'th JSON Value 
- belonging to a JSON Object with the specified key.
-
- The json parser will pass the key as a _decoded_ JSON String. _Decoding_ a JSON 
- string involves unescaping, possibly replacing certain Unicode characters with 
- their  replacement character as specified in the semantic actions configuration, 
- and possibly converting from the source encoding to the specified Unicode encoding 
- form. 
- 
- The associated value for the key has been notified by the parser by the corres-
- ponding event which has been sent immediately before this message.
- 
- @warning *Note:* The specified Unicode encoding scheme in parameter `encoding` 
- corresponds to the Library Build Option `JP_JSON_STRING_BUFFER_ENCODING` and
- cannot be selected at runtime.
-  
- @param bytes A const void pointer to the start of the sequence of the JSON String.
- @param length The number of bytes of the character sequence.
- @param encoding The _Unicode encoding scheme_ for the character sequence.
- @param index The current index of the key-value pair of the JSON Object.
-*/ 
-- (void) parserFoundJsonValueEndWithKey:(const void*)bytes length:(size_t)length encoding:(NSStringEncoding)encoding index:(size_t)index;
 
 
 @end

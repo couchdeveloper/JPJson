@@ -21,6 +21,50 @@
 #define JSON_CONFIG_HPP
 
 
+/**
+ If JSON_UTILITY_STRING_TO_NUMBER_USE_QI is defined, the implemenation uses
+ boost::spirit::qi for string to number conversions. This is slightly faster
+ that when using standard conversions defined in header <xlocale.h>. 
+ */
+#define JSON_UTILITY_STRING_TO_NUMBER_USE_QI
+
+
+
+
+/**
+ JSON_PARSER_INTERNAL_STRING_STORAGE_MIN_CHUNK_SIZE specifies the minimum
+ chunk size for partial strings. The semantic actions object receives partial
+ data strings of this size. The actual size of the chunk may be possibly larger.
+*/ 
+#define JSON_PARSER_INTERNAL_STRING_STORAGE_MIN_CHUNK_SIZE (4*1024)
+
+
+/**
+ JSON_PARSER_INTERNAL_STRING_STORAGE_MAX_SIZE specifies the maximum size (in
+ code units) for the internal buffer allocated for key and data strings. The
+ maximum size may only be exceeded if a key string is larger than this. If this
+ happens, the parser throws a runtime error.
+ */ 
+#define JSON_PARSER_INTERNAL_STRING_STORAGE_MAX_SIZE (32*1024)
+
+
+
+#define JSON_SEMANTIC_ACTIONS_STRING_ENCODING_UTF_8      1
+#define JSON_SEMANTIC_ACTIONS_STRING_ENCODING_UTF_16     2
+/**
+ SEMANTIC_ACTIONS_STRING_ENCODING specifies the encoding of the string buffer
+ which a semantic actions object receives when the parser detects a JSON string.
+ The encoding may be specied from the macros defined above.
+ */ 
+#define JSON_SEMANTIC_ACTIONS_STRING_ENCODING    JSON_SEMANTIC_ACTIONS_STRING_ENCODING_UTF_16
+
+
+
+/**
+ JSON Path - not yet implemented
+*/
 // #define JSON_USE_JSON_PATH  //currently not used
+
+
 
 #endif   // JSON_CONFIG_HPP

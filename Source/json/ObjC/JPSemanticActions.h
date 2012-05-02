@@ -23,8 +23,8 @@
 
 #import "JPSemanticActionsBase.h"
 #import "JPJsonCommon.h"
-#import <Foundation/Foundation.h>
 #include <dispatch/dispatch.h>
+#import <Foundation/Foundation.h>
 
 
 
@@ -61,24 +61,24 @@ typedef NSUInteger JPSemanticActionsNumberGeneratorOption;
  
  ### I Detailed Mapping of an Integral JSON Number ###
 
- 1. If the number of digits of the JSON integer number is eqpual or
+ 1. If the number of digits of a JSON *integer number* is equal or
     smaller than the maximal number of digits (in decimal base) that 
     can be represented by a `signed int` without overflow, then a 
     `NSNumber` with underlaying type `signed int` will be generated.
 
- 2. Otherwise, if the number of digits of the JSON integer number is
+ 2. Otherwise, if the number of digits of a JSON *integer number* is
     equal or smaller than the maximal number of digits (in decimal
     base) that can be represented by a `signed long`  without overflow,
     then a `NSNumber` with an underlaying type `signed long` will be 
     generated.
 
- 3. Otherwise, if the number of digits of the JSON integer number is
+ 3. Otherwise, if the number of digits of the JSON *integer number* is
     equal or smaller than the maximal number of digits (in decimal
     base) that can be represented by a `signed long long` without
     overflow, then a `NSNumber` with an underlaying type `signed long long` 
     will be generated.
 
- 4. Otherwise, if the number of digits of the JSON integer number is
+ 4. Otherwise, if the number of digits of the JSON *integer number* is
     equal or smaller than the maximal number of digits (in decimal
     base) that can be represented by a `NSDecimalNumber` without
     loosing precision, then a `NSDecimalNumber` will be generated.
@@ -92,35 +92,31 @@ typedef NSUInteger JPSemanticActionsNumberGeneratorOption;
     with a corresponding runtime error.
     
 
-
- ### II Detailed Mapping of a Float JSON Number ###
-
- 1. If the number of significant digits of the JSON float number is 
-    equal or smaller than the maximal number of digits (in decimal 
-    base) that can be represented by a double, then a `NSNumber` with 
-    underlaying type double will be generated. If the resulting 
-    value is out of range, a range error will be signaled.
+ ### II Detailed Mapping of a Decimal JSON Number ###
  
- 2. Otherwise, if the number of significant digits of the JSON float 
-    number is greater than the maximal number of digits (in decimal
-    base) that can be represented by a double and if the exponent is
-    also greater than 127 or smaller than -127, then a `NSNumber` with
-    underlaying type double will be generated and a WARNING will be
-    logged to the console about loosing precision.
+ A decimal number is a number with a decimal point but no exponent.
+ 
+ 1. If the number of digits of the decimal number is equal or smaller than 
+    the maximal number of digits (in decimal base) that can be represented by 
+    a `double`, then a `NSNumber` with underlaying type `double` will be 
+    generated. 
 
- 3. Otherwise, if the number of significant digits of the JSON float 
-    number is smaller than the maximal number of digits (in decimal
-    base) that can be represented by a `NSDecimalNumber` and if the 
-    exponent is also smaller than 128 or greater than -128, then a 
-    `NSDecimalNumber` will be generated.
+ 2. Otherwise, `NSDecimalNumber` will be generated. If the `NSDecimalNumber`
+    cannot represent the decimal value with the same precision as in the
+    JSON number, an additional warning will be logged.
+    If the decimal value cannot represent the JSON number because it is out of
+    range, a range error will be signaled.
+ 
+ 
+ 
+ ### II Detailed Mapping of a Scientific JSON Number ###
+ 
+ A number in scientific form has an optional decimal point and an exponent.
 
- 4. Otherwise, (the number of significant digits of the JSON float 
-    number is greater than the maximal number of digits (in decimal
-    base) that can be represented by a `NSDecimalNumber` and the
-    exponent is within range [-127 .. 127]) a `NSDecimalNumber` will 
-    be generates and a WARNING will be logged to the console about 
-    loosing precision.
-
+ 1. A JSON number in scientific format will allways be converted to a NSNumber
+    with an underlaying `double` type. If the resulting value is out of range, 
+    a range error will be signaled.
+ 
 
  @warning *Note:* -objCType for `NSDecimalNumber` returns "d".
 

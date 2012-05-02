@@ -78,8 +78,6 @@ namespace {
     // The fixture for testing class JsonParser.
     class JsonParserTest : public ::testing::Test 
     {
-        
-        
     protected:
         // You can remove any or all of the following functions if its body
         // is empty.
@@ -623,7 +621,8 @@ namespace {
             int result;
             int count_objects;
             int count_arrays;
-            int count_strings;
+            int count_key_strings;
+            int count_data_strings;
             int count_numbers;
             int count_booleans;
             int count_nulls;
@@ -632,64 +631,64 @@ namespace {
         test_s tests[] = {   
             // input | output         
             {" [ ] ",                           "[]",
-            // err  | objs | arrs | strs | nbrs | bools| nulls 
-                0,      0,     1,    0,      0,     0,     0 },
+            // err  | objs | arrs | k-strs | d-strs | nbrs | bools| nulls 
+                0,      0,     1,    0,      0,       0,     0,     0 },
             
             {" { } ",                           "{}",
-            // err  | objs | arrs | strs | nbrs | bools| nulls 
-                0,      1,     0,    0,      0,     0,     0 },
+            // err  | objs | arrs | k-strs | d-strs | nbrs | bools| nulls 
+                0,      1,     0,     0,      0,      0,     0,     0 },
             
             {" [ [ [ [ [ [ [ [ [ [ ] ] ] ] ] ] ] ] ] ] ",      "[[[[[[[[[[]]]]]]]]]]",
-            // err  | objs | arrs | strs | nbrs | bools| nulls 
-                0,      0,    10,    0,      0,     0,     0 },
+            // err  | objs | arrs | k-strs | d-strs | nbrs | bools| nulls 
+                0,      0,    10,    0,      0,       0,     0,     0 },
             
             {" [\"string\"] ",                  "[\"string\"]",
-            // err  | objs | arrs | strs | nbrs | bools| nulls 
-                0,      0,     1,    1,      0,     0,     0 },
+            // err  | objs | arrs | k-strs | d-strs | nbrs | bools| nulls 
+                0,      0,     1,    0,      1,       0,     0,     0 },
             
             {" [1] ",                           "[1]",
-            // err  | objs | arrs | strs | nbrs | bools| nulls 
-                0,      0,     1,    0,      1,     0,     0 },
+            // err  | objs | arrs | k-strs | d-strs | nbrs | bools| nulls 
+                0,      0,     1,    0,      0,       1,     0,     0 },
             
             {" [true] ",                        "[true]",
-            // err  | objs | arrs | strs | nbrs | bools| nulls 
-                0,      0,     1,    0,      0,     1,     0 },
+            // err  | objs | arrs | k-strs | d-strs | nbrs | bools| nulls 
+                0,      0,     1,    0,      0,       0,     1,     0 },
             
             {" [false] ",                       "[false]",
-            // err  | objs | arrs | strs | nbrs | bools| nulls 
-                0,      0,     1,    0,      0,     1,     0 },
+            // err  | objs | arrs | k-strs | d-strs | nbrs | bools| nulls 
+                0,      0,     1,    0,      0,       0,     1,     0 },
 
             {" [null] ",                        "[null]",
-            // err  | objs | arrs | strs | nbrs | bools| nulls 
-                0,      0,     1,    0,      0,     0,     1 },
+            // err  | objs | arrs | k-strs | d-strs | nbrs | bools| nulls 
+                0,      0,     1,    0,      0,       0,     0,     1 },
             
             {" [{}] ",                          "[{}]",
-                // err  | objs | arrs | strs | nbrs | bools| nulls 
-                0,      1,     1,    0,      0,     0,     0 },
+            // err  | objs | arrs | k-strs | d-strs | nbrs | bools| nulls 
+                0,      1,     1,    0,      0,       0,     0,     0 },
             
             {" [{} , {}] ",                     "[{},{}]",
-            // err  | objs | arrs | strs | nbrs | bools| nulls 
-                0,      2,     1,    0,      0,     0,     0 },
+            // err  | objs | arrs | k-strs | d-strs | nbrs | bools| nulls 
+                0,      2,     1,    0,      0,       0,     0,     0 },
             
             {" [1, 2, 3] ",                     "[1,2,3]",
-            // err  | objs | arrs | strs | nbrs | bools| nulls 
-                0,      0,     1,    0,      3,     0,     0 },
+            // err  | objs | arrs | k-strs | d-strs | nbrs | bools| nulls 
+                0,      0,     1,    0,      0,       3,     0,     0 },
 
             {" [{}, \"string\", 1, true, null] ", "[{},\"string\",1,true,null]",
-            // err  | objs | arrs | strs | nbrs | bools| nulls 
-                0,      1,     1,    1,      1,     1,     1 },
+            // err  | objs | arrs | k-strs | d-strs | nbrs | bools| nulls 
+                0,      1,     1,    0,      1,       1,     1,     1 },
             
             {" [\"quote '\\\"'\"] ",            "[\"quote '\\\"'\"]",
-            // err  | objs | arrs | strs | nbrs | bools| nulls 
-                0,      0,     1,    1,      0,     0,     0 },
+            // err  | objs | arrs | k-strs | d-strs | nbrs | bools| nulls 
+                0,      0,     1,    0,      1,       0,     0,     0 },
             
             {"{\"key0\" : 0}",                  "{\"key0\":0}",
-                // err  | objs | arrs | strs | nbrs | bools| nulls 
-                0,      1,     0,    1,      1,     0,     0 },
+            // err  | objs | arrs | k-strs | d-strs | nbrs | bools| nulls 
+                0,      1,     0,    1,      0,       1,     0,     0 },
             
             {"{\"key0\" : 0, \"key1\" : 1}",    "{\"key0\":0,\"key1\":1}",
-            // err  | objs | arrs | strs | nbrs | bools| nulls 
-                0,      1,     0,    2,      2,     0,     0 }
+            // err  | objs | arrs | k-strs | d-strs | nbrs | bools| nulls 
+                0,      1,     0,    2,      0,       2,     0,     0 }
             
             
         };
@@ -726,7 +725,8 @@ namespace {
             EXPECT_EQ( (*first).output, output ) << "with input[" << idx << "]: " << buffer;
             EXPECT_EQ( (*first).count_objects, sa.object_count() );
             EXPECT_EQ( (*first).count_arrays, sa.array_count() );
-            EXPECT_EQ( (*first).count_strings, sa.string_count() );
+            EXPECT_EQ( (*first).count_key_strings, sa.key_string_count() );
+            EXPECT_EQ( (*first).count_data_strings, sa.data_string_count() );
             EXPECT_EQ( (*first).count_numbers, sa.number_count() );
             EXPECT_EQ( (*first).count_booleans, sa.boolean_count() );
             EXPECT_EQ( (*first).count_nulls, sa.null_count() );
@@ -1241,5 +1241,57 @@ namespace {
     
     
     
+#pragma mark - Large JSON String
+    
+    
+    TEST_F(JsonParserTest, LargeJSONString) 
+    {
+        typedef std::vector<char> json_text_t;
+        typedef json::internal::semantic_actions_test<UTF_8_encoding_tag>  semantic_actions_t;
+        typedef json_text_t::const_iterator                 input_iterator;
+        typedef parser<input_iterator, UTF_8_encoding_tag, semantic_actions_t>  parser_t;
+        typedef parser_t::result_t                          result_t;
+        typedef parser_t::state_t                           state_t;
+        
+        // create the JSON input:
+        const size_t Size = 128*1024;
+        json_text_t jsonText;
+        jsonText.push_back('[');
+        jsonText.push_back('\"');
+        
+        for (int i = 0; i < Size; ++i) {
+            jsonText.push_back('a');
+        }
+        jsonText.push_back('\"');
+        jsonText.push_back(']');
+        
+        
+        semantic_actions_t sa;
+        parser_t parser(sa);
+        input_iterator first = jsonText.begin();
+        input_iterator last = jsonText.end();
+        
+        parser_error_type err = parser.parse(first, last);
+        EXPECT_EQ(JP_NO_ERROR, err);
+        EXPECT_TRUE( (first == last) );        
+        const state_t& state = parser.state();
+        EXPECT_EQ(JP_NO_ERROR, state.error());
+        EXPECT_EQ("no error", std::string(state.error_str()));
+        
+                
+        typedef semantic_actions_t::json_value_type value_t;
+        typedef semantic_actions_t::json_array_type array_t;
+        typedef semantic_actions_t::json_string_type string_t;
+        
+        value_t json_value = sa.result();
+        
+        boost::any p = (*json_value);
+        array_t array = boost::any_cast<array_t>(p);
+        EXPECT_EQ(1, array.size());
+        
+        string_t str = boost::any_cast<string_t>(*(array[0]));
+        EXPECT_EQ(Size, str.size());
+    }
+
     
 }  // namespace

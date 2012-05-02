@@ -17,15 +17,15 @@
 //  limitations under the License.
 //
 
-#import "JPAsyncJsonParser.h"
-#import "JPSemanticActionsBase.h"
-#import "JPSemanticActionsBase_private.h"
-#import "JPSemanticActions.h"  // Default Semantic Actions
 #include "json/parser/parse.hpp"
 #include "json/utility/syncqueue_streambuf.hpp"
 #include "json/utility/synchronous_queue.hpp"
 #include "json/utility/istreambuf_iterator.hpp"
 #include "CFDataBuffer.hpp"
+#import "JPAsyncJsonParser.h"
+#import "JPSemanticActionsBase.h"
+#import "JPSemanticActionsBase_private.h"
+#import "JPSemanticActions.h"  // Default Semantic Actions
 #include <dispatch/dispatch.h>
 #include <iterator>
 #include <stdexcept>
@@ -419,6 +419,8 @@ namespace {
 
 // Cancel the parser
 // 
+//  Cancelation might be tricky!
+// 
 // In order to cancel the parser which lets it exit as soon as possible rather 
 // than when encountering a timeout, it should receive an EOF or otherwise 
 // encounter an error in the input. This can be achieved by erasing the 
@@ -428,16 +430,30 @@ namespace {
 // concurrent dispatch queue.
 - (void) cancel
 {
+    // If the parser is idle, return immediately ...
+    long result = dispatch_semaphore_wait(idle_, DISPATCH_TIME_NOW);
+    if (result == 0) {
+        dispatch_semaphore_signal(idle_);
+        return;
+    }
+    
+    // ... otherwise, the parser's thread is executing:    
     killed_ = true;
-    // Send the semantic actions object a cancel message. This will stop the 
-    // parser at its next cancelation point (currently, this is at the start 
-    // of new json text).
+    
+    // Send the semantic actions object a cancel message. This method simply sets 
+    // a flag, which can be concurrently accessed by the sa and the parser. The
+    // parser accesses it at its next cancelation point (currently, this is at 
+    // the start of new json text).
+    // If the parser detects this cancel flag, it will stop and the parser's 
+    // thread will eventually exit. The method can be seen as an asynchronous 
+    // invocation, since the parser might still executing after returning from 
+    // the method.
     if ([sa_ respondsToSelector:@selector(cancel)]) {
         [sa_ cancel];
     }
     
-    // nonetheless, the parser might still running ...
-    // eat all produced buffes until nothing is offered:
+    // Nonetheless, the parser might still running ...
+    // eat all produced buffers until nothing is offered:
     while (syncQueue_.get(0.0).first == sync_queue_t::OK) {
         NSLog(@"JPAsyncJsonParser cancel: removed buffer");
     }
@@ -449,10 +465,35 @@ namespace {
     // not running anymore:
     while ( (syncQueue_.put(CFDataByteBuffer(CFDataRef(nil)), 1.0)) != sync_queue_t::OK) {
         // buffer was not consumed - check if the parsers is running at all:
-        if ([self isRunning] == NO)
-            break;
+        if ([self isRunning] == NO) {
+            return;
+        }
+    }    
+    
+    // the nil-buffer has been consumed - wait until the parser's thread exits:
+    // Usually, exiting should happen within milli seconds. Otherwise, this is a
+    // sign of a bad error somewhere.
+    int count = 0;
+    while ((result = dispatch_semaphore_wait(idle_, dispatch_time(DISPATCH_TIME_NOW, 1*NSEC_PER_SEC)))) 
+    {   
+        // timed out
+        // TODO: use logger facility
+        ++count;
+        if (count > 10) {
+            NSLog(@"ERROR: JPAsyncJsonParser cancel: waiting for parser thread to exit failed. Giving up.");
+            return;
+        }
+        NSLog(@"WARNING: JPAsyncJsonParser cancel: waiting for parser thread to exit");
+    }
+    if (count) {
+        NSLog(@"JPAsyncJsonParser cancel: parser thread did exit");
+    }
+    if (result == 0) {
+        dispatch_semaphore_signal(idle_);
+        return;
     }    
 }
+
 
 - (BOOL) isRunning {
     long result = dispatch_semaphore_wait(idle_, DISPATCH_TIME_NOW);

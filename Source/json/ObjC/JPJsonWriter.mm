@@ -17,9 +17,6 @@
 //  limitations under the License.
 //
 
-#import "JPJsonWriter.h"
-#import <CoreFoundation/CoreFoundation.h>
-#import <Foundation/Foundation.h>
 
 #include "json/unicode/unicode_traits.hpp"
 #include "json/unicode/unicode_converter.hpp"
@@ -33,6 +30,10 @@
 
 #include <boost/type_traits.hpp>
 #include <boost/iterator/iterator_traits.hpp>
+
+#import "JPJsonWriter.h"
+#import <CoreFoundation/CoreFoundation.h>
+#import <Foundation/Foundation.h>
 
 
 

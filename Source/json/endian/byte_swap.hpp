@@ -155,13 +155,15 @@ namespace json
     namespace mpl = boost::mpl;
     
     // Restrict candidates whoses template parameter types are 
-    // derived from endian_tag.
+    // derived from endian_tag and which are not equal (this results
+    // in a byte swap):
     template<typename FromEndianT, typename ToEndianT, class T>
     inline 
     typename boost::enable_if<
         mpl::and_ <
             boost::is_base_and_derived<internal::endian_tag, FromEndianT>
           , boost::is_base_and_derived<internal::endian_tag, ToEndianT>
+          , mpl::not_<boost::is_same<FromEndianT, ToEndianT> >
         >
         , T
         >::type
@@ -175,14 +177,16 @@ namespace json
         return internal::do_byte_swap<FromEndianT, ToEndianT, T>()(value);
     }
     
-    // Enable if either or both endians are "always compatible" (where the type
-    // equals endian_tag) - e.g. the endianess is a property of UTF-8 encoding.
+    // Restrict candidates whoses template parameter types are 
+    // derived from endian_tag and which are equal (this results
+    // in a no-op):
     template<typename FromEndianT, typename ToEndianT, class T>
     inline 
     typename boost::enable_if<
-        mpl::or_ <
-            boost::is_same<internal::endian_tag, FromEndianT>
-          , boost::is_same<internal::endian_tag, ToEndianT>
+        mpl::and_ <
+            boost::is_base_and_derived<internal::endian_tag, FromEndianT>
+          , boost::is_base_and_derived<internal::endian_tag, ToEndianT>
+          , boost::is_same<FromEndianT, ToEndianT>
         >
     , T
     >::type
@@ -192,14 +196,13 @@ namespace json
     }
     
     
-    // Catch Illegal template parameter which are NOT endian_tag or are not
-    // derived from endian_tag.
+    // Catch Illegal template parameters which are NOT derived from endian_tag.
     template<typename FromEndianT, typename ToEndianT, class T>
     inline 
     typename boost::enable_if<
         mpl::or_ <
-            mpl::not_<boost::is_base_of<internal::endian_tag, FromEndianT> >
-          , mpl::not_<boost::is_base_of<internal::endian_tag, ToEndianT> >
+            mpl::not_<boost::is_base_and_derived<internal::endian_tag, FromEndianT> >
+          , mpl::not_<boost::is_base_and_derived<internal::endian_tag, ToEndianT> >
         >
         , T
     >::type

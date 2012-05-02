@@ -25,17 +25,26 @@
 #import "json/ObjC/SemanticActionsBase.hpp"
 #include "json/unicode/unicode_utilities.hpp"
 
-
 //
 //  Defines the encoding of the internal string buffer and the
 //  the concrete type of the base class of the internal semantic 
 //  actions class.
 // 
-#if 1 /* USE_UTF_16 */
-typedef json::unicode::to_host_endianness<json::unicode::UTF_16_encoding_tag>::type JP_CFStringEncoding;
+#if !defined (JSON_SEMANTIC_ACTIONS_STRING_ENCODING) 
+// UTF-16
+    typedef json::unicode::to_host_endianness<json::unicode::UTF_16_encoding_tag>::type JP_CFStringEncoding;
+#elif defined (JSON_SEMANTIC_ACTIONS_STRING_ENCODING_UTF_8) and JSON_SEMANTIC_ACTIONS_STRING_ENCODING == JSON_SEMANTIC_ACTIONS_STRING_ENCODING_UTF_8
+    typedef json::unicode::UTF_8_encoding_tag JP_CFStringEncoding;
+#elif defined (JSON_SEMANTIC_ACTIONS_STRING_ENCODING_UTF_16) and JSON_SEMANTIC_ACTIONS_STRING_ENCODING == JSON_SEMANTIC_ACTIONS_STRING_ENCODING_UTF_16
+// UTF-16
+    typedef json::unicode::to_host_endianness<json::unicode::UTF_16_encoding_tag>::type JP_CFStringEncoding;
 #else
-typedef json::unicode::UTF_8_encoding_tag JP_CFStringEncoding;
+// UTF-16
+    typedef json::unicode::to_host_endianness<json::unicode::UTF_16_encoding_tag>::type JP_CFStringEncoding;
 #endif
+
+
+
 typedef json::objc::SemanticActionsBase<JP_CFStringEncoding> SemanticActionsBase;
 
 

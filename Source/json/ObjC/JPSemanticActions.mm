@@ -18,12 +18,12 @@
 //  limitations under the License.
 //
 
-#import "JPSemanticActions.h"
-#import "JPSemanticActionsBase_private.h"
-#include "SemanticActions.hpp"
 #include <dispatch/dispatch.h>
 #include <assert.h>
 #include <sstream>
+#include "SemanticActions.hpp"
+#import "JPSemanticActions.h"
+#import "JPSemanticActionsBase_private.h"
 
 
 //

@@ -134,8 +134,8 @@ namespace  {
 //        void  parse_begin_imp();
 //        void  parse_end_imp();
 //        void  finished_imp();
-//        void  push_key_imp(char_t* s, size_t len);
-//        void  push_string_imp(char_t* s, size_t len);
+//        void  push_key_imp(const const_buffer_t& buffer);
+//        void  push_string_imp(const const_buffer_t& buffer);
 //        void  push_number_imp(const nb_number_t& number);
 //        void  push_null_imp();
 //        void  push_boolean_imp(bool b);
@@ -282,7 +282,7 @@ namespace json {
         
     public:    
         typedef typename base::error_t              error_t;
-        typedef typename base::nb_number_t          nb_number_t;
+        typedef typename base::number_info_t        number_info_t;
         
         typedef value<policies::ValuePolicies>      Value;
         typedef Value::array_t                      Array;
@@ -295,6 +295,9 @@ namespace json {
         typedef typename base::char_t               char_t;     // char type of the StringBuffer
         typedef typename base::encoding_t           encoding_t;
         typedef Value                               result_type;
+        
+        typedef typename base::buffer_t             buffer_t;
+        typedef typename base::const_buffer_t       const_buffer_t;
         
     private:
         
@@ -567,29 +570,33 @@ namespace json {
         void begin_value_at_index_imp(size_t index) {}
         void end_value_at_index_imp(size_t index) {}
         
-        void begin_value_with_key_imp(const char_t* s, size_t len, size_t nth) 
+        void begin_key_value_pair_imp(const const_buffer_t& buffer, size_t nth) 
         {
-            push_key(s, len);
+            push_key(buffer);
         }
-        void end_value_with_key_imp(const char_t* s, size_t len, size_t nth) {}
+        void end_key_value_pair_imp() {}
                 
         
         
-        void value_string_imp(const char_t* s, std::size_t len) 
-        {
+        void value_string_imp(const const_buffer_t& buffer, bool hasMore) 
+        { 
+            assert(hasMore == false);
+            if (hasMore) {
+                throw std::logic_error("partial strings not yet implemented");
+            }
             //t0_.start();            
             //++c0_;
             //++string_count;
-            stack_.push_back(String(s, len));
+            stack_.push_back(String(buffer.first, buffer.second));
             //t0_.pause();
-        }
+        }        
         
-        void value_number_imp(const nb_number_t& number) 
+        void value_number_imp(const number_info_t& number) 
         {
             //t0_.start();
             //++c0_;
             //++number_count;
-            stack_.push_back(Number(number.string_));
+            stack_.push_back(Number(number.c_str()));
             //t0_.pause();
         }
         
@@ -647,7 +654,7 @@ namespace json {
         
         const map_t&        string_cache() const { return string_cache_; }
         
-        double              t() const          { return t_.seconds(); }
+        double              t() const           { return t_.seconds(); }
         double              t0() const          { return t0_.seconds(); }
         double              t1() const          { return t1_.seconds(); }
         double              t2() const          { return t2_.seconds(); }
@@ -660,26 +667,26 @@ namespace json {
         
     protected:
         
-        void push_string_cached(const char_t* s, std::size_t len) 
+        void push_string_cached(const const_buffer_t& buffer) 
         {
             // (performance critical function)
-            const std::size_t hash = json::utility::string_hasher<char_t>()(s, len);
+            const std::size_t hash = json::utility::string_hasher<char_t>()(buffer.first, buffer.second);
             map_c_iter_t iter = string_cache_.find(hash);
             if (iter == string_cache_.end()) {
                 std::pair<map_c_iter_t, bool> result = 
-                string_cache_.insert(map_elem_t(hash, map_mapped_value_t(s, len)));
+                string_cache_.insert(map_elem_t(hash, map_mapped_value_t(buffer.first, buffer.second)));
                 iter = result.first;
             }
             stack_.push_back( (*iter).second );
         }        
         
         
-        void push_key(const char_t* s, std::size_t len) 
+        void push_key(const const_buffer_t& buffer) 
         { 
             //t0_.start();
             //++c0_;
             //++string_count;
-            push_string_cached(s, len); 
+            push_string_cached(buffer); 
             //t0_.pause();
         }
         

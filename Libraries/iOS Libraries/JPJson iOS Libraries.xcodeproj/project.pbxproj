@@ -28,7 +28,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		A16AEB321441FB2700FDB7B2 /* libjson-iOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libjson-iOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A1024E2E154167F6001349EC /* libjson-iOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libjson-iOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A16AEB351441FB2700FDB7B2 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		A16AEB391441FB2700FDB7B2 /* JPJsonLib-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "JPJsonLib-Prefix.pch"; path = "JPJsonLib/JPJsonLib-Prefix.pch"; sourceTree = "<group>"; };
 		A16AEB8E1441FDBE00FDB7B2 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
@@ -39,7 +39,7 @@
 		A1DDB9E0150E3CB300AF007F /* JPJsonWriter.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = JPJsonWriter.mm; sourceTree = "<group>"; };
 		A1DDB9E1150E3CB300AF007F /* JPSemanticActions.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = JPSemanticActions.mm; sourceTree = "<group>"; };
 		A1DDB9E2150E3CB300AF007F /* JPSemanticActionsBase.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = JPSemanticActionsBase.mm; sourceTree = "<group>"; };
-		A1DDB9E3150E3CB300AF007F /* JPStreamSemanticActions.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = JPStreamSemanticActions.mm; sourceTree = "<group>"; };
+		A1DDB9E3150E3CB300AF007F /* JPStreamSemanticActions.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; path = JPStreamSemanticActions.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		A1DDB9E4150E3CB300AF007F /* NSData+JPJsonDetectEncoding.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "NSData+JPJsonDetectEncoding.mm"; sourceTree = "<group>"; };
 		A1DDBA10150E3F9100AF007F /* JPAsyncJsonParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JPAsyncJsonParser.h; path = ../../Source/json/ObjC/JPAsyncJsonParser.h; sourceTree = "<group>"; };
 		A1DDBA11150E3F9100AF007F /* JPJsonCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JPJsonCommon.h; path = ../../Source/json/ObjC/JPJsonCommon.h; sourceTree = "<group>"; };
@@ -65,6 +65,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A1024E2F154167FE001349EC /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A1024E2E154167F6001349EC /* libjson-iOS.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		A16AEB251441FB0300FDB7B2 = {
 			isa = PBXGroup;
 			children = (
@@ -74,16 +82,8 @@
 				A1ECC390146D0B9000124779 /* Source */,
 				A16AEB371441FB2700FDB7B2 /* JPJsonLib */,
 				A16AEB341441FB2700FDB7B2 /* Frameworks */,
-				A16AEB331441FB2700FDB7B2 /* Products */,
+				A1024E2F154167FE001349EC /* Products */,
 			);
-			sourceTree = "<group>";
-		};
-		A16AEB331441FB2700FDB7B2 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				A16AEB321441FB2700FDB7B2 /* libjson-iOS.a */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		A16AEB341441FB2700FDB7B2 /* Frameworks */ = {
@@ -194,7 +194,7 @@
 			);
 			name = JPJsonLib;
 			productName = JPJsonLib;
-			productReference = A16AEB321441FB2700FDB7B2 /* libjson-iOS.a */;
+			productReference = A1024E2E154167F6001349EC /* libjson-iOS.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 /* End PBXNativeTarget section */
@@ -213,7 +213,7 @@
 				en,
 			);
 			mainGroup = A16AEB251441FB0300FDB7B2;
-			productRefGroup = A16AEB331441FB2700FDB7B2 /* Products */;
+			productRefGroup = A16AEB251441FB0300FDB7B2;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -293,6 +293,11 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "$(PRJ_HEADER_SEARCH_PATHS)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../../../../Library/Developer/Xcode/DerivedData/JPJson-ejutwqptiebgcjcabedtzqzwdhuj/Build/Products/Release-iphonesimulator\"",
+				);
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "json-iOS";
 				PUBLIC_HEADERS_FOLDER_PATH = JPJson;
@@ -322,6 +327,10 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "$(PRJ_HEADER_SEARCH_PATHS)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../../../../Library/Developer/Xcode/DerivedData/JPJson-ejutwqptiebgcjcabedtzqzwdhuj/Build/Products/Release-iphonesimulator\"",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "json-iOS";
 				PUBLIC_HEADERS_FOLDER_PATH = JPJson;

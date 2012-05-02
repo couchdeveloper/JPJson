@@ -21,15 +21,24 @@
 #define JSON_OBJC_CFDATA_CACHE_HPP
 
 
+//#define CFDATA_CACHE_USE_FLAT_MAP
+
 #include "json/config.hpp"
-#include <CoreFoundation/CoreFoundation.h>
 #include <functional>
 #include <assert.h>
 #include <cstring>
 #include <cstdlib>
-#include <boost/tr1/unordered_map.hpp>
 #include <boost/utility.hpp>
 #include "json/utility/string_hasher.hpp"
+
+#if defined (CFDATA_CACHE_USE_FLAT_MAP)
+    #include <boost/container/flat_map.hpp>
+#else
+    #include <boost/unordered_map.hpp>
+    //#include <boost/container/map.hpp>
+#endif
+
+#include <CoreFoundation/CoreFoundation.h>
 
 
 
@@ -72,11 +81,26 @@ namespace json { namespace objc {
     class CFDataCache : boost::noncopyable
     {
     public:
-        typedef CFTypeRef                               mapped_type;
         typedef std::pair<const CharT*, std::size_t>    key_type;
-        typedef std::pair<key_type const, mapped_type>  value_type;
+        typedef CFTypeRef                               mapped_type;
+        typedef std::pair<key_type const, CFTypeRef>    value_type;
         
     private:
+
+        struct key_less_to
+        : std::binary_function<key_type, key_type, bool>
+        {
+            bool operator()(const key_type& lhv, const key_type& rhv ) const
+            {
+                int result = std::char_traits<CharT>::compare(lhv.first, rhv.first, std::min(lhv.second, rhv.second));
+                if (result == 0)
+                    return (lhv.second < rhv.second);
+                else 
+                    return result < 0;
+            }
+        };
+        
+
         
         struct key_equal_to
         : std::binary_function<key_type, key_type, bool>
@@ -84,7 +108,7 @@ namespace json { namespace objc {
             bool operator()(const key_type& lhv, const key_type& rhv ) const
             {
                 if (lhv.second == rhv.second)
-                    return memcmp(lhv.first, rhv.first, rhv.second) == 0;
+                    return 0 == std::char_traits<CharT>::compare(lhv.first, rhv.first, lhv.second);
                 else
                     return false;
             }
@@ -132,9 +156,15 @@ namespace json { namespace objc {
         
         typedef block_allocator                             pool_t;        
         
-        typedef mapped_type                                 map_mapped_t;
+        typedef CFTypeRef                                   map_mapped_t;
         typedef std::pair<const key_type, map_mapped_t>     map_value_t;
-        typedef std::allocator<map_value_t>                 map_allocator_type;        
+        typedef std::allocator<map_value_t>                 map_allocator_type;
+#if defined (CFDATA_CACHE_USE_FLAT_MAP)
+        typedef boost::container::flat_map<
+            key_type, 
+            CFTypeRef, 
+            key_less_to>                                    map_t;
+#else 
         typedef boost::unordered_map<
               key_type
             , map_mapped_t
@@ -142,6 +172,7 @@ namespace json { namespace objc {
             , key_equal_to
             , map_allocator_type 
         >                                       map_t;        
+#endif
         
     public:
         
@@ -151,7 +182,9 @@ namespace json { namespace objc {
         explicit CFDataCache(std::size_t capacity = 1024) 
         : pool_(capacity*16)
         {
+#if !defined (CFDATA_CACHE_USE_FLAT_MAP)            
             map_.rehash(capacity);
+#endif            
         }
         
         ~CFDataCache() { 
@@ -174,25 +207,25 @@ namespace json { namespace objc {
         }
                 
         std::pair<iterator, bool> 
-        insert(const key_type& key, mapped_type v)
+        insert(key_type const& key, CFTypeRef v)
         {     
             // TODO: use a faster block allocator
             CharT* p = (CharT*)pool_.malloc(key.second*sizeof(CharT));
-            std::copy(key.first, key.first + key.second, p); 
-            //std::memcpy(p, key.first, key.second*sizeof(CharT));
+            std::char_traits<CharT>::copy(p, key.first, key.second);
+#if 0            
             key_type map_key;
             map_key.first = p;
             map_key.second = key.second;
-            
-            std::pair<iterator, bool> result = 
-                    map_.insert(value_type(map_key, v));
+            std::pair<iterator, bool> result = map_.insert(value_type(map_key, v));
+#else            
+            std::pair<iterator, bool> result = map_.emplace(key_type(p,key.second), v);
+#endif            
             if (result.second) {
                 if (v)
                     CFRetain(v);
                 return result;
             } 
-            else
-            {
+            else {
                 return result;
             }
         }
@@ -227,7 +260,7 @@ namespace json { namespace objc {
             key_type map_key = (*iter).first;
             //pool_.free(const_cast<char*>(map_key.first), map_key.second);
             pool_.free(static_cast<void*>(const_cast<CharT*>(map_key.first)));
-            mapped_type v = (*iter).second;
+            CFTypeRef v = (*iter).second;
             if (v) {
                 CFRelease(v);
             }

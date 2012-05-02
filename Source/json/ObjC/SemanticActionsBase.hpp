@@ -23,22 +23,10 @@
 
 
 #include "json/config.hpp"
-#include <vector>
-#include <string>
-#include <stdexcept>
 #include <iostream>  // description
-#include <iomanip>   // description   
-#include <limits>
-#include <stdlib.h>  // numeric conversion
 #include "json/parser/semantic_actions_base.hpp"
-#include "json/unicode/unicode_utilities.hpp"
-#include "json/utility/simple_log.hpp"
-#include "json/utility/flags.hpp"
-#include <boost/mpl/if.hpp>
-#include <boost/static_assert.hpp>
-#import <Foundation/Foundation.h>
-#import <CoreFoundation/CoreFoundation.h>
 #import "JPSemanticActionsProtocol.h"
+#import <Foundation/Foundation.h>
 
 
 
@@ -101,10 +89,13 @@ namespace json { namespace objc {
 
     public:    
         typedef typename base::error_t              error_t;
-        typedef typename base::nb_number_t          nb_number_t;
+        typedef typename base::number_info_t        number_info_t;
         typedef typename base::char_t               char_t;     // char type of the StringBuffer
         typedef typename base::encoding_t           encoding_t;
         typedef id                                  result_type;
+        
+        typedef typename base::buffer_t             buffer_t;
+        typedef typename base::const_buffer_t       const_buffer_t;
 
     public:    
         
@@ -143,18 +134,17 @@ namespace json { namespace objc {
         virtual void begin_value_at_index_imp(size_t index) {}        
         virtual void end_value_at_index_imp(size_t) {}
         
-        virtual void begin_value_with_key_imp(const char_t* s, size_t len, size_t nth) {}
-        virtual void end_value_with_key_imp(const char_t* s, size_t len, size_t nth) {}
+        virtual void begin_key_value_pair_imp(const const_buffer_t& buffer, size_t nth) {}
+        virtual void end_key_value_pair_imp() {}
                 
-        virtual void value_string_imp(const char_t* s, std::size_t len) {}                
-        virtual void value_number_imp(const nb_number_t& number) {}
+        virtual void value_string_imp(const const_buffer_t& buffer, bool hasMore) {}        
+        virtual void value_number_imp(const number_info_t& number) {}
         virtual void value_null_imp() {}
         virtual void value_boolean_imp(bool b) {}
 
         
         virtual void clear_imp() {
             error_.reset();
-            //error_str_.clear();
         } 
         
         virtual void print_imp(std::ostream& os) { 
@@ -163,8 +153,6 @@ namespace json { namespace objc {
 
         virtual void error_imp(int code, const char* description) {
             error_.first = code;
-            // make a copy of the error string
-            //error_str_ = error.second;
             error_.second = description;
             [delegate_ parserDetectedError];
         }
@@ -180,7 +168,6 @@ namespace json { namespace objc {
         
     private:    
         error_t         error_;
-        //std::string     error_str_;
 
         
 #pragma mark - Friend Stream Output Operator
@@ -194,9 +181,6 @@ namespace json { namespace objc {
         {
             typedef SemanticActionsBase::base base;
             os << static_cast<base const&>(sa);   
-            
-            // Insert code ...
-            
             return os;
         }
         

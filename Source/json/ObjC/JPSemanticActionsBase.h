@@ -18,9 +18,9 @@
 //  limitations under the License.
 //
 
-#import <Foundation/Foundation.h>
 #import "JPSemanticActionsProtocol.h"
 #import "JPJsonCommon.h"
+#import <Foundation/Foundation.h>
 
 
 /** Unicode Noncharacter Handling */

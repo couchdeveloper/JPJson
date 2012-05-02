@@ -43,6 +43,12 @@
 #include "gtest/gtest.h"
 
 #include "utilities/timer.hpp"
+#include "json/unicode/unicode_traits.hpp"
+
+#include <boost/static_assert.hpp>
+#include <boost/type_traits.hpp>
+#include <boost/mpl/or.hpp>
+
 #include <iostream>
 #include <iomanip>
 
@@ -133,7 +139,7 @@ namespace {
         
     }
     
-    TEST_F(ByteSwapTest, ByteSwap) 
+    TEST_F(ByteSwapTest, BasicByteSwap) 
     {
         
         int16_t i16 = 0x1234;
@@ -275,3 +281,118 @@ namespace {
     
     
 }  // namespace
+
+
+
+namespace {
+
+
+    using namespace json;
+    
+    
+    template <typename T>
+    class ByteSwapWithEncodingTest : public ::testing::Test {
+    protected:
+        // You can remove any or all of the following functions if its body
+        // is empty.
+        
+        ByteSwapWithEncodingTest() {
+            // You can do set-up work for each test here.
+        }
+        
+        virtual ~ByteSwapWithEncodingTest() {
+            // You can do clean-up work that doesn't throw exceptions here.
+        }
+        
+        // If the constructor and destructor are not enough for setting up
+        // and cleaning up each test, you can define the following methods:
+        
+        virtual void SetUp() {
+            // Code here will be called immediately after the constructor (right
+            // before each test).
+        }
+        
+        virtual void TearDown() {
+            // Code here will be called immediately after each test (right
+            // before the destructor).
+        }
+        
+        // Objects declared here can be used by all tests in the test case for Foo.
+    };
+    
+    
+    TYPED_TEST_CASE_P(ByteSwapWithEncodingTest);
+    
+    
+    TYPED_TEST_P(ByteSwapWithEncodingTest, SwapByteWithEncoding) 
+    {
+        // This test merely shows how to retrieve the endianness from an 
+        // Unicode scheme/form and how to use it in the swap_byte() function.
+        //
+        // Function byte_swap() accepts two kinds of parameter types, which
+        // are endianness types:        
+        //  - internal::big_endian_tag
+        //  - internal::little_endian_tag
+        //  where 'endian_tag' is the common base class of 'big_endian_tag' and
+        //  'little_endian_tag'.
+        //
+        // For all Unicode encodings, retrieve the endianness, and
+        // try a byte swap. This test merely shows how to retrieve the 
+        // endianness from an Unicode scheme/form:
+        
+        using unicode::encoding_traits;
+        using unicode::add_endianness;
+        using internal::big_endian_tag;
+        using internal::little_endian_tag;
+        using internal::endian_tag;
+        
+        // Inside a test, refer to TypeParam to get the type parameter.        
+        // 'TypeParam' is our Unicode encoding scheme/form:
+        typedef TypeParam encoding_t;
+
+        
+        // Retrieve the endianness:
+        // Note: if we don't have an "Unicode scheme", but rather an "Unicode encoding
+        // form" (which doesn't inlcude endianness tag) the type 'endian_tag'
+        // is not defined. Thus, we "add" host endianness to encoding forms
+        // (encoding schemes will not be modified).
+        typedef typename add_endianness<encoding_t>::type encoding_scheme_t;
+        typedef typename encoding_traits<encoding_scheme_t>::endian_tag endianness_t;
+        
+        
+        BOOST_STATIC_ASSERT( (boost::mpl::or_<
+                                boost::is_same<internal::big_endian_tag, endianness_t>,
+                                boost::is_same<internal::little_endian_tag, endianness_t>
+                              >::value == true) );
+        
+
+        // Get the type of the code unit:
+        typedef typename encoding_traits<encoding_t>::code_unit_type char_t;
+        
+        char_t result;
+        result = byte_swap<endianness_t, big_endian_tag>(0);
+        result = byte_swap<endianness_t, little_endian_tag>(0);
+        
+    }
+    
+    
+    
+    // Register
+    REGISTER_TYPED_TEST_CASE_P(ByteSwapWithEncodingTest, SwapByteWithEncoding);
+    
+    // Instantiate test cases:
+    typedef ::testing::Types<
+    unicode::UTF_8_encoding_tag, 
+    unicode::UTF_16_encoding_tag,
+    unicode::UTF_16BE_encoding_tag,
+    unicode::UTF_16LE_encoding_tag,
+    unicode::UTF_32_encoding_tag,
+    unicode::UTF_32BE_encoding_tag,
+    unicode::UTF_32LE_encoding_tag
+    >  UTF_encodings;
+    
+    
+    INSTANTIATE_TYPED_TEST_CASE_P(SwapByteWithEncodingTests, ByteSwapWithEncodingTest, UTF_encodings);
+    
+    
+}

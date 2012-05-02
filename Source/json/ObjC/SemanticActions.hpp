@@ -54,8 +54,6 @@
 #include <iostream>  // description
 #include <iomanip>   // description   
 #include <limits>
-#include <stdlib.h>  // numeric conversion
-#include <xlocale.h>
 
 #include "SemanticActionsBase.hpp"
 #include "unicode_traits.hpp"
@@ -63,16 +61,16 @@
 #include "json/unicode/unicode_traits.hpp"
 #include "json/utility/simple_log.hpp"
 #include "json/utility/flags.hpp"
+#include "json/utility/string_to_number.hpp"
 
 #include <boost/static_assert.hpp>
-
-#import <Foundation/Foundation.h>
-#import <CoreFoundation/CoreFoundation.h>
-
 
 #if defined (JSON_OBJC_SEMANTIC_ACTIONS_USE_JSON_PATH)
 #include "json/json_path/intrusive_json_path.hpp"
 #endif
+
+#import <Foundation/Foundation.h>
+#import <CoreFoundation/CoreFoundation.h>
 
 
 
@@ -140,6 +138,8 @@ namespace {
     
 #pragma mark CFString Creation
     
+    // Creates a CFString from a buffer 's' containing 'len' code units encoded 
+    // in 'Encoding'. Ownership of the string folows the "Create" rule.
     template <typename Encoding, typename CharT>
     CFStringRef createString(const CharT* s, std::size_t len, Encoding) 
     {
@@ -150,8 +150,59 @@ namespace {
                                                   static_cast<const UInt8*>(static_cast<const void*>(s)), 
                                                   sizeof(code_unit_t)*len, 
                                                   cf_encoding, 0);
+        assert(str != NULL);
         return str;
     }
+    
+    
+    // Creates a CFMutableString from a buffer 's' containing 'len' code units encoded in
+    // 'Encoding'. Ownership of the string folows the "Create" rule.
+    template <typename Encoding, typename CharT>
+    CFMutableStringRef createMutableString(const CharT* s, std::size_t len, Encoding) 
+    {
+        typedef typename json::unicode::add_endianness<Encoding>::type encoding_type;
+        typedef typename json::unicode::encoding_traits<encoding_type>::code_unit_type code_unit_t;
+        CFStringEncoding cf_encoding = json::cf_unicode_encoding_traits<encoding_type>::value;
+        
+        // First, create a temp const string
+        CFStringRef tmp = CFStringCreateWithBytesNoCopy(NULL, 
+                                                        static_cast<const UInt8*>(static_cast<const void*>(s)), 
+                                                        sizeof(code_unit_t)*len, 
+                                                        cf_encoding, 
+                                                        false, kCFAllocatorNull);
+        assert(tmp != NULL);
+        // Create a string with unlimited capazity:
+        CFMutableStringRef str = CFStringCreateMutable(kCFAllocatorDefault, 0);
+        assert(str != NULL);
+        CFStringAppend(str, tmp);
+        CFRelease(tmp);
+        return str;
+    }
+    
+    
+    // Appends a buffer of code units with length 'len' and encding 'Encoding' to 
+    // the mutable string 'str'.
+    template <typename Encoding, typename CharT>
+    void appendString(CFMutableStringRef str, const CharT* s, std::size_t len, Encoding) 
+    {
+        typedef typename json::unicode::add_endianness<Encoding>::type encoding_type;
+        typedef typename json::unicode::encoding_traits<encoding_type>::code_unit_type code_unit_t;
+        CFStringEncoding cf_encoding = json::cf_unicode_encoding_traits<encoding_type>::value;
+        
+        // First, create a temp const string
+        CFStringRef tmp = CFStringCreateWithBytesNoCopy(NULL, 
+                                                        static_cast<const UInt8*>(static_cast<const void*>(s)), 
+                                                        sizeof(code_unit_t)*len, 
+                                                        cf_encoding, 
+                                                        false, kCFAllocatorNull);
+        assert(tmp != NULL);
+        // Append to the mutable string:
+        CFStringAppend(str, tmp);
+        CFRelease(tmp);
+    }
+    
+    
+    
     
 } // unnamed namespace 
 
@@ -178,7 +229,6 @@ namespace json { namespace objc { namespace sa_options {
 
 namespace json { namespace objc { 
         
-    using json::numberbuilder::normalized_number_t;
     //using json::semanticactions::json_path;
     
     
@@ -318,10 +368,13 @@ namespace json { namespace objc {
         
     public:    
         typedef typename base::error_t              error_t;
-        typedef typename base::nb_number_t          nb_number_t;
+        typedef typename base::number_info_t        number_info_t;
         typedef typename base::char_t               char_t;     // char type of the StringBuffer
         typedef typename base::encoding_t           encoding_t;
         typedef typename base::result_type          result_type;
+        
+        typedef typename base::buffer_t             buffer_t;
+        typedef typename base::const_buffer_t       const_buffer_t;
         
         typedef typename UTF_8_encoding_traits::code_unit_type utf8_code_unit;
         
@@ -344,15 +397,12 @@ namespace json { namespace objc {
         typedef typename cache_t::iterator          cache_iterator;
         typedef typename cache_t::const_iterator    cache_const_iterator;
 #endif
-        typedef std::pair<const char_t*, size_t>    string_buffer_t;
         
 #if defined (JSON_OBJC_SEMANTIC_ACTIONS_USE_JSON_PATH)
         typedef  objc_internal::intrusive_json_path<encoding_t> json_path_t;
 #endif
         
         
-        // nb_number_t's char_t shall be 8-bit wide.
-        BOOST_STATIC_ASSERT(sizeof(typename nb_number_t::char_t) == 1 );
         
     public:    
         
@@ -362,6 +412,7 @@ namespace json { namespace objc {
         SemanticActions(id<JPSemanticActionsProtocol> delegate = nil) 
         :   base(delegate),
             result_(nil),
+            tmp_data_str_(NULL),
             number_generator_option_(sa_options::NumberGeneratorGenerateAuto),
             opt_keep_string_cache_on_clear_(false),
             opt_cache_data_strings_(false),
@@ -383,6 +434,10 @@ namespace json { namespace objc {
 #endif      
             // If result_ is not nil, we need to release it:
             [result_ release];
+            assert(tmp_data_str_ == NULL);
+            if (tmp_data_str_) {
+                CFRelease(tmp_data_str_);
+            }
         }
         
         
@@ -393,6 +448,10 @@ namespace json { namespace objc {
             tmp_keys_.reserve(100);
             tmp_values_.reserve(100);
             base::parse_begin_imp(); // notifyies delegate
+            assert(tmp_data_str_ == NULL);
+            if (tmp_data_str_) {
+                CFRelease(tmp_data_str_);
+            }
         }
         
         
@@ -411,9 +470,8 @@ namespace json { namespace objc {
             //markers_.clear();
             pc_.t_.stop();
             // result_ contains the result of the parser. It's retained.
-            
+            assert (tmp_data_str_ == 0);            
             base::parse_end_imp();  // notifyies delegate
-
         }
         
         
@@ -649,72 +707,68 @@ namespace json { namespace objc {
         virtual void end_value_at_index_imp(size_t) {
         }
         
-        virtual void begin_value_with_key_imp(const char_t* s, size_t len, size_t nth) 
+        virtual void begin_key_value_pair_imp(const const_buffer_t& buffer, size_t nth) 
         {
 #if defined (JSON_OBJC_SEMANTIC_ACTIONS_USE_JSON_PATH)            
-            string_buffer_t string_buffer = 
+            const_buffer_t string_buffer = 
 #endif            
-            push_key(s, len);
+            push_key(buffer);
 #if defined (JSON_OBJC_SEMANTIC_ACTIONS_USE_JSON_PATH)
             typedef typename json_path_t::string_buffer_type string_buffer_type;
             json_path_.back_key() = string_buffer_type(string_buffer.first, string_buffer.second);
 #endif                        
         }
-        virtual void end_value_with_key_imp(const char_t* s, size_t len, size_t nth) {
+        virtual void end_key_value_pair_imp() {
         }
 
-        
-        
-        virtual void value_string_imp(const char_t* s, std::size_t len) 
-        {
+
+        virtual void value_string_imp(const const_buffer_t& buffer, bool hasMore) { 
             //++c0_;
-            ++pc_.string_count_;
+            pc_.string_count_ += static_cast<int>(!hasMore);
             
             //t0_.start();
 #if defined (JSON_OBJC_SEMANTIC_ACTIONS_USE_CACHE)
-            if (cacheDataStrings()) {
-                push_string_cached(s, len);
+            if (cacheDataStrings() and not hasMore) {
+                // Only cache *small* data strings
+                push_string_cached(buffer);
             } else {
-                push_string_uncached(s, len);
+                push_string_uncached(buffer, hasMore);
             }
 #else
-            push_string_uncached(s, len);
+            push_string_uncached(buffer, hasMore);
 #endif            
             //t0_.pause();
-        }        
+        }
         
         
-        virtual void value_number_imp(const nb_number_t& number) 
+        virtual void value_number_imp(const number_info_t& number) 
         {
             ++pc_.number_count_;
             switch (number_generator_option_) {
                 case sa_options::NumberGeneratorGenerateString:
-                    push_number_string(number.string_, number.len_, unicode::UTF_8_encoding_tag());
+                    push_number_string(number.c_str(), number.c_str_len(), unicode::UTF_8_encoding_tag());
                     break;
                 case sa_options::NumberGeneratorGenerateAuto: {
                     id num = nil;
-                    char* endPtr;
                     
-                    if (number.isInteger()) {
+                    if (number.is_integer()) 
+                    {
+                        // signed or unsigned integers
                         int digits = number.digits();
                         if (digits <= std::numeric_limits<int>::digits10) {
-                            int val;
                             //boost::spirit::qi::parse(number.c_str(), number.c_str() + number.c_str_len(), boost::spirit::int_, val);
-                            val = int(strtol_l(number.c_str(), &endPtr, 10, NULL));
+                            // TODO: revert test code
+                            int val = json::utility::string_to_number<int>(number.c_str(), number.c_str_len());
                             num = (id)CFNumberCreate(NULL, kCFNumberIntType, &val);
                         }
                         else if (digits <= std::numeric_limits<long>::digits10) {
-                            long val;
                             //boost::spirit::qi::parse(number.c_str(), number.c_str() + number.c_str_len(), boost::spirit::long_, val);                            
-                            val = strtol_l(number.c_str(), &endPtr, 10, NULL);
+                            // TODO: revert test code
+                            long val = json::utility::string_to_number<long>(number.c_str(), number.c_str_len());
                             num = (id)CFNumberCreate(NULL, kCFNumberLongType, &val);
                         }
                         else if (digits <= std::numeric_limits<long long>::digits10) {
-                            errno = 0;
-                            long long val = strtoll_l(number.c_str(), &endPtr, 10, NULL);
-                            if (errno != 0) {
-                                perror("ERROR: Conversion to long long failed");
-                            }
+                            long long val = json::utility::string_to_number<long long>(number.c_str(), number.c_str_len());
                             num = (id)CFNumberCreate(NULL, kCFNumberLongLongType, &val);
                         } 
                         else if (digits <= 38){
@@ -732,28 +786,30 @@ namespace json { namespace objc {
                         }
                         // finished creating an integer
                     } 
-                    else /* number is float */
+                    else if (number.is_scientific()) 
                     {
-                        // If there is an exponent, and the exponent is greater
-                        // than 127 or smaller then -127 we always use NSNumber
-                        // with an underlaying double:
-                        int exponent;
-                        if ((number.digits() <= std::numeric_limits<double>::digits10) // a double has sufficient precision
-                            or ((exponent = number.exp()) > 127 or exponent < -127))  // A NSDecimalNumber would not accept this 
-                            // exponent, thus generate a NSNumber with double:                            
-                        {                            
-                            errno = 0;
-                            double d = strtod_l(number.c_str(), &endPtr, NULL);
-                            if (errno == ERANGE) {
-                                throwRangeError("floating point value out of range");
-                            }
+                        // A number with an exponent
+                        // Always use an NSNumber with an underlaying double. If the conversion will possibly loose precision,
+                        // log a message but convert it anyway:
+                        if (number.digits() > std::numeric_limits<double>::digits10) {
+                            // log precision warning:
+                            (this->logger_).log(json::utility::LOG_WARNING, 
+                                "WARNING: JSON number to NSNumber with double conversion may loose precision. Original JSON number: %.*s", 
+                                number.c_str_len(), number.c_str());
+                        }
+                        double d = json::utility::string_to_number<double>(number.c_str(), number.c_str_len());
+                        num = (id)CFNumberCreate(NULL, kCFNumberDoubleType, &d);
+                    }
+                    else /* number is decimal*/
+                    {
+                        // If the precision of a double is sufficient to represent the
+                        // decimal number, use an underlaying double, otherwise use
+                        // a NSDecimalNumber:
+                        if (number.digits() <= std::numeric_limits<double>::digits10) // a double has sufficient precision
+                        {      
+                            // use an NSNumber with underlaying double
+                            double d = json::utility::string_to_number<double>(number.c_str(), number.c_str_len());
                             num = (id)CFNumberCreate(NULL, kCFNumberDoubleType, &d);
-                            if (number.digits() > std::numeric_limits<double>::digits10) {
-                                // log precision warning:
-                                (this->logger_).log(json::utility::LOG_WARNING, 
-                                                    "WARNING: JSON number to NSNumber with double conversion may loose precision. Original JSON number: %.*s", 
-                                                    number.c_str_len(), number.c_str());
-                            }
                         }
                         else 
                         {
@@ -762,8 +818,8 @@ namespace json { namespace objc {
                             if (number.digits() > 38) {
                                 // log precision warning:
                                 (this->logger_).log(json::utility::LOG_WARNING, 
-                                                    "WARNING: JSON number to NSDecimalNumber conversion may loose precision. Original JSON number: %.*s", 
-                                                    number.c_str_len(), number.c_str());
+                                    "WARNING: JSON number to NSDecimalNumber conversion may loose precision. Original JSON number: %.*s", 
+                                    number.c_str_len(), number.c_str());
                             }
                         }
                         // finished generating a float
@@ -845,7 +901,7 @@ namespace json { namespace objc {
         bool    keepStringCacheOnClear() const { return opt_keep_string_cache_on_clear_; }
         void    keepStringCacheOnClear(bool set) { opt_keep_string_cache_on_clear_ = set; }
         
-        bool    cacheDataStrings() const { return opt_cache_data_strings_; }
+        bool    cacheDataStrings() const { return opt_cache_data_strings_; }  // TODO: possibly, data string caching is a bad idea anyway, so remove all referenes, flags, ect. including documentation.
         void    cacheDataStrings(bool set) { opt_cache_data_strings_ = set; }
         
         size_t  string_cache_size() const { 
@@ -871,17 +927,18 @@ namespace json { namespace objc {
         
     protected:
         
-        string_buffer_t push_key(const char_t* s, std::size_t len) 
+        const_buffer_t 
+        push_key(const const_buffer_t& buffer) 
         {
             //++c0_;
             ++pc_.string_count_;
             
             //t0_.start();
 #if defined (JSON_OBJC_SEMANTIC_ACTIONS_USE_CACHE)
-            return push_string_cached(s, len); 
+            return push_string_cached(buffer); 
 #else
-            push_string_uncached(s, len);
-            return string_buffer_t(0,0);
+            push_string_uncached(buffer);
+            return const_buffer_t(0,0);
 #endif
             //t0_.pause();
         }
@@ -890,27 +947,16 @@ namespace json { namespace objc {
 #if defined (JSON_OBJC_SEMANTIC_ACTIONS_USE_CACHE)
         // Returns a string buffer, which is the key where the string has been
         // associated in the cache.
-        string_buffer_t push_string_cached(const char_t* s, std::size_t len) 
+        const_buffer_t push_string_cached(const const_buffer_t& buffer) 
         {
-            string_buffer_t result;
             // (performance critical function)
-            cache_key_t cache_key = cache_key_t(s, len);
+            const cache_key_t cache_key = cache_key_t(buffer.first, buffer.second);
             cache_iterator iter = string_cache_.find(cache_key);
             cache_mapped_t str;    // CFTypeRef         
             if (iter == string_cache_.end()) {
                 ++cache_miss_count_;
                 // The string is not in the cache, create one and insert it into the cache:
-#if 1                
-                str = createString(s, len, EncodingT());
-#else
-                // For unknown reasons, CFStringCreateWithBytesNoCopy is slower
-                // than createString - even though the internal encoding would
-                // match.
-                str = CFStringCreateWithBytesNoCopy(kCFAllocatorDefault, 
-                                                    (const UInt8 *)s, len*sizeof(char_t), 
-                                                    json::cf_unicode_encoding_traits<EncodingT>::value,
-                                                    false, kCFAllocatorNull);
-#endif                
+                str = createString(buffer.first, buffer.second, EncodingT());
                 iter = string_cache_.insert(cache_key, str).first;
             } 
             else {
@@ -919,16 +965,32 @@ namespace json { namespace objc {
                 f_cf_retain(str);
             }
             stack_.push_back(id(CFTypeRef(str)));
-            result.first = (*iter).first.first;
-            result.second = (*iter).first.second;
-            return result;
+            return const_buffer_t((*iter).first.first, (*iter).first.second);
         }
 #endif
         
-        void push_string_uncached(const char_t* s, std::size_t len)
+        void push_string_uncached(const const_buffer_t& buffer, bool hasMore)
         {
-            CFStringRef str = createString(s, len, EncodingT());
-            stack_.push_back(id(str));
+            if (tmp_data_str_ == 0 and not hasMore) {
+                // Create an immutable string
+                CFStringRef str = createString(buffer.first, buffer.second, EncodingT());
+                stack_.push_back(id(str));  // Do not release str!
+            }
+            else if (tmp_data_str_ == 0 and hasMore)
+            {
+                // Create a mutable string with the partial characters
+                tmp_data_str_ = createMutableString(buffer.first, buffer.second, EncodingT());
+            }
+            else if (tmp_data_str_ != 0 and not hasMore) {
+                // append to mutable tmp_data_str_ and push it to the stack:
+                appendString(tmp_data_str_, buffer.first, buffer.second, EncodingT());
+                stack_.push_back(id(tmp_data_str_));
+                tmp_data_str_ = NULL;  // don't CFRelease!
+            }
+            else /* tmp_data_str_ != 0 and hasMore */ {
+                // append to mutable tmp_data_str_
+                appendString(tmp_data_str_, buffer.first, buffer.second, EncodingT());
+            }
         }
         
         template<typename Encoding>        
@@ -954,7 +1016,7 @@ namespace json { namespace objc {
                 --count;
                 *dest++ = static_cast<uint8_t>(*s++);
             }
-            push_string_uncached(buffer, len);
+            push_string_uncached(const_buffer_t(buffer, len), false);
         }
         
         // number strings are encoded in ASCII
@@ -964,7 +1026,7 @@ namespace json { namespace objc {
                                 boost::is_same<Encoding, EncodingT>
                                 >::type* = 0)
         {
-            push_string_uncached(s, len);
+            push_string_uncached(const_buffer_t(s, len), false);
         }
         
         
@@ -1004,37 +1066,38 @@ namespace json { namespace objc {
     private:    
         sa_options::number_generator_option number_generator_option_;
         int parser_non_conformance_options_;
-        markers_t       markers_;
-        stack_t         stack_;
-        tmp_array_t     tmp_keys_;      // used when creating immutable dictionaries
-        tmp_array_t     tmp_values_;    // dito
+        markers_t           markers_;
+        stack_t             stack_;
+        tmp_array_t         tmp_keys_;      // used when creating immutable dictionaries
+        tmp_array_t         tmp_values_;    // dito
+        CFMutableStringRef  tmp_data_str_;
         
         //json_path_t     path_;
 #if defined (JSON_OBJC_SEMANTIC_ACTIONS_USE_CACHE)   
-        cache_t         string_cache_;
-        size_t          cache_hit_count_;
-        size_t          cache_miss_count_;        
+        cache_t             string_cache_;
+        size_t              cache_hit_count_;
+        size_t              cache_miss_count_;        
 #endif
 
 #if defined (JSON_OBJC_SEMANTIC_ACTIONS_USE_JSON_PATH)
  #if !defined (JSON_OBJC_SEMANTIC_ACTIONS_USE_CACHE)   
   #error  JSON_OBJC_SEMANTIC_ACTIONS_USE_JSON_PATH requires JSON_OBJC_SEMANTIC_ACTIONS_USE_CACHE
  #endif        
-        json_path_t json_path_;
+        json_path_t         json_path_;
 #endif
         
         typedef CFTypeRef (*cf_retain_t)(CFTypeRef);
-        cf_retain_t     f_cf_retain;
+        cf_retain_t         f_cf_retain;
         
         typedef void (*cf_release_t)(CFTypeRef);
-        cf_release_t     f_cf_release;
+        cf_release_t        f_cf_release;
         
-        bool            opt_keep_string_cache_on_clear_;
-        bool            opt_cache_data_strings_;        
-        bool            opt_create_mutable_json_containers_;
+        bool                opt_keep_string_cache_on_clear_;
+        bool                opt_cache_data_strings_;        
+        bool                opt_create_mutable_json_containers_;
         
     protected:
-        performance_counter  pc_;
+        performance_counter pc_;
         
 #pragma mark - Stream Output Operator
         //    

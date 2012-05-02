@@ -52,6 +52,8 @@ typedef json::unicode::encoding_traits<JP_CFStringEncoding>::code_unit_type char
     size_t level_;
     NSMutableData* jsonBranch_;
     NSStringEncoding encoding_;
+    
+    BOOL partialString_;
 }
 
 
@@ -64,6 +66,7 @@ typedef json::unicode::encoding_traits<JP_CFStringEncoding>::code_unit_type char
     if (self) {
         jsonBranch_ = [[NSMutableData alloc] initWithCapacity:1024];
         encoding_ = json::ns_unicode_encoding_traits<JP_CFStringEncoding>::value;
+        partialString_ = NO;  
     }    
     return self;
 }
@@ -78,29 +81,32 @@ typedef json::unicode::encoding_traits<JP_CFStringEncoding>::code_unit_type char
 
 #pragma mark -
 
-- (void) parserFoundJsonString:(const void*)bytes length:(size_t)length encoding:(NSStringEncoding)encoding 
+- (void) parserFoundString:(const void*)bytes 
+                    length:(size_t)length 
+                   hasMore:(BOOL)hasMore
+                  encoding:(NSStringEncoding)encoding 
 {
-    assert(encoding_ == encoding);
+    assert(encoding_ == encoding);    
     char_t quote = static_cast<char_t>('"');
-    [jsonBranch_ appendBytes:&quote length:sizeof(quote)];    
-    [jsonBranch_ appendBytes:bytes length:length];
-    [jsonBranch_ appendBytes:&quote length:sizeof(quote)];    
     
-#if defined (DEBUG)
-//    std::ostream_iterator<char> out_it(std::cout);    
-//    char_t const* first = static_cast<char_t const*>(bytes);
-//    char_t const* last = first + length/sizeof(char_t);
-//    std::cout << "Parser found JSON string value: \"";
-//    int result = json::unicode::convert(first, last, JP_CFStringEncoding(),out_it, json::unicode::UTF_8_encoding_tag());
-//    std::cout << '"' << std::endl;
-//    assert(result == 0);
-#endif 
+    if (not partialString_) {
+        // start of a string
+        [jsonBranch_ appendBytes:&quote length:sizeof(quote)];    
+    }
+    if (hasMore) {
+        partialString_ = YES;
+    }        
+    [jsonBranch_ appendBytes:bytes length:length];
+    if (not hasMore) {
+        // end of string
+        partialString_ = NO;
+        [jsonBranch_ appendBytes:&quote length:sizeof(quote)];
+    }
 }
 
 
-//- (void) parserFoundJsonKey:(const void*)bytes length:(size_t)length encoding:(NSStringEncoding)encoding
 
-- (void) parserFoundJsonNumber:(const char*)numberString length:(size_t)length
+- (void) parserFoundNumber:(const char*)numberString length:(size_t)length
 {
     char_t buffer[128];
     char_t* dest = buffer;
@@ -124,7 +130,7 @@ typedef json::unicode::encoding_traits<JP_CFStringEncoding>::code_unit_type char
     [jsonBranch_ appendBytes:buffer length:length*sizeof(char_t)];    
 }
 
-- (void) parserFoundJsonBoolean:(BOOL)value
+- (void) parserFoundBoolean:(BOOL)value
 {
     // Since "true" and "false" is true ASCII, we don't really need to elaborately convert 
     // the encoding:
@@ -134,39 +140,39 @@ typedef json::unicode::encoding_traits<JP_CFStringEncoding>::code_unit_type char
     [jsonBranch_ appendBytes:bytes length: (value ? sizeof(true_buffer) : sizeof(false_buffer))];    
 }
 
-- (void) parserFoundJsonNull {
+- (void) parserFoundNull {
     // Since "null" is true ASCII, we don't really need to elaborately convert the encoding:
     const char_t buffer[] = {'n', 'u', 'l', 'l'};
     [jsonBranch_ appendBytes:buffer length:sizeof(buffer)];    
 }
 
 
-- (void) parserFoundJsonArrayBegin {
+- (void) parserFoundArrayBegin {
     ++level_;
     char_t ch = static_cast<char_t>('[');
     [jsonBranch_ appendBytes:&ch length:sizeof(ch)];    
 }
 
-- (void) parserFoundJsonArrayEnd {
+- (void) parserFoundArrayEnd {
     --level_;
     char_t ch = static_cast<char_t>(']');
     [jsonBranch_ appendBytes:&ch length:sizeof(ch)];    
 }
 
-- (void) parserFoundJsonObjectBegin {
+- (void) parserFoundObjectBegin {
     ++level_;
     char_t ch = static_cast<char_t>('{');
     [jsonBranch_ appendBytes:&ch length:sizeof(ch)];    
 }
 
-- (bool) parserFoundJsonObjectEnd {
+- (bool) parserFoundObjectEnd {
     --level_;
     return true;
     char_t ch = static_cast<char_t>('}');
     [jsonBranch_ appendBytes:&ch length:sizeof(ch)];    
 }
 
-- (void) parserFoundJsonValueBeginAtIndex:(size_t)index
+- (void) parserFoundValueBeginAtIndex:(size_t)index
 {
     if (level_ == 1) {
         json_path_.push_index(index);
@@ -181,7 +187,7 @@ typedef json::unicode::encoding_traits<JP_CFStringEncoding>::code_unit_type char
     }
 }
 
-- (void) parserFoundJsonValueEndAtIndex:(size_t)index
+- (void) parserFoundValueEndAtIndex:(size_t)index
 {
     if (level_ == 1) {
         json_path_.pop_component();
@@ -191,7 +197,7 @@ typedef json::unicode::encoding_traits<JP_CFStringEncoding>::code_unit_type char
     }    
 }
 
-- (void) parserFoundJsonValueBeginWithKey:(const void*)bytes length:(size_t)length encoding:(NSStringEncoding)encoding index:(size_t)index
+- (void) parserFoundKeyValuePairBeginWithKey:(const void*)bytes length:(size_t)length encoding:(NSStringEncoding)encoding index:(size_t)index
 {
     assert(encoding_ == encoding);
     
@@ -216,7 +222,7 @@ typedef json::unicode::encoding_traits<JP_CFStringEncoding>::code_unit_type char
     }
 }
 
-- (void) parserFoundJsonValueEndWithKey:(const void*)bytes length:(size_t)length encoding:(NSStringEncoding)encoding index:(size_t)index
+- (void) parserFoundKeyValuePairEnd
 {
     if (level_ == 1) {
         json_path_.pop_component();

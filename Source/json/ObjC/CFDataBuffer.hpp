@@ -22,7 +22,6 @@
 
 
 #include "json/config.hpp"
-#import <CoreFoundation/CoreFoundation.h>
 #include "semaphore.hpp"
 #include "mutex.hpp"
 
@@ -34,6 +33,7 @@
 #include <iostream>
 #include <iomanip>
 
+#import <CoreFoundation/CoreFoundation.h>
 
 
 //#define JSON_OBJC_CFDATA_BUFFERS_HPP_LOG_DEBUG

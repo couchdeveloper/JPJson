@@ -28,13 +28,12 @@
 #include "unicode_errors.hpp"
 #include "unicode_filter.hpp"
 
-#include <boost/mpl/if.hpp>
 #include <boost/utility.hpp>
 #include <boost/type_traits.hpp>
+#include <boost/mpl/if.hpp>
 #include <boost/mpl/and.hpp>
 #include <boost/mpl/not.hpp>
 #include <boost/mpl/assert.hpp>
-#include <boost/mpl/if.hpp>
 
 
 #define JP_EXPECT(cond)  __builtin_expect(static_cast<long>(cond), 1)
@@ -2051,7 +2050,7 @@ namespace json { namespace unicode {
         //  E_INVALID_CODE_POINT:   Surrogate or out of Unicode code space.
         //
         template <typename InIteratorT, typename OutIteratorT>
-        int 
+        static int 
 #if defined (TEST_CONVERT_FORCE_INLINE)
         __attribute__((always_inline))
 #endif                            
@@ -2273,7 +2272,7 @@ namespace json { namespace unicode {
         //  E_INVALID_CODE_POINT:   Surrogate or out of Unicode code space.
         //
         template <typename InIteratorT, typename OutIteratorT>
-        int 
+        static int 
 #if defined (TEST_CONVERT_FORCE_INLINE)
         __attribute__((always_inline))
 #endif                            
