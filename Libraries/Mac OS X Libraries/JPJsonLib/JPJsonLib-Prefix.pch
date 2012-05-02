@@ -2,6 +2,12 @@
 // Prefix header for all source files of the 'JPJsonLib' target in the 'JPJsonLib' project
 //
 
+
+// Due to a conflict with macros "Nil" and "nil" defined in Foundation,
+// we need to include certain boost headers before any Foundation header:
+#include "json/utility/string_to_number.hpp"
+
+
 #ifdef __OBJC__
     #import <CoreFoundation/CoreFoundation.h>
 #endif
