@@ -109,6 +109,9 @@
                <FileRef
                   location = "group:simple_log.hpp">
                </FileRef>
+               <FileRef
+                  location = "group:string_to_number.hpp">
+               </FileRef>
             </Group>
             <Group
                location = "group:parser"
