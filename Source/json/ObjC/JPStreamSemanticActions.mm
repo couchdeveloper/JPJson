@@ -78,13 +78,6 @@ namespace {
             (write_string_imp_func_ptr_t)[(NSObject*)this->delegate_ methodForSelector: @selector(parserFoundString:length:hasMore:encoding:)]
             : 0;        
             
-//            push_string_imp_ = [this->delegate_ respondsToSelector:@selector(parserFoundString:length:encoding:)] ? 
-//                (push_string_imp_func_ptr_t)[(NSObject*)this->delegate_ methodForSelector: @selector(parserFoundString:length:encoding:)]
-//                : 0;        
-
-//            push_key_imp_ = [this->delegate_ respondsToSelector:@selector(parserFoundKey:length:encoding:)] ? 
-//                (push_key_imp_func_ptr_t)[(NSObject*)this->delegate_ methodForSelector: @selector(parserFoundKey:length:encoding:)]
-//                : 0;
             push_number_imp_ = [this->delegate_ respondsToSelector:@selector(parserFoundNumber:length:)] ? 
                 (push_number_imp_func_ptr_t)[(NSObject*)this->delegate_ methodForSelector:@selector(parserFoundNumber:length:)]
                 : 0;

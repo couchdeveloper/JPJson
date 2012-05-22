@@ -1,12 +1,12 @@
 //
-//  JPSemanticActionsTest.mm
+//  JPRepresentationGeneratorTest.mm
 //  Test
 //
 //  Created by Andreas Grosam on 10/23/11.
 //  Copyright (c) 2011 __MyCompanyName__. All rights reserved.
 //
 
-#import "JPJson/JPSemanticActions.h"
+#import "JPJson/JPRepresentationGenerator.h"
 #include "gtest/gtest.h"
 #import <Foundation/Foundation.h>
 
@@ -15,16 +15,16 @@
 namespace {
     
         
-    class JPSemanticActionsTest : public ::testing::Test {
+    class JPRepresentationGeneratorTest : public ::testing::Test {
     protected:
         // You can remove any or all of the following functions if its body
         // is empty.
         
-        JPSemanticActionsTest() {
+        JPRepresentationGeneratorTest() {
             // You can do set-up work for each test here.
         }
         
-        virtual ~JPSemanticActionsTest() {
+        virtual ~JPRepresentationGeneratorTest() {
             // You can do clean-up work that doesn't throw exceptions here.
         }
         
@@ -47,15 +47,15 @@ namespace {
     
     
     
-    TEST_F(JPSemanticActionsTest, JPSemanticActionsDefaultProperties) 
+    TEST_F(JPRepresentationGeneratorTest, JPSemanticActionsDefaultProperties) 
     {
         NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
         
-        JPSemanticActions* sa = [[JPSemanticActions alloc] init];
+        JPRepresentationGenerator* sa = [[JPRepresentationGenerator alloc] init];
         EXPECT_TRUE((void*)sa.handlerDispatchQueue != NULL);
         [sa release];
         
-        sa = [[JPSemanticActions alloc] initWithHandlerDispatchQueue:NULL];
+        sa = [[JPRepresentationGenerator alloc] initWithHandlerDispatchQueue:NULL];
         EXPECT_EQ(nil, sa.handlerDispatchQueue);
 
         
@@ -94,11 +94,11 @@ namespace {
         [pool drain];
     }
     
-    TEST_F(JPSemanticActionsTest, JPSemanticActionsSetProperties) 
+    TEST_F(JPRepresentationGeneratorTest, JPSemanticActionsSetProperties) 
     {
         NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
         
-        JPSemanticActions* sa = [[JPSemanticActions alloc] init];
+        JPRepresentationGenerator* sa = [[JPRepresentationGenerator alloc] init];
 
         EXPECT_TRUE((void*)(sa.handlerDispatchQueue) != NULL);
         
@@ -194,10 +194,10 @@ namespace {
     }
     
     
-    TEST_F(JPSemanticActionsTest, JPSemanticActionsError) 
+    TEST_F(JPRepresentationGeneratorTest, JPSemanticActionsError) 
     {
         NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-        JPSemanticActions* sa = [[JPSemanticActions alloc] init];
+        JPRepresentationGenerator* sa = [[JPRepresentationGenerator alloc] init];
         
         // If clients detect errors, they may set the error state of the 
         // semantic actions instance using method setErrorCode:description:

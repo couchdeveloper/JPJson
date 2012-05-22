@@ -75,8 +75,9 @@ namespace {
         }
     }
 
+    
     // Path to a JSON file which is used globally for all tests.
-    NSString* JSON_TEST_FILE = @"Test-UTF8.json";
+    NSString* JSON_TEST_FILE = @"sample_json.json";
     
     
     using utilities::timer;
@@ -1086,7 +1087,7 @@ int main (int argc, const char * argv[])
 //    bench_AGJsonParser2(N);
 //    bench_AGAsyncJsonParser(N);
 //#if defined (USE_JSONKit)    
-//    bench_JSONKit1(N);
+    bench_JSONKit1(N);
 //    bench_JSONKit2(N);
 //    bench_JSONKitString1(N);
 //#endif    

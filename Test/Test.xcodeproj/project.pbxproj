@@ -89,9 +89,9 @@
 		A1AF4B651462B5AB0065B048 /* JsonSemanticActionsTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A164227C13D442A300796785 /* JsonSemanticActionsTest.cpp */; };
 		A1AF4B681462B5AB0065B048 /* CFDataCacheTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1DC52B914582CDA00CE28F2 /* CFDataCacheTest.mm */; };
 		A1AF4B691462B5AB0065B048 /* SemanticActionsBaseTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1DC52BD14582D6C00CE28F2 /* SemanticActionsBaseTest.mm */; };
-		A1AF4B6A1462B5AB0065B048 /* SemanticActionsTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1DC52BA14582CDA00CE28F2 /* SemanticActionsTest.mm */; };
+		A1AF4B6A1462B5AB0065B048 /* RepresentationGeneratorTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1DC52BA14582CDA00CE28F2 /* RepresentationGeneratorTest.mm */; };
 		A1AF4B6B1462B5AB0065B048 /* JPSemanticActionsBaseTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A12BA49114541AD40083BAA6 /* JPSemanticActionsBaseTest.mm */; };
-		A1AF4B6C1462B5AB0065B048 /* JPSemanticActionsTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A12BA48F145417900083BAA6 /* JPSemanticActionsTest.mm */; };
+		A1AF4B6C1462B5AB0065B048 /* JPRepresentationGeneratorTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A12BA48F145417900083BAA6 /* JPRepresentationGeneratorTest.mm */; };
 		A1AF4B6D1462B5AB0065B048 /* JPJsonParserTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A199FC8013D6FF45000170CD /* JPJsonParserTest.mm */; };
 		A1AF4B6E1462B5AB0065B048 /* JPAsyncJsonParserTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A192C71114239B59002EE32F /* JPAsyncJsonParserTest.mm */; };
 		A1AF4B6F1462B5AB0065B048 /* JPJsonWriterTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A199FCB013D74363000170CD /* JPJsonWriterTest.mm */; };
@@ -109,7 +109,7 @@
 		A1D2527E13DDA2AE00960381 /* gtest_main.cc in Sources */ = {isa = PBXBuildFile; fileRef = A164221013D4357400796785 /* gtest_main.cc */; };
 		A1DC4BDC14582A3E00CE28F2 /* JPAsyncJsonParserTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A192C71114239B59002EE32F /* JPAsyncJsonParserTest.mm */; };
 		A1DC4BDD14582A5D00CE28F2 /* JPJsonParserTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A199FC8013D6FF45000170CD /* JPJsonParserTest.mm */; };
-		A1DC4BDE14582A8D00CE28F2 /* JPSemanticActionsTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A12BA48F145417900083BAA6 /* JPSemanticActionsTest.mm */; };
+		A1DC4BDE14582A8D00CE28F2 /* JPRepresentationGeneratorTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A12BA48F145417900083BAA6 /* JPRepresentationGeneratorTest.mm */; };
 		A1DC4BDF14582AC400CE28F2 /* JPSemanticActionsBaseTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A12BA49114541AD40083BAA6 /* JPSemanticActionsBaseTest.mm */; };
 		A1DC4BE614582BB700CE28F2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A199FC7B13D5DB12000170CD /* Foundation.framework */; };
 		A1DC52BB14582CDA00CE28F2 /* CFDataCacheTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1DC52B914582CDA00CE28F2 /* CFDataCacheTest.mm */; };
@@ -117,7 +117,7 @@
 		A1E228061408E58B0048FE07 /* JsonCustomObjectTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A164225413D4427000796785 /* JsonCustomObjectTest.cpp */; };
 		A1FE70ED148A4873004B962E /* SemanticActionsBaseTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1DC52BD14582D6C00CE28F2 /* SemanticActionsBaseTest.mm */; };
 		A1FE70F0148A4A43004B962E /* intrusive_json_path_test.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1FE70EF148A4A43004B962E /* intrusive_json_path_test.mm */; };
-		A1FE70F1148A56A6004B962E /* SemanticActionsTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1DC52BA14582CDA00CE28F2 /* SemanticActionsTest.mm */; };
+		A1FE70F1148A56A6004B962E /* RepresentationGeneratorTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1DC52BA14582CDA00CE28F2 /* RepresentationGeneratorTest.mm */; };
 		A1FE70F2148A5C29004B962E /* intrusive_json_path_test.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1FE70EF148A4A43004B962E /* intrusive_json_path_test.mm */; };
 		A1FF8C771489201B003DF439 /* NSData+JPJsonDetectEncodingTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A12AC926146BE78F00AED943 /* NSData+JPJsonDetectEncodingTest.mm */; };
 /* End PBXBuildFile section */
@@ -217,7 +217,7 @@
 		A126DCB6154EC071001E09F0 /* string_storage_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = string_storage_test.cpp; sourceTree = "<group>"; };
 		A126DCC2154FD991001E09F0 /* string_to_number_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = string_to_number_test.cpp; sourceTree = "<group>"; };
 		A12AC926146BE78F00AED943 /* NSData+JPJsonDetectEncodingTest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "NSData+JPJsonDetectEncodingTest.mm"; sourceTree = "<group>"; };
-		A12BA48F145417900083BAA6 /* JPSemanticActionsTest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = JPSemanticActionsTest.mm; sourceTree = "<group>"; };
+		A12BA48F145417900083BAA6 /* JPRepresentationGeneratorTest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = JPRepresentationGeneratorTest.mm; sourceTree = "<group>"; };
 		A12BA49114541AD40083BAA6 /* JPSemanticActionsBaseTest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = JPSemanticActionsBaseTest.mm; sourceTree = "<group>"; };
 		A140DD1C13E94E36009DBB8C /* unicode_conversion_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = unicode_conversion_test.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		A148127214AA035200CC7BEA /* json_path_parser_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = json_path_parser_test.cpp; sourceTree = "<group>"; };
@@ -280,7 +280,7 @@
 		A1DC4BE414582BB700CE28F2 /* ObjC_private_test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ObjC_private_test; sourceTree = BUILT_PRODUCTS_DIR; };
 		A1DC4BEB14582BB800CE28F2 /* ObjC_private_test-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ObjC_private_test-Prefix.pch"; sourceTree = "<group>"; };
 		A1DC52B914582CDA00CE28F2 /* CFDataCacheTest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; path = CFDataCacheTest.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		A1DC52BA14582CDA00CE28F2 /* SemanticActionsTest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; path = SemanticActionsTest.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		A1DC52BA14582CDA00CE28F2 /* RepresentationGeneratorTest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; path = RepresentationGeneratorTest.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		A1DC52BD14582D6C00CE28F2 /* SemanticActionsBaseTest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SemanticActionsBaseTest.mm; sourceTree = "<group>"; };
 		A1E4ADDB1450610E000F4E21 /* json_path_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = json_path_test.cpp; sourceTree = "<group>"; };
 		A1E95E0F147288E100A78D3F /* base64_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = base64_test.cpp; sourceTree = "<group>"; };
@@ -490,7 +490,7 @@
 			isa = PBXGroup;
 			children = (
 				A12BA49114541AD40083BAA6 /* JPSemanticActionsBaseTest.mm */,
-				A12BA48F145417900083BAA6 /* JPSemanticActionsTest.mm */,
+				A12BA48F145417900083BAA6 /* JPRepresentationGeneratorTest.mm */,
 				A199FC8013D6FF45000170CD /* JPJsonParserTest.mm */,
 				A192C71114239B59002EE32F /* JPAsyncJsonParserTest.mm */,
 				A199FCB013D74363000170CD /* JPJsonWriterTest.mm */,
@@ -586,7 +586,7 @@
 				A1FE70EF148A4A43004B962E /* intrusive_json_path_test.mm */,
 				A1DC52B914582CDA00CE28F2 /* CFDataCacheTest.mm */,
 				A1DC52BD14582D6C00CE28F2 /* SemanticActionsBaseTest.mm */,
-				A1DC52BA14582CDA00CE28F2 /* SemanticActionsTest.mm */,
+				A1DC52BA14582CDA00CE28F2 /* RepresentationGeneratorTest.mm */,
 				A1DC4BEA14582BB800CE28F2 /* Supporting Files */,
 			);
 			path = ObjC_private_test;
@@ -857,7 +857,7 @@
 				A167EB621440716700BD2A58 /* JPJsonWriterTest.mm in Sources */,
 				A1DC4BDC14582A3E00CE28F2 /* JPAsyncJsonParserTest.mm in Sources */,
 				A1DC4BDD14582A5D00CE28F2 /* JPJsonParserTest.mm in Sources */,
-				A1DC4BDE14582A8D00CE28F2 /* JPSemanticActionsTest.mm in Sources */,
+				A1DC4BDE14582A8D00CE28F2 /* JPRepresentationGeneratorTest.mm in Sources */,
 				A1DC4BDF14582AC400CE28F2 /* JPSemanticActionsBaseTest.mm in Sources */,
 				A12AC927146BE78F00AED943 /* NSData+JPJsonDetectEncodingTest.mm in Sources */,
 			);
@@ -900,9 +900,9 @@
 				A1AF4B651462B5AB0065B048 /* JsonSemanticActionsTest.cpp in Sources */,
 				A1AF4B681462B5AB0065B048 /* CFDataCacheTest.mm in Sources */,
 				A1AF4B691462B5AB0065B048 /* SemanticActionsBaseTest.mm in Sources */,
-				A1AF4B6A1462B5AB0065B048 /* SemanticActionsTest.mm in Sources */,
+				A1AF4B6A1462B5AB0065B048 /* RepresentationGeneratorTest.mm in Sources */,
 				A1AF4B6B1462B5AB0065B048 /* JPSemanticActionsBaseTest.mm in Sources */,
-				A1AF4B6C1462B5AB0065B048 /* JPSemanticActionsTest.mm in Sources */,
+				A1AF4B6C1462B5AB0065B048 /* JPRepresentationGeneratorTest.mm in Sources */,
 				A1AF4B6D1462B5AB0065B048 /* JPJsonParserTest.mm in Sources */,
 				A1AF4B6E1462B5AB0065B048 /* JPAsyncJsonParserTest.mm in Sources */,
 				A1AF4B6F1462B5AB0065B048 /* JPJsonWriterTest.mm in Sources */,
@@ -940,7 +940,7 @@
 				A1DC52BF1458368200CE28F2 /* gtest_main.cc in Sources */,
 				A1FE70ED148A4873004B962E /* SemanticActionsBaseTest.mm in Sources */,
 				A1FE70F0148A4A43004B962E /* intrusive_json_path_test.mm in Sources */,
-				A1FE70F1148A56A6004B962E /* SemanticActionsTest.mm in Sources */,
+				A1FE70F1148A56A6004B962E /* RepresentationGeneratorTest.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

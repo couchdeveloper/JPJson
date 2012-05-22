@@ -108,13 +108,15 @@
  
  If enabled, the parser parses one or more documents from the input until it 
  receives `EOF`. Otherwise, the parser treats any non white spaces after the
- first JSON document as an error.
+ first JSON document as an error. 
  
  *Note:* This option is ignored when invoking the json parser through one of
- the convenience methods:
+ the two convenience methods (listed below) since parsing multiple documents 
+ require to use a Semantic Actions object, and possibly a asynchronous parser.
  
  -  `+parseString:options:error:`
  -  `+parseData:options:error:`
+ 
  
  
  -  `JPJsonParserParseMultipleDocumentsAsynchronously`
@@ -184,7 +186,7 @@
  `NSDecimalNumber` object when encountering a number in the input.
  
  *Note:* Detailed information about mapping of JSON number to a 
- corresponding Foundation class can be found in class <JPSemanticActions>.
+ corresponding Foundation class can be found in class <JPRepresentationGenerator>.
  
  
    
@@ -203,47 +205,42 @@
  
  
  
- ### Using a JPSemanticActions instance ###
- 
- As mentioned, semantic actions instances shall conform to the protocol 
- `JPSemanticActionsProtocol`. There is already an abstract base class 
- <JPSemanticActionsBase> where all concrete semantic actions classes shall
- inherit from. JPSemanticActionsBase implements all required common aspects
- for a semantic actions object.
- 
- One of the concrete semantic actions class is <JPSemanticActions>. The purpose
- of this class is to create a representation of a JSON document as a hierarchical 
- structure of Foundation objects.
- 
- When an instance of a <JPSemanticActions> is set as parameter `semanticActions`
- invoking '+parseData:semanticActions:' creates a repesentation from the JSON 
- text as Foundation objects which can be retrieved with property `result` of 
- the semantic actions object. 
- 
- The conventience methods `+parseString:options:error:` and `+parseData:options:error:`
- just use a JPSemanticActions object internally and configure it using the 
- options provided in parameter `options`.
+ ### Using a Semantic Actions object ###
  
  
- Depending on the configuration of the JPSemanticActions instance, the parser
- may parse one or more JSON documents within one input. If more than one JSON
- documents shall be parsed, the client need to setup handler blocks and 
- possibly a dispatch queue for the semantic actions instance. 
+ Each parser, that is an instance of <JPJsonParser> or and instance of 
+ <JPAsyncJsonParser>, needs to be associated to a _Semantic Actions_ object. If 
+ none is specified when a parser is created, the parser itself creates a default 
+ one, which is a `JPRepresentationGenerator`. 
  
- The handler blocks will be called by the JPSemanticActions instance on the 
- occurence of the following events:
+ *Info:*  A parser sends _parse events_ to the semantic actions object as they 
+ appear in the JSON text. The task of a semantic actions object is to handle 
+ these events appropriately.
  
- - The start of a JSON document was detected.
- - A JSON document could be parsed completely and a Foundation object 
- has been created, which will be passed as paramenter to the client.
- - The parser finished parsing the text.
- - An error occured.
+ There are two "built-in" semantic actions classes:
  
- The semantic actions object also contains additional information, for example
- an error object, which can be retrieved in case an error occured.
+ - <JPRepresentationGenerator> and
+ - <JPStreamSemanticActions>
+ 
+ *see also:*  <JPSemanticActionsBase> and <JPSemanticActionsProtocol>. 
+ 
+ 
+ The purpose of `JPRepresentationGenerator` is to create a _representation_ of a 
+ JSON document as a hierarchical structure of _Foundation objects_. This class
+ is _self-contained_, that means it handles all the parse events and generates 
+ the representation itself without the need of a delegate. There is rarely the 
+ need to subclass it.
+ 
+ The purpose of a `JPStreamSemanticActions` is to provide a _SAX style_ API. This 
+ gives fine grained control over the actions which shall be taken on the various 
+ _parse events_. `JPStreamSemanticActions` can be subclassed in order to implement 
+ the delegate methods which will be invoked by the parser on "parse events".
+
+
+ 
  
  For detailed information about semantic actions see class <JPSemanticActionsBase>, 
- <JPSemanticActions> and <JPSemanticActionsProtocol>.
+ <JPRepresentationGenerator> and <JPSemanticActionsProtocol>.
 
  */
 
@@ -258,10 +255,10 @@
  Parses the input text with the specified options and returns a representation
  of the JSON text as a Foundation object.
  
- This method internally creates a JPSemanticActions instance and configures it
- according the specified options. Then it starts parsing immediately and returns
- the result. For a detailed description of class  `JPSemanticActions`
- see <JPSemanticActions>.
+ This method internally creates a `JPRepresentationGenerator` instance and configures 
+ it according the specified options. Then it starts parsing immediately and returns
+ the result. For a detailed description of class  `JPRepresentationGenerator`
+ see <JPRepresentationGenerator>.
  
  Using this convenience method, the parser can only parse one JSON document. That 
  is, parameter _string_ should not contain multiple JSON documents.
@@ -299,10 +296,10 @@
  UTF-8, UTF-16, UTF-16LE, UTF-16BE, UTF-32, UTF-32LE or UTF-32BE. A BOM
  may optionally preceed the start of the byte stream.
  
- This method internally creates a JPSemanticActions instance and configures it
- according the specified options. Then it starts parsing immediately and returns
- the result. For a detailed description of class  `JPSemanticActions`
- see <JPSemanticActions>.
+ This method internally creates a `JPRepresentationGenerator` instance and configures 
+ it according the specified options. Then it starts parsing immediately and returns
+ the result. For a detailed description of class  `JPRepresentationGenerator`
+ see <JPRepresentationGenerator>.
  
  
  Using this method, the parser can only parse one JSON document contained
@@ -340,7 +337,7 @@
 /** @name Using a Semantic Actions Object */
 
 // Synopsis:
-// + (BOOL) parseData:(NSData*)data semanticActions:(JPSemanticActions*)sa;
+// + (BOOL) parseData:(NSData*)data semanticActions:(JPSemanticActionsBase*)sa;
 //
 /**
  Parses the input text contained in "data" and processes the JSON elements
@@ -363,8 +360,8 @@
  
  @param semanticActions A "semantic actions" object which provides the semantic 
  actions for the parser. This parameter must not be nil. For detailed information 
- about semantic actions see class <JPSemanticActionsBase>, <JPSemanticActions> 
- and <JPSemanticActionsProtocol>
+ about semantic actions see class <JPSemanticActionsBase>, <JPRepresentationGenerator>,
+ <JPStreamSemanticActions> and <JPSemanticActionsProtocol>.
 
  
  @return Returns YES, if the input could be successfully parsed and successfully 

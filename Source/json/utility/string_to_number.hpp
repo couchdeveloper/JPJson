@@ -43,6 +43,7 @@
 
 
 #include <boost/lexical_cast.hpp>
+#include <limits>
 #include <stdexcept>
 #include <xlocale.h>
 #include <cerrno>
@@ -61,6 +62,15 @@ namespace json { namespace utility {
     }
     
 
+    // The following conversion function assume that the str is a valid 
+    // JSON number string and len is set correctly. The number string shall 
+    // not be preceeded with whitespaces or an optional '+' sign.
+    // If the conversion result is an *unsigned* integral type there must 
+    // be no minus sign.
+    
+#define JSON_UTILITY_STRING_TO_NUMBER_CHECK_RESULT
+    
+    
     // T shall be an arithmentic type
     
     template <typename T>
@@ -76,15 +86,48 @@ namespace json { namespace utility {
     inline int string_to_number<int>(char const*  str, size_t len) 
     {
         char* endPtr;
-        return static_cast<int>(strtol_l(str, &endPtr, 10, NULL));
+        long result = strtol_l(str, &endPtr, 10, NULL);
+        if (result > std::numeric_limits<int>::max() or result < std::numeric_limits<int>::min())
+            throw_number_conversion_error("ERROR: Conversion to int is out of range");
+        return static_cast<int>(result);
+    }
+
+    
+    template <>
+    inline unsigned int string_to_number<unsigned int>(char const*  str, size_t len) 
+    {
+        char* endPtr;
+        unsigned long result = strtoul_l(str, &endPtr, 10, NULL);
+        if (result > std::numeric_limits<unsigned int>::max())
+            throw_number_conversion_error("ERROR: Conversion to unsigned int is out of range");
+        return static_cast<unsigned int>(result);
     }
     
     template <>
     inline long string_to_number<long>(char const*  str, size_t len) 
     {
         char* endPtr;
-        return strtol_l(str, &endPtr, 10, NULL);
+        errno = 0;
+        long result = strtol_l(str, &endPtr, 10, NULL);
+        if (errno == ERANGE) {
+            throw_number_conversion_error("ERROR: Conversion to long is out of range");
+        }
+        return result;
     }
+                                          
+    template <>
+    inline unsigned long string_to_number<unsigned long>(char const*  str, size_t len) 
+    {
+        char* endPtr;
+        errno = 0;
+        unsigned long result = strtoul_l(str, &endPtr, 10, NULL);
+        if (errno == ERANGE) {
+            throw_number_conversion_error("ERROR: Conversion to unsigned long is out of range");
+        }
+        return result;
+    }
+    
+                                          
     
     template <>
     inline long long string_to_number<long long>(char const*  str, size_t len) 
@@ -93,11 +136,24 @@ namespace json { namespace utility {
         errno = 0;
         long long result = strtoll_l(str, &endPtr, 10, NULL);
         if (errno == ERANGE) {
-            throw_number_conversion_error("ERROR: Conversion to long long failed");
+            throw_number_conversion_error("ERROR: Conversion to long long is out of range");
         }
         return result;
     }
     
+    template <>
+    inline unsigned long long string_to_number<unsigned long long>(char const*  str, size_t len) 
+    {
+        char* endPtr;
+        errno = 0;
+        unsigned long long result = strtoull_l(str, &endPtr, 10, NULL);
+        if (errno == ERANGE) {
+            throw_number_conversion_error("ERROR: Conversion to unsigned long long is out of range");
+        }
+        return result;
+    }
+    
+
     template <>
     inline double string_to_number<double>(char const*  str, size_t len) 
     {
@@ -130,12 +186,33 @@ namespace json { namespace utility {
     }
     
     template <>
+    inline unsigned int string_to_number<unsigned int>(char const*  str, size_t len) 
+    {
+        unsigned int val;
+        bool result = boost::spirit::qi::parse(str, str+len, boost::spirit::uint_, val);        
+        if (not result)
+            throw_number_conversion_error("ERROR: Conversion to unsigned int failed");
+        return val;
+    }
+    
+
+    template <>
     inline long string_to_number<long>(char const*  str, size_t len) 
     {
         long val;
         bool result = boost::spirit::qi::parse(str, str+len, boost::spirit::long_, val);        
         if (not result)
-            throw_number_conversion_error("ERROR: Conversion to int failed");
+            throw_number_conversion_error("ERROR: Conversion to long failed");
+        return val;
+    }
+    
+    template <>
+    inline unsigned long string_to_number<unsigned long>(char const*  str, size_t len) 
+    {
+        unsigned long val;
+        bool result = boost::spirit::qi::parse(str, str+len, boost::spirit::ulong_, val);        
+        if (not result)
+            throw_number_conversion_error("ERROR: Conversion to unsigned long failed");
         return val;
     }
     
@@ -145,7 +222,17 @@ namespace json { namespace utility {
         long long val;
         bool result = boost::spirit::qi::parse(str, str+len, boost::spirit::long_long, val);        
         if (not result)
-            throw_number_conversion_error("ERROR: Conversion to int failed");
+            throw_number_conversion_error("ERROR: Conversion to long long failed");
+        return val;
+    }
+    
+    template <>
+    inline unsigned long long string_to_number<unsigned long long>(char const*  str, size_t len) 
+    {
+        unsigned long long val;
+        bool result = boost::spirit::qi::parse(str, str+len, boost::spirit::ulong_long, val);        
+        if (not result)
+            throw_number_conversion_error("ERROR: Conversion to unsigned long long failed");
         return val;
     }
     
@@ -155,7 +242,17 @@ namespace json { namespace utility {
         double val;
         bool result = boost::spirit::qi::parse(str, str+len, boost::spirit::double_, val);        
         if (not result)
-            throw_number_conversion_error("ERROR: Conversion to int failed");
+            throw_number_conversion_error("ERROR: Conversion to double failed");
+        return val;
+    }
+    
+    template <>
+    inline long double string_to_number<long double>(char const*  str, size_t len) 
+    {
+        long double val;
+        bool result = boost::spirit::qi::parse(str, str+len, boost::spirit::long_double, val);        
+        if (not result)
+            throw_number_conversion_error("ERROR: Conversion to long double failed");
         return val;
     }
     

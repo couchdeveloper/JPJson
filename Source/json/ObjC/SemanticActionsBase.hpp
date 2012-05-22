@@ -36,36 +36,36 @@ namespace json { namespace objc {
     
 #pragma mark - Class SemanticActionsBase
 
-    //  Class SemanticActionsBase is the (abstract) base class of all concrete 
-    //  definitions of a semantic actions class. An instance of a subclass will 
-    //  be created by an Objective-C semantic actions object which itself is a 
-    //  subclass of JPSemanticActionsBase. The creater sets itself as the 
-    //  "delegate" for this class. 
+    //  Class `SemanticActionsBase` is the base class of all semantic actions 
+    //  classes which is used as the 'implementation' of an Objective-C semantic 
+    //  actions class. An instance of a subclass will be created by an Objective-C 
+    //  semantic actions object which itself is a subclass of JPSemanticActionsBase. 
+    //  The creater sets itself as the "delegate" for an instance of the SemanticActionsBase. 
     //
     //  The purpose of the SemanticActionsBase class is to provide a common
-    //  interface for a) the parser and b) the Objective-C semantic actions
-    //  class. To accomplish this, the SemanticActionsBase class simply maps
-    //  "parser events" to corresponding virtual member functions, which are
-    //  - with a few excpetions - emtpy by default. (This is in contrast to 
-    //  the pure C++ version, where semantic action classes are template para-
-    //  meters and use the curiously recurring template pattern (CRTP) to 
-    //  provide static polymorphism).
+    //  interface for the internal parser implemented in pure C++ and the 
+    //  semantic actions class implemented in Objective-C. Class SemanticActionsBase
+    //  is itself a C++ class but has a member variable `delegate_` which is an
+    //  Objective-C object pointer defined as `id<JPSemanticActionsProtocol>`.
     //
-    //  These virtual member functions eventually notify the parser events by
-    //  sending the "delegate", that is the JPSemanticActions instance, the 
-    //  corresponding message via Objective-C dispatching. Here, only the 
-    //  *required* delegate methods will actually be forwarded to the Objective-
-    //  C instance. Other delegate methods must be invoked by sub classes if
-    //  required.
+    //  The internal parser uses this exposed API and calls the virtual member 
+    //  functions - aka "parse events" - for its semantic actions object (a C++ 
+    //  instance). The  SemanticActionsBase instance maps these "parse events" 
+    //  to corresponding Objective-C messages which will be send to its delegate. 
+    //  (This is in contrast to the pure C++ version, where semantic action classes 
+    //  are template parameters and use the curiously recurring template pattern 
+    //  (CRTP) to provide static polymorphism).
+    //
+    //  Thats is, "parse events" sent from the internal JSON parser will be
+    //  forwarded as Objective-C messages via Objective-C dispatching to a 
+    //  delegate object which eventually handles these "parse event".
+    //
+    //  However, class `SemanticActionsBase` implements only the *required* delegate 
+    //  methods. This means, if other delegate methods - aka "parse events" must 
+    //  be send to a delegate, class `SemanticActionsBase` must be subclassed in 
+    //  order to implement this.
     //  
     // 
-    //  The concrete C++ subclass is required to implement the virtual member
-    //  functions accordingly. Most of the features of a Objective-C Semantic 
-    //  Actions class is thereof implemented in the concrete definition of the 
-    //  C++ semantic actions class.
-    //  The public interface required to implement an Objective-C semantic
-    //  actions class is kept minimal and C++ implementations can be reused in
-    //  differnet Objective-C classes.
     //  
     //  Template parameter EncodingT specifies the encoding of the internal 
     //  string buffer encoding. Usually, this should be set to UTF-16 encoding 

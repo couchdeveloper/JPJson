@@ -1,5 +1,5 @@
 //
-//  SemanticActions.hpp
+//  RepresentationGenerator.hpp
 //
 //  Created by Andreas Grosam on 6/16/11.
 //  Copyright 2011 Andreas Grosam
@@ -17,8 +17,8 @@
 //  limitations under the License.
 //
 
-#ifndef JSON_OBJC_SEMANTIC_ACTIONS_HPP
-#define JSON_OBJC_SEMANTIC_ACTIONS_HPP 
+#ifndef JSON_OBJC_REPRESENTATION_GENERATOR_HPP
+#define JSON_OBJC_REPRESENTATION_GENERATOR_HPP 
 
 #include "json/config.hpp"
 
@@ -30,21 +30,25 @@
 // via CF functions. CFMutbaleDictionaries created via Foundation do not expose 
 // this poor performance. 
 // Note: iOS 4 does not seem to have this issue.
-#define SEMANTIC_ACTIONS_NO_CREATE_MUTABLE_DICTIONARY_USING_CF
+#define JSON_OBJC_REPRESENTATION_GENERATOR_NO_CREATE_MUTABLE_DICTIONARY_USING_CF
 
 
-// JSON_OBJC_SEMANTIC_ACTIONS_USE_CACHE shall be defined.
-#define JSON_OBJC_SEMANTIC_ACTIONS_USE_CACHE
+// JSON_OBJC_REPRESENTATION_GENERATOR_USE_CACHE shall be defined.
+#define JSON_OBJC_REPRESENTATION_GENERATOR_USE_CACHE
 
 
-// JSON_OBJC_SEMANTIC_ACTIONS_USE_JSON_PATH should be in order to enable 
+// JSON_OBJC_REPRESENTATION_GENERATOR_USE_JSON_PATH should be in order to enable 
 // the JSON Path API and feature.
-//#define JSON_OBJC_SEMANTIC_ACTIONS_USE_JSON_PATH
+//#define JSON_OBJC_REPRESENTATION_GENERATOR_USE_JSON_PATH
 
 
+#if defined (DEBUG)
+    #define JSON_OBJC_REPRESENTATION_GENERATOR_USE_PERFORMANCE_COUNTER
+#endif
 
-#if defined (JSON_OBJC_SEMANTIC_ACTIONS_USE_JSON_PATH) && !defined (JSON_OBJC_SEMANTIC_ACTIONS_USE_CACHE)   
-#error  JSON_OBJC_SEMANTIC_ACTIONS_USE_JSON_PATH requires JSON_OBJC_SEMANTIC_ACTIONS_USE_CACHE
+
+#if defined (JSON_OBJC_REPRESENTATION_GENERATOR_USE_JSON_PATH) && !defined (JSON_OBJC_REPRESENTATION_GENERATOR_USE_CACHE)   
+#error  JSON_OBJC_REPRESENTATION_GENERATOR_USE_JSON_PATH requires JSON_OBJC_REPRESENTATION_GENERATOR_USE_CACHE
 #endif        
 
 
@@ -65,7 +69,7 @@
 
 #include <boost/static_assert.hpp>
 
-#if defined (JSON_OBJC_SEMANTIC_ACTIONS_USE_JSON_PATH)
+#if defined (JSON_OBJC_REPRESENTATION_GENERATOR_USE_JSON_PATH)
 #include "json/json_path/intrusive_json_path.hpp"
 #endif
 
@@ -92,7 +96,7 @@ namespace  {
 
 
 
-#if defined (JSON_OBJC_SEMANTIC_ACTIONS_USE_CACHE)
+#if defined (JSON_OBJC_REPRESENTATION_GENERATOR_USE_CACHE)
 #include "CFDataCache.hpp"
 #endif
 
@@ -242,24 +246,32 @@ namespace json { namespace objc {
     
     
     
-#pragma mark - Class SemanticActions
+#pragma mark - Class RepresentationGenerator
     //
-    //  Class SemanticActions
+    //  Class RepresentationGenerator
     //
-    //  The SemanticActions instance is responsible for creating the correspon-
-    //  ding JSON representation as Foundation objects. 
+    //  The class `RepresentationGenerator` is a specialized subclass of  
+    //  `SemanticActionsBase`. It is responsible for creating the corresponding 
+    //  JSON representation as Foundation objects. It is not meant to be 
+    //  subclassed.
+    //  
+    //  An instance of this class is used as the implementation object for the
+    //  Objective-C class `JPRepresentationGenerator`, the associated Objective-C 
+    //  class which is just a wrapper for this C++ class. 
     //
-    //  An instance of this class is used as the implementation object for
-    //  the Objective-C class JPSemanticActions. It ties together the JSON
-    //  parser implemented in pure C++ with its semantic actions class, which
-    //  is implemnted in Objective-C. It would be possible, that most of the
-    //  features implemented here may be implemented within the corresponding 
-    //  Objective-C class, JPSemanticActions. 
+    //  The RepresentationGenerator is "self-contained" which means that it consumes
+    //  and handles ALL "parse events" itself and thus, will not require a 
+    //  delegate nor is it meant to be subclassed.
+    //
+    //  Note: It would be possible, that most of the features implemented here 
+    //  may be implemented within the corresponding  Objective-C class 
+    // `JPRepresentationGenerator` directly. The reason for doing it this way
+    //  is performance: dispatching Objective-C methods is still slower than
+    //  C++ virtual function dispatch.
     // 
-    //  Uses NSArray and NSDictionary as the underlaying containers. 
-    //
-    //  Only the *required* delegate methods as defined in the 
-    //  JPSemanticActionsProtocol will be forwarded to the corresponding delegate.    
+    //  Only the *required* delegate methods as defined in the Objectivive-C 
+    //  protocol `JPSemanticActionsProtocol` will be forwarded to the 
+    //  corresponding delegate.    
     //  
     //
     //
@@ -309,13 +321,15 @@ namespace json { namespace objc {
     //  Objective-C objects hold in STL containers are always retained.
     
     template <typename EncodingT>
-    class SemanticActions : public SemanticActionsBase<EncodingT>
+    class RepresentationGenerator : public SemanticActionsBase<EncodingT>
     {
     public:     
         typedef SemanticActionsBase<EncodingT>      base;
         
+  
         
 #pragma mark -  struct performance_counter
+#if defined (JSON_OBJC_REPRESENTATION_GENERATOR_USE_PERFORMANCE_COUNTER)        
         struct performance_counter {
             performance_counter() :
                 c0_(0), c1_(0), c2_(0),
@@ -365,6 +379,7 @@ namespace json { namespace objc {
             size_t          number_count_;
             size_t          max_stack_size_;
         };
+#endif // JSON_OBJC_REPRESENTATION_GENERATOR_USE_PERFORMANCE_COUNTER        
         
     public:    
         typedef typename base::error_t              error_t;
@@ -389,7 +404,7 @@ namespace json { namespace objc {
         //typedef json_path<char_t>                   json_path_t;
         
 
-#if defined (JSON_OBJC_SEMANTIC_ACTIONS_USE_CACHE)   
+#if defined (JSON_OBJC_REPRESENTATION_GENERATOR_USE_CACHE)   
         typedef CFDataCache<char_t>                 cache_t;
         typedef typename cache_t::key_type          cache_key_t;
         typedef typename cache_t::value_type        cache_value_t;
@@ -398,7 +413,7 @@ namespace json { namespace objc {
         typedef typename cache_t::const_iterator    cache_const_iterator;
 #endif
         
-#if defined (JSON_OBJC_SEMANTIC_ACTIONS_USE_JSON_PATH)
+#if defined (JSON_OBJC_REPRESENTATION_GENERATOR_USE_JSON_PATH)
         typedef  objc_internal::intrusive_json_path<encoding_t> json_path_t;
 #endif
         
@@ -409,7 +424,7 @@ namespace json { namespace objc {
 #pragma mark - Public Members        
         
                 
-        SemanticActions(id<JPSemanticActionsProtocol> delegate = nil) 
+        RepresentationGenerator(id<JPSemanticActionsProtocol> delegate = nil) 
         :   base(delegate),
             result_(nil),
             tmp_data_str_(NULL),
@@ -421,15 +436,15 @@ namespace json { namespace objc {
             f_cf_retain = CFRetain;
             f_cf_release = CFRelease;
             numberGeneratorOption(number_generator_option_);
-#if defined (JSON_OBJC_SEMANTIC_ACTIONS_USE_CACHE) 
+#if defined (JSON_OBJC_REPRESENTATION_GENERATOR_USE_CACHE) 
             init_cache();
 #endif            
         }
         
-        virtual ~SemanticActions() 
+        virtual ~RepresentationGenerator() 
         {
             clear_stack();
-#if defined (JSON_OBJC_SEMANTIC_ACTIONS_USE_CACHE) 
+#if defined (JSON_OBJC_REPRESENTATION_GENERATOR_USE_CACHE) 
             //clear_cache();
 #endif      
             // If result_ is not nil, we need to release it:
@@ -442,7 +457,9 @@ namespace json { namespace objc {
         
         
         virtual void parse_begin_imp() {
+#if defined (JSON_OBJC_REPRESENTATION_GENERATOR_USE_PERFORMANCE_COUNTER)            
             pc_.t_.start();
+#endif            
             stack_.reserve(200);
             markers_.reserve(20);
             tmp_keys_.reserve(100);
@@ -458,7 +475,7 @@ namespace json { namespace objc {
         virtual void parse_end_imp()                            
         {
             if (stack_.size() != 1 or markers_.size() != 0) 
-                throwLogicError("json::SemanticActions: logic error");
+                throwLogicError("json::RepresentationGenerator: logic error");
             
             // The last and only element is the result of the parser. This object
             // is retained when put on the stack. When assigned to result_ we need 
@@ -468,7 +485,9 @@ namespace json { namespace objc {
             result_ = stack_.back(); 
             stack_.clear();
             //markers_.clear();
+#if defined (JSON_OBJC_REPRESENTATION_GENERATOR_USE_PERFORMANCE_COUNTER)            
             pc_.t_.stop();
+#endif            
             // result_ contains the result of the parser. It's retained.
             assert (tmp_data_str_ == 0);            
             base::parse_end_imp();  // notifyies delegate
@@ -484,10 +503,12 @@ namespace json { namespace objc {
         {
             //t0_.start();
             //++c0_;
+#if defined (JSON_OBJC_REPRESENTATION_GENERATOR_USE_PERFORMANCE_COUNTER)            
             ++pc_.array_count_;
+#endif            
             markers_.push_back(stack_.size());  // marker points to the next value which shall be inserted into the array, if any.
             //t0_.pause();
-#if defined (JSON_OBJC_SEMANTIC_ACTIONS_USE_JSON_PATH)            
+#if defined (JSON_OBJC_REPRESENTATION_GENERATOR_USE_JSON_PATH)            
             json_path_.push_index(-1);  // push dummy index
 #endif            
         }
@@ -495,10 +516,12 @@ namespace json { namespace objc {
         
         virtual void end_array_imp() 
         {
+#if defined (JSON_OBJC_REPRESENTATION_GENERATOR_USE_PERFORMANCE_COUNTER)                        
             //t1_.start();
-            // Calculate the max stack size - for performance counter
+            // Calculate the max stack size - for performance counter            
             pc_.max_stack_size_ = std::max(pc_.max_stack_size_, stack_.size());
-#if defined (JSON_OBJC_SEMANTIC_ACTIONS_USE_JSON_PATH)            
+#endif            
+#if defined (JSON_OBJC_REPRESENTATION_GENERATOR_USE_JSON_PATH)            
             json_path_.pop_component();  // pop the index component
 #endif            
             size_t first_idx = markers_.back();
@@ -553,13 +576,17 @@ namespace json { namespace objc {
         
         virtual void begin_object_imp() 
         {
-            //t0_.start();
+#if defined (JSON_OBJC_REPRESENTATION_GENERATOR_USE_PERFORMANCE_COUNTER)                        
+            //pc_.t0_.start();
             //++c0_;
             ++pc_.object_count_;
+#endif            
             markers_.push_back(stack_.size()); // marker points to the next value which shall be inserted into the object, if any.
-            //t0_.pause();
             
-#if defined (JSON_OBJC_SEMANTIC_ACTIONS_USE_JSON_PATH)            
+#if defined (JSON_OBJC_REPRESENTATION_GENERATOR_USE_PERFORMANCE_COUNTER)                        
+            //pc_.t0_.pause();
+#endif            
+#if defined (JSON_OBJC_REPRESENTATION_GENERATOR_USE_JSON_PATH)            
             json_path_.push_key(typename json_path_t::string_buffer_type(0, 0));  // push dummy Key
 #endif            
         }
@@ -584,10 +611,12 @@ namespace json { namespace objc {
             
             //t2_.start();
 
-#if defined (JSON_OBJC_SEMANTIC_ACTIONS_USE_JSON_PATH)            
+#if defined (JSON_OBJC_REPRESENTATION_GENERATOR_USE_JSON_PATH)            
             json_path_.pop_component(); // pop the key component
-#endif                        
+#endif      
+#if defined (JSON_OBJC_REPRESENTATION_GENERATOR_USE_PERFORMANCE_COUNTER)                        
             pc_.max_stack_size_ = std::max(pc_.max_stack_size_, stack_.size());            
+#endif            
             size_t first_idx = markers_.back();
             markers_.pop_back();
             stack_t::iterator first = stack_.begin();
@@ -612,7 +641,7 @@ namespace json { namespace objc {
                 typedef void (*CFDictionaryAddValue_t)(CFMutableDictionaryRef theDict, const void *key, const void *value);
                 CFDictionaryAddValue_t f_cf_DictionaryAddValue_t = CFDictionaryAddValue;
                 
-#if !defined (SEMANTIC_ACTIONS_NO_CREATE_MUTABLE_DICTIONARY_USING_CF)
+#if !defined (JSON_OBJC_REPRESENTATION_GENERATOR_NO_CREATE_MUTABLE_DICTIONARY_USING_CF)
                 // use CF to create a dictionary
                 CFMutableDictionaryRef o =
                 CFDictionaryCreateMutable(NULL, num_elements, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
@@ -632,7 +661,7 @@ namespace json { namespace objc {
                         duplicateKeyError = true;
 #if defined (DEBUG)
                         const id* pk = reinterpret_cast<const id*>(static_cast<const void*>(&tmp_keys_[0]));
-                        NSLog(@"ERROR: json::SemanticActions: duplicate key error with keys: %@",
+                        NSLog(@"ERROR: json::RepresentationGenerator: duplicate key error with keys: %@",
                               [NSArray arrayWithObjects:pk count:num_elements]);
                         NSLog(@"Current keys in object: %@", [id(o) allKeys]);
 #endif                    
@@ -671,7 +700,7 @@ namespace json { namespace objc {
                         duplicateKeyError = true;
 #if defined (DEBUG)
                         const id* pk = reinterpret_cast<const id*>(static_cast<const void*>(&tmp_keys_[0]));                        
-                        NSLog(@"ERROR: json::SemanticActions: duplicate key error with keys: %@",
+                        NSLog(@"ERROR: json::RepresentationGenerator: duplicate key error with keys: %@",
                               [NSArray arrayWithObjects:pk count:num_elements]);
                         NSLog(@"Current keys in object: %@", [id(o) allKeys]);
 #endif                    
@@ -700,7 +729,7 @@ namespace json { namespace objc {
         
         
         virtual void begin_value_at_index_imp(size_t index) {
-#if defined (JSON_OBJC_SEMANTIC_ACTIONS_USE_JSON_PATH)            
+#if defined (JSON_OBJC_REPRESENTATION_GENERATOR_USE_JSON_PATH)            
             json_path_.back_index() = index;
 #endif            
         }        
@@ -709,11 +738,11 @@ namespace json { namespace objc {
         
         virtual void begin_key_value_pair_imp(const const_buffer_t& buffer, size_t nth) 
         {
-#if defined (JSON_OBJC_SEMANTIC_ACTIONS_USE_JSON_PATH)            
+#if defined (JSON_OBJC_REPRESENTATION_GENERATOR_USE_JSON_PATH)            
             const_buffer_t string_buffer = 
 #endif            
             push_key(buffer);
-#if defined (JSON_OBJC_SEMANTIC_ACTIONS_USE_JSON_PATH)
+#if defined (JSON_OBJC_REPRESENTATION_GENERATOR_USE_JSON_PATH)
             typedef typename json_path_t::string_buffer_type string_buffer_type;
             json_path_.back_key() = string_buffer_type(string_buffer.first, string_buffer.second);
 #endif                        
@@ -723,11 +752,13 @@ namespace json { namespace objc {
 
 
         virtual void value_string_imp(const const_buffer_t& buffer, bool hasMore) { 
+#if defined (JSON_OBJC_REPRESENTATION_GENERATOR_USE_PERFORMANCE_COUNTER)                                    
             //++c0_;
             pc_.string_count_ += static_cast<int>(!hasMore);
-            
             //t0_.start();
-#if defined (JSON_OBJC_SEMANTIC_ACTIONS_USE_CACHE)
+#endif            
+            
+#if defined (JSON_OBJC_REPRESENTATION_GENERATOR_USE_CACHE)
             if (cacheDataStrings() and not hasMore) {
                 // Only cache *small* data strings
                 push_string_cached(buffer);
@@ -737,13 +768,17 @@ namespace json { namespace objc {
 #else
             push_string_uncached(buffer, hasMore);
 #endif            
+#if defined (JSON_OBJC_REPRESENTATION_GENERATOR_USE_PERFORMANCE_COUNTER)                                    
             //t0_.pause();
+#endif            
         }
         
         
         virtual void value_number_imp(const number_info_t& number) 
         {
+#if defined (JSON_OBJC_REPRESENTATION_GENERATOR_USE_PERFORMANCE_COUNTER)                                                
             ++pc_.number_count_;
+#endif            
             switch (number_generator_option_) {
                 case sa_options::NumberGeneratorGenerateString:
                     push_number_string(number.c_str(), number.c_str_len(), unicode::UTF_8_encoding_tag());
@@ -847,22 +882,30 @@ namespace json { namespace objc {
         
         virtual void value_boolean_imp(bool b) 
         {
+#if defined (JSON_OBJC_REPRESENTATION_GENERATOR_USE_PERFORMANCE_COUNTER)                                    
             //t0_.start();
             //++c0_;
             ++pc_.boolean_count_;
+#endif            
             CFBooleanRef boolean = b ? kCFBooleanTrue : kCFBooleanFalse;
             stack_.push_back(id(boolean));
+#if defined (JSON_OBJC_REPRESENTATION_GENERATOR_USE_PERFORMANCE_COUNTER)                                    
             //t0_.pause();
+#endif            
         }
         
         
         virtual void value_null_imp() 
         {
+#if defined (JSON_OBJC_REPRESENTATION_GENERATOR_USE_PERFORMANCE_COUNTER)                                    
             //t0_.start();
             //++c0_;
             ++pc_.null_count_;
+#endif            
             stack_.push_back(id(kCFNull));
+#if defined (JSON_OBJC_REPRESENTATION_GENERATOR_USE_PERFORMANCE_COUNTER)                                    
             //t0_.pause();
+#endif            
         }
         
         
@@ -872,12 +915,14 @@ namespace json { namespace objc {
             base::clear_imp();
             clear_stack();
             markers_.clear();
+#if defined (JSON_OBJC_REPRESENTATION_GENERATOR_USE_PERFORMANCE_COUNTER)                                    
             pc_.clear();
-#if defined (JSON_OBJC_SEMANTIC_ACTIONS_USE_CACHE)
+#endif            
+#if defined (JSON_OBJC_REPRESENTATION_GENERATOR_USE_CACHE)
             if (not keepStringCacheOnClear())
                 clear_cache();          
 #endif            
-#if defined (JSON_OBJC_SEMANTIC_ACTIONS_USE_JSON_PATH)
+#if defined (JSON_OBJC_REPRESENTATION_GENERATOR_USE_JSON_PATH)
             json_path_.clear();
 #endif            
             [result_ release], result_ = nil;
@@ -905,13 +950,13 @@ namespace json { namespace objc {
         void    cacheDataStrings(bool set) { opt_cache_data_strings_ = set; }
         
         size_t  string_cache_size() const { 
-#if defined (JSON_OBJC_SEMANTIC_ACTIONS_USE_CACHE)
+#if defined (JSON_OBJC_REPRESENTATION_GENERATOR_USE_CACHE)
             return string_cache_.size(); 
 #else
             return 0;
 #endif            
         }
-#if defined (JSON_OBJC_SEMANTIC_ACTIONS_USE_CACHE)
+#if defined (JSON_OBJC_REPRESENTATION_GENERATOR_USE_CACHE)
         size_t  cache_hit_count() const { return cache_hit_count_; }
         size_t  cache_miss_count() const { return cache_miss_count_; }
         size_t  cache_size() const { return string_cache_.size(); }
@@ -919,7 +964,7 @@ namespace json { namespace objc {
         
         
         
-#if defined (JSON_OBJC_SEMANTIC_ACTIONS_USE_JSON_PATH)
+#if defined (JSON_OBJC_REPRESENTATION_GENERATOR_USE_JSON_PATH)
         
         size_t json_path_level() const { return json_path_.level(); }
         std::string json_path() const { return json_path_.path(); }
@@ -930,21 +975,19 @@ namespace json { namespace objc {
         const_buffer_t 
         push_key(const const_buffer_t& buffer) 
         {
-            //++c0_;
+#if defined (JSON_OBJC_REPRESENTATION_GENERATOR_USE_PERFORMANCE_COUNTER)                                    
             ++pc_.string_count_;
-            
-            //t0_.start();
-#if defined (JSON_OBJC_SEMANTIC_ACTIONS_USE_CACHE)
+#endif            
+#if defined (JSON_OBJC_REPRESENTATION_GENERATOR_USE_CACHE)
             return push_string_cached(buffer); 
 #else
             push_string_uncached(buffer);
             return const_buffer_t(0,0);
 #endif
-            //t0_.pause();
         }
         
         
-#if defined (JSON_OBJC_SEMANTIC_ACTIONS_USE_CACHE)
+#if defined (JSON_OBJC_REPRESENTATION_GENERATOR_USE_CACHE)
         // Returns a string buffer, which is the key where the string has been
         // associated in the cache.
         const_buffer_t push_string_cached(const const_buffer_t& buffer) 
@@ -1047,7 +1090,7 @@ namespace json { namespace objc {
             stack_.clear();
         }
         
-#if defined (JSON_OBJC_SEMANTIC_ACTIONS_USE_CACHE) 
+#if defined (JSON_OBJC_REPRESENTATION_GENERATOR_USE_CACHE) 
         void clear_cache() {
             string_cache_.clear();
             assert(string_cache_.size() == 0);
@@ -1073,15 +1116,15 @@ namespace json { namespace objc {
         CFMutableStringRef  tmp_data_str_;
         
         //json_path_t     path_;
-#if defined (JSON_OBJC_SEMANTIC_ACTIONS_USE_CACHE)   
+#if defined (JSON_OBJC_REPRESENTATION_GENERATOR_USE_CACHE)   
         cache_t             string_cache_;
         size_t              cache_hit_count_;
         size_t              cache_miss_count_;        
 #endif
 
-#if defined (JSON_OBJC_SEMANTIC_ACTIONS_USE_JSON_PATH)
- #if !defined (JSON_OBJC_SEMANTIC_ACTIONS_USE_CACHE)   
-  #error  JSON_OBJC_SEMANTIC_ACTIONS_USE_JSON_PATH requires JSON_OBJC_SEMANTIC_ACTIONS_USE_CACHE
+#if defined (JSON_OBJC_REPRESENTATION_GENERATOR_USE_JSON_PATH)
+ #if !defined (JSON_OBJC_REPRESENTATION_GENERATOR_USE_CACHE)   
+  #error  JSON_OBJC_REPRESENTATION_GENERATOR_USE_JSON_PATH requires JSON_OBJC_REPRESENTATION_GENERATOR_USE_CACHE
  #endif        
         json_path_t         json_path_;
 #endif
@@ -1097,7 +1140,9 @@ namespace json { namespace objc {
         bool                opt_create_mutable_json_containers_;
         
     protected:
+#if defined (JSON_OBJC_REPRESENTATION_GENERATOR_USE_PERFORMANCE_COUNTER)        
         performance_counter pc_;
+#endif        
         
 #pragma mark - Stream Output Operator
         //    
@@ -1105,9 +1150,9 @@ namespace json { namespace objc {
         //  
         friend inline 
         std::ostream& 
-        operator<< (std::ostream& os, const SemanticActions& sa) 
+        operator<< (std::ostream& os, const RepresentationGenerator& sa) 
         {
-            typedef SemanticActions::base base;
+            typedef RepresentationGenerator::base base;
             
             os << static_cast<base const&>(sa);            
             
@@ -1122,6 +1167,7 @@ namespace json { namespace objc {
                                                 : "")
             << std::endl;
             
+#if defined (JSON_OBJC_REPRESENTATION_GENERATOR_USE_PERFORMANCE_COUNTER)            
             os << "\nNumber of parsed items:"
             << "\n\tArray count:      " << std::setw(8) << sa.pc_.array_count_ 
             << "\n\tObject count:     " << std::setw(8) << sa.pc_.object_count_ 
@@ -1130,20 +1176,24 @@ namespace json { namespace objc {
             << "\n\tNull count:       " << std::setw(8) << sa.pc_.null_count_ 
             << "\n\tNumber count:     " << std::setw(8) << sa.pc_.number_count_
             << "\n\tmax stack items:  " << std::setw(8) << sa.pc_.max_stack_size() << '\n';
+#endif            
             
-#if defined (JSON_OBJC_SEMANTIC_ACTIONS_USE_CACHE)   
+#if defined (JSON_OBJC_REPRESENTATION_GENERATOR_USE_CACHE)   
             os << "\nString Cache:"
             << "\n\telement count:    " << std::setw(8) << sa.string_cache_.size()
             << "\n\thit count:        " << std::setw(8) << sa.cache_hit_count_
             << "\n\tmiss count:       " << std::setw(8) << sa.cache_miss_count_
             << std::endl;
-#endif            
+#endif        
+            
+#if defined (JSON_OBJC_REPRESENTATION_GENERATOR_USE_PERFORMANCE_COUNTER)            
             os << "\nPerformance counters for last parsed document:" 
             << "\n\telapsed time:     " << std::fixed << std::setprecision(3) << sa.pc_.t() * 1.0e6 << " µs" 
             << "\n\tpush string:      " << std::fixed << std::setprecision(3) << sa.pc_.t0() * 1.0e6 << " µs"
             << "\n\tbuild array:      " << std::fixed << std::setprecision(3) << sa.pc_.t1() * 1.0e6 << " µs"            
             << "\n\tbuild object:     " << std::fixed << std::setprecision(3) << sa.pc_.t2() * 1.0e6 << " µs"
             << std::endl;
+#endif            
             
             return os;
         }
@@ -1161,6 +1211,6 @@ namespace json { namespace objc {
 }}
 
 
-#endif // JSON_OBJC_SEMANTIC_ACTIONS_HPP
+#endif // JSON_OBJC_REPRESENTATION_GENERATOR_HPP
 
 

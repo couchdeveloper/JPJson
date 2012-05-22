@@ -25,7 +25,7 @@
 #import "JPJsonParser.h"
 #import "JPSemanticActionsBase.h"
 #import "JPSemanticActionsBase_private.h"
-#import "JPSemanticActions.h"  // Default Semantic Actions
+#import "JPRepresentationGenerator.h"  // Default Semantic Actions
 
 
 namespace {
@@ -289,14 +289,14 @@ namespace {
 {
     NSParameterAssert(string);
         
-    // Use the "default semantic actions" aka "JPSemanticActions".
+    // Use the "default semantic actions" aka "JPRepresentationGenerator".
     // Multiple documents cannot be parsed - silently clear the 
     // flag "JPJsonParserParseMultipleDocuments" - if set.
     options &= ~JPJsonParserParseMultipleDocuments;
     
     // Since we don't need handlers, we do not need a dispatch queue, so
     // create a semantic actions object without a dispatch queue.
-    JPSemanticActions* sa = [[JPSemanticActions alloc] initWithHandlerDispatchQueue:NULL];
+    JPRepresentationGenerator* sa = [[JPRepresentationGenerator alloc] initWithHandlerDispatchQueue:NULL];
     [sa configureWithOptions:options];    
     
     // Try to get the string's content in UTF-16:
@@ -338,14 +338,14 @@ namespace {
          options:(JPJsonParserOptions)options
            error:(NSError**)error
 {
-    // Use the "default semantic actions" aka "JPSemanticActions".
+    // Use the "default semantic actions" aka "JPRepresentationGenerator".
     // Multiple documents cannot be parsed - silently clear the 
     // flag "JPJsonParserParseMultipleDocuments" - if set.
     options &= ~JPJsonParserParseMultipleDocuments;
     
     // Since we don't need handlers, we do not need a dispatch queue, so
     // create a semantic actions object without a dispatch queue:
-    JPSemanticActions* sa = [[JPSemanticActions alloc] initWithHandlerDispatchQueue:NULL];
+    JPRepresentationGenerator* sa = [[JPRepresentationGenerator alloc] initWithHandlerDispatchQueue:NULL];
     [sa configureWithOptions:options];    
     
     id result = nil;
@@ -378,14 +378,14 @@ namespace {
          options:(JPJsonParserOptions)options
            error:(NSError**)error
 {
-    // Use the "default semantic actions" aka "JPSemanticActions".
+    // Use the "default semantic actions" aka "JPRepresentationGenerator".
     // Multiple documents cannot be parsed - silently clear the 
     // flag "JPJsonParserParseMultipleDocuments" - if set.
     options &= ~JPJsonParserParseMultipleDocuments;
     
     // Since we don't need handlers, we do not need a dispatch queue, so
     // create a semantic actions object without a dispatch queue:
-    JPSemanticActions* sa = [[JPSemanticActions alloc] initWithHandlerDispatchQueue:NULL];
+    JPRepresentationGenerator* sa = [[JPRepresentationGenerator alloc] initWithHandlerDispatchQueue:NULL];
     [sa configureWithOptions:options];    
     
     id result = nil;

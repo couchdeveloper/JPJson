@@ -1,5 +1,5 @@
 //
-//  JPSemanticActions.h
+//  JPRepresentationGenerator.h
 //
 //  Created by Andreas Grosam on 7/1/11.
 //  Copyright 2011 Andreas Grosam
@@ -17,8 +17,8 @@
 //  limitations under the License.
 //
 
-#ifndef JSON_OBJC_JP_SEMANTIC_ACTIONS_H
-#define JSON_OBJC_JP_SEMANTIC_ACTIONS_H
+#ifndef JSON_OBJC_JP_REPRESENTATION_GENERATOR_H
+#define JSON_OBJC_JP_REPRESENTATION_GENERATOR_H
 
 
 #import "JPSemanticActionsBase.h"
@@ -43,10 +43,63 @@ typedef NSUInteger JPSemanticActionsNumberGeneratorOption;
 
 
 /** 
- A `JPSemanticActions` class is a delegate of the _internal json parser_ which 
- implements a set of semantic actions in order to generate a JSON representation 
- of Foundation objects from a JSON document.
+ A `JPRepresentationGenerator` class is a semantic actions class which can be 
+ associated to a JSON parser. It implements a set of semantic actions in order 
+ to generate a JSON representation of Foundation objects from a JSON document. 
+ A `JPRepresentationGenerator` instance is the _default_ semantic actions class 
+ for a JPJsonParser, unless another one is specified explicitly.
   
+ Class `JPRepresentationGenerator is "self-contained" which means that it consumes
+ and handles ALL "parse events" itself and thus, will not have a delegate nor 
+ is it meant to be subclassed.
+ 
+ 
+ 
+ ## Using a JPRepresentationGenerator ##
+ 
+ An instance of `JPRepresentationGenerator` can be setup individually and its 
+ behavoir can be tailored by setting properties. An instance of a semantic actions
+ object can be specified as a parameter when creating a parser.
+ 
+ For example a `JPRepresentationGenerator` object can be set as parameter 
+ `semanticActions` in method `+parseData:semanticActions:` of class `JPJsonParser`.
+ 
+ As a result, the parser will create a representation in form of a hierarchy of 
+ Foundation objects from the JSON text. When the parser is finished, this json 
+ structure can be retrieved with property `result` of the semantic actions object. 
+ 
+ *Note:* The convenience methods of class <JPJsonParser> `+parseString:options:error:`
+ and `+parseData:options:error:` just use a `JPRepresentationGenerator` object 
+ internally and configure it using the options provided in parameter `options`.
+ 
+ 
+ Depending on the configuration of the `JPRepresentationGenerator` instance, the 
+ parser may parse one or more JSON documents within one input. If more than one 
+ JSON documents shall be parsed, the client is required to setup handler blocks and 
+ possibly a dispatch queue for the semantic actions instance. 
+ 
+ The handler blocks will be called by the `JPRepresentationGenerator` instance on 
+ the occurence of the following events:
+ 
+ - The start of a JSON document was detected.
+ - A JSON document could be parsed completely and a Foundation object 
+ has been created, which will be passed as paramenter to the client.
+ - The parser finished parsing the text.
+ - An error occured.
+ 
+ The semantic actions object also contains additional information, for example
+ an error object, which can be retrieved in case an error occured.
+ 
+ 
+ 
+ ### Setting Up Handler Blocks ##
+ 
+ This is described in <JPSemanticActionsBase>  _Setting Up Handler Blocks_.
+ 
+ 
+
+ ## Mapping JSON Elements to Foundation Classes ##
+ 
  
  The conversion and mapping of JSON values will be done as
  follows:
@@ -117,22 +170,18 @@ typedef NSUInteger JPSemanticActionsNumberGeneratorOption;
     with an underlaying `double` type. If the resulting value is out of range, 
     a range error will be signaled.
  
-
- @warning *Note:* -objCType for `NSDecimalNumber` returns "d".
-
- 
 */
 
 
 
-@interface JPSemanticActions : JPSemanticActionsBase 
+@interface JPRepresentationGenerator : JPSemanticActionsBase 
 
 /** @name Initialization */
 
 /**
  *Designated Initializer*
 
- Initializes a `JPSemanticActions` object with the specified dispatch queue where
+ Initializes a `JPRepresentationGenerator` object with the specified dispatch queue where
  handler blocks will be dispatched.
  Parameter handlerQueue may be NULL, in which case no handlers will be
  executed.
@@ -142,7 +191,7 @@ typedef NSUInteger JPSemanticActionsNumberGeneratorOption;
 */ 
 - (id) initWithHandlerDispatchQueue:(dispatch_queue_t)handlerQueue;
 
-// Initialzes a `JPSemanticActions` object with a private default dispatch queue  
+// Initialzes a `JPRepresentationGenerator` object with a private default dispatch queue  
 // where handler blocks will be dispatched. The dispatch queue is a serial 
 // dispatch queue.
 //- (id) init;
@@ -150,7 +199,7 @@ typedef NSUInteger JPSemanticActionsNumberGeneratorOption;
 
 /** @name Configuration  */
 /** 
- Configures a `JPSemanticActions` instance with the specified options.
+ Configures a `JPRepresentationGenerator` instance with the specified options.
  
  @param options A set of ored flags from constants of enum `JPJsonParserOptions`.
  
@@ -260,5 +309,5 @@ typedef NSUInteger JPSemanticActionsNumberGeneratorOption;
 @end
 
 
-#endif
+#endif  // JSON_OBJC_JP_REPRESENTATION_GENERATOR_H
 

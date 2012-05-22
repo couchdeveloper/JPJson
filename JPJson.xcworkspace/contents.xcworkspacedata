@@ -205,7 +205,7 @@
                      location = "group:Source/json/ObjC/unicode_traits.hpp">
                   </FileRef>
                   <FileRef
-                     location = "group:Source/json/ObjC/SemanticActions.hpp">
+                     location = "group:Source/json/ObjC/RepresentationGenerator.hpp">
                   </FileRef>
                   <FileRef
                      location = "group:Source/json/ObjC/CFDataCache.hpp">
@@ -237,10 +237,10 @@
                   assignedFileDataType = "public.objective-c-plus-plus-source">
                </FileRef>
                <FileRef
-                  location = "group:JPSemanticActions.h">
+                  location = "group:JPRepresentationGenerator.h">
                </FileRef>
                <FileRef
-                  location = "group:JPSemanticActions.mm">
+                  location = "group:JPRepresentationGenerator.mm">
                </FileRef>
                <FileRef
                   location = "group:JPJsonParser.h">
@@ -265,6 +265,9 @@
                </FileRef>
                <FileRef
                   location = "group:NSData+JPJsonDetectEncoding.mm">
+               </FileRef>
+               <FileRef
+                  location = "group:JPJsonWriterExtensions.h">
                </FileRef>
             </Group>
          </Group>
@@ -440,13 +443,16 @@
             </FileRef>
          </Group>
          <FileRef
+            location = "group:sample_json2.json">
+         </FileRef>
+         <FileRef
+            location = "group:sample_json.json">
+         </FileRef>
+         <FileRef
             location = "group:Test-UTF8.json">
          </FileRef>
          <FileRef
             location = "group:Test-UTF8-esc.json">
-         </FileRef>
-         <FileRef
-            location = "group:testString.txt">
          </FileRef>
          <FileRef
             location = "group:TestMD.json">

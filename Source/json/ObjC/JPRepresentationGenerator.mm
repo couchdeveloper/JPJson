@@ -1,6 +1,5 @@
 //
-//  JPSemanticActions.mm
-//  json_parser
+//  JPRepresentationGenerator.mm
 //
 //  Created by Andreas Grosam on 7/1/11.
 //  Copyright 2011 Andreas Grosam
@@ -21,21 +20,21 @@
 #include <dispatch/dispatch.h>
 #include <assert.h>
 #include <sstream>
-#include "SemanticActions.hpp"
-#import "JPSemanticActions.h"
+#include "RepresentationGenerator.hpp"
+#import "JPRepresentationGenerator.h"
 #import "JPSemanticActionsBase_private.h"
 
 
 //
-//  Defines the internal semantic actions class 'SemanticActions'
+//  Defines the internal semantic actions class 'RepresentationGenerator'
 // 
-typedef json::objc::SemanticActions<JP_CFStringEncoding>    SemanticActions;
+typedef json::objc::RepresentationGenerator<JP_CFStringEncoding>    RepresentationGenerator;
 
 
 
 
 
-@interface JPSemanticActions()
+@interface JPRepresentationGenerator()
 // As defined in the header file JPSemanticActionsBase_private.h,
 // the property imp shall be implemented:
 @property (readonly, nonatomic) SemanticActionsBase* imp;
@@ -43,15 +42,15 @@ typedef json::objc::SemanticActions<JP_CFStringEncoding>    SemanticActions;
 
 
 
-#pragma mark - JPSemanticActions
-@implementation JPSemanticActions
+#pragma mark - JPRepresentationGenerator
+@implementation JPRepresentationGenerator
 {
 @private
-    SemanticActions*                    sa_;  // the implementation 
+    RepresentationGenerator*    sa_;  // the implementation 
     
     // We provide the property "inputEncoding" and "hasBOM" for clients, as 
     // they will probably detect this.
-    BOOL                                hasBOM_;
+    BOOL                        hasBOM_;
     // TODO: timeout
 }
 
@@ -66,7 +65,7 @@ typedef json::objc::SemanticActions<JP_CFStringEncoding>    SemanticActions;
 {
     self = [super initWithHandlerDispatchQueue:handlerQueue];
     if (self) {
-        sa_ = new SemanticActions(self);
+        sa_ = new RepresentationGenerator(self);
     }    
     return self;
 }

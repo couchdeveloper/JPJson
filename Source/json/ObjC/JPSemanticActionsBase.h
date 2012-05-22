@@ -64,10 +64,11 @@ typedef void (^JPSemanticActions_ErrorHandlerBlockType)(NSError*);
  Abstract Base Class for concrete Semantic Actions classes.
  
  
- A __Semantic Actions Object__ acts as a delegate of the _internal json parser_. 
- It conforms to the protocol `JPSemanticActionsProtocol` and provides a default 
- implementation for the following optional methods declared in 
- `JPSemanticActionsProtocol`:
+ A __Semantic Actions Object__ acts as an internal delegate of a JSON parser. 
+ It receives _parse events_ sent from the parser and handles them in corresponding 
+ _semantic actions_. The class conforms to the protocol `JPSemanticActionsProtocol` 
+ and provides a default implementation for the following optional methods declared 
+ in `JPSemanticActionsProtocol`:
  
  - `-parserFoundJsonBegin`
  - `-parserFoundJsonEnd`
@@ -78,14 +79,59 @@ typedef void (^JPSemanticActions_ErrorHandlerBlockType)(NSError*);
  methods mentioned above and may define the additional methods declared in
  protocol `JPSemanticActionsProtocol`. 
  
+ There are two prominent subclasses: `JPRepresentationGenerator` and
+ `JPStreamSemanticActions`. While `JPRepresentationGenerator` shall be used
+ as is, `JPStreamSemanticActions` may be subclassed or alternatively used with
+ a delegate.
+ 
  The delegate methods will be invoked when the json parser successfully parsed 
  a certain rule, that is when the parser detects the various JSON elements, or 
  the start and the end of the document. For more information see <JPSemanticActionsProtocol>.
  
  
- ### Handler Blocks ###
- TBD
-  
+ 
+ ### Using a Semantic Actions object ###
+ 
+ Each parser, that is an instance of <JPJsonParser> or and instance of 
+ <JPAsyncJsonParser>, needs to be associated to a _Semantic Actions_ object. If 
+ none is specified when a parser is created, the parser itself creates a default 
+ one, which is a `JPRepresentationGenerator`. 
+ 
+ *Info:*  A parser sends _parse events_ to the semantic actions object as they 
+ appear in the JSON text. The task of a semantic actions object is to handle 
+ these events appropriately.
+ 
+ All semantic actions classes shall inherit from <JPSemanticActionsBase>. 
+ `JPSemanticActionsBase` implements all required common aspects for a semantic 
+ actions object.
+ 
+ Semantic actions classes shall conform to the protocol <JPSemanticActionsProtocol>. 
+ 
+ There are two "built-in" semantic actions classes inherting from `JPSemanticActionsBase`:
+ 
+ - <JPRepresentationGenerator> and
+ - <JPStreamSemanticActions>
+ 
+
+ 
+ ### Setting Up Handler Blocks ###
+
+ An `JPSemanticActions` class provides four Blocks (callbacks) which handle principal 
+ events:
+ 
+ - Notifying the start of a JSON text
+ - Notifying the end of a JSON text
+ - Notifying the completion of a semantic actions task
+ - Notifying a possible error
+ 
+
+ These principal handlers are common to all semantic actions classes. They will
+ be implemented using _Blocks_ and the class provides properties to access them.
+ 
+ For a description of each, see section _Handlers and Dispatch Queue_.
+ 
+ 
+ 
  */
 
 
@@ -156,6 +202,10 @@ typedef void (^JPSemanticActions_ErrorHandlerBlockType)(NSError*);
  
  If this option is set, the parser parses more than one document from the input 
  until it receives an `EOF` in the input data. 
+
+ This flag becomes especially useful if the parser will be fed  from a "stream" 
+ of JSON documents - possibly from input downloaded in a single network connection 
+ supporting a "Streaming API".
  
  Default: `NO`
 */ 

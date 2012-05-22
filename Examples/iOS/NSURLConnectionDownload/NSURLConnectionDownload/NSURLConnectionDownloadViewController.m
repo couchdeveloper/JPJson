@@ -22,12 +22,14 @@
 
 #import "JPJson/JPAsyncJsonParser.h"
 #import "JPJson/JPJsonParser.h"
-#import "JPJson/JPSemanticActions.h"
+#import "JPJson/JPRepresentationGenerator.h"
 
 #include <mach/mach_time.h>
 #include <unistd.h>
 #include <dispatch/dispatch.h>
 
+
+//#define USE_SYNC_PARSER_WITH_TMP_FILE
 
 #if !defined (USE_ASYNC_PARSER) && !defined (USE_SYNC_PARSER_WITH_TMP_FILE)
     #define USE_ASYNC_PARSER
@@ -43,11 +45,12 @@
     #define WRITE_TO_TEMP_FILE
 #endif
 
+// Don't set these macros here - use #define USE_ASYNC_PARSER or define USE_SYNC_PARSER_WITH_TMP_FILE on top of the file!
 //#define WRITE_TO_TEMP_FILE
 //#define START_CONNECTION_IN_SECONDARY_THREAD
 
 
-#define LOOP_INFINITIVE
+//#define LOOP_INFINITIVE
 
 static NSError* makeError(NSString* domain, NSInteger code, NSString* errString) {
     // setup an error object:
@@ -289,7 +292,7 @@ static NSString* kTempFileName = @"download.data";
     self.messageLabel.text = @"Download JSON canceled."; 
 }
 
-- (void) setupSemanticActions:(JPSemanticActions*) sa 
+- (void) setupSemanticActions:(JPRepresentationGenerator*) sa 
 {
     sa.startJsonHandlerBlock = ^{ 
         ++numberDocuments_;
@@ -390,7 +393,7 @@ static NSString* kTempFileName = @"download.data";
     //  Setup the parser and the semantic actions:
     //  
     parser_ = [[JPAsyncJsonParser alloc] init];
-    [self setupSemanticActions:(JPSemanticActions*)(parser_.semanticActions)];
+    [self setupSemanticActions:(JPRepresentationGenerator*)(parser_.semanticActions)];
 
 #endif    
     
@@ -434,7 +437,7 @@ static NSString* kTempFileName = @"download.data";
     
     // Setup the URL request:
 #if defined (DEBUG)    
-    NSTimeInterval request_timeout = 1000;
+    NSTimeInterval request_timeout = 30;
 #else    
     NSTimeInterval request_timeout = 60;
 #endif    
@@ -769,7 +772,7 @@ static NSString* kTempFileName = @"download.data";
         
         // Create a semantic actions object with default properties - including
         // its own serial dispatch queue where handler blocks will be scheduled.
-        JPSemanticActions* sa = [[JPSemanticActions alloc] init];
+        JPRepresentationGenerator* sa = [[JPRepresentationGenerator alloc] init];
         [self setupSemanticActions:sa];
         BOOL success = [JPJsonParser parseData:data semanticActions:sa];
         if (!success) {

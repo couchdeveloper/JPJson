@@ -56,7 +56,7 @@ typedef JPSemanticActions_ErrorHandlerBlockType       ErrorHandlerBlockType;
  @property (readonly, nonatomic) SemanticActionsBase* imp;
  @end
  
- The propert imp shall be impemented in the subclass
+ The property imp shall be impemented in the subclass
  */
 @dynamic imp;
 

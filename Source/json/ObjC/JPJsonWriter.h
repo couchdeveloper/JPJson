@@ -25,7 +25,6 @@
 #import <Foundation/Foundation.h>
 
 
-
 enum  {
     JPJsonWriterPrettyPrint =               1UL << 0,
     JPJsonWriterSortKeys =                  1UL << 1,
@@ -34,6 +33,9 @@ enum  {
     JPJsonWriterEscapeSolidus =             1UL << 4
 };
 typedef NSUInteger JPJsonWriterOptions;
+
+
+
 
 
 /**

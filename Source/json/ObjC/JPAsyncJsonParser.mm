@@ -25,7 +25,7 @@
 #import "JPAsyncJsonParser.h"
 #import "JPSemanticActionsBase.h"
 #import "JPSemanticActionsBase_private.h"
-#import "JPSemanticActions.h"  // Default Semantic Actions
+#import "JPRepresentationGenerator.h"  // Default Semantic Actions
 #include <dispatch/dispatch.h>
 #include <iterator>
 #include <stdexcept>
@@ -314,7 +314,7 @@ namespace {
         if (sa == nil) {
             // Create the default semantic actions object:
             dispatch_queue_t handlerDispatchQueue = dispatch_queue_create("com.JPAsyncParser.handler_queue", NULL);
-            sa_ = [[JPSemanticActions alloc] initWithHandlerDispatchQueue:handlerDispatchQueue];
+            sa_ = [[JPRepresentationGenerator alloc] initWithHandlerDispatchQueue:handlerDispatchQueue];
             dispatch_release(handlerDispatchQueue);
         } else {
             sa_ = [sa retain];

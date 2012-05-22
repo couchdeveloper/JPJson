@@ -8,14 +8,14 @@
 
 #import <Foundation/Foundation.h>
 #import "JPJson/JPJsonParser.h"
-#import "JPJson/JPSemanticActions.h"
+#import "JPJson/JPRepresentationGenerator.h"
 #import "JPJson/JPJsonWriter.h"
 #import "JPJson/NSData+JPJsonDetectEncoding.h"
 
 //
 //  Objectives:
 //
-//  Use the Default Semantic Actions class ”JPSemanticActions”
+//  Use the Default Semantic Actions class ”JPRepresentationGenerator”
 //  to define the behavior of the parser.
 //
 
@@ -60,12 +60,12 @@ int main (int argc, const char * argv[])
         // representation which is built upon Foundation objects. This is the 
         // "default" semantic actions object which is the same semantic actions 
         // class which is used in the convenient class method +parseData:options:error:.
-        // The class is JPSemanticActions, and part of the library.
+        // The class is JPRepresentationGenerator, and part of the library.
         //
         // Since we do not use handler blocks here in this sample, we need to use the 
         // following init method to explicitly specify NOT to use a disatch queue. 
         // (We will see later how handler blocks work.)
-        JPSemanticActions* sa = [[JPSemanticActions alloc] initWithHandlerDispatchQueue:NULL];
+        JPRepresentationGenerator* sa = [[JPRepresentationGenerator alloc] initWithHandlerDispatchQueue:NULL];
         
         // Once we created the semantic actions object we may now set various
         // options available for this semantic actions object and which may also
@@ -75,7 +75,7 @@ int main (int argc, const char * argv[])
         sa.createMutableContainers = YES; // create mutable NSArray and mutable NSDictionaries.
         // There are a couple more options which set various aspects of how the
         // json parser is configured, and how the semantic actions object can be
-        // tailored. For more details, see the description of class JPSemanticActions 
+        // tailored. For more details, see the description of class JPRepresentationGenerator 
         // and class JPSemanticActionsBase.
         
         

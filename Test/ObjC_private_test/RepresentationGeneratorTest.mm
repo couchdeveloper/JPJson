@@ -1,5 +1,5 @@
 //
-//  SemanticActionsTest.cpp
+//  RepresentationGeneratorTest.cpp
 //  Test
 //
 //  Created by Andreas Grosam on 7/20/11.
@@ -18,7 +18,7 @@
 //  limitations under the License.
 //
 
-#include "json/ObjC/SemanticActions.hpp"
+#include "json/ObjC/RepresentationGenerator.hpp"
 #include "json/unicode/unicode_utilities.hpp"   // encoding
 #include "gtest/gtest.h"
 
@@ -41,7 +41,7 @@ using namespace json;
 
 using json::unicode::UTF_8_encoding_tag;
 using json::semantic_actions_base;
-using json::objc::SemanticActions;
+using json::objc::RepresentationGenerator;
 
 using utilities::timer;
 
@@ -51,16 +51,16 @@ namespace {
     
     // The fixture for testing class json::Boolean:
     
-    class SemanticActionsTest : public ::testing::Test {
+    class RepresentationGeneratorTest : public ::testing::Test {
     protected:
         // You can remove any or all of the following functions if its body
         // is empty.
         
-        SemanticActionsTest() {
+        RepresentationGeneratorTest() {
             // You can do set-up work for each test here.
         }
         
-        virtual ~SemanticActionsTest() {
+        virtual ~RepresentationGeneratorTest() {
             // You can do clean-up work that doesn't throw exceptions here.
         }
         
@@ -82,9 +82,9 @@ namespace {
     
     
     
-    TEST_F(SemanticActionsTest, DefaultCtor) 
+    TEST_F(RepresentationGeneratorTest, DefaultCtor) 
     {
-        SemanticActions<UTF_8_encoding_tag> sa; 
+        RepresentationGenerator<UTF_8_encoding_tag> sa; 
         
         EXPECT_TRUE(sa.checkDuplicateKey());
         EXPECT_FALSE(sa.keepStringCacheOnClear());
@@ -94,9 +94,9 @@ namespace {
         EXPECT_TRUE(sa.numberGeneratorOption() == json::objc::sa_options::NumberGeneratorGenerateAuto);
     }
     
-    TEST_F(SemanticActionsTest, SimpleTest) 
+    TEST_F(RepresentationGeneratorTest, SimpleTest) 
     {
-        typedef SemanticActions<UTF_8_encoding_tag> sa_t;
+        typedef RepresentationGenerator<UTF_8_encoding_tag> sa_t;
         typedef sa_t::const_buffer_t  const_buffer_t;
         
         NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];

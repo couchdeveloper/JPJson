@@ -20,7 +20,7 @@
 
 #include "JPJson/JPJsonParser.h"
 #include "JPJson/JPJsonWriter.h"
-#include "JPJson/JPSemanticActions.h"
+#include "JPJson/JPRepresentationGenerator.h"
 
 #include "gtest/gtest.h"
 
@@ -510,7 +510,7 @@ namespace {
         int idx = 0;
         while (first != last)
         {
-            JPSemanticActions* sa = [[JPSemanticActions alloc] init];
+            JPRepresentationGenerator* sa = [[JPRepresentationGenerator alloc] init];
             
             const char* json = (*first).input_;                
             size_t len = (*first).input_len_;
@@ -634,7 +634,7 @@ namespace {
         NSData* jsonText = [NSData dataWithBytes:[s UTF8String] length:[s lengthOfBytesUsingEncoding:NSUTF8StringEncoding]];
 
         
-        JPSemanticActions* sa = [[JPSemanticActions alloc] init];        
+        JPRepresentationGenerator* sa = [[JPRepresentationGenerator alloc] init];        
         sa.parseMultipleDocuments = YES;
         
         __block int count = 0;
@@ -663,7 +663,7 @@ namespace {
         NSData* jsonText = [NSData dataWithBytes:[s UTF8String] length:[s lengthOfBytesUsingEncoding:NSUTF8StringEncoding]];
         
         
-        JPSemanticActions* sa = [[JPSemanticActions alloc] init];        
+        JPRepresentationGenerator* sa = [[JPRepresentationGenerator alloc] init];        
         sa.parseMultipleDocuments = YES;
         sa.ignoreSpuriousTrailingBytes = YES;
         

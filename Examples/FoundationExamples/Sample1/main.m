@@ -48,7 +48,7 @@ static NSData* readFile(NSString* fileName)
 int main (int argc, const char * argv[])
 {
     @autoreleasepool {
-        NSData* data = readFile(@"Test-UTF8-esc.json");
+        NSData* data = readFile(@"sample_json.json");
         
         NSError* error;
         id json = [JPJsonParser parseData:data options:(JPJsonParserOptions)0 error:&error];
@@ -67,10 +67,13 @@ int main (int argc, const char * argv[])
         }
         else {
             NSError* error;
-            NSString* filePath = @"Out-UTF8-pretty.json";
+            NSString* filePath = @"sample-json-pretty.json";
             BOOL result = [jsonData writeToFile:filePath options:0 error:&error];
             if (!result) {
                 NSLog(@"Writing JSON document to file '%@' failed with error: %@", filePath, error);
+            }
+            else {
+                NSLog(@"Wrote JSON document to file '%@'" , filePath);
             }
         }
     }

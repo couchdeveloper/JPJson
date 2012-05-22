@@ -7,7 +7,7 @@
 //
 
 #include "JPJson/JPAsyncJsonParser.h"
-#include "JPJson/JPSemanticActions.h"
+#include "JPJson/JPRepresentationGenerator.h"
 #include "JPJson/JPJsonWriter.h"
 #include "gtest/gtest.h"
 
@@ -90,7 +90,7 @@ namespace {
         JPAsyncJsonParser* parser = [[JPAsyncJsonParser alloc] init];
         EXPECT_TRUE(parser != nil);
         
-        JPSemanticActions* sa = (JPSemanticActions*)parser.semanticActions;
+        JPRepresentationGenerator* sa = (JPRepresentationGenerator*)parser.semanticActions;
         EXPECT_TRUE(sa != nil);
         
         EXPECT_TRUE( sa.startJsonHandlerBlock == nil );
@@ -169,7 +169,7 @@ namespace {
             usleep(1000*100);
         }
         
-        JPSemanticActions* sa = (JPSemanticActions*)parser.semanticActions;
+        JPRepresentationGenerator* sa = (JPRepresentationGenerator*)parser.semanticActions;
         [sa retain];
         [parser release];
         
@@ -212,7 +212,7 @@ namespace {
             usleep(1000*100);
         }
         
-        JPSemanticActions* sa = (JPSemanticActions*)parser.semanticActions;
+        JPRepresentationGenerator* sa = (JPRepresentationGenerator*)parser.semanticActions;
         [sa retain];
         [parser release];
         
@@ -239,7 +239,7 @@ namespace {
         dispatch_semaphore_t sem = dispatch_semaphore_create(0);
         
         JPAsyncJsonParser* parser = [[JPAsyncJsonParser alloc] init];
-        JPSemanticActions* sa = (JPSemanticActions*)parser.semanticActions;
+        JPRepresentationGenerator* sa = (JPRepresentationGenerator*)parser.semanticActions;
         
         __block bool startCalled = false;
         __block bool endCalled = false;
@@ -336,7 +336,7 @@ namespace {
             dispatch_semaphore_t sem = dispatch_semaphore_create(0);
         
             JPAsyncJsonParser* parser = [[JPAsyncJsonParser alloc] init];
-            JPSemanticActions* sa = (JPSemanticActions*)parser.semanticActions;
+            JPRepresentationGenerator* sa = (JPRepresentationGenerator*)parser.semanticActions;
             
             __block bool startCalled = false;
             __block bool endCalled = false;
@@ -470,7 +470,7 @@ namespace {
         
         
         // Setup SA
-        JPSemanticActions* sa = (JPSemanticActions*)(parser.semanticActions);
+        JPRepresentationGenerator* sa = (JPRepresentationGenerator*)(parser.semanticActions);
         sa.startJsonHandlerBlock = ^{ 
             NSLog(@"startJsonHandlerBlock called");
         };
