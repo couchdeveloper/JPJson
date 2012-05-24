@@ -15,7 +15,7 @@ dest_path = Pathname.new("#{dest_dir}").cleanpath
 
 apple_doc_command = "/usr/local/bin/appledoc -p JPJson -v \"0.1\" -c \"Bit Passion\""
 apple_doc_command << " -o " << "\"" << dest_path << "\"" 
-apple_doc_command << " --warn-undocumented-object --warn-undocumented-member --warn-empty-description --warn-unknown-directive --warn-invalid-crossref --warn-missing-arg --no-repeat-first-par --explicit-crossref"
+apple_doc_command << " -x .m --ignore .m --warn-undocumented-object --warn-undocumented-member --warn-empty-description --warn-unknown-directive --warn-invalid-crossref --warn-missing-arg --no-repeat-first-par --no-keep-undocumented-objects --explicit-crossref"
 
 apple_doc_command << " --no-create-docset --keep-intermediate-files --create-html"
 apple_doc_command << " --logformat xcode --exit-threshold 2"

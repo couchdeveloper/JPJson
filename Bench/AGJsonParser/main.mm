@@ -77,7 +77,8 @@ namespace {
 
     
     // Path to a JSON file which is used globally for all tests.
-    NSString* JSON_TEST_FILE = @"sample_json.json";
+    NSString* JSON_TEST_FILE = @"Test-UTF8-esc.json";
+    //NSString* JSON_TEST_FILE = @"Test-UTF8.json";
     
     
     using utilities::timer;

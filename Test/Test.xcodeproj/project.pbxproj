@@ -47,6 +47,7 @@
 		A191B5281529907D007F9471 /* gtest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1A941491517879300AF9548 /* gtest.framework */; };
 		A191B52915299098007F9471 /* gtest_main.cc in Sources */ = {isa = PBXBuildFile; fileRef = A164221013D4357400796785 /* gtest_main.cc */; };
 		A191B52A152998FA007F9471 /* timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A199FC7613D5D186000170CD /* timer.cpp */; };
+		A1977E65156D1D3E0074D9B2 /* NSMutableDataStreambufTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1977E64156D1D3E0074D9B2 /* NSMutableDataStreambufTest.mm */; };
 		A199EFCA1444729600B53269 /* Test-UTF8-esc.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = A199EFC91444729600B53269 /* Test-UTF8-esc.json */; };
 		A199FC7713D5D186000170CD /* timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A199FC7613D5D186000170CD /* timer.cpp */; };
 		A199FC7813D5D186000170CD /* timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A199FC7613D5D186000170CD /* timer.cpp */; };
@@ -256,6 +257,7 @@
 		A191B51B15298FB8007F9471 /* endian_test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = endian_test; sourceTree = BUILT_PRODUCTS_DIR; };
 		A191B5251529903D007F9471 /* ByteSwapTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ByteSwapTest.cpp; sourceTree = "<group>"; };
 		A192C71114239B59002EE32F /* JPAsyncJsonParserTest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = JPAsyncJsonParserTest.mm; sourceTree = "<group>"; };
+		A1977E64156D1D3E0074D9B2 /* NSMutableDataStreambufTest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = NSMutableDataStreambufTest.mm; sourceTree = "<group>"; };
 		A1995FAB141FCC2F00595100 /* atomic_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = atomic_test.cpp; sourceTree = "<group>"; };
 		A199EFC91444729600B53269 /* Test-UTF8-esc.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = "Test-UTF8-esc.json"; path = "../Resources/Test-UTF8-esc.json"; sourceTree = "<group>"; };
 		A199FC7513D5D186000170CD /* timer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = timer.hpp; path = ../utilities/timer.hpp; sourceTree = "<group>"; };
@@ -583,6 +585,7 @@
 		A1DC4BE714582BB800CE28F2 /* ObjC_private_test */ = {
 			isa = PBXGroup;
 			children = (
+				A1977E64156D1D3E0074D9B2 /* NSMutableDataStreambufTest.mm */,
 				A1FE70EF148A4A43004B962E /* intrusive_json_path_test.mm */,
 				A1DC52B914582CDA00CE28F2 /* CFDataCacheTest.mm */,
 				A1DC52BD14582D6C00CE28F2 /* SemanticActionsBaseTest.mm */,
@@ -938,6 +941,7 @@
 				A144F303145871230062D5E9 /* timer.cpp in Sources */,
 				A1DC52BB14582CDA00CE28F2 /* CFDataCacheTest.mm in Sources */,
 				A1DC52BF1458368200CE28F2 /* gtest_main.cc in Sources */,
+				A1977E65156D1D3E0074D9B2 /* NSMutableDataStreambufTest.mm in Sources */,
 				A1FE70ED148A4873004B962E /* SemanticActionsBaseTest.mm in Sources */,
 				A1FE70F0148A4A43004B962E /* intrusive_json_path_test.mm in Sources */,
 				A1FE70F1148A56A6004B962E /* RepresentationGeneratorTest.mm in Sources */,
@@ -1350,10 +1354,7 @@
 					"$(JP_ROOT)",
 					"$(inherited)",
 				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../../../../Library/Developer/Xcode/DerivedData/Json-hiazqngtzsfxawgakamtpamfsytx/Build/Products/Release\"",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_LDFLAGS = (
 					"$(ICU_OTHER_LDFLAGS)",
@@ -1392,10 +1393,7 @@
 					"$(JP_ROOT)",
 					"$(inherited)",
 				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../../../../Library/Developer/Xcode/DerivedData/Json-hiazqngtzsfxawgakamtpamfsytx/Build/Products/Release\"",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_LDFLAGS = (
 					"$(ICU_OTHER_LDFLAGS)",
@@ -1489,6 +1487,7 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				HEADER_SEARCH_PATHS = (
+					"$(BOOST_HEADER_SEARCH_PATHS)",
 					"$(JP_ROOT)",
 					"$(inherited)",
 				);
@@ -1521,6 +1520,7 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				HEADER_SEARCH_PATHS = (
+					"$(BOOST_HEADER_SEARCH_PATHS)",
 					"$(JP_ROOT)",
 					"$(inherited)",
 				);

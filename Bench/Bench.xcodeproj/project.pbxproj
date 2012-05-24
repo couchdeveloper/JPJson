@@ -7,10 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A10942EB156E87540051793A /* libjson.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A126DCBB154FD366001E09F0 /* libjson.a */; };
 		A11D2190144C9B6300D24AA8 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A11D218F144C9B6300D24AA8 /* main.cpp */; };
 		A122FDE2150CF22600D6C7C7 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1A3399913D96A6B000CE571 /* main.cpp */; };
 		A126DCC0154FD3AC001E09F0 /* libjson.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A126DCBB154FD366001E09F0 /* libjson.a */; };
-		A1314ADD1552E15A00CC4910 /* sample_json2.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = A1314ADB1552E10600CC4910 /* sample_json2.json */; };
 		A1485F761447133B00A88A92 /* Test-UTF8-esc.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = A1485F751447133B00A88A92 /* Test-UTF8-esc.json */; };
 		A1485F9F144733B500A88A92 /* Test-UTF8.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = A1485F9E144733B500A88A92 /* Test-UTF8.json */; };
 		A171E72313D4924D00260A6B /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = A171E72213D4924D00260A6B /* main.mm */; };
@@ -25,6 +25,11 @@
 		A17DD7CE146AF503000AD974 /* timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A17DD7C7146AF503000AD974 /* timer.cpp */; };
 		A17DD7CF146AF503000AD974 /* timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A17DD7C7146AF503000AD974 /* timer.cpp */; };
 		A187B4D513FAA7AF00FB63BD /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A187B4D413FAA7AF00FB63BD /* main.cpp */; };
+		A1977E4C156CBE920074D9B2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A171E72813D4938E00260A6B /* Foundation.framework */; };
+		A1977E4F156CBE920074D9B2 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1977E4E156CBE920074D9B2 /* main.mm */; };
+		A1977E59156CCC6E0074D9B2 /* timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A17DD7C7146AF503000AD974 /* timer.cpp */; };
+		A1977E5A156CCC8F0074D9B2 /* Test-UTF8.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = A1485F9E144733B500A88A92 /* Test-UTF8.json */; };
+		A1977E5B156CCC8F0074D9B2 /* Test-UTF8-esc.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = A1485F751447133B00A88A92 /* Test-UTF8-esc.json */; };
 		A1995FBC1420A96E00595100 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1995FBB1420A96E00595100 /* main.cpp */; };
 		A19F3B1E1428C89D00266273 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A171E72413D4928400260A6B /* CoreFoundation.framework */; };
 		A19F3B211428C89D00266273 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A19F3B201428C89D00266273 /* main.cpp */; };
@@ -63,7 +68,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 16;
 			files = (
-				A1314ADD1552E15A00CC4910 /* sample_json2.json in CopyFiles */,
 				A1AE44091552C676007E5498 /* sample_json.json in CopyFiles */,
 				A1485F9F144733B500A88A92 /* Test-UTF8.json in CopyFiles */,
 				A1485F761447133B00A88A92 /* Test-UTF8-esc.json in CopyFiles */,
@@ -87,6 +91,17 @@
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 1;
+		};
+		A1977E48156CBE920074D9B2 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 12;
+			dstPath = "";
+			dstSubfolderSpec = 16;
+			files = (
+				A1977E5A156CCC8F0074D9B2 /* Test-UTF8.json in CopyFiles */,
+				A1977E5B156CCC8F0074D9B2 /* Test-UTF8-esc.json in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		A1995FB61420A96E00595100 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -127,7 +142,16 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		A11D218C144C9B6300D24AA8 /* parse_number */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = parse_number; sourceTree = BUILT_PRODUCTS_DIR; };
+		A10942C5156E86DF0051793A /* unicode_conversion */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = unicode_conversion; sourceTree = BUILT_PRODUCTS_DIR; };
+		A10942C7156E86DF0051793A /* CFStringStringBuffer */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = CFStringStringBuffer; sourceTree = BUILT_PRODUCTS_DIR; };
+		A10942C9156E86DF0051793A /* queue_bench */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = queue_bench; sourceTree = BUILT_PRODUCTS_DIR; };
+		A10942CB156E86DF0051793A /* sync_queue_iterator_bench */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = sync_queue_iterator_bench; sourceTree = BUILT_PRODUCTS_DIR; };
+		A10942CD156E86DF0051793A /* parse_number */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = parse_number; sourceTree = BUILT_PRODUCTS_DIR; };
+		A10942CF156E86DF0051793A /* JsonContainerBench */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = JsonContainerBench; sourceTree = BUILT_PRODUCTS_DIR; };
+		A10942D1156E86DF0051793A /* Allocator_bench */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Allocator_bench; sourceTree = BUILT_PRODUCTS_DIR; };
+		A10942D3156E86DF0051793A /* json_parser */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = json_parser; sourceTree = BUILT_PRODUCTS_DIR; };
+		A10942D5156E86DF0051793A /* JPJsonParser */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = JPJsonParser; sourceTree = BUILT_PRODUCTS_DIR; };
+		A10942D7156E86DF0051793A /* JPJsonWriter */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = JPJsonWriter; sourceTree = BUILT_PRODUCTS_DIR; };
 		A11D218F144C9B6300D24AA8 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = main.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		A126DCBB154FD366001E09F0 /* libjson.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjson.a; path = ../Build/Products/Release/libjson.a; sourceTree = "<group>"; };
 		A1314ADB1552E10600CC4910 /* sample_json2.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = sample_json2.json; sourceTree = "<group>"; };
@@ -135,31 +159,26 @@
 		A139AC701488B749003E3881 /* unicode_conversion.release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = unicode_conversion.release.xcconfig; sourceTree = "<group>"; };
 		A1485F751447133B00A88A92 /* Test-UTF8-esc.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "Test-UTF8-esc.json"; sourceTree = "<group>"; };
 		A1485F9E144733B500A88A92 /* Test-UTF8.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "Test-UTF8.json"; sourceTree = "<group>"; };
-		A16B4A5113D9B3260021EA8E /* json_parser */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = json_parser; sourceTree = BUILT_PRODUCTS_DIR; };
 		A16EEE3E1487DA3B00D12DA2 /* Bench.debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Bench.debug.xcconfig; sourceTree = "<group>"; };
 		A16EEE3F1487DB6D00D12DA2 /* Bench.release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Bench.release.xcconfig; sourceTree = "<group>"; };
-		A171E71E13D4922600260A6B /* AGJsonParser */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = AGJsonParser; sourceTree = BUILT_PRODUCTS_DIR; };
 		A171E72113D4924D00260A6B /* AGJsonParser-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AGJsonParser-Prefix.pch"; sourceTree = "<group>"; };
 		A171E72213D4924D00260A6B /* main.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; path = main.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		A171E72413D4928400260A6B /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		A171E72813D4938E00260A6B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		A177EAF3150E42EB009A1299 /* JsonContainerBench */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = JsonContainerBench; sourceTree = BUILT_PRODUCTS_DIR; };
 		A17DD7C7146AF503000AD974 /* timer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = timer.cpp; sourceTree = "<group>"; };
 		A17DD7C8146AF503000AD974 /* timer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = timer.hpp; sourceTree = "<group>"; };
-		A187B4D113FAA7AF00FB63BD /* unicode_conversion */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = unicode_conversion; sourceTree = BUILT_PRODUCTS_DIR; };
 		A187B4D413FAA7AF00FB63BD /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = main.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		A191B514152982C3007F9471 /* MinMaxAvg.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MinMaxAvg.hpp; sourceTree = "<group>"; };
-		A1995FB81420A96E00595100 /* queue_bench */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = queue_bench; sourceTree = BUILT_PRODUCTS_DIR; };
+		A1977E4E156CBE920074D9B2 /* main.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = main.mm; sourceTree = "<group>"; };
+		A1977E51156CBE920074D9B2 /* JPJsonWriter-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "JPJsonWriter-Prefix.pch"; sourceTree = "<group>"; };
+		A1977E57156CBF1A0074D9B2 /* JPJson.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JPJson.framework; path = ../Build/Products/Release/JPJson.framework; sourceTree = "<group>"; };
 		A1995FBB1420A96E00595100 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = main.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		A19F3B1C1428C89D00266273 /* Allocator_bench */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Allocator_bench; sourceTree = BUILT_PRODUCTS_DIR; };
 		A19F3B201428C89D00266273 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		A1A3399913D96A6B000CE571 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = main.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		A1AA92991529E20700181B93 /* CFStringStringBufferBench */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; name = CFStringStringBufferBench; path = CFStringStringBuffer; sourceTree = BUILT_PRODUCTS_DIR; };
 		A1AA929D1529E20700181B93 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		A1AE44081552C663007E5498 /* sample_json.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = sample_json.json; sourceTree = "<group>"; };
 		A1AE440C1552CA49007E5498 /* JSONKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JSONKit.h; sourceTree = "<group>"; };
 		A1AE440D1552CA49007E5498 /* JSONKit.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JSONKit.m; sourceTree = "<group>"; };
-		A1EF0D9D142666BF0083221D /* sync_queue_iterator_bench */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = sync_queue_iterator_bench; sourceTree = BUILT_PRODUCTS_DIR; };
 		A1EF0DA0142666BF0083221D /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		A1FF8C6D14891C07003DF439 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -203,6 +222,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A1977E47156CBE920074D9B2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A10942EB156E87540051793A /* libjson.a in Frameworks */,
+				A1977E4C156CBE920074D9B2 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A1995FB51420A96E00595100 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -237,6 +265,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A10942E9156E86E90051793A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A10942C5156E86DF0051793A /* unicode_conversion */,
+				A10942C7156E86DF0051793A /* CFStringStringBuffer */,
+				A10942C9156E86DF0051793A /* queue_bench */,
+				A10942CB156E86DF0051793A /* sync_queue_iterator_bench */,
+				A10942CD156E86DF0051793A /* parse_number */,
+				A10942CF156E86DF0051793A /* JsonContainerBench */,
+				A10942D1156E86DF0051793A /* Allocator_bench */,
+				A10942D3156E86DF0051793A /* json_parser */,
+				A10942D5156E86DF0051793A /* JPJsonParser */,
+				A10942D7156E86DF0051793A /* JPJsonWriter */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		A11D218E144C9B6300D24AA8 /* parse_number */ = {
 			isa = PBXGroup;
 			children = (
@@ -256,6 +301,7 @@
 		A171E6E313D488FC00260A6B = {
 			isa = PBXGroup;
 			children = (
+				A1977E57156CBF1A0074D9B2 /* JPJson.framework */,
 				A126DCBB154FD366001E09F0 /* libjson.a */,
 				A16EEE3E1487DA3B00D12DA2 /* Bench.debug.xcconfig */,
 				A16EEE3F1487DB6D00D12DA2 /* Bench.release.xcconfig */,
@@ -264,32 +310,17 @@
 				A14BE8F114681E8D0077EA5C /* Vendor */,
 				A199FCBC13D76F64000170CD /* Resources */,
 				A171E72613D4929F00260A6B /* Frameworks */,
-				A171E6EF13D488FC00260A6B /* Products */,
+				A10942E9156E86E90051793A /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		A171E6EF13D488FC00260A6B /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				A171E71E13D4922600260A6B /* AGJsonParser */,
-				A16B4A5113D9B3260021EA8E /* json_parser */,
-				A187B4D113FAA7AF00FB63BD /* unicode_conversion */,
-				A1995FB81420A96E00595100 /* queue_bench */,
-				A1EF0D9D142666BF0083221D /* sync_queue_iterator_bench */,
-				A19F3B1C1428C89D00266273 /* Allocator_bench */,
-				A11D218C144C9B6300D24AA8 /* parse_number */,
-				A177EAF3150E42EB009A1299 /* JsonContainerBench */,
-				A1AA92991529E20700181B93 /* CFStringStringBufferBench */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		A171E72013D4924D00260A6B /* AGJsonParser */ = {
+		A171E72013D4924D00260A6B /* JPJsonParser */ = {
 			isa = PBXGroup;
 			children = (
 				A171E72113D4924D00260A6B /* AGJsonParser-Prefix.pch */,
 				A171E72213D4924D00260A6B /* main.mm */,
 			);
+			name = JPJsonParser;
 			path = AGJsonParser;
 			sourceTree = "<group>";
 		};
@@ -317,7 +348,8 @@
 			isa = PBXGroup;
 			children = (
 				A1AA929C1529E20700181B93 /* CFStringStringBufferBench */,
-				A171E72013D4924D00260A6B /* AGJsonParser */,
+				A171E72013D4924D00260A6B /* JPJsonParser */,
+				A1977E4D156CBE920074D9B2 /* JPJsonWriter */,
 				A1A3399813D96A6B000CE571 /* json_parser */,
 				A1FF8C6C14891C07003DF439 /* JsonContainerBench */,
 				A187B4D313FAA7AF00FB63BD /* unicode_conversion */,
@@ -337,6 +369,23 @@
 				A139AC701488B749003E3881 /* unicode_conversion.release.xcconfig */,
 			);
 			path = unicode_conversion;
+			sourceTree = "<group>";
+		};
+		A1977E4D156CBE920074D9B2 /* JPJsonWriter */ = {
+			isa = PBXGroup;
+			children = (
+				A1977E4E156CBE920074D9B2 /* main.mm */,
+				A1977E50156CBE920074D9B2 /* Supporting Files */,
+			);
+			path = JPJsonWriter;
+			sourceTree = "<group>";
+		};
+		A1977E50156CBE920074D9B2 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				A1977E51156CBE920074D9B2 /* JPJsonWriter-Prefix.pch */,
+			);
+			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		A1995FBA1420A96E00595100 /* queue_bench */ = {
@@ -425,7 +474,7 @@
 			);
 			name = parse_number;
 			productName = parse_number;
-			productReference = A11D218C144C9B6300D24AA8 /* parse_number */;
+			productReference = A10942CD156E86DF0051793A /* parse_number */;
 			productType = "com.apple.product-type.tool";
 		};
 		A16B4A5013D9B3260021EA8E /* json_parser */ = {
@@ -442,12 +491,12 @@
 			);
 			name = json_parser;
 			productName = json_parser;
-			productReference = A16B4A5113D9B3260021EA8E /* json_parser */;
+			productReference = A10942D3156E86DF0051793A /* json_parser */;
 			productType = "com.apple.product-type.tool";
 		};
-		A171E71613D4922600260A6B /* AGJsonParser */ = {
+		A171E71613D4922600260A6B /* JPJsonParser */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = A171E71B13D4922600260A6B /* Build configuration list for PBXNativeTarget "AGJsonParser" */;
+			buildConfigurationList = A171E71B13D4922600260A6B /* Build configuration list for PBXNativeTarget "JPJsonParser" */;
 			buildPhases = (
 				A171E71713D4922600260A6B /* Sources */,
 				A171E71913D4922600260A6B /* Frameworks */,
@@ -457,9 +506,9 @@
 			);
 			dependencies = (
 			);
-			name = AGJsonParser;
+			name = JPJsonParser;
 			productName = Bench;
-			productReference = A171E71E13D4922600260A6B /* AGJsonParser */;
+			productReference = A10942D5156E86DF0051793A /* JPJsonParser */;
 			productType = "com.apple.product-type.tool";
 		};
 		A177EAF2150E42EB009A1299 /* JsonContainerBench */ = {
@@ -476,7 +525,7 @@
 			);
 			name = JsonContainerBench;
 			productName = JsonContainerBench2;
-			productReference = A177EAF3150E42EB009A1299 /* JsonContainerBench */;
+			productReference = A10942CF156E86DF0051793A /* JsonContainerBench */;
 			productType = "com.apple.product-type.tool";
 		};
 		A187B4D013FAA7AF00FB63BD /* unicode_conversion */ = {
@@ -493,7 +542,24 @@
 			);
 			name = unicode_conversion;
 			productName = unicode_conversion;
-			productReference = A187B4D113FAA7AF00FB63BD /* unicode_conversion */;
+			productReference = A10942C5156E86DF0051793A /* unicode_conversion */;
+			productType = "com.apple.product-type.tool";
+		};
+		A1977E49156CBE920074D9B2 /* JPJsonWriter */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A1977E54156CBE920074D9B2 /* Build configuration list for PBXNativeTarget "JPJsonWriter" */;
+			buildPhases = (
+				A1977E46156CBE920074D9B2 /* Sources */,
+				A1977E47156CBE920074D9B2 /* Frameworks */,
+				A1977E48156CBE920074D9B2 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = JPJsonWriter;
+			productName = JPJsonWriter;
+			productReference = A10942D7156E86DF0051793A /* JPJsonWriter */;
 			productType = "com.apple.product-type.tool";
 		};
 		A1995FB71420A96E00595100 /* queue_bench */ = {
@@ -510,7 +576,7 @@
 			);
 			name = queue_bench;
 			productName = queue_bench;
-			productReference = A1995FB81420A96E00595100 /* queue_bench */;
+			productReference = A10942C9156E86DF0051793A /* queue_bench */;
 			productType = "com.apple.product-type.tool";
 		};
 		A19F3B1B1428C89D00266273 /* Allocator_bench */ = {
@@ -527,7 +593,7 @@
 			);
 			name = Allocator_bench;
 			productName = Allocator_bench;
-			productReference = A19F3B1C1428C89D00266273 /* Allocator_bench */;
+			productReference = A10942D1156E86DF0051793A /* Allocator_bench */;
 			productType = "com.apple.product-type.tool";
 		};
 		A1AA92981529E20700181B93 /* CFStringStringBuffer */ = {
@@ -544,7 +610,7 @@
 			);
 			name = CFStringStringBuffer;
 			productName = CFStringStringBufferBench;
-			productReference = A1AA92991529E20700181B93 /* CFStringStringBufferBench */;
+			productReference = A10942C7156E86DF0051793A /* CFStringStringBuffer */;
 			productType = "com.apple.product-type.tool";
 		};
 		A1EF0D9C142666BF0083221D /* sync_queue_iterator_bench */ = {
@@ -561,7 +627,7 @@
 			);
 			name = sync_queue_iterator_bench;
 			productName = sync_queue_iterator_bench;
-			productReference = A1EF0D9D142666BF0083221D /* sync_queue_iterator_bench */;
+			productReference = A10942CB156E86DF0051793A /* sync_queue_iterator_bench */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
@@ -580,7 +646,7 @@
 				en,
 			);
 			mainGroup = A171E6E313D488FC00260A6B;
-			productRefGroup = A171E6EF13D488FC00260A6B /* Products */;
+			productRefGroup = A171E6E313D488FC00260A6B;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -592,7 +658,8 @@
 				A177EAF2150E42EB009A1299 /* JsonContainerBench */,
 				A19F3B1B1428C89D00266273 /* Allocator_bench */,
 				A16B4A5013D9B3260021EA8E /* json_parser */,
-				A171E71613D4922600260A6B /* AGJsonParser */,
+				A171E71613D4922600260A6B /* JPJsonParser */,
+				A1977E49156CBE920074D9B2 /* JPJsonWriter */,
 			);
 		};
 /* End PBXProject section */
@@ -641,6 +708,15 @@
 			files = (
 				A187B4D513FAA7AF00FB63BD /* main.cpp in Sources */,
 				A17DD7CB146AF503000AD974 /* timer.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A1977E46156CBE920074D9B2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A1977E59156CCC6E0074D9B2 /* timer.cpp in Sources */,
+				A1977E4F156CBE920074D9B2 /* main.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -808,7 +884,7 @@
 					"-ObjC",
 					"-ljson",
 				);
-				PRODUCT_NAME = AGJsonParser;
+				PRODUCT_NAME = JPJsonParser;
 			};
 			name = Debug;
 		};
@@ -834,7 +910,7 @@
 					"-ObjC",
 					"-ljson",
 				);
-				PRODUCT_NAME = AGJsonParser;
+				PRODUCT_NAME = JPJsonParser;
 			};
 			name = Release;
 		};
@@ -942,6 +1018,62 @@
 					"$(ICU_OTHER_LDFLAGS)",
 					"$(inherited)",
 				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		A1977E55156CBE920074D9B2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ENABLE_OBJC_ARC = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "JPJsonWriter/JPJsonWriter-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(BUILT_PRODUCTS_DIR)",
+					"$(SRCROOT)/Vendor",
+					"$(inherited)",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../Build/Products/Release\"",
+				);
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		A1977E56156CBE920074D9B2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ENABLE_OBJC_ARC = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "JPJsonWriter/JPJsonWriter-Prefix.pch";
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(BUILT_PRODUCTS_DIR)",
+					"$(SRCROOT)/Vendor",
+					"$(inherited)",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../Build/Products/Release\"",
+				);
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -1116,7 +1248,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		A171E71B13D4922600260A6B /* Build configuration list for PBXNativeTarget "AGJsonParser" */ = {
+		A171E71B13D4922600260A6B /* Build configuration list for PBXNativeTarget "JPJsonParser" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				A171E71C13D4922600260A6B /* Debug */,
@@ -1139,6 +1271,15 @@
 			buildConfigurations = (
 				A187B4D813FAA7AF00FB63BD /* Debug */,
 				A187B4D913FAA7AF00FB63BD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A1977E54156CBE920074D9B2 /* Build configuration list for PBXNativeTarget "JPJsonWriter" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A1977E55156CBE920074D9B2 /* Debug */,
+				A1977E56156CBE920074D9B2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

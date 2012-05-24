@@ -35,7 +35,6 @@
 #define DLog(...) do { } while (0)
 #endif
 
-#define ZAssert(condition, ...) do { if (!(condition)) { ALog(__VA_ARGS__); }} while(0)
 
 namespace {
     

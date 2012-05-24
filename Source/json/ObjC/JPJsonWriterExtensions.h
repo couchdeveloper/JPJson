@@ -9,34 +9,40 @@
 #import <Foundation/Foundation.h>
 
 
+
 /**
- JPJsonOutputStreamProtocol defines the interface for an output stream:
+ JPJsonStreambufferProtocol defines the interface for an stream buffer:
  
- Custom classes which map to a JSON primitive element will use the stream in 
- their implementation of method JPJson_serializeTo:encoding:options:level: in
+ Custom classes which map to a JSON primitive element will use the stream buffer 
+ in their implementation of method JPJson_serializeTo:encoding:options:level: in
  order to serialize itself into the stream. (Custom classes for JSON __containers__, 
  like array and object will instead use the predefined class methods 
  serializeObjectAsJSONArray and serializeObjectAsJSONObject).
-*/
-@protocol JPJsonOutputStreamProtocol <NSObject>
+ */
+@protocol JPJsonStreambufferProtocol <NSObject>
+
 
 /**
- A signature for a method which writes a serialized Foundation object into the 
- stream.
+ Write a sequence of bytes.
  
- @param data  A pointer to a buffer containing the characters
+ Write up to `length` bytes from the array of bytes pointed to by `buffer` into
+ the stream buffer.
  
- @param length The length of the buffer in bytes.
-
+ @param buffer A pointer to the sequence of bytes to be written.
  
- The method returns when the complete character sequence has been written
- into the output stream.
+ @param length The number of bytes to write.
  
+ @return Returns the actual number of bytes written, or a negative number
+ indicating an error.
  */
 
-- (void) writeData:(const void*)data length:(NSUInteger)length;
+- (NSInteger) write:(const void*)buffer length:(NSUInteger)length;
 
 @end
+
+
+
+
 
 
 /**
@@ -59,7 +65,7 @@
  An implementation shall serialize itself as a character sequence and write the 
  characters into the stream `buffer`.
  
- @param buffer The stream into which the characters shall be written.
+ @param streambuf A stream buffer into which the characters will be written.
  
  @param encoding The output encoding of the character sequence for the serialized 
  object.
@@ -75,7 +81,7 @@
  the appropariate syntax elements.
  
 */ 
-- (NSInteger) JPJson_serializeTo:(id<JPJsonOutputStreamProtocol>) buffer 
+- (NSInteger) JPJson_serializeTo:(id<JPJsonStreambufferProtocol>) streambuf
                         encoding:(JPUnicodeEncoding)encoding 
                          options:(JPJsonWriterOptions)options 
                            level:(NSUInteger)level;
@@ -92,6 +98,15 @@
  */
 @interface JPJsonWriter (Extension)
 
+//
+///**
+// 
+// Returns the default number formatter for NSDecimalNumber
+// 
+// */
+//+ NSNumberFormatter* defaultDecimalNumberFormatter;
+//
+
 
 /**
  Serialize an object which shall be represented as a JSON Array. This method already 
@@ -99,7 +114,7 @@
  
  @param object The "array like" object which shall be serialized
  
- @param buffer The stream to which the characters shall be written.
+ @param streambuf A stream buffer into which the characters will be written.
  
  @param encoding The output encoding of the character sequence for the serialized 
  object.
@@ -116,7 +131,7 @@
  protocol NSFastEnumeration. 
  */
 + (int) serializeObjectAsJSONArray:(id) object 
-                            buffer:(id<JPJsonOutputStreamProtocol>) buffer
+                            buffer:(id<JPJsonStreambufferProtocol>) streambuf
                           encoding:(JPUnicodeEncoding) encoding
                            options:(JPJsonWriterOptions) options
                              level:(NSUInteger) level;
@@ -130,7 +145,7 @@
  
  @param object The "dictionary like" object which shall be serialized
  
- @param buffer The stream to which the characters shall be written.
+ @param streambuf A stream buffer into which the characters will be written.
  
  @param encoding The output encoding of the character sequence for the serialized 
  object.
@@ -147,7 +162,7 @@
  and shall implement the protocol NSFastEnumeration. 
  */
 + (int) serializeObjectAsJSONObject:(id) object 
-                            buffer:(id<JPJsonOutputStreamProtocol>) buffer
+                            buffer:(id<JPJsonStreambufferProtocol>) streambuf
                           encoding:(JPUnicodeEncoding) encoding
                            options:(JPJsonWriterOptions) options
                              level:(NSUInteger) level;

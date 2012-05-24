@@ -193,6 +193,97 @@ namespace json { namespace generator_internal {
     
     
     
+    
+    
+    template <
+    typename InIteratorT, typename InEncodingT, 
+    typename OutIteratorT, typename OutEncodingT
+    >
+    inline int
+    escape_convert_one_unsafe_slowpath(
+                          InIteratorT&     first, 
+                          InIteratorT      last, 
+                          InEncodingT      inEncoding,
+                          OutIteratorT&    dest,
+                          OutEncodingT     outEncoding,
+                          bool             escapeSolidus)
+    {
+        typedef typename encoding_traits<UTF_8_encoding_tag>::code_unit_type utf8_char_type;
+        typedef typename encoding_traits<OutEncodingT>::code_unit_type      out_char_type;
+        
+        typedef typename encoding_traits<UTF_8_encoding_tag>::endian_tag    utf8_endian_t;  // this is host endianness
+        typedef typename add_endianness<OutEncodingT>::type                 to_encoding_t;
+        typedef typename encoding_traits<to_encoding_t>::endian_tag         to_endian_t;
+        
+        typedef utf8_char_type esc_buffer_type[8];
+        
+        assert(first != last);
+        
+        unsigned int ch = encoding_traits<InEncodingT>::to_uint(*first);
+        
+        esc_buffer_type escapedSequenceBuffer;
+        
+        bool escaped = true;
+        utf8_char_type* startEscaped = &escapedSequenceBuffer[0];
+        utf8_char_type* endEscaped = startEscaped;
+        switch (ch) {
+            case '"':   *endEscaped++ = '\\'; *endEscaped++ = '"'; break;
+            case '\\':  *endEscaped++ = '\\'; *endEscaped++ = '\\'; break;
+            case '/':   
+                if (escapeSolidus) {
+                    *endEscaped++ = '\\'; *endEscaped++ = '/';
+                } else {
+                    escaped = false;
+                }
+                break;
+            case '\b':  *endEscaped++ = '\\'; *endEscaped++ = 'b'; break;
+            case '\f':  *endEscaped++ = '\\'; *endEscaped++ = 'f'; break;
+            case '\n':  *endEscaped++ = '\\'; *endEscaped++ = 'n'; break;
+            case '\r':  *endEscaped++ = '\\'; *endEscaped++ = 'r'; break;
+            case '\t':  *endEscaped++ = '\\'; *endEscaped++ = 't'; break;                    
+            default:
+                if (ch < 0x20u) {
+                    // escape a control character
+                    *endEscaped++ = '\n';
+                    *endEscaped++ = 'u';
+                    *endEscaped++ = '0';
+                    *endEscaped++ = '0';
+                    *endEscaped++ = ((ch >> 4)+'0');
+                    *endEscaped++ = ((ch & 0x0Fu)+'0');
+                }
+                else {
+                    // unescaped
+                    escaped = false;
+                }
+        } // switch
+        
+        if (escaped) {
+            // Copy the escaped sequence from internal buffer to dest using encoding 'outEncoding':
+            // Note, the character within the internal buffer shall be ASCII only.
+            while (startEscaped != endEscaped) {
+                assert(encoding_traits<UTF_8_encoding_tag>::to_uint(*startEscaped) <= 0x7Fu);
+                out_char_type c = byte_swap<utf8_endian_t, to_endian_t>(
+                                                                        static_cast<out_char_type>(encoding_traits<UTF_8_encoding_tag>::to_uint(*startEscaped++)));
+                *dest++ = c;
+            }
+            ++first;
+        }
+        else {
+            // Use an unsafe, stateless converter which only converts one character:
+            typedef converter<
+            InEncodingT, OutEncodingT, 
+            Validation::UNSAFE, Stateful::No, ParseOne::Yes
+            >  converter_t;
+            
+            int result = converter_t().convert(first, last, dest);
+            if (result != unicode::NO_ERROR) {
+                return result;
+            }
+        }
+        
+        return 0;
+    }    
+    
     //
     //  Deprecated: use class string_encoder.
     //
@@ -230,77 +321,25 @@ namespace json { namespace generator_internal {
         typedef typename encoding_traits<UTF_8_encoding_tag>::code_unit_type utf8_char_type;
         typedef typename encoding_traits<OutEncodingT>::code_unit_type      out_char_type;
         
-        typedef typename encoding_traits<UTF_8_encoding_tag>::endian_tag    utf8_endian_t;
+        typedef typename encoding_traits<UTF_8_encoding_tag>::endian_tag    utf8_endian_t;  // this is host endianness
         typedef typename add_endianness<OutEncodingT>::type                 to_encoding_t;
         typedef typename encoding_traits<to_encoding_t>::endian_tag         to_endian_t;
         
         typedef utf8_char_type esc_buffer_type[8];
         
-        while (first != last) 
+        int result = unicode::NO_ERROR;
+        while (first != last and result == unicode::NO_ERROR) 
         {
             unsigned int ch = encoding_traits<InEncodingT>::to_uint(*first);
-            esc_buffer_type escapedSequenceBuffer;
-            
-            bool escaped = true;
-            utf8_char_type* startEscaped = &escapedSequenceBuffer[0];
-            utf8_char_type* endEscaped = startEscaped;
-            switch (ch) {
-                case '"':   *endEscaped++ = '\\'; *endEscaped++ = '"'; break;
-                case '\\':  *endEscaped++ = '\\'; *endEscaped++ = '\\'; break;
-                case '/':   
-                    if (escapeSolidus) {
-                        *endEscaped++ = '\\'; *endEscaped++ = '/';
-                    } else {
-                        escaped = false;
-                    }
-                    break;
-                case '\b':  *endEscaped++ = '\\'; *endEscaped++ = 'b'; break;
-                case '\f':  *endEscaped++ = '\\'; *endEscaped++ = 'f'; break;
-                case '\n':  *endEscaped++ = '\\'; *endEscaped++ = 'n'; break;
-                case '\r':  *endEscaped++ = '\\'; *endEscaped++ = 'r'; break;
-                case '\t':  *endEscaped++ = '\\'; *endEscaped++ = 't'; break;                    
-                default:
-                    if (ch < 0x20u) {
-                        // escape a control character
-                        *endEscaped++ = '\n';
-                        *endEscaped++ = 'u';
-                        *endEscaped++ = '0';
-                        *endEscaped++ = '0';
-                        *endEscaped++ = ((ch >> 4)+'0');
-                        *endEscaped++ = ((ch & 0x0Fu)+'0');
-                    }
-                    else {
-                        // unescaped
-                        escaped = false;
-                    }
-            } // switch
-            
-            if (escaped) {
-                // Copy the escaped sequence from internal buffer to dest using encoding 'outEncoding':
-                // Note, the character within the internal buffer shall be ASCII only.
-                while (startEscaped != endEscaped) {
-                    assert(encoding_traits<UTF_8_encoding_tag>::to_uint(*startEscaped) <= 0x7Fu);
-                    out_char_type c = byte_swap<utf8_endian_t, to_endian_t>(
-                            static_cast<out_char_type>(encoding_traits<UTF_8_encoding_tag>::to_uint(*startEscaped++)));
-                    *dest++ = c;
-                }
+            if (__builtin_expect((ch - 0x20u) < 0x60u, 1))  { // ASCII except control-char, and no ASCII NULL
                 ++first;
+                *dest++ = byte_swap<utf8_endian_t, to_endian_t>(static_cast<out_char_type>(ch));
+                continue;
             }
-            else {
-                // Use an unsafe, stateless converter which only converts one character:
-                typedef converter<
-                    InEncodingT, OutEncodingT, 
-                    Validation::UNSAFE, Stateful::No, ParseOne::Yes
-                >  converter_t;
-                
-                int result = converter_t().convert(first, last, dest);
-                if (result != unicode::NO_ERROR) {
-                    return result;
-                }
-            }
-        } // while
-        
-        return 0;
+            
+            result = escape_convert_one_unsafe_slowpath(first, last, inEncoding, dest, outEncoding, escapeSolidus);
+        }
+        return result;
     }    
     
     
