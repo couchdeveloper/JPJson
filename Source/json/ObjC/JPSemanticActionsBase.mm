@@ -1,7 +1,6 @@
 //
 //  JPSemanticActionsBase.m
 //  
-//
 //  Created by Andreas Grosam on 8/24/11.
 //  Copyright 2011 Andreas Grosam
 //
@@ -17,6 +16,11 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 //
+
+#if __has_feature(objc_arc) 
+#error This Objective-C file shall be compiled with ARC disabled.
+#endif
+
 
 #import "JPSemanticActionsBase.h"
 #import "JPSemanticActionsBase_private.h"

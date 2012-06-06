@@ -17,6 +17,10 @@
 //  limitations under the License.
 //
 
+#if __has_feature(objc_arc) 
+#error This Objective-C file shall be compiled with ARC disabled.
+#endif
+
 // #include <boost/spirit/include/karma.hpp>
 
 #include "json/unicode/unicode_traits.hpp"

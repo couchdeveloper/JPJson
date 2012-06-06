@@ -331,7 +331,6 @@
 		A1F001281440A27E007A72A9 = {
 			isa = PBXGroup;
 			children = (
-				A1977E41156B9A4B0074D9B2 /* JPJson.framework */,
 				A1CFB9321510C8CA0010942D /* common.xcconfig */,
 				A1CA8B411441D42E0076C0CB /* Readme.rtf */,
 				A1F0015A1440A7C3007A72A9 /* Resources */,
@@ -366,6 +365,7 @@
 		A1F001361440A27E007A72A9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A1977E41156B9A4B0074D9B2 /* JPJson.framework */,
 				A19AD783151B332000D2A086 /* JPJson.framework */,
 				A1F001371440A27E007A72A9 /* Foundation.framework */,
 				A126811C14556BB500131E77 /* CoreFoundation.framework */,

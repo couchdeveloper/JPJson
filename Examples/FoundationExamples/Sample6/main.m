@@ -217,6 +217,13 @@ int main (int argc, const char * argv[])
             else {
                 NSLog(@"Wrote JSON document to file '%@'" , filePath);
             }
+#if defined (DEBUG)
+            NSString* s = [NSString stringWithContentsOfFile:filePath
+                                                    encoding:NSUTF8StringEncoding
+                                                       error:nil];
+            NSLog(@"%@:\n%@", filePath, s);
+            
+#endif            
         }
     }
     return 0;

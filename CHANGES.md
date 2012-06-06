@@ -29,6 +29,8 @@
 
 #### Changes
 
+* Caution: this version changed the "SAX-style" Objective-C API.
+
 * Renamed class JPJsonSemanticActions to JPRepresentationGenerator.
 
 * Extended JPJsonWriter with protocols and helper methods so that custom classes can be easily serialized.
