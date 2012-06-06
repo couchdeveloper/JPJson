@@ -30,7 +30,7 @@
 static NSData* readFile(NSString* fileName)
 {
     NSError* error;
-    NSData* data = [[NSData alloc] initWithContentsOfFile:fileName 
+    NSData* data = [[NSData alloc] initWithContentsOfFile:[@"Resources" stringByAppendingPathComponent:fileName]
                                                   options:NSDataReadingUncached 
                                                     error:&error];    
     if (data == nil) {
@@ -48,7 +48,7 @@ static NSData* readFile(NSString* fileName)
 int main (int argc, const char * argv[])
 {
     @autoreleasepool {
-        NSData* data = readFile(@"sample_json.json");
+        NSData* data = readFile(@"Test-UTF8.json");
         
         NSError* error;
         id json = [JPJsonParser parseData:data options:(JPJsonParserOptions)0 error:&error];

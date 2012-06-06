@@ -51,9 +51,11 @@ namespace {
     
     const char* TEST_JSON = "Test-UTF8-esc.json";
     
-    std::vector<char> loadFromFile(const char* fileName) 
+    std::vector<char> loadFileFromResourceFolder(const char* fileName) 
     {        
-        std::ifstream ifs(fileName);
+        std::string filePath("Resources/");
+        filePath.append(fileName);
+        std::ifstream ifs(filePath.c_str());
         if (!ifs)
             throw std::runtime_error("could not open file");
         
@@ -83,7 +85,7 @@ static void bench_validating_parser()
     using namespace json;
     using namespace utilities;
     
-    std::vector<char> buffer = loadFromFile(TEST_JSON);
+    std::vector<char> buffer = loadFileFromResourceFolder(TEST_JSON);
     
     /*
     // Create your string stream.
@@ -125,7 +127,7 @@ static void bench_test_parser()
     
     std::cout << "using vector<char> iterators" << std::endl;
     
-    std::vector<char> buffer = loadFromFile(TEST_JSON);
+    std::vector<char> buffer = loadFileFromResourceFolder(TEST_JSON);
 
     timer t0 = timer();
 #if defined (DEBUG)
@@ -176,7 +178,7 @@ static void bench_parser()
     
     std::cout << "using vector<char> iterators" << std::endl;
     
-    std::vector<char> buffer = loadFromFile(TEST_JSON);
+    std::vector<char> buffer = loadFileFromResourceFolder(TEST_JSON);
     
     timer t = timer();
 #if defined (DEBUG)

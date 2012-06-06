@@ -285,7 +285,10 @@ namespace {
                                                               encoding:NSUTF8StringEncoding];
                 ASSERT_TRUE(jsonString != nil);
                 
-                DLog(@"JSON output: \"%@\"", jsonString);
+#if defined (DEBUG)                
+                printf("JSON input:   \"%s\"\n", [inString UTF8String]);
+                printf("JSON output:  \"%s\"\n", [jsonString UTF8String]);
+#endif                
                 EXPECT_EQ( std::string([inString UTF8String]), std::string([jsonString UTF8String]) );
             }
             ++idx;

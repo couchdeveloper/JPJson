@@ -17,6 +17,7 @@
 //  limitations under the License.
 //
 
+// #include <boost/spirit/include/karma.hpp>
 
 #include "json/unicode/unicode_traits.hpp"
 #include "json/unicode/unicode_converter.hpp"
@@ -416,7 +417,6 @@ namespace std {
     
 namespace {
     
-
     NSError*  makeError(int errorCode, const char* errorStr)
     {
         NSString* errStr = [[NSString alloc] initWithUTF8String:errorStr];
@@ -470,6 +470,34 @@ namespace {
         }
         return result;
     }
+}
+
+
+namespace {
+    
+    using namespace boost::spirit;
+    using boost::spirit::karma::real_policies;
+    using boost::spirit::karma::real_generator;
+    using boost::spirit::karma::generate;
+    
+
+    // float to number string generator:
+    // define a new real number formatting policy
+    template <typename Num>
+    struct scientific_policy : real_policies<Num>
+    {
+        // we want the numbers always to be in scientific format
+        static int floatfield(Num n) { return real_policies<Num>::fmtflags::scientific; }
+        static int unsigned precision(Num n) { return std::numeric_limits<Num>::digits10 + 1; }
+        //static bool trailing_zeros(Num n) { return true; } 
+    };
+    
+    // define a new generator type based on the new policy
+    typedef real_generator<double, scientific_policy<double> > science_type;
+    
+    static science_type const scientific_generator = science_type();
+    
+    
 
 
     // TODO: replace number to string conversions with karma, which should be
@@ -478,16 +506,24 @@ namespace {
     int insertNumberIntoBuffer(CFNumberRef number, id<JPJsonStreambufferProtocol> streambuf, 
                                size_t* outCount, JPUnicodeEncoding encoding)
     {
+        
+        
         static CFNumberFormatterRef s_numberFormatter;
         
         assert(encoding == JPUnicodeEncoding_UTF8);
         
         char tmp_buffer[128];
+        char* begin = tmp_buffer;
+        char* p = tmp_buffer;
+#if defined (DEBUG)        
+        char* end_cap = tmp_buffer + sizeof(tmp_buffer);
+#endif        
         size_t count = 0;      // the number of bytes in tmp_buffer
-        
+                
         
         CFNumberType numberType = CFNumberGetType(number);    
         Boolean conversionSucceeded = false;
+        
         switch (numberType) {
             case kCFNumberSInt8Type:
             case kCFNumberSInt16Type:
@@ -497,14 +533,18 @@ namespace {
             case kCFNumberIntType: {
                 int result;
                 conversionSucceeded = CFNumberGetValue(number, kCFNumberIntType, &result);
-                count = snprintf(tmp_buffer, sizeof(tmp_buffer), "%d", result);
+                generate(p, int_, result);
+                count = p - begin;
             }
                 break;
+                
                 
             case kCFNumberLongType: {
                 long result;
                 conversionSucceeded = CFNumberGetValue(number, kCFNumberLongType, &result);
-                count = snprintf(tmp_buffer, sizeof(tmp_buffer), "%ld", result);
+                generate(p, long_, result);
+                assert(p <= end_cap);
+                count = p - begin;
             }
                 break;
                 
@@ -512,16 +552,23 @@ namespace {
             case kCFNumberLongLongType: {
                 long long result;
                 conversionSucceeded = CFNumberGetValue(number, kCFNumberLongLongType, &result);
-                count = snprintf(tmp_buffer, sizeof(tmp_buffer), "%lld", result);
+                generate(p, long_long, result);
+                assert(p <= end_cap);
+                count = p - begin;
+                *p = 0;
+                //count = snprintf(tmp_buffer, sizeof(tmp_buffer), "%lld", result);
             }
                 break;
                 
             case kCFNumberFloat32Type:    
             case kCFNumberFloatType: {
                 float result;
-                int digits = FLT_DIG;
                 conversionSucceeded = CFNumberGetValue(number, kCFNumberFloatType, &result);
-                count = snprintf(tmp_buffer, sizeof(tmp_buffer), "%#.*e",digits-1, result);
+                generate(p, scientific_generator, result);
+                count = p - begin;
+                *p = 0;
+                //int digits = FLT_DIG;
+                //count = snprintf(tmp_buffer, sizeof(tmp_buffer), "%#.*e",digits-1, result);
             }
                 break;
                 
@@ -529,9 +576,12 @@ namespace {
             case kCFNumberDoubleType:{
                 assert(sizeof(double) == 8);
                 double result;
-                int digits = DBL_DIG;
                 conversionSucceeded = CFNumberGetValue(number, kCFNumberDoubleType, &result);
-                count = snprintf(tmp_buffer, sizeof(tmp_buffer), "%#.*e", digits-1, result);
+                generate(p, scientific_generator, result);
+                count = p - begin;
+                *p = 0;
+                //int digits = DBL_DIG;
+                //count = snprintf(tmp_buffer, sizeof(tmp_buffer), "%#.*e", digits-1, result);
             }
                 break;
                 

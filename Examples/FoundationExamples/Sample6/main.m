@@ -54,7 +54,7 @@
 @interface NSDate (JPJsonWriterExtension) <JPJsonSerializableProtocol>
 @end
 @implementation NSDate (JPJsonWriterExtension) 
-- (NSInteger) JPJson_serializeTo:(id<JPJsonOutputStreamProtocol>) buffer 
+- (NSInteger) JPJson_serializeTo:(id<JPJsonStreambufferProtocol>) buffer 
                         encoding:(JPUnicodeEncoding)encoding 
                          options:(JPJsonWriterOptions)options 
                            level:(NSUInteger)level 
@@ -155,7 +155,7 @@
     return 4;
 }
 
-- (NSInteger) JPJson_serializeTo:(id<JPJsonOutputStreamProtocol>) buffer 
+- (NSInteger) JPJson_serializeTo:(id<JPJsonStreambufferProtocol>) buffer 
                         encoding:(JPUnicodeEncoding)encoding 
                          options:(JPJsonWriterOptions)options 
                            level:(NSUInteger)level 

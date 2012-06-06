@@ -17,6 +17,9 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 //
+#if __has_feature(objc_arc) 
+#error This Objective-C file shall be compiled with ARC disabled.
+#endif
 
 #import "JPBenchAppViewController.h"
 #import "JPJson/JPJsonParser.h"
@@ -29,7 +32,7 @@
 #include <utility>
 #include <algorithm>
 
-#import "JSONKit.h"
+#import "JSONKit/JSONKit.h"
 
 
 #if !defined (NS_BLOCK_ASSERTIONS)
@@ -71,33 +74,31 @@ namespace {
         T sum_;
     };
 
+    
+    
+    uint64_t absoluteTimeToNanoseconds(uint64_t t) 
+    {    
+        // If this is the first time we've run, get the timebase.
+        // We can use denom == 0 to indicate that sTimebaseInfo is 
+        // uninitialised because it makes no sense to have a zero 
+        // denominator is a fraction.
+        static mach_timebase_info_data_t sTimebaseInfo;
+        
+        if ( sTimebaseInfo.denom == 0 ) {
+            (void) mach_timebase_info(&sTimebaseInfo);
+        }
+        uint64_t elapsedNano = t * sTimebaseInfo.numer / sTimebaseInfo.denom;
+        return elapsedNano;
+    }
+    
+    
 }
 
 typedef     MinMaxAvg<double> MinMaxAvgTime;
 
 
-static uint64_t absoluteTimeToNanoseconds(uint64_t t) 
-{    
-    // If this is the first time we've run, get the timebase.
-    // We can use denom == 0 to indicate that sTimebaseInfo is 
-    // uninitialised because it makes no sense to have a zero 
-    // denominator is a fraction.
-    static mach_timebase_info_data_t sTimebaseInfo;
-    
-    if ( sTimebaseInfo.denom == 0 ) {
-        (void) mach_timebase_info(&sTimebaseInfo);
-    }
-    uint64_t elapsedNano = t * sTimebaseInfo.numer / sTimebaseInfo.denom;
-    return elapsedNano;
-}
-
-
-
-
-
 @interface JPBenchAppViewController ()
 
-@property (nonatomic, retain) JPAsyncJsonParser* parser;
 @property (nonatomic, retain) IBOutlet UILabel*  benchJPJsonParserResult1Label;
 @property (nonatomic, retain) IBOutlet UILabel*  benchJPJsonParserResult2Label;
 @property (nonatomic, retain) IBOutlet UILabel*  benchJSONKitResult1Label;
@@ -119,21 +120,20 @@ static uint64_t absoluteTimeToNanoseconds(uint64_t t)
 
 
 @implementation JPBenchAppViewController {
-    JPAsyncJsonParser*      parser_;    
-    IBOutlet UILabel*       benchJPParserResult1Label_;
-    IBOutlet UILabel*       benchJPParserResult2Label_;
-    IBOutlet UILabel*       benchJSONKitResult1Label_;
-    IBOutlet UILabel*       benchJSONKitResult2Label_;
-    BOOL                    running_;
+    IBOutlet UILabel*       _benchJPJsonParserResult1Label;
+    IBOutlet UILabel*       _benchJPJsonParserResult2Label;
+    IBOutlet UILabel*       _benchJSONKitResult1Label;
+    IBOutlet UILabel*       _benchJSONKitResult2Label;
+    BOOL                    _running;
 }
 
 
+static NSString* JsonTestFile = @"Test-UTF8-esc.json";
 
-@synthesize parser = parser_;
-@synthesize benchJPJsonParserResult1Label = benchJPJsonParserResult1Label_;
-@synthesize benchJPJsonParserResult2Label = benchJPJsonParserResult2Label_;
-@synthesize benchJSONKitResult1Label = benchJSONKitResult1Label_;
-@synthesize benchJSONKitResult2Label = benchJSONKitResult2Label_;
+@synthesize benchJPJsonParserResult1Label = _benchJPJsonParserResult1Label;
+@synthesize benchJPJsonParserResult2Label = _benchJPJsonParserResult2Label;
+@synthesize benchJSONKitResult1Label = _benchJSONKitResult1Label;
+@synthesize benchJSONKitResult2Label = _benchJSONKitResult2Label;
 
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -164,10 +164,10 @@ static uint64_t absoluteTimeToNanoseconds(uint64_t t)
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    NSAssert(benchJPJsonParserResult1Label_, @"IBOutlet 'benchJPJsonParserResult1Label_' is nil");
-    NSAssert(benchJPJsonParserResult2Label_, @"IBOutlet 'benchJPJsonParserResult2Label_' is nil");
-    NSAssert(benchJSONKitResult1Label_, @"IBOutlet 'benchJSONKitResult1Label_' is nil");
-    NSAssert(benchJSONKitResult2Label_, @"IBOutlet 'benchJSONKitResult2Label_' is nil");
+    NSAssert(_benchJPJsonParserResult1Label, @"IBOutlet '_benchJPJsonParserResult1Label' is nil");
+    NSAssert(_benchJPJsonParserResult2Label, @"IBOutlet '_benchJPJsonParserResult2Label' is nil");
+    NSAssert(_benchJSONKitResult1Label, @"IBOutlet '_benchJSONKitResult1Label' is nil");
+    NSAssert(_benchJSONKitResult2Label, @"IBOutlet '_benchJSONKitResult2Label' is nil");
     
     self.benchJPJsonParserResult1Label.text = @"";    
     self.benchJPJsonParserResult2Label.text = @"";    
@@ -199,7 +199,7 @@ static uint64_t absoluteTimeToNanoseconds(uint64_t t)
 
 -(IBAction) startBenchJPJsonParser1:(id)sender
 {
-    if (running_) {
+    if (_running) {
         NSLog(@"Bench is already running.");
         return;
     }
@@ -211,7 +211,7 @@ static uint64_t absoluteTimeToNanoseconds(uint64_t t)
 
 -(IBAction) startBenchJPJsonParser2:(id)sender 
 {
-    if (running_) {
+    if (_running) {
         NSLog(@"Bench is already running.");
         return;
     }
@@ -223,7 +223,7 @@ static uint64_t absoluteTimeToNanoseconds(uint64_t t)
     
 -(IBAction) startBenchJSONKitParser1:(id)sender  
 {
-    if (running_) {
+    if (_running) {
         NSLog(@"Bench is already running.");
         return;
     }
@@ -235,7 +235,7 @@ static uint64_t absoluteTimeToNanoseconds(uint64_t t)
 
 -(IBAction) startBenchJSONKitParser2:(id)sender  
 {
-    if (running_) {
+    if (_running) {
         NSLog(@"Bench is already running.");
         return;
     }
@@ -274,7 +274,7 @@ static uint64_t absoluteTimeToNanoseconds(uint64_t t)
     using namespace utilities;
     
     NSString* fileName = [[[NSBundle mainBundle] resourcePath] 
-                          stringByAppendingPathComponent:@"Test-UTF8-esc.json"];
+                          stringByAppendingPathComponent:JsonTestFile];
     NSError* error;
     NSData* data = [[NSData alloc] initWithContentsOfFile:fileName
                                                   options:NSDataReadingUncached 
@@ -330,6 +330,7 @@ static uint64_t absoluteTimeToNanoseconds(uint64_t t)
               te.min()*1e3, te.max()*1e3, te.avg()*1e3);
     }
     
+    [data release];
     return te;
 }
 
@@ -339,7 +340,7 @@ static uint64_t absoluteTimeToNanoseconds(uint64_t t)
     using namespace utilities;
     
     NSString* fileName = [[[NSBundle mainBundle] resourcePath] 
-                          stringByAppendingPathComponent:@"Test-UTF8-esc.json"];
+                          stringByAppendingPathComponent:JsonTestFile];
     NSError* error;
     NSData* data = [[NSData alloc] initWithContentsOfFile:fileName
                                                   options:NSDataReadingUncached 
@@ -391,6 +392,8 @@ static uint64_t absoluteTimeToNanoseconds(uint64_t t)
               te.min()*1e3, te.max()*1e3, te.avg()*1e3);
     }
     
+    [data release];
+    
     return te;
 }
 
@@ -400,7 +403,7 @@ static uint64_t absoluteTimeToNanoseconds(uint64_t t)
     using namespace utilities;
     
     NSString* fileName = [[[NSBundle mainBundle] resourcePath] 
-                          stringByAppendingPathComponent:@"Test-UTF8-esc.json"];
+                          stringByAppendingPathComponent:JsonTestFile];
     NSError* error;
     NSData* data = [[NSData alloc] initWithContentsOfFile:fileName
                                                   options:NSDataReadingUncached 
@@ -451,6 +454,8 @@ static uint64_t absoluteTimeToNanoseconds(uint64_t t)
               te.min()*1e3, te.max()*1e3, te.avg()*1e3);
     }
     
+    [data release];
+    
     return te;
 }
 
@@ -459,7 +464,7 @@ static uint64_t absoluteTimeToNanoseconds(uint64_t t)
     using namespace utilities;
     
     NSString* fileName = [[[NSBundle mainBundle] resourcePath] 
-                          stringByAppendingPathComponent:@"Test-UTF8-esc.json"];
+                          stringByAppendingPathComponent:JsonTestFile];
     NSError* error;
     NSData* data = [[NSData alloc] initWithContentsOfFile:fileName
                                                   options:NSDataReadingUncached 
@@ -506,6 +511,7 @@ static uint64_t absoluteTimeToNanoseconds(uint64_t t)
               "%.3f s\n\n", N, t.seconds());
     }
     
+    [data release];
     return te;
 }
 

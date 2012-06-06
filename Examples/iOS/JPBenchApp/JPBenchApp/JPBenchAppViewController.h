@@ -21,11 +21,6 @@
 #import <UIKit/UIKit.h>
 
 
-@class JPAsyncJsonParser;
 
-@interface JPBenchAppViewController : UIViewController {
-}
-
-
-
+@interface JPBenchAppViewController : UIViewController 
 @end

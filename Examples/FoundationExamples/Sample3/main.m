@@ -23,7 +23,7 @@
 static NSData* readFile(NSString* fileName)
 {
     NSError* error;
-    NSData* data = [[NSData alloc] initWithContentsOfFile:fileName 
+    NSData* data = [[NSData alloc] initWithContentsOfFile:[@"Resources" stringByAppendingPathComponent:fileName]
                                                   options:NSDataReadingUncached 
                                                     error:&error];    
     if (data == nil) {

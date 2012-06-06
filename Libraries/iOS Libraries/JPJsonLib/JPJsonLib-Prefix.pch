@@ -7,6 +7,7 @@
 // Due to a conflict with macros "Nil" and "nil" defined in Foundation,
 // we need to include certain boost headers before any Foundation header:
 #include "json/utility/string_to_number.hpp"
+#include <boost/spirit/include/karma.hpp>
 
 
 

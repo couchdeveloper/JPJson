@@ -446,9 +446,6 @@
             </FileRef>
          </Group>
          <FileRef
-            location = "group:sample_json2.json">
-         </FileRef>
-         <FileRef
             location = "group:sample_json.json">
          </FileRef>
          <FileRef

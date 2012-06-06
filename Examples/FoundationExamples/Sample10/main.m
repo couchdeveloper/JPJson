@@ -27,7 +27,7 @@
 static NSData* readFile(NSString* fileName)
 {
     NSError* error;
-    NSData* data = [[NSData alloc] initWithContentsOfFile:fileName 
+    NSData* data = [[NSData alloc] initWithContentsOfFile:[@"Resources" stringByAppendingPathComponent:fileName]
                                                   options:NSDataReadingUncached 
                                                     error:&error];    
     if (data == nil) {
@@ -50,10 +50,8 @@ int main (int argc, const char * argv[])
         // any Unicode encoding scheme. There may also be a BOM to indicate the
         // encoding. The parser will detect the encoding automatically. So,
         // don't worry about it.
-        // Note: the file "Out-UTF8-pretty.json" will be created in sample 3. If
-        // it does not yet exist, just run Sample3.
         
-        NSData* data = readFile(@"Out-UTF8-pretty.json");
+        NSData* data = readFile(@"Test-UTF8-esc.json");
         
         // The Semantic Actions class used: JsonPathSemanticActions
         // This SA will print a lot of lines to the console. Check

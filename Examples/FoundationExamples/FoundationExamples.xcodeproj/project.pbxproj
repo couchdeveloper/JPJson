@@ -40,7 +40,7 @@
 		A126811814556BB400131E77 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 12;
-			dstPath = "";
+			dstPath = Resources;
 			dstSubfolderSpec = 16;
 			files = (
 				A12681311455781300131E77 /* Test-UTF8-esc.json in CopyFiles */,
@@ -50,7 +50,7 @@
 		A126813414557F4A00131E77 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 12;
-			dstPath = "";
+			dstPath = Resources;
 			dstSubfolderSpec = 16;
 			files = (
 				A126814314557FBB00131E77 /* Test-UTF8-esc.json in CopyFiles */,
@@ -59,44 +59,44 @@
 		};
 		A1268147145588A400131E77 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = /usr/share/man/man1/;
+			buildActionMask = 12;
+			dstPath = "";
 			dstSubfolderSpec = 0;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 1;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		A15E63631456D4EC000F22F6 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = /usr/share/man/man1/;
+			buildActionMask = 12;
+			dstPath = "";
 			dstSubfolderSpec = 0;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 1;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		A1977E31156B86FE0074D9B2 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = /usr/share/man/man1/;
+			buildActionMask = 12;
+			dstPath = "";
 			dstSubfolderSpec = 0;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 1;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		A199EFD6144480D200B53269 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = /usr/share/man/man1/;
+			buildActionMask = 12;
+			dstPath = "";
 			dstSubfolderSpec = 0;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 1;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		A1F001471440A2A0007A72A9 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 12;
-			dstPath = "";
+			dstPath = Resources;
 			dstSubfolderSpec = 16;
 			files = (
 				A1314AE015530FA500CC4910 /* sample_json.json in CopyFiles */,
@@ -985,6 +985,7 @@
 				A1977E3E156B86FE0074D9B2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		A199EFE2144480D200B53269 /* Build configuration list for PBXNativeTarget "Sample2" */ = {
 			isa = XCConfigurationList;

@@ -281,11 +281,6 @@ namespace {
 }   // unnamed namespace
 
 
-#pragma mark - JPAsyncJsonParser Private
-
-@interface JPAsyncJsonParser ()
-@end
-
 
 
 #pragma mark - JPAsyncJsonParser
@@ -514,11 +509,17 @@ namespace {
     // Try putting the buffer. Be patient for 5 seconds. If put failed, 
     // check if the receiver was killed, and if so return NO, otherwise
     // retry.
+    int timedout = 0;
     while (syncQueue_.put(CFDataByteBuffer(CFDataRef(buffer)), 5.0) == sync_queue_t::TIMEOUT_NOT_DELIVERED)
     {
         if (killed_  or finished_) {
             return NO;
         }
+        NSLog(@"Caution: JPAsyncJsonParser: SyncQueue timed out (5.0 sec) while attempting to put a buffer. Retrying ...");
+        ++timedout;
+    }
+    if (timedout) {
+        NSLog(@"JPAsyncJsonParser: ... SyncQueue 'put' finally succeeded after %d timeouts (a 5 sec).", timedout);
     }
     return YES;
 }

@@ -29,7 +29,23 @@
 #include <dispatch/dispatch.h>
 
 
+//#define DEBUG_LOG
+
+//#define LOOP_INFINITELY
+
+#if defined (DEBUG_LOG)
+#define DLog(...) NSLog(@"%s %@", __PRETTY_FUNCTION__, [NSString stringWithFormat:__VA_ARGS__])
+#else
+#define DLog(...) do { } while (0)
+#endif
+
+
+
 //#define USE_SYNC_PARSER_WITH_TMP_FILE
+
+// USE_ASYNC_DISPATCH_CONSUMER
+// If defined, asynchronously dispatch the producer's data to the consumer (not recommended)
+//#define USE_ASYNC_DISPATCH_CONSUMER
 
 #if !defined (USE_ASYNC_PARSER) && !defined (USE_SYNC_PARSER_WITH_TMP_FILE)
     #define USE_ASYNC_PARSER
@@ -132,6 +148,11 @@ static uint64_t absoluteTimeToNanoseconds(uint64_t t)
     NSFileHandle*       tempFileHandle_;
     NSURL*              tempFileURL_;
 #endif    
+    
+#if defined (USE_ASYNC_DISPATCH_CONSUMER)    
+    dispatch_queue_t    serial_queue_;
+#endif    
+    
     NSError*            lastError_;
     BOOL                canceled_;
     
@@ -194,7 +215,10 @@ static NSString* kTempFileName = @"download.data";
 #if defined (START_CONNECTION_IN_SECONDARY_THREAD)        
     [connectionThread_ release]; connectionThread_ = nil;
 #endif
-        
+ 
+#if defined (USE_ASYNC_DISPATCH_CONSUMER)        
+    dispatch_release(serial_queue_);
+#endif    
     [super dealloc];
 }
 
@@ -212,6 +236,11 @@ static NSString* kTempFileName = @"download.data";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    // For testing:
+    [UIApplication sharedApplication].idleTimerDisabled = YES;
+    
+    
     
     NSAssert(startDownloadButton_, @"IBOutlet 'startDownloadButton_' is nil");
     NSAssert(cancelButton_, @"IBOutlet 'cancelButton_' is nil");
@@ -307,10 +336,14 @@ static NSString* kTempFileName = @"download.data";
         //[pool release];
     };
     
-    sa.endJsonHandlerBlock = ^(id jsonContainer){ 
+    sa.endJsonHandlerBlock = ^(id jsonContainer) { 
+        NSString* msg = [[NSString alloc] initWithFormat:@"Received JSON document [%d]", numberDocuments_];
+        DLog(@"%@", msg);
         dispatch_async(dispatch_get_main_queue(), ^{
-            self.messageLabel.text = [NSString stringWithFormat:@"Received JSON document [%d]", numberDocuments_];
+            self.messageLabel.text = msg;
         });
+        [msg release];
+        
     };
     
     sa.completionHandlerBlock = ^{ 
@@ -319,7 +352,7 @@ static NSString* kTempFileName = @"download.data";
         NSString* msg = [[NSString alloc] initWithFormat:@"Parser finished. Elapsed time: %g seconds.\n%d Documents parsed.\n%@", 
                          secs, numberDocuments_, 
                          (lastError_)?[NSString stringWithFormat:@"Parsing failed: %@",[lastError_ localizedDescription]]:@""];        
-        NSLog(@"%@", msg);
+        DLog(@"%@", msg);
 #if !defined (WRITE_TO_TEMP_FILE)        
         self.parser = nil;
 #endif    
@@ -328,6 +361,17 @@ static NSString* kTempFileName = @"download.data";
             self.messageLabel.text = msg;
         });  
         [msg release];
+        
+        
+#if defined (LOOP_INFINITELY)
+        if (sa.error == nil) {
+            dispatch_after(dispatch_time( DISPATCH_TIME_NOW,  10ULL*NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+                NSLog(@"Repeating download and parse due to option 'LOOP_INFINITIVELY'");
+                [self startDownloadAndParse];
+            });
+        }
+#endif        
+        
     };
 
     sa.errorHandlerBlock = ^(NSError* error) {
@@ -343,6 +387,12 @@ static NSString* kTempFileName = @"download.data";
 
 - (void) startDownloadAndParse
 {    
+#if defined (USE_ASYNC_DISPATCH_CONSUMER)        
+    if (serial_queue_ == NULL) {
+        serial_queue_ = dispatch_queue_create("com.ag.connectionHandlerQueue", NULL);
+    }
+#endif    
+    
     // Method startDownloadAndParse shall be invoked on the main thread!
     
     // We must not invoke several connection attempts:
@@ -696,32 +746,53 @@ static NSString* kTempFileName = @"download.data";
     size_t size = [data length];
     totalBytesDownloaded_ += size;
     ++con_number_buffers_;
+    NSString* msg = [[NSString alloc] initWithFormat:@"NSData[%ld](%p), size: %8.ld, total: %8.ld", 
+                     con_number_buffers_, data, size, totalBytesDownloaded_];
+    NSLog(@"%@", msg);
+    [msg release];
+    
 #if defined (DEBUG)
-    NSString* msg = [[NSString alloc] initWithFormat:@"Connection did receive NSData[%ld](%p), size: %8.ld, total: %8.ld", 
-                     con_number_buffers_, data, size, totalBytesDownloaded_];                     
-    NSLog(@"%@", msg);    
+    NSString* dmsg = [[NSString alloc] initWithFormat:@"Received data with size: %8.ld, total: %8.ld", 
+                     con_number_buffers_, data, size, totalBytesDownloaded_];
+    
 #if defined (START_CONNECTION_IN_SECONDARY_THREAD)    
     dispatch_async(dispatch_get_main_queue(), ^{
-        self.messageLabel.text = msg;
+        self.messageLabel.text = dmsg;
     });
 #else
     self.messageLabel.text = msg;    
 #endif    
-    [msg release];
+    [dmsg release];
 #endif    
 #if !defined (WRITE_TO_TEMP_FILE)    
     // Pass the data buffer to the parser
+#if !defined (USE_ASYNC_DISPATCH_CONSUMER)
     [parser_ parseBuffer:data];
+#else    
+    dispatch_async(serial_queue_, ^{
+        [parser_ parseBuffer:data];
+    });
+#endif    
 #else
     assert(tempFileHandle_);
+#if !defined (USE_ASYNC_DISPATCH_CONSUMER)
     [tempFileHandle_ writeData:data];
+#else    
+    dispatch_async(serial_queue_, ^{
+        [tempFileHandle_ writeData:data];
+    });
+#endif    
 #endif
 }
 
 
 - (void) connectionDidFinishLoading:(NSURLConnection *)connection
-{  
-    NSString* msg = [[NSString alloc] initWithFormat:@"Connection did finish downloading %lu bytes", totalBytesDownloaded_];
+{ 
+    uint64_t t = mach_absolute_time();
+    double secs = absoluteTimeToNanoseconds(t - t_start_) * 1.0e-9;
+    
+    NSString* msg = [[NSString alloc] initWithFormat:@"Connection did finish downloading %lu bytes after %.2f sec", 
+                     totalBytesDownloaded_, secs];
     NSLog(@"%@", msg);
     
     self.connection = nil;
@@ -743,15 +814,22 @@ static NSString* kTempFileName = @"download.data";
     
 #if !defined (WRITE_TO_TEMP_FILE)        
     // stop the parser
+    
+#if !defined (USE_ASYNC_DISPATCH_CONSUMER)    
     [parser_ parseBuffer:nil];    
 #else    
-    uint64_t t = mach_absolute_time();
-    double secs = absoluteTimeToNanoseconds(t - t_start_) * 1.0e-9;
-    unsigned long long pos = [self.tempFileHandle seekToEndOfFile];
-    NSLog(@"Finished writing temp file (%llu bytes) in %g s", pos, secs);
+    dispatch_async(serial_queue_, ^{    
+        [parser_ parseBuffer:nil];    
+    });
+#endif    
+#else    
     // We can close and release the file handle
+    unsigned long long pos = [self.tempFileHandle seekToEndOfFile];
     [self.tempFileHandle closeFile];
     self.tempFileHandle = nil;
+    t = mach_absolute_time();
+    secs = absoluteTimeToNanoseconds(t - t_start_) * 1.0e-9;
+    DLog(@"Finished writing temp file (%llu bytes) in %g s", pos, secs);
     
     // Start a synchronous JSON parser with a big chunk of NSData buffer which 
     // is memory mapped on the temporay file and execute it on the global 
@@ -763,13 +841,15 @@ static NSString* kTempFileName = @"download.data";
         NSFileManager* fm = [[NSFileManager alloc] init];
         bool canAccessTempFile = [fm fileExistsAtPath:[tempFileURL_ path]];
         [fm release];
+        if (!canAccessTempFile) {
+            NSLog(@"[NSFileManager] fileExistsAtPath returned NO with path %@", [tempFileURL_ path]);
+            abort();
+        }
         NSAssert(canAccessTempFile, @"could not access temporary file");
         NSError* error;
         NSData* data = [[NSData alloc] initWithContentsOfURL:self.tempFileURL
                                                      options:NSDataReadingMappedIfSafe | NSDataReadingUncached
                                                        error:&error];
-        
-        
         // Create a semantic actions object with default properties - including
         // its own serial dispatch queue where handler blocks will be scheduled.
         JPRepresentationGenerator* sa = [[JPRepresentationGenerator alloc] init];
@@ -836,8 +916,11 @@ static NSString* kTempFileName = @"download.data";
         if ([fm fileExistsAtPath:[tempFileURL_ path]]) {
             NSError* error;
             BOOL result = [fm removeItemAtURL:tempFileURL_ error:&error];
+            if (!result) {
+                NSLog(@"[NSFileManager] removeItemAtURL did fail with error %@", error);
+            }
             NSAssert(result, @"could not remove temporary file");
-            NSLog(@"TempFile removed");
+            DLog(@"TempFile removed");
         }
         [fm release];
 #endif        
@@ -863,51 +946,56 @@ static NSString* kTempFileName = @"download.data";
 
 - (void) makeTemporaryFileSync
 {
-      if (tempFileHandle_) {
-          [tempFileHandle_ closeFile];
-          [tempFileHandle_ release]; tempFileHandle_ = nil;        
-      }
-      
-      NSFileManager* fm = [[NSFileManager alloc] init];    
-      
-      // Get the URL for a temp file
-      if (tempFileURL_ == nil) {
-          NSURL* tmpDirURL = [[fm URLsForDirectory:NSCachesDirectory inDomains:NSUserDomainMask] lastObject];
-          tempFileURL_ = [[tmpDirURL URLByAppendingPathComponent:kTempFileName] retain];
-          NSAssert(tempFileURL_ != nil, @"Could not locate temp file");
-      }
-      // Create the temporary file:
-      // If a file already exists at path, this method overwrites the contents of that file
-      BOOL success = [fm createFileAtPath:[tempFileURL_ path] contents:nil attributes:nil];
-      NSAssert(success == YES, @"createFileAtPath did fail");
-      
-      // Create a file handle
-      NSError* error;
-      tempFileHandle_ = [[NSFileHandle fileHandleForWritingToURL:tempFileURL_ error:&error] retain];
-      [fm release];
-      NSAssert(tempFileHandle_ != nil, @"temporary file handle is nil");
-      NSLog(@"TempFileHandle created");
+    if (tempFileHandle_) {
+      [tempFileHandle_ closeFile];
+      [tempFileHandle_ release]; tempFileHandle_ = nil;        
+    }
+
+    NSFileManager* fm = [[NSFileManager alloc] init];    
+
+    // Get the URL for a temp file
+    if (tempFileURL_ == nil) {
+      NSURL* tmpDirURL = [[fm URLsForDirectory:NSCachesDirectory inDomains:NSUserDomainMask] lastObject];
+      tempFileURL_ = [[tmpDirURL URLByAppendingPathComponent:kTempFileName] retain];
+      NSAssert(tempFileURL_ != nil, @"Could not locate temp file");
+    }
+    // Create the temporary file:
+    // If a file already exists at path, this method overwrites the contents of that file
+    BOOL success = [fm createFileAtPath:[tempFileURL_ path] contents:nil attributes:nil];
+    if (!success) {
+        NSLog(@"[NSFileManager] createFileAtPath did fail with path: %@", [tempFileURL_ path]);
+    }
+    NSAssert(success == YES, @"createFileAtPath did fail");
+
+    // Create a file handle
+    NSError* error;
+    tempFileHandle_ = [[NSFileHandle fileHandleForWritingToURL:tempFileURL_ error:&error] retain];
+    [fm release];
+    NSAssert(tempFileHandle_ != nil, @"temporary file handle is nil");
+    DLog(@"TempFileHandle created");
 }
 
 - (void) removeTemporaryFile 
 {
-    dispatch_sync(dispatch_get_main_queue(), 
-                  ^{
-                      if (tempFileURL_ == nil) {
-                          return;
-                      }
-                      if (tempFileHandle_) {
-                          [tempFileHandle_ closeFile];
-                          [tempFileHandle_ release]; tempFileHandle_ = nil;        
-                      }
-                      NSFileManager* fm = [[NSFileManager alloc] init];        
-                      if ([fm fileExistsAtPath:[tempFileURL_ path]]) {
-                          NSError* error;
-                          BOOL result = [fm removeItemAtURL:tempFileURL_ error:&error];
-                          NSAssert(result, @"could not remove temporary file");
-                      }
-                      [fm release];
-                  });      
+    dispatch_sync(dispatch_get_main_queue(), ^{
+        if (tempFileURL_ == nil) {
+            return;
+        }
+        if (tempFileHandle_) {
+            [tempFileHandle_ closeFile];
+            [tempFileHandle_ release]; tempFileHandle_ = nil;        
+        }
+        NSFileManager* fm = [[NSFileManager alloc] init];        
+        if ([fm fileExistsAtPath:[tempFileURL_ path]]) {
+            NSError* error;
+            BOOL result = [fm removeItemAtURL:tempFileURL_ error:&error];
+            if (!result) {
+                NSLog(@"[NSFileManager] removeItemAtURL did fail with error: %@", error);
+            }
+            NSAssert(result, @"could not remove temporary file");
+        }
+        [fm release];
+    });      
 }
 #endif
 

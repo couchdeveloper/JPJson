@@ -138,7 +138,7 @@ namespace {
                JPUnicodeEncodingToString(encoding).c_str());
         
         NSError* error;
-        NSData* data = [[NSData alloc] initWithContentsOfFile:JSON_TEST_FILE 
+        NSData* data = [[NSData alloc] initWithContentsOfFile:[@"Resources" stringByAppendingPathComponent:JSON_TEST_FILE]
                                                       options:NSDataReadingUncached 
                                                         error:&error];
         if (data == nil) {

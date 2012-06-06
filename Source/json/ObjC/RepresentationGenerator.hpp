@@ -639,7 +639,7 @@ namespace json { namespace objc {
                 //  Create a mutable JSON object
                 //                
                 typedef void (*CFDictionaryAddValue_t)(CFMutableDictionaryRef theDict, const void *key, const void *value);
-                CFDictionaryAddValue_t f_cf_DictionaryAddValue_t = CFDictionaryAddValue;
+                //CFDictionaryAddValue_t f_cf_DictionaryAddValue_t = CFDictionaryAddValue;
                 
 #if !defined (JSON_OBJC_REPRESENTATION_GENERATOR_NO_CREATE_MUTABLE_DICTIONARY_USING_CF)
                 // use CF to create a dictionary
@@ -653,7 +653,7 @@ namespace json { namespace objc {
                 {
                     // get the key and the value from the stack and insert it:
                     CFTypeRef key =  CFTypeRef(*first++);
-                    f_cf_DictionaryAddValue_t(o, key, CFTypeRef(*first++));
+                    CFDictionaryAddValue(o, key, CFTypeRef(*first++));
                 }
                 
                 if (this->checkDuplicateKey()) {
