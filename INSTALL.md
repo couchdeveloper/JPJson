@@ -189,6 +189,12 @@ In the target build settings of the client add the build settings variable `BUIL
 e.g.:  
 `HEADER_SEARCH_PATHS = $(BUILT_PRODUCTS_DIR) my/other/path/`  
 
+Hint: you might need to wrap a path variable in double quotes if this path contains spaces, e.g.:
+`HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)" "my/other path/"`  
+
+In general, using quotes for paths variables is a good idea if you don't know the path a priori.
+
+
 This is appropriate for building, except when linking against a **static library** and creating an Archive. Apparently, at the time of writing there is a bug in Xcode Version 4.3.1 (4E1019) here. So, we need to apply a workaround in order to be able to create an Archive successfully:
 
 Add a header search path `$(OBJROOT)/UninstalledProducts` to the target build setting of the client. This header search path will let the compiler locate the public headers of static libraries when creating an Archive.

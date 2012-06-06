@@ -621,12 +621,12 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/../../../../../Library/Developer/Xcode/DerivedData/JPJson-ejutwqptiebgcjcabedtzqzwdhuj/Build/Products/Debug\"",
 				);
+				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)\"";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lstdc++",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				USER_HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)";
 			};
 			name = Debug;
 		};
@@ -637,12 +637,12 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/../../../../../Library/Developer/Xcode/DerivedData/JPJson-ejutwqptiebgcjcabedtzqzwdhuj/Build/Products/Debug\"",
 				);
+				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)\"";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lstdc++",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				USER_HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)";
 			};
 			name = Release;
 		};
@@ -655,12 +655,12 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Sample4/Sample4-Prefix.pch";
+				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)\"";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lstdc++",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				USER_HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)";
 			};
 			name = Debug;
 		};
@@ -673,12 +673,12 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Sample4/Sample4-Prefix.pch";
+				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)\"";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lstdc++",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				USER_HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)";
 			};
 			name = Release;
 		};
@@ -691,12 +691,12 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Sample5/Sample5-Prefix.pch";
+				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)\"";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lstdc++",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				USER_HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)";
 			};
 			name = Debug;
 		};
@@ -709,12 +709,12 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Sample5/Sample5-Prefix.pch";
+				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)\"";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lstdc++",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				USER_HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)";
 			};
 			name = Release;
 		};
@@ -778,6 +778,7 @@
 					"$(inherited)",
 				);
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)\"";
 				OTHER_LDFLAGS = (
 					"-lstdc++",
 					"-ObjC",
@@ -798,6 +799,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Sample6/Sample6-Prefix.pch";
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)\"";
 				OTHER_LDFLAGS = (
 					"-lstdc++",
 					"-ObjC",
@@ -815,12 +817,12 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Sample2/Sample2-Prefix.pch";
+				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)\"";
 				OTHER_LDFLAGS = (
 					"-lstdc++",
 					"-ObjC",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				USER_HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)";
 			};
 			name = Debug;
 		};
@@ -834,12 +836,12 @@
 				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Sample2/Sample2-Prefix.pch";
+				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)\"";
 				OTHER_LDFLAGS = (
 					"-lstdc++",
 					"-ObjC",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				USER_HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)";
 			};
 			name = Release;
 		};
@@ -909,13 +911,13 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Sample1/Sample1-Prefix.pch";
+				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)\"";
 				OTHER_CFLAGS = "-v";
 				OTHER_LDFLAGS = (
 					"-lstdc++",
 					"-ObjC",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				USER_HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)";
 			};
 			name = Debug;
 		};
@@ -929,13 +931,13 @@
 				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Sample1/Sample1-Prefix.pch";
+				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)\"";
 				OTHER_CFLAGS = "-v";
 				OTHER_LDFLAGS = (
 					"-lstdc++",
 					"-ObjC",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				USER_HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)";
 			};
 			name = Release;
 		};
