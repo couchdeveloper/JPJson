@@ -26,11 +26,15 @@
 //  4) Create a NSString from the NSData and print it to the console.
 //     Use NSData utility method to detect the Unicode encoding of the 
 //     JSON text which has been created by the JPJsonWriter.
+//
+//  Note: Sample1 links against the static library version, which is accomplished
+//  by setting "Other Linker Flags" option: -ljson
 
 static NSData* readFile(NSString* fileName)
 {
     NSError* error;
-    NSData* data = [[NSData alloc] initWithContentsOfFile:[@"Resources" stringByAppendingPathComponent:fileName]
+    NSString* filePath = [@"Resources" stringByAppendingPathComponent:fileName];
+    NSData* data = [[NSData alloc] initWithContentsOfFile:filePath
                                                   options:NSDataReadingUncached 
                                                     error:&error];    
     if (data == nil) {
