@@ -87,7 +87,6 @@
             || defined (JSON_SEMANTIC_ACTIONS_VALUE_POLICIES_UNORDERED_MAP_USE_BOOST_FAST_POOL_ALLOCATOR) \
             || defined (JSON_SEMANTIC_ACTIONS_VALUE_POLICIES_MAP_USE_BOOST_FAST_POOL_ALLOCATOR)
     
- #include "fast_pool_alloc.hpp"
  #include <boost/pool/pool_alloc.hpp>
 
 #endif
@@ -203,7 +202,7 @@ namespace json { namespace policies {
             , boost::mpl::_                         /* T */
             , std::less<boost::mpl::_1>             /* Compare */
 #if defined (JSON_SEMANTIC_ACTIONS_VALUE_POLICIES_MAP_USE_BOOST_FAST_POOL_ALLOCATOR)        
-            , json::fast_pool_allocator< std::pair<const boost::mpl::_1, boost::mpl::_2> >  /* Allocator */
+            , boost::fast_pool_allocator< std::pair<const boost::mpl::_1, boost::mpl::_2> >  /* Allocator */
 #else        
            , FSBAllocator2< std::pair<const boost::mpl::_1, boost::mpl::_2> >  /* Allocator */
 #endif        
@@ -336,7 +335,7 @@ namespace json {
         //typedef FSBAllocator<std::pair<const map_key_t, map_mapped_value_t> > map_allocator_type;
         //typedef FSBAllocator2<std::pair<const map_key_t, map_mapped_value_t> > map_allocator_type;
 #if defined (JSON_SEMANTIC_ACTIONS_STRING_CACHE_USE_BOOST_POOL_ALLOCATOR)
-        typedef json::fast_pool_allocator<
+        typedef boost::fast_pool_allocator<
             std::pair<const map_key_t, map_mapped_value_t>,
             SemanticActions_system_allocator_new_delete
         >                                           map_allocator_type;

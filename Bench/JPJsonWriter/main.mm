@@ -29,7 +29,7 @@
 #define USE_JSONKit
 
 #if defined (USE_JSONKit)
-#include "JSONKit.h"
+#include "JSONKit/JSONKit.h"
 #endif
 
 

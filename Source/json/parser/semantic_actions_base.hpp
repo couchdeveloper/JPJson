@@ -297,7 +297,7 @@ namespace json {
         
         void error(int code, const char* description)  
         {
-            assert(code <= 0 or code >= static_cast<int>(json::JP_PARSER_CLIENT));
+            //assert(code <= 0 or code >= static_cast<int>(json::JP_PARSER_CLIENT));
             if (canceled_) {
                 this->derived().error_imp(static_cast<int>(JP_CANCELED), parser_error_str(JP_CANCELED));
             } else {

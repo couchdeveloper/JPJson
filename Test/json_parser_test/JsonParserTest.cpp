@@ -472,7 +472,10 @@ namespace {
             // formed sequence by replacing malformed chars with Unicode replacement 
             // characters.
             char* d = buffer;
-            int cvt_result = json::unicode::convert(s, end, UTF_8_encoding_tag(), d, UTF_8_encoding_tag(), unicode::ReplaceIllFormed);
+#if defined (DEBUG)
+            int cvt_result =
+#endif
+            json::unicode::convert(s, end, UTF_8_encoding_tag(), d, UTF_8_encoding_tag(), unicode::ReplaceIllFormed);
             assert(cvt_result == 0);
             buffer[d-buffer] = 0;
             
@@ -717,7 +720,7 @@ namespace {
             buffer[count] = 0;
             json::parser_error_type result = parser.parse(p, end);
             const parse_state_t& state = parser.state();
-            std::size_t consumed = std::distance(start, p);
+            //std::size_t consumed = std::distance(start, p);
             std::string output = sa.str();
             
             EXPECT_EQ( (*first).result, static_cast<int>(result) ) << "with input[" << idx << "]: " << buffer;

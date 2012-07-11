@@ -234,9 +234,8 @@ namespace {
         
         iterator iter = o.find("");
         iterator end = o.end();
-        const char* s = (*iter).first.c_str();
-        
-        EXPECT_TRUE( o.find("") == o.end() );
+        //const char* s = (*iter).first.c_str();        
+        EXPECT_TRUE( iter == end );
     }
 
     

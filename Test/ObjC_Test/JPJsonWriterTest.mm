@@ -132,7 +132,366 @@ namespace {
     }
     
 
-    TEST_F(JPJsonWriterTest, TestUTF8Strings) 
+    TEST_F(JPJsonWriterTest, BasicWriterNSNumberAsBooleanTest)
+    {
+        NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+        
+        NSArray* array = [[NSArray alloc] initWithObjects:
+                            [NSNumber numberWithBool:NO],
+                            [NSNumber numberWithBool:YES],
+                            [NSNumber numberWithBool:0],
+                            [NSNumber numberWithBool:1],
+                            [NSNumber numberWithBool:2],
+                            [NSNumber numberWithBool:0xFF],
+                            nil];
+                            
+        NSError* error;
+        NSData* jsonData = [JPJsonWriter dataWithObject:array
+                                               encoding:JPUnicodeEncoding_UTF8
+                                                options:0
+                                                  error:&error];
+        NSString* jsonString = [[NSString alloc] initWithBytes:[jsonData bytes]
+                                                        length:[jsonData length]
+                                                      encoding:NSUTF8StringEncoding];
+        EXPECT_TRUE([@"[false,true,false,true,true,true]" isEqualToString:jsonString]) << "with json string\n" << [jsonString UTF8String];
+        
+        
+        [jsonString release];
+        [array release];
+        
+        [pool drain];
+    }
+    
+    TEST_F(JPJsonWriterTest, BasicWriterNSNumberAsCharTest)
+    {
+        NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+        
+        // A NSNumber with an underlaying type `char` will be mapped to an integer:
+        
+        NSArray* array = [[NSArray alloc] initWithObjects:
+                          [NSNumber numberWithChar:NO],
+                          [NSNumber numberWithChar:YES],
+                          [NSNumber numberWithChar:0],
+                          [NSNumber numberWithChar:1],
+                          [NSNumber numberWithChar:2],
+                          [NSNumber numberWithChar:0xFF],
+                          nil];
+        
+        NSError* error;
+        NSData* jsonData = [JPJsonWriter dataWithObject:array
+                                               encoding:JPUnicodeEncoding_UTF8
+                                                options:0
+                                                  error:&error];
+        NSString* jsonString = [[NSString alloc] initWithBytes:[jsonData bytes]
+                                                        length:[jsonData length]
+                                                      encoding:NSUTF8StringEncoding];
+        EXPECT_TRUE([@"[0,1,0,1,2,-1]" isEqualToString:jsonString]) << "with json string\n" << [jsonString UTF8String];
+        
+        
+        [jsonString release];
+        [array release];
+        
+        [pool drain];
+    }
+
+    TEST_F(JPJsonWriterTest, BasicWriterNSNumberAsUnsignedCharTest)
+    {
+        NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+        
+        // A NSNumber with an underlaying type `unsigned char` will be mapped to an integer:
+        
+        NSArray* array = [[NSArray alloc] initWithObjects:
+                          [NSNumber numberWithUnsignedChar:NO],
+                          [NSNumber numberWithUnsignedChar:YES],
+                          [NSNumber numberWithUnsignedChar:0],
+                          [NSNumber numberWithUnsignedChar:1],
+                          [NSNumber numberWithUnsignedChar:2],
+                          [NSNumber numberWithUnsignedChar:0xFF],
+                          nil];
+        
+        NSError* error;
+        NSData* jsonData = [JPJsonWriter dataWithObject:array
+                                               encoding:JPUnicodeEncoding_UTF8
+                                                options:0
+                                                  error:&error];
+        NSString* jsonString = [[NSString alloc] initWithBytes:[jsonData bytes]
+                                                        length:[jsonData length]
+                                                      encoding:NSUTF8StringEncoding];
+        EXPECT_TRUE([@"[0,1,0,1,2,255]" isEqualToString:jsonString]) << "with json string\n" << [jsonString UTF8String];
+        
+        
+        [jsonString release];
+        [array release];
+        
+        [pool drain];
+    }
+    
+    
+    TEST_F(JPJsonWriterTest, BasicWriterNSNumberAsShortTest)
+    {
+        NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+        
+        // A NSNumber with an underlaying type `short` will be mapped to an integer:
+        
+        NSArray* array = [[NSArray alloc] initWithObjects:
+                          [NSNumber numberWithShort:0],
+                          [NSNumber numberWithShort:1],
+                          [NSNumber numberWithShort:-1],
+                          [NSNumber numberWithShort:SHRT_MAX],
+                          [NSNumber numberWithShort:SHRT_MIN],
+                          nil];
+        
+        NSError* error;
+        NSData* jsonData = [JPJsonWriter dataWithObject:array
+                                               encoding:JPUnicodeEncoding_UTF8
+                                                options:0
+                                                  error:&error];
+        NSString* jsonString = [[NSString alloc] initWithBytes:[jsonData bytes]
+                                                        length:[jsonData length]
+                                                      encoding:NSUTF8StringEncoding];
+        NSString* expectedString = [NSString stringWithFormat:@"[%d,%d,%d,%d,%d]", 0,1,-1,SHRT_MAX,SHRT_MIN];
+        EXPECT_TRUE([expectedString isEqualToString:jsonString]) << "with json string\n" << [jsonString UTF8String];
+        
+        
+        [jsonString release];
+        [array release];
+        
+        [pool drain];
+    }
+    
+    
+    TEST_F(JPJsonWriterTest, BasicWriterNSNumberAsUnsignedShortTest)
+    {
+        NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+        
+        // A NSNumber with an underlaying type `unsigned short` will be mapped to an integer:
+        
+        NSArray* array = [[NSArray alloc] initWithObjects:
+                          [NSNumber numberWithUnsignedShort:0],
+                          [NSNumber numberWithUnsignedShort:1],
+                          [NSNumber numberWithUnsignedShort:USHRT_MAX],
+                          nil];
+        
+        NSError* error;
+        NSData* jsonData = [JPJsonWriter dataWithObject:array
+                                               encoding:JPUnicodeEncoding_UTF8
+                                                options:0
+                                                  error:&error];
+        NSString* jsonString = [[NSString alloc] initWithBytes:[jsonData bytes]
+                                                        length:[jsonData length]
+                                                      encoding:NSUTF8StringEncoding];
+        NSString* expectedString = [NSString stringWithFormat:@"[%d,%d,%u]", 0,1,USHRT_MAX];
+        EXPECT_TRUE([expectedString isEqualToString:jsonString]) << "with json string\n" << [jsonString UTF8String];
+        
+        
+        [jsonString release];
+        [array release];
+        
+        [pool drain];
+    }
+
+    TEST_F(JPJsonWriterTest, BasicWriterNSNumberAsIntTest)
+    {
+        NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+        
+        // A NSNumber with an underlaying type `int` will be mapped to an integer:
+        
+        NSArray* array = [[NSArray alloc] initWithObjects:
+                          [NSNumber numberWithInt:0],
+                          [NSNumber numberWithInt:1],
+                          [NSNumber numberWithInt:-1],
+                          [NSNumber numberWithInt:INT_MAX],
+                          [NSNumber numberWithInt:INT_MIN],
+                          nil];
+        
+        NSError* error;
+        NSData* jsonData = [JPJsonWriter dataWithObject:array
+                                               encoding:JPUnicodeEncoding_UTF8
+                                                options:0
+                                                  error:&error];
+        NSString* jsonString = [[NSString alloc] initWithBytes:[jsonData bytes]
+                                                        length:[jsonData length]
+                                                      encoding:NSUTF8StringEncoding];
+        NSString* expectedString = [NSString stringWithFormat:@"[%d,%d,%d,%d,%d]", 0,1,-1,INT_MAX, INT_MIN];
+        EXPECT_TRUE([expectedString isEqualToString:jsonString]) << "with json string\n" << [jsonString UTF8String];
+        
+        
+        [jsonString release];
+        [array release];
+        
+        [pool drain];
+    }
+    
+
+    TEST_F(JPJsonWriterTest, BasicWriterNSNumberAsUnsignedIntTest)
+    {
+        NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+        
+        // A NSNumber with an underlaying type `unsigned int` will be mapped to an integer:
+        
+        NSArray* array = [[NSArray alloc] initWithObjects:
+                          [NSNumber numberWithUnsignedInt:0],
+                          [NSNumber numberWithUnsignedInt:1],
+                          [NSNumber numberWithUnsignedInt:UINT_MAX],
+                          nil];
+        
+        NSError* error;
+        NSData* jsonData = [JPJsonWriter dataWithObject:array
+                                               encoding:JPUnicodeEncoding_UTF8
+                                                options:0
+                                                  error:&error];
+        NSString* jsonString = [[NSString alloc] initWithBytes:[jsonData bytes]
+                                                        length:[jsonData length]
+                                                      encoding:NSUTF8StringEncoding];
+        NSString* expectedString = [NSString stringWithFormat:@"[%d,%d,%u]", 0,1,UINT_MAX];
+        EXPECT_TRUE([expectedString isEqualToString:jsonString]) << "with json string\n" << [jsonString UTF8String];
+        
+        
+        [jsonString release];
+        [array release];
+        
+        [pool drain];
+    }
+    
+
+    TEST_F(JPJsonWriterTest, BasicWriterNSNumberAsLongTest)
+    {
+        NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+        
+        // A NSNumber with an underlaying type `unsigned int` will be mapped to an integer:
+        
+        NSArray* array = [[NSArray alloc] initWithObjects:
+                          [NSNumber numberWithLong:0],
+                          [NSNumber numberWithLong:1],
+                          [NSNumber numberWithLong:-1],
+                          [NSNumber numberWithLong:LONG_MAX],
+                          [NSNumber numberWithLong:LONG_MIN],
+                          nil];
+        
+        NSError* error;
+        NSData* jsonData = [JPJsonWriter dataWithObject:array
+                                               encoding:JPUnicodeEncoding_UTF8
+                                                options:0
+                                                  error:&error];
+        NSString* jsonString = [[NSString alloc] initWithBytes:[jsonData bytes]
+                                                        length:[jsonData length]
+                                                      encoding:NSUTF8StringEncoding];
+        NSString* expectedString = [NSString stringWithFormat:@"[%d,%d,%d,%ld,%ld]", 0,1,-1,LONG_MAX,LONG_MIN];
+        EXPECT_TRUE([expectedString isEqualToString:jsonString]) << "with json string\n" << [jsonString UTF8String];
+        
+        
+        [jsonString release];
+        [array release];
+        
+        [pool drain];
+    }
+    
+    
+    TEST_F(JPJsonWriterTest, BasicWriterNSNumberAsUnsignedLongTest)
+    {
+        NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+        
+        // A NSNumber with an underlaying type `unsigned long` will be mapped to an integer:
+        
+        NSArray* array = [[NSArray alloc] initWithObjects:
+                          [NSNumber numberWithUnsignedLong:0],
+                          [NSNumber numberWithUnsignedLong:1],
+                          [NSNumber numberWithUnsignedLong:ULONG_MAX],
+                          nil];
+        
+        NSError* error;
+        NSData* jsonData = [JPJsonWriter dataWithObject:array
+                                               encoding:JPUnicodeEncoding_UTF8
+                                                options:0
+                                                  error:&error];
+        NSString* jsonString = [[NSString alloc] initWithBytes:[jsonData bytes]
+                                                        length:[jsonData length]
+                                                      encoding:NSUTF8StringEncoding];
+        NSString* expectedString = [NSString stringWithFormat:@"[%d,%d,%lu]", 0,1,ULONG_MAX];
+        EXPECT_TRUE([expectedString isEqualToString:jsonString]) << "with json string\n" << [jsonString UTF8String];
+        
+        
+        [jsonString release];
+        [array release];
+        
+        [pool drain];
+    }
+    
+    
+    TEST_F(JPJsonWriterTest, BasicWriterNSNumberAsLongLongTest)
+    {
+        NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+        
+        // A NSNumber with an underlaying type `unsigned long long` will be mapped to an integer:
+        
+        NSArray* array = [[NSArray alloc] initWithObjects:
+                          [NSNumber numberWithLongLong:0],
+                          [NSNumber numberWithLongLong:1],
+                          [NSNumber numberWithLongLong:-1],
+                          [NSNumber numberWithLongLong:LLONG_MAX],
+                          [NSNumber numberWithLongLong:LLONG_MIN],
+                          nil];
+        
+        NSError* error;
+        NSData* jsonData = [JPJsonWriter dataWithObject:array
+                                               encoding:JPUnicodeEncoding_UTF8
+                                                options:0
+                                                  error:&error];
+        NSString* jsonString = [[NSString alloc] initWithBytes:[jsonData bytes]
+                                                        length:[jsonData length]
+                                                      encoding:NSUTF8StringEncoding];
+        NSString* expectedString = [NSString stringWithFormat:@"[%d,%d,%d,%lld,%lld]", 0,1,-1,LLONG_MAX,LLONG_MIN];
+        EXPECT_TRUE([expectedString isEqualToString:jsonString]) << "with json string\n" << [jsonString UTF8String];
+        
+        
+        [jsonString release];
+        [array release];
+        
+        [pool drain];
+    }
+    
+    
+    TEST_F(JPJsonWriterTest, BasicWriterNSNumberAsUnsignedLongLongTest)
+    {
+        NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+        
+        // A NSNumber with an underlaying type `unsigned long long` will be mapped to an integer:
+        
+        NSArray* array = [[NSArray alloc] initWithObjects:
+                          [NSNumber numberWithUnsignedLongLong:0],
+                          [NSNumber numberWithUnsignedLongLong:1],
+                          [NSNumber numberWithUnsignedLongLong:ULLONG_MAX],
+                          nil];
+        
+        NSError* error;
+        NSData* jsonData = [JPJsonWriter dataWithObject:array
+                                               encoding:JPUnicodeEncoding_UTF8
+                                                options:0
+                                                  error:&error];
+        NSString* jsonString = [[NSString alloc] initWithBytes:[jsonData bytes]
+                                                        length:[jsonData length]
+                                                      encoding:NSUTF8StringEncoding];
+        NSString* expectedString = [NSString stringWithFormat:@"[%d,%d,%llu]", 0,1,ULLONG_MAX];
+        EXPECT_TRUE([expectedString isEqualToString:jsonString]) << "with json string\n" << [jsonString UTF8String];
+        
+        
+        [jsonString release];
+        [array release];
+        
+        [pool drain];
+    }
+    
+    
+    
+//    + (NSNumber *)numberWithFloat:(float)value;
+//    + (NSNumber *)numberWithDouble:(double)value;
+//    + (NSNumber *)numberWithBool:(BOOL)value;
+//    + (NSNumber *)numberWithInteger:(NSInteger)value NS_AVAILABLE(10_5, 2_0);
+//    + (NSNumber *)numberWithUnsignedInteger:(NSUInteger)value NS_AVAILABLE(10_5, 2_0);
+    
+    
+    
+    TEST_F(JPJsonWriterTest, TestUTF8Strings)
     {
         NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
         
@@ -267,10 +626,7 @@ namespace {
                 NSLog(@"ERROR: %@", error);
             } else  {
                 // json is an array, with one element which is a NSDecimalNumber:
-                NSString* numberString = [[json objectAtIndex:0] stringValue];
-                DLog(@"Number: %@", numberString);
-                
-                
+                DLog(@"Number: %@", [[json objectAtIndex:0] stringValue]);                
                 NSData* jsonData = [JPJsonWriter dataWithObject:json 
                                                        encoding:JPUnicodeEncoding_UTF8
                                                         options:0 

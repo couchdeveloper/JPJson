@@ -51,7 +51,7 @@
 		A18A705A1511F9E000FEB03C /* debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = debug.xcconfig; sourceTree = "<group>"; };
 		A18A705B1511F9EE00FEB03C /* release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = release.xcconfig; sourceTree = "<group>"; };
 		A18A705C1512292000FEB03C /* Test-UTF8.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "Test-UTF8.json"; path = "../../../Resources/Test-UTF8.json"; sourceTree = "<group>"; };
-		A19DEF70157F860B00A64183 /* libjson-iOS.a */ = {isa = PBXFileReference; lastKnownFileType = file; name = "libjson-iOS.a"; path = "../../../Libraries/iOS Libraries/build/Release-iphoneos/libjson-iOS.a"; sourceTree = "<group>"; };
+		A19DEF70157F860B00A64183 /* libjson-iOS.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libjson-iOS.a"; path = "../../../Libraries/iOS Libraries/build/Release-iphoneos/libjson-iOS.a"; sourceTree = "<group>"; };
 		A1AC40231577BAB500AE34CC /* random.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = random.json; path = ../../../Resources/random.json; sourceTree = "<group>"; };
 		A1E06FF5155127B5005C487A /* libjson.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjson.a; path = ../../../Build/Products/Release/libjson.a; sourceTree = "<group>"; };
 		A1FAF1DB143F225500CD2CCB /* UIDevice-Hardware.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIDevice-Hardware.h"; path = "../UIDevice-Hardware.h"; sourceTree = "<group>"; };
@@ -297,7 +297,6 @@
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
@@ -312,7 +311,6 @@
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
@@ -334,7 +332,6 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "JPBenchApp/JPBenchApp-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = "$(PRJ_GCC_PREPROCESSOR_DEFINITIONS)";
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				HEADER_SEARCH_PATHS = (
 					"$(PRJ_HEADER_SEARCH_PATHS)",
 					"$(JP_ROOT)",
@@ -366,7 +363,6 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "JPBenchApp/JPBenchApp-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = "$(PRJ_GCC_PREPROCESSOR_DEFINITIONS)";
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				HEADER_SEARCH_PATHS = (
 					"$(PRJ_HEADER_SEARCH_PATHS)",
 					"$(JP_ROOT)",

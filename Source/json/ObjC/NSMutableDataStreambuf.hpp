@@ -143,53 +143,15 @@ namespace json { namespace objc {
     }
 
     #ifndef BOOST_NO_RVALUE_REFERENCES
+#if 0    
 
     template <class CharT, class Traits>
-    NSMutableDataStreambuf<CharT, Traits>::NSMutableDataStreambuf(NSMutableDataStreambuf&& __rhs)
-    : _mode(__rhs._mode)
-    {
-        ptrdiff_t __ninp = __rhs.gptr()  - __rhs.eback();
-        ptrdiff_t __einp = __rhs.egptr() - __rhs.eback();
-        ptrdiff_t __nout = __rhs.pptr()  - __rhs.pbase();
-        ptrdiff_t __eout = __rhs.epptr() - __rhs.pbase();
-        ptrdiff_t __hm   = __rhs._hm   - __rhs.pbase();
-        __str_ = _VSTD::move(__rhs.__str_);
-        char_type* __p = static_cast<char_type*>([_data mutableBytes]);
-        this->setg(__p, __p + __ninp, __p + __einp);
-        this->setp(__p, __p + __eout);
-        this->pbump(__nout);
-        _hm = __p + __hm;
-        __p = const_cast<char_type*>(static_cast<char_type*>([__rhs._data mutableBytes]));
-        __rhs.setg(__p, __p, __p);
-        __rhs.setp(__p, __p);
-        __rhs._hm = __p;
-        this->pubimbue(__rhs.getloc());
-    }
+    NSMutableDataStreambuf<CharT, Traits>::NSMutableDataStreambuf(NSMutableDataStreambuf&& __rhs);
 
     template <class CharT, class Traits>
     NSMutableDataStreambuf<CharT, Traits>&
-    NSMutableDataStreambuf<CharT, Traits>::operator=(NSMutableDataStreambuf&& __rhs)
-    {
-        ptrdiff_t __ninp = __rhs.gptr()  - __rhs.eback();
-        ptrdiff_t __einp = __rhs.egptr() - __rhs.eback();
-        ptrdiff_t __nout = __rhs.pptr()  - __rhs.pbase();
-        ptrdiff_t __eout = __rhs.epptr() - __rhs.pbase();
-        ptrdiff_t __hm   = __rhs._hm   - __rhs.pbase();
-        _mode = __rhs._mode;
-        __str_ = _VSTD::move(__rhs.__str_);
-        char_type* __p = static_cast<char_type*>([_data mutableBytes]);
-        this->setg(__p, __p + __ninp, __p + __einp);
-        this->setp(__p, __p + __eout);
-        this->pbump(__nout);
-        _hm = __p + __hm;
-        __p = const_cast<char_type*>(static_cast<char_type*>([__rhs._data mutableBytes]));
-        __rhs.setg(__p, __p, __p);
-        __rhs.setp(__p, __p);
-        __rhs._hm = __p;
-        this->pubimbue(__rhs.getloc());
-        return *this;
-    }
-
+    NSMutableDataStreambuf<CharT, Traits>::operator=(NSMutableDataStreambuf&& __rhs);
+#endif
     #endif  // BOOST_NO_RVALUE_REFERENCES
     
 #if 0    
@@ -278,13 +240,13 @@ namespace json { namespace objc {
         size_t __sz = __byte_size/(sizeof(char_type));
         if (_mode & ios_base::out)
         {
-            size_t __delta = 8*1024;
+            int __delta = 8*1024;
             [_data increaseLengthBy:sizeof(char_type)*__delta];
             char_type* __bytes = static_cast<char_type*>([_data mutableBytes]);
             _hm = __bytes + __sz;
             this->setp(__bytes, __bytes + (__sz + __delta));
             if (_mode & (ios_base::app | ios_base::ate))
-                this->pbump(__sz);
+                this->pbump(static_cast<int>(__sz));
         }
         if (_mode & ios_base::in)
         {
@@ -355,13 +317,13 @@ namespace json { namespace objc {
                 if (!(_mode & ios_base::out)) {
                     return traits_type::eof();
                 }
-                ptrdiff_t __nout = this->pptr()  - this->pbase();
+                ptrdiff_t __nout = this->pptr() - this->pbase();
                 ptrdiff_t __hm = _hm - this->pbase();
                 size_t __delta = [_data length];
                 [_data increaseLengthBy:sizeof(char_type)*__delta];
                 char_type* __p = static_cast<char_type*>([_data mutableBytes]);
                 this->setp(__p, __p + [_data length]/(sizeof(char_type)));
-                this->pbump(__nout);
+                this->pbump(static_cast<int>(__nout));
                 _hm = this->pbase() + __hm;
             }
             _hm = std::max(this->pptr() + 1, _hm);
@@ -421,7 +383,7 @@ namespace json { namespace objc {
         if (__wch & ios_base::out)
         {
             this->setp(this->pbase(), this->epptr());
-            this->pbump(__noff);
+            this->pbump(static_cast<int>(__noff));
         }
         return pos_type(__noff);
     }

@@ -364,13 +364,16 @@ namespace json { namespace internal {
             std::back_insert_iterator<std::string> dest(result);
             const char_t* first = s;
             
-            int cvt_result = json::generator_internal::escape_convert_unsafe(
+#if defined (DEBUG)
+            int cvt_result =
+#endif
+            json::generator_internal::escape_convert_unsafe(
                          first, first+len, EncodingT(),
                          dest, json::unicode::UTF_8_encoding_tag(), 
                          false /*escape solidus*/);   
 
             assert(cvt_result==unicode::NO_ERROR);
-            size_t str_len = result.size();
+            assert(result.size() > 0);
             return result;
         }
         
@@ -381,7 +384,10 @@ namespace json { namespace internal {
             std::back_insert_iterator<std::string> dest(str);
             const char_t* first = s;
             
-            int cvt_result = json::generator_internal::escape_convert_unsafe(
+#if defined (DEBUG)
+            int cvt_result =
+#endif
+            json::generator_internal::escape_convert_unsafe(
                          first, first+len, EncodingT(),
                          dest, json::unicode::UTF_8_encoding_tag(), 
                          false /*escape solidus*/);   

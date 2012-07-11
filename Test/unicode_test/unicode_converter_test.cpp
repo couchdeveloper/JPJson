@@ -329,7 +329,7 @@ namespace json { namespace unicode { namespace test {
         }
         
         void print(std::ostream& os) const {
-            int i = std::distance(begin_, end_); 
+            size_t i = std::distance(begin_, end_);
             iterator first = begin_;
             while (i--) {
                 os << "0x" << std::hex << std::setw(2) << std::setfill('0') << static_cast<unsigned int>(*first) << " " << std::flush;
@@ -1753,7 +1753,7 @@ namespace {
                 reference_result = utf8_test_wellformed(ref_first, generator.end());
             }
 #endif            
-            int reference_consumed = std::distance(generator.begin(), ref_first);
+            size_t reference_consumed = std::distance(generator.begin(), ref_first);
             if (reference_result == unicode::NO_ERROR) {
                 // Conversion shall be successfull:
                 if (reference_consumed != consumed or result != unicode::NO_ERROR) {

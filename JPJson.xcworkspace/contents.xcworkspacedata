@@ -318,6 +318,9 @@
             <FileRef
                location = "group:NSURLConnectionDownload/NSURLConnectionDownload.xcodeproj">
             </FileRef>
+            <FileRef
+               location = "group:DemoApp/DemoApp.xcodeproj">
+            </FileRef>
          </Group>
          <FileRef
             location = "group:FoundationExamples/FoundationExamples.xcodeproj">

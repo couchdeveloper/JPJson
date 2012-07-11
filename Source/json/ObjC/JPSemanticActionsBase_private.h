@@ -64,8 +64,7 @@ typedef json::objc::SemanticActionsBase<JP_CFStringEncoding> SemanticActionsBase
 // This class is used to throw exceptions from C++ code when the Objective-C code has
 // set an error state via setErrorCode:description. The error information shall be
 // retrieved from the error sate property of the semantic actions instance.
-__attribute__ ((visibility ("default")))
-struct SemanticActionsStateError {};
+struct __attribute__ ((visibility ("default"))) SemanticActionsStateError {};
 
 
 #endif // JSON_OBJC_JP_SEMANTIC_ACTIONS_BASE_PRIVATE_HPP

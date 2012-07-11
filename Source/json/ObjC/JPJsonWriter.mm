@@ -63,7 +63,7 @@ namespace {
     //
     //  Maps NSStringEncoding constants to json::unicode encoding tags
     //
-    template <int NSStringEncoding>
+    template <uint32_t NSStringEncoding>
     struct NSStringEncodingToJsonUnicodeEncoding {};
     
     template <>
@@ -264,14 +264,14 @@ namespace {
     return [self initWithData:nil];
 }
 
-- (NSInteger) write:(const void*)buffer length:(NSUInteger)length;
+- (int) write:(const void*)buffer length:(int)length;
 {
-    std::streamsize result;
+    int result;
     if (length == 1) {
-        result = _streambuf.sputc(*static_cast<const char*>(buffer));
+        result = _streambuf.sputc(*static_cast<const char*>(buffer)) != EOF ? 1 : 0;
     }
     else {
-        result = _streambuf.sputn(static_cast<const char*>(buffer), length);
+        result = static_cast<int>(_streambuf.sputn(static_cast<const char*>(buffer), length));
     }
     return result;
 }
@@ -384,6 +384,9 @@ namespace std {
         { return *this; }
     };
     
+        
+    // Note: any concrete subclass of JPJsonStreambufferProtocol must be implemented
+    // using a std::streambuf.
 
     template <>
     class back_insert_iterator< id<JPJsonStreambufferProtocol> > 
@@ -522,70 +525,74 @@ namespace {
 #if defined (DEBUG)        
         char* end_cap = tmp_buffer + sizeof(tmp_buffer);
 #endif        
-        size_t count = 0;      // the number of bytes in tmp_buffer
+        int count = 0;      // the number of bytes in tmp_buffer
                 
         
-        CFNumberType numberType = CFNumberGetType(number);    
+        char numberType = *[(id)number objCType];
         Boolean conversionSucceeded = false;
         
         switch (numberType) {
-            case kCFNumberSInt8Type:
-            case kCFNumberSInt16Type:
-            case kCFNumberSInt32Type:
-            case kCFNumberCharType:
-            case kCFNumberShortType:
-            case kCFNumberIntType: {
+            case 'c':
+            case 'C':
+            case 's':
+            case 'S':
+            case 'i':
+            case 'l':  { // 32-bit
+                assert(sizeof(int) >= 4);
                 int result;
                 conversionSucceeded = CFNumberGetValue(number, kCFNumberIntType, &result);
                 generate(p, int_, result);
-                count = p - begin;
+                count = static_cast<int>(p - begin);
+                *p = 0;
             }
                 break;
-                
-                
-            case kCFNumberLongType: {
-                long result;
-                conversionSucceeded = CFNumberGetValue(number, kCFNumberLongType, &result);
-                generate(p, long_, result);
-                assert(p <= end_cap);
-                count = p - begin;
+        
+            case 'I':
+            case 'L': {
+                unsigned int result;
+                conversionSucceeded = CFNumberGetValue(number, kCFNumberIntType, &result);
+                generate(p, uint_, result);
+                count = static_cast<int>(p - begin);
+                *p = 0;
             }
                 break;
-                
-            case kCFNumberSInt64Type:
-            case kCFNumberLongLongType: {
+
+            case 'q': {
                 long long result;
                 conversionSucceeded = CFNumberGetValue(number, kCFNumberLongLongType, &result);
                 generate(p, long_long, result);
                 assert(p <= end_cap);
-                count = p - begin;
+                count = static_cast<int>(p - begin);
                 *p = 0;
-                //count = snprintf(tmp_buffer, sizeof(tmp_buffer), "%lld", result);
             }
                 break;
-                
-            case kCFNumberFloat32Type:    
-            case kCFNumberFloatType: {
+
+            case 'Q': {
+                unsigned long long result;
+                conversionSucceeded = CFNumberGetValue(number, kCFNumberLongLongType, &result);
+                generate(p, ulong_long, result);
+                assert(p <= end_cap);
+                count = static_cast<int>(p - begin);
+                *p = 0;
+            }
+                break;
+                                
+            case 'f': {
                 float result;
                 conversionSucceeded = CFNumberGetValue(number, kCFNumberFloatType, &result);
                 generate(p, scientific_generator, result);
-                count = p - begin;
+                count = static_cast<int>(p - begin);
                 *p = 0;
-                //int digits = FLT_DIG;
-                //count = snprintf(tmp_buffer, sizeof(tmp_buffer), "%#.*e",digits-1, result);
             }
                 break;
                 
-            case kCFNumberFloat64Type:
-            case kCFNumberDoubleType:{
+            case 'd': {
                 assert(sizeof(double) == 8);
                 double result;
                 conversionSucceeded = CFNumberGetValue(number, kCFNumberDoubleType, &result);
                 generate(p, scientific_generator, result);
-                count = p - begin;
+                count = static_cast<int>(p - begin);
                 *p = 0;
-                //int digits = DBL_DIG;
-                //count = snprintf(tmp_buffer, sizeof(tmp_buffer), "%#.*e", digits-1, result);
             }
                 break;
                 
@@ -608,17 +615,19 @@ namespace {
                                                     static_cast<UInt8*>(static_cast<void*>(tmp_buffer)), sizeof(tmp_buffer), &usedBufLen);
             assert(numConverted == CFStringGetLength(numberString));
             CFRelease(numberString);
-            count = usedBufLen;        
+            count = static_cast<int>(usedBufLen);
         } 
         
         // TODO: Convert the buffer to the target encoding        
         //std::copy(tmp_buffer, tmp_buffer+count, std::back_inserter(buffer));
-        [streambuf write:tmp_buffer length:count];
-        
+        int wcount = [streambuf write:tmp_buffer length:count];
+        if (wcount != count) {
+            return -1; // ERROR
+        }
+
         if (outCount) {
             *outCount = count;
-        }
-        
+        }        
         return 0;
     }
     
@@ -801,18 +810,12 @@ namespace {
     
     int insertJsonArray(id object, id<JPJsonStreambufferProtocol> streambuf, 
                     JPUnicodeEncoding encoding, JPJsonWriterOptions options, 
-                    NSUInteger level)
+                    int level)
     {
         typedef id<JPJsonStreambufferProtocol>          streambuf_t;
         assert(encoding == JPUnicodeEncoding_UTF8);    
         assert(streambuf);
-        
-        if (object == nil) {
-            return [(id)[NSNull null] JPJson_serializeTo:streambuf 
-                                                encoding:encoding 
-                                                 options:options 
-                                                   level:level];
-        }
+        assert(object != nil);
         
         std::back_insert_iterator<streambuf_t> back_it(streambuf);
         
@@ -821,11 +824,17 @@ namespace {
         //[streambuf write:"[" length:1]; //buffer->push_back('[');
         *back_it++ = '[';
         if (count and (options & JPJsonWriterPrettyPrint) != 0) {
-            [streambuf write:"\n" length:1]; //buffer->push_back('\n');
-            NSUInteger indent = level+1;
+            int wcount = [streambuf write:"\n" length:1]; //buffer->push_back('\n');
+            if (wcount != 1) {
+                return -1; // ERROR
+            }
+            int indent = level+1;
             while (indent > 0) {
-                int n  = std::min(NSUInteger(10), indent);
-                [streambuf write:"\t\t\t\t\t\t\t\t\t\t" length:n];
+                int n  = std::min(10, indent);
+                int wcount = [streambuf write:"\t\t\t\t\t\t\t\t\t\t" length:n];
+                if (wcount != n) {
+                    return -1; // ERROR: streambuffer write failed
+                }
                 indent -=n;
             }
         }    
@@ -834,10 +843,10 @@ namespace {
             if (value == nil) {
                 value = [NSNull null];
             }
-            NSInteger result = [value JPJson_serializeTo:streambuf 
-                                                encoding:encoding 
-                                                 options:options 
-                                                   level:level + 1];
+            int result = [value JPJson_serializeTo:streambuf
+                                          encoding:encoding
+                                           options:options
+                                             level:level + 1];
             if (result < 0) {
                 return result;
             }
@@ -845,22 +854,34 @@ namespace {
                 //[streambuf write:"," length:1]; //buffer->push_back(',');
                 *back_it++ = ',';
                 if ((options & JPJsonWriterPrettyPrint) != 0) {
-                    [streambuf write:"\n" length:1]; //buffer->push_back('\n');
-                    NSUInteger indent = level+1;
+                    int wcount = [streambuf write:"\n" length:1]; //buffer->push_back('\n');
+                    if (wcount != 1) {
+                        return -1; // ERROR
+                    }
+                    int indent = level+1;
                     while (indent > 0) {
-                        int n  = std::min(NSUInteger(10), indent);
-                        [streambuf write:"\t\t\t\t\t\t\t\t\t\t" length:n];
+                        int n  = std::min(10, indent);
+                        int wcount = [streambuf write:"\t\t\t\t\t\t\t\t\t\t" length:n];
+                        if (wcount != n) {
+                            return -1; // ERROR: streambuffer write failed
+                        }
                         indent -=n;
                     }
                 }
             }
         }
         if (count and (options & JPJsonWriterPrettyPrint) != 0) {
-            [streambuf write:"\n" length:1]; //buffer->push_back('\n');
-            NSUInteger indent = level;
+            int wcount = [streambuf write:"\n" length:1]; //buffer->push_back('\n');
+            if (wcount != 1) {
+                return -1;// ERROR: streambuffer write failed
+            }
+            int indent = level;
             while (indent > 0) {
-                int n  = std::min(NSUInteger(10), indent);
-                [streambuf write:"\t\t\t\t\t\t\t\t\t\t" length:n];
+                int n  = std::min(10, indent);
+                int wcount = [streambuf write:"\t\t\t\t\t\t\t\t\t\t" length:n];
+                if (wcount != n) {
+                    return -1;// ERROR: streambuffer write failed
+                }
                 indent -=n;
             }
         }
@@ -877,21 +898,16 @@ namespace {
     //  Parameter `object` shall respond to message `count` and message objectForKey: 
     //  and shall implement the protocol NSFastEnumeration.
     //
-    int insertJsonObject(id object, id<JPJsonStreambufferProtocol> streambuf, 
+    int insertJsonObject(id object, id<JPJsonStreambufferProtocol> streambuf,
                         JPUnicodeEncoding encoding, JPJsonWriterOptions options, 
-                        NSUInteger level)
+                        int level)
     {
         typedef id<JPJsonStreambufferProtocol>          streambuf_t;
         
         assert(encoding == JPUnicodeEncoding_UTF8);
         assert(streambuf);
+        assert(object != nil);
         
-        if (object == nil) {
-            return [(id)[NSNull null] JPJson_serializeTo:streambuf 
-                                                encoding:encoding 
-                                                 options:options 
-                                                   level:level];
-        }
         const NSUInteger count = [object count];
 
         std::back_insert_iterator<streambuf_t> back_it(streambuf);        
@@ -900,16 +916,22 @@ namespace {
         *back_it++ = '{';
         
         if (count and (options & JPJsonWriterPrettyPrint) != 0) {
-            [streambuf write:"\n" length:1]; //buffer->push_back('\n');
-            NSUInteger indent = level+1;
+            int wcount = [streambuf write:"\n" length:1]; //buffer->push_back('\n');
+            if (wcount != 1) {
+                return -1; //ERROR streambuf write failed
+            }
+            int indent = level+1;
             while (indent > 0) {
-                int n  = std::min(NSUInteger(10), indent);
-                [streambuf write:"\t\t\t\t\t\t\t\t\t\t" length:n];
+                int n  = std::min(10, indent);
+                int wcount = [streambuf write:"\t\t\t\t\t\t\t\t\t\t" length:n];
+                if (wcount != n) {
+                    return -1; // ERROR
+                }
                 indent -=n;
             }
         }
         id o;
-        if ((options & JPJsonWriterSortKeys & [object respondsToSelector:@selector(allKeys)]) != 0) {    
+        if ((options & JPJsonWriterSortKeys & [object respondsToSelector:@selector(allKeys)]) != 0) {
             o = [[(id)object allKeys] sortedArrayUsingSelector:@selector(compare:)];
         }
         else {
@@ -917,18 +939,26 @@ namespace {
         }
         NSUInteger i = count;
         for (id key in o) {
-            [key JPJson_serializeTo:streambuf 
-                           encoding:encoding 
-                            options:options 
-                              level:level + 1];
-            
+            int result = [key JPJson_serializeTo:streambuf
+                                        encoding:encoding
+                                         options:options
+                                           level:level + 1];
+            if (result != 0) {
+                return result;
+            }
             if ((options & JPJsonWriterPrettyPrint) != 0) {
-                [streambuf write:" " length:1]; //buffer->push_back(' ');
+                int wcount = [streambuf write:" " length:1]; //buffer->push_back(' ');
+                if (wcount != 1) {
+                    return -1; // ERROR
+                }
             }
             //[streambuf write:":" length:1]; //buffer->push_back(':');        
             *back_it++ = ':';
             if ((options & JPJsonWriterPrettyPrint) != 0) {
-                [streambuf write:" " length:1]; //buffer->push_back(' ');
+                int wcount = [streambuf write:" " length:1]; //buffer->push_back(' ');
+                if (wcount != 1) {
+                    return -1; // ERROR
+                }
             }
             
             // TODO: check if blocks give a performance advantage
@@ -936,16 +966,25 @@ namespace {
             if (value == nil) {
                 value = [NSNull null];
             }
-            [value JPJson_serializeTo:streambuf encoding:encoding options:options level:level + 1];
+            result = [value JPJson_serializeTo:streambuf encoding:encoding options:options level:level + 1];
+            if (result != 0) {
+                return result;
+            }
             if (--i) {
                 //[streambuf write:"," length:1]; //buffer->push_back(',');
                 *back_it++ = ',';
                 if ((options & JPJsonWriterPrettyPrint) != 0) {
-                    [streambuf write:"\n" length:1]; //buffer->push_back('\n');
-                    NSUInteger indent = level+1;
+                    int wcount = [streambuf write:"\n" length:1]; //buffer->push_back('\n');
+                    if (wcount != 1) {
+                        return -1; // ERROR
+                    }
+                    int indent = level+1;
                     while (indent > 0) {
-                        int n  = std::min(NSUInteger(10), indent);
-                        [streambuf write:"\t\t\t\t\t\t\t\t\t\t" length:n];
+                        int n  = std::min(10, indent);
+                        int wcount = [streambuf write:"\t\t\t\t\t\t\t\t\t\t" length:n];
+                        if (wcount != n) {
+                            return -1; // ERROR
+                        }
                         indent -=n;
                     }
                 }
@@ -955,10 +994,13 @@ namespace {
         if (count and (options & JPJsonWriterPrettyPrint) != 0) {
             //[streambuf write:"\n" length:1]; //buffer->push_back('\n');
             *back_it++ = '\n';
-            NSUInteger indent = level;
+            int indent = level;
             while (indent > 0) {
-                int n  = std::min(NSUInteger(10), indent);
-                [streambuf write:"\t\t\t\t\t\t\t\t\t\t" length:n];
+                int n  = std::min(10, indent);
+                int wcount = [streambuf write:"\t\t\t\t\t\t\t\t\t\t" length:n];
+                if (wcount != n) {
+                    return -1; // ERROR
+                }
                 indent -=n;
             }
         }
@@ -986,10 +1028,10 @@ namespace {
 
 @implementation NSArray (JPJsonWriter)
 
-- (NSInteger) JPJson_serializeTo:(id<JPJsonStreambufferProtocol>)streambuf 
-                        encoding:(JPUnicodeEncoding)encoding
-                         options:(JPJsonWriterOptions)options
-                           level:(NSUInteger)level
+- (int) JPJson_serializeTo:(id<JPJsonStreambufferProtocol>)streambuf
+                  encoding:(JPUnicodeEncoding)encoding
+                   options:(JPJsonWriterOptions)options
+                     level:(int)level
 {
     return insertJsonArray(self, streambuf, encoding, options, level);
 }
@@ -1007,10 +1049,10 @@ namespace {
 
 @implementation NSDictionary (JPJsonWriter)
 
-- (NSInteger) JPJson_serializeTo:(id<JPJsonStreambufferProtocol>)streambuf
-                        encoding:(JPUnicodeEncoding)encoding
-                         options:(JPJsonWriterOptions)options
-                           level:(NSUInteger)level
+- (int) JPJson_serializeTo:(id<JPJsonStreambufferProtocol>)streambuf
+                  encoding:(JPUnicodeEncoding)encoding
+                   options:(JPJsonWriterOptions)options
+                     level:(int)level
 {
     return insertJsonObject(self, streambuf, encoding, options, level);
 }
@@ -1025,10 +1067,10 @@ namespace {
 @end
 
 @implementation  NSString (JPJsonWriter) 
-- (NSInteger) JPJson_serializeTo:(id<JPJsonStreambufferProtocol>) streambuf 
-                        encoding:(JPUnicodeEncoding) encoding
-                         options:(JPJsonWriterOptions) options
-                           level:(NSUInteger) level;
+- (int) JPJson_serializeTo:(id<JPJsonStreambufferProtocol>) streambuf
+                  encoding:(JPUnicodeEncoding) encoding
+                   options:(JPJsonWriterOptions) options
+                     level:(int) level;
 {
     assert(encoding == JPUnicodeEncoding_UTF8);  
     assert(streambuf);
@@ -1054,27 +1096,36 @@ namespace {
 @end
 
 @implementation NSNumber (JPJsonWriter) 
-- (NSInteger) JPJson_serializeTo:(id<JPJsonStreambufferProtocol>)streambuf
-                        encoding:(JPUnicodeEncoding)encoding
-                         options:(JPJsonWriterOptions)options
-                           level:(NSUInteger)level
+- (int) JPJson_serializeTo:(id<JPJsonStreambufferProtocol>)streambuf
+                  encoding:(JPUnicodeEncoding)encoding
+                   options:(JPJsonWriterOptions)options
+                     level:(int)level
 {
     assert(encoding == JPUnicodeEncoding_UTF8);  
     assert(streambuf);
     
     // TODO: encoding!
-    if ((CFTypeRef)self == kCFBooleanTrue) {
-        [streambuf write:"true" length:4]; // buffer->write("true", 4);
+    CFNumberType numberType = CFNumberGetType((CFNumberRef)self);
+    int boolValue;
+    if (numberType == kCFNumberCharType) {
+        CFNumberGetValue((CFNumberRef)self, kCFNumberIntType, &boolValue);
+        if (boolValue == 0) {
+            int wcount = [streambuf write:"false" length:5]; // buffer->write("false", 5);
+            if (wcount != 5) {
+                return -1; // ERROR
+            }
+            return 0;  // success
+        }
+        else if (boolValue == 1) {
+            //assert(boolValue == 1);
+            int wcount = [streambuf write:"true" length:4]; // buffer->write("true", 4);
+            if (wcount != 4) {
+                return -1; // ERROR
+            }
+            return 0;  // success
+        }
     }
-    else if ((CFTypeRef)self == kCFBooleanFalse) {
-        [streambuf write:"false" length:5]; // buffer->write("false", 5);
-    }
-    else {
-        size_t count;
-        insertNumberIntoBuffer(CFNumberRef(self), streambuf, &count, encoding);
-    }
-
-    return 0;
+    return insertNumberIntoBuffer(CFNumberRef(self), streambuf, NULL, encoding);
 }
 
 @end
@@ -1088,10 +1139,10 @@ namespace {
 @end
 
 @implementation NSDecimalNumber (JPJsonWriter) 
-- (NSInteger) JPJson_serializeTo:(id<JPJsonStreambufferProtocol>)streambuf
-                        encoding:(JPUnicodeEncoding)encoding
-                         options:(JPJsonWriterOptions)options
-                           level:(NSUInteger)level
+- (int) JPJson_serializeTo:(id<JPJsonStreambufferProtocol>)streambuf
+                  encoding:(JPUnicodeEncoding)encoding
+                   options:(JPJsonWriterOptions)options
+                     level:(int)level
 {
     assert(encoding == JPUnicodeEncoding_UTF8); 
     assert(streambuf);
@@ -1101,8 +1152,13 @@ namespace {
     NSUInteger length = [numberString lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
     assert(s);
     // TODO: encoding!
-    [streambuf write:s length:length]; // buffer->write(s, length);    
-    return 0;
+    int wcount = [streambuf write:s length:static_cast<int>(length)]; // buffer->write(s, length);
+    if (wcount != length) {
+        return -1; // ERROR
+    }
+    else {
+        return 0;
+    }
 }
 
 @end
@@ -1117,16 +1173,21 @@ namespace {
 
 @implementation NSNull (JPJsonWriter) 
 
-- (NSInteger) JPJson_serializeTo:(id<JPJsonStreambufferProtocol>)streambuf
-                        encoding:(JPUnicodeEncoding)encoding
-                         options:(JPJsonWriterOptions)options
-                           level:(NSUInteger)level
+- (int) JPJson_serializeTo:(id<JPJsonStreambufferProtocol>)streambuf
+                  encoding:(JPUnicodeEncoding)encoding
+                   options:(JPJsonWriterOptions)options
+                     level:(int)level
 {
     assert(encoding == JPUnicodeEncoding_UTF8); 
     assert(streambuf);
     // TODO: encoding!
-    [streambuf write:"null" length:4]; // buffer->write("null", 4);
-    return 0;
+    int wcount = [streambuf write:"null" length:4]; // buffer->write("null", 4);
+    if (wcount != 4) {
+        return -1; // ERROR
+    }
+    else {
+        return 0;
+    }
 }
 
 @end
@@ -1158,7 +1219,7 @@ namespace {
 
 
 
-+ (NSData*)dataWithObject:(id)object 
++ (NSData*)dataWithObject:(id)object
                  encoding:(JPUnicodeEncoding)encoding
                   options:(JPJsonWriterOptions)options 
                     error:(NSError**)error
@@ -1244,7 +1305,7 @@ namespace {
                             buffer:(id<JPJsonStreambufferProtocol>) streambuf
                           encoding:(JPUnicodeEncoding) encoding
                            options:(JPJsonWriterOptions) options
-                             level:(NSUInteger) level
+                             level:(int) level
 {
     return insertJsonArray(object, streambuf, encoding, options, level);
 }
@@ -1254,7 +1315,7 @@ namespace {
                              buffer:(id<JPJsonStreambufferProtocol>) streambuf
                            encoding:(JPUnicodeEncoding) encoding
                             options:(JPJsonWriterOptions) options
-                              level:(NSUInteger) level
+                              level:(int) level
 {
     return insertJsonObject(object, streambuf, encoding, options, level);
 }

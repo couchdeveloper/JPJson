@@ -23,10 +23,9 @@
 		A11D217A144B1B1F00D24AA8 /* libjson-iOS.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libjson-iOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A1615B61143F2FE300DA0A11 /* UIDevice-Hardware.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIDevice-Hardware.h"; sourceTree = "<group>"; };
 		A1615B62143F2FE300DA0A11 /* UIDevice-Hardware.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIDevice-Hardware.m"; sourceTree = "<group>"; };
-		A1789AB51576B60500EFEE28 /* libjson-iOS-d.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libjson-iOS-d.a"; path = "../../../Build/Products/Debug-iphoneos/libjson-iOS-d.a"; sourceTree = "<group>"; };
 		A18A70571511F79400FEB03C /* release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = release.xcconfig; sourceTree = "<group>"; };
 		A18A70591511F7A200FEB03C /* debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = debug.xcconfig; sourceTree = "<group>"; };
-		A19DEF74157F877D00A64183 /* libjson-iOS.a */ = {isa = PBXFileReference; lastKnownFileType = file; name = "libjson-iOS.a"; path = "../../../Libraries/iOS Libraries/build/Release-iphoneos/libjson-iOS.a"; sourceTree = "<group>"; };
+		A19DEF74157F877D00A64183 /* libjson-iOS.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libjson-iOS.a"; path = "../../../Libraries/iOS Libraries/build/Release-iphoneos/libjson-iOS.a"; sourceTree = "<group>"; };
 		A1ED08E81428F0B800B276C4 /* NSURLConnectionDownload.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NSURLConnectionDownload.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A1ED08EC1428F0B800B276C4 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		A1ED08EE1428F0B800B276C4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -69,7 +68,6 @@
 			isa = PBXGroup;
 			children = (
 				A19DEF74157F877D00A64183 /* libjson-iOS.a */,
-				A1789AB51576B60500EFEE28 /* libjson-iOS-d.a */,
 				A18A70591511F7A200FEB03C /* debug.xcconfig */,
 				A18A70571511F79400FEB03C /* release.xcconfig */,
 				A1ED08F21428F0B800B276C4 /* NSURLConnectionDownload */,
@@ -225,7 +223,6 @@
 					"$(inherited)",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
@@ -251,7 +248,6 @@
 					NS_BLOCK_ASSERTIONS,
 					NDEBUG,
 				);
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;

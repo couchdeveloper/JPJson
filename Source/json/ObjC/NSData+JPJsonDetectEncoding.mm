@@ -121,3 +121,8 @@ namespace {
 
 
 @end
+
+
+// Workaround for linker bug:
+@interface DummyNSDataJPJsonDetectEncoding @end
+@implementation DummyNSDataJPJsonDetectEncoding @end

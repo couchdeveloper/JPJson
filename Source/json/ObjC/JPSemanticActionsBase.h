@@ -334,7 +334,7 @@ typedef void (^JPSemanticActions_ErrorHandlerBlockType)(NSError*);
  
  The value shall be a concurrent or a serial dispatch queue or `NULL`.
 */ 
-@property (nonatomic) dispatch_queue_t handlerDispatchQueue;
+@property (nonatomic, assign) dispatch_queue_t handlerDispatchQueue;
 
 
 
@@ -353,7 +353,7 @@ typedef void (^JPSemanticActions_ErrorHandlerBlockType)(NSError*);
 
  startJsonHandlerBlock can be set to `nil`.
 */ 
-@property (copy) JPSemanticActions_StartJsonHandlerBlockType 
+@property (nonatomic, copy) JPSemanticActions_StartJsonHandlerBlockType
 startJsonHandlerBlock;
 
 
@@ -380,7 +380,7 @@ startJsonHandlerBlock;
 
  endJsonHandlerBlock may be set to `nil`.
 */ 
-@property (copy) JPSemanticActions_EndJsonHandlerBlockType 
+@property (nonatomic, copy) JPSemanticActions_EndJsonHandlerBlockType 
 endJsonHandlerBlock;
 
 
@@ -399,7 +399,7 @@ endJsonHandlerBlock;
  completionHandlerBlock will not be called.
  completionBlock may be set to `NULL`.
 */ 
-@property (copy)  JPSemanticActions_CompletionHandlerBlockType 
+@property (nonatomic, copy)  JPSemanticActions_CompletionHandlerBlockType 
 completionHandlerBlock;
 
 
@@ -415,7 +415,7 @@ completionHandlerBlock;
  errorHandlerBlock may be set to `NULL` in which case no errors will be reported
  by this means.
 */ 
-@property (copy) JPSemanticActions_ErrorHandlerBlockType 
+@property (nonatomic, copy) JPSemanticActions_ErrorHandlerBlockType 
 errorHandlerBlock;
 
 

@@ -240,7 +240,7 @@ namespace json {
         typename boost::enable_if <
             is_numeric<NumericT>,
             NumericT>::type    
-        as() const { return boost::get<Number>(value_).as<NumericT>(); }
+        as() const { return boost::get<Number>(value_).template as<NumericT>(); }
         
         
         //

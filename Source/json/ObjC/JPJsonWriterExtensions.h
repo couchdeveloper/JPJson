@@ -18,6 +18,9 @@
  order to serialize itself into the stream. (Custom classes for JSON __containers__, 
  like array and object will instead use the predefined class methods 
  serializeObjectAsJSONArray and serializeObjectAsJSONObject).
+ 
+ Caution: Preliminary. At a later version this protocol may change, supporting
+ a higher level abstraction of "stream" instead of "buffer".
  */
 @protocol JPJsonStreambufferProtocol <NSObject>
 
@@ -36,7 +39,7 @@
  indicating an error.
  */
 
-- (NSInteger) write:(const void*)buffer length:(NSUInteger)length;
+- (int) write:(const void*)buffer length:(int)length;
 
 @end
 
@@ -76,15 +79,16 @@
  used only when additional format characters shall be inserted into the JSON text,
  for example when "pretty printing".
  
+ @return Returns zero on success, otherwise an integer value indicating the error.
  
  The character sequence shall be a valid JSON element according RFC 4627, including 
  the appropariate syntax elements.
  
 */ 
-- (NSInteger) JPJson_serializeTo:(id<JPJsonStreambufferProtocol>) streambuf
-                        encoding:(JPUnicodeEncoding)encoding 
-                         options:(JPJsonWriterOptions)options 
-                           level:(NSUInteger)level;
+- (int) JPJson_serializeTo:(id<JPJsonStreambufferProtocol>) streambuf
+                  encoding:(JPUnicodeEncoding)encoding
+                   options:(JPJsonWriterOptions)options
+                     level:(int)level;
 
 @end
 
@@ -134,7 +138,7 @@
                             buffer:(id<JPJsonStreambufferProtocol>) streambuf
                           encoding:(JPUnicodeEncoding) encoding
                            options:(JPJsonWriterOptions) options
-                             level:(NSUInteger) level;
+                             level:(int) level;
 
 
 
@@ -165,7 +169,7 @@
                             buffer:(id<JPJsonStreambufferProtocol>) streambuf
                           encoding:(JPUnicodeEncoding) encoding
                            options:(JPJsonWriterOptions) options
-                             level:(NSUInteger) level;
+                             level:(int) level;
 
 
 @end

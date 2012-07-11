@@ -154,6 +154,7 @@ namespace json { namespace parse_internal {
                             }
                             else if (c == 0 or c == EOF) {
                                 done = true;  // terminate parse loop
+                                result = true; // ALL documents have been parsed successful
                                 break;
                             }
                             else {
