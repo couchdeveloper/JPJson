@@ -450,8 +450,8 @@ static NSString* JsonTestFile = @"Test-UTF8-esc.json";
         NSLog(@"ERROR: %@", error);
     }
     else {
-        NSLog(@"JSONKit: elapsed time for parsing: min:\n"
-              "%.3f ms, max: %0.3f ms, avg: %0.3f ms\n", 
+        NSLog(@"JSONKit: elapsed time for parsing:\n"
+              "min: %.3f ms, max: %0.3f ms, avg: %0.3f ms\n", 
               te.min()*1e3, te.max()*1e3, te.avg()*1e3);
     }
     
@@ -509,8 +509,8 @@ static NSString* JsonTestFile = @"Test-UTF8-esc.json";
         NSLog(@"ERROR: %@", error);
     }
     else {
-        NSLog(@"JSONKit: elapsed time for parsing: min:\n"
-              "%.3f ms, max: %0.3f ms, avg: %0.3f ms\n", 
+        NSLog(@"JSONKit: elapsed time for parsing:\n"
+              "min: %.3f ms, max: %0.3f ms, avg: %0.3f ms\n", 
               te.min()*1e3, te.max()*1e3, te.avg()*1e3);
     }
     

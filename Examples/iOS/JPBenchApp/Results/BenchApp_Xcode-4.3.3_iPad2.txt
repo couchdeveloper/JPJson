@@ -1,0 +1,123 @@
+2012-07-16 11:53:43.649 JPBenchApp[3645:707] /private/var/mobile/Applications/008A6E73-F7B3-4D3B-9236-3300FF203FFE/JPBenchApp.app/JPBenchApp
+2012-07-16 11:53:43.654 JPBenchApp[3645:707] Starting Bench for Device: 
+System Name: iPhone OS
+System Version: 5.1.1
+Model: iPad
+Localized Model: iPad
+Platform: iPad2,2
+Hardware Model: K94AP
+Platform Type: 14
+Platform String: iPad 2G
+CPU Frequency: 1000 MHz
+BUS Frequency: 250 MHz
+Total Memory: 502 MByte
+User Memory: 443 MByte
+2012-07-16 11:53:43.657 JPBenchApp[3645:707] application did become active ...
+--------------------------------------------
+Running bench_JsonParser1WithN 100 times.
+--------------------------------------------
+Using a NSData with UTF-8 content as input and interface method:
++parseData:options:error: (class JPJsonParser)
+options: 0
+Automatic detection of input encoding, immutable containers
+2012-07-16 11:53:45.402 JPBenchApp[3645:707] JPJsonParser: elapsed time for parsing:
+min: 2.568 ms, max: 4.112 ms, avg: 2.655 ms
+--------------------------------------------
+Running bench_JsonParser2WithN bench 100 times.
+--------------------------------------------
+Timing includes destruction of objects, too
+Using a NSData with UTF-8 content as input and interface method:
++parseData:options:error: (class JPJsonParser)
+options: 0
+Automatic detection of input encoding, immutable containers
+2012-07-16 11:53:46.138 JPBenchApp[3645:707] JPJsonParser: elapsed time for parsing:
+min: 3.362 ms, max: 5.502 ms, avg: 3.458 ms
+--------------------------------------------
+Running bench_JSONKit1WithN 100 times.
+--------------------------------------------
+using a NSData with UTF-8 content as input,
+interface method: objectWithData: (JSONDecoder),
+JKParseOptionFlags = 0
+2012-07-16 11:53:47.046 JPBenchApp[3645:707] JSONKit: elapsed time for parsing:
+min: 2.883 ms, max: 6.406 ms, avg: 2.965 ms
+--------------------------------------------
+Running bench_JSONKit2WithN 100 times.
+--------------------------------------------
+Timing includes destruction of objects, too
+using a NSData with UTF-8 content as input,
+interface method: mutableObjectWithData: (JSONDecoder),
+JKParseOptionFlags = 0
+2012-07-16 11:53:47.871 JPBenchApp[3645:707] JSONKit: elapsed time for parsing:
+ min: 3.603 ms, max: 5.646 ms, avg: 3.662 ms
+--------------------------------------------
+Running bench_JsonParser1WithN 100 times.
+--------------------------------------------
+Using a NSData with UTF-8 content as input and interface method:
++parseData:options:error: (class JPJsonParser)
+options: 0
+Automatic detection of input encoding, immutable containers
+2012-07-16 11:53:48.611 JPBenchApp[3645:707] JPJsonParser: elapsed time for parsing:
+min: 2.565 ms, max: 4.557 ms, avg: 2.607 ms
+--------------------------------------------
+Running bench_JsonParser2WithN bench 100 times.
+--------------------------------------------
+Timing includes destruction of objects, too
+Using a NSData with UTF-8 content as input and interface method:
++parseData:options:error: (class JPJsonParser)
+options: 0
+Automatic detection of input encoding, immutable containers
+2012-07-16 11:53:49.351 JPBenchApp[3645:707] JPJsonParser: elapsed time for parsing:
+min: 3.337 ms, max: 5.407 ms, avg: 3.430 ms
+--------------------------------------------
+Running bench_JSONKit1WithN 100 times.
+--------------------------------------------
+using a NSData with UTF-8 content as input,
+interface method: objectWithData: (JSONDecoder),
+JKParseOptionFlags = 0
+2012-07-16 11:53:50.097 JPBenchApp[3645:707] JSONKit: elapsed time for parsing:
+min: 2.863 ms, max: 4.965 ms, avg: 2.928 ms
+--------------------------------------------
+Running bench_JSONKit2WithN 100 times.
+--------------------------------------------
+Timing includes destruction of objects, too
+using a NSData with UTF-8 content as input,
+interface method: mutableObjectWithData: (JSONDecoder),
+JKParseOptionFlags = 0
+2012-07-16 11:53:50.845 JPBenchApp[3645:707] JSONKit: elapsed time for parsing:
+ min: 3.594 ms, max: 5.680 ms, avg: 3.657 ms
+--------------------------------------------
+Running bench_JsonParser1WithN 100 times.
+--------------------------------------------
+Using a NSData with UTF-8 content as input and interface method:
++parseData:options:error: (class JPJsonParser)
+options: 0
+Automatic detection of input encoding, immutable containers
+2012-07-16 11:53:51.586 JPBenchApp[3645:707] JPJsonParser: elapsed time for parsing:
+min: 2.553 ms, max: 4.720 ms, avg: 2.611 ms
+--------------------------------------------
+Running bench_JsonParser2WithN bench 100 times.
+--------------------------------------------
+Timing includes destruction of objects, too
+Using a NSData with UTF-8 content as input and interface method:
++parseData:options:error: (class JPJsonParser)
+options: 0
+Automatic detection of input encoding, immutable containers
+2012-07-16 11:53:52.312 JPBenchApp[3645:707] JPJsonParser: elapsed time for parsing:
+min: 3.322 ms, max: 5.637 ms, avg: 3.445 ms
+--------------------------------------------
+Running bench_JSONKit1WithN 100 times.
+--------------------------------------------
+using a NSData with UTF-8 content as input,
+interface method: objectWithData: (JSONDecoder),
+JKParseOptionFlags = 0
+2012-07-16 11:53:53.071 JPBenchApp[3645:707] JSONKit: elapsed time for parsing:
+min: 2.859 ms, max: 5.048 ms, avg: 2.916 ms
+--------------------------------------------
+Running bench_JSONKit2WithN 100 times.
+--------------------------------------------
+Timing includes destruction of objects, too
+using a NSData with UTF-8 content as input,
+interface method: mutableObjectWithData: (JSONDecoder),
+JKParseOptionFlags = 0
+2012-07-16 11:53:54.047 JPBenchApp[3645:707] JSONKit: elapsed time for parsing:
+ min: 3.630 ms, max: 5.672 ms, avg: 3.684 ms

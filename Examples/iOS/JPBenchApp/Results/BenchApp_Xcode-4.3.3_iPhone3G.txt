@@ -1,0 +1,87 @@
+2012-07-16 11:52:44.420 JPBenchApp[524:307] /private/var/mobile/Applications/9832B1B7-0A19-4A6B-ADFB-EA028813DB30/JPBenchApp.app/JPBenchApp
+2012-07-16 11:52:44.481 JPBenchApp[524:307] Starting Bench for Device: 
+System Name: iPhone OS
+System Version: 4.2.1
+Model: iPhone
+Localized Model: iPhone
+Platform: iPhone1,2
+Hardware Model: N82AP
+Platform Type: 5
+Platform String: iPhone 3G
+CPU Frequency: 412 MHz
+BUS Frequency: 103 MHz
+Total Memory: 116 MByte
+User Memory: 87 MByte
+2012-07-16 11:52:44.496 JPBenchApp[524:307] application did become active ...
+--------------------------------------------
+Running bench_JsonParser1WithN 100 times.
+--------------------------------------------
+Using a NSData with UTF-8 content as input and interface method:
++parseData:options:error: (class JPJsonParser)
+options: 0
+Automatic detection of input encoding, immutable containers
+2012-07-16 11:52:51.190 JPBenchApp[524:307] JPJsonParser: elapsed time for parsing:
+min: 22.016 ms, max: 30.383 ms, avg: 22.965 ms
+--------------------------------------------
+Running bench_JsonParser2WithN bench 100 times.
+--------------------------------------------
+Timing includes destruction of objects, too
+Using a NSData with UTF-8 content as input and interface method:
++parseData:options:error: (class JPJsonParser)
+options: 0
+Automatic detection of input encoding, immutable containers
+2012-07-16 11:52:55.341 JPBenchApp[524:307] JPJsonParser: elapsed time for parsing:
+min: 27.897 ms, max: 56.050 ms, avg: 30.079 ms
+--------------------------------------------
+Running bench_JSONKit1WithN 100 times.
+--------------------------------------------
+using a NSData with UTF-8 content as input,
+interface method: objectWithData: (JSONDecoder),
+JKParseOptionFlags = 0
+2012-07-16 11:52:59.919 JPBenchApp[524:307] JSONKit: elapsed time for parsing:
+min: 25.703 ms, max: 32.552 ms, avg: 26.971 ms
+--------------------------------------------
+Running bench_JSONKit2WithN 100 times.
+--------------------------------------------
+Timing includes destruction of objects, too
+using a NSData with UTF-8 content as input,
+interface method: mutableObjectWithData: (JSONDecoder),
+JKParseOptionFlags = 0
+2012-07-16 11:53:04.268 JPBenchApp[524:307] JSONKit: elapsed time for parsing:
+ min: 30.868 ms, max: 42.430 ms, avg: 32.350 ms
+--------------------------------------------
+Running bench_JsonParser1WithN 100 times.
+--------------------------------------------
+Using a NSData with UTF-8 content as input and interface method:
++parseData:options:error: (class JPJsonParser)
+options: 0
+Automatic detection of input encoding, immutable containers
+2012-07-16 11:53:08.390 JPBenchApp[524:307] JPJsonParser: elapsed time for parsing:
+min: 22.564 ms, max: 32.870 ms, avg: 23.584 ms
+--------------------------------------------
+Running bench_JsonParser2WithN bench 100 times.
+--------------------------------------------
+Timing includes destruction of objects, too
+Using a NSData with UTF-8 content as input and interface method:
++parseData:options:error: (class JPJsonParser)
+options: 0
+Automatic detection of input encoding, immutable containers
+2012-07-16 11:53:12.284 JPBenchApp[524:307] JPJsonParser: elapsed time for parsing:
+min: 27.274 ms, max: 35.216 ms, avg: 28.465 ms
+--------------------------------------------
+Running bench_JSONKit1WithN 100 times.
+--------------------------------------------
+using a NSData with UTF-8 content as input,
+interface method: objectWithData: (JSONDecoder),
+JKParseOptionFlags = 0
+2012-07-16 11:53:16.490 JPBenchApp[524:307] JSONKit: elapsed time for parsing:
+min: 25.082 ms, max: 34.130 ms, avg: 26.207 ms
+--------------------------------------------
+Running bench_JSONKit2WithN 100 times.
+--------------------------------------------
+Timing includes destruction of objects, too
+using a NSData with UTF-8 content as input,
+interface method: mutableObjectWithData: (JSONDecoder),
+JKParseOptionFlags = 0
+2012-07-16 11:53:20.804 JPBenchApp[524:307] JSONKit: elapsed time for parsing:
+ min: 31.322 ms, max: 59.097 ms, avg: 32.931 ms
