@@ -25,6 +25,16 @@
 		A1FAF1DD143F225500CD2CCB /* UIDevice-Hardware.m in Sources */ = {isa = PBXBuildFile; fileRef = A1FAF1DC143F225500CD2CCB /* UIDevice-Hardware.m */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		A18DC6E215B3F58800F921C2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A1B0AE5E15B1E90500E0C685 /* JPJson iOS Libraries.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A1024E2E154167F6001349EC;
+			remoteInfo = JPJsonLib;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		A125E02F156FBF2A006EB6FD /* CHANGELOG.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CHANGELOG.md; sourceTree = "<group>"; };
 		A125E030156FBF2A006EB6FD /* JSONKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONKit.h; sourceTree = "<group>"; };
@@ -53,8 +63,8 @@
 		A18A705B1511F9EE00FEB03C /* release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = release.xcconfig; sourceTree = "<group>"; };
 		A18A705C1512292000FEB03C /* Test-UTF8.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "Test-UTF8.json"; path = "../../../Resources/Test-UTF8.json"; sourceTree = "<group>"; };
 		A1AC40231577BAB500AE34CC /* random.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = random.json; path = ../../../Resources/random.json; sourceTree = "<group>"; };
-		A1B0AE5E15B1E90500E0C685 /* JPJson iOS Libraries.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = file; name = "JPJson iOS Libraries.xcodeproj"; path = "../../../Libraries/iOS Libraries/JPJson iOS Libraries.xcodeproj"; sourceTree = "<group>"; };
-		A1B0AE6615B1E9E400E0C685 /* libjson-iOS.a */ = {isa = PBXFileReference; lastKnownFileType = file; name = "libjson-iOS.a"; path = "../../../Libraries/iOS Libraries/build/Release-iphoneos/libjson-iOS.a"; sourceTree = "<group>"; };
+		A1B0AE5E15B1E90500E0C685 /* JPJson iOS Libraries.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "JPJson iOS Libraries.xcodeproj"; path = "../../../Libraries/iOS Libraries/JPJson iOS Libraries.xcodeproj"; sourceTree = "<group>"; };
+		A1B0AE6615B1E9E400E0C685 /* libjson-iOS.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libjson-iOS.a"; path = "../../../Libraries/iOS Libraries/build/Release-iphoneos/libjson-iOS.a"; sourceTree = "<group>"; };
 		A1FAF1DB143F225500CD2CCB /* UIDevice-Hardware.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIDevice-Hardware.h"; path = "../UIDevice-Hardware.h"; sourceTree = "<group>"; };
 		A1FAF1DC143F225500CD2CCB /* UIDevice-Hardware.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIDevice-Hardware.m"; path = "../UIDevice-Hardware.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -185,6 +195,14 @@
 			name = Libraries;
 			sourceTree = "<group>";
 		};
+		A18DC6DF15B3F58800F921C2 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A18DC6E315B3F58800F921C2 /* libjson-iOS.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -223,12 +241,28 @@
 			mainGroup = A138813113D0D57B0006461E;
 			productRefGroup = A138813D13D0D57B0006461E /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = A18DC6DF15B3F58800F921C2 /* Products */;
+					ProjectRef = A1B0AE5E15B1E90500E0C685 /* JPJson iOS Libraries.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				A138813B13D0D57B0006461E /* JPBenchApp */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		A18DC6E315B3F58800F921C2 /* libjson-iOS.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libjson-iOS.a";
+			remoteRef = A18DC6E215B3F58800F921C2 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		A138813A13D0D57B0006461E /* Resources */ = {

@@ -288,7 +288,7 @@ static NSString* JsonTestFile = @"Test-UTF8-esc.json";
     
     
     printf("--------------------------------------------\n");
-    printf("Running JPJsonParser bench %d times.\n", N);
+    printf("Running bench_JsonParser1WithN %d times.\n", N);
     printf("--------------------------------------------\n");    
     printf("Using a NSData with UTF-8 content as input and interface method:\n"
            "+parseData:options:error: (class JPJsonParser)\n"
@@ -354,7 +354,7 @@ static NSString* JsonTestFile = @"Test-UTF8-esc.json";
     
 
     printf("--------------------------------------------\n");
-    printf("Running JPJsonParser bench %d times.\n", N);
+    printf("Running bench_JsonParser2WithN bench %d times.\n", N);
     printf("--------------------------------------------\n");    
     printf("Timing includes destruction of objects, too\n");
     printf("Using a NSData with UTF-8 content as input and interface method:\n"
@@ -365,11 +365,12 @@ static NSString* JsonTestFile = @"Test-UTF8-esc.json";
     MinMaxAvgTime te;
     timer t = timer();
     
-    t.start();
     BOOL gotError = NO;
     for (int i = 0; i < N; ++i) 
     {
         NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+
+        t.start();        
         // This method creates and destroys the internal semantic actions
         // instance.
         id result = [JPJsonParser parseData:data 
@@ -417,7 +418,7 @@ static NSString* JsonTestFile = @"Test-UTF8-esc.json";
     
     
     printf("--------------------------------------------\n");
-    printf("Running JSONKit bench %d times.\n", N);
+    printf("Running bench_JSONKit1WithN %d times.\n", N);
     printf("--------------------------------------------\n");    
     printf("using a NSData with UTF-8 content as input,\n"
            "interface method: objectWithData: (JSONDecoder),\n"
@@ -477,7 +478,7 @@ static NSString* JsonTestFile = @"Test-UTF8-esc.json";
     }
     
     printf("--------------------------------------------\n");
-    printf("Running JSONKit bench %d times.\n", N);
+    printf("Running bench_JSONKit2WithN %d times.\n", N);
     printf("--------------------------------------------\n");  
     printf("Timing includes destruction of objects, too\n");
     printf("using a NSData with UTF-8 content as input,\n"
@@ -487,11 +488,12 @@ static NSString* JsonTestFile = @"Test-UTF8-esc.json";
     MinMaxAvg<double> te;
     timer t = timer();
     
-    t.start();
     BOOL gotError = NO;
     for (int i = 0; i < N; ++i) 
     {
         NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+
+        t.start();
         JSONDecoder* decoder = [[JSONDecoder alloc] initWithParseOptions:(JKParseOptionFlags)JKParseOptionNone];
         id result = [decoder objectWithData:data];
         [decoder release];
@@ -507,8 +509,9 @@ static NSString* JsonTestFile = @"Test-UTF8-esc.json";
         NSLog(@"ERROR: %@", error);
     }
     else {
-        NSLog(@"JSONKit: elapsed time for parsing %d documents:\n"
-              "%.3f s\n\n", N, t.seconds());
+        NSLog(@"JSONKit: elapsed time for parsing: min:\n"
+              "%.3f ms, max: %0.3f ms, avg: %0.3f ms\n", 
+              te.min()*1e3, te.max()*1e3, te.avg()*1e3);
     }
     
     [data release];
