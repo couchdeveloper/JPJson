@@ -9,6 +9,12 @@
 /* Begin PBXBuildFile section */
 		A11F57C0159A082000CCC4DD /* DemoUserTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A11F57BF159A082000CCC4DD /* DemoUserTableViewCell.m */; };
 		A11FC9E415ADA0EB00EB87CB /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A11FC9E315ADA0EB00EB87CB /* SystemConfiguration.framework */; };
+		A11FC9E515ADA4B700EB87CB /* DemoReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = A11FC9E015AD9E0400EB87CB /* DemoReachability.m */; };
+		A11FC9F915ADBA6B00EB87CB /* iTunesArtwork in Resources */ = {isa = PBXBuildFile; fileRef = A11FC9F215ADBA6B00EB87CB /* iTunesArtwork */; };
+		A11FCA0315ADC58900EB87CB /* AppIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = A11FCA0215ADC58900EB87CB /* AppIcon.png */; };
+		A11FCA0515ADC5AE00EB87CB /* AppIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A11FCA0415ADC5AE00EB87CB /* AppIcon@2x.png */; };
+		A11FCA0715ADC64F00EB87CB /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = A11FCA0615ADC64F00EB87CB /* Default.png */; };
+		A11FCA0E15ADCFE500EB87CB /* DemoNetworkIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = A11FCA0D15ADCFE400EB87CB /* DemoNetworkIndicator.m */; };
 		A1AC4D27158A103C00131927 /* DemoAddUserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A1AC4D26158A103C00131927 /* DemoAddUserViewController.m */; };
 		A1CC84E5158C5CA20023E5A4 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = A1CC84E4158C5CA20023E5A4 /* README.md */; };
 		A1CC84E9158C5FB00023E5A4 /* DemoAppModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A1CC84E7158C5FB00023E5A4 /* DemoAppModel.xcdatamodeld */; };
@@ -30,9 +36,15 @@
 /* Begin PBXFileReference section */
 		A11F57BE159A082000CCC4DD /* DemoUserTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DemoUserTableViewCell.h; sourceTree = "<group>"; };
 		A11F57BF159A082000CCC4DD /* DemoUserTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DemoUserTableViewCell.m; sourceTree = "<group>"; };
-		A11FC9DF15AD9E0400EB87CB /* DemoReachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DemoReachability.h; sourceTree = "<group>"; };
-		A11FC9E015AD9E0400EB87CB /* DemoReachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DemoReachability.m; sourceTree = "<group>"; };
+		A11FC9DF15AD9E0400EB87CB /* DemoReachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DemoReachability.h; path = ../DemoReachability.h; sourceTree = "<group>"; };
+		A11FC9E015AD9E0400EB87CB /* DemoReachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DemoReachability.m; path = ../DemoReachability.m; sourceTree = "<group>"; };
 		A11FC9E315ADA0EB00EB87CB /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		A11FC9F215ADBA6B00EB87CB /* iTunesArtwork */ = {isa = PBXFileReference; lastKnownFileType = file; path = iTunesArtwork; sourceTree = "<group>"; };
+		A11FCA0215ADC58900EB87CB /* AppIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = AppIcon.png; path = ../../AppIcon.png; sourceTree = "<group>"; };
+		A11FCA0415ADC5AE00EB87CB /* AppIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "AppIcon@2x.png"; path = "../../AppIcon@2x.png"; sourceTree = "<group>"; };
+		A11FCA0615ADC64F00EB87CB /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = ../../Default.png; sourceTree = "<group>"; };
+		A11FCA0C15ADCFE400EB87CB /* DemoNetworkIndicator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DemoNetworkIndicator.h; sourceTree = "<group>"; };
+		A11FCA0D15ADCFE400EB87CB /* DemoNetworkIndicator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DemoNetworkIndicator.m; sourceTree = "<group>"; };
 		A19E9D74158CD95D009807EF /* DemoJSONRequestQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DemoJSONRequestQueue.h; sourceTree = "<group>"; };
 		A19E9D75158CD95D009807EF /* DemoJSONRequestQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DemoJSONRequestQueue.m; sourceTree = "<group>"; };
 		A19E9D7A158E0D56009807EF /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
@@ -94,6 +106,27 @@
 			name = Views;
 			sourceTree = "<group>";
 		};
+		A11FC9EA15ADBA5400EB87CB /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				A11FC9EB15ADBA6B00EB87CB /* AppImages */,
+			);
+			name = Resources;
+			path = ..;
+			sourceTree = "<group>";
+		};
+		A11FC9EB15ADBA6B00EB87CB /* AppImages */ = {
+			isa = PBXGroup;
+			children = (
+				A11FCA0615ADC64F00EB87CB /* Default.png */,
+				A11FCA0415ADC5AE00EB87CB /* AppIcon@2x.png */,
+				A11FCA0215ADC58900EB87CB /* AppIcon.png */,
+				A11FC9F215ADBA6B00EB87CB /* iTunesArtwork */,
+			);
+			name = AppImages;
+			path = DemoApp/AppImages;
+			sourceTree = "<group>";
+		};
 		A19E9D7D158E1760009807EF /* Store */ = {
 			isa = PBXGroup;
 			children = (
@@ -107,8 +140,6 @@
 			isa = PBXGroup;
 			children = (
 				A11FC9E315ADA0EB00EB87CB /* SystemConfiguration.framework */,
-				A11FC9DF15AD9E0400EB87CB /* DemoReachability.h */,
-				A11FC9E015AD9E0400EB87CB /* DemoReachability.m */,
 				A1CC84E4158C5CA20023E5A4 /* README.md */,
 				A1EFE508158613EF003C5C75 /* libjson-iOS.a */,
 				A1EFE4EE15861361003C5C75 /* DemoApp */,
@@ -138,6 +169,11 @@
 		A1EFE4EE15861361003C5C75 /* DemoApp */ = {
 			isa = PBXGroup;
 			children = (
+				A11FCA0C15ADCFE400EB87CB /* DemoNetworkIndicator.h */,
+				A11FCA0D15ADCFE400EB87CB /* DemoNetworkIndicator.m */,
+				A11FC9DF15AD9E0400EB87CB /* DemoReachability.h */,
+				A11FC9E015AD9E0400EB87CB /* DemoReachability.m */,
+				A11FC9EA15ADBA5400EB87CB /* Resources */,
 				A11F57BC159A07D200CCC4DD /* Views */,
 				A19E9D7D158E1760009807EF /* Store */,
 				A1EFE50A15861431003C5C75 /* Models */,
@@ -241,6 +277,10 @@
 				A1EFE4FC15861361003C5C75 /* MainStoryboard_iPhone.storyboard in Resources */,
 				A1EFE4FF15861361003C5C75 /* MainStoryboard_iPad.storyboard in Resources */,
 				A1CC84E5158C5CA20023E5A4 /* README.md in Resources */,
+				A11FC9F915ADBA6B00EB87CB /* iTunesArtwork in Resources */,
+				A11FCA0315ADC58900EB87CB /* AppIcon.png in Resources */,
+				A11FCA0515ADC5AE00EB87CB /* AppIcon@2x.png in Resources */,
+				A11FCA0715ADC64F00EB87CB /* Default.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -260,6 +300,8 @@
 				A1CC84EC158C619F0023E5A4 /* DemoOriginModel.m in Sources */,
 				A1CC84EF158C70A40023E5A4 /* DemoJSONRequestFuture.m in Sources */,
 				A11F57C0159A082000CCC4DD /* DemoUserTableViewCell.m in Sources */,
+				A11FC9E515ADA4B700EB87CB /* DemoReachability.m in Sources */,
+				A11FCA0E15ADCFE500EB87CB /* DemoNetworkIndicator.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

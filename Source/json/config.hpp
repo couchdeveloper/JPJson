@@ -56,7 +56,7 @@
  which a semantic actions object receives when the parser detects a JSON string.
  The encoding may be specied from the macros defined above.
  */ 
-#define JSON_SEMANTIC_ACTIONS_STRING_ENCODING    JSON_SEMANTIC_ACTIONS_STRING_ENCODING_UTF_16
+#define JSON_SEMANTIC_ACTIONS_STRING_ENCODING    JSON_SEMANTIC_ACTIONS_STRING_ENCODING_UTF_16i
 
 
 

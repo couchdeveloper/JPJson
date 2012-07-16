@@ -219,6 +219,9 @@
                   <FileRef
                      location = "group:Source/json/ObjC/NSMutableDataStreambuf.hpp">
                   </FileRef>
+                  <FileRef
+                     location = "group:Source/json/ObjC/NSDataStreambuf.hpp">
+                  </FileRef>
                </Group>
                <FileRef
                   location = "group:JPJsonCommon.h">

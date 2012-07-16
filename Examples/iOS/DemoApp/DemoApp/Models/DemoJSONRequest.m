@@ -8,6 +8,7 @@
 
 #import "DemoJSONRequest.h"
 #import "JPJson/JPJsonParser.h"
+#import "DemoNetworkIndicator.h"
 #include <libkern/OSAtomic.h>
 #include <dispatch/dispatch.h>
 
@@ -226,7 +227,7 @@ typedef enum DemoJSONRequest_State_t DemoJSONRequest_State;
     // and that the parser has finished (canceled):
     OSAtomicAnd32Barrier((ConnectionStateCanceledEnd|ParserStateCanceledEnd), &_state);  
     dispatch_async(dispatch_get_main_queue(), ^{
-        [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+        [DemoNetworkIndicator sharedNetworkIndicator].active = NO;
     });
     if ([_delegate respondsToSelector:@selector(jsonRequest:didFailWithError:)]) {
         [_delegate jsonRequest:self didFailWithError:makeError(defaultErrorDomain, DemoJSONRequestError_OperationCanceled, nil)];
@@ -313,7 +314,7 @@ typedef enum DemoJSONRequest_State_t DemoJSONRequest_State;
     {        
         DLogInfo(@"Start downloading URL %@", [_request URL]);   
         dispatch_async(dispatch_get_main_queue(), ^{
-            [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+            [DemoNetworkIndicator sharedNetworkIndicator].active = YES;
         });
         DLogInfo(@"Connection Queue: %@", self.connectionQueue.name);
 #if !defined(BUG_iOS_setDelegateQueue)
@@ -365,8 +366,7 @@ typedef enum DemoJSONRequest_State_t DemoJSONRequest_State;
     self.responseBuffer = nil;
     if ([error code] == kCFURLErrorNotConnectedToInternet) {
         // if we can identify the error, we can present a more precise message to the user.
-        NSDictionary* userInfo =
-        @{NSLocalizedDescriptionKey: NSLocalizedString(@"No Connection Error", nil)};
+        NSDictionary* userInfo = @{NSLocalizedDescriptionKey: NSLocalizedString(@"No Connection Error", nil)};
         NSError* noConnectionError = [NSError errorWithDomain:NSCocoaErrorDomain
                                                          code:kCFURLErrorNotConnectedToInternet
                                                      userInfo:userInfo];
@@ -377,7 +377,7 @@ typedef enum DemoJSONRequest_State_t DemoJSONRequest_State;
     }  
     // TODO: reset
     dispatch_async(dispatch_get_main_queue(), ^{
-        [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+        [DemoNetworkIndicator sharedNetworkIndicator].active = NO;
     });
     self.delegate = nil;
 }
@@ -399,9 +399,7 @@ typedef enum DemoJSONRequest_State_t DemoJSONRequest_State;
     {
         OSAtomicOr32Barrier(ConnectionStateErrorEnd, &_state);
         OSAtomicAnd32Barrier(~ConnectionStateRunning, &_state);
-        
-        NSDictionary* userInfo = 
-        @{NSLocalizedDescriptionKey: NSLocalizedString(@"HTTP Error", nil)};
+        NSDictionary* userInfo = @{NSLocalizedDescriptionKey: NSLocalizedString(@"HTTP Error", nil)};
         NSError* error = [NSError errorWithDomain:@"HTTP" 
                                              code:[httpResponse statusCode] 
                                          userInfo:userInfo];
@@ -435,7 +433,7 @@ typedef enum DemoJSONRequest_State_t DemoJSONRequest_State;
     self.responseBuffer = nil;
 
     dispatch_async(dispatch_get_main_queue(), ^{
-        [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+        [DemoNetworkIndicator sharedNetworkIndicator].active = NO;
     });
 }
 

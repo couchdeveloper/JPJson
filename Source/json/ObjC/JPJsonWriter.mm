@@ -41,7 +41,7 @@
 #import <Foundation/Foundation.h>
 
 #import "JPJsonWriterExtensions.h"
-#include "json/ObjC/NSMutableDataStreambuf.hpp"
+#include "json/ObjC/NSDataStreambuf.hpp"
 
 
 namespace {
@@ -100,9 +100,11 @@ namespace {
     JPUnicodeEncodingToNSStringEncoding(JPUnicodeEncoding encoding) 
     {
         switch (encoding) {
-            case JPUnicodeEncoding_UTF8: return NSUTF8StringEncoding;
+            case JPUnicodeEncoding_UTF8:    return NSUTF8StringEncoding;
+            case JPUnicodeEncoding_UTF16:   return NSUTF16StringEncoding;
             case JPUnicodeEncoding_UTF16BE: return NSUTF16BigEndianStringEncoding;
             case JPUnicodeEncoding_UTF16LE: return NSUTF16LittleEndianStringEncoding;
+            case JPUnicodeEncoding_UTF32:   return NSUTF32StringEncoding;
             case JPUnicodeEncoding_UTF32BE: return NSUTF32BigEndianStringEncoding;
             case JPUnicodeEncoding_UTF32LE: return NSUTF32LittleEndianStringEncoding;
             default: return -1;
@@ -241,14 +243,14 @@ namespace {
 
 
 
-#pragma mark - JPMutableDataStreambuffer
+#pragma mark - JPDataStreambuffer
 
 //  A concrete JPJsonStreambuffer Implementation
-@interface JPMutableDataStreambuffer : NSObject <JPJsonStreambufferProtocol>
+@interface JPDataStreambuffer : NSObject <JPJsonStreambufferProtocol>
 @end
 
-@implementation JPMutableDataStreambuffer {
-    json::objc::NSMutableDataStreambuf<char>  _streambuf;        
+@implementation JPDataStreambuffer {
+    json::objc::NSDataStreambuf<char>  _streambuf;        
 }
 
 - (id)initWithData:(NSData*)data
@@ -283,9 +285,9 @@ namespace {
 @end
 
 
-@interface JPMutableDataStreambuffer (Private)
+@interface JPDataStreambuffer (Private)
 @end
-@implementation JPMutableDataStreambuffer (Private)
+@implementation JPDataStreambuffer (Private)
 - (std::streambuf*) internal_streambuf {
     return &_streambuf;
 }
@@ -510,7 +512,7 @@ namespace {
     // TODO: replace number to string conversions with karma, which should be
     // much faster than snprintf or Cocoa's methods.
     // Returns zero on success, otherwise a negative number indicating the error.
-    int insertNumberIntoBuffer(CFNumberRef number, id<JPJsonStreambufferProtocol> streambuf, 
+    int serializeNumberIntoBuffer(CFNumberRef number, id<JPJsonStreambufferProtocol> streambuf, 
                                size_t* outCount, JPUnicodeEncoding encoding)
     {
         
@@ -739,52 +741,86 @@ namespace {
         typedef id<JPJsonStreambufferProtocol>                      streambuf_t;
                 
         assert(string);
-        
         // TODO: enable other output encodings
         assert(outputEncoding == JPUnicodeEncoding_UTF8);
         
+        std::back_insert_iterator<streambuf_t> back_it(streambuf);
+        if (withQuotes) {
+            *back_it++ = '\"';
+        }        
         // Try to get the NSString's content in internal encoding. That way, we
-        // may apply faster conversion routines. For optimal performance we
-        // require the internal encoding be in Unicode.
+        // may apply faster conversion routines. For optimal performance
+        // the internal encoding should be Unicode UTF-16 or UTF-8.
         NSStringEncoding ns_string_encoding = -1;
-        const void* bytes = string ? CFStringGetCharactersPtr(CFStringRef(string)) : NULL;
-        size_t length = bytes ? [string length]*2 : 0; // length equals number of bytes 
+        size_t length = 0; // number of bytes (not code units)
+        const void* bytes = CFStringGetCharactersPtr(CFStringRef(string));
         if (bytes) {
             // UTF-16. We strongly assume, the endianess is platform:
             ns_string_encoding = json::ns_unicode_encoding_traits<to_host_endianness<UTF_16_encoding_tag>::type>::value;
+            length = CFStringGetLength(CFStringRef(string)) * 2;
         }
         else {
             // No UTF-16 Unicode, try UTF-8:
             bytes = CFStringGetCStringPtr(CFStringRef(string), kCFStringEncodingUTF8);
             if (bytes) {
                 ns_string_encoding = NSUTF8StringEncoding;
+                length = [string lengthOfBytesUsingEncoding:ns_string_encoding];
             }
-            else {
-                // Internal encoding is not Unicode. Performance is suboptimal. Convert
-                // NSString to output encoding:
-                ns_string_encoding = JPUnicodeEncodingToNSStringEncoding(outputEncoding);
-                bytes = [string cStringUsingEncoding:ns_string_encoding];
+        }
+        int result = 0;  // the result of the conversion function - should always succeed (returns 0).
+        if (bytes) {
+            // UTF-8 or UTF-16 encoding
+            assert(ns_string_encoding != -1);
+            if (length > 0) {
+                const void* first = static_cast<const char*>(bytes);
+                const void* last = static_cast<const char*>(bytes) + length;
+                // escape_convert() returns:
+                //  Any json::unicode::ErrorT value, and
+                //  json::unicode::E_UNKNOWN_ERROR-1:   Input Encoding not yet implemented or invalid.
+                //  json::unicode::E_UNKNOWN_ERROR-2:   Output Encoding not yet implemented or invalid.
+                result = escape_convert(first, last, ns_string_encoding,
+                                        back_it, JPUnicodeEncodingToNSStringEncoding(outputEncoding),
+                                        ((options & JPJsonWriterEscapeSolidus)!=0));
             }
-            length = [string lengthOfBytesUsingEncoding:ns_string_encoding];
         }
-        
-        std::back_insert_iterator<streambuf_t> back_it(streambuf);
-        if (withQuotes) {
-            *back_it++ = '\"';
+        else {
+            // Internal encoding is not Unicode. Performance is suboptimal since we need
+            // CFString to convert from its internal representation to UTF-16 using an
+            // intermediate buffer. This conversion is also not that fast, even for any
+            // 8-bit (system) encoding which is frequently the default for smaller strings
+            // (e.g. kCFStringEncodingMacRoman) - regardless of how the string was created.
+            // An option which might slightly improve performance would involve to try to
+            // get the C-String pointer with kCFStringEncodingMacRoman encoding and if this
+            // returned a non-NULL pointer, converting the bytes manually to UTF-16 using
+            // a simple map table. The approach below is sufficiently fast and works
+            // with any internal encoding, though:
+            // 
+            // Convert NSString to UTF-16 encoding using a chunk buffer, then repeately
+            // convert the buffer to outputEncoding:
+            // We strongly assume, the endianess is platform:
+            ns_string_encoding = json::ns_unicode_encoding_traits<to_host_endianness<UTF_16_encoding_tag>::type>::value;
+            NSStringEncoding const ns_output_encoding = JPUnicodeEncodingToNSStringEncoding(outputEncoding);
+            int const BufferSize = 128;
+            UniChar buffer[BufferSize];
+            CFIndex const len = CFStringGetLength(CFStringRef(string));
+            CFIndex pos = 0;
+            while (pos < len and result == 0) {
+                CFIndex rangeLen = std::min(len-pos, static_cast<CFIndex>(BufferSize));
+                CFRange range = {pos, rangeLen};
+                CFStringGetCharacters(CFStringRef(string), range, buffer);
+                const void* first = static_cast<const UniChar*>(buffer);
+                const void* last = static_cast<const UniChar*>(buffer + rangeLen);
+                // escape_convert() returns:
+                //  Any json::unicode::ErrorT value, and
+                //  json::unicode::E_UNKNOWN_ERROR-1:   Input Encoding not yet implemented or invalid.
+                //  json::unicode::E_UNKNOWN_ERROR-2:   Output Encoding not yet implemented or invalid.
+                result = escape_convert(first, last, ns_string_encoding,
+                                        back_it, ns_output_encoding,
+                                        ((options & JPJsonWriterEscapeSolidus)!=0));
+                pos += rangeLen;
+            }
         }
-        int result = 0;
-        if (length > 0) {
-            const void* first = static_cast<const char*>(bytes);        
-            const void* last = static_cast<const char*>(bytes) + length;        
-            
-            // escape_convert() returns:
-            //  Any json::unicode::ErrorT value, and
-            //  json::unicode::E_UNKNOWN_ERROR-1:   Input Encoding not yet implemented or invalid.
-            //  json::unicode::E_UNKNOWN_ERROR-2:   Output Encoding not yet implemented or invalid.
-            result = escape_convert(first, last, ns_string_encoding,
-                                        back_it, JPUnicodeEncodingToNSStringEncoding(outputEncoding), 
-                                        ((options & JPJsonWriterEscapeSolidus)!=0));   
-        }
+
         if (withQuotes) {
             *back_it++ = '\"';
         }
@@ -803,12 +839,12 @@ namespace {
 namespace {
     
     //
-    //  insertJsonArray
+    //  serializeJsonArray
     //
     //    Parameter `object` shall respond to message `count` and shall implement the
     //    protocol NSFastEnumeration.
     
-    int insertJsonArray(id object, id<JPJsonStreambufferProtocol> streambuf, 
+    int serializeJsonArray(id object, id<JPJsonStreambufferProtocol> streambuf, 
                     JPUnicodeEncoding encoding, JPJsonWriterOptions options, 
                     int level)
     {
@@ -893,12 +929,12 @@ namespace {
     
     
     //
-    //  insertJsonObject
+    //  serializeJsonObject
     //
     //  Parameter `object` shall respond to message `count` and message objectForKey: 
     //  and shall implement the protocol NSFastEnumeration.
     //
-    int insertJsonObject(id object, id<JPJsonStreambufferProtocol> streambuf,
+    int serializeJsonObject(id object, id<JPJsonStreambufferProtocol> streambuf,
                         JPUnicodeEncoding encoding, JPJsonWriterOptions options, 
                         int level)
     {
@@ -1033,7 +1069,7 @@ namespace {
                    options:(JPJsonWriterOptions)options
                      level:(int)level
 {
-    return insertJsonArray(self, streambuf, encoding, options, level);
+    return serializeJsonArray(self, streambuf, encoding, options, level);
 }
 
 @end
@@ -1054,7 +1090,7 @@ namespace {
                    options:(JPJsonWriterOptions)options
                      level:(int)level
 {
-    return insertJsonObject(self, streambuf, encoding, options, level);
+    return serializeJsonObject(self, streambuf, encoding, options, level);
 }
 @end
 
@@ -1125,7 +1161,7 @@ namespace {
             return 0;  // success
         }
     }
-    return insertNumberIntoBuffer(CFNumberRef(self), streambuf, NULL, encoding);
+    return serializeNumberIntoBuffer(CFNumberRef(self), streambuf, NULL, encoding);
 }
 
 @end
@@ -1255,7 +1291,7 @@ namespace {
             return nil;
     }
         
-    JPMutableDataStreambuffer* streambuf = [[JPMutableDataStreambuffer alloc] init];
+    JPDataStreambuffer* streambuf = [[JPDataStreambuffer alloc] init];
     
     if ((options & JPJsonWriterWriteBOM) != 0) {
         int result = insertBOMIntoBuffer(streambuf, encoding);
@@ -1307,7 +1343,7 @@ namespace {
                            options:(JPJsonWriterOptions) options
                              level:(int) level
 {
-    return insertJsonArray(object, streambuf, encoding, options, level);
+    return serializeJsonArray(object, streambuf, encoding, options, level);
 }
 
 
@@ -1317,7 +1353,7 @@ namespace {
                             options:(JPJsonWriterOptions) options
                               level:(int) level
 {
-    return insertJsonObject(object, streambuf, encoding, options, level);
+    return serializeJsonObject(object, streambuf, encoding, options, level);
 }
 
 @end

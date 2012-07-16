@@ -28,12 +28,14 @@
 /// Defines constants for an Unicode encoding scheme
 
 enum {
-    JPUnicodeEncoding_Unknown = 0,
-    JPUnicodeEncoding_UTF8 =    1,
-    JPUnicodeEncoding_UTF16BE = 2,
-    JPUnicodeEncoding_UTF16LE = 3,
-    JPUnicodeEncoding_UTF32BE = 4,
-    JPUnicodeEncoding_UTF32LE = 5
+    JPUnicodeEncoding_Unknown   = 0,
+    JPUnicodeEncoding_UTF8      = 1,
+    JPUnicodeEncoding_UTF16     = 2,  // (platform endianness)
+    JPUnicodeEncoding_UTF16BE   = 3,
+    JPUnicodeEncoding_UTF16LE   = 4,
+    JPUnicodeEncoding_UTF32     = 5,  // (platform endianness)
+    JPUnicodeEncoding_UTF32BE   = 6,
+    JPUnicodeEncoding_UTF32LE   = 7
 };
 typedef uint32_t JPUnicodeEncoding;
 

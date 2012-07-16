@@ -158,7 +158,7 @@
 		A139AC701488B749003E3881 /* unicode_conversion.release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = unicode_conversion.release.xcconfig; sourceTree = "<group>"; };
 		A16EEE3E1487DA3B00D12DA2 /* Bench.debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Bench.debug.xcconfig; sourceTree = "<group>"; };
 		A16EEE3F1487DB6D00D12DA2 /* Bench.release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Bench.release.xcconfig; sourceTree = "<group>"; };
-		A171E72113D4924D00260A6B /* AGJsonParser-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AGJsonParser-Prefix.pch"; sourceTree = "<group>"; };
+		A171E72113D4924D00260A6B /* JPJsonParser-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "JPJsonParser-Prefix.pch"; sourceTree = "<group>"; };
 		A171E72213D4924D00260A6B /* main.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; path = main.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		A171E72413D4928400260A6B /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		A171E72813D4938E00260A6B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -314,7 +314,7 @@
 		A171E72013D4924D00260A6B /* JPJsonParser */ = {
 			isa = PBXGroup;
 			children = (
-				A171E72113D4924D00260A6B /* AGJsonParser-Prefix.pch */,
+				A171E72113D4924D00260A6B /* JPJsonParser-Prefix.pch */,
 				A171E72213D4924D00260A6B /* main.mm */,
 			);
 			name = JPJsonParser;

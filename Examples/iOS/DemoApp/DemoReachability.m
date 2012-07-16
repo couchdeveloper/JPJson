@@ -49,28 +49,25 @@ static void PrintReachabilityFlags(SCNetworkReachabilityFlags    flags, const ch
 static void ReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkReachabilityFlags flags, void* info)
 {
 #pragma unused (target, flags)
+    NSCAssert([NSThread currentThread] == [NSThread mainThread], @"not executing on the main thread");
     NSCAssert(info != NULL, @"info was NULL in ReachabilityCallback");
-    NSCAssert([(NSObject*) info isKindOfClass: [DemoReachability class]], @"info was wrong class in ReachabilityCallback");
+    NSCAssert([(__bridge NSObject*)(info) isKindOfClass: [DemoReachability class]], @"info was wrong class in ReachabilityCallback");
     
-    //We're on the main RunLoop, so an NSAutoreleasePool is not necessary, but is added defensively
-    // in case someon uses the Reachablity object in a different thread.
-    NSAutoreleasePool* myPool = [[NSAutoreleasePool alloc] init];
-    
-    DemoReachability* noteObject = (DemoReachability*) info;
-    // Post a notification to notify the client that the network reachability changed.
-    [[NSNotificationCenter defaultCenter] postNotificationName: kReachabilityChangedNotification object: noteObject];
-    
-    [myPool release];
+    // We're on the main RunLoop, so an autorelease pool is not necessary, but is
+    // added defensively in case someon uses the Reachablity object in a different thread.
+    @autoreleasepool {
+        DemoReachability* noteObject = (__bridge DemoReachability*)(info);
+        // Post a notification to notify the client that the network reachability changed.
+        [[NSNotificationCenter defaultCenter] postNotificationName: kReachabilityChangedNotification object: noteObject];
+    }
 }
 
 - (BOOL) startNotifier
 {
     BOOL retVal = NO;
-    SCNetworkReachabilityContext    context = {0, self, NULL, NULL, NULL};
-    if(SCNetworkReachabilitySetCallback(reachabilityRef, ReachabilityCallback, &context))
-    {
-        if(SCNetworkReachabilityScheduleWithRunLoop(reachabilityRef, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode))
-        {
+    SCNetworkReachabilityContext context = {0, (__bridge void*)(self), NULL, NULL, NULL};
+    if (SCNetworkReachabilitySetCallback(reachabilityRef, ReachabilityCallback, &context)) {
+        if (SCNetworkReachabilityScheduleWithRunLoop(reachabilityRef, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode)) {
             retVal = YES;
         }
     }
@@ -79,8 +76,7 @@ static void ReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkReach
 
 - (void) stopNotifier
 {
-    if(reachabilityRef!= NULL)
-    {
+    if (reachabilityRef != NULL) {
         SCNetworkReachabilityUnscheduleFromRunLoop(reachabilityRef, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode);
     }
 }
@@ -88,22 +84,18 @@ static void ReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkReach
 - (void) dealloc
 {
     [self stopNotifier];
-    if(reachabilityRef!= NULL)
-    {
+    if (reachabilityRef != NULL) {
         CFRelease(reachabilityRef);
     }
-    [super dealloc];
 }
 
-+ (DemoReachability*) reachabilityWithHostName: (NSString*) hostName;
++ (DemoReachability*) reachabilityWithHostName: (NSString*) hostName
 {
-    DemoReachability* retVal = NULL;
+    DemoReachability* retVal = nil;
     SCNetworkReachabilityRef reachability = SCNetworkReachabilityCreateWithName(NULL, [hostName UTF8String]);
-    if(reachability!= NULL)
-    {
-        retVal= [[[self alloc] init] autorelease];
-        if(retVal!= NULL)
-        {
+    if (reachability != NULL) {
+        retVal= [[self alloc] init];
+        if (retVal != nil) {
             retVal->reachabilityRef = reachability;
             retVal->localWiFiRef = NO;
         }
@@ -115,11 +107,9 @@ static void ReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkReach
 {
     SCNetworkReachabilityRef reachability = SCNetworkReachabilityCreateWithAddress(kCFAllocatorDefault, (const struct sockaddr*)hostAddress);
     DemoReachability* retVal = NULL;
-    if(reachability!= NULL)
-    {
-        retVal= [[[self alloc] init] autorelease];
-        if(retVal!= NULL)
-        {
+    if (reachability != NULL) {
+        retVal= [[self alloc] init];
+        if (retVal != nil) {
             retVal->reachabilityRef = reachability;
             retVal->localWiFiRef = NO;
         }
@@ -145,8 +135,7 @@ static void ReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkReach
     // IN_LINKLOCALNETNUM is defined in <netinet/in.h> as 169.254.0.0
     localWifiAddress.sin_addr.s_addr = htonl(IN_LINKLOCALNETNUM);
     DemoReachability* retVal = [self reachabilityWithAddress: &localWifiAddress];
-    if(retVal!= NULL)
-    {
+    if (retVal!= nil) {
         retVal->localWiFiRef = YES;
     }
     return retVal;
@@ -157,10 +146,8 @@ static void ReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkReach
 - (NetworkStatus) localWiFiStatusForFlags: (SCNetworkReachabilityFlags) flags
 {
     PrintReachabilityFlags(flags, "localWiFiStatusForFlags");
-    
     BOOL retVal = NotReachable;
-    if((flags & kSCNetworkReachabilityFlagsReachable) && (flags & kSCNetworkReachabilityFlagsIsDirect))
-    {
+    if ((flags & kSCNetworkReachabilityFlagsReachable) && (flags & kSCNetworkReachabilityFlagsIsDirect)) {
         retVal = ReachableViaWiFi;
     }
     return retVal;
@@ -169,37 +156,27 @@ static void ReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkReach
 - (NetworkStatus) networkStatusForFlags: (SCNetworkReachabilityFlags) flags
 {
     PrintReachabilityFlags(flags, "networkStatusForFlags");
-    if ((flags & kSCNetworkReachabilityFlagsReachable) == 0)
-    {
+    if ((flags & kSCNetworkReachabilityFlagsReachable) == 0) {
         // if target host is not reachable
         return NotReachable;
     }
-    
     BOOL retVal = NotReachable;
-    
-    if ((flags & kSCNetworkReachabilityFlagsConnectionRequired) == 0)
-    {
+    if ((flags & kSCNetworkReachabilityFlagsConnectionRequired) == 0) {
         // if target host is reachable and no connection is required
         //  then we'll assume (for now) that your on Wi-Fi
         retVal = ReachableViaWiFi;
     }
-    
-    
     if ((((flags & kSCNetworkReachabilityFlagsConnectionOnDemand ) != 0) ||
          (flags & kSCNetworkReachabilityFlagsConnectionOnTraffic) != 0))
     {
         // ... and the connection is on-demand (or on-traffic) if the
         //     calling application is using the CFSocketStream or higher APIs
-        
-        if ((flags & kSCNetworkReachabilityFlagsInterventionRequired) == 0)
-        {
+        if ((flags & kSCNetworkReachabilityFlagsInterventionRequired) == 0) {
             // ... and no [user] intervention is needed
             retVal = ReachableViaWiFi;
         }
     }
-    
-    if ((flags & kSCNetworkReachabilityFlagsIsWWAN) == kSCNetworkReachabilityFlagsIsWWAN)
-    {
+    if ((flags & kSCNetworkReachabilityFlagsIsWWAN) == kSCNetworkReachabilityFlagsIsWWAN) {
         // ... but WWAN connections are OK if the calling application
         //     is using the CFNetwork (CFSocketStream?) APIs.
         retVal = ReachableViaWWAN;
@@ -211,8 +188,7 @@ static void ReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkReach
 {
     NSAssert(reachabilityRef != NULL, @"connectionRequired called with NULL reachabilityRef");
     SCNetworkReachabilityFlags flags;
-    if (SCNetworkReachabilityGetFlags(reachabilityRef, &flags))
-    {
+    if (SCNetworkReachabilityGetFlags(reachabilityRef, &flags)) {
         return (flags & kSCNetworkReachabilityFlagsConnectionRequired);
     }
     return NO;
@@ -223,14 +199,11 @@ static void ReachabilityCallback(SCNetworkReachabilityRef target, SCNetworkReach
     NSAssert(reachabilityRef != NULL, @"currentNetworkStatus called with NULL reachabilityRef");
     NetworkStatus retVal = NotReachable;
     SCNetworkReachabilityFlags flags;
-    if (SCNetworkReachabilityGetFlags(reachabilityRef, &flags))
-    {
-        if(localWiFiRef)
-        {
+    if (SCNetworkReachabilityGetFlags(reachabilityRef, &flags)) {
+        if (localWiFiRef) {
             retVal = [self localWiFiStatusForFlags: flags];
         }
-        else
-        {
+        else {
             retVal = [self networkStatusForFlags: flags];
         }
     }

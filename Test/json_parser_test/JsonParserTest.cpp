@@ -685,6 +685,35 @@ namespace {
             // err  | objs | arrs | k-strs | d-strs | nbrs | bools| nulls 
                 0,      0,     1,    0,      1,       0,     0,     0 },
             
+            {" [\"reverse solidus '\\\\'\"] ",  "[\"reverse solidus '\\\\'\"]",
+                // err  | objs | arrs | k-strs | d-strs | nbrs | bools| nulls
+                0,      0,     1,    0,      1,       0,     0,     0 },
+            
+            {" [\"solidus '/'\"] ",            "[\"solidus '/'\"]",
+                // err  | objs | arrs | k-strs | d-strs | nbrs | bools| nulls
+                0,      0,     1,    0,      1,       0,     0,     0 },
+            
+            {" [\"line feed '\\n'\"] ",         "[\"line feed '\\n'\"]",
+                // err  | objs | arrs | k-strs | d-strs | nbrs | bools| nulls
+                0,      0,     1,    0,      1,       0,     0,     0 },
+            
+            {" [\"backspace '\\b'\"] ",         "[\"backspace '\\b'\"]",
+                // err  | objs | arrs | k-strs | d-strs | nbrs | bools| nulls
+                0,      0,     1,    0,      1,       0,     0,     0 },
+            
+            {" [\"form feed '\\f'\"] ",         "[\"form feed '\\f'\"]",
+                // err  | objs | arrs | k-strs | d-strs | nbrs | bools| nulls
+                0,      0,     1,    0,      1,       0,     0,     0 },
+            
+            {" [\"carriage return '\\r'\"] ",   "[\"carriage return '\\r'\"]",
+                // err  | objs | arrs | k-strs | d-strs | nbrs | bools| nulls
+                0,      0,     1,    0,      1,       0,     0,     0 },
+            
+            {" [\"tab '\\t'\"] ",               "[\"tab '\\t'\"]",
+                // err  | objs | arrs | k-strs | d-strs | nbrs | bools| nulls
+                0,      0,     1,    0,      1,       0,     0,     0 },
+            
+
             {"{\"key0\" : 0}",                  "{\"key0\":0}",
             // err  | objs | arrs | k-strs | d-strs | nbrs | bools| nulls 
                 0,      1,     0,    1,      0,       1,     0,     0 },
@@ -716,8 +745,9 @@ namespace {
             char buffer[64];
             InputIterator s = p;
             char* d = buffer;
-            std::size_t count = json::unicode::convert(s, end, UTF_8_encoding_tag(), d, UTF_8_encoding_tag(), unicode::ReplaceIllFormed);
-            buffer[count] = 0;
+            int res = json::unicode::convert(s, end, UTF_8_encoding_tag(), d, UTF_8_encoding_tag(), unicode::ReplaceIllFormed);
+            assert(res == 0);
+            buffer[std::distance(buffer, d)] = 0;
             json::parser_error_type result = parser.parse(p, end);
             const parse_state_t& state = parser.state();
             //std::size_t consumed = std::distance(start, p);

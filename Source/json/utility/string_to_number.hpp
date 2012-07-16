@@ -155,18 +155,42 @@ namespace json { namespace utility {
     
 
     template <>
-    inline double string_to_number<double>(char const*  str, size_t len) 
+    inline float string_to_number<float>(char const*  str, size_t len)
+    {
+        char* endPtr;
+        errno = 0;
+        float result = strtof_l(str, &endPtr, NULL);
+        if (errno == ERANGE) {
+            throw_number_conversion_error("ERROR: float value out of range");
+        }
+        return result;
+    }
+    
+    template <>
+    inline double string_to_number<double>(char const*  str, size_t len)
     {
         char* endPtr;
         errno = 0;
         double result = strtod_l(str, &endPtr, NULL);
         if (errno == ERANGE) {
-            throw_number_conversion_error("ERROR: floating point value out of range");
+            throw_number_conversion_error("ERROR: double value out of range");
         }
         return result;
     }
     
-#endif  
+    template <>
+    inline long double string_to_number<long double>(char const*  str, size_t len)
+    {
+        char* endPtr;
+        errno = 0;
+        long double result = strtold_l(str, &endPtr, NULL);
+        if (errno == ERANGE) {
+            throw_number_conversion_error("ERROR: long double value out of range");
+        }
+        return result;
+    }
+    
+#endif
     
 
     
@@ -237,10 +261,20 @@ namespace json { namespace utility {
     }
     
     template <>
-    inline double string_to_number<double>(char const*  str, size_t len) 
+    inline float string_to_number<float>(char const*  str, size_t len)
+    {
+        float val;
+        bool result = boost::spirit::qi::parse(str, str+len, boost::spirit::float_, val);
+        if (not result)
+            throw_number_conversion_error("ERROR: Conversion to float failed");
+        return val;
+    }
+    
+    template <>
+    inline double string_to_number<double>(char const*  str, size_t len)
     {
         double val;
-        bool result = boost::spirit::qi::parse(str, str+len, boost::spirit::double_, val);        
+        bool result = boost::spirit::qi::parse(str, str+len, boost::spirit::double_, val);
         if (not result)
             throw_number_conversion_error("ERROR: Conversion to double failed");
         return val;

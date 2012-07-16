@@ -127,7 +127,7 @@ namespace {
         
         printf("\n");
         printf("--------------------------------------------\n");
-        printf("Running JPJsonParser bench 1 %d times.\n", N);
+        printf("Running JPJsonWriter bench 1 %d times.\n", N);
         printf("--------------------------------------------\n");    
         printf("Using file '%s' as input for generating the JSON object:\n"
                "API method: [JPJsonWriter] +dataWithObject:encoding:options:error:\n"
@@ -213,8 +213,13 @@ namespace {
 //    };
 //    typedef NSUInteger JPJsonWriterOptions;
     
+#if defined (DEBUG)
+    const int N = 1;
+#else
+    const int N = 10000;
+#endif
     void bench_JPJsonWriter1() {
-        bench_JPJsonWriter(10000, JPUnicodeEncoding_UTF8, 0);
+        bench_JPJsonWriter(N, JPUnicodeEncoding_UTF8, 0);
     }
     
 }

@@ -331,12 +331,11 @@ namespace json { namespace generator_internal {
         while (first != last and result == unicode::NO_ERROR) 
         {
             unsigned int ch = encoding_traits<InEncodingT>::to_uint(*first);
-            if (__builtin_expect((ch - 0x20u) < 0x60u, 1))  { // ASCII except control-char, and no ASCII NULL
+            if (__builtin_expect((ch - 0x20u) < 0x60u, 1) and ch != '"' and ch != '\\' and ch != '/')  {
                 ++first;
                 *dest++ = byte_swap<utf8_endian_t, to_endian_t>(static_cast<out_char_type>(ch));
                 continue;
             }
-            
             result = escape_convert_one_unsafe_slowpath(first, last, inEncoding, dest, outEncoding, escapeSolidus);
         }
         return result;

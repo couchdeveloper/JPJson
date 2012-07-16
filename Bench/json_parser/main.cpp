@@ -57,7 +57,7 @@ namespace {
         filePath.append(fileName);
         std::ifstream ifs(filePath.c_str());
         if (!ifs)
-            throw std::runtime_error("could not open file");
+            throw std::runtime_error(std::string("could not open file: " + filePath));
         
         // get the length of the file:
         ifs.seekg(0, std::ios::end);

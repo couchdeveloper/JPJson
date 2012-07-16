@@ -248,7 +248,6 @@ namespace {
       semanticActions:(JPSemanticActionsBase*)sa
 {
     assert(sa);
-    
     if (start == NULL or length <= 0 ) {
         [sa setErrorCode:json::JP_EMPTY_TEXT_ERROR 
              description:[NSString stringWithUTF8String:json::parser_error_str(json::JP_EMPTY_TEXT_ERROR)]];

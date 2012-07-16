@@ -90,7 +90,11 @@ namespace json { namespace objc {
     #ifndef BOOST_NO_RVALUE_REFERENCES
         NSMutableDataStreambuf& operator=(NSMutableDataStreambuf&& __rhs);
     #endif
-#if 0        
+        
+        ~NSMutableDataStreambuf() {
+            [_data release];
+        }
+#if 0
         void swap(NSMutableDataStreambuf& __rhs);
 #endif        
         
