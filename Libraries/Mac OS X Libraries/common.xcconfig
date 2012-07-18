@@ -3,7 +3,7 @@
 //
 
 
-#include "../../Xcode.config/user.boost.xcconfig"
+#include "../../Xcode.config/$user.boost.xcconfig"
 
 
 // Source Root Path

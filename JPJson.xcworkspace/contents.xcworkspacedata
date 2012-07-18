@@ -321,9 +321,6 @@
             <FileRef
                location = "group:NSURLConnectionDownload/NSURLConnectionDownload.xcodeproj">
             </FileRef>
-            <FileRef
-               location = "group:DemoApp/DemoApp.xcodeproj">
-            </FileRef>
          </Group>
          <FileRef
             location = "group:FoundationExamples/FoundationExamples.xcodeproj">
@@ -481,13 +478,13 @@
             </FileRef>
          </Group>
          <FileRef
-            location = "group:user.boost.xcconfig">
+            location = "group:$user.boost.xcconfig">
          </FileRef>
          <FileRef
-            location = "group:user.gtest.xcconfig">
+            location = "group:$user.gtest.xcconfig">
          </FileRef>
          <FileRef
-            location = "group:user.ICU.xcconfig">
+            location = "group:$user.ICU.xcconfig">
          </FileRef>
          <FileRef
             location = "group:JP_link_static_lib.xcconfig">

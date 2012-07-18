@@ -3,7 +3,7 @@
 //  
 //
 //  This file is meant for a template for user settings. Don't change this file!
-//  In your project, rename this file to user.ICU.xconfig 
+//  In your project, rename this file to $user.ICU.xconfig 
 // 
 
 // This configuration is only required in the test suite. The following

@@ -2,7 +2,7 @@
 //  default.gtest.xcconfig
 //  
 //  This file is meant for a template for user settings. Don't change this file!
-//  In your project, rename this file to user.gtest.xconfig 
+//  In your project, rename this file to $user.gtest.xconfig 
 // 
 
 

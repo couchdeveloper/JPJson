@@ -29,7 +29,7 @@ If you are only interested in compiling the JPJson *libraries* which you need fo
 
 ### Installing Boost
 
-The JPJson lib depends on [boost](http://www.boost.org/). In order to build JPJson libraries, you need to install boost on your *developer machine*, unless you haven't done it so far. For JPJson it suffices to just download the most recent boost archive and put the decompressed folder anywhere on your local disk and you are done. The version of boost shall be the newest one, which is at the time of writing v1.49.0.
+The JPJson lib depends on [boost](http://www.boost.org/). In order to build JPJson libraries, you need to install boost on your *developer machine*, unless you haven't done it so far. For JPJson it suffices to just download the most recent boost archive and put the decompressed folder anywhere on your local disk and you are done. The version of boost shall be the newest one, which is at the time of writing v1.50.0.
 
 Other ways to install boost is to use one of the package managers available for Mac OS X, for instance [MacPorts](http://www.macports.org/) or [Homebrew](http://mxcl.github.com/homebrew/).
 
@@ -155,11 +155,11 @@ Note: Don't add a trailing '/'.
 
 The JPJson package requires a few user specific Xcode config files. There are three template files as default config files and these are probably already fine, but there is the need to rename the default Xcode config files in order to prevent them to be tracked by the VCS.
 
-Locate the Xcode config files prefixed with `default` with the JPJson package and change the prefix from `default` to `user`:
+Locate the Xcode config files prefixed with `default` with the JPJson package and change the prefix from `default` to `$user`:
 
-`default.boost.xcconfig` becomes `user.boost.xcconfig`
-`default.gtest.xcconfig` becomes `user.gtest.xcconfig`
-`default.ICU.xcconfig` becomes `user.ICU.xcconfig`
+`default.boost.xcconfig` becomes `$user.boost.xcconfig`
+`default.gtest.xcconfig` becomes `$user.gtest.xcconfig`
+`default.ICU.xcconfig` becomes `$user.ICU.xcconfig`
 
 You probably don't need to make changes to the configuration itself, but in case you have, these files are kept as user settings and will not be tracked by git.
 

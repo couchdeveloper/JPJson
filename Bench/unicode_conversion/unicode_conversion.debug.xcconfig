@@ -3,4 +3,4 @@
 //
 
 
-#include "../../Xcode.config/user.ICU.xcconfig"
+#include "../../Xcode.config/$user.ICU.xcconfig"

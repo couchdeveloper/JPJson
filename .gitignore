@@ -15,7 +15,7 @@ DerivedData
 
 
 ## exclude user specific files and folders
-user.*
+$user.*
 
 
 #exclude generated html files in folder "doc":
