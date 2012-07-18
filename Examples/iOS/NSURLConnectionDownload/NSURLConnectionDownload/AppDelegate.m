@@ -22,7 +22,7 @@ static NSString* deviceInformationString()
                             @"\nLocalized Model: %@"
                             @"\nPlatform: %@"
                             @"\nHardware Model: %@"
-                            @"\nPlatform Type: %lu"
+                            @"\nPlatform Type: %u"
                             @"\nPlatform String: %@"
                             @"\nCPU Frequency: %g MHz"
                             @"\nBUS Frequency: %g MHz"

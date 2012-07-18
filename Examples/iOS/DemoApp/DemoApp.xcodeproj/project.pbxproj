@@ -20,6 +20,8 @@
 		A1CC84E9158C5FB00023E5A4 /* DemoAppModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A1CC84E7158C5FB00023E5A4 /* DemoAppModel.xcdatamodeld */; };
 		A1CC84EC158C619F0023E5A4 /* DemoOriginModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A1CC84EB158C619F0023E5A4 /* DemoOriginModel.m */; };
 		A1CC84EF158C70A40023E5A4 /* DemoJSONRequestFuture.m in Sources */ = {isa = PBXBuildFile; fileRef = A1CC84EE158C70A40023E5A4 /* DemoJSONRequestFuture.m */; };
+		A1EDAF2D15B421390001D840 /* JPJson iOS Libraries.xcodeproj in Resources */ = {isa = PBXBuildFile; fileRef = A1EDAF2C15B421390001D840 /* JPJson iOS Libraries.xcodeproj */; };
+		A1EDAF2F15B4214E0001D840 /* libjson-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A1EDAF2E15B4214E0001D840 /* libjson-iOS.a */; };
 		A1EFE4E915861361003C5C75 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1EFE4E815861361003C5C75 /* UIKit.framework */; };
 		A1EFE4EB15861361003C5C75 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1EFE4EA15861361003C5C75 /* Foundation.framework */; };
 		A1EFE4ED15861361003C5C75 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1EFE4EC15861361003C5C75 /* CoreGraphics.framework */; };
@@ -29,9 +31,18 @@
 		A1EFE4FC15861361003C5C75 /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A1EFE4FA15861361003C5C75 /* MainStoryboard_iPhone.storyboard */; };
 		A1EFE4FF15861361003C5C75 /* MainStoryboard_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A1EFE4FD15861361003C5C75 /* MainStoryboard_iPad.storyboard */; };
 		A1EFE50215861361003C5C75 /* DemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A1EFE50115861361003C5C75 /* DemoViewController.m */; };
-		A1EFE509158613EF003C5C75 /* libjson-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A1EFE508158613EF003C5C75 /* libjson-iOS.a */; };
 		A1EFE51E15861F07003C5C75 /* DemoJSONRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = A1EFE51D15861F07003C5C75 /* DemoJSONRequest.m */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		A14C739C15B5E10A00F0D2E0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A1EDAF2C15B421390001D840 /* JPJson iOS Libraries.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A1024E2E154167F6001349EC;
+			remoteInfo = JPJsonLib;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		A11F57BE159A082000CCC4DD /* DemoUserTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DemoUserTableViewCell.h; sourceTree = "<group>"; };
@@ -59,6 +70,8 @@
 		A1CC84EB158C619F0023E5A4 /* DemoOriginModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DemoOriginModel.m; sourceTree = "<group>"; };
 		A1CC84ED158C70A40023E5A4 /* DemoJSONRequestFuture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DemoJSONRequestFuture.h; sourceTree = "<group>"; };
 		A1CC84EE158C70A40023E5A4 /* DemoJSONRequestFuture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DemoJSONRequestFuture.m; sourceTree = "<group>"; };
+		A1EDAF2C15B421390001D840 /* JPJson iOS Libraries.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "JPJson iOS Libraries.xcodeproj"; path = "../../../Libraries/iOS Libraries/JPJson iOS Libraries.xcodeproj"; sourceTree = "<group>"; };
+		A1EDAF2E15B4214E0001D840 /* libjson-iOS.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libjson-iOS.a"; path = "../../../Build/Products/Release-iphoneos/libjson-iOS.a"; sourceTree = "<group>"; };
 		A1EFE4E415861361003C5C75 /* DemoApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DemoApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A1EFE4E815861361003C5C75 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		A1EFE4EA15861361003C5C75 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -73,7 +86,6 @@
 		A1EFE4FE15861361003C5C75 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPad.storyboard; sourceTree = "<group>"; };
 		A1EFE50015861361003C5C75 /* DemoViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DemoViewController.h; sourceTree = "<group>"; };
 		A1EFE50115861361003C5C75 /* DemoViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DemoViewController.m; sourceTree = "<group>"; };
-		A1EFE508158613EF003C5C75 /* libjson-iOS.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libjson-iOS.a"; path = "../../../Libraries/iOS Libraries/build/Release-iphoneos/libjson-iOS.a"; sourceTree = "<group>"; };
 		A1EFE50B15861478003C5C75 /* DemoUserEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DemoUserEntity.h; sourceTree = "<group>"; };
 		A1EFE50C15861478003C5C75 /* DemoUserEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DemoUserEntity.m; sourceTree = "<group>"; };
 		A1EFE51C15861F07003C5C75 /* DemoJSONRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DemoJSONRequest.h; sourceTree = "<group>"; };
@@ -86,7 +98,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A1EFE509158613EF003C5C75 /* libjson-iOS.a in Frameworks */,
+				A1EDAF2F15B4214E0001D840 /* libjson-iOS.a in Frameworks */,
 				A11FC9E415ADA0EB00EB87CB /* SystemConfiguration.framework in Frameworks */,
 				A1EFE4E915861361003C5C75 /* UIKit.framework in Frameworks */,
 				A1EFE4EB15861361003C5C75 /* Foundation.framework in Frameworks */,
@@ -127,6 +139,14 @@
 			path = DemoApp/AppImages;
 			sourceTree = "<group>";
 		};
+		A14C739515B5E10900F0D2E0 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A14C739D15B5E10A00F0D2E0 /* libjson-iOS.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		A19E9D7D158E1760009807EF /* Store */ = {
 			isa = PBXGroup;
 			children = (
@@ -136,13 +156,21 @@
 			path = Store;
 			sourceTree = "<group>";
 		};
+		A1EDAF2B15B421240001D840 /* Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				A1EDAF2C15B421390001D840 /* JPJson iOS Libraries.xcodeproj */,
+				A1EDAF2E15B4214E0001D840 /* libjson-iOS.a */,
+			);
+			name = Libraries;
+			sourceTree = "<group>";
+		};
 		A1EFE4D915861360003C5C75 = {
 			isa = PBXGroup;
 			children = (
-				A11FC9E315ADA0EB00EB87CB /* SystemConfiguration.framework */,
 				A1CC84E4158C5CA20023E5A4 /* README.md */,
-				A1EFE508158613EF003C5C75 /* libjson-iOS.a */,
 				A1EFE4EE15861361003C5C75 /* DemoApp */,
+				A1EDAF2B15B421240001D840 /* Libraries */,
 				A1EFE4E715861361003C5C75 /* Frameworks */,
 				A1EFE4E515861361003C5C75 /* Products */,
 			);
@@ -159,6 +187,7 @@
 		A1EFE4E715861361003C5C75 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A11FC9E315ADA0EB00EB87CB /* SystemConfiguration.framework */,
 				A1EFE4E815861361003C5C75 /* UIKit.framework */,
 				A1EFE4EA15861361003C5C75 /* Foundation.framework */,
 				A1EFE4EC15861361003C5C75 /* CoreGraphics.framework */,
@@ -261,12 +290,28 @@
 			mainGroup = A1EFE4D915861360003C5C75;
 			productRefGroup = A1EFE4E515861361003C5C75 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = A14C739515B5E10900F0D2E0 /* Products */;
+					ProjectRef = A1EDAF2C15B421390001D840 /* JPJson iOS Libraries.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				A1EFE4E315861361003C5C75 /* DemoApp */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		A14C739D15B5E10A00F0D2E0 /* libjson-iOS.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libjson-iOS.a";
+			remoteRef = A14C739C15B5E10A00F0D2E0 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		A1EFE4E215861361003C5C75 /* Resources */ = {
@@ -281,6 +326,7 @@
 				A11FCA0315ADC58900EB87CB /* AppIcon.png in Resources */,
 				A11FCA0515ADC5AE00EB87CB /* AppIcon@2x.png in Resources */,
 				A11FCA0715ADC64F00EB87CB /* Default.png in Resources */,
+				A1EDAF2D15B421390001D840 /* JPJson iOS Libraries.xcodeproj in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -392,10 +438,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "DemoApp/DemoApp-Prefix.pch";
-				HEADER_SEARCH_PATHS = (
-					"$(BUILT_PRODUCTS_DIR)",
-					"\"$(SRCROOT)\"",
-				);
+				HEADER_SEARCH_PATHS = "\"$(SRCROOT)\"";
 				INFOPLIST_FILE = "DemoApp/DemoApp-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_LDFLAGS = (
@@ -415,10 +458,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "DemoApp/DemoApp-Prefix.pch";
-				HEADER_SEARCH_PATHS = (
-					"$(BUILT_PRODUCTS_DIR)",
-					"\"$(SRCROOT)\"",
-				);
+				HEADER_SEARCH_PATHS = "\"$(SRCROOT)\"";
 				INFOPLIST_FILE = "DemoApp/DemoApp-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_LDFLAGS = (

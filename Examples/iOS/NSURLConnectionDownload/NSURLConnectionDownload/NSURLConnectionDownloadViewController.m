@@ -337,7 +337,7 @@ static NSString* kTempFileName = @"download.data";
     };
     
     sa.endJsonHandlerBlock = ^(id jsonContainer) { 
-        NSString* msg = [[NSString alloc] initWithFormat:@"Received JSON document [%d]", numberDocuments_];
+        NSString* msg = [[NSString alloc] initWithFormat:@"Received JSON document [%zd]", numberDocuments_];
         DLog(@"%@", msg);
         dispatch_async(dispatch_get_main_queue(), ^{
             self.messageLabel.text = msg;
@@ -349,7 +349,7 @@ static NSString* kTempFileName = @"download.data";
     sa.completionHandlerBlock = ^{ 
         t_end_ = mach_absolute_time();
         double secs = absoluteTimeToNanoseconds(t_end_ - t_start_) * 1.0e-9;
-        NSString* msg = [[NSString alloc] initWithFormat:@"Parser finished. Elapsed time: %g seconds.\n%d Documents parsed.\n%@", 
+        NSString* msg = [[NSString alloc] initWithFormat:@"Parser finished. Elapsed time: %g seconds.\n%zd Documents parsed.\n%@", 
                          secs, numberDocuments_, 
                          (lastError_)?[NSString stringWithFormat:@"Parsing failed: %@",[lastError_ localizedDescription]]:@""];        
         DLog(@"%@", msg);

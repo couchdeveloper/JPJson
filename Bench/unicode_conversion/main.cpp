@@ -21,6 +21,9 @@
 #include <iostream>
 #include <vector>
 #include <iterator>
+#include <cstdio>
+#include <cstdlib>
+
 #include "json/unicode/unicode_conversion.hpp"
 #include "json/unicode/unicode_traits.hpp"
 
@@ -1658,6 +1661,9 @@ namespace {
 int main (int argc, const char * argv[])
 {    
     try {
+        system("system_profiler SPHardwareDataType");
+        
+        
         time_t time_info;    
         std::time(&time_info);
         std::cout << ctime(&time_info) << "\n";

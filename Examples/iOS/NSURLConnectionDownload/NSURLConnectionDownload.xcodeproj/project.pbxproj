@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		A1615B63143F2FE300DA0A11 /* UIDevice-Hardware.m in Sources */ = {isa = PBXBuildFile; fileRef = A1615B62143F2FE300DA0A11 /* UIDevice-Hardware.m */; };
-		A19DEF75157F877D00A64183 /* libjson-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A19DEF74157F877D00A64183 /* libjson-iOS.a */; };
 		A1ED08ED1428F0B800B276C4 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1ED08EC1428F0B800B276C4 /* UIKit.framework */; };
 		A1ED08EF1428F0B800B276C4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1ED08EE1428F0B800B276C4 /* Foundation.framework */; };
 		A1ED08F11428F0B800B276C4 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1ED08F01428F0B800B276C4 /* CoreGraphics.framework */; };
@@ -17,15 +16,25 @@
 		A1ED08FD1428F0B800B276C4 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A1ED08FC1428F0B800B276C4 /* AppDelegate.m */; };
 		A1ED090B1429072100B276C4 /* NSURLConnectionDownloadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A1ED090A1429072100B276C4 /* NSURLConnectionDownloadViewController.m */; };
 		A1ED090D1429073200B276C4 /* NSURLConnectionDownloadViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1ED090C1429073200B276C4 /* NSURLConnectionDownloadViewController.xib */; };
+		A1EDAF2615B420820001D840 /* JPJson iOS Libraries.xcodeproj in Resources */ = {isa = PBXBuildFile; fileRef = A1EDAF2515B420820001D840 /* JPJson iOS Libraries.xcodeproj */; };
+		A1EDAF2915B420AA0001D840 /* libjson-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A1EDAF2715B4209E0001D840 /* libjson-iOS.a */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		A14C739815B5E10900F0D2E0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A1EDAF2515B420820001D840 /* JPJson iOS Libraries.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A1024E2E154167F6001349EC;
+			remoteInfo = JPJsonLib;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
-		A11D217A144B1B1F00D24AA8 /* libjson-iOS.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libjson-iOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A1615B61143F2FE300DA0A11 /* UIDevice-Hardware.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIDevice-Hardware.h"; sourceTree = "<group>"; };
 		A1615B62143F2FE300DA0A11 /* UIDevice-Hardware.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIDevice-Hardware.m"; sourceTree = "<group>"; };
 		A18A70571511F79400FEB03C /* release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = release.xcconfig; sourceTree = "<group>"; };
 		A18A70591511F7A200FEB03C /* debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = debug.xcconfig; sourceTree = "<group>"; };
-		A19DEF74157F877D00A64183 /* libjson-iOS.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libjson-iOS.a"; path = "../../../Libraries/iOS Libraries/build/Release-iphoneos/libjson-iOS.a"; sourceTree = "<group>"; };
 		A1ED08E81428F0B800B276C4 /* NSURLConnectionDownload.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NSURLConnectionDownload.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A1ED08EC1428F0B800B276C4 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		A1ED08EE1428F0B800B276C4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -39,6 +48,8 @@
 		A1ED09091429072100B276C4 /* NSURLConnectionDownloadViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = NSURLConnectionDownloadViewController.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		A1ED090A1429072100B276C4 /* NSURLConnectionDownloadViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = NSURLConnectionDownloadViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		A1ED090C1429073200B276C4 /* NSURLConnectionDownloadViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NSURLConnectionDownloadViewController.xib; sourceTree = "<group>"; };
+		A1EDAF2515B420820001D840 /* JPJson iOS Libraries.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "JPJson iOS Libraries.xcodeproj"; path = "../../../Libraries/iOS Libraries/JPJson iOS Libraries.xcodeproj"; sourceTree = "<group>"; };
+		A1EDAF2715B4209E0001D840 /* libjson-iOS.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libjson-iOS.a"; path = "../../../Build/Products/Release-iphoneos/libjson-iOS.a"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -46,7 +57,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A19DEF75157F877D00A64183 /* libjson-iOS.a in Frameworks */,
+				A1EDAF2915B420AA0001D840 /* libjson-iOS.a in Frameworks */,
 				A1ED08ED1428F0B800B276C4 /* UIKit.framework in Frameworks */,
 				A1ED08EF1428F0B800B276C4 /* Foundation.framework in Frameworks */,
 				A1ED08F11428F0B800B276C4 /* CoreGraphics.framework in Frameworks */,
@@ -56,10 +67,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A14C739315B5E10900F0D2E0 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A14C739915B5E10900F0D2E0 /* libjson-iOS.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		A17DD7BB146AEB7F000AD974 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				A11D217A144B1B1F00D24AA8 /* libjson-iOS.a */,
+				A1EDAF2515B420820001D840 /* JPJson iOS Libraries.xcodeproj */,
+				A1EDAF2715B4209E0001D840 /* libjson-iOS.a */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -67,7 +87,6 @@
 		A1ED08DD1428F0B800B276C4 = {
 			isa = PBXGroup;
 			children = (
-				A19DEF74157F877D00A64183 /* libjson-iOS.a */,
 				A18A70591511F7A200FEB03C /* debug.xcconfig */,
 				A18A70571511F79400FEB03C /* release.xcconfig */,
 				A1ED08F21428F0B800B276C4 /* NSURLConnectionDownload */,
@@ -159,12 +178,28 @@
 			mainGroup = A1ED08DD1428F0B800B276C4;
 			productRefGroup = A1ED08E91428F0B800B276C4 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = A14C739315B5E10900F0D2E0 /* Products */;
+					ProjectRef = A1EDAF2515B420820001D840 /* JPJson iOS Libraries.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				A1ED08E71428F0B800B276C4 /* NSURLConnectionDownload */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		A14C739915B5E10900F0D2E0 /* libjson-iOS.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libjson-iOS.a";
+			remoteRef = A14C739815B5E10900F0D2E0 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		A1ED08E61428F0B800B276C4 /* Resources */ = {
@@ -173,6 +208,7 @@
 			files = (
 				A1ED08F71428F0B800B276C4 /* InfoPlist.strings in Resources */,
 				A1ED090D1429073200B276C4 /* NSURLConnectionDownloadViewController.xib in Resources */,
+				A1EDAF2615B420820001D840 /* JPJson iOS Libraries.xcodeproj in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -271,10 +307,6 @@
 				HEADER_SEARCH_PATHS = "$(PRJ_HEADER_SEARCH_PATHS)";
 				INFOPLIST_FILE = "NSURLConnectionDownload/NSURLConnectionDownload-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../../../Build/Products/Debug-iphoneos\"",
-				);
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = "-v";
 				OTHER_LDFLAGS = "$(PRJ_OTHER_LDFLAGS)";
@@ -298,10 +330,6 @@
 				HEADER_SEARCH_PATHS = "$(PRJ_HEADER_SEARCH_PATHS)";
 				INFOPLIST_FILE = "NSURLConnectionDownload/NSURLConnectionDownload-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../../../Build/Products/Debug-iphoneos\"",
-				);
 				OTHER_CFLAGS = "-v";
 				OTHER_LDFLAGS = "$(PRJ_OTHER_LDFLAGS)";
 				PRODUCT_NAME = "$(TARGET_NAME)";

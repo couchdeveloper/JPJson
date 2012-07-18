@@ -317,8 +317,7 @@
 				A171E72113D4924D00260A6B /* JPJsonParser-Prefix.pch */,
 				A171E72213D4924D00260A6B /* main.mm */,
 			);
-			name = JPJsonParser;
-			path = AGJsonParser;
+			path = JPJsonParser;
 			sourceTree = "<group>";
 		};
 		A171E72613D4929F00260A6B /* Frameworks */ = {
@@ -822,7 +821,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				HEADER_SEARCH_PATHS = "$(inherited)";
-				LLVM_LTO = NO;
+				LLVM_LTO = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
