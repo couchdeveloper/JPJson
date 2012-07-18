@@ -26,7 +26,6 @@
 		A14F836815B034B600B49E8A /* JPAsyncJsonParserTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A192C71114239B59002EE32F /* JPAsyncJsonParserTest.mm */; };
 		A14F836915B034BF00B49E8A /* NSData+JPJsonDetectEncodingTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A12AC926146BE78F00AED943 /* NSData+JPJsonDetectEncodingTest.mm */; };
 		A14F836A15B04CFD00B49E8A /* string_to_number_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A126DCC2154FD991001E09F0 /* string_to_number_test.cpp */; };
-		A14F836B15B04D5100B49E8A /* NSMutableDataStreambufTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1977E64156D1D3E0074D9B2 /* NSMutableDataStreambufTest.mm */; };
 		A16315BE14FFB9CA00422AF1 /* unicode_conversion_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A140DD1C13E94E36009DBB8C /* unicode_conversion_test.cpp */; };
 		A167EB621440716700BD2A58 /* JPJsonWriterTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A199FCB013D74363000170CD /* JPJsonWriterTest.mm */; };
 		A171E6CE13D4853300260A6B /* gtest_main.cc in Sources */ = {isa = PBXBuildFile; fileRef = A164221013D4357400796785 /* gtest_main.cc */; };
@@ -55,7 +54,6 @@
 		A191B5281529907D007F9471 /* gtest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1A941491517879300AF9548 /* gtest.framework */; };
 		A191B52915299098007F9471 /* gtest_main.cc in Sources */ = {isa = PBXBuildFile; fileRef = A164221013D4357400796785 /* gtest_main.cc */; };
 		A191B52A152998FA007F9471 /* timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A199FC7613D5D186000170CD /* timer.cpp */; };
-		A1977E65156D1D3E0074D9B2 /* NSMutableDataStreambufTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1977E64156D1D3E0074D9B2 /* NSMutableDataStreambufTest.mm */; };
 		A199EFCA1444729600B53269 /* Test-UTF8-esc.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = A199EFC91444729600B53269 /* Test-UTF8-esc.json */; };
 		A199FC7713D5D186000170CD /* timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A199FC7613D5D186000170CD /* timer.cpp */; };
 		A199FC7813D5D186000170CD /* timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A199FC7613D5D186000170CD /* timer.cpp */; };
@@ -113,6 +111,7 @@
 		A1B20CC2153C5FD800557321 /* syncqueue_streambuf_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A18DFC111426416800DAFE2E /* syncqueue_streambuf_test.cpp */; };
 		A1B20CC3153C5FDC00557321 /* semaphore_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A19F3A6C142877E400266273 /* semaphore_test.cpp */; };
 		A1B20CC4153C5FDF00557321 /* base64_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1E95E0F147288E100A78D3F /* base64_test.cpp */; };
+		A1C55DC915B6D0A500C573C6 /* NSDataStreambufTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1C55DC715B6D0A500C573C6 /* NSDataStreambufTest.mm */; };
 		A1D2527E13DDA2AE00960381 /* gtest_main.cc in Sources */ = {isa = PBXBuildFile; fileRef = A164221013D4357400796785 /* gtest_main.cc */; };
 		A1DC4BE614582BB700CE28F2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A199FC7B13D5DB12000170CD /* Foundation.framework */; };
 		A1DC52BB14582CDA00CE28F2 /* CFDataCacheTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1DC52B914582CDA00CE28F2 /* CFDataCacheTest.mm */; };
@@ -283,6 +282,7 @@
 		A1AF4B421462B4970065B048 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		A1AF4B7F1462D4D30065B048 /* Test-UTF8-esc.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = "Test-UTF8-esc.json"; path = "../Resources/Test-UTF8-esc.json"; sourceTree = "<group>"; };
 		A1C29BAF15A1DA5700D3CBF7 /* libjson.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjson.a; path = ../Build/Products/Release/libjson.a; sourceTree = "<group>"; };
+		A1C55DC715B6D0A500C573C6 /* NSDataStreambufTest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = NSDataStreambufTest.mm; sourceTree = "<group>"; };
 		A1CFB92C1510B1670010942D /* Test.debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Test.debug.xcconfig; sourceTree = "<group>"; };
 		A1CFB92D1510B1FB0010942D /* Test.release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Test.release.xcconfig; sourceTree = "<group>"; };
 		A1D2529013DDA2AE00960381 /* unicode_test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = unicode_test; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -599,6 +599,7 @@
 		A1DC4BE714582BB800CE28F2 /* ObjC_private_test */ = {
 			isa = PBXGroup;
 			children = (
+				A1C55DC715B6D0A500C573C6 /* NSDataStreambufTest.mm */,
 				A1977E64156D1D3E0074D9B2 /* NSMutableDataStreambufTest.mm */,
 				A1FE70EF148A4A43004B962E /* intrusive_json_path_test.mm */,
 				A1DC52B914582CDA00CE28F2 /* CFDataCacheTest.mm */,
@@ -933,7 +934,6 @@
 				A126DCB8154EDF7F001E09F0 /* string_buffer_test.cpp in Sources */,
 				A126DCBA154EF54B001E09F0 /* string_storage_test.cpp in Sources */,
 				A14F836A15B04CFD00B49E8A /* string_to_number_test.cpp in Sources */,
-				A14F836B15B04D5100B49E8A /* NSMutableDataStreambufTest.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -957,10 +957,10 @@
 				A144F303145871230062D5E9 /* timer.cpp in Sources */,
 				A1DC52BB14582CDA00CE28F2 /* CFDataCacheTest.mm in Sources */,
 				A1DC52BF1458368200CE28F2 /* gtest_main.cc in Sources */,
-				A1977E65156D1D3E0074D9B2 /* NSMutableDataStreambufTest.mm in Sources */,
 				A1FE70ED148A4873004B962E /* SemanticActionsBaseTest.mm in Sources */,
 				A1FE70F0148A4A43004B962E /* intrusive_json_path_test.mm in Sources */,
 				A1FE70F1148A56A6004B962E /* RepresentationGeneratorTest.mm in Sources */,
+				A1C55DC915B6D0A500C573C6 /* NSDataStreambufTest.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -18,6 +18,8 @@
 //  Use the Default Semantic Actions class ”JPRepresentationGenerator”
 //  to define the behavior of the parser.
 //
+//  Note: sample3 links against the dynamic library version of JPJson
+
 
 
 static NSData* readFile(NSString* fileName)

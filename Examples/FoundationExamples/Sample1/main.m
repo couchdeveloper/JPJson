@@ -27,8 +27,7 @@
 //     Use NSData utility method to detect the Unicode encoding of the 
 //     JSON text which has been created by the JPJsonWriter.
 //
-//  Note: Sample1 links against the static library version, which is accomplished
-//  by setting "Other Linker Flags" option: -ljson
+//  Note: sample1 links against the static library version (libjson) of JPJson
 
 static NSData* readFile(NSString* fileName)
 {

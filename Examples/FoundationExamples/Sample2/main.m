@@ -25,7 +25,7 @@
 //     using a convenient JPJsonParser class method. The result of the parser is
 //     again a JSON representation as a Foundation object.
 //
-
+//  Note: sample2 links against the framework version of JPJson
 
 int main (int argc, const char * argv[])
 {
