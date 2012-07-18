@@ -60,7 +60,7 @@
 
 
 
-#### Bug fixes:
+#### Bug fixes
 
 * JPJsonWriter: fixed a memory leak in JPJsonWriter (now uses NSDataStreambuf class internally)
 

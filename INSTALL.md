@@ -169,46 +169,47 @@ You probably don't need to make changes to the configuration itself, but in case
 
 ### Setting up an Xcode Project
 
-This section decribes how to setup an Xcode project with a binary that links against the JPJson library.
 
-First, create a Xcode workspace and create a project for your own purpose. Then add the JPJson Library project to your workspace:
-
-For Mac OS X projects add `JPJson Mac OS X Libraries` project to the workspace, and for an iOS project add `JPJson iOS Libraries` project to the worksapce. Both projects are located in the corresponding sub folders of the `Libraries` folder within the JPJson package.
+This section decribes how to setup an Xcode project with a binary that links against the JPJson library. There are a few settings required for the target which links against the JPJson library. Let us refere to this target as the "client".
 
 
-In order to link a binary to the JPJson library, use the "Link Binary With Libraries" section in "Build Phases" tab of the target editor and add the library by clicking on the (+) Button and selecting it from within the "Workspace" folder.
+First, create a Xcode workspace and create a your new project or reference any existing Xcode project where you want to incorporate JPJson. 
 
-For iOS targets you can only choose the static library, for Mac OS X you can select either a framework, a dynamic library or a static library. In any case you shall select only *one* JPJson library.
+ - For an iOS project add the "`JPJson iOS Libraries`" Xcode project to the workspace, either as a sibling to your main project or as a subproject.
+
+ - For Mac OS X projects add "`JPJson Mac OS X Libraries`" project to the workspace, either as a sibling to your main project or as a subproject.
+
+Note: Both projects are located in the corresponding sub folders of the `Libraries` folder within the JPJson package.
+
+
+Once you have added the library project to your workspace, link the client target to the JPJson library by selecting the client project in the Navigation area, then select the client target and then use the "Link Binary With Libraries" section in "Build Phases" tab of the target editor and add the JPJson library by clicking on the (+) Button and selecting it from within the "Workspace" folder.
+
+For iOS targets you can only choose the static library "`libjson-iOS.a`", for Mac OS X you can select either a framework, a dynamic library or a static library. In any case you shall select only *one* JPJson library.
 
 When building your product the JPJson library will be build with its own settings as specified in their corresponding Xcode project with its intended build settings.
 
-Yet, there are still some settings required for the target which links against the JPJson library. Let us refere to this target as the "client", most likely this is your application target.
+The library products are placed into the folder in the respective `$(BUILT_PRODUCTS_DIR)` folder of the current built configuration and the public headers are copied to a subfolder "`include/JPJson`" within the same directory.
 
-*  Setup a header search path for the public headers exposed by the JPJson library:
-In the target build settings of the client add the build settings variable `BUILT_PRODUCTS_DIR` to the **Header Search Paths**:  
-e.g.:  
-`HEADER_SEARCH_PATHS = $(BUILT_PRODUCTS_DIR) my/other/path/`  
+Xcode automatically adds a header search path for projects linking against libraries whose public headers are located at `"$(BUILT_PRODUCTS_DIR)/include`". These default settings are now appropriate to locate the JPJson headers by a "qualified" import directive, e.g.:
+ 
+     #import "JPJson/JPJsonParser.h"
 
-Hint: you might need to wrap a path variable in double quotes if this path contains spaces, e.g.:
-`HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)" "my/other path/"`  
-
-In general, using quotes for paths variables is a good idea if you don't know the path a priori.
+That is, you are not required to add a header search path for the client target.
 
 
-This is appropriate for building, except when linking against a **static library** and creating an Archive. Apparently, at the time of writing there is a bug in Xcode Version 4.3.1 (4E1019) here. So, we need to apply a workaround in order to be able to create an Archive successfully:
+Yet, there are still a few settings required:
 
-Add a header search path `$(OBJROOT)/UninstalledProducts` to the target build setting of the client. This header search path will let the compiler locate the public headers of static libraries when creating an Archive.
+The JPJson Lib requires to be linked itself with the stdc++ library. We need to setup this in a build setting for the client by adding a the option `-lstdc++` to the **Other Linker Flags** build setting.
 
+Furthermore, in order to ensure the linker puts all possibly required code from the static archive containing Objective-C code into the final executable we need to add the option `-ObjC ` to the **Other Linker Flags**, too.
 
-
-*  The JPJson Lib requires to be linked itself with the stdc++ library. We need to setup this in a build setting for the client:  
-In the target build settings of the client, add the follwing to **Other Linker Flags**:  
+ - In the target build settings of the client, add the follwing two options to **Other Linker Flags**:  
     `-ObjC -lstdc++`  
     e.g.:  
     `OTHER_LDFLAGS = -ObjC -lstdc++`
 
 
-*  Optionally, but recommended, add a few macros to the target build setting **Preprocessor Macros** of your client:  
+ - Optionally, but recommended, add a few macros to the target build setting **Preprocessor Macros** of your client:
    e.g.:
     *For Debug builds:*  
    `GCC_PREPROCESSOR_DEFINITIONS = DEBUG=1 __ASSERT_MACROS_DEFINE_VERSIONS_WITHOUT_UNDERSCORES=0`  
