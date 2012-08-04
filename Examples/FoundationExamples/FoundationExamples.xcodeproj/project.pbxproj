@@ -15,6 +15,7 @@
 		A126814E145588A400131E77 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A126814D145588A400131E77 /* main.m */; };
 		A12681581455892400131E77 /* JsonValidatorSemanticActions.m in Sources */ = {isa = PBXBuildFile; fileRef = A12681571455892400131E77 /* JsonValidatorSemanticActions.m */; };
 		A1314AE015530FA500CC4910 /* sample_json.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = A1314ADE15530F7F00CC4910 /* sample_json.json */; };
+		A14C058F15BA80F0006E4790 /* JPJson.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1977E41156B9A4B0074D9B2 /* JPJson.framework */; };
 		A15E63671456D4EC000F22F6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1F001371440A27E007A72A9 /* Foundation.framework */; };
 		A15E636A1456D4EC000F22F6 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A15E63691456D4EC000F22F6 /* main.m */; };
 		A15E63781456D649000F22F6 /* JsonPathSemanticActions.mm in Sources */ = {isa = PBXBuildFile; fileRef = A15E63771456D649000F22F6 /* JsonPathSemanticActions.mm */; };
@@ -37,7 +38,6 @@
 		A1D4608E1582428C004D330F /* sample_json.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = A1314ADE15530F7F00CC4910 /* sample_json.json */; };
 		A1D4608F1582428C004D330F /* Test-UTF8.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = A1D4607F158241AF004D330F /* Test-UTF8.json */; };
 		A1D460901582428C004D330F /* Test-UTF8-esc.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = A1D46081158241C8004D330F /* Test-UTF8-esc.json */; };
-		A1D46093158244B7004D330F /* JPJson.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1977E41156B9A4B0074D9B2 /* JPJson.framework */; };
 		A1D46094158244BE004D330F /* JPJson.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1977E41156B9A4B0074D9B2 /* JPJson.framework */; };
 		A1D46096158244D3004D330F /* libjson.A.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A1D46095158244D3004D330F /* libjson.A.dylib */; };
 		A1F0014B1440A2A0007A72A9 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1F001371440A27E007A72A9 /* Foundation.framework */; };
@@ -141,7 +141,7 @@
 		A15E636C1456D4EC000F22F6 /* Sample10-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Sample10-Prefix.pch"; sourceTree = "<group>"; };
 		A15E63761456D649000F22F6 /* JsonPathSemanticActions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JsonPathSemanticActions.h; sourceTree = "<group>"; };
 		A15E63771456D649000F22F6 /* JsonPathSemanticActions.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = JsonPathSemanticActions.mm; sourceTree = "<group>"; };
-		A177549415B6DF3200462E72 /* libjson.a */ = {isa = PBXFileReference; lastKnownFileType = file; name = libjson.a; path = "../../Libraries/Mac OS X Libraries/build/Release/libjson.a"; sourceTree = "<group>"; };
+		A177549415B6DF3200462E72 /* libjson.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjson.a; path = "../../Libraries/Mac OS X Libraries/build/Release/libjson.a"; sourceTree = "<group>"; };
 		A17DD7AA146AE72E000AD974 /* libjson.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjson.a; path = "../../../../../Library/Developer/Xcode/DerivedData/Json-hiazqngtzsfxawgakamtpamfsytx/Build/Products/Debug/libjson.a"; sourceTree = "<group>"; };
 		A1977E33156B86FE0074D9B2 /* Sample6 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Sample6; sourceTree = BUILT_PRODUCTS_DIR; };
 		A1977E37156B86FE0074D9B2 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -178,7 +178,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A1D46093158244B7004D330F /* JPJson.framework in Frameworks */,
+				A14C058F15BA80F0006E4790 /* JPJson.framework in Frameworks */,
 				A126813814557F4A00131E77 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -640,6 +640,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)\"";
+				OTHER_CFLAGS = "-v";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lstdc++",
@@ -652,6 +653,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)\"";
+				OTHER_CFLAGS = "-v";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lstdc++",
@@ -665,7 +667,6 @@
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Sample4/Sample4-Prefix.pch";
-				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)\"";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lstdc++",
@@ -679,7 +680,6 @@
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Sample4/Sample4-Prefix.pch";
-				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)\"";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lstdc++",
@@ -715,6 +715,144 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
+		};
+		A14C058615BA7ABD006E4790 /* Dist */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A1CFB9321510C8CA0010942D /* common.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					NS_BLOCK_ASSERTIONS,
+					NDEBUG,
+					"__ASSERT_MACROS_DEFINE_VERSIONS_WITHOUT_UNDERSCORES=0",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS_NOT_USED_IN_PRECOMPS = "";
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				OTHER_LDFLAGS = "-lstdc++";
+				SDKROOT = macosx;
+			};
+			name = Dist;
+		};
+		A14C058715BA7ABD006E4790 /* Dist */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Sample1/Sample1-Prefix.pch";
+				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)\"";
+				LIBRARY_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)";
+				OTHER_CFLAGS = "-v";
+				OTHER_LDFLAGS = (
+					"-lstdc++",
+					"-ObjC",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Dist;
+		};
+		A14C058815BA7ABD006E4790 /* Dist */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Sample2/Sample2-Prefix.pch";
+				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)\"";
+				OTHER_LDFLAGS = (
+					"-lstdc++",
+					"-ObjC",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Dist;
+		};
+		A14C058915BA7ABD006E4790 /* Dist */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)\"";
+				OTHER_CFLAGS = "-v";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-lstdc++",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Dist;
+		};
+		A14C058A15BA7ABD006E4790 /* Dist */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "$(SYMROOT)/Release";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Sample4/Sample4-Prefix.pch";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-lstdc++",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Dist;
+		};
+		A14C058B15BA7ABD006E4790 /* Dist */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Sample5/Sample5-Prefix.pch";
+				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)\"";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-lstdc++",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Dist;
+		};
+		A14C058C15BA7ABD006E4790 /* Dist */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_OBJCPP_ARC_ABI = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Sample6/Sample6-Prefix.pch";
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)\"";
+				OTHER_LDFLAGS = (
+					"-lstdc++",
+					"-ObjC",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Dist;
+		};
+		A14C058D15BA7ABD006E4790 /* Dist */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Sample10/Sample10-Prefix.pch";
+				HEADER_SEARCH_PATHS = (
+					"$(BUILT_PRODUCTS_DIR)",
+					"$(JP_ROOT)",
+					"$(BOOST_HEADER_SEARCH_PATHS)",
+				);
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-lstdc++",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Dist;
 		};
 		A15E636F1456D4EC000F22F6 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -923,6 +1061,7 @@
 			buildConfigurations = (
 				A126812314556BB500131E77 /* Debug */,
 				A126812414556BB500131E77 /* Release */,
+				A14C058915BA7ABD006E4790 /* Dist */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -932,6 +1071,7 @@
 			buildConfigurations = (
 				A126814114557F4A00131E77 /* Debug */,
 				A126814214557F4A00131E77 /* Release */,
+				A14C058A15BA7ABD006E4790 /* Dist */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -941,6 +1081,7 @@
 			buildConfigurations = (
 				A1268154145588A400131E77 /* Debug */,
 				A1268155145588A400131E77 /* Release */,
+				A14C058B15BA7ABD006E4790 /* Dist */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -950,6 +1091,7 @@
 			buildConfigurations = (
 				A15E636F1456D4EC000F22F6 /* Debug */,
 				A15E63701456D4EC000F22F6 /* Release */,
+				A14C058D15BA7ABD006E4790 /* Dist */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -959,6 +1101,7 @@
 			buildConfigurations = (
 				A1977E3D156B86FE0074D9B2 /* Debug */,
 				A1977E3E156B86FE0074D9B2 /* Release */,
+				A14C058C15BA7ABD006E4790 /* Dist */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -968,6 +1111,7 @@
 			buildConfigurations = (
 				A199EFE3144480D200B53269 /* Debug */,
 				A199EFE4144480D200B53269 /* Release */,
+				A14C058815BA7ABD006E4790 /* Dist */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -977,6 +1121,7 @@
 			buildConfigurations = (
 				A1F001401440A27E007A72A9 /* Debug */,
 				A1F001411440A27E007A72A9 /* Release */,
+				A14C058615BA7ABD006E4790 /* Dist */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -986,6 +1131,7 @@
 			buildConfigurations = (
 				A1F001541440A2A0007A72A9 /* Debug */,
 				A1F001551440A2A0007A72A9 /* Release */,
+				A14C058715BA7ABD006E4790 /* Dist */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

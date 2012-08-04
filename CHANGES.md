@@ -66,3 +66,10 @@
 
 * JPJsonWriter: fixed a bug in converting NSNumber objects whose underlaying type equals BOOL and whose address is not equal `kCFBooleanTrue` or not equal `kCFBooleanFalse`.
 
+
+
+### Version 0.5 beta
+
+#### Bug fixes
+
+* Fixed a minor bug in Sample6, introduced due to an API change.

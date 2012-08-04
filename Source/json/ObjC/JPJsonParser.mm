@@ -26,6 +26,7 @@
 #include "json/unicode/unicode_traits.hpp"
 #include "json/parser/parser_errors.hpp"
 #include <dispatch/dispatch.h>
+#include <cstdlib>
 #import "JPJsonParser.h"
 #import "JPSemanticActionsBase.h"
 #import "JPSemanticActionsBase_private.h"
@@ -304,22 +305,35 @@ namespace {
     
     // Try to get the string's content in UTF-16:
     JPUnicodeEncoding encoding = JPUnicodeEncoding_Unknown;
-    const void* bytes = string ? CFStringGetCharactersPtr(CFStringRef(string)) : NULL;
-    size_t length = bytes ? [string length]*2 : 0; // length equals number of bytes 
-    if (not bytes and string) {
-        bytes = CFStringGetCStringPtr(CFStringRef(string), kCFStringEncodingUTF8);
-        if (not bytes) {
-            // Performance may be suboptimal
-            bytes = [string UTF8String];
+    bool doFreeBuffer = false;
+    const void* buffer = string ? CFStringGetCharactersPtr(CFStringRef(string)) : NULL;
+    size_t length = buffer ? CFStringGetLength(CFStringRef(string))*2 : 0; // length equals number of bytes
+    if (not buffer and string) {
+        // attempt to get the internal buffer in UTF-8:
+        buffer = CFStringGetCStringPtr(CFStringRef(string), kCFStringEncodingUTF8);
+        if (buffer) {
+            length = [string lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
+            encoding = JPUnicodeEncoding_UTF8;
+        } else {
+            // No Unicode: performance is suboptimal.
+            // Retrive the NSString's content as UTF-16 and store it into an allocated buffer:
+            // We strongly assume, the endianess is platform:
+            length = CFStringGetLength(CFStringRef(string))*2; // number of bytes
+            void* buf = malloc(length);
+            CFRange range = {0, length>>1};
+            CFStringGetCharacters(CFStringRef(string), range, (UniChar*)buf);
+            buffer = buf;
+            doFreeBuffer = true;
+            encoding = JPUnicodeEncoding_UTF16;
         }
-        length = [string lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
-        encoding = JPUnicodeEncoding_UTF8;
     }
-    
-    BOOL success = [JPJsonParser runWithBytes:bytes 
+    BOOL success = [JPJsonParser runWithBytes:buffer
                                        length:length 
                                      encoding:encoding 
                               semanticActions:sa];
+    if (doFreeBuffer) {
+        free(const_cast<void*>(buffer));
+    }
     id result = nil;
     if (success) {
         // result is owned by sa only  - need to retain,autorelease it since we

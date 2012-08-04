@@ -54,10 +54,10 @@
 @interface NSDate (JPJsonWriterExtension) <JPJsonSerializableProtocol>
 @end
 @implementation NSDate (JPJsonWriterExtension) 
-- (NSInteger) JPJson_serializeTo:(id<JPJsonStreambufferProtocol>) buffer 
+- (int) JPJson_serializeTo:(id<JPJsonStreambufferProtocol>) buffer
                         encoding:(JPUnicodeEncoding)encoding 
                          options:(JPJsonWriterOptions)options 
-                           level:(NSUInteger)level 
+                           level:(int)level
 {
     NSDateFormatter* rfc3339DateFormatter = [NSDateFormatter rfc3339DateFormatter];
     id<JPJsonSerializableProtocol> dateString = (id<JPJsonSerializableProtocol>)[rfc3339DateFormatter stringFromDate:self];    
@@ -155,10 +155,10 @@
     return 4;
 }
 
-- (NSInteger) JPJson_serializeTo:(id<JPJsonStreambufferProtocol>) buffer 
+- (int) JPJson_serializeTo:(id<JPJsonStreambufferProtocol>) buffer
                         encoding:(JPUnicodeEncoding)encoding 
                          options:(JPJsonWriterOptions)options 
-                           level:(NSUInteger)level 
+                           level:(int)level
 {
     return [JPJsonWriter serializeObjectAsJSONObject:self buffer:buffer encoding:encoding options:options level:level];    
 }

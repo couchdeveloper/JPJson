@@ -1106,7 +1106,7 @@ namespace {
 - (int) JPJson_serializeTo:(id<JPJsonStreambufferProtocol>) streambuf
                   encoding:(JPUnicodeEncoding) encoding
                    options:(JPJsonWriterOptions) options
-                     level:(int) level;
+                     level:(int) level
 {
     assert(encoding == JPUnicodeEncoding_UTF8);  
     assert(streambuf);
