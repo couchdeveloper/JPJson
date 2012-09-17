@@ -159,10 +159,10 @@
  
  The four methods
  
- - `-parserFoundJsonValueBeginAtIndex:`,
- - `-parserFoundJsonValueEndAtIndex:`, 
- - `-parserFoundJsonValueBeginWithKey:length:encoding:index` and
- - `-parserFoundJsonValueEndWithKey:length:encoding:index`
+ - `-parserFoundValueBeginAtIndex:`,
+ - `-parserFoundValueEndAtIndex:`, 
+ - `-parserFoundValueBeginWithKey:length:encoding:index` and
+ - `-parserFoundValueEndWithKey:length:encoding:index`
  
  are helpful when implementing a streaming API. These additional messages 
  give fine grained control for all relevant parser events.
