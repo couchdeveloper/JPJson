@@ -76,7 +76,7 @@
                     
                     ...
  
-                parserFoundJsonArrayEnd
+                parserFoundArrayEnd
             parserFoundKeyValuePairEnd
  
             parserFoundKeyValuePairBeginWithKey:length:encoding:index:
@@ -89,14 +89,14 @@
                     parserFoundNumber:length:
                     parserFoundValueEndAtIndex:
                     ..
-                parserFoundJsonArrayEnd
+                parserFoundArrayEnd
             parserFoundKeyValuePairEnd
  
-        parserFoundJsonObjectEnd
-        parserFoundJsonObjectBegin
+        parserFoundObjectEnd
+        parserFoundObjectBegin
             ..
-        parserFoundJsonObjectEnd
-     parserFoundJsonArrayEnd
+        parserFoundObjectEnd
+     parserFoundArrayEnd
  
  
  A `parserFoundString` message may be possibly sent repeatedly, if the string
@@ -181,11 +181,11 @@
         parserFoundJsonValueEndAtIndex
         ..
  
-    parserFoundJsonObjectBegin
+    parserFoundObjectBegin
         parserFoundJsonKey
-        parserFoundJsonValueBeginWithKey
+        parserFoundValueBeginWithKey
             ..
-        parserFoundJsonValueEndWithKey
+        parserFoundValueEndWithKey
         ..
  */
 
