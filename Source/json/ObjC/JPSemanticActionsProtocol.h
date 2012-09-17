@@ -65,13 +65,13 @@
             parserFoundKeyValuePairBeginWithKey:length:encoding:index:
                 parserFoundArrayBegin
                     parserFoundValueBeginAtIndex:
-                    parserFoundJsonString:length:hasMore:encoding:
-                    parserFoundJsonString:length:hasMore:encoding:
-                    parserFoundJsonString:length:hasMore:encoding:
+                    parserFoundString:length:hasMore:encoding:
+                    parserFoundString:length:hasMore:encoding:
+                    parserFoundString:length:hasMore:encoding:
                     parserFoundValueEndAtIndex:
 
                     parserFoundValueBeginAtIndex:
-                    parserFoundJsonString:length:hasMore:encoding:
+                    parserFoundString:length:hasMore:encoding:
                     parserFoundValueEndAtIndex:
                     
                     ...
