@@ -177,6 +177,8 @@
     parserFoundArrayBegin
         parserFoundValueBeginAtIndex:
         ...
+        parserFoundValueEndAtIndex:
+        ...
     parserFoundArrayEnd
  
     parserFoundObjectBegin
