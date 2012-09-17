@@ -65,13 +65,13 @@
             parserFoundKeyValuePairBeginWithKey:length:encoding:index:
                 parserFoundArrayBegin
                     parserFoundValueBeginAtIndex:
-                    parserFoundString:length:hasMore:encoding:
-                    parserFoundString:length:hasMore:encoding:
-                    parserFoundString:length:hasMore:encoding:
+                    parserFoundJsonString:length:hasMore:encoding:
+                    parserFoundJsonString:length:hasMore:encoding:
+                    parserFoundJsonString:length:hasMore:encoding:
                     parserFoundValueEndAtIndex:
 
                     parserFoundValueBeginAtIndex:
-                    parserFoundString:length:hasMore:encoding:
+                    parserFoundJsonString:length:hasMore:encoding:
                     parserFoundValueEndAtIndex:
                     
                     ...
@@ -159,10 +159,10 @@
  
  The four methods
  
- - `-parserFoundValueBeginAtIndex:`,
- - `-parserFoundValueEndAtIndex:`, 
- - `-parserFoundValueBeginWithKey:length:encoding:index` and
- - `-parserFoundValueEndWithKey:length:encoding:index`
+ - `-parserFoundJsonValueBeginAtIndex:`,
+ - `-parserFoundJsonValueEndAtIndex:`, 
+ - `-parserFoundJsonValueBeginWithKey:length:encoding:index` and
+ - `-parserFoundJsonValueEndWithKey:length:encoding:index`
  
  are helpful when implementing a streaming API. These additional messages 
  give fine grained control for all relevant parser events.
