@@ -58,22 +58,36 @@
  JSON Strings (which inlcude keys) will be unescaped by the parser.
  
  
- A typical flow of messages could be as follows:
+ Below is a typical flow of the complete messages:
  
     parserFoundArrayBegin
         parserFoundObjectBegin
-            parserFoundKeyValuePairBeginWithKey
+            parserFoundKeyValuePairBeginWithKey:length:encoding:index:
                 parserFoundJsonArrayBegin
-                    parserFoundJsonString
-                    parserFoundJsonString
-                    .. 
+                    parserFoundValueBeginAtIndex:
+                    parserFoundJsonString:length:hasMore:encoding:
+                    parserFoundJsonString:length:hasMore:encoding:
+                    parserFoundJsonString:length:hasMore:encoding:
+                    parserFoundValueEndAtIndex:
+
+                    parserFoundValueBeginAtIndex:
+                    parserFoundJsonString:length:hasMore:encoding:
+                    parserFoundValueEndAtIndex:
+                    
+                    ...
+ 
                 parserFoundJsonArrayEnd
             parserFoundKeyValuePairEnd
  
-            parserFoundKeyValuePairBeginWithKey
+            parserFoundKeyValuePairBeginWithKey:length:encoding:index:
                 parserFoundJsonArrayBegin
-                    parserFoundJsonString
-                    parserFoundJsonString
+                    parserFoundValueBeginAtIndex:
+                    parserFoundNumber:length:
+                    parserFoundValueEndAtIndex:
+                     
+                    parserFoundValueBeginAtIndex:
+                    parserFoundNumber:length:
+                    parserFoundValueEndAtIndex:
                     ..
                 parserFoundJsonArrayEnd
             parserFoundKeyValuePairEnd
@@ -341,8 +355,8 @@
  Sent to the delegate when the parser found the end of a JSON Value 
  belonging to an JSON Array at the specified index.
  
- The associated value at this index has been notified by the parser by the corres-
- ponding event which has been sent immediately before this message.
+ The associated value at this index has been notified by the parser by the 
+ corresponding event which has been sent immediately before this message.
  
  @param index The index of at which the value is added to the JSON Array.
  */ 
