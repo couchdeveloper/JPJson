@@ -63,7 +63,7 @@
     parserFoundArrayBegin
         parserFoundObjectBegin
             parserFoundKeyValuePairBeginWithKey:length:encoding:index:
-                parserFoundJsonArrayBegin
+                parserFoundArrayBegin
                     parserFoundValueBeginAtIndex:
                     parserFoundString:length:hasMore:encoding:
                     parserFoundString:length:hasMore:encoding:
@@ -80,7 +80,7 @@
             parserFoundKeyValuePairEnd
  
             parserFoundKeyValuePairBeginWithKey:length:encoding:index:
-                parserFoundJsonArrayBegin
+                parserFoundArrayBegin
                     parserFoundValueBeginAtIndex:
                     parserFoundNumber:length:
                     parserFoundValueEndAtIndex:
@@ -175,7 +175,7 @@
  
  These message are invoked as follows:
  
-    parserFoundJsonArrayBegin
+    parserFoundArrayBegin
         parserFoundJsonValueBeginAtIndex
             ..
         parserFoundJsonValueEndAtIndex
