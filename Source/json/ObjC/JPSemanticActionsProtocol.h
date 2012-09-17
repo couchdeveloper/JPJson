@@ -67,7 +67,6 @@
                     parserFoundValueBeginAtIndex:
                     parserFoundString:length:hasMore:encoding:
                     parserFoundString:length:hasMore:encoding:
-                    parserFoundString:length:hasMore:encoding:
                     parserFoundValueEndAtIndex:
 
                     parserFoundValueBeginAtIndex:
@@ -176,17 +175,16 @@
  These message are invoked as follows:
  
     parserFoundArrayBegin
-        parserFoundJsonValueBeginAtIndex
-            ..
-        parserFoundJsonValueEndAtIndex
-        ..
+        parserFoundValueBeginAtIndex:
+        ...
+    parserFoundArrayEnd
  
     parserFoundObjectBegin
-        parserFoundJsonKey
-        parserFoundValueBeginWithKey
-            ..
-        parserFoundValueEndWithKey
-        ..
+        parserFoundKeyValuePairBeginWithKey:length:encoding:index:
+        ...
+        parserFoundKeyValuePairEnd
+        ...
+    parserFoundObjectEnd
  */
 
 
