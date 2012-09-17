@@ -6,7 +6,7 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#if !__has_feature(objc_arc) 
+#if !__has_feature(objc_arc)
 #error This Objective-C file shall be compiled with ARC enabled.
 #endif
 
@@ -15,6 +15,8 @@
 #import "JPJson/JPJsonWriter.h"
 #import "JPJson/JPJsonWriterExtensions.h"
 
+#include <time.h>
+
 
 //  Objectives:
 //
@@ -22,7 +24,7 @@
 
 
 // Helper category for creating a RFC3339DateFormatter
-@implementation NSDateFormatter (RFC3339DateFormatter) 
+@implementation NSDateFormatter (RFC3339DateFormatter)
 +(NSDateFormatter*) rfc3339DateFormatter {
     NSDateFormatter* rfc3339DateFormatter = [[NSDateFormatter alloc] init];
     NSLocale* enUSPOSIXLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
@@ -44,24 +46,37 @@
 //
 // A NSDate object may be serialized as a formatted date string. So, in order to
 // make this work - we just ned to define a Category for NSDate and implement the
-// JPJsonSerializableProtocol. 
+// JPJsonSerializableProtocol.
 //
 // Serializing a NSDate involves to convert the date into a string with an
 // appropriate format. The format purposfully meets RFC 3339. Then we just serialize
-// the string using the JPJsonSerializableProtocol. The JPJsonSerializableProtocol 
+// the string using the JPJsonSerializableProtocol. The JPJsonSerializableProtocol
 // is already implemented for a NSString by the JPJson library.
 //
 @interface NSDate (JPJsonWriterExtension) <JPJsonSerializableProtocol>
 @end
-@implementation NSDate (JPJsonWriterExtension) 
+@implementation NSDate (JPJsonWriterExtension)
 - (int) JPJson_serializeTo:(id<JPJsonStreambufferProtocol>) buffer
-                        encoding:(JPUnicodeEncoding)encoding 
-                         options:(JPJsonWriterOptions)options 
-                           level:(int)level
+                  encoding:(JPUnicodeEncoding)encoding
+                   options:(JPJsonWriterOptions)options
+                     level:(int)level
 {
+#if 0 /* Using a NSDateFormatter */
     NSDateFormatter* rfc3339DateFormatter = [NSDateFormatter rfc3339DateFormatter];
-    id<JPJsonSerializableProtocol> dateString = (id<JPJsonSerializableProtocol>)[rfc3339DateFormatter stringFromDate:self];    
-    return [dateString JPJson_serializeTo:buffer encoding:encoding options:options level:level];    
+    id<JPJsonSerializableProtocol> dateString = (id<JPJsonSerializableProtocol>)[rfc3339DateFormatter stringFromDate:self];
+    return [dateString JPJson_serializeTo:buffer encoding:encoding options:options level:level];
+#else
+    /* Use time utilities from ISO C (or POSIX, C99 UNIX Spec)*/
+    struct tm* timeinfo;
+    char buf[64];
+    time_t rawtime = [self timeIntervalSince1970];
+    timeinfo = gmtime(&rawtime);
+    size_t len = strftime(buf, sizeof(buf), "%FT%TZ", timeinfo);
+    CFStringRef cfDateString = CFStringCreateWithBytesNoCopy(NULL, (const UInt8 *)buf, len, kCFStringEncodingASCII, false, kCFAllocatorNull);
+    int result = [(__bridge id)cfDateString JPJson_serializeTo:buffer encoding:encoding options:options level:level];
+    CFRelease(cfDateString);
+    return result;
+#endif
 }
 @end
 
@@ -103,7 +118,7 @@
 
 - (void) addComment:(NSString*) comment
 {
-    if (comment == nil) 
+    if (comment == nil)
         return;
     
     if (_comments == nil) {
@@ -125,12 +140,12 @@
 // For this purpose the implementation utilizes the JPJsonWriter class method
 // `serializeObjectAsJSONObject:buffer:encoding:options:level:`, which in  turn
 // requires that the class Person implements the `NSFastEnumeration` protocol,
-// the JPJsonSerializableProtocol, and as well responds to message `count` and 
+// the JPJsonSerializableProtocol, and as well responds to message `count` and
 // message `objectForKey:`
 //
 @interface Person (JPJsonWriterExtension) <JPJsonSerializableProtocol, NSFastEnumeration>
 @end
-@implementation Person (JPJsonWriterExtension) 
+@implementation Person (JPJsonWriterExtension)
 
 - (id) objectForKey:(id)aKey {
     return [self valueForKey:aKey];
@@ -140,15 +155,15 @@
     return 4;  // return the number of properies
 }
 
-- (NSUInteger) countByEnumeratingWithState:(NSFastEnumerationState *)state 
-                                   objects:(id __unsafe_unretained [])buffer 
+- (NSUInteger) countByEnumeratingWithState:(NSFastEnumerationState *)state
+                                   objects:(id __unsafe_unretained [])buffer
                                      count:(NSUInteger)len
 {
     static id __unsafe_unretained properties[] = {@"firstName", @"lastName", @"dayOfBirth", @"comments"};
     
     if (state->state >= 4) {
         return 0;
-    }    
+    }
     state->itemsPtr = properties;
     state->state = 4;
     state->mutationsPtr = &state->extra[0];
@@ -156,11 +171,11 @@
 }
 
 - (int) JPJson_serializeTo:(id<JPJsonStreambufferProtocol>) buffer
-                        encoding:(JPUnicodeEncoding)encoding 
-                         options:(JPJsonWriterOptions)options 
-                           level:(int)level
+                  encoding:(JPUnicodeEncoding)encoding
+                   options:(JPJsonWriterOptions)options
+                     level:(int)level
 {
-    return [JPJsonWriter serializeObjectAsJSONObject:self buffer:buffer encoding:encoding options:options level:level];    
+    return [JPJsonWriter serializeObjectAsJSONObject:self buffer:buffer encoding:encoding options:options level:level];
 }
 
 @end
@@ -176,23 +191,25 @@
 int main (int argc, const char * argv[])
 {
     @autoreleasepool {
-
+        
+        // Date in local time zone
         NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"]];
-        [dateFormatter setDateFormat:@"yyyy'-'MM'-'dd"];
+        [dateFormatter setDateFormat:@"yyyy'-'MM'-'dd' 'HH:mm:ss"];
+        //[dateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
         
         // Create an array of Persons:
         NSArray* json = [[NSArray alloc] initWithObjects:
-                         [[Person alloc] initWithFirstName:@"John" 
-                                                  lastName:@"Appleseed" 
-                                                dayOfBirth:[dateFormatter dateFromString:@"1962-04-21"]],
-                          [[Person alloc] initWithFirstName:@"Pete" 
-                                                   lastName:@"Pearson" 
-                                                 dayOfBirth:[dateFormatter dateFromString:@"1912-10-12"]],
-                          [[Person alloc] initWithFirstName:@"Tab" 
-                                                   lastName:@"Benoit" 
-                                                 dayOfBirth:[dateFormatter dateFromString:@"1970-03-09"]],
-                          nil];
+                         [[Person alloc] initWithFirstName:@"John"
+                                                  lastName:@"Appleseed"
+                                                dayOfBirth:[dateFormatter dateFromString:@"1962-04-21 20:00:00"]],
+                         [[Person alloc] initWithFirstName:@"Pete"
+                                                  lastName:@"Pearson"
+                                                dayOfBirth:[dateFormatter dateFromString:@"1912-10-12 08:00:00"]],
+                         [[Person alloc] initWithFirstName:@"Tab"
+                                                  lastName:@"Benoit"
+                                                dayOfBirth:[dateFormatter dateFromString:@"1970-03-09 09:00:00"]],
+                         nil];
         
         Person* p0 = [json objectAtIndex:0];
         [p0 addComment:@"This is a comment"];
@@ -223,7 +240,7 @@ int main (int argc, const char * argv[])
                                                        error:nil];
             NSLog(@"%@:\n%@", filePath, s);
             
-#endif            
+#endif
         }
     }
     return 0;
