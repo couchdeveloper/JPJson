@@ -209,7 +209,7 @@
 		A16AEB271441FB0300FDB7B2 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0430;
+				LastUpgradeCheck = 0440;
 			};
 			buildConfigurationList = A16AEB2A1441FB0300FDB7B2 /* Build configuration list for PBXProject "JPJson iOS Libraries" */;
 			compatibilityVersion = "Xcode 3.2";
