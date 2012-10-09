@@ -84,11 +84,13 @@ typedef NSUInteger JPJsonWriterOptions;
 
 
 /**
- Serializes the Foundation object with the specified Unicode
- encoding and options.
+ Serializes the Foundation object with the specified Unicode encoding into a
+ NSData object and returns it.
 
- @param object  A `NSDictionary` or an `NSArray` or a corresponding mutable 
- subclass which contains a representation of a JSON document.
+ @param object  A hierarchy of Foundation objects which all implement the
+ `JPJsonSerializableProtocol`. The root object shall be a either a `NSDictionary`, 
+ `NSArray` or a corresponding subclass or any other object which implements 
+ `JPJsonSerializableProtocol and poses as a dictionary or array.
  
  @param encoding One of the constants defined in enum `JPUnicodeEncoding` which 
  specifies the Unicode encoding scheme for the generated output.
@@ -111,6 +113,103 @@ typedef NSUInteger JPJsonWriterOptions;
                  encoding:(JPUnicodeEncoding)encoding
                   options:(JPJsonWriterOptions)options 
                     error:(NSError**)error;
+
+
+/**
+ Serializes the Foundation object as UTF-8 Unicode encoded string into a
+ NSData object and returns it.
+ 
+ @param object  A hierarchy of Foundation objects which all implement the
+ `JPJsonSerializableProtocol`. The root object shall be a either a `NSDictionary`,
+ `NSArray` or a corresponding subclass or any other object which implements
+ `JPJsonSerializableProtocol and poses as a dictionary or array.
+ 
+ 
+ @param options A bit mask specifying options for serializing. For possible
+ values see "JPJsonWriterOptions".
+ 
+ @param error A pointer to a `NSError` object. If this is not `NULL`, and if
+ an error occured during serializing the parameter error contains an `NSError`
+ object describing the issue.
+ 
+ 
+ @return A NSData object representing the JSON in parameter 'object' as text,
+ or `nil` if an error occured.
+ */
+
++ (NSData*)dataWithObject:(id)object
+                  options:(JPJsonWriterOptions)options
+                    error:(NSError**)error;
+
+
+
+/**
+ Serializes the Foundation object with the specified Unicode
+ encoding and options.
+ 
+ @param object  A hierarchy of Foundation objects which all implement the
+ `JPJsonSerializableProtocol`. The root object shall be a either a `NSDictionary`,
+ `NSArray` or a corresponding subclass or any other object which implements
+ `JPJsonSerializableProtocol and poses as a dictionary or array.
+
+ @param stream An output stream. The stream should be unopened.
+ 
+ @param encoding One of the constants defined in enum `JPUnicodeEncoding` which
+ specifies the Unicode encoding scheme for the generated output.
+ 
+ *Warning:* Currently, only UTF-8 encoding is supported.
+ 
+ @param options A bit mask specifying options for serializing. For possible
+ values see "JPJsonWriterOptions".
+ 
+ @param error A pointer to a `NSError` object. If this is not `NULL`, and if
+ an error occured during serializing the parameter error contains an `NSError`
+ object describing the issue.
+ 
+ 
+ @return The number of bytes written into the stream, or zero if an error occured.
+ 
+ 
+ */
+
++ (NSUInteger) serializeObject:(id)object
+                      toStream:(NSOutputStream*)stream
+                      encoding:(JPUnicodeEncoding)encoding
+                       options:(JPJsonWriterOptions)options
+                         error:(NSError**)error;
+
+
+
+/**
+ Serializes the Foundation object as UTF-8 Unicode encoded string into the stream
+ and returns the number of bytes written.
+ 
+ @param object  A hierarchy of Foundation objects which all implement the
+ `JPJsonSerializableProtocol`. The root object shall be a either a `NSDictionary`,
+ `NSArray` or a corresponding subclass or any other object which implements
+ `JPJsonSerializableProtocol and poses as a dictionary or array.
+ 
+ @param stream An output stream. The stream must be opened. On return, the 
+ stream is closed.
+ 
+ @param options A bit mask specifying options for serializing. For possible
+ values see "JPJsonWriterOptions".
+ 
+ @param error A pointer to a `NSError` object. If this is not `NULL`, and if
+ an error occured during serializing the parameter error contains an `NSError`
+ object describing the issue.
+ 
+ 
+ @return The number of bytes written into the stream, or zero if an error occured.
+ 
+ 
+ */
+
++ (NSUInteger) serializeObject:(id)object
+                      toStream:(NSOutputStream*)stream
+                       options:(JPJsonWriterOptions)options
+                         error:(NSError**)error;
+
 
 
 @end

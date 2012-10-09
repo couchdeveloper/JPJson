@@ -22,6 +22,7 @@
 #import "JPJson/JPJsonWriter.h"
 #import "JPJson/JPJsonParser.h"
 #include "gtest/gtest.h"
+#include <dispatch/dispatch.h>
 
 
 
@@ -654,5 +655,74 @@ namespace {
     }
 
     
+    
+    
+    
+    
+    
+    TEST_F(JPJsonWriterTest, TestStreamAPI)
+    {
+        NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+        
+        
+        NSDictionary* object = [NSDictionary dictionaryWithObjectsAndKeys:
+                                @"Aaaaaaaaaabbbbbbbbbb", @"first_name",
+                                @"Ccccccccccdddddddddd", @"last_name",
+                                nil];
+        
+        
+        dispatch_semaphore_t sem = dispatch_semaphore_create(0);
+        
+        const int BufferSize = 4;// For testing, change buffer size
+        CFReadStreamRef readStream = NULL;
+        CFWriteStreamRef writeStream = NULL;
+        CFStreamCreateBoundPair(NULL, &readStream, &writeStream, BufferSize);
+        NSInputStream* istream = [(id)readStream retain];
+        NSOutputStream* ostream = [(id)writeStream retain];
+        CFRelease(readStream);
+        CFRelease(writeStream);
+        
+        // Invoke the JPJsonWriter asynchronously on its own thread:
+        __block NSError* serializerError;
+        dispatch_async(dispatch_get_global_queue(0, 0), ^{
+            [ostream open];
+            NSUInteger count = [JPJsonWriter serializeObject:object
+                                                    toStream:ostream
+                                                     options:0
+                                                       error:&serializerError];
+            if (count == 0) {
+                NSLog(@"NSJSONSerialization Error while writing to stream: %@", serializerError);
+            }
+            [ostream close];
+            dispatch_semaphore_signal(sem);
+        });
+        
+        const char* expectedResult = "{\"first_name\":\"Aaaaaaaaaabbbbbbbbbb\",\"last_name\":\"Ccccccccccdddddddddd\"}";
+        const int BSIZE = 1024;
+        char actualResult[BSIZE] = {};
+        int left = BSIZE;
+        
+        [istream open];
+        char* p = &actualResult[0];
+        NSInteger len;
+        do {
+            len = [istream read:(uint8_t*)p maxLength:left];
+            if (len) {
+                p += len;
+                left -= len;
+            }
+        } while (len > 0);
+        [istream close];
+        
+        dispatch_semaphore_wait(sem, DISPATCH_TIME_FOREVER);
+        dispatch_release(sem);
+        [istream release];
+        [ostream release];
+        
+        EXPECT_EQ( std::string(expectedResult), std::string(actualResult) );
+        
+        
+        [pool drain];        
+    }
     
 }

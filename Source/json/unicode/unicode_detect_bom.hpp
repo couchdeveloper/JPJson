@@ -31,14 +31,7 @@
 namespace json { namespace unicode {
 
 
-    enum UnicodeBOM {
-        UNICODE_BOM_UTF_8       =  UNICODE_ENCODING_UTF_8,
-        UNICODE_BOM_UTF_16BE    =  UNICODE_ENCODING_UTF_16BE,
-        UNICODE_BOM_UTF_16LE    =  UNICODE_ENCODING_UTF_16LE,
-        UNICODE_BOM_UTF_32BE    =  UNICODE_ENCODING_UTF_32BE,
-        UNICODE_BOM_UTF_32LE    =  UNICODE_ENCODING_UTF_32LE
-    };
-
+    
     // This helps in
     // figuring the enocding form of an arbitrary byte stream. However, if no
     // BOM is provided, the encoding must be "guessed" using domain specific 
@@ -56,8 +49,8 @@ namespace json { namespace unicode {
     //
     // Result:
     //
-    // If the return value is greater than zero, the input stream contains a
-    // BOM and the value corresponds to one of the Unicode encoding schemes.
+    // If the input stream contains a BOM the value corresponds to one of the
+    // Unicode encoding constants UNICODE_ENCODING, which are positive values.
     // If the result equals zero, no BOM could be detected.
     // Otherwise, if the result is negative it indicates an error.
     //
@@ -65,13 +58,13 @@ namespace json { namespace unicode {
     // the BOM, respectively points to the first character or EOF.
     //
     // Results:
-    //     >0: success, returns a values of UnicodeBOM
-    //     -1: unexpected EOF
+    //     >0: success, returns a value of UNICODE_ENCODING
+    //     UNICODE_ENCODING_INVALID: unexpected EOF
     //
     // The size of the iterator's value_type shall be 1.
 
     template <typename Iterator>
-    int detect_bom(Iterator& first, Iterator last) 
+    int detect_bom(Iterator& first, Iterator last)
     {        
         //  Check if there is a BOM.
         //
@@ -101,7 +94,7 @@ namespace json { namespace unicode {
                     continue;
                 case 0xFF00FEFF:
                     ++first;
-                    return UNICODE_BOM_UTF_16BE;
+                    return UNICODE_ENCODING_UTF_16BE;
                     
                 // reading data[2]    
                 case 0x000000FE:
@@ -110,22 +103,22 @@ namespace json { namespace unicode {
                     continue;
                 case 0x00EFBBBF: 
                     ++first;
-                    return UNICODE_BOM_UTF_8;
+                    return UNICODE_ENCODING_UTF_8;
                     
                 // reading data[3]    
                 case 0x0000FEFF:
                     ++first;
-                    return UNICODE_BOM_UTF_32BE;
+                    return UNICODE_ENCODING_UTF_32BE;
                 case 0xFFFE0000:
                     ++first;
-                    return UNICODE_BOM_UTF_32LE;
+                    return UNICODE_ENCODING_UTF_32LE;
                     
                 default:
                     // (reading data[2])
                     // possibly UTF-16-LE ?
                     if ( (c >> 8) == 0x0000FFFE )  {
                         // do not increment first here, it already points to the next
-                        return UNICODE_BOM_UTF_16LE;
+                        return UNICODE_ENCODING_UTF_16LE;
                     }
                     return 0;  // no BOM
             } // switch
@@ -135,7 +128,7 @@ namespace json { namespace unicode {
         // We might got a valid UTF-16-LE BOM - but a zero length text. So, check
         // this too:
         if (c == 0xFF00FFFE) {
-            return UNICODE_BOM_UTF_16LE; // still ambiguous since we got EOF
+            return UNICODE_ENCODING_UTF_16LE; // still ambiguous since we got EOF
         }
         
         return -1;  // unexpected EOF

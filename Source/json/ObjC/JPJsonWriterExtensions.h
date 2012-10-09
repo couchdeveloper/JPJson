@@ -28,18 +28,37 @@
 /**
  Write a sequence of bytes.
  
- Write up to `length` bytes from the array of bytes pointed to by `buffer` into
- the stream buffer.
+ Write `length` bytes from the array of bytes pointed to by `buffer` into the
+ stream buffer. This may block the current thread until after the requested
+ number of bytes have been written.
  
  @param buffer A pointer to the sequence of bytes to be written.
  
  @param length The number of bytes to write.
  
- @return Returns the actual number of bytes written, or a negative number
- indicating an error.
+ @return Returns `YES` on success, otherwise `NO` indicating an error.
  */
 
-- (int) write:(const void*)buffer length:(int)length;
+- (BOOL) write:(const void*)buffer length:(int)length;
+
+
+
+/**
+ Close a stream buffer.
+ 
+ Write any remaining bytes into the underlaying device.
+
+ 
+ @return Returns `YES` on success, otherwise `NO` indicating an error.
+ */
+- (BOOL) close;
+
+
+/**
+ @return Returns the error of the last operation, nil if there was success.
+ */
+
+@property (nonatomic, readonly) NSError* error;
 
 @end
 

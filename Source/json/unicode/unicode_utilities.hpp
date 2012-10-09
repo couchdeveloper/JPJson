@@ -43,8 +43,10 @@
 // 
 namespace json { namespace unicode {
     
-    
-    // deprecated
+
+    //
+    //  Constants for Unicode Encodings
+    //
     enum UNICODE_ENCODING {
         UNICODE_ENCODING_UTF_8 =    1,
         UNICODE_ENCODING_UTF_16BE = 2,

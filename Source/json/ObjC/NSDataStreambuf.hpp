@@ -25,8 +25,10 @@
 #include "json/config.hpp"
 #include <streambuf>
 #include <utility>
+#include <stdexcept>
 #include <algorithm>
 #include <stdint.h>
+
 #include <boost/config.hpp>
 
 #import <Foundation/Foundation.h>

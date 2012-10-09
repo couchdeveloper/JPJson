@@ -33,6 +33,147 @@
 #import "JPRepresentationGenerator.h"  // Default Semantic Actions
 
 
+
+
+namespace json { namespace objc {
+    //
+    //  Maps JPUnicodeEncoding constants to json::unicode encoding_tag
+    //
+    template <JPUnicodeEncoding C>
+    struct jp_unicode_encoding_traits {
+        //BOOST_STATIC_ASSERT(0);
+    };
+    
+    template <>
+    struct jp_unicode_encoding_traits<JPUnicodeEncoding_Unknown> {
+        //BOOST_STATIC_ASSERT(0);
+    };
+    
+    template <>
+    struct jp_unicode_encoding_traits<JPUnicodeEncoding_UTF8> {
+        typedef json::unicode::UTF_8_encoding_tag type;
+    };
+    
+    template <>
+    struct jp_unicode_encoding_traits<JPUnicodeEncoding_UTF16> {
+        typedef json::unicode::UTF_16_encoding_tag type;
+    };
+    
+    template <>
+    struct jp_unicode_encoding_traits<JPUnicodeEncoding_UTF16BE> {
+        typedef json::unicode::UTF_16BE_encoding_tag type;
+    };
+    
+    template <>
+    struct jp_unicode_encoding_traits<JPUnicodeEncoding_UTF16LE> {
+        typedef json::unicode::UTF_16LE_encoding_tag type;
+    };
+
+    template <>
+    struct jp_unicode_encoding_traits<JPUnicodeEncoding_UTF32> {
+        typedef json::unicode::UTF_32_encoding_tag type;
+    };
+    
+    
+    template <>
+    struct jp_unicode_encoding_traits<JPUnicodeEncoding_UTF32BE> {
+        typedef json::unicode::UTF_32BE_encoding_tag type;
+    };
+    
+    template <>
+    struct jp_unicode_encoding_traits<JPUnicodeEncoding_UTF32LE> {
+        typedef json::unicode::UTF_32LE_encoding_tag type;
+    };
+    
+    
+    //
+    //  Map json::unicode encoding_tag to JPUnicodeEncoding constants
+    //
+    template <typename EncodingT, typename Enable = void>
+    struct jp_map_unicode_encoding {
+        BOOST_STATIC_ASSERT(sizeof(Enable) == 0);
+    };
+    
+    template <typename EncodingT>
+    struct jp_map_unicode_encoding<
+        EncodingT,
+        typename boost::enable_if<boost::is_same<UTF_8_encoding_tag, EncodingT> >::type
+    >
+    {
+        static const JPUnicodeEncoding value = JPUnicodeEncoding_UTF8;
+    };
+    
+    template <typename EncodingT>
+    struct jp_map_unicode_encoding<
+        EncodingT,
+        typename boost::enable_if<boost::is_same<UTF_16_encoding_tag, EncodingT> >::type
+    >
+    {
+        static const JPUnicodeEncoding value = JPUnicodeEncoding_UTF16;
+    };
+    
+    template <typename EncodingT>
+    struct jp_map_unicode_encoding<
+        EncodingT,
+        typename boost::enable_if<boost::is_same<UTF_16BE_encoding_tag, EncodingT> >::type
+    >
+    {
+        static const JPUnicodeEncoding value = JPUnicodeEncoding_UTF16BE;
+    };
+    
+    template <typename EncodingT>
+    struct jp_map_unicode_encoding<
+        EncodingT,
+        typename boost::enable_if<boost::is_same<UTF_16LE_encoding_tag, EncodingT> >::type
+    >
+    {
+        static const JPUnicodeEncoding value = JPUnicodeEncoding_UTF16LE;
+    };
+    
+    
+    
+    template <typename EncodingT>
+    struct jp_map_unicode_encoding<
+        EncodingT,
+        typename boost::enable_if<boost::is_same<UTF_32_encoding_tag, EncodingT> >::type
+    >
+    {
+        static const JPUnicodeEncoding value = JPUnicodeEncoding_UTF32;
+    };
+    
+    template <typename EncodingT>
+    struct jp_map_unicode_encoding<
+        EncodingT,
+        typename boost::enable_if<boost::is_same<UTF_32BE_encoding_tag, EncodingT> >::type
+    >
+    {
+        static const JPUnicodeEncoding value = JPUnicodeEncoding_UTF32BE;
+    };
+    
+    template <typename EncodingT>
+    struct jp_map_unicode_encoding<
+        EncodingT,
+        typename boost::enable_if<boost::is_same<UTF_32LE_encoding_tag, EncodingT> >::type
+    >
+    {
+        static const JPUnicodeEncoding value = JPUnicodeEncoding_UTF32LE;
+    };
+    
+    
+    //
+    //  "Add" host endianness to JPUnicodeEncoding constants:
+    //
+    template <JPUnicodeEncoding C>
+    struct jp_add_host_endianness {
+        typedef typename json::unicode::add_endianness<typename jp_unicode_encoding_traits<C>::type>::type  unicode_tag;
+        static const JPUnicodeEncoding value = jp_map_unicode_encoding<unicode_tag>::value;
+    };
+    
+
+}}
+
+
+
 namespace {
     
     // Exception sync_parser_runtime_error
@@ -100,12 +241,18 @@ namespace {
             // If the encoding is explicitly specified, there must be no BOM!
             
             // Map JPUnicodeEncoding constant to json::unicode::UNICODE_ENCODING constants:
+            if (encoding == JPUnicodeEncoding_UTF16) {
+                encoding = json::objc::jp_add_host_endianness<JPUnicodeEncoding_UTF16>::value;
+            }
+            else if (encoding == JPUnicodeEncoding_UTF32) {
+                encoding = json::objc::jp_add_host_endianness<JPUnicodeEncoding_UTF32>::value;
+            }
             switch (encoding) {
-                case JPUnicodeEncoding_UTF8: unicode_encoding = json::unicode::UNICODE_BOM_UTF_8; break;
-                case JPUnicodeEncoding_UTF16BE: unicode_encoding = json::unicode::UNICODE_BOM_UTF_16BE; break;
-                case JPUnicodeEncoding_UTF16LE: unicode_encoding = json::unicode::UNICODE_BOM_UTF_16LE; break;
-                case JPUnicodeEncoding_UTF32BE: unicode_encoding = json::unicode::UNICODE_BOM_UTF_32BE; break;
-                case JPUnicodeEncoding_UTF32LE: unicode_encoding = json::unicode::UNICODE_BOM_UTF_32LE; break;
+                case JPUnicodeEncoding_UTF8:    unicode_encoding = json::unicode::UNICODE_ENCODING_UTF_8; break;
+                case JPUnicodeEncoding_UTF16BE: unicode_encoding = json::unicode::UNICODE_ENCODING_UTF_16BE; break;
+                case JPUnicodeEncoding_UTF16LE: unicode_encoding = json::unicode::UNICODE_ENCODING_UTF_16LE; break;
+                case JPUnicodeEncoding_UTF32BE: unicode_encoding = json::unicode::UNICODE_ENCODING_UTF_32BE; break;
+                case JPUnicodeEncoding_UTF32LE: unicode_encoding = json::unicode::UNICODE_ENCODING_UTF_32LE; break;
                 default:
                     throw sync_parser_runtime_error("Parameter error: unknown encoding");
             }
@@ -116,11 +263,11 @@ namespace {
             // Check if there is a BOM using detect_bom() utility function. Possible 
             // results:
             // positive values in case of success:
-            //    json::unicode::UNICODE_BOM_UTF_8    
-            //    json::unicode::UNICODE_BOM_UTF_16BE 
-            //    json::unicode::UNICODE_BOM_UTF_16LE 
-            //    json::unicode::UNICODE_BOM_UTF_32BE 
-            //    json::unicode::UNICODE_BOM_UTF_32LE 
+            //    json::unicode::UNICODE_ENCODING_UTF_8    
+            //    json::unicode::UNICODE_ENCODING_UTF_16BE
+            //    json::unicode::UNICODE_ENCODING_UTF_16LE
+            //    json::unicode::UNICODE_ENCODING_UTF_32BE
+            //    json::unicode::UNICODE_ENCODING_UTF_32LE 
             //  zero, if no BOM
             //  and negative values in case of an error:
             //   -1: unexpected EOF
@@ -324,7 +471,7 @@ namespace {
             CFStringGetCharacters(CFStringRef(string), range, (UniChar*)buf);
             buffer = buf;
             doFreeBuffer = true;
-            encoding = JPUnicodeEncoding_UTF16;
+            encoding = JPUnicodeEncoding_UTF16;  // platform endianness
         }
     }
     BOOL success = [JPJsonParser runWithBytes:buffer

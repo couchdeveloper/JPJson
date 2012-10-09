@@ -222,6 +222,12 @@
                   <FileRef
                      location = "group:Source/json/ObjC/NSDataStreambuf.hpp">
                   </FileRef>
+                  <FileRef
+                     location = "group:Source/json/ObjC/NSStreamStreambuf.hpp">
+                  </FileRef>
+                  <FileRef
+                     location = "group:Source/json/ObjC/NSStreamStreambuf.1.hpp">
+                  </FileRef>
                </Group>
                <FileRef
                   location = "group:JPJsonCommon.h">

@@ -35,6 +35,7 @@
 
 #include <boost/type_traits.hpp>
 #include <boost/iterator/iterator_traits.hpp>
+#include <boost/ref.hpp>
 
 #import "JPJsonWriter.h"
 #import <CoreFoundation/CoreFoundation.h>
@@ -42,6 +43,7 @@
 
 #import "JPJsonWriterExtensions.h"
 #include "json/ObjC/NSDataStreambuf.hpp"
+#include "json/ObjC/NSStreamStreambuf.hpp"
 
 
 namespace {
@@ -114,134 +116,6 @@ namespace {
 }
 
 
-#if 0
-#pragma mark - NSMutableDataPushbackBuffer
-namespace {
-    
-    
-    class NSMutableDataPushbackBuffer 
-    {
-    public:
-        NSMutableDataPushbackBuffer(NSMutableData* data = nil) 
-        : data_(data), p_(0), start_(0), last_(0)
-        {
-            [data_ retain];
-        }
-        
-        ~NSMutableDataPushbackBuffer() {
-            [data_ release];
-        }
-        
-        void setData(NSMutableData* data) {
-            if (data_ != data) {
-                [data_ release];
-                data_ = [data retain];
-            }
-        }
-        size_t size() const { return p_ - start_; } 
-        size_t capacity() const { return last_ - start_; } 
-        
-        template <typename T>
-        void put(const T& v) {
-#if 0            
-            if (__builtin_expect((last_ - p_) < sizeof(T), 0)) {
-                [data_ increaseLengthBy:1024];
-                uint8_t* tmp = static_cast<uint8_t*>([data_ mutableBytes]);
-                p_ = tmp + size();
-                last_ = tmp + capacity() + 1024;                
-                start_ = tmp;
-            }
-            *static_cast<T*>(static_cast<void*>(p_)) = v;
-            p_ += sizeof(T);
-#else       
-            if ((last_ - p_) >= sizeof(T)) {
-                *static_cast<T*>(static_cast<void*>(p_)) = v;
-                p_ += sizeof(T);
-                return;
-            }
-            else {
-                [data_ increaseLengthBy:1024];
-                uint8_t* tmp = static_cast<uint8_t*>([data_ mutableBytes]);
-                p_ = tmp + size();
-                last_ = tmp + capacity() + 1024;                
-                start_ = tmp;
-                *static_cast<T*>(static_cast<void*>(p_)) = v;
-                p_ += sizeof(T);
-                return;
-            }            
-#endif            
-        }
-        
-        void write(const void* p, size_t n) {
-            if ( (last_ - p_) < sizeof(char)*n) {
-                size_t delta = 1024 + (sizeof(char)*n)/1024;
-                [data_ increaseLengthBy:delta];
-                uint8_t* tmp = static_cast<uint8_t*>([data_ mutableBytes]);
-                p_ = tmp + size();
-                last_ = tmp + capacity() + delta;                
-                start_ = tmp;
-            }
-            memcpy(p_, p, n);
-            p_ += n;            
-        }
-        
-    private:
-        
-        NSMutableData*  data_;        
-        uint8_t*        p_;
-        uint8_t*        start_;
-        uint8_t*        last_;
-    };
-    
-    
-    
-}
-#endif
-
-
-
-#if 0
-#pragma mark - JPJsonOutputStream
-// -----------------------------------------------------------------------------
-//  A concrete JPJsonOutputStream Implementation
-// -----------------------------------------------------------------------------
-@interface JPJsonWriterMutableDataBuffer : NSObject <JPJsonOutputStreamProtocol>
-@end
-
-@implementation JPJsonWriterMutableDataBuffer {
-    NSMutableDataPushbackBuffer  _imp;        
-}
-
-- (id)initWithMutableData:(NSMutableData*)data
-{
-    self = [super init];
-    if (self) {
-        _imp.setData(data);
-    }
-    return self;
-}
-
-- (void) writeData:(const void*)data length:(NSUInteger)length
-{
-    _imp.write(data, length);
-}
-
-- (NSUInteger) size { 
-    return _imp.size();
-} 
-
-- (NSUInteger) capacity { 
-    return _imp.capacity();
-} 
-
-- (NSMutableDataPushbackBuffer*) imp_pointer {
-    return &_imp;
-}
-
-@end
-#endif
-
-
 
 #pragma mark - JPDataStreambuffer
 
@@ -249,9 +123,15 @@ namespace {
 @interface JPDataStreambuffer : NSObject <JPJsonStreambufferProtocol>
 @end
 
+@interface JPDataStreambuffer (Private)
+- (std::streambuf*) internal_streambuf;
+@end
+
+
 @implementation JPDataStreambuffer {
-    json::objc::NSDataStreambuf<char>  _streambuf;        
+    json::objc::NSDataStreambuf<char>  _streambuf;
 }
+@synthesize error = _error;
 
 - (id)initWithData:(NSData*)data
 {
@@ -266,17 +146,49 @@ namespace {
     return [self initWithData:nil];
 }
 
-- (int) write:(const void*)buffer length:(int)length;
+- (void) dealloc {
+    [_error release];
+    [super dealloc];
+}
+
+- (BOOL) write:(const void*)buffer length:(int)length
 {
-    int result;
+    if (_error) {
+        [_error release], _error = nil;
+    }
+    BOOL result;
     if (length == 1) {
-        result = _streambuf.sputc(*static_cast<const char*>(buffer)) != EOF ? 1 : 0;
+        result = _streambuf.sputc(*static_cast<const char*>(buffer)) != EOF ? YES : NO;
     }
     else {
-        result = static_cast<int>(_streambuf.sputn(static_cast<const char*>(buffer), length));
+        int count = static_cast<int>(_streambuf.sputn(static_cast<const char*>(buffer), length));
+        result = count == length;
+        if (!result) {
+            _error = [[NSError alloc] initWithDomain:@"JPDataStreambuffer"
+                                                code:-1
+                                            userInfo:[NSDictionary dictionaryWithObjectsAndKeys:
+                                                      @"Could not write into stream", NSLocalizedDescriptionKey,
+                                                      nil]];
+        }
     }
     return result;
 }
+
+- (BOOL) close {
+    int result = _streambuf.pubsync();
+    if (result != 0) {
+        _error = [[NSError alloc] initWithDomain:@"JPDataStreambuffer"
+                                            code:-1
+                                        userInfo:[NSDictionary dictionaryWithObjectsAndKeys:
+                                                  @"Could not sync stream", NSLocalizedDescriptionKey,
+                                                  nil]];
+        return NO;
+    }
+    else {
+        return YES;
+    }
+}
+
 
 - (NSData*) data {
     return _streambuf.data();
@@ -285,8 +197,6 @@ namespace {
 @end
 
 
-@interface JPDataStreambuffer (Private)
-@end
 @implementation JPDataStreambuffer (Private)
 - (std::streambuf*) internal_streambuf {
     return &_streambuf;
@@ -296,64 +206,102 @@ namespace {
 
 
 
-#if 0
-#pragma mark - std 
-namespace std {
-    
-    
-    template <>
-    class back_insert_iterator<NSMutableDataPushbackBuffer> 
-    : public std::iterator<std::output_iterator_tag,void,void,void,void>
-    {
-    protected:
-        NSMutableDataPushbackBuffer& buffer_;
-        
-    public:
-        explicit back_insert_iterator(NSMutableDataPushbackBuffer& buffer) 
-        : buffer_(buffer) 
-        {
-        }
-        template <typename T>
-        back_insert_iterator& operator= (T const& value) { 
-            buffer_.put(value); return *this; 
-        }
-        back_insert_iterator& operator* ()
-        { return *this; }
-        back_insert_iterator& operator++ ()
-        { return *this; }
-        back_insert_iterator operator++ (int)
-        { return *this; }
-    };
-    
-    typedef JPJsonWriterMutableDataBuffer* JPJsonOutputStream_t;
-   
-    template <>
-    class back_insert_iterator<JPJsonOutputStream_t> 
-    : public std::iterator<std::output_iterator_tag,void,void,void,void>
-    {
-    protected:
-        NSMutableDataPushbackBuffer* buffer_;
-        
-    public:
-        explicit back_insert_iterator(JPJsonOutputStream_t buffer) 
-        : buffer_([buffer imp_pointer]) 
-        {
-        }
-        template <typename T>
-        back_insert_iterator& operator= (T const& value) { 
-            buffer_->put(value); return *this; 
-        }
-        back_insert_iterator& operator* ()
-        { return *this; }
-        back_insert_iterator& operator++ ()
-        { return *this; }
-        back_insert_iterator operator++ (int)
-        { return *this; }
-    };
-    
+#pragma mark - JPOutputStreamStreambuffer
+
+//  A concrete JPJsonStreambuffer Implementation
+@interface JPOutputStreamStreambuffer : NSObject <JPJsonStreambufferProtocol>
+@property (nonatomic, readonly) NSInteger written;
+@end
+
+@interface JPOutputStreamStreambuffer ()
+@property (nonatomic, readwrite) NSError* error;
+@end
+
+@interface JPOutputStreamStreambuffer (Private)
+- (std::streambuf*) internal_streambuf;
+@end
+
+@implementation JPOutputStreamStreambuffer {
+    json::objc::NSOutputStreamStreambuf2 _streambuf;
 }
-#endif
-    
+@synthesize error = _error;
+
+// ostream must not be nil and openend.
+- (id)initWithOutputStream:(NSOutputStream*)ostream
+{
+    NSParameterAssert(ostream && ([ostream streamStatus] == NSStreamStatusOpen));
+    self = [super init];
+    if (self) {
+        const int WriteBufferSize = 1024;
+        _streambuf.open(json::objc::internal::NSOutputStreamSink2(ostream), WriteBufferSize);
+    }
+    return self;
+}
+
+- (id)init {
+    return [self initWithOutputStream:nil];
+}
+
+- (void) dealloc {
+    [_error release];
+    [super dealloc];
+}
+
+- (BOOL) write:(const void*)buffer length:(int)length
+{
+    if (_error) {
+        return NO;
+    }
+    BOOL result;
+    if (length == 1) {
+        result = _streambuf.sputc(*static_cast<const char*>(buffer)) != EOF ? YES : NO;
+    }
+    else {
+        int count = static_cast<int>(_streambuf.sputn(static_cast<const char*>(buffer), length));
+        result = count == length;
+        if (!result) {
+            _error = [[NSError alloc] initWithDomain:@"JPOutputStreamStreambuffer"
+                                                code:-1
+                                            userInfo:[NSDictionary dictionaryWithObjectsAndKeys:
+                                                      @"Could not write into stream", NSLocalizedDescriptionKey,
+                                                      nil]];
+        }
+    }
+    return result;
+}
+
+- (BOOL) close {
+    int result = _streambuf.pubsync();
+    if (result != 0) {
+        _error = [[NSError alloc] initWithDomain:@"JPOutputStreamStreambuffer"
+                                            code:-1
+                                        userInfo:[NSDictionary dictionaryWithObjectsAndKeys:
+                                                  @"Could not sync stream", NSLocalizedDescriptionKey,
+                                                  nil]];
+        return NO;
+    }
+    else {
+        return YES;
+    }
+}
+
+- (NSInteger) written {
+    return (*_streambuf).written();
+}
+
+@end
+
+
+@implementation JPOutputStreamStreambuffer (Private)
+- (std::streambuf*) internal_streambuf {
+    return &_streambuf;
+}
+@end
+
+
+
+
+        
     
 namespace std {
     
@@ -426,14 +374,17 @@ namespace std {
     
 namespace {
     
-    NSError*  makeError(int errorCode, const char* errorStr)
+    NSError*  makeError(int errorCode, const char* errorStr, NSError* underlayingError)
     {
         NSString* errStr = [[NSString alloc] initWithUTF8String:errorStr];
         NSString* localizedErrStr = NSLocalizedString(errStr, errStr);
         [errStr release];
         NSArray* objectsArray = [[NSArray alloc] initWithObjects: localizedErrStr, nil];
         NSArray* keysArray = [[NSArray alloc] initWithObjects: NSLocalizedDescriptionKey, nil];            
-        NSDictionary* userInfoDict = [[NSDictionary alloc] initWithObjects:objectsArray forKeys: keysArray];
+        NSMutableDictionary* userInfoDict = [[NSMutableDictionary alloc] initWithObjects:objectsArray forKeys: keysArray];
+        if (underlayingError) {
+            [userInfoDict setObject:underlayingError forKey:NSUnderlyingErrorKey];
+        }
         [objectsArray release];
         [keysArray release];        
         NSError* error = [NSError errorWithDomain:@"JPJsonWriter" code:errorCode userInfo:userInfoDict];
@@ -619,14 +570,11 @@ namespace {
             CFRelease(numberString);
             count = static_cast<int>(usedBufLen);
         } 
-        
         // TODO: Convert the buffer to the target encoding        
         //std::copy(tmp_buffer, tmp_buffer+count, std::back_inserter(buffer));
-        int wcount = [streambuf write:tmp_buffer length:count];
-        if (wcount != count) {
+        if (![streambuf write:tmp_buffer length:count]) {
             return -1; // ERROR
         }
-
         if (outCount) {
             *outCount = count;
         }        
@@ -857,19 +805,16 @@ namespace {
         
         
         const NSUInteger count = [object count];
-        //[streambuf write:"[" length:1]; //buffer->push_back('[');
         *back_it++ = '[';
         if (count and (options & JPJsonWriterPrettyPrint) != 0) {
-            int wcount = [streambuf write:"\n" length:1]; //buffer->push_back('\n');
-            if (wcount != 1) {
+            if (![streambuf write:"\n" length:1]) {
                 return -1; // ERROR
             }
             int indent = level+1;
             while (indent > 0) {
                 int n  = std::min(10, indent);
-                int wcount = [streambuf write:"\t\t\t\t\t\t\t\t\t\t" length:n];
-                if (wcount != n) {
-                    return -1; // ERROR: streambuffer write failed
+                if (![streambuf write:"\t\t\t\t\t\t\t\t\t\t" length:n]) {
+                    return -1; // ERROR
                 }
                 indent -=n;
             }
@@ -887,18 +832,15 @@ namespace {
                 return result;
             }
             if (--i) {
-                //[streambuf write:"," length:1]; //buffer->push_back(',');
                 *back_it++ = ',';
                 if ((options & JPJsonWriterPrettyPrint) != 0) {
-                    int wcount = [streambuf write:"\n" length:1]; //buffer->push_back('\n');
-                    if (wcount != 1) {
+                    if (![streambuf write:"\n" length:1]) {
                         return -1; // ERROR
                     }
                     int indent = level+1;
                     while (indent > 0) {
                         int n  = std::min(10, indent);
-                        int wcount = [streambuf write:"\t\t\t\t\t\t\t\t\t\t" length:n];
-                        if (wcount != n) {
+                        if (![streambuf write:"\t\t\t\t\t\t\t\t\t\t" length:n]) {
                             return -1; // ERROR: streambuffer write failed
                         }
                         indent -=n;
@@ -907,21 +849,18 @@ namespace {
             }
         }
         if (count and (options & JPJsonWriterPrettyPrint) != 0) {
-            int wcount = [streambuf write:"\n" length:1]; //buffer->push_back('\n');
-            if (wcount != 1) {
+            if (![streambuf write:"\n" length:1]) {
                 return -1;// ERROR: streambuffer write failed
             }
             int indent = level;
             while (indent > 0) {
                 int n  = std::min(10, indent);
-                int wcount = [streambuf write:"\t\t\t\t\t\t\t\t\t\t" length:n];
-                if (wcount != n) {
+                if (![streambuf write:"\t\t\t\t\t\t\t\t\t\t" length:n]) {
                     return -1;// ERROR: streambuffer write failed
                 }
                 indent -=n;
             }
         }
-        //[streambuf write:"]" length:1]; //buffer->push_back(']');    
         *back_it++ = ']';
         
         return 0;
@@ -948,19 +887,16 @@ namespace {
 
         std::back_insert_iterator<streambuf_t> back_it(streambuf);        
         
-        //[streambuf write:"{" length:1]; //buffer->push_back('{');
         *back_it++ = '{';
         
         if (count and (options & JPJsonWriterPrettyPrint) != 0) {
-            int wcount = [streambuf write:"\n" length:1]; //buffer->push_back('\n');
-            if (wcount != 1) {
+            if (![streambuf write:"\n" length:1]) {
                 return -1; //ERROR streambuf write failed
             }
             int indent = level+1;
             while (indent > 0) {
                 int n  = std::min(10, indent);
-                int wcount = [streambuf write:"\t\t\t\t\t\t\t\t\t\t" length:n];
-                if (wcount != n) {
+                if (![streambuf write:"\t\t\t\t\t\t\t\t\t\t" length:n]) {
                     return -1; // ERROR
                 }
                 indent -=n;
@@ -983,16 +919,13 @@ namespace {
                 return result;
             }
             if ((options & JPJsonWriterPrettyPrint) != 0) {
-                int wcount = [streambuf write:" " length:1]; //buffer->push_back(' ');
-                if (wcount != 1) {
+                if (![streambuf write:" " length:1]) {
                     return -1; // ERROR
                 }
             }
-            //[streambuf write:":" length:1]; //buffer->push_back(':');        
             *back_it++ = ':';
             if ((options & JPJsonWriterPrettyPrint) != 0) {
-                int wcount = [streambuf write:" " length:1]; //buffer->push_back(' ');
-                if (wcount != 1) {
+                if (![streambuf write:" " length:1]) {
                     return -1; // ERROR
                 }
             }
@@ -1007,18 +940,15 @@ namespace {
                 return result;
             }
             if (--i) {
-                //[streambuf write:"," length:1]; //buffer->push_back(',');
                 *back_it++ = ',';
                 if ((options & JPJsonWriterPrettyPrint) != 0) {
-                    int wcount = [streambuf write:"\n" length:1]; //buffer->push_back('\n');
-                    if (wcount != 1) {
+                    if (![streambuf write:"\n" length:1]) {
                         return -1; // ERROR
                     }
                     int indent = level+1;
                     while (indent > 0) {
                         int n  = std::min(10, indent);
-                        int wcount = [streambuf write:"\t\t\t\t\t\t\t\t\t\t" length:n];
-                        if (wcount != n) {
+                        if (![streambuf write:"\t\t\t\t\t\t\t\t\t\t" length:n]) {
                             return -1; // ERROR
                         }
                         indent -=n;
@@ -1028,19 +958,16 @@ namespace {
                 
         }    
         if (count and (options & JPJsonWriterPrettyPrint) != 0) {
-            //[streambuf write:"\n" length:1]; //buffer->push_back('\n');
             *back_it++ = '\n';
             int indent = level;
             while (indent > 0) {
                 int n  = std::min(10, indent);
-                int wcount = [streambuf write:"\t\t\t\t\t\t\t\t\t\t" length:n];
-                if (wcount != n) {
+                if (![streambuf write:"\t\t\t\t\t\t\t\t\t\t" length:n]) {
                     return -1; // ERROR
                 }
                 indent -=n;
             }
         }
-        //[streambuf write:"}" length:1]; //buffer->push_back('}');    
         *back_it++ = '}';
         
         return 0;
@@ -1146,16 +1073,14 @@ namespace {
     if (numberType == kCFNumberCharType) {
         CFNumberGetValue((CFNumberRef)self, kCFNumberIntType, &boolValue);
         if (boolValue == 0) {
-            int wcount = [streambuf write:"false" length:5]; // buffer->write("false", 5);
-            if (wcount != 5) {
+            if (![streambuf write:"false" length:5]) {
                 return -1; // ERROR
             }
             return 0;  // success
         }
         else if (boolValue == 1) {
             //assert(boolValue == 1);
-            int wcount = [streambuf write:"true" length:4]; // buffer->write("true", 4);
-            if (wcount != 4) {
+            if (![streambuf write:"true" length:4]) {
                 return -1; // ERROR
             }
             return 0;  // success
@@ -1188,8 +1113,7 @@ namespace {
     NSUInteger length = [numberString lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
     assert(s);
     // TODO: encoding!
-    int wcount = [streambuf write:s length:static_cast<int>(length)]; // buffer->write(s, length);
-    if (wcount != length) {
+    if (![streambuf write:s length:static_cast<int>(length)]) {
         return -1; // ERROR
     }
     else {
@@ -1217,8 +1141,7 @@ namespace {
     assert(encoding == JPUnicodeEncoding_UTF8); 
     assert(streambuf);
     // TODO: encoding!
-    int wcount = [streambuf write:"null" length:4]; // buffer->write("null", 4);
-    if (wcount != 4) {
+    if (![streambuf write:"null" length:4]) {
         return -1; // ERROR
     }
     else {
@@ -1262,13 +1185,13 @@ namespace {
 {
     if (object == nil) {
         if (error) {
-            *error = makeError(1, "Parameter error: 'object' equals nil");
+            *error = makeError(1, "Parameter error: 'object' equals nil", nil);
         }
         return nil;
     }
     if(![object respondsToSelector:@selector(JPJson_serializeTo:encoding:options:level:)]) {
         if (error) {
-            *error = makeError(2, "Parameter error: 'object' is not a JSON object");
+            *error = makeError(2, "Parameter error: 'object' is not a JSON object", nil);
         }
         return nil;
     }
@@ -1280,13 +1203,13 @@ namespace {
         case JPUnicodeEncoding_UTF32BE:
         case JPUnicodeEncoding_UTF32LE:
             if (error) {
-                *error = makeError(6, "Encoding not suported in this version");
+                *error = makeError(6, "Encoding not suported in this version", nil);
             }
             return nil;
             break;
         default: 
             if (error) {
-                *error = makeError(3, "Parameter error: invalid encoding specified");
+                *error = makeError(3, "Parameter error: invalid encoding specified", nil);
             }
             return nil;
     }
@@ -1297,7 +1220,7 @@ namespace {
         int result = insertBOMIntoBuffer(streambuf, encoding);
         if (result <= 0) {
             if (error) {
-                *error = makeError(4, "Unknown error occured");
+                *error = makeError(4, "Unknown error occured", streambuf.error);
             }
             [streambuf release];
             return nil;
@@ -1306,7 +1229,7 @@ namespace {
     int result = [object JPJson_serializeTo:streambuf encoding:encoding options:options level:0];
     if (result < 0) {
         if (error) {
-            *error = makeError(5, "Could not serialize JSON into NSData object");
+            *error = makeError(5, "Could not serialize JSON into NSData object", streambuf.error);
         }
         [streambuf release];
         return nil;
@@ -1318,9 +1241,113 @@ namespace {
 }
 
 
++ (NSData*)dataWithObject:(id)object
+                  options:(JPJsonWriterOptions)options
+                    error:(NSError**)error
+{
+    return [self dataWithObject:object
+                       encoding:JPUnicodeEncoding_UTF8
+                        options:options
+                          error:error];
+}
+
+
++ (NSUInteger) serializeObject:(id)object
+                      toStream:(NSOutputStream*)ostream
+                      encoding:(JPUnicodeEncoding)encoding
+                       options:(JPJsonWriterOptions)options
+                         error:(NSError**)error
+{
+    NSParameterAssert(ostream && ([ostream streamStatus] == NSStreamStatusOpen));
+    
+    if (object == nil) {
+        if (error) {
+            *error = makeError(1, "Parameter error: 'object' equals nil", nil);
+        }
+        return nil;
+    }
+    if(![object respondsToSelector:@selector(JPJson_serializeTo:encoding:options:level:)]) {
+        if (error) {
+            *error = makeError(2, "Parameter error: 'object' is not a JSON object", nil);
+        }
+        return nil;
+    }
+    switch (encoding) {
+        case JPUnicodeEncoding_UTF8:
+            break;
+        case JPUnicodeEncoding_UTF16BE:
+        case JPUnicodeEncoding_UTF16LE:
+        case JPUnicodeEncoding_UTF32BE:
+        case JPUnicodeEncoding_UTF32LE:
+            if (error) {
+                *error = makeError(6, "Encoding not suported in this version", nil);
+            }
+            return nil;
+            break;
+        default:
+            if (error) {
+                *error = makeError(3, "Parameter error: invalid encoding specified", nil);
+            }
+            return nil;
+    }
+    JPOutputStreamStreambuffer* streambuf = [[JPOutputStreamStreambuffer alloc] initWithOutputStream:ostream];
+    if ((options & JPJsonWriterWriteBOM) != 0) {
+        int result = insertBOMIntoBuffer(streambuf, encoding);
+        if (result <= 0) {
+            if (error) {
+                *error = makeError(4, "Unknown error occured", streambuf.error);
+            }
+            [streambuf release];
+            return nil;
+        }
+    }
+    int result = [object JPJson_serializeTo:streambuf encoding:encoding options:options level:0];
+    if (result < 0) {
+        if (error) {
+            *error = makeError(5, "Could not serialize JSON", streambuf.error);
+        }
+        [streambuf release];
+        return 0;
+    }
+    if (![streambuf close]) {
+        if (error) {
+            *error = makeError(5, "Could not close stream", streambuf.error);
+        }
+        [streambuf release];
+        return 0;
+    }
+    
+    NSInteger written = streambuf.written;
+    [streambuf release];
+    return written;
+}
+
+
+
++ (NSUInteger) serializeObject:(id)object
+                      toStream:(NSOutputStream*)stream
+                       options:(JPJsonWriterOptions)options
+                         error:(NSError**)error
+{
+    return [self serializeObject:object
+                        toStream:stream
+                        encoding:JPUnicodeEncoding_UTF8
+                         options:options
+                           error:error];
+}
+
+
 @end
 
 
+        
+        
+        
+        
+        
+        
+        
+        
 @implementation JPJsonWriter (Extension)
 
 

@@ -73,3 +73,11 @@
 #### Bug fixes
 
 * Fixed a minor bug in Sample6, introduced due to an API change.
+
+
+### Version 0.6 beta
+
+* Improved installation document and fixed typos.
+
+
+
