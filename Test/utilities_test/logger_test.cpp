@@ -19,7 +19,7 @@
 //
 
 #include "json/utility/simple_log.hpp"
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
 #include <iomanip>
 

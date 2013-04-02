@@ -24,17 +24,17 @@
 
 #include "json/config.hpp"
 #include "semantic_actions_base.hpp"
-#include <boost/shared_ptr.hpp>
-#include <boost/any.hpp>
 #include "json/unicode/unicode_utilities.hpp"
 #include "json/unicode/unicode_conversion.hpp"
 #include "json/generator/generate.hpp"
-#include "json/value/string.hpp"
+#include <boost/shared_ptr.hpp>
+#include <boost/any.hpp>
 #include <map>
 #include <stack>
 #include <vector>
 #include <iterator>
 #include <assert.h>
+
 
 namespace json { namespace internal {
     
@@ -49,7 +49,8 @@ namespace json { namespace internal {
     //  
     // Template parameter EncodingT shall be derived from json::utf_encoding_tag.
     // EncodingT specifies the StringBufferEncoding of the parser.
-    //    
+    //
+        
     template <typename EncodingT>
     class semantic_actions_test : public json::semantic_actions_base<semantic_actions_test<EncodingT>, EncodingT>
     {
@@ -60,17 +61,19 @@ namespace json { namespace internal {
         typedef typename base::error_t          error_t;
         typedef typename base::char_t           char_t;
         typedef typename base::encoding_t       encoding_t;
-        typedef typename base::number_info_t    number_info_t;
+        typedef typename base::number_desc_t    number_desc_t;
         
         typedef typename base::buffer_t         buffer_t;
         typedef typename base::const_buffer_t   const_buffer_t;
         
+        typedef typename number_desc_t::NumberType number_type_t;
+        
     private:    
         enum Mode {Key, Data};
         
-        typedef boost::shared_ptr<boost::any>   value_t;
+        typedef boost::any                      value_t;
         typedef std::string                     string_t; 
-        typedef std::string                     number_t;
+        typedef std::pair<number_type_t,std::string> number_t;
         typedef bool                            boolean_t;
         struct null_t {};
         typedef std::vector<value_t>            array_t;
@@ -128,7 +131,7 @@ namespace json { namespace internal {
             max_level_ = std::max(max_level_, level_);
             string_representation_.append(1, '[');
             markers_.push_back(stack_.size());
-            stack_.push_back(value_t(new boost::any(array_t()))); 
+            stack_.emplace_back(array_t());
         }
         
         void end_array_imp() {
@@ -136,9 +139,9 @@ namespace json { namespace internal {
             string_representation_.append(1, ']');
             iterator container_iter = stack_.begin() + markers_.back();
             iterator first = container_iter + 1;
-            array_t& a = boost::any_cast<array_t&>(*(*container_iter));
+            array_t& a = boost::any_cast<array_t&>(*container_iter);
             while (first != stack_.end()) {
-                a.push_back(*first++);
+                a.emplace_back(*first++);
             }
             stack_.erase(container_iter+1, stack_.end());
             markers_.pop_back();
@@ -150,8 +153,8 @@ namespace json { namespace internal {
             ++level_;
             max_level_ = std::max(max_level_, level_);
             string_representation_.append(1, '{');
-            markers_.push_back(stack_.size());
-            stack_.push_back(value_t(new boost::any(object_t()))); 
+            markers_.emplace_back(stack_.size());
+            stack_.emplace_back(object_t());
         }
         
         bool end_object_imp() 
@@ -162,12 +165,12 @@ namespace json { namespace internal {
             iterator container_iter = stack_.begin() + markers_.back();
             iterator first = container_iter + 1;
             bool result = true;
-            object_t& o = boost::any_cast<object_t&>(*(*container_iter));
+            object_t& o = boost::any_cast<object_t&>(*container_iter);
             while (first != stack_.end()) {
-                string_t key = boost::any_cast<string_t&>(*(*first++));
+                string_t key = boost::any_cast<string_t&>(*first++);
                 assert(first != stack_.end());
                 value_t v = *first++;
-                std::pair<object_iterator, bool> res = o.insert(std::pair<string_t, value_t>(key, v));
+                std::pair<object_iterator, bool> res = o.emplace(key, v);
                 if (res.second == false) {
                     while (0) {};
                 }
@@ -205,7 +208,7 @@ namespace json { namespace internal {
                 throw std::runtime_error("escaping JSON string failed");
             }
             string_representation_.append("\":");
-            stack_.push_back(value_t(new boost::any(make_string(buffer.first, buffer.second)))); 
+            stack_.emplace_back(make_string(buffer.first, buffer.second));
         }
         
         void end_key_value_pair_imp() {}
@@ -245,8 +248,7 @@ namespace json { namespace internal {
                     throw std::runtime_error("escaping JSON string failed");
                 }
                 string_representation_.append(1, '"');
-                std::string value = make_string(buffer.first, buffer.second);
-                stack_.push_back(value_t(new boost::any(value))); 
+                stack_.emplace_back(make_string(buffer.first, buffer.second));
                 ++data_string_count_; 
             }
             else if (data_string_start_ and hasMore) {
@@ -290,7 +292,7 @@ namespace json { namespace internal {
                 }
                 string_representation_.append(1, '"');
                 append_to_string(tmp_large_string_, buffer.first, buffer.second);
-                stack_.push_back(value_t(new boost::any(tmp_large_string_))); 
+                stack_.emplace_back(tmp_large_string_);
                 ++data_string_count_; 
                 tmp_large_string_.clear();
                 data_string_start_ = true;
@@ -298,33 +300,37 @@ namespace json { namespace internal {
         }
         
         
-        void value_number_imp(const number_info_t& number) { 
+        void value_number_imp(const number_desc_t& number) { 
             ++number_count_; 
             string_representation_.append(number.c_str(), number.c_str_len());
-            stack_.push_back(value_t(new boost::any(number_t(number.c_str(), number.c_str_len())))); 
+            stack_.emplace_back(number_t(number.number_type(), {number.c_str(), number.c_str_len()}));
         }
         
         void value_boolean_imp(bool b) { 
             ++boolean_count_; 
             const char* v = b ? "true" : "false";
             string_representation_.append(v);
-            stack_.push_back(value_t(new boost::any(boolean_t(b)))); 
+            stack_.emplace_back(boost::any(boolean_t(b)));
         }
         
         void value_null_imp() { 
             ++null_count_; 
             string_representation_.append("null");
-            stack_.push_back(value_t(new boost::any(null_t()))); 
+            stack_.emplace_back(boost::any(null_t()));
         }
         
         
-        void clear_imp() { 
+        void clear_imp(bool shrink_buffers) {
             array_count_ = object_count_ = key_string_count_ = data_string_count_ 
             = boolean_count_ = null_count_ = number_count_ = 0;
             stack_ = stack_t(); 
             result_ = result_type(); 
             string_representation_.clear();
             markers_.clear();
+            if (shrink_buffers) {
+                string_representation_.shrink_to_fit();
+                tmp_large_string_.shrink_to_fit();
+            }
         }
         
         void error_imp(int code, const char* description) {

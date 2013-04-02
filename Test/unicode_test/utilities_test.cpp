@@ -20,7 +20,7 @@
 
 #include "json/unicode/unicode_utilities.hpp"
 #include "json/unicode/unicode_traits.hpp"
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
 #include <iostream>
 #include <iomanip>

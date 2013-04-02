@@ -6,7 +6,7 @@
 //
 //
 
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 #include "json/ObjC/NSStreamStreambuf.hpp"
 #include <boost/ref.hpp>
 #include <boost/iostreams/device/file.hpp>
@@ -226,6 +226,42 @@ namespace {
     }
     
     
+    
+    TEST_F(NSStreamStreambufTest, NSInputStreamStreambuf2_read1)
+    {
+        NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+        
+        const NSUInteger Size = 32000;
+        NSMutableData* data = [NSMutableData dataWithLength:Size];
+        char* start = static_cast<char*>([data mutableBytes]);
+        char* p = start;
+        for (int i = 0; i < Size; ++i, ++p) {
+            *p = (i % 10) + '0';
+        }
+        NSInputStream* nsistream = [NSInputStream inputStreamWithData:data];
+        [nsistream open];
+        ASSERT_TRUE([nsistream streamStatus] == NSStreamStatusOpen);
+        
+        const int ReadBufferSize = 1024;
+        //char buffer[ReadBufferSize];
+        NSInputStreamStreambuf2 issbuf;
+        issbuf.open(internal::NSInputStreamSource2(nsistream), ReadBufferSize);
+        ASSERT_TRUE(issbuf.is_open());
+        
+        std::streamsize count = 0;
+        int ch;
+        while ((ch = issbuf.sbumpc()) != EOF) {
+            EXPECT_EQ( (count % 10) + '0', ch);
+            ++count;
+        }
+        EXPECT_EQ(Size, count);
+        
+        
+        issbuf.close();
+        ASSERT_TRUE([nsistream streamStatus] == NSStreamStatusClosed);
+        
+        [pool drain];
+    }
     
 #if 0
     

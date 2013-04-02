@@ -5,7 +5,7 @@ require 'pathname'
 
 puts "CreateDoc JPJsonParser/json/ObjC"
 
-src_root = ENV['JP_ROOT']
+src_root = ENV['SOURCE_ROOT']
 dest_dir = ENV['DERIVED_FILE_DIR']
 puts "cd #{src_root}"
 Dir.chdir src_root

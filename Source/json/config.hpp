@@ -22,6 +22,14 @@
 
 
 /**
+ Endianness
+ If JSON_SWAP_NO_BUILTIN is defined, an internal implementation will be chosen
+ instead of a builtin or library function.
+ */
+//#define JSON_SWAP_NO_BUILTIN
+
+
+/**
  If JSON_UTILITY_STRING_TO_NUMBER_USE_QI is defined, the implemenation uses
  boost::spirit::qi for string to number conversions. This is slightly faster
  that when using standard conversions defined in header <xlocale.h>. 
@@ -29,6 +37,7 @@
 #define JSON_UTILITY_STRING_TO_NUMBER_USE_QI
 
 
+#define JSON_UTILITY_NUMBER_TO_STRING_USE_KARMA
 
 
 /**
@@ -65,6 +74,10 @@
 */
 // #define JSON_USE_JSON_PATH  //currently not used
 
+
+
+// json::Value implementation
+#define USE_JSON_UTILITY_VARIANT
 
 
 #endif   // JSON_CONFIG_HPP

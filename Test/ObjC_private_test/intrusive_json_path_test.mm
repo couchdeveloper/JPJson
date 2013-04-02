@@ -15,7 +15,7 @@
 //
 
 #include "json/json_path/intrusive_json_path.hpp"
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
 #include <iostream>
 #include <iomanip>

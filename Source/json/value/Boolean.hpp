@@ -22,13 +22,10 @@
 
 
 #include "json/config.hpp"
-#include <boost/config.hpp>
-#include <boost/utility/enable_if.hpp>
-#include <boost/mpl/and.hpp>
-#include <boost/mpl/not.hpp>
-#include <boost/type_traits.hpp>
-#include <iostream>
 #include "json_traits.hpp"
+#include "json/utility/mpl.hpp"
+#include <type_traits>
+#include <iostream>
 
 
 namespace json {
@@ -36,121 +33,106 @@ namespace json {
 #pragma mark -
 #pragma mark json::Boolean
     
-    namespace mpl = boost::mpl;
+    namespace mpl = json::utility::mpl;
     
     //
     // Typesafe Boolean
     //
-    class Boolean 
+    
+    
+    class Boolean
     {
-    private:
-        bool value_;
-        
         struct bool_value {
-            void nonnull() {} 
+            void nonnull() {}
         };
         typedef void (bool_value::*safe_bool)();
         
     public:
         
-        //
-        // Constructors
-        //
+        Boolean() noexcept = default;
         
-        Boolean() throw() : value_(false) {}
-        
-        Boolean(Boolean const& v)  throw() : value_(v.value_)  {}
+        constexpr Boolean(Boolean const& other) noexcept = default;
         
         // Implicit conversions (T => Boolean) are allowed only from type bool
-        template <typename T>
-        Boolean(const T& v,
-                typename boost::enable_if< boost::is_same<bool, T> >::type* = 0 )
-        throw() 
-        : value_(v) 
-        {}
-        
-        // Explicit conversions:
-        template <typename T>
-        /*
-        explicit Boolean(const T& v,
-                         typename boost::enable_if_c< 
-                            not boost::is_same<bool, T>::value
-                            and (boost::is_convertible<T,bool>::value 
-                                 and not boost::is_convertible<T,int>::value 
-                                 and not boost::is_convertible<T, void*>::value)
-                         >::type* = 0 
-                         ) 
-        */
-        explicit Boolean(const T& v,
-                         typename boost::enable_if< 
-                            mpl::and_<
-                                mpl::not_<boost::is_same<bool, T> >
-                              , mpl::and_<
-                                    boost::is_convertible<T,bool>
-                                  , mpl::not_<boost::is_convertible<T,int> > 
-                                  , mpl::not_<boost::is_convertible<T, void*> >
-                                >
-                            >
-                         >::type* = 0 
-                         ) 
+        template <typename T,
+                typename = typename std::enable_if<std::is_same<bool, T>::value
+            >::type
+        >
+        constexpr Boolean(T v) noexcept
         : value_(v)
-        {}
-        
-        //
-        // Safe bool operator
-        //
-        operator safe_bool() const
         {
-            return value_ == true? &bool_value::nonnull : 0;
+        }
+        
+        // assignment
+        Boolean& operator=(const Boolean& other) noexcept
+        {
+            value_ = other.value_;
+            return *this;
         }
         
         
-        //
-        // Comparison Operators
-        //
+        // Safe bool operator
+        operator safe_bool() const  noexcept {
+            return value_ == true ? &bool_value::nonnull : 0;
+        }
+
+        // Conversion operator bool
+        constexpr explicit operator bool () const noexcept { return value_; }
         
-        Boolean operator! () const { return Boolean(not value_); }
+        
+        // Not operator
+        Boolean operator! () const noexcept { return not value_; }
+        
         
         // Comparison Operators (defined inline as friend free functions)
         
         // bool operator== (ConvertibleToBoolean lhv, ConvertibleToBoolean rhv)
-        template <typename T, typename U>
-        friend inline 
-        typename boost::enable_if<
-            mpl::and_<
-                  boost::is_convertible<T, Boolean>
-                , boost::is_convertible<U, Boolean> 
-            >
-            , bool>::type
-        operator== (const T& lhv, const U& rhv) {
-            return bool(lhv) == bool(rhv);
+        template <typename T, typename U,
+            typename = typename std::enable_if<
+                std::is_convertible<T, Boolean>::value
+                and std::is_convertible<U, Boolean>::value
+            >::type
+        >
+        friend inline
+        bool operator== (const T& lhv, const U& rhv) {
+            return static_cast<bool>(lhv) == static_cast<bool>(rhv);
         }
         
         // bool operator!= (ConvertibleToBoolean lhv, ConvertibleToBoolean rhv)
-        template <typename T, typename U>
-        friend inline 
-        typename boost::enable_if<
-            mpl::and_<
-                boost::is_convertible<T, Boolean>
-              , boost::is_convertible<U, Boolean>
-            >
-            , bool>::type
-        operator!= (const T& lhv, const U& rhv) {
-            return bool(lhv) != bool(rhv);
+        template <typename T, typename U,
+            typename = typename std::enable_if<
+                std::is_convertible<T, Boolean>::value
+                and std::is_convertible<U, Boolean>::value
+            >::type
+        >
+        friend inline
+        bool operator!= (const T& lhv, const U& rhv) {
+            return static_cast<bool>(lhv) != static_cast<bool>(rhv);
         }
+        
+        
+        
+        // ostream support
+        friend inline
+        std::ostream& operator<< (std::ostream& os, Boolean b) {
+            std::ios::fmtflags flags = os.setf(std::ios::boolalpha);
+            os << b.value_;
+            os.setf(flags);
+            return os;
+        }
+
+    
+    private:
+        bool value_;
         
     };
     
-    inline std::ostream& operator<<(std::ostream& os, const Boolean& b) {
-        os << bool(b);
-        return os;
-    }
     
-    template <> 
-    struct is_json_type<Boolean> : public boost::mpl::true_
-    { 
-        static const bool value = true; 
-    };
+//    template <>
+//    struct is_json_type<Boolean> : std::true_type
+//    {
+//    };
+    
     
 }  // namespace json
 

@@ -7,7 +7,7 @@
 //
 
 #include "json/utility/base64.hpp"
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
 #include <iostream>
 #include <iomanip>

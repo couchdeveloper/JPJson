@@ -18,18 +18,18 @@
 //  limitations under the License.
 //
 
-#include <iostream>
-#include <vector>
-#include <iterator>
-#include <cstdio>
-#include <cstdlib>
-
 #include "json/unicode/unicode_conversion.hpp"
 #include "json/unicode/unicode_traits.hpp"
 
 #include "utilities/timer.hpp"
 #include "utilities/MinMaxAvg.hpp"
 
+#include <iostream>
+#include <vector>
+#include <iterator>
+#include <cstdio>
+#include <cstdlib>
+#include <sstream>
 #include <cassert>
 #include <ctime>
 
@@ -178,6 +178,7 @@ namespace {
     };
     
     const int kBenchFlags = BENCH_JP_SAFE | BENCH_ICU;
+    //const int kBenchFlags = BENCH_JP;
     
 
     
@@ -1672,14 +1673,14 @@ int main (int argc, const char * argv[])
         
                 //profile();
 
-        //bench_UTF8_to_codepoint(1000*1000, 10);
-        //bench_UTF16_to_codepoint();
-        //bench_UTF32_to_codepoint();
+        bench_UTF8_to_codepoint(1000*1000, 10);
+        bench_UTF16_to_codepoint();
+        bench_UTF32_to_codepoint();
         
-        //bench_codepoint_to_UTF8();
-        //bench_codepoint_to_UTF16();
-        //bench_codepoint_to_UTF32();
-        //bench_codepoint_to_UTF();
+        bench_codepoint_to_UTF8();
+        bench_codepoint_to_UTF16();
+        bench_codepoint_to_UTF32();
+        bench_codepoint_to_UTF();
     
         
         //bench_UTF8_to_UTF8(1000*1000, 100);
@@ -1691,6 +1692,8 @@ int main (int argc, const char * argv[])
         //bench_UTF16_to_UTF32();        
 
         bench_UTF_to_UTF(1000, 1000);
+        
+        std::cout << "finished" << std::endl;
         
     }
     catch (std::exception& ex) {

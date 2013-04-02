@@ -20,15 +20,12 @@
 
 #include <boost/config.hpp>
 
-// using boost file streams
-//#include <boost/iostreams/device/file.hpp>
-//#include <boost/iostreams/stream.hpp>
-
 #include <iostream>
 #include <fstream>
 #include <iterator>
 #include <stdexcept>
 #include <string>
+#include <chrono>
 
 #include <cstdio>
 #include <cstdlib>
@@ -39,23 +36,21 @@
 
 #include "json/parser/parser.hpp"
 #include "json/parser/parse.hpp"
-#include "json/parser/semantic_actions.hpp"
-#include "json/parser/semantic_actions_test.hpp"
-
-#include "utilities/timer.hpp"
-
-
+#include "json/parser/value_generator.hpp"
+#include "json/utility/arena_allocator.hpp"
+#include "utilities/bench.hpp"
 
 namespace {
     
     
-    const char* TEST_JSON = "Test-UTF8-esc.json";
+    const char* TEST_JSON = "Test-UTF8.json";
+    //const char* TEST_JSON = "sample.json";
     
     std::vector<char> loadFileFromResourceFolder(const char* fileName) 
     {        
         std::string filePath("Resources/");
         filePath.append(fileName);
-        std::ifstream ifs(filePath.c_str());
+        std::ifstream ifs(filePath.c_str(), std::ios_base::in|std::ios_base::binary);
         if (!ifs)
             throw std::runtime_error(std::string("could not open file: " + filePath));
         
@@ -79,480 +74,474 @@ namespace {
 }
 
 
-#if 0
+namespace test {
+    
+#if defined (DEBUG)
+    constexpr int N = 1;
+#else
+    constexpr int N = 1000;
+#endif
+    
+    
+    template <typename Derived>
+    struct bench_parser_base : bench_base<Derived, N>
+    {
+        typedef bench_base<Derived> base;
+        typedef typename base::timer timer;
+        typedef typename base::duration duration;
+        
+        
+        bench_parser_base(std::string title) : title_(title) {}
+        
+        void prepare_imp()
+        {
+            std::cout << "\n--- " << title_ << " ---\n";
+        }
+                
+        void report_imp(duration min, duration max, duration tot, std::size_t n)
+        {
+            std::cout << "elapsed time for parsing :\n"
+            << "min: " << formatted_duration(min) <<
+            ", max: " << formatted_duration(max) <<
+            ", avg: " << formatted_duration(tot/n) << std::endl;
+        }
+        
+        bool result() const { return result_; }
+        bool& result() { return result_; }
+        
+        void teardown_imp() {};        
+        
+
+    private:
+        bool result_;
+        std::string title_;
+    };
+    
+    
+    
+    struct bench_validating_parser : bench_parser_base<bench_validating_parser>
+    {
+        typedef bench_parser_base<bench_validating_parser> base;
+        typedef typename bench_parser_base::timer timer;
+        typedef typename bench_parser_base::duration duration;
+        
+        bench_validating_parser() : base("Bench Validating Parser")  {}
+        
+        void prepare_imp(std::string filePath)
+        {
+            base::prepare_imp();
+            std::cout << "parsing file at path " << filePath << std::endl;
+            std::cout << "using vector<char> iterators" << std::endl;
+            json_ = loadFileFromResourceFolder(filePath.c_str());
+        }
+        
+        duration bench_imp()
+        {
+            timer timer;
+            std::vector<char>::const_iterator first = json_.begin();
+            std::vector<char>::const_iterator last = json_.end();
+            auto t0 = timer.now();
+            result() = json::parse(first, last);
+            return timer.now() - t0;
+        }
+        
+    private:
+        std::vector<char> json_;
+    };
+    
+    
+    struct bench_test_parser : bench_parser_base<bench_test_parser>
+    {
+        typedef bench_parser_base<bench_test_parser> base;
+        typedef typename bench_parser_base::timer timer;
+        typedef typename bench_parser_base::duration duration;
+        
+        typedef std::vector<char>::iterator iterator;
+        typedef json::value_generator<json::unicode::UTF_8_encoding_tag> SemanticActions;
+        
+        bench_test_parser() : base("Bench Test Parser")  {}
+        
+        void prepare_imp(std::string filePath)
+        {
+            base::prepare_imp();
+            std::cout << "parsing file at path " << filePath << std::endl;
+            std::cout << "using vector<char> iterators, continuously using one sematic actions objects" << std::endl;
+            json_ = loadFileFromResourceFolder(filePath.c_str());
+        }
+        
+        duration bench_imp()
+        {
+            timer timer;
+
+            sa_.clear();
+            auto t0 = timer.now();
+            std::vector<char>::const_iterator first = json_.begin();
+            std::vector<char>::const_iterator last = json_.end();
+            result() = json::parse(first, last, sa_);
+            return timer.now() - t0;
+        }
+        
+        
+        void report_imp(duration min, duration max, duration tot, std::size_t n)
+        {
+            if (result()) {
+                base::report_imp(min, max, tot, n);
+                std::cout << sa_ << std::endl;
+            } else {
+                std::cout << "json test parser: error" << std::endl;
+            }
+        }
+        
+    private:
+        SemanticActions sa_;
+        std::vector<char> json_;
+    };
+    
+    struct bench_parser : bench_parser_base<bench_parser>
+    {
+        typedef bench_parser_base<bench_parser> base;
+        typedef typename bench_parser_base::timer timer;
+        typedef typename bench_parser_base::duration duration;
+        
+        typedef json::value_generator<json::unicode::UTF_8_encoding_tag> SemanticActions;
+        
+        bench_parser() : base("Bench Parser")  {}
+        
+        void prepare_imp(std::string filePath)
+        {
+            base::prepare_imp();
+            std::cout << "parsing file at path " << filePath << std::endl;
+            std::cout << "using vector<char> iterators, continuously using one sematic actions objects" << std::endl;
+            json_ = loadFileFromResourceFolder(filePath.c_str());
+        }
+        
+        duration bench_imp()
+        {
+            timer timer;
+            
+            sa_.clear();
+            auto t0 = timer.now();
+            std::vector<char>::const_iterator first = json_.begin();
+            std::vector<char>::const_iterator last = json_.end();
+            result() = json::parse(first, last, sa_);
+            return timer.now() - t0;
+        }
+        
+        
+        void report_imp(duration min, duration max, duration tot, std::size_t n)
+        {
+            if (result()) {
+                base::report_imp(min, max, tot, n);
+            } else {
+                std::cout << "json parser: error" << std::endl;
+            }
+        }
+        
+    private:
+        SemanticActions sa_;
+        std::vector<char> json_;
+    };
+    
+    
+    struct bench_parser_arena_allocator : bench_parser_base<bench_parser_arena_allocator>
+    {
+        typedef bench_parser_base<bench_parser_arena_allocator> base;
+        typedef typename bench_parser_base::timer timer;
+        typedef typename bench_parser_base::duration duration;
+                
+        typedef json::utility::arena_allocator<void, json::utility::SysArena> Allocator;
+        typedef json::value_generator<json::unicode::UTF_8_encoding_tag, Allocator> SemanticActions;
+        
+        bench_parser_arena_allocator()
+        :   base("Bench Parser with Arena Allocator"),
+            arena_(4*1024),
+            a_(arena_),
+            sa_(a_)
+        {}
+        
+        void prepare_imp(std::string filePath)
+        {
+            base::prepare_imp();
+            std::cout << "parsing file at path " << filePath << std::endl;
+            std::cout << "using vector<char> iterators, "
+                "\ncontinuously using one sematic actions objects (clearing it for each run)"
+                "\ncontinuously using one arena (clearing it for each run)" 
+            << std::endl;
+            json_ = loadFileFromResourceFolder(filePath.c_str());
+        }
+        
+        duration bench_imp()
+        {
+            timer timer;
+            
+            sa_.clear();
+            arena_.clear();
+            auto t0 = timer.now();
+            std::vector<char>::const_iterator first = json_.begin();
+            std::vector<char>::const_iterator last = json_.end();
+            result() = json::parse(first, last, sa_);
+            return timer.now() - t0;
+        }
+        
+        
+        void report_imp(duration min, duration max, duration tot, std::size_t n)
+        {
+            if (result()) {
+                base::report_imp(min, max, tot, n);
+                std::cout << "Arena: total memory allocated: " << arena_.totalSize() << " bytes" << std::endl;
+                std::cout << "Arena: total memory used: " << arena_.bytesUsed() << " bytes"<< std::endl;
+                //    std::cout << "Arena: min block size: " << arena_.minBlock() << " bytes"<< std::endl;
+                std::cout << "Arena: number of blocks allocated: " << arena_.numberAllocatedBlocks() << std::endl;
+                
+            } else {
+                std::cout << "json parser: error" << std::endl;
+            }
+        }
+        
+    private:
+        std::vector<char> json_;
+        json::utility::SysArena arena_;
+        Allocator a_;
+        SemanticActions sa_;
+    };
+    
+
+    
+    
+    
+    struct bench_parser_stream_iter : bench_parser_base<bench_parser_stream_iter>
+    {
+        typedef bench_parser_base<bench_parser_stream_iter> base;
+        typedef typename bench_parser_base::timer timer;
+        typedef typename bench_parser_base::duration duration;
+        
+        typedef json::value_generator<json::unicode::UTF_8_encoding_tag> SemanticActions;
+        
+        bench_parser_stream_iter() : bench_parser_base("Bench Parser With Stream")  {}
+        
+        void prepare_imp(std::string filePath)
+        {
+            base::prepare_imp();
+            std::cout << "parsing file at path " << filePath << std::endl;
+            std::cout << "using istream iterators, continuously using one sematic actions objects" << std::endl;
+            buffer_ = static_cast<char*>(malloc(4096));
+            ifs_.rdbuf()->pubsetbuf(buffer_, 4096);
+            ifs_.open(std::string("Resources/").append(filePath), std::ios::binary);
+            if (ifs_.fail())
+                throw std::runtime_error("could not open file");
+        }
+        
+        duration bench_imp()
+        {
+            typedef std::istream_iterator<char> iterator;
+            
+            timer timer;
+            
+            sa_.clear();
+            ifs_.clear();
+            ifs_.seekg(0);
+            auto t0 = timer.now();
+            iterator first(ifs_);
+            iterator last;  // EOS
+            result() = json::parse(first, last, sa_);
+            return timer.now() - t0;
+        }
+        
+        void teardown_imp() {
+            ifs_.close();
+            free(buffer_);
+        }
+        
+        void report_imp(duration min, duration max, duration tot, std::size_t n)
+        {
+            if (result()) {
+                base::report_imp(min, max, tot, n);
+            } else {
+                std::cout << "json parser: error" << std::endl;
+            }
+        }
+        
+    private:
+        SemanticActions sa_;
+        std::ifstream ifs_;
+        char* buffer_;
+    };
+    
+    
+    template <typename StreamIter>
+    struct bench_validating_parser_stream_iter : bench_parser_base<bench_validating_parser_stream_iter<StreamIter>>
+    {
+        typedef bench_parser_base<bench_validating_parser_stream_iter<StreamIter>> base;
+        typedef typename base::timer timer;
+        typedef typename base::duration duration;
+        
+        typedef StreamIter iterator;
+        
+        bench_validating_parser_stream_iter() : base("Bench Validating Parser with Stream Iterator")  {}
+        
+        void prepare_imp(std::string filePath)
+        {
+            base::prepare_imp();
+            std::cout << "parsing file at path " << filePath << std::endl;
+            std::cout << "using istream iterators" << std::endl;
+            buffer_ = static_cast<char*>(malloc(4096));
+            ifs_.rdbuf()->pubsetbuf(buffer_, 4096);
+            ifs_.open(std::string("Resources/").append(filePath), std::ios::binary);
+            if (ifs_.fail())
+                throw std::runtime_error("could not open file");
+        }
+        
+        duration bench_imp()
+        {
+            timer timer;
+            
+            ifs_.clear();
+            ifs_.seekg(0);
+            auto t0 = timer.now();
+            iterator first(ifs_);
+            iterator last;  // EOS
+            base::result() = json::parse(first, last);
+            return timer.now() - t0;
+        }
+        
+        void teardown_imp() {
+            ifs_.close();
+            free(buffer_);
+        }
+        
+        void report_imp(duration min, duration max, duration tot, std::size_t n)
+        {
+            if (base::result()) {
+                base::report_imp(min, max, tot, n);
+            } else {
+                std::cout << "json parser: error" << std::endl;
+            }
+        }
+        
+    private:
+        std::ifstream ifs_;
+        char* buffer_;
+    };
+    
+    
+    template <typename StreamBufIter>
+    struct bench_validating_parser_streambuf_iter : bench_parser_base<bench_validating_parser_streambuf_iter<StreamBufIter>>
+    {
+        typedef bench_parser_base<bench_validating_parser_streambuf_iter<StreamBufIter>> base;
+        typedef typename base::timer timer;
+        typedef typename base::duration duration;
+
+        typedef StreamBufIter iterator;
+        
+        bench_validating_parser_streambuf_iter() : base("Bench Validating Parser with Streambuf Iterator")  {}
+        
+        void prepare_imp(std::string filePath)
+        {
+            base::prepare_imp();
+            std::cout << "parsing file at path " << filePath << std::endl;
+            std::cout << "using istreambuf iterators" << std::endl;
+            buffer_ = static_cast<char*>(malloc(4096));
+            ifs_.rdbuf()->pubsetbuf(buffer_, 4096);
+            ifs_.open(std::string("Resources/").append(filePath), std::ios::binary);
+            if (ifs_.fail())
+                throw std::runtime_error("could not open file");
+        }
+        
+        duration bench_imp()
+        {
+            
+            timer timer;
+            
+            ifs_.clear();
+            ifs_.seekg(0);
+            
+            auto t0 = timer.now();
+            iterator first(ifs_);
+            iterator last;  // EOS
+            base::result() = json::parse(first, last);
+            return timer.now() - t0;
+        }
+        
+        void teardown_imp() {
+            ifs_.close();
+            free(buffer_);
+        }
+        
+        void report_imp(duration min, duration max, duration tot, std::size_t n)
+        {
+            if (base::result()) {
+                base::report_imp(min, max, tot, n);
+            } else {
+                std::cout << "json parser: error" << std::endl;
+            }
+        }
+        
+    private:
+        std::ifstream ifs_;
+        char* buffer_;
+    };
+    
+    
+    
+    
+    
+}  // namespace test
+
+
+
+
+
+
+
+static void bench_parser_stream_iter()
+{
+    test::bench_parser_stream_iter b;
+    b.run(TEST_JSON);
+}
+
+static void bench_validating_parser_stream_iter()
+{
+    test::bench_validating_parser_stream_iter<std::istream_iterator<char>> b;
+    b.run(TEST_JSON);
+}
+
+static void bench_validating_parser_streambuf_iter()
+{
+    test::bench_validating_parser_streambuf_iter<std::istreambuf_iterator<char>> b;
+    b.run(TEST_JSON);
+}
+
+
+static void bench_parser_arena_allocator()
+{
+    test::bench_parser_arena_allocator b;
+    b.run(TEST_JSON);
+}
+
 static void bench_validating_parser()
 {
-    using namespace json;
-    using namespace utilities;
-    
-    std::vector<char> buffer = loadFileFromResourceFolder(TEST_JSON);
-    
-    /*
-    // Create your string stream.
-    // Get the stringbuffer from the stream and set the vector as it source.
-    std::stringstream localStream;
-    localStream.rdbuf()->pubsetbuf(&buffer[0],length);
-    */
-    
-    timer t0 = timer();
-#if defined (DEBUG)
-    const int N = 1;
-#else    
-    const int N = 1000;
-#endif    
-    
-    bool result;
-    for (int i = 0; i < N; ++i) {
-        t0.start();
-        std::vector<char>::const_iterator first = buffer.begin();
-        std::vector<char>::const_iterator last = buffer.end();
-        result = parse(first, last);
-        t0.pause();
-    }
-    
-    if (result) {
-        printf("Validating Parser: elapsed time:  %.3f ms\n", t0.seconds()*1e3 / N);
-    }
-    else {
-        printf("Validating Parser: error\n");
-    }    
+    test::bench_validating_parser b;
+    b.run(TEST_JSON);
 }
-#endif
 
-
-static void bench_test_parser() 
+static void bench_test_parser()
 {
-    using namespace json;
-    using utilities::timer;
-    
-    std::cout << "using vector<char> iterators" << std::endl;
-    
-    std::vector<char> buffer = loadFileFromResourceFolder(TEST_JSON);
-
-    timer t0 = timer();
-#if defined (DEBUG)
-    const int N = 1;
-#else    
-    const int N = 1000;
-#endif    
-    
-    typedef std::vector<char>::iterator iterator;
-    typedef json::semantic_actions<json::unicode::UTF_8_encoding_tag> SemanticActions;
-    
-    bool result;
-    SemanticActions sa;
-    std::cout << "start parsing " << N << " times ... \n";
-    for (int i = 0; i < N; ++i) {
-        sa.clear();
-        t0.start();
-        iterator first = buffer.begin();
-        iterator last = buffer.end();
-        result = parse(first, last, sa);
-        t0.pause();
-#if 1   
-        if (i == N-1) {
-            if (result) 
-            {
-                //SemanticActions::result_type& r = sa.result();
-                std::cout << sa << std::endl;
-            }
-        }
-#endif    
-    }
-    std::cout << "... end parsing\n";
-    
-    
-    if (result) {
-        printf("Test Parser: elapsed time:  %.3f ms\n", t0.seconds()*1e3 / N);
-    }
-    else {
-        printf("json test parser: error\n");
-    }    
+    test::bench_test_parser b;
+    b.run(TEST_JSON);
 }
 
-
-static void bench_parser() 
+static void bench_parser()
 {
-    using namespace json;
-    using utilities::timer;
-    
-    std::cout << "using vector<char> iterators" << std::endl;
-    
-    std::vector<char> buffer = loadFileFromResourceFolder(TEST_JSON);
-    
-    timer t = timer();
-#if defined (DEBUG)
-    const int N = 1;
-#else    
-    const int N = 1000;
-#endif    
-    
-    typedef std::vector<char>::iterator iterator;
-    typedef json::semantic_actions<json::unicode::UTF_8_encoding_tag> SemanticActions;
-    
-    bool result;
-    SemanticActions sa;
-    std::cout << "start parsing " << N << " times ... \n";
-    double t0_sum = 0.0;
-    double t1_sum = 0.0;
-    double t2_sum = 0.0;
-    double t3_sum = 0.0;
-    double t_min = 1.0e99;
-    double t_max = 0.0;
-    double t_tot = 0.0;
-    for (int i = 0; i < N; ++i) {
-        sa.clear();
-        t.start();
-        iterator first = buffer.begin();
-        iterator last = buffer.end();
-        result = parse(first, last, sa);
-        t.stop();
-        t_min = std::min(t_min, t.seconds());
-        t_max = std::max(t_max, t.seconds());
-        t_tot += t.seconds();
-        t.reset();
-        
-        t0_sum += sa.t0();
-        t1_sum += sa.t1();
-        t2_sum += sa.t2();
-        t3_sum += sa.t3();
-#if 1   
-        if (i == N-1) {
-            if (result) 
-            {
-                //SemanticActions::result_type& r = sa.result();
-                // std::cout << sa << std::endl;
-                std::cout << "SemanticActionsTest average elapsed time for:\n"
-                << "push string (" <<  sa.c0() << "): " 
-                << std::fixed << std::setprecision(3) << (t0_sum / N) * 1.0e3 << " ms" 
-                << std::endl  
-                << "pop operations: " 
-                << std::fixed << std::setprecision(3) << (t3_sum / N) * 1.0e3 << " ms" 
-                << std::endl  
-                << "array push_back operations(" <<  sa.c1() << "): " 
-                << std::fixed << std::setprecision(3) << (t1_sum / N) * 1.0e3 << " ms" 
-                << std::endl  
-                << "object insert operations(" <<  sa.c2() << "): " 
-                << std::fixed << std::setprecision(3) << (t2_sum / N) * 1.0e3 << " ms" 
-                << std::endl;
-                
-                std::cout << sa << std::endl;
-                
-            }
-        }
-#endif    
-    }
-    
-    SemanticActions::cleanup_caches();
-    std::cout << "... end parsing\n";
-    
-    
-    if (result) {
-        printf("JsonParser: elapsed time:  min: %5.3f ms, max: %5.3f ms, avg: %5.3f ms\n", 
-               t_min*1e3, t_max*1e3, t_tot*1e3 / N );
-    }
-    else {
-        printf("JsonParser: error\n");
-    }    
+    test::bench_parser b;
+    b.run(TEST_JSON);
 }
 
 
 
-static void bench_parser2() 
-{
-    using namespace json;
-    using utilities::timer;
-    
-    std::cout << "using istream iterators" << std::endl;    
-    
-    std::ifstream ifs(TEST_JSON);
-    if (!ifs)
-        throw std::runtime_error("could not open file");
-    
-    
-    timer t = timer();
-#if defined (DEBUG)
-    const int N = 1;
-#else    
-    const int N = 1000;
-#endif    
-    
-    typedef std::istream_iterator<char> iterator;
-    typedef json::semantic_actions<json::unicode::UTF_8_encoding_tag> SemanticActions;
-    
-    bool result;
-    SemanticActions sa;
-    std::cout << "start parsing " << N << " times ... \n";
-    double t0_sum = 0.0;
-    double t1_sum = 0.0;
-    double t2_sum = 0.0;
-    double t3_sum = 0.0;
-    double t_min = 1.0e99;
-    double t_max = 0.0;
-    double t_tot = 0.0;
-    for (int i = 0; i < N; ++i) {
-        sa.clear();
-        ifs.clear();
-        ifs.seekg(0);
-        if (ifs.eof()) {
-            std::cout << "error: eos bit set for file stream\n";
-            break;
-        }
-        t.start();
-        iterator first(ifs);
-        iterator last;  // EOS
-        result = parse(first, last, sa);
-        t.stop();
-        t_min = std::min(t_min, t.seconds());
-        t_max = std::max(t_max, t.seconds());
-        t_tot += t.seconds();
-        t.reset();
-        
-        t0_sum += sa.t0();
-        t1_sum += sa.t1();
-        t2_sum += sa.t2();
-        t3_sum += sa.t3();
-#if 1   
-        if (i == N-1) {
-            if (result) 
-            {
-                //SemanticActions::result_type& r = sa.result();
-                // std::cout << sa << std::endl;
-                std::cout << "SemanticActionsTest average elapsed time for:\n"
-                << "push string (" <<  sa.c0() << "): " 
-                << std::fixed << std::setprecision(3) << (t0_sum / N) * 1.0e3 << " ms" 
-                << std::endl  
-                << "pop operations: " 
-                << std::fixed << std::setprecision(3) << (t3_sum / N) * 1.0e3 << " ms" 
-                << std::endl  
-                << "array push_back operations(" <<  sa.c1() << "): " 
-                << std::fixed << std::setprecision(3) << (t1_sum / N) * 1.0e3 << " ms" 
-                << std::endl  
-                << "object insert operations(" <<  sa.c2() << "): " 
-                << std::fixed << std::setprecision(3) << (t2_sum / N) * 1.0e3 << " ms" 
-                << std::endl;
-                
-                std::cout << sa << std::endl;
-                
-            }
-        }
-#endif    
-    }
-    std::cout << "... end parsing\n";
-    
-    ifs.close();
-    
-    
-    if (result) {
-        printf("JsonParser: elapsed time:  min: %5.3f ms, max: %5.3f ms, avg: %5.3f ms\n", 
-               t_min*1e3, t_max*1e3, t_tot*1e3 / N );
-    }
-    else {
-        printf("JsonParser: error\n");
-    }    
-}
 
 
-#if 0
-// Note: using boost file streams
-static void bench_parser3() 
-{
-    using namespace json;
-    using utilities::timer;
-    
-    typedef boost::iostreams::stream<boost::iostreams::file_source> ifstream;
-    
-    std::cout << "using istream iterators" << std::endl;
-
-    
-    std:ifstream ifs(TEST_JSON);
-    if (!ifs)
-        throw std::runtime_error("could not open file");
-    
-    
-    timer t = timer();
-#if defined (DEBUG)
-    const int N = 1;
-#else    
-    const int N = 1000;
-#endif    
-    
-    typedef std::istream_iterator<char> iterator;
-    typedef json::semantic_actions<json::unicode::UTF_8_encoding_tag> SemanticActions;
-    
-    bool result;
-    SemanticActions sa;
-    std::cout << "start parsing " << N << " times ... \n";
-    double t0_sum = 0.0;
-    double t1_sum = 0.0;
-    double t2_sum = 0.0;
-    double t3_sum = 0.0;
-    double t_min = 1.0e99;
-    double t_max = 0.0;
-    double t_tot = 0.0;
-    for (int i = 0; i < N; ++i) {
-        sa.clear();
-        ifs.clear();
-        ifs.seekg(0);
-        if (ifs.eof()) {
-            std::cout << "error: eos bit set for file stream\n";
-            break;
-        }
-        t.start();
-        iterator first(ifs);
-        iterator last;  // EOS
-        result = parse(first, last, sa);
-        t.stop();
-        t_min = std::min(t_min, t.seconds());
-        t_max = std::max(t_max, t.seconds());
-        t_tot += t.seconds();
-        t.reset();
-        
-        t0_sum += sa.t0();
-        t1_sum += sa.t1();
-        t2_sum += sa.t2();
-        t3_sum += sa.t3();
-#if 1   
-        if (i == N-1) {
-            if (result) 
-            {
-                //SemanticActions::result_type& r = sa.result();
-                // std::cout << sa << std::endl;
-                std::cout << "SemanticActionsTest average elapsed time for:\n"
-                << "push string (" <<  sa.c0() << "): " 
-                << std::fixed << std::setprecision(3) << (t0_sum / N) * 1.0e3 << " ms" 
-                << std::endl  
-                << "pop operations: " 
-                << std::fixed << std::setprecision(3) << (t3_sum / N) * 1.0e3 << " ms" 
-                << std::endl  
-                << "array push_back operations(" <<  sa.c1() << "): " 
-                << std::fixed << std::setprecision(3) << (t1_sum / N) * 1.0e3 << " ms" 
-                << std::endl  
-                << "object insert operations(" <<  sa.c2() << "): " 
-                << std::fixed << std::setprecision(3) << (t2_sum / N) * 1.0e3 << " ms" 
-                << std::endl;
-                
-                std::cout << sa << std::endl;
-                
-            }
-        }
-#endif    
-    }
-    std::cout << "... end parsing\n";
-    
-    ifs.close();
-    
-    
-    if (result) {
-        printf("JsonParser: elapsed time:  min: %5.3f ms, max: %5.3f ms, avg: %5.3f ms\n", 
-               t_min*1e3, t_max*1e3, t_tot*1e3 / N );
-    }
-    else {
-        printf("JsonParser: error\n");
-    }    
-}
-#endif
 
 
-#if 0
-// Note: using streambuf iterators
-// Usually, this is the way to parse a file.
-static void bench_parser4() 
-{
-    using namespace json;
-    using utilities::timer;
-    
-    typedef boost::iostreams::stream<boost::iostreams::file_source> ifstream;
-    
-    std::cout << "using streambuf iterators" << std::endl;
-    
-    ifstream ifs(TEST_JSON);
-    if (!ifs)
-        throw std::runtime_error("could not open file");
-    
-    
-    timer t = timer();
-#if defined (DEBUG)
-    const int N = 1;
-#else    
-    const int N = 1000;
-#endif    
-    
-    typedef std::istreambuf_iterator<char> iterator;
-    typedef json::semantic_actions<json::unicode::UTF_8_encoding_tag> SemanticActions;
-    
-    bool result;
-    SemanticActions sa;
-    std::cout << "start parsing " << N << " times ... \n";
-    double t0_sum = 0.0;
-    double t1_sum = 0.0;
-    double t2_sum = 0.0;
-    double t3_sum = 0.0;
-    double t_min = 1.0e99;
-    double t_max = 0.0;
-    double t_tot = 0.0;
-    for (int i = 0; i < N; ++i) {
-        sa.clear();
-        ifs.clear();
-        ifs.seekg(0);
-        if (ifs.eof()) {
-            std::cout << "error: eos bit set for file stream\n";
-            break;
-        }
-        t.start();
-        iterator first(ifs.rdbuf());
-        iterator last;  // EOS
-        result = parse(first, last, sa);
-        t.stop();
-        t_min = std::min(t_min, t.seconds());
-        t_max = std::max(t_max, t.seconds());
-        t_tot += t.seconds();
-        t.reset();
-        
-        t0_sum += sa.t0();
-        t1_sum += sa.t1();
-        t2_sum += sa.t2();
-        t3_sum += sa.t3();
-#if 1   
-        if (i == N-1) {
-            if (result) 
-            {
-                //SemanticActions::result_type& r = sa.result();
-                // std::cout << sa << std::endl;
-                std::cout << "SemanticActionsTest average elapsed time for:\n"
-                << "push string (" <<  sa.c0() << "): " 
-                << std::fixed << std::setprecision(3) << (t0_sum / N) * 1.0e3 << " ms" 
-                << std::endl  
-                << "pop operations: " 
-                << std::fixed << std::setprecision(3) << (t3_sum / N) * 1.0e3 << " ms" 
-                << std::endl  
-                << "array push_back operations(" <<  sa.c1() << "): " 
-                << std::fixed << std::setprecision(3) << (t1_sum / N) * 1.0e3 << " ms" 
-                << std::endl  
-                << "object insert operations(" <<  sa.c2() << "): " 
-                << std::fixed << std::setprecision(3) << (t2_sum / N) * 1.0e3 << " ms" 
-                << std::endl;
-                
-                std::cout << sa << std::endl;
-                
-            }
-        }
-#endif    
-    }
-    std::cout << "... end parsing\n";
-    
-    ifs.close();
-    
-    
-    if (result) {
-        printf("JsonParser: elapsed time:  min: %5.3f ms, max: %5.3f ms, avg: %5.3f ms\n", 
-               t_min*1e3, t_max*1e3, t_tot*1e3 / N );
-    }
-    else {
-        printf("JsonParser: error\n");
-    }    
-}
-#endif
 
 int main ()
 {   
@@ -565,9 +554,13 @@ int main ()
     std::cout << BOOST_COMPILER << "\n";
     
     try {
-        //bench_validating_parser();
-        //bench_test_parser();
+        bench_validating_parser();
+        bench_validating_parser_stream_iter();
+        bench_validating_parser_streambuf_iter();
         bench_parser();
+        bench_parser_arena_allocator();
+        bench_parser_stream_iter();
+        bench_test_parser();
     }
     catch (std::exception& ex) {
         std::cout << ex.what() << std::endl;

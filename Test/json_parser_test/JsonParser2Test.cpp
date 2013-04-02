@@ -12,7 +12,7 @@
 #include "json/parser/semantic_actions_test.hpp"
 #include "json/parser/parser_errors.hpp"
 
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
 
 // for testing

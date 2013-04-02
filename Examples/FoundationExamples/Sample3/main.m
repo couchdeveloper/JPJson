@@ -107,10 +107,8 @@ int main (int argc, const char * argv[])
         
         // 'result' is solely retained by the semantic actions object. In order to 
         // maintain a reference to the result, we need to keep the semantic
-        // actions object alife as long as we need the result, or alternatively,
-        // retain/autorelease it:
-        result = [[result retain] autorelease];
-        [sa release], sa = nil;
+        // actions object alife as long as we need the result.
+        sa = nil;
         
         // If parsing was successful, result shall not be nil:
         assert(result);

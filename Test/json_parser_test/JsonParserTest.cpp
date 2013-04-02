@@ -21,12 +21,12 @@
 #include "json/parser/parser.hpp"
 #include "json/parser/parse.hpp"
 #include "json/unicode/unicode_utilities.hpp"
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 #include <string.h>
 
 
 #include <boost/iterator/iterator_traits.hpp>
-#include "json/parser/semantic_actions.hpp"
+//#include "json/parser/value_generator.hpp"
 #include "json/parser/semantic_actions_test.hpp"
 #include "json/parser/parser_errors.hpp"
 
@@ -128,12 +128,12 @@ namespace {
         parser_t parser(sa);
         EXPECT_EQ(json::JP_NO_ERROR, parser.state().error());
         EXPECT_EQ("no error", std::string(parser.state().error_str()));
-        EXPECT_TRUE(sa.result() == 0);
+        EXPECT_TRUE(sa.result().empty());
         
         parser.reset();
         EXPECT_EQ( JP_NO_ERROR, parser.state().error() );
         EXPECT_EQ("no error", std::string(parser.state().error_str()));
-        EXPECT_TRUE(sa.result() == 0);
+        EXPECT_TRUE(sa.result().empty());
     }
     
     TEST_F(JsonParserTest, NoopParserDefaultCtor) 
@@ -177,7 +177,7 @@ namespace {
         EXPECT_TRUE (first == last);
         EXPECT_EQ(json::JP_EMPTY_TEXT_ERROR, error);
         EXPECT_EQ(json::JP_EMPTY_TEXT_ERROR, state.error() );
-        EXPECT_TRUE(sa.result() == 0);
+        EXPECT_TRUE(sa.result().empty());
     }
     
     TEST_F(JsonParserTest, NoopParserBasicErrors)  
@@ -1131,6 +1131,222 @@ namespace {
      */
     
     // Testing valid numbers:
+    TEST_F(JsonParserTest, ParseInteger)
+    {
+        typedef json::internal::semantic_actions_test<unicode::UTF_8_encoding_tag>  sa_test_t;
+        typedef parser<const char*, unicode::UTF_8_encoding_tag, sa_test_t> parser_t;
+        typedef typename sa_test_t::number_desc_t::NumberType number_type_t;
+        
+        typedef typename sa_test_t::json_value_type Value;      // boost::shared_ptr<boost::any>
+        typedef typename sa_test_t::json_array_type Array;      // std::vector<Value>
+        typedef typename sa_test_t::json_number_type Number;    // std::pair<number_type_t, std::string>
+        
+        struct test_s {
+            const char* number_string;
+            number_type_t number_type;
+        };
+        
+        test_s tests[] = {
+            {"0", number_type_t::UnsignedInteger},
+            {"1", number_type_t::UnsignedInteger},
+            {"10", number_type_t::UnsignedInteger},
+            {"100", number_type_t::UnsignedInteger},
+            {"1000", number_type_t::UnsignedInteger},
+            {"1234567890", number_type_t::UnsignedInteger},
+            {"-0", number_type_t::Integer},
+            {"-1", number_type_t::Integer},
+            {"-10", number_type_t::Integer},
+            {"-100", number_type_t::Integer},
+            {"-1000", number_type_t::Integer},
+            {"-1234567890", number_type_t::Integer}
+        };
+        
+        const int count = sizeof(tests)/sizeof(test_s);
+        
+        for (int i = 0; i < count; ++i)
+        {
+            std::string json;
+            json.append("[");
+            json.append(tests[i].number_string);
+            json.append("]");
+            
+            sa_test_t sa;
+            parser_t parser(sa);
+            
+            const char* first = json.c_str();
+            const char* last = first + json.size();
+            parser_error_type err = parser.parse(first, last);
+            EXPECT_EQ(JP_NO_ERROR, err);
+            EXPECT_TRUE( (first == last) );
+            
+            Value v = sa.result();
+            Array const a = boost::any_cast<Array>(v);
+            Number const n = boost::any_cast<Number>(a[0]);
+            
+            EXPECT_EQ(tests[i].number_type, n.first);
+            EXPECT_EQ(std::string(tests[i].number_string), n.second);
+        }
+        
+    }
+
+    
+    
+    TEST_F(JsonParserTest, ParseDecimal)
+    {
+        typedef json::internal::semantic_actions_test<unicode::UTF_8_encoding_tag>  sa_test_t;
+        typedef parser<const char*, unicode::UTF_8_encoding_tag, sa_test_t> parser_t;
+        typedef typename sa_test_t::number_desc_t::NumberType number_type_t;
+        
+        typedef typename sa_test_t::json_value_type Value;      // boost::shared_ptr<boost::any>
+        typedef typename sa_test_t::json_array_type Array;      // std::vector<Value>
+        typedef typename sa_test_t::json_number_type Number;    // std::pair<number_type_t, std::string>
+        
+        struct test_s {
+            const char* number_string;
+            number_type_t number_type;
+        };
+        
+        test_s tests[] = {
+            {"0.0", number_type_t::UnsignedDecimal},
+            {"1.0", number_type_t::UnsignedDecimal},
+            {"10.0", number_type_t::UnsignedDecimal},
+            {"100.00", number_type_t::UnsignedDecimal},
+            {"1000.000", number_type_t::UnsignedDecimal},
+            {"1234567890.00000", number_type_t::UnsignedDecimal},
+            {"-0.0", number_type_t::Decimal},
+            {"-1.0", number_type_t::Decimal},
+            {"-10.0", number_type_t::Decimal},
+            {"-100.00", number_type_t::Decimal},
+            {"-1000.000", number_type_t::Decimal},
+            {"-1234567890.000", number_type_t::Decimal}
+        };
+        
+        const int count = sizeof(tests)/sizeof(test_s);
+        
+        for (int i = 0; i < count; ++i)
+        {
+            std::string json;
+            json.append("[");
+            json.append(tests[i].number_string);
+            json.append("]");
+            
+            sa_test_t sa;
+            parser_t parser(sa);
+            
+            const char* first = json.c_str();
+            const char* last = first + json.size();
+            parser_error_type err = parser.parse(first, last);
+            EXPECT_EQ(JP_NO_ERROR, err);
+            EXPECT_TRUE( (first == last) );
+            
+            Value v = sa.result();
+            Array const a = boost::any_cast<Array>(v);
+            Number const n = boost::any_cast<Number>(a[0]);
+            
+            EXPECT_EQ(tests[i].number_type, n.first);
+            EXPECT_EQ(std::string(tests[i].number_string), n.second);
+        }
+        
+    }
+    
+    
+    TEST_F(JsonParserTest, ParseScientific)
+    {
+        typedef json::internal::semantic_actions_test<unicode::UTF_8_encoding_tag>  sa_test_t;
+        typedef parser<const char*, unicode::UTF_8_encoding_tag, sa_test_t> parser_t;
+        typedef typename sa_test_t::number_desc_t::NumberType number_type_t;
+        
+        typedef typename sa_test_t::json_value_type Value;      // boost::shared_ptr<boost::any>
+        typedef typename sa_test_t::json_array_type Array;      // std::vector<Value>
+        typedef typename sa_test_t::json_number_type Number;    // std::pair<number_type_t, std::string>
+        
+        struct test_s {
+            const char* number_string;
+            number_type_t number_type;
+        };
+        
+        test_s tests[] = {
+            {"0.0e00", number_type_t::Scientific},
+            {"1.0e00", number_type_t::Scientific},
+            {"10.0e00", number_type_t::Scientific},
+            {"100.00e00", number_type_t::Scientific},
+            {"1000.000e00", number_type_t::Scientific},
+            {"1234567890.00000e00", number_type_t::Scientific},
+            {"-0.0e00", number_type_t::Scientific},
+            {"-1.0e00", number_type_t::Scientific},
+            {"-10.0e00", number_type_t::Scientific},
+            {"-100.00e00", number_type_t::Scientific},
+            {"-1000.000e00", number_type_t::Scientific},
+            {"-1234567890.000e-00", number_type_t::Scientific},
+            {"0.0e-00", number_type_t::Scientific},
+            {"1.0e-00", number_type_t::Scientific},
+            {"10.0e-00", number_type_t::Scientific},
+            {"100.00e-00", number_type_t::Scientific},
+            {"1000.000e-00", number_type_t::Scientific},
+            {"1234567890.00000e-00", number_type_t::Scientific},
+            {"-0.0e-00", number_type_t::Scientific},
+            {"-1.0e-00", number_type_t::Scientific},
+            {"-10.0e-00", number_type_t::Scientific},
+            {"-100.00e-00", number_type_t::Scientific},
+            {"-1000.000e-00", number_type_t::Scientific},
+            
+            {"-1234567890.000E-00", number_type_t::Scientific},
+            {"0.0E00", number_type_t::Scientific},
+            {"1.0E00", number_type_t::Scientific},
+            {"10.0E00", number_type_t::Scientific},
+            {"100.00E00", number_type_t::Scientific},
+            {"1000.000E00", number_type_t::Scientific},
+            {"1234567890.00000E00", number_type_t::Scientific},
+            {"-0.0E00", number_type_t::Scientific},
+            {"-1.0E00", number_type_t::Scientific},
+            {"-10.0E00", number_type_t::Scientific},
+            {"-100.00E00", number_type_t::Scientific},
+            {"-1000.000E00", number_type_t::Scientific},
+            {"-1234567890.000E-00", number_type_t::Scientific},
+            {"0.0E-00", number_type_t::Scientific},
+            {"1.0E-00", number_type_t::Scientific},
+            {"10.0E-00", number_type_t::Scientific},
+            {"100.00E-00", number_type_t::Scientific},
+            {"1000.000E-00", number_type_t::Scientific},
+            {"1234567890.00000E-00", number_type_t::Scientific},
+            {"-0.0E-00", number_type_t::Scientific},
+            {"-1.0E-00", number_type_t::Scientific},
+            {"-10.0E-00", number_type_t::Scientific},
+            {"-100.00E-00", number_type_t::Scientific},
+            {"-1000.000E-00", number_type_t::Scientific},
+            {"-1234567890.000E-00", number_type_t::Scientific}
+        };
+        
+        const int count = sizeof(tests)/sizeof(test_s);
+        
+        for (int i = 0; i < count; ++i)
+        {
+            std::string json;
+            json.append("[");
+            json.append(tests[i].number_string);
+            json.append("]");
+            
+            sa_test_t sa;
+            parser_t parser(sa);
+            
+            const char* first = json.c_str();
+            const char* last = first + json.size();
+            parser_error_type err = parser.parse(first, last);
+            EXPECT_EQ(JP_NO_ERROR, err);
+            EXPECT_TRUE( (first == last) );
+            
+            Value v = sa.result();
+            Array const a = boost::any_cast<Array>(v);
+            Number const n = boost::any_cast<Number>(a[0]);
+            
+            EXPECT_EQ(tests[i].number_type, n.first);
+            EXPECT_EQ(std::string(tests[i].number_string), n.second);
+        }
+    }
+    
+    
+    
+    
     TEST_F(JsonParserTest, ParseIntegers) {
         const char* jsonText = "[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, -0, -1, -2,-3,-4,-5,-6,-7,-8,-9, 1234567890, -1234567890, 0]";
         typedef std::string::const_iterator                 input_iterator;
@@ -1317,12 +1533,10 @@ namespace {
         typedef semantic_actions_t::json_string_type string_t;
         
         value_t json_value = sa.result();
-        
-        boost::any p = (*json_value);
-        array_t array = boost::any_cast<array_t>(p);
+        array_t array = boost::any_cast<array_t>(json_value);
         EXPECT_EQ(1, array.size());
         
-        string_t str = boost::any_cast<string_t>(*(array[0]));
+        string_t str = boost::any_cast<string_t>(array[0]);
         EXPECT_EQ(Size, str.size());
     }
 

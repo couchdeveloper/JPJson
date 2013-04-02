@@ -33,8 +33,8 @@
 #include <iterator>
 
 
-#if __has_feature(objc_arc) 
-    #error This Objective-C file shall be compiled with ARC disabled.
+#if !__has_feature(objc_arc)
+    #error This Objective-C file shall be compiled with ARC enabled.
 #endif
 
 @interface JsonPathSemanticActions () 
@@ -73,8 +73,6 @@ typedef json::unicode::encoding_traits<JP_CFStringEncoding>::code_unit_type char
 
 - (void) dealloc 
 {
-    [jsonBranch_ release];
-    [super dealloc];
 }
 
 

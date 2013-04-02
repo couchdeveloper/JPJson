@@ -88,7 +88,6 @@ namespace json { namespace objc { namespace internal {
         // Read up to n characters from the underlying data source into the
         // buffer s.
         // Returns: the number of characters read or -1 to indicate EOF.
-        // Throws an exception if the internal stream failed.
         std::streamsize read(char* s, std::streamsize n)
         {
             NSInteger amount = [_ns_input_stream read:reinterpret_cast<uint8_t*>(s)
@@ -101,8 +100,8 @@ namespace json { namespace objc { namespace internal {
                 return -1; // end of buffer reached - return EOF
             }
             else {
-                throw std::runtime_error("NSInputStream operation read failed");
-                return -1;
+                //throw std::runtime_error("NSInputStream operation read failed");
+                return 0;
             }
         }
         
@@ -189,7 +188,6 @@ namespace json { namespace objc { namespace internal {
         // Read up to n characters from the underlying data source into the
         // buffer s.
         // Returns: the number of characters read or -1 to indicate EOF.
-        // Throws an exception if the internal stream failed.
         std::streamsize read(char* s, std::streamsize n)
         {
             NSInteger amount = [_ns_input_stream read:reinterpret_cast<uint8_t*>(s)
@@ -202,8 +200,8 @@ namespace json { namespace objc { namespace internal {
                 return -1; // end of buffer reached - return EOF
             }
             else {
-                throw std::runtime_error("NSInputStream operation read failed");
-                return -1;
+                //throw std::runtime_error("NSInputStream operation read failed");
+                return 0;
             }
         }
         
@@ -277,7 +275,6 @@ namespace json { namespace objc { namespace internal {
         // Write up to n characters to the underlying data sink into the
         // buffer s.
         // Returns: the number of characters written.
-        // Throws an exception if the internal stream failed.
         std::streamsize write(const char* s, std::streamsize n)
         {
             const uint8_t* buffer = reinterpret_cast<const uint8_t*>(s);
@@ -288,8 +285,8 @@ namespace json { namespace objc { namespace internal {
                 return amount;
             }
             else {
-                throw std::runtime_error("NSOutputStream operation write failed");
-                return -1;
+                //throw std::runtime_error("NSOutputStream operation write failed");
+                return 0;
             }
         }
 
@@ -383,7 +380,6 @@ namespace json { namespace objc { namespace internal {
         // Write up to n characters to the underlying data sink into the
         // buffer s.
         // Returns: the number of characters written.
-        // Throws an exception if the internal stream failed.
         std::streamsize write(const char* s, std::streamsize n)
         {
             const uint8_t* p = reinterpret_cast<const uint8_t*>(s);
@@ -410,8 +406,8 @@ namespace json { namespace objc { namespace internal {
                 return n-remaining;
             }                
             else {
-                throw std::runtime_error("NSOutputStream operation write failed");
-                return -1;
+                //throw std::runtime_error("NSOutputStream operation write failed");
+                return 0;
             }
         }
         

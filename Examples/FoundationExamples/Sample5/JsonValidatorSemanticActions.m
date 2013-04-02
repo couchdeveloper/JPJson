@@ -36,8 +36,6 @@
 }
 
 - (void)dealloc {
-    [stack_ release];
-    [super dealloc];
 }
 
 #pragma mark -
@@ -45,7 +43,6 @@
 - (void) parserFoundJsonObjectBegin {
     NSMutableSet* jsonObject = [[NSMutableSet alloc] initWithCapacity:10];
     [self.stack addObject:jsonObject];
-    [jsonObject release];
 }
 
 - (bool) parserFoundJsonObjectEnd {
@@ -63,7 +60,6 @@
     } else {
         [[self.stack lastObject] addObject:key];
     }
-    [key release];
 }
 
 

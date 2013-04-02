@@ -19,7 +19,7 @@
 //
 
 #include "json/unicode/unicode_conversion.hpp"
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
 #include <iomanip>
 

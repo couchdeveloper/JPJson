@@ -2,4 +2,11 @@
 //  unicode_conversion.release.xcconfig
 //
 
-#include "../../Xcode.config/$user.ICU.xcconfig"
+//#include "../../Xcode.config/$user.ICU.xcconfig"
+ICU_ROOT = /usr/local/Cellar/icu4c/4.8.1.1
+
+HEADER_SEARCH_PATHS = $(ICU_ROOT)/include $(inherited)
+
+LIBRARY_SEARCH_PATHS = $(ICU_ROOT)/lib $(inherited)
+
+OTHER_LDFLAGS = -licuuc $(inherited)

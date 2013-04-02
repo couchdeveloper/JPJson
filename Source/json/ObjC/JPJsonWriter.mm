@@ -116,6 +116,12 @@ namespace {
 }
 
 
+#pragma mark - JPJsonStreambufferInternalProtocol
+
+
+@protocol JPJsonStreambufferInternalProtocol <NSObject>
+@property (nonatomic, readonly) std::streambuf* internal_streambuf;
+@end
 
 #pragma mark - JPDataStreambuffer
 
@@ -123,8 +129,7 @@ namespace {
 @interface JPDataStreambuffer : NSObject <JPJsonStreambufferProtocol>
 @end
 
-@interface JPDataStreambuffer (Private)
-- (std::streambuf*) internal_streambuf;
+@interface JPDataStreambuffer (Internal) <JPJsonStreambufferInternalProtocol>
 @end
 
 
@@ -197,8 +202,8 @@ namespace {
 @end
 
 
-@implementation JPDataStreambuffer (Private)
-- (std::streambuf*) internal_streambuf {
+@implementation JPDataStreambuffer (Internal)
+-(std::streambuf*) internal_streambuf {
     return &_streambuf;
 }
 @end
@@ -217,8 +222,7 @@ namespace {
 @property (nonatomic, readwrite) NSError* error;
 @end
 
-@interface JPOutputStreamStreambuffer (Private)
-- (std::streambuf*) internal_streambuf;
+@interface JPOutputStreamStreambuffer (Internal) <JPJsonStreambufferInternalProtocol>
 @end
 
 @implementation JPOutputStreamStreambuffer {
@@ -260,11 +264,7 @@ namespace {
         int count = static_cast<int>(_streambuf.sputn(static_cast<const char*>(buffer), length));
         result = count == length;
         if (!result) {
-            _error = [[NSError alloc] initWithDomain:@"JPOutputStreamStreambuffer"
-                                                code:-1
-                                            userInfo:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                      @"Could not write into stream", NSLocalizedDescriptionKey,
-                                                      nil]];
+            self.error = _streambuf->error();
         }
     }
     return result;
@@ -272,12 +272,9 @@ namespace {
 
 - (BOOL) close {
     int result = _streambuf.pubsync();
+    _streambuf.close();
     if (result != 0) {
-        _error = [[NSError alloc] initWithDomain:@"JPOutputStreamStreambuffer"
-                                            code:-1
-                                        userInfo:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                  @"Could not sync stream", NSLocalizedDescriptionKey,
-                                                  nil]];
+        self.error = _streambuf->error();
         return NO;
     }
     else {
@@ -292,14 +289,11 @@ namespace {
 @end
 
 
-@implementation JPOutputStreamStreambuffer (Private)
+@implementation JPOutputStreamStreambuffer (Internal)
 - (std::streambuf*) internal_streambuf {
     return &_streambuf;
 }
 @end
-
-
-
 
         
     
@@ -466,10 +460,7 @@ namespace {
     int serializeNumberIntoBuffer(CFNumberRef number, id<JPJsonStreambufferProtocol> streambuf, 
                                size_t* outCount, JPUnicodeEncoding encoding)
     {
-        
-        
         static CFNumberFormatterRef s_numberFormatter;
-        
         assert(encoding == JPUnicodeEncoding_UTF8);
         
         char tmp_buffer[128];
@@ -479,11 +470,8 @@ namespace {
         char* end_cap = tmp_buffer + sizeof(tmp_buffer);
 #endif        
         int count = 0;      // the number of bytes in tmp_buffer
-                
-        
         char numberType = *[(id)number objCType];
         Boolean conversionSucceeded = false;
-        
         switch (numberType) {
             case 'c':
             case 'C':
@@ -801,19 +789,16 @@ namespace {
         assert(streambuf);
         assert(object != nil);
         
-        std::back_insert_iterator<streambuf_t> back_it(streambuf);
-        
-        
+        std::streambuf* internalStreambuf = [(id<JPJsonStreambufferInternalProtocol>)streambuf internal_streambuf];
+        std::ostreambuf_iterator<char> out_it(internalStreambuf);
         const NSUInteger count = [object count];
-        *back_it++ = '[';
+        *out_it++ = '[';
         if (count and (options & JPJsonWriterPrettyPrint) != 0) {
-            if (![streambuf write:"\n" length:1]) {
-                return -1; // ERROR
-            }
+            *out_it++ = '\n';
             int indent = level+1;
             while (indent > 0) {
-                int n  = std::min(10, indent);
-                if (![streambuf write:"\t\t\t\t\t\t\t\t\t\t" length:n]) {
+                std::streamsize n  = std::min(10, indent);
+                if (out_it.failed() or n != internalStreambuf->sputn("\t\t\t\t\t\t\t\t\t\t", n)) {
                     return -1; // ERROR
                 }
                 indent -=n;
@@ -832,16 +817,14 @@ namespace {
                 return result;
             }
             if (--i) {
-                *back_it++ = ',';
+                *out_it++ = ',';
                 if ((options & JPJsonWriterPrettyPrint) != 0) {
-                    if (![streambuf write:"\n" length:1]) {
-                        return -1; // ERROR
-                    }
+                    *out_it++ = '\n';
                     int indent = level+1;
                     while (indent > 0) {
-                        int n  = std::min(10, indent);
-                        if (![streambuf write:"\t\t\t\t\t\t\t\t\t\t" length:n]) {
-                            return -1; // ERROR: streambuffer write failed
+                        std::streamsize n  = std::min(10, indent);
+                        if (out_it.failed() or n != internalStreambuf->sputn("\t\t\t\t\t\t\t\t\t\t", n)) {
+                            return -1; // ERROR
                         }
                         indent -=n;
                     }
@@ -849,21 +832,18 @@ namespace {
             }
         }
         if (count and (options & JPJsonWriterPrettyPrint) != 0) {
-            if (![streambuf write:"\n" length:1]) {
-                return -1;// ERROR: streambuffer write failed
-            }
+            *out_it++ = '\n';
             int indent = level;
             while (indent > 0) {
-                int n  = std::min(10, indent);
-                if (![streambuf write:"\t\t\t\t\t\t\t\t\t\t" length:n]) {
-                    return -1;// ERROR: streambuffer write failed
+                std::streamsize n  = std::min(10, indent);
+                if (out_it.failed() or n != internalStreambuf->sputn("\t\t\t\t\t\t\t\t\t\t", n)) {
+                    return -1; // ERROR
                 }
                 indent -=n;
             }
         }
-        *back_it++ = ']';
-        
-        return 0;
+        *out_it++ = ']';
+        return out_it.failed() ? -1 : 0;
     }
     
     
@@ -883,20 +863,16 @@ namespace {
         assert(streambuf);
         assert(object != nil);
         
+        std::streambuf* internalStreambuf = [(id<JPJsonStreambufferInternalProtocol>)streambuf internal_streambuf];
         const NSUInteger count = [object count];
-
-        std::back_insert_iterator<streambuf_t> back_it(streambuf);        
-        
-        *back_it++ = '{';
-        
+        std::ostreambuf_iterator<char> out_it(internalStreambuf);
+        *out_it++ = '{';
         if (count and (options & JPJsonWriterPrettyPrint) != 0) {
-            if (![streambuf write:"\n" length:1]) {
-                return -1; //ERROR streambuf write failed
-            }
+            *out_it++ = '\n';
             int indent = level+1;
             while (indent > 0) {
-                int n  = std::min(10, indent);
-                if (![streambuf write:"\t\t\t\t\t\t\t\t\t\t" length:n]) {
+                std::streamsize n  = std::min(10, indent);
+                if (out_it.failed() or n != internalStreambuf->sputn("\t\t\t\t\t\t\t\t\t\t", n)) {
                     return -1; // ERROR
                 }
                 indent -=n;
@@ -919,17 +895,12 @@ namespace {
                 return result;
             }
             if ((options & JPJsonWriterPrettyPrint) != 0) {
-                if (![streambuf write:" " length:1]) {
-                    return -1; // ERROR
-                }
+                *out_it++ = ' ';
             }
-            *back_it++ = ':';
+            *out_it++ = ':';
             if ((options & JPJsonWriterPrettyPrint) != 0) {
-                if (![streambuf write:" " length:1]) {
-                    return -1; // ERROR
-                }
+                *out_it++ = ' ';
             }
-            
             // TODO: check if blocks give a performance advantage
             id value = [object objectForKey:key];
             if (value == nil) {
@@ -940,45 +911,36 @@ namespace {
                 return result;
             }
             if (--i) {
-                *back_it++ = ',';
+                *out_it++ = ',';
                 if ((options & JPJsonWriterPrettyPrint) != 0) {
-                    if (![streambuf write:"\n" length:1]) {
-                        return -1; // ERROR
-                    }
+                    *out_it++ = '\n';
                     int indent = level+1;
                     while (indent > 0) {
-                        int n  = std::min(10, indent);
-                        if (![streambuf write:"\t\t\t\t\t\t\t\t\t\t" length:n]) {
+                        std::streamsize n  = std::min(10, indent);
+                        if (out_it.failed() or n != internalStreambuf->sputn("\t\t\t\t\t\t\t\t\t\t", n)) {
                             return -1; // ERROR
                         }
                         indent -=n;
                     }
                 }
             }
-                
         }    
         if (count and (options & JPJsonWriterPrettyPrint) != 0) {
-            *back_it++ = '\n';
+            *out_it++ = '\n';
             int indent = level;
             while (indent > 0) {
-                int n  = std::min(10, indent);
-                if (![streambuf write:"\t\t\t\t\t\t\t\t\t\t" length:n]) {
+                std::streamsize n  = std::min(10, indent);
+                if (out_it.failed() or n != internalStreambuf->sputn("\t\t\t\t\t\t\t\t\t\t", n)) {
                     return -1; // ERROR
                 }
                 indent -=n;
             }
         }
-        *back_it++ = '}';
-        
-        return 0;
+        *out_it++ = '}';
+        return out_it.failed() ? -1 : 0;
     }
     
-    
-    
 }
-
-
-
 
 
 #pragma mark - NSArray Category

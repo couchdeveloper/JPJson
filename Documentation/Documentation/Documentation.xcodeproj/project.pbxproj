@@ -21,7 +21,7 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXFileReference section */
-		A15D892B146592250001E08D /* CreateDoc.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = CreateDoc.rb; sourceTree = "<group>"; };
+		A15D892B146592250001E08D /* CreateDoc.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; lineEnding = 0; path = CreateDoc.rb; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */

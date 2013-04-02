@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#ifndef _unicode_errors_hpp
-#define _unicode_errors_hpp
+#ifndef JSON_UNICODE_ERRORS_HPP
+#define JSON_UNICODE_ERRORS_HPP
 
 #pragma mark - Error Codes
 namespace json { namespace unicode { 
@@ -30,4 +30,4 @@ namespace json { namespace unicode {
 
 
 
-#endif
+#endif // JSON_UNICODE_ERRORS_HPP

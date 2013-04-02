@@ -18,20 +18,14 @@
 //  limitations under the License.
 //
 
-#ifndef JSON_UNICODE_CONVERSION_HPP
-#define JSON_UNICODE_CONVERSION_HPP
+#ifndef JSON_UNICODE_UNICODE_CONVERSION_HPP
+#define JSON_UNICODE_UNICODE_CONVERSION_HPP
 
 
 #include "json/config.hpp"
 #include "unicode_converter.hpp"
 #include "unicode_errors.hpp"
-
-#include <boost/mpl/if.hpp>
-#include <boost/utility.hpp>
-#include <boost/type_traits.hpp>
-#include <boost/mpl/and.hpp>
-#include <boost/mpl/not.hpp>
-#include <boost/mpl/assert.hpp>
+#include <type_traits>
 
 
 #define CONVERSION_CONVERT_FORCE_INLINE
@@ -43,19 +37,24 @@
 
 namespace json { namespace unicode {
     
+    
+    namespace internal {
+    }
+    
+    
     template <typename EncodingT>
     struct mb_state : public internal::mb_state<typename encoding_traits<EncodingT>::encoding_form, true> 
     {
-        BOOST_STATIC_ASSERT( (boost::is_base_and_derived<utf_encoding_tag, EncodingT>::value) );
+        static_assert( internal::IsBaseAndDerived<utf_encoding_tag, EncodingT>::value, "" );
 
         typedef internal::mb_state<typename encoding_traits<EncodingT>::encoding_form, true> base;
         
         
-        mb_state() : base() {}
-        mb_state(mb_state const& other) : base(other) {}
+        mb_state() noexcept : base() {}
+        mb_state(mb_state const& other) noexcept : base(other) {}
         
+        mb_state(base const& other) noexcept : base(other) {}
 
-        mb_state(base const& other) : base(other) {}        
         mb_state& operator=(base const& other) {
             base::operator=(other);
             return *this;
@@ -90,15 +89,15 @@ namespace json { namespace unicode {
             OutIteratorT& dest, ToEncodingT toEncoding, 
             mb_state<FromEncodingT>& state,
             ConvertOption convertOption = None,
-            typename boost::disable_if<
-                boost::is_same<
+            typename std::enable_if<
+                !std::is_same<
                     typename std::iterator_traits<InIteratorT>::iterator_category, 
                     std::random_access_iterator_tag
-                >    
+                >::value
             >::type* dummy = 0)
     {
-        BOOST_STATIC_ASSERT( (boost::is_base_and_derived<utf_encoding_tag, FromEncodingT>::value) );
-        BOOST_STATIC_ASSERT( (boost::is_base_and_derived<utf_encoding_tag, ToEncodingT>::value) );
+        static_assert( (internal::IsBaseAndDerived<utf_encoding_tag, FromEncodingT>::value), "" );
+        static_assert( (internal::IsBaseAndDerived<utf_encoding_tag, ToEncodingT>::value), "" );
         
         converter<FromEncodingT, ToEncodingT, Validation::SAFE> cvt(state);
         int result;
@@ -132,15 +131,15 @@ namespace json { namespace unicode {
     convert(InIteratorT& first, InIteratorT last, FromEncodingT fromEncoding, 
             OutIteratorT& dest, ToEncodingT toEncoding, 
             ConvertOption convertOption = None,            
-            typename boost::disable_if<
-                boost::is_same<
+            typename std::enable_if<
+                !std::is_same<
                     typename std::iterator_traits<InIteratorT>::iterator_category, 
                     std::random_access_iterator_tag
-                >    
+                >::value
             >::type* dummy = 0)
     {
-        BOOST_STATIC_ASSERT( (boost::is_base_and_derived<utf_encoding_tag, FromEncodingT>::value) );
-        BOOST_STATIC_ASSERT( (boost::is_base_and_derived<utf_encoding_tag, ToEncodingT>::value) );
+        static_assert( (internal::IsBaseAndDerived<utf_encoding_tag, FromEncodingT>::value), "" );
+        static_assert( (internal::IsBaseAndDerived<utf_encoding_tag, ToEncodingT>::value), "" );
         
         converter<FromEncodingT, ToEncodingT, Validation::SAFE> cvt;
         
@@ -179,15 +178,15 @@ namespace json { namespace unicode {
             OutIteratorT& dest, ToEncodingT toEncoding, 
             mb_state<FromEncodingT>& state,
             ConvertOption convertOption = None,            
-            typename boost::enable_if<
-                boost::is_same<
+            typename std::enable_if<
+                std::is_same<
                     typename std::iterator_traits<InIteratorT>::iterator_category, 
                     std::random_access_iterator_tag
-                >    
+                >::value
             >::type* dummy = 0)
     {
-        BOOST_STATIC_ASSERT( (boost::is_base_and_derived<utf_encoding_tag, FromEncodingT>::value) );
-        BOOST_STATIC_ASSERT( (boost::is_base_and_derived<utf_encoding_tag, ToEncodingT>::value) );
+        static_assert( (internal::IsBaseAndDerived<utf_encoding_tag, FromEncodingT>::value), "" );
+        static_assert( (internal::IsBaseAndDerived<utf_encoding_tag, ToEncodingT>::value), "" );
         
 #if !defined (NO_USE_MINOR_SPEED_OPTIMZATION)  // speed vs code size
         // If we have random access input iterators, we can apply some
@@ -257,15 +256,15 @@ namespace json { namespace unicode {
     convert(InIteratorT& first, InIteratorT last, FromEncodingT fromEncoding, 
             OutIteratorT& dest, ToEncodingT toEncoding, 
             ConvertOption convertOption = None,            
-            typename boost::enable_if<
-                boost::is_same<
-                typename std::iterator_traits<InIteratorT>::iterator_category, 
-                std::random_access_iterator_tag
-                >    
+            typename std::enable_if<
+                std::is_same<
+                    typename std::iterator_traits<InIteratorT>::iterator_category,
+                    std::random_access_iterator_tag
+                >::value
             >::type* dummy = 0)
     {
-        BOOST_STATIC_ASSERT( (boost::is_base_and_derived<utf_encoding_tag, FromEncodingT>::value) );
-        BOOST_STATIC_ASSERT( (boost::is_base_and_derived<utf_encoding_tag, ToEncodingT>::value) );
+        static_assert( (internal::IsBaseAndDerived<utf_encoding_tag, FromEncodingT>::value), "" );
+        static_assert( (internal::IsBaseAndDerived<utf_encoding_tag, ToEncodingT>::value), "" );
         
 #if !defined (NO_USE_MINOR_SPEED_OPTIMZATION)  // speed vs code size
         // If we have random access input iterators, we can apply some
@@ -335,15 +334,15 @@ namespace json { namespace unicode {
     convert_unsafe(InIteratorT& first, InIteratorT last, FromEncodingT fromEncoding, 
                    OutIteratorT& dest, ToEncodingT toEncoding, 
                    mb_state<FromEncodingT>& state,
-                   typename boost::disable_if<
-                    boost::is_same<
-                        typename std::iterator_traits<InIteratorT>::iterator_category, 
-                        std::random_access_iterator_tag
-                    >    
+                   typename std::enable_if<
+                        !std::is_same<
+                            typename std::iterator_traits<InIteratorT>::iterator_category,
+                            std::random_access_iterator_tag
+                        >::value
                    >::type* dummy = 0)
     {
-        BOOST_STATIC_ASSERT( (boost::is_base_and_derived<utf_encoding_tag, FromEncodingT>::value) );
-        BOOST_STATIC_ASSERT( (boost::is_base_and_derived<utf_encoding_tag, ToEncodingT>::value) );
+        static_assert( (internal::IsBaseAndDerived<utf_encoding_tag, FromEncodingT>::value), "" );
+        static_assert( (internal::IsBaseAndDerived<utf_encoding_tag, ToEncodingT>::value), "" );
         
         converter<FromEncodingT, ToEncodingT, Validation::NO_VALIDATION> cvt(state);
         int result = cvt.convert(first, last, dest);
@@ -361,17 +360,17 @@ namespace json { namespace unicode {
 #if defined (CONVERSION_CONVERT_FORCE_INLINE)
     __attribute__((always_inline))
 #endif                                
-    convert_unsafe(InIteratorT& first, InIteratorT last, FromEncodingT fromEncoding, 
+    convert_unsafe(InIteratorT& first, InIteratorT last, FromEncodingT fromEncoding,
                    OutIteratorT& dest, ToEncodingT toEncoding, 
-                   typename boost::disable_if<
-                   boost::is_same<
-                    typename std::iterator_traits<InIteratorT>::iterator_category, 
-                    std::random_access_iterator_tag
-                    >    
+                   typename std::enable_if<
+                        !std::is_same<
+                            typename std::iterator_traits<InIteratorT>::iterator_category,
+                            std::random_access_iterator_tag
+                        >::value
                    >::type* dummy = 0)
     {
-        BOOST_STATIC_ASSERT( (boost::is_base_and_derived<utf_encoding_tag, FromEncodingT>::value) );
-        BOOST_STATIC_ASSERT( (boost::is_base_and_derived<utf_encoding_tag, ToEncodingT>::value) );
+        static_assert( (internal::IsBaseAndDerived<utf_encoding_tag, FromEncodingT>::value), "" );
+        static_assert( (internal::IsBaseAndDerived<utf_encoding_tag, ToEncodingT>::value), "" );
         
         converter<FromEncodingT, ToEncodingT, Validation::UNSAFE> cvt;
         int result = cvt.convert(first, last, dest);
@@ -391,15 +390,15 @@ namespace json { namespace unicode {
     convert_unsafe(InIteratorT& first, InIteratorT last, FromEncodingT fromEncoding, 
                    OutIteratorT& dest, ToEncodingT toEncoding, 
                    mb_state<FromEncodingT>& state,
-                   typename boost::enable_if<
-                    boost::is_same<
-                        typename std::iterator_traits<InIteratorT>::iterator_category, 
-                        std::random_access_iterator_tag
-                    >    
+                   typename std::enable_if<
+                        std::is_same<
+                            typename std::iterator_traits<InIteratorT>::iterator_category,
+                            std::random_access_iterator_tag
+                        >::value
                    >::type* dummy = 0)
     {
-        BOOST_STATIC_ASSERT( (boost::is_base_and_derived<utf_encoding_tag, FromEncodingT>::value) );
-        BOOST_STATIC_ASSERT( (boost::is_base_and_derived<utf_encoding_tag, ToEncodingT>::value) );
+        static_assert( (internal::IsBaseAndDerived<utf_encoding_tag, FromEncodingT>::value), "" );
+        static_assert( (internal::IsBaseAndDerived<utf_encoding_tag, ToEncodingT>::value), "" );
         
 #if !defined (NO_USE_MINOR_SPEED_OPTIMZATION)  // speed vs code size
         // If we have random access input iterators, we can apply some
@@ -435,15 +434,15 @@ namespace json { namespace unicode {
 #endif                                
     convert_unsafe(InIteratorT& first, InIteratorT last, FromEncodingT fromEncoding, 
                    OutIteratorT& dest, ToEncodingT toEncoding, 
-                   typename boost::enable_if<
-                    boost::is_same<
-                        typename std::iterator_traits<InIteratorT>::iterator_category, 
-                        std::random_access_iterator_tag
-                    >    
+                   typename std::enable_if<
+                        std::is_same<
+                            typename std::iterator_traits<InIteratorT>::iterator_category,
+                            std::random_access_iterator_tag
+                        >::value
                    >::type* dummy = 0)
     {
-        BOOST_STATIC_ASSERT( (boost::is_base_and_derived<utf_encoding_tag, FromEncodingT>::value) );
-        BOOST_STATIC_ASSERT( (boost::is_base_and_derived<utf_encoding_tag, ToEncodingT>::value) );
+        static_assert( (internal::IsBaseAndDerived<utf_encoding_tag, FromEncodingT>::value), "" );
+        static_assert( (internal::IsBaseAndDerived<utf_encoding_tag, ToEncodingT>::value), "" );
         
 #if !defined (NO_USE_MINOR_SPEED_OPTIMZATION)  // speed vs code size
         // If we have random access input iterators, we can apply some
@@ -472,4 +471,4 @@ namespace json { namespace unicode {
 
 
 
-#endif  // JSON_UNICODE_CONVERSION_HPP
+#endif  // JSON_UNICODE_UNICODE_CONVERSION_HPP

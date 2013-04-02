@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #include "json/ObjC/SemanticActionsBase.hpp"
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
 
 using namespace json;

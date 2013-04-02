@@ -23,16 +23,15 @@
 
 
 #include "json/config.hpp"
-#include <string>
-#include <iostream>
-#include <boost/config.hpp>
-#include <boost/functional/hash/hash.hpp>
-#include <boost/static_assert.hpp>
-
+#include "number_description.hpp"
 #include "parser_errors.hpp"
 #include "json/utility/simple_log.hpp"
 #include "json/utility/flags.hpp"
 #include "json/unicode/unicode_traits.hpp"
+#include <string>
+#include <iostream>
+#include <type_traits>
+
 
 using json::utility::logger;
 #if defined (DEBUG)
@@ -96,77 +95,20 @@ namespace json {
     
 
     
-    class number_info 
-    {
-    public:    
-        typedef std::pair<char const*, size_t> const_buffer_type;  // null terminated!
-        
-        enum NumberType {
-            Scientific = 0,     // number using a mantissa and exponet and possibly having a decimal point
-            Integer,            // signed number
-            UnsignedInteger,    // unsigend number
-            Decimal,            // signed number with a decimal point but no exponent
-            UnsignedDecimal     // unsigned number with a decimal point but no exponent
-        };
-        
-        number_info() {}
-        
-        
-        number_info(const_buffer_type const& buffer, NumberType numberType, short precision)
-        :  number_string_(buffer), digits_(precision), type_(numberType)
-        {
-            assert(number_string_.second >= 0 and number_string_.first[number_string_.second] == 0);  // null terminated
-        }
-        
-        number_info(const number_info& other)  
-        :  number_string_(other.number_string_), digits_(other.digits_), type_(other.type_)
-        {
-            assert(number_string_.second >= 0 and number_string_.first[number_string_.second] == 0);  // null terminated
-        }
-        
-        void assign(const number_info& other) 
-        {
-            assert(other.number_string_.second >= 0 and other.number_string_.first[other.number_string_.second] == 0);  // null terminated
-            number_string_ = other.number_string_;
-            digits_ = other.digits_;
-            type_ = other.type_;
-        }
-        
-        number_info& operator=(const number_info& other) {
-            assign(other);
-            return *this;
-        }
-        
-        char const* c_str() const           { return number_string_.first; }
-        size_t      c_str_len() const       { return number_string_.second; }        
-
-        short       digits() const          { return digits_; }
-        bool        is_signed() const       { return type_ == Scientific or type_ == Decimal or type_ == Integer; }
-        bool        is_unsigned() const     { return type_ == UnsignedInteger or type_ == UnsignedDecimal; }
-        bool        is_integer() const      { return type_ == Integer or type_ == UnsignedInteger; }
-        bool        is_decimal() const      { return type_ == Decimal or type_ == UnsignedDecimal; }
-        bool        is_scientific() const   { return type_ == Scientific; }
-        
-    private:
-        const_buffer_type   number_string_;
-        short               digits_;      // number of digits for integer part and fractional part
-        NumberType          type_;
-    };
-    
 
     // Requires:
-    // Copy Constructable, Assignable
+    // Copy-Constructible, Assignable
     
     template <typename DerivedT, typename StringBufferEncodingT>
     class semantic_actions_base
     {
-        BOOST_STATIC_ASSERT( (boost::is_base_and_derived<utf_encoding_tag, StringBufferEncodingT>::value) );
+        static_assert( std::is_base_of<utf_encoding_tag, StringBufferEncodingT>::value, "" );
         
         struct error_info : std::pair<int, std::string> 
         {
             typedef std::pair<int, std::string> base;
             
-            error_info() : base(0, std::string()) {}
+            error_info() noexcept : base(0, std::string()) {}
             
             explicit error_info(int code, const char* description)  
             : base(code,description) 
@@ -197,7 +139,7 @@ namespace json {
         typedef std::pair<char_t*, size_t>                  buffer_t;
         typedef std::pair<char_t const*, size_t>            const_buffer_t;
         
-        typedef number_info                                 number_info_t;
+        typedef number_description                          number_desc_t;
         
         typedef json::utility::logger<LOG_MAX_LEVEL>        logger_t;
         
@@ -272,7 +214,7 @@ namespace json {
         void value_string(const const_buffer_t& buffer, bool hasMore = false) { this->derived().value_string_imp(buffer, hasMore); }
         
         // The parser calls this function when it encounters a JSON number
-        void value_number(const number_info_t& number)     { this->derived().value_number_imp(number); }
+        void value_number(const number_desc_t& number)     { this->derived().value_number_imp(number); }
         
         // The parser calls this function when it encounters a JSON null.
         void value_null()                                { this->derived().value_null_imp(); }
@@ -281,7 +223,7 @@ namespace json {
         void value_boolean(bool b)                       { this->derived().value_boolean_imp(b); }
         
         
-        void clear()                                    { canceled_ = false; inputEncoding_.clear(); this->derived().clear_imp(); }
+        void clear(bool shrink_buffers = false)          { canceled_ = false; inputEncoding_.clear(); this->derived().clear_imp(shrink_buffers); }
 
         void print(std::ostream& os)                    { this->derived().print_imp(os); }
         
@@ -477,7 +419,7 @@ namespace json {
         typedef typename base::char_t                   char_t;
         typedef typename base::encoding_t               encoding_t;
         typedef void                                    result_type;
-        typedef typename base::number_info_t            number_info_t;
+        typedef typename base::number_desc_t            number_desc_t;
         
         typedef typename base::buffer_t                 buffer_t;
         typedef typename base::const_buffer_t           const_buffer_t;
@@ -496,14 +438,13 @@ namespace json {
         void end_value_at_index_imp(size_t index) {}        
         void begin_key_value_pair_imp(const const_buffer_t&, size_t) {}
         void end_key_value_pair_imp() {}
-        void value_string_imp(const const_buffer_t&, bool)    {}        
-        void value_number_imp(const number_info_t& number)    {}
-        void value_boolean_imp(bool b)                       {}
-        void value_null_imp()                                {}
+        void value_string_imp(const const_buffer_t&, bool)  {}
+        void value_number_imp(const number_desc_t& number)  {}
+        void value_boolean_imp(bool b)                      {}
+        void value_null_imp()                               {}
         
                 
-        void clear_imp() 
-        {} 
+        void clear_imp(bool)                                {}
         
         void error_imp(int code, const char* description) {
             error_.set(code, description);

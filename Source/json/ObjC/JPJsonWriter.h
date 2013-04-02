@@ -69,6 +69,13 @@ typedef NSUInteger JPJsonWriterOptions;
 
     If this option is set, the generator prefixes the output with a BOM
     according the current Unicode encoding.
+ 
+ 
+- `JPJsonWriterEscapeSolidus`
+
+    If this option is set, the generator will escape the "solidus" (`/`)
+    character.
+ 
 */  
 
 

@@ -22,7 +22,7 @@
 #include "JPJson/JPJsonWriter.h"
 #include "JPJson/JPRepresentationGenerator.h"
 
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
 
 
@@ -133,18 +133,16 @@ namespace {
     //     
     TEST_F(JPJsonParserTest, BasicParserTestParseString) 
     {
-        NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-        
-        NSString* jsonText = @"[\"Sample string\"]";
-        NSError* error;
-        
-        id result = [JPJsonParser parseString:jsonText 
-                                      options:(JPJsonParserOptions)0 
-                                        error:&error];
-        EXPECT_TRUE( result != nil );
-        EXPECT_EQ(1, [result count]);
-        
-        [pool drain];
+        @autoreleasepool {
+            NSString* jsonText = @"[\"Sample string\"]";
+            NSError* error;
+            
+            id result = [JPJsonParser parseString:jsonText
+                                          options:(JPJsonParserOptions)0
+                                            error:&error];
+            EXPECT_TRUE( result != nil );
+            EXPECT_EQ(1, [result count]);
+        }
     }
     
 
@@ -154,18 +152,17 @@ namespace {
     //     
     TEST_F(JPJsonParserTest, BasicParserTestParseData) 
     {
-        NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-        const char* s = "[\"Sample string\"]";
-        NSData* data = [[NSData alloc] initWithBytes:s length:strlen(s)];
-        NSError* error;
-        
-        id result = [JPJsonParser parseData:data 
-                                      options:(JPJsonParserOptions)0 
-                                        error:&error];
-        EXPECT_TRUE( result != nil );
-        EXPECT_EQ(1, [result count]);
-        
-        [pool drain];
+        @autoreleasepool {
+            const char* s = "[\"Sample string\"]";
+            NSData* data = [[NSData alloc] initWithBytes:s length:strlen(s)];
+            NSError* error;
+            
+            id result = [JPJsonParser parseData:data
+                                        options:(JPJsonParserOptions)0
+                                          error:&error];
+            EXPECT_TRUE( result != nil );
+            EXPECT_EQ(1, [result count]);
+        }
     }
     
     
@@ -174,64 +171,57 @@ namespace {
     
     TEST_F(JPJsonParserTest, CheckDuplicateKeyError) 
     {
-        NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-        
-        
-        NSString* jsonText = @"{\"key1\":1,\"key1\":2}";
-        NSError* error;
-        
-        // 1) Duplicate key errors are ignored:
-        //    In case of a duplicate key, the key-value pair cannot be inserted. 
-        //    Whether the old value remains, or the value will be overridden by
-        //    the subsequent insertion is undefined.
-        id result1 = [JPJsonParser parseString:jsonText 
-                                       options:(JPJsonParserOptions)0 
-                                         error:&error];
-        EXPECT_TRUE( result1 != nil );
-        EXPECT_EQ(1, [result1 count]);
-        
-        error = nil;
-        // 2) Duplicate key errors are detected:
-        //    In case of a duplicate key error, the result will be nil and if
-        //    error is not nil it will be set accordingly.
-        id result2 = [JPJsonParser parseString:jsonText 
-                                       options:(JPJsonParserOptions)JPJsonParserCheckForDuplicateKey 
-                                         error:&error];
-        EXPECT_TRUE( result2 == nil );
-        EXPECT_TRUE( error != nil );
-        NSLog(@"CheckDuplicateKeyError: error message: %@", error);
-        
-        
-        [pool drain];
+        @autoreleasepool {
+            NSString* jsonText = @"{\"key1\":1,\"key1\":2}";
+            NSError* error;
+            
+            // 1) Duplicate key errors are ignored:
+            //    In case of a duplicate key, the key-value pair cannot be inserted.
+            //    Whether the old value remains, or the value will be overridden by
+            //    the subsequent insertion is undefined.
+            id result1 = [JPJsonParser parseString:jsonText
+                                           options:(JPJsonParserOptions)0
+                                             error:&error];
+            EXPECT_TRUE( result1 != nil );
+            EXPECT_EQ(1, [result1 count]);
+            
+            error = nil;
+            // 2) Duplicate key errors are detected:
+            //    In case of a duplicate key error, the result will be nil and if
+            //    error is not nil it will be set accordingly.
+            id result2 = [JPJsonParser parseString:jsonText
+                                           options:(JPJsonParserOptions)JPJsonParserCheckForDuplicateKey
+                                             error:&error];
+            EXPECT_TRUE( result2 == nil );
+            EXPECT_TRUE( error != nil );
+            NSLog(@"CheckDuplicateKeyError: error message: %@", error);
+        }
     }
     
     
     TEST_F(JPJsonParserTest, ParseJsonTestDocument) 
     { 
-        NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-        
-        NSString* fileName = @"Resources/Test-UTF8-esc.json";
-        NSError* error;
-        NSData* data = [[NSData alloc] initWithContentsOfFile:fileName
-                                                      options:NSDataReadingUncached 
-                                                        error:&error];
-        if (data == nil) {
-            NSLog(@"ERROR: %@", error);
-        }
-        ASSERT_TRUE(data != nil);
-        
-        
-        id result = [JPJsonParser parseData:data 
-                                    options:0
-                                      error:&error];
-        EXPECT_TRUE( result != nil );
-        
-        
-#if defined (DEBUG)        
-        NSLog(@"\n%@", [result descriptionWithLocale:NULL indent:0]);
+        @autoreleasepool {
+            NSString* fileName = @"Resources/Test-UTF8-esc.json";
+            NSError* error;
+            NSData* data = [[NSData alloc] initWithContentsOfFile:fileName
+                                                          options:NSDataReadingUncached
+                                                            error:&error];
+            if (data == nil) {
+                NSLog(@"ERROR: %@", error);
+            }
+            ASSERT_TRUE(data != nil);
+            
+            id result = [JPJsonParser parseData:data
+                                        options:0
+                                          error:&error];
+            EXPECT_TRUE( result != nil );
+            
+            
+#if defined (DEBUG)
+            NSLog(@"\n%@", [result descriptionWithLocale:NULL indent:0]);
 #endif        
-        
-        [pool drain];
+        }
     }
     
     
@@ -319,48 +309,38 @@ namespace {
         };
         
         
-        NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-        
-        
-        const test_s* first = tests;
-        const test_s* last = first + sizeof(tests)/sizeof(test_s);
-        
-        while (first != last)
-        {
-            NSString* json_text = [NSString stringWithFormat:(*first).json_format, (*first).json_arg];
+        @autoreleasepool {
             
-            //NSLog(@"JSON input:  \"%@\"", json_text);
-
-            NSError* error;            
-            id json = [JPJsonParser parseString:json_text 
-                                        options:(JPJsonParserOptions)0
-                                          error:&error];
+            const test_s* first = tests;
+            const test_s* last = first + sizeof(tests)/sizeof(test_s);
             
-            
-            if ((*first).result) {
-                EXPECT_TRUE(json != nil);
-                
-                if (json) {
-                    id number = [json objectAtIndex:0];
-                    //NSString* numberString = [number stringValue];
-                    //NSLog(@"Number: %@, type: %@, encoding: %s", numberString, [number class], [number objCType]);
-                    EXPECT_EQ(std::string([number objCType]),  std::string((*first).encoding));
+            while (first != last)
+            {
+                NSString* json_text = [NSString stringWithFormat:(*first).json_format, (*first).json_arg];
+                //NSLog(@"JSON input:  \"%@\"", json_text);
+                NSError* error;
+                id json = [JPJsonParser parseString:json_text
+                                            options:(JPJsonParserOptions)0
+                                              error:&error];
+                if ((*first).result) {
+                    EXPECT_TRUE(json != nil);
+                    
+                    if (json) {
+                        id number = [json objectAtIndex:0];
+                        //NSString* numberString = [number stringValue];
+                        //NSLog(@"Number: %@, type: %@, encoding: %s", numberString, [number class], [number objCType]);
+                        EXPECT_EQ(std::string([number objCType]),  std::string((*first).encoding));
+                    }
                 }
-            }
-            else {
-                EXPECT_TRUE(json == nil);
-                if (json == nil) {
-                    NSLog(@"ERROR: %@", error);
+                else {
+                    EXPECT_TRUE(json == nil);
+                    if (json == nil) {
+                        NSLog(@"ERROR: %@", error);
+                    }
                 }
+                ++first;
             }
-            
-            
-            ++first;
         }
-        
-        
-        [pool drain];
-        
     }
 
 
@@ -433,36 +413,36 @@ namespace {
             {@"[%s]", "0.1e200",true, 0, [NSNumber class], "d"},
         };
         
-        NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-        const test_s* first = tests;
-        const test_s* last = first + sizeof(tests)/sizeof(test_s);
-        while (first != last)
-        {
-            NSString* json_text = [NSString stringWithFormat:(*first).json_format, (*first).json_arg];
-            NSLog(@"JSON input:  \"%@\"", json_text);
-            NSError* error;            
-            id json = [JPJsonParser parseString:json_text 
-                                        options:(JPJsonParserOptions)0
-                                          error:&error];            
-            if ((*first).result) {
-                EXPECT_TRUE(json != nil);
-                if (json) {
-                    id number = [json objectAtIndex:0];
-                    NSString* numberString = [number stringValue];
-                    NSLog(@"Number: %@, type: %@, encoding: %s", numberString, [number class], [number objCType]);
-                    EXPECT_EQ(std::string([number objCType]),  std::string((*first).encoding));
-                    //EXPECT_EQ((*first).type, [number class] );
+        @autoreleasepool {
+            const test_s* first = tests;
+            const test_s* last = first + sizeof(tests)/sizeof(test_s);
+            while (first != last)
+            {
+                NSString* json_text = [NSString stringWithFormat:(*first).json_format, (*first).json_arg];
+                NSLog(@"JSON input:  \"%@\"", json_text);
+                NSError* error;
+                id json = [JPJsonParser parseString:json_text
+                                            options:(JPJsonParserOptions)0
+                                              error:&error];
+                if ((*first).result) {
+                    EXPECT_TRUE(json != nil);
+                    if (json) {
+                        id number = [json objectAtIndex:0];
+                        NSString* numberString = [number stringValue];
+                        NSLog(@"Number: %@, type: %@, encoding: %s", numberString, [number class], [number objCType]);
+                        EXPECT_EQ(std::string([number objCType]),  std::string((*first).encoding));
+                        //EXPECT_EQ((*first).type, [number class] );
+                    }
                 }
-            }
-            else {
-                EXPECT_TRUE(json == nil);
-                if (json == nil) {
-                    NSLog(@"ERROR: %@", error);
+                else {
+                    EXPECT_TRUE(json == nil);
+                    if (json == nil) {
+                        NSLog(@"ERROR: %@", error);
+                    }
                 }
+                ++first;
             }
-            ++first;
         }
-        [pool drain];
     }
 
     
@@ -475,66 +455,62 @@ namespace {
     
     TEST_F(JPJsonParserTest, DetectBOM) 
     {
-        NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-        //   00 00 FE FF	UTF-32, big-endian
-        //   FF FE 00 00	UTF-32, little-endian
-        //   FE FF          UTF-16, big-endian
-        //   FF FE          UTF-16, little-endian
-        //   EF BB BF       UTF-8
-        
-        struct test_s {
-            const char*     input_;
-            size_t          input_len_;
-            bool            hasBOM_;
-            const char*     encoding_;
-            bool            parser_result_;
-        };
-        
-        test_s tests[] = {
-            //          input_                         input_len_   hasBOM_ encding_    parser_result_        
-//            { "[]",                                             2,  false,  "UTF-8",    true },
-//            { "\xEF\xBB\xBF""[]",                               5,  true,   "UTF-8",    true },
-//            { "\x00[\x00]",                                     4,  false,  "UTF-16BE", true },
-//            { "\xFE\xFF""\x00[\x00]",                           6,  true,   "UTF-16BE", true },
-//            { "[\x00]\x00",                                     4,  false,  "UTF-16LE", true },
-//            { "\xFF\xFE""[\x00]\x00",                           6,  true,   "UTF-16LE", true },
-            { "\x00\x00\x00[\x00\x00\x00]",                     8,  false,  "UTF-32BE", true }
-//            { "\x00\x00\xFE\xFF""\x00\x00\x00[\x00\x00\x00]",   12, true,   "UTF-32BE", true },
-//            { "[\x00\x00\x00]\x00\x00\x00",                     8,  false,  "UTF-32LE", true },
-//            { "\xFF\xFE\x00\x00""[\x00\x00\x00]\x00\x00\x00",   12, true,   "UTF-32LE", true }
-        };
-        
-        const int count = sizeof(tests)/sizeof(test_s);
-        test_s* first = tests;
-        test_s* last = tests + count;
-        int idx = 0;
-        while (first != last)
-        {
-            JPRepresentationGenerator* sa = [[JPRepresentationGenerator alloc] init];
+        @autoreleasepool {
+            //   00 00 FE FF	UTF-32, big-endian
+            //   FF FE 00 00	UTF-32, little-endian
+            //   FE FF          UTF-16, big-endian
+            //   FF FE          UTF-16, little-endian
+            //   EF BB BF       UTF-8
             
-            const char* json = (*first).input_;                
-            size_t len = (*first).input_len_;
-            NSData* buffer = [[NSData alloc] initWithBytes:json length:len];
-            BOOL success = [JPJsonParser parseData:buffer semanticActions:sa];
-            [buffer release];
+            struct test_s {
+                const char*     input_;
+                size_t          input_len_;
+                bool            hasBOM_;
+                const char*     encoding_;
+                bool            parser_result_;
+            };
             
-            EXPECT_EQ((*first).parser_result_, success) << "at index " << idx;
-            EXPECT_EQ((*first).hasBOM_, sa.hasBOM) << "at index " << idx;
-            EXPECT_EQ(std::string((*first).encoding_), std::string([sa.inputEncoding UTF8String])) << "at index " << idx;
-            if (success) {
-                EXPECT_TRUE(sa.error == nil && sa.result != nil) << "at index " << idx;
-            } else
+            test_s tests[] = {
+                //          input_                         input_len_   hasBOM_ encding_    parser_result_
+                //            { "[]",                                             2,  false,  "UTF-8",    true },
+                //            { "\xEF\xBB\xBF""[]",                               5,  true,   "UTF-8",    true },
+                //            { "\x00[\x00]",                                     4,  false,  "UTF-16BE", true },
+                //            { "\xFE\xFF""\x00[\x00]",                           6,  true,   "UTF-16BE", true },
+                //            { "[\x00]\x00",                                     4,  false,  "UTF-16LE", true },
+                //            { "\xFF\xFE""[\x00]\x00",                           6,  true,   "UTF-16LE", true },
+                { "\x00\x00\x00[\x00\x00\x00]",                     8,  false,  "UTF-32BE", true }
+                //            { "\x00\x00\xFE\xFF""\x00\x00\x00[\x00\x00\x00]",   12, true,   "UTF-32BE", true },
+                //            { "[\x00\x00\x00]\x00\x00\x00",                     8,  false,  "UTF-32LE", true },
+                //            { "\xFF\xFE\x00\x00""[\x00\x00\x00]\x00\x00\x00",   12, true,   "UTF-32LE", true }
+            };
+            
+            const int count = sizeof(tests)/sizeof(test_s);
+            test_s* first = tests;
+            test_s* last = tests + count;
+            int idx = 0;
+            while (first != last)
             {
-                EXPECT_TRUE(sa.error != nil && sa.result == nil) << "at index " << idx;
+                JPRepresentationGenerator* sa = [[JPRepresentationGenerator alloc] init];
+                
+                const char* json = (*first).input_;
+                size_t len = (*first).input_len_;
+                NSData* buffer = [[NSData alloc] initWithBytes:json length:len];
+                BOOL success = [JPJsonParser parseData:buffer semanticActions:sa];
+                
+                EXPECT_EQ((*first).parser_result_, success) << "at index " << idx;
+                EXPECT_EQ((*first).hasBOM_, sa.hasBOM) << "at index " << idx;
+                EXPECT_EQ(std::string((*first).encoding_), std::string([sa.inputEncoding UTF8String])) << "at index " << idx;
+                if (success) {
+                    EXPECT_TRUE(sa.error == nil && sa.result != nil) << "at index " << idx;
+                } else
+                {
+                    EXPECT_TRUE(sa.error != nil && sa.result == nil) << "at index " << idx;
+                }
+                
+                ++first;
+                ++idx;
             }
-            
-            [sa release];
-            
-            ++first;
-            ++idx;
         }
-        
-        [pool drain];
     }
     
     
@@ -558,174 +534,158 @@ namespace {
     
     TEST_F(JPJsonParserTest, JPJsonParserOptionsUnicodeNoncharactersHandling)  
     {
-        NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-        
-        NSString* jsonText = @"[\"abc\uFFFEdef\"]";
-        
-        NSError* error = nil;
-        id json = [JPJsonParser parseString:jsonText 
-                                    options:(JPJsonParserOptions)JPJsonParserSignalErrorOnNoncharacter
-                                      error:&error]; 
-        EXPECT_EQ(nil, json);
-        EXPECT_TRUE(error != nil);        
-        EXPECT_TRUE([[error description] rangeOfString:@"encountered Unicode noncharacter"].length != 0);
-
-        
-        error = nil;
-        json = [JPJsonParser parseString:jsonText 
-                                 options:(JPJsonParserOptions)JPJsonParserSubstituteUnicodeNoncharacter
-                                   error:&error];
-        EXPECT_TRUE(json != nil);
-        EXPECT_TRUE(error == nil);        
-        NSString* value = [json objectAtIndex:0];
-        // Unicode replacement character: U+FFFD
-        const NSString* repl_str = @"abc\uFFFDdef";
-        EXPECT_TRUE([repl_str isEqualToString:value]);
-        
+        @autoreleasepool {
+            NSString* jsonText = @"[\"abc\uFFFEdef\"]";
+            
+            NSError* error = nil;
+            id json = [JPJsonParser parseString:jsonText
+                                        options:(JPJsonParserOptions)JPJsonParserSignalErrorOnNoncharacter
+                                          error:&error];
+            EXPECT_EQ(nil, json);
+            EXPECT_TRUE(error != nil);
+            EXPECT_TRUE([[error description] rangeOfString:@"encountered Unicode noncharacter"].length != 0);
+            
+            error = nil;
+            json = [JPJsonParser parseString:jsonText
+                                     options:(JPJsonParserOptions)JPJsonParserSubstituteUnicodeNoncharacter
+                                       error:&error];
+            EXPECT_TRUE(json != nil);
+            EXPECT_TRUE(error == nil);
+            NSString* value = [json objectAtIndex:0];
+            // Unicode replacement character: U+FFFD
+            const NSString* repl_str = @"abc\uFFFDdef";
+            EXPECT_TRUE([repl_str isEqualToString:value]);
+            
 #if 0 // The option `JPJsonParserSkipUnicodeNoncharacter`is not yet implemented
-        error = nil;
-        json = [JPJsonParser parseString:jsonText 
-                                 options:(JPJsonParserOptions)JPJsonParserSkipUnicodeNoncharacter
-                                   error:&error];
-        EXPECT_TRUE(json != nil);
-        EXPECT_TRUE(error == nil);        
-        value = [json objectAtIndex:0];
-        // Unicode replacement character: U+FFFD
-        const NSString* str = @"abcdef";
-        EXPECT_TRUE([str isEqualToString:value]);
+            error = nil;
+            json = [JPJsonParser parseString:jsonText
+                                     options:(JPJsonParserOptions)JPJsonParserSkipUnicodeNoncharacter
+                                       error:&error];
+            EXPECT_TRUE(json != nil);
+            EXPECT_TRUE(error == nil);
+            value = [json objectAtIndex:0];
+            // Unicode replacement character: U+FFFD
+            const NSString* str = @"abcdef";
+            EXPECT_TRUE([str isEqualToString:value]);
 #endif        
-        
-        [pool drain];
-    }    
+        }
+    }
     
 
     TEST_F(JPJsonParserTest, JPJsonParserOptionsIgnoreSpuriousTrailingBytes) 
     {
-        NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-        
-        NSString* jsonText = @"[\"abcdef\"] x y z";
-        
-        NSError* error = nil;
-        id json = [JPJsonParser parseString:jsonText 
-                                    options:(JPJsonParserOptions)0
-                                      error:&error]; 
-        EXPECT_EQ(nil, json);
-        EXPECT_TRUE(error != nil);        
-        EXPECT_TRUE([[error description] rangeOfString:@"extra characters at end of json document not allowed"].length != 0);
-        
-        
-        
-        error = nil;
-        json = [JPJsonParser parseString:jsonText 
-                                 options:(JPJsonParserOptions)JPJsonParserIgnoreSpuriousTrailingBytes
-                                   error:&error];
-        EXPECT_TRUE(json != nil);
-        EXPECT_TRUE(error == nil);        
-        
-        [pool drain];
+        @autoreleasepool {
+            NSString* jsonText = @"[\"abcdef\"] x y z";
+            
+            NSError* error = nil;
+            id json = [JPJsonParser parseString:jsonText
+                                        options:(JPJsonParserOptions)0
+                                          error:&error];
+            EXPECT_EQ(nil, json);
+            EXPECT_TRUE(error != nil);
+            EXPECT_TRUE([[error description] rangeOfString:@"extra characters at end of json document not allowed"].length != 0);
+            
+            
+            
+            error = nil;
+            json = [JPJsonParser parseString:jsonText
+                                     options:(JPJsonParserOptions)JPJsonParserIgnoreSpuriousTrailingBytes
+                                       error:&error];
+            EXPECT_TRUE(json != nil);
+            EXPECT_TRUE(error == nil);
+        }
     }
     
     
     TEST_F(JPJsonParserTest, JPJsonParserOptionsParseMultipleDocuments)  
     {
-        NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-        
-        NSString* s = @"[\"abc\"] \n\t[\"def\"][\"ghi\"]";
-        NSData* jsonText = [NSData dataWithBytes:[s UTF8String] length:[s lengthOfBytesUsingEncoding:NSUTF8StringEncoding]];
-
-        
-        JPRepresentationGenerator* sa = [[JPRepresentationGenerator alloc] init];        
-        sa.parseMultipleDocuments = YES;
-        
-        __block int count = 0;
-        sa.endJsonHandlerBlock = ^(id result) {
-            ++count;
-        };
-        sa.errorHandlerBlock = ^(NSError* error) {
-            NSLog(@"%@", error);
-        };
-        
-        BOOL success = [JPJsonParser parseData:jsonText semanticActions:sa];
-        EXPECT_EQ(YES, success);
-        EXPECT_EQ(3, count);
-
-        [sa release];
-        
-        [pool drain];        
+        @autoreleasepool {
+            NSString* s = @"[\"abc\"] \n\t[\"def\"][\"ghi\"]";
+            NSData* jsonText = [NSData dataWithBytes:[s UTF8String] length:[s lengthOfBytesUsingEncoding:NSUTF8StringEncoding]];
+            
+            
+            JPRepresentationGenerator* sa = [[JPRepresentationGenerator alloc] init];
+            sa.parseMultipleDocuments = YES;
+            
+            __block int count = 0;
+            sa.endJsonHandlerBlock = ^(id result) {
+                ++count;
+            };
+            sa.errorHandlerBlock = ^(NSError* error) {
+                NSLog(@"%@", error);
+            };
+            
+            BOOL success = [JPJsonParser parseData:jsonText semanticActions:sa];
+            EXPECT_EQ(YES, success);
+            EXPECT_EQ(3, count);
+        }
     }
 
 
     TEST_F(JPJsonParserTest, JPJsonParserOptionsParseMultipleDocuments_ignoreSpuriousTrailingBytes)  
     {
-        NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-        
-        NSString* s = @"[\"abc\"] [\"def\"][\"ghi\"] x y z";
-        NSData* jsonText = [NSData dataWithBytes:[s UTF8String] length:[s lengthOfBytesUsingEncoding:NSUTF8StringEncoding]];
-        
-        
-        JPRepresentationGenerator* sa = [[JPRepresentationGenerator alloc] init];        
-        sa.parseMultipleDocuments = YES;
-        sa.ignoreSpuriousTrailingBytes = YES;
-        
-        __block int count = 0;
-        sa.endJsonHandlerBlock = ^(id result) {
-            ++count;
-        };
-        sa.errorHandlerBlock = ^(NSError* error) {
-            NSLog(@"%@", error);
-        };
-        
-        BOOL success = [JPJsonParser parseData:jsonText semanticActions:sa];
-        EXPECT_EQ(YES, success);
-        EXPECT_EQ(3, count);
-        
-        [sa release];
-        
-        [pool drain];        
+        @autoreleasepool {
+            NSString* s = @"[\"abc\"] [\"def\"][\"ghi\"] x y z";
+            NSData* jsonText = [NSData dataWithBytes:[s UTF8String] length:[s lengthOfBytesUsingEncoding:NSUTF8StringEncoding]];
+            
+            
+            JPRepresentationGenerator* sa = [[JPRepresentationGenerator alloc] init];
+            sa.parseMultipleDocuments = YES;
+            sa.ignoreSpuriousTrailingBytes = YES;
+            
+            __block int count = 0;
+            sa.endJsonHandlerBlock = ^(id result) {
+                ++count;
+            };
+            sa.errorHandlerBlock = ^(NSError* error) {
+                NSLog(@"%@", error);
+            };
+            
+            BOOL success = [JPJsonParser parseData:jsonText semanticActions:sa];
+            EXPECT_EQ(YES, success);
+            EXPECT_EQ(3, count);
+        }
     }
     
     
     
     TEST_F(JPJsonParserTest, LargeJSONString) 
     {
-        NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-        
-        typedef std::vector<char> json_text_t;
-        
-        // create the JSON input:
-        const size_t Size = 128*1024;
-        json_text_t json_text;
-        json_text.push_back('[');
-        json_text.push_back('\"');
-        
-        for (int i = 0; i < Size; ++i) {
-            json_text.push_back('a');
+        @autoreleasepool {
+            typedef std::vector<char> json_text_t;
+            
+            // create the JSON input:
+            const size_t Size = 128*1024;
+            json_text_t json_text;
+            json_text.push_back('[');
+            json_text.push_back('\"');
+            
+            for (int i = 0; i < Size; ++i) {
+                json_text.push_back('a');
+            }
+            json_text.push_back('\"');
+            json_text.push_back(']');
+            
+            NSData* jsonText = [NSData dataWithBytes:&json_text[0] length:json_text.size()];
+            
+            
+            NSError* error = nil;
+            id json = [JPJsonParser parseData:jsonText
+                                      options:(JPJsonParserOptions)0
+                                        error:&error];
+            EXPECT_TRUE(json != nil);
+            EXPECT_TRUE(error == nil);
+            EXPECT_TRUE(([json isKindOfClass:[NSArray class]] == YES));
+            
+            NSUInteger count = [json count];
+            EXPECT_EQ(1U, count);
+            
+            id json_value = [json objectAtIndex:0];
+            EXPECT_TRUE(([json_value isKindOfClass:[NSString class]] == YES));
+            
+            NSUInteger length = [json_value lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
+            EXPECT_EQ(Size, length);
         }
-        json_text.push_back('\"');
-        json_text.push_back(']');
-        
-        NSData* jsonText = [NSData dataWithBytes:&json_text[0] length:json_text.size()];
-        
-        
-        NSError* error = nil;
-        id json = [JPJsonParser parseData:jsonText 
-                                    options:(JPJsonParserOptions)0
-                                      error:&error]; 
-        EXPECT_TRUE(json != nil);
-        EXPECT_TRUE(error == nil);        
-        EXPECT_TRUE(([json isKindOfClass:[NSArray class]] == YES));
-        
-        NSUInteger count = [json count];
-        EXPECT_EQ(1U, count);
-        
-        id json_value = [json objectAtIndex:0];
-        EXPECT_TRUE(([json_value isKindOfClass:[NSString class]] == YES));
-
-        NSUInteger length = [json_value lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
-        EXPECT_EQ(Size, length);
-        
-        
-        [pool drain];                
     }
     
 

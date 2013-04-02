@@ -57,15 +57,15 @@ namespace json { namespace parser_internal {
         typedef typename std::pair<char const*, size_t> const_buffer_type;        
         
     public:
-        number_string_buffer() 
+        number_string_buffer() noexcept
         : end_(buffer_)
         {}
         
-        void reset() {
+        void reset() noexcept {
             end_ = buffer_;
         }
         
-        void clear() {
+        void clear() noexcept {
             end_ = buffer_;
         }
         

@@ -7,7 +7,7 @@
 //
 
 #include "json/json_path/parser.hpp"
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
 #include <iostream>
 #include <iomanip>

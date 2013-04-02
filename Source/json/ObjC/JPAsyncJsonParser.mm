@@ -143,11 +143,13 @@ namespace {
         // Check if there is a BOM using detect_bom() utility function. Possible 
         // results:
         // positive values in case of success:
-        //    json::unicode::UNICODE_BOM_UTF_8    
-        //    json::unicode::UNICODE_BOM_UTF_16BE 
-        //    json::unicode::UNICODE_BOM_UTF_16LE 
-        //    json::unicode::UNICODE_BOM_UTF_32BE 
-        //    json::unicode::UNICODE_BOM_UTF_32LE 
+        //        enum UNICODE_ENCODING {
+        //            UNICODE_ENCODING_UTF_8 =    1,
+        //            UNICODE_ENCODING_UTF_16BE = 2,
+        //            UNICODE_ENCODING_UTF_16LE = 3,
+        //            UNICODE_ENCODING_UTF_32BE = 4,
+        //            UNICODE_ENCODING_UTF_32LE = 5
+        //        };
         //  zero, if no BOM
         //  and negative values in case of an error:
         //   -1: unexpected EOF

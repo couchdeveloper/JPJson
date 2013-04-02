@@ -22,43 +22,41 @@
 
 
 #include "json/config.hpp"
-#include <boost/config.hpp>
-#include <boost/static_assert.hpp>
-#include <boost/type_traits.hpp>
-#include <boost/utility/enable_if.hpp>
-#include <boost/mpl/and.hpp>
-#include <boost/mpl/or.hpp>
-#include <boost/mpl/bool.hpp>
-#include <stdexcept>
-#include <stdlib.h>
 #include "endian.hpp"
-
+#include <stdexcept>
+#include <cstdlib>
+#include <type_traits>
 
 namespace json 
 {
     namespace internal 
     {
-    
+        template <typename Base, typename Derived>
+        using IsBaseAndDerived = typename std::integral_constant<bool,
+            std::is_base_of<Base, Derived>::value
+            and !std::is_same<Base, Derived>::value
+        >::type;
+        
+
         template<typename T, size_t sz>
         struct swap_bytes {
-            inline T operator()(T val) {
+            inline T operator()(T val) const {
                 throw std::out_of_range("data size");
             }
         };
         
         template<typename T>
         struct swap_bytes<T, 1> {
-            inline T operator()(T val) {
+            constexpr inline T operator()(T val) const {
                 return val;
             }
         };
         
         template<typename T>
         struct swap_bytes<T, 2> {
-            inline T operator()(T val) {
+            constexpr inline T operator()(T val) const {
 #if defined (__APPLE__) && !defined (JSON_SWAP_NO_BUILTIN)
-                T result = __DARWIN_OSSwapInt16(val);
-                return result;
+                return __DARWIN_OSSwapInt16(val);
 #elif defined (__llvm__)  && !defined (JSON_SWAP_NO_BUILTIN)
                 return __builtin_bswap16(val);                
 #elif defined (__GNUC__) && (__GNUC_MINOR__ >= 3 ) 
@@ -73,7 +71,7 @@ namespace json
         
         template<typename T>
         struct swap_bytes<T, 4> {
-            inline T operator()(T val) {
+            constexpr inline T operator()(T val) const {
 #if defined (__APPLE__)  && !defined (JSON_SWAP_NO_BUILTIN)
                 return __DARWIN_OSSwapInt32(val);
 #elif defined (__llvm__)  && !defined (JSON_SWAP_NO_BUILTIN)
@@ -94,7 +92,7 @@ namespace json
         
         template<>
         struct swap_bytes<float, 4> {
-            inline float operator()(float val) {
+            inline float operator()(float val) const{
                 uint32_t mem = swap_bytes<uint32_t, sizeof(uint32_t)>()(*(uint32_t*)&val);
                 return *(float*)&mem;
             }
@@ -102,7 +100,7 @@ namespace json
         
         template<typename T>
         struct swap_bytes<T, 8> {
-            inline T operator()(T val) {
+            constexpr inline T operator()(T val) const {
 #if defined (__APPLE__)  && !defined (JSON_SWAP_NO_BUILTIN)
                 return __DARWIN_OSSwapInt64(val);
 #elif defined (__llvm__)  && !defined (JSON_SWAP_NO_BUILTIN)
@@ -127,7 +125,7 @@ namespace json
         
         template<>
         struct swap_bytes<double, 8> {
-            inline double operator()(double val) {
+            inline double operator()(double val) const {
                 uint64_t mem = swap_bytes<uint64_t, sizeof(uint64_t)>()(*(uint64_t*)&val);
                 return *(double*)&mem;
             }
@@ -135,7 +133,7 @@ namespace json
         
         template<typename FromEndianT, typename ToEndianT, class T>
         struct do_byte_swap {
-            inline T operator()(T value) {
+            constexpr inline T operator()(T value) const {
                 return swap_bytes<T, sizeof(T)>()(value);
             }
         };
@@ -144,35 +142,31 @@ namespace json
         // Specialisation when attempting to swap to the same endianess
         template<typename FromAndToEndianT, class T> 
         struct do_byte_swap<FromAndToEndianT, FromAndToEndianT, T> { 
-            inline T operator()(T value) { 
+            constexpr inline T operator()(T value) const {
                 return value; 
             } 
         };
         
     } // namespace internal
 
-
-    namespace mpl = boost::mpl;
     
     // Restrict candidates whoses template parameter types are 
     // derived from endian_tag and which are not equal (this results
     // in a byte swap):
     template<typename FromEndianT, typename ToEndianT, class T>
-    inline 
-    typename boost::enable_if<
-        mpl::and_ <
-            boost::is_base_and_derived<internal::endian_tag, FromEndianT>
-          , boost::is_base_and_derived<internal::endian_tag, ToEndianT>
-          , mpl::not_<boost::is_same<FromEndianT, ToEndianT> >
-        >
-        , T
+    constexpr inline
+    typename std::enable_if<
+            internal::IsBaseAndDerived<internal::endian_tag, FromEndianT>::value
+            and internal::IsBaseAndDerived<internal::endian_tag, ToEndianT>::value
+            and !std::is_same<FromEndianT, ToEndianT>::value
+          , T
         >::type
     byte_swap(T value)
     {
         // ensure the data is only 1, 2, 4 or 8 bytes
-        BOOST_STATIC_ASSERT(sizeof(T) == 1 || sizeof(T) == 2 || sizeof(T) == 4 || sizeof(T) == 8);
+        static_assert(sizeof(T) == 1 || sizeof(T) == 2 || sizeof(T) == 4 || sizeof(T) == 8, "");
         // ensure we're only swapping arithmetic types
-        BOOST_STATIC_ASSERT(boost::is_arithmetic<T>::value);
+        static_assert(std::is_arithmetic<T>::value, "");
         
         return internal::do_byte_swap<FromEndianT, ToEndianT, T>()(value);
     }
@@ -181,14 +175,12 @@ namespace json
     // derived from endian_tag and which are equal (this results
     // in a no-op):
     template<typename FromEndianT, typename ToEndianT, class T>
-    inline 
-    typename boost::enable_if<
-        mpl::and_ <
-            boost::is_base_and_derived<internal::endian_tag, FromEndianT>
-          , boost::is_base_and_derived<internal::endian_tag, ToEndianT>
-          , boost::is_same<FromEndianT, ToEndianT>
-        >
-    , T
+    constexpr inline
+    typename std::enable_if<
+        internal::IsBaseAndDerived<internal::endian_tag, FromEndianT>::value
+        and internal::IsBaseAndDerived<internal::endian_tag, ToEndianT>::value
+        and std::is_same<FromEndianT, ToEndianT>::value
+      , T
     >::type
     byte_swap(T value)
     {
@@ -198,23 +190,21 @@ namespace json
     
     // Catch Illegal template parameters which are NOT derived from endian_tag.
     template<typename FromEndianT, typename ToEndianT, class T>
-    inline 
-    typename boost::enable_if<
-        mpl::or_ <
-            mpl::not_<boost::is_base_and_derived<internal::endian_tag, FromEndianT> >
-          , mpl::not_<boost::is_base_and_derived<internal::endian_tag, ToEndianT> >
-        >
+    constexpr inline
+    typename std::enable_if<
+        !internal::IsBaseAndDerived<internal::endian_tag, FromEndianT>::value
+        or !internal::IsBaseAndDerived<internal::endian_tag, ToEndianT>::value
         , T
     >::type
-    byte_swap(T value)
-    {
-        BOOST_STATIC_ASSERT(sizeof(T) == 0); 
-        return T();
-    }
+    byte_swap(T value);
+//    {
+//        static_assert(sizeof(T) == 0, "");
+//        return T();
+//    }
     
 
     template <typename T>
-    T byte_swap(const T& value) {
+    constexpr T byte_swap(const T& value) {
         return internal::swap_bytes<T, sizeof(T)>()(value);
     }
     

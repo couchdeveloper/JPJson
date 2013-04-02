@@ -22,37 +22,41 @@
 
 
 #include "json/config.hpp"
-#include <boost/config.hpp>
-#include <boost/type_traits.hpp>
-#include <boost/mpl/bool.hpp>
+#include <type_traits>
 
 
 namespace json 
 {
     
-    // 
-    // json type trait
-    //
-    template <typename T> 
-    struct is_json_type : public boost::mpl::false_ 
-    { 
-        static const bool value = false; 
-    };
+//    // 
+//    // json type trait
+//    //
+//    template <typename T> 
+//    struct is_json_type : std::false_type
+//    { 
+//    };
     
 
     //
     // is_numeric type trait
     //
-    // The is_numeric type trait is used for construction and assignment for
+    // The is_numeric type trait is used for construction and assignment to
     // instances of type Number.
-    // is_numeric triat comprises a C++ arithmetic type excluding the type bool.
+    // is_numeric trait comprises a C++ arithmetic type excluding the type bool
+    // and character types.
     //
     template <typename T>
-    struct is_numeric : boost::is_arithmetic<T> {};
-    
-    template <>
-    struct is_numeric<bool> {
-        static const bool value = false;
+    struct is_numeric : std::conditional<
+            (std::is_same<bool,T>::value
+             or std::is_same<char,T>::value
+             or std::is_same<unsigned char,T>::value
+             or std::is_same<signed char,T>::value
+             or std::is_same<char16_t,T>::value
+             or std::is_same<char32_t,T>::value),
+            std::false_type,
+            std::is_arithmetic<T>
+        >::type
+    {
     };
     
     
@@ -60,25 +64,5 @@ namespace json
 }  // namespace json
 
 
-#if defined (BOOST_NO_RVALUE_REFERENCES)
-namespace json {
-    namespace internal
-    {
-        template <typename T>
-        struct move_t {
-            explicit move_t(T& value) : source(value) {}
-            T& source;
-        };
-        
-    } // namespace internal   
-    
-    template <typename T>
-    internal::move_t<T> 
-    move(T& v) {
-        return internal::move_t<T>(v);
-    }
-    
-} // namespace json
-#endif
 
 #endif   // JSON_JSON_TRAITS_HPP

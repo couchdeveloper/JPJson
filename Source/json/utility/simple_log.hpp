@@ -251,6 +251,9 @@ namespace json { namespace utility {
     typedef log_severity<LOG_LEVEL_FATAL>    log_fatal;
     typedef log_severity<LOG_LEVEL_NONE>     log_none;
     
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunused-variable"
+    
     static log_trace   LOG_TRACE;
     static log_debug   LOG_DEBUG;
     static log_info    LOG_INFO;
@@ -259,6 +262,7 @@ namespace json { namespace utility {
     static log_fatal   LOG_FATAL;
     static log_none    LOG_NONE;
     
+#pragma clang diagnostic pop
     
     
     template <typename MaxSeverity = log_warning >

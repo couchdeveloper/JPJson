@@ -49,7 +49,7 @@ namespace {
         
     public:
         typedef typename encoding_traits<EncodingT>::code_unit_type char_t;
-        typedef typename base::number_info_t                        number_info_t;
+        typedef typename base::number_desc_t                        number_desc_t;
         typedef typename base::buffer_t                             buffer_t;
         typedef typename base::const_buffer_t                       const_buffer_t;
 
@@ -227,7 +227,7 @@ namespace {
 //            }
 //        }
         
-        virtual void value_number_imp(const number_info_t& number) {
+        virtual void value_number_imp(const number_desc_t& number) {
             if (push_number_imp_) {
                 push_number_imp_(this->delegate_, @selector(parserFoundNumber:length:), number.c_str(), number.c_str_len());
                 if (!this->ok()) {
@@ -260,8 +260,8 @@ namespace {
             base::pop_imp();
         }
         
-        virtual void clear_imp() {
-            base::clear_imp();
+        virtual void clear_imp(bool shrink_buffers) {
+            base::clear_imp(shrink_buffers);
         } 
         
         virtual void error_imp(const error_t& error) {

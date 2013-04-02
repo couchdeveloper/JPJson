@@ -25,7 +25,7 @@
 //    ...
 // Type conversions are not allowed, though. (see compile time assertions below)
 
-#include <boost/static_assert.hpp>
+#include <type_traits>
 
 
 class SafeBool
@@ -38,7 +38,7 @@ public:
     explicit SafeBool(bool v) : v_(v) {}
     operator bool_convert () const { return v_ ? &s::dummy : 0; }
 };
-BOOST_STATIC_ASSERT( (boost::is_convertible<SafeBool,bool>::value) );
-BOOST_STATIC_ASSERT( (not boost::is_convertible<SafeBool,int>::value) );
-BOOST_STATIC_ASSERT( (not boost::is_convertible<SafeBool,void*>::value) );
+static_assert( (std::is_convertible<SafeBool,bool>::value), "SafeBool shall be convertible to bool" );
+static_assert( (not std::is_convertible<SafeBool,int>::value), "SafeBool shall NOT be convertible to int");
+static_assert( (not std::is_convertible<SafeBool,void*>::value), "SafeBool shall NOT be convertible to void*");
 

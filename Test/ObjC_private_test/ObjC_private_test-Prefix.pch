@@ -4,12 +4,11 @@
 
 // Due to a conflict with macros "Nil" and "nil" defined in Foundation,
 // we need to include certain boost headers before any Foundation header:
-//#include "json/utility/string_to_number.hpp"
+#include "json/utility/string_to_number.hpp"
 
-//#define BOOST_IOSTREAMS_BROKEN_OVERLOAD_RESOLUTION
 #ifdef __OBJC__
     #import <Foundation/Foundation.h>
 #endif
 
 #import <CoreFoundation/CoreFoundation.h>
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>

@@ -40,8 +40,8 @@ namespace {
     //
     // Path(s) to a JSON file(s) which is shall be used for creating the JSON object.
     //
-    NSString* JSON_TEST_FILE = @"Test-UTF8-esc.json";
-    //NSString* JSON_TEST_FILE = @"Test-UTF8.json";
+    //NSString* JSON_TEST_FILE = @"Test-UTF8-esc.json";
+    NSString* JSON_TEST_FILE = @"Test-UTF8.json";
 
 }
 

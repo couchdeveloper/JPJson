@@ -18,8 +18,8 @@
 //  limitations under the License.
 //
 
-#ifndef JSON_UNICODE_DETECT_ENCODING_HPP
-#define JSON_UNICODE_DETECT_ENCODING_HPP
+#ifndef JSON_UNICODE_UNICODE_DETECT_BOM_HPP
+#define JSON_UNICODE_UNICODE_DETECT_BOM_HPP
 
 
 #include "json/config.hpp"
@@ -58,8 +58,9 @@ namespace json { namespace unicode {
     // the BOM, respectively points to the first character or EOF.
     //
     // Results:
-    //     >0: success, returns a value of UNICODE_ENCODING
-    //     UNICODE_ENCODING_INVALID: unexpected EOF
+    //     >0:                          success, returns a value of json::unicode::UNICODE_ENCODING
+    //     0:                           no BOM detected
+    //     UNICODE_ENCODING_INVALID:    unexpected EOF
     //
     // The size of the iterator's value_type shall be 1.
 
@@ -138,4 +139,4 @@ namespace json { namespace unicode {
 }}
 
 
-#endif
+#endif  // JSON_UNICODE_UNICODE_DETECT_BOM_HPP

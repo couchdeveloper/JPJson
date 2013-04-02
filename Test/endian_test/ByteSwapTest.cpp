@@ -37,10 +37,9 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 //
-#define JSON_SWAP_NO_BUILTIN
 
 #include "json/endian/byte_swap.hpp"
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
 #include "utilities/timer.hpp"
 #include "json/unicode/unicode_traits.hpp"
@@ -95,6 +94,13 @@ namespace {
     };
     
     
+    TEST_F(ByteSwapTest, EndianConstExpr)
+    {
+        constexpr bool isLittleEndian = json::internal::host_endianness::is_little_endian;
+        constexpr bool isBigEndian = json::internal::host_endianness::is_big_endian;
+        EXPECT_TRUE(isLittleEndian != isBigEndian);
+    }
+    
     TEST_F(ByteSwapTest, ExecutionEnvironment) 
     {
         using std::hex;
@@ -106,11 +112,19 @@ namespace {
         using json::internal::run_time_host_endianness;
         using json::internal::host_endianness;
         
+#if defined (DEBUG)
         cout << "Runtime: Host is big endian: " << (run_time_host_endianness::is_big_endian() ? "Yes" : "No")  << endl;
         cout << "Runtime: Host is little endian: " << (run_time_host_endianness::is_little_endian() ? "Yes" : "No")  << endl;
         
         cout << "Compiletime: Host is big endian: " << (host_endianness::is_big_endian ? "Yes" : "No")  << endl;
         cout << "Compiletime: Host is little endian: " << (host_endianness::is_little_endian ? "Yes" : "No")  << endl;
+#endif
+        
+        EXPECT_TRUE(run_time_host_endianness::is_big_endian() == host_endianness::is_big_endian);
+        EXPECT_TRUE(run_time_host_endianness::is_little_endian() == host_endianness::is_little_endian);
+
+        EXPECT_TRUE(run_time_host_endianness::is_big_endian() != run_time_host_endianness::is_little_endian());
+        EXPECT_TRUE(host_endianness::is_big_endian != host_endianness::is_little_endian);
         
         //int16_t i16_little = byte_swap<host_endianness::type, little_endian>(i16);
         //int16_t i16_big = byte_swap<host_endianness::type, big_endian_tag>(i16);

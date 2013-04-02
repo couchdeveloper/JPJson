@@ -23,7 +23,6 @@
 
 
 #include "json/config.hpp"
-#include <boost/config.hpp>
 #include <boost/functional/hash.hpp>
 
 

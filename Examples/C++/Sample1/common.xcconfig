@@ -1,0 +1,7 @@
+//
+//  common.xcconfig
+//
+
+// Source Root Path
+SOURCE_ROOT = "$(SRCROOT)/../../../Source"
+

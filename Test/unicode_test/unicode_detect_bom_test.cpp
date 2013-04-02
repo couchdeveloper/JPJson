@@ -7,7 +7,7 @@
 //
 
 #include "json/unicode/unicode_detect_bom.hpp"
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
 #include <iostream>
 #include <iomanip>
@@ -61,17 +61,19 @@ namespace {
         //  int detect_bom(Iterator& first, Iterator last) 
         //
         //  Returns:
-        //     >0: success, returns a values of UnicodeBOM
-        //  Errors
-        //     -1: unexpected EOF
-        //
-        //   enum UnicodeBOM {
-        //       UNICODE_BOM_UTF_8     =  1,
-        //       UNICODE_BOM_UTF_16LE  =  2,
-        //       UNICODE_BOM_UTF_16BE  =  3,
-        //       UNICODE_BOM_UTF_32LE  =  4,
-        //       UNICODE_BOM_UTF_32BE  =  5
-        //   };
+        //  positive values in case of success:
+        //        enum UNICODE_ENCODING {
+        //            UNICODE_ENCODING_UTF_8 =    1,
+        //            UNICODE_ENCODING_UTF_16BE = 2,
+        //            UNICODE_ENCODING_UTF_16LE = 3,
+        //            UNICODE_ENCODING_UTF_32BE = 4,
+        //            UNICODE_ENCODING_UTF_32LE = 5
+        //        };
+        //  zero, if no BOM
+        //  and negative values in case of an error:
+        //   -1: unexpected EOF
+        // (Note: this may require a look-ahead. Thus we must be able to reset
+        // the stream - which may fail if we require to read several buffers)
 
         
         //   00 00 FE FF	UTF-32, big-endian
@@ -87,18 +89,19 @@ namespace {
             int distance_;
         };
         
+        
         test_s tests[] = {
-            {"\x00\x00\xFE\xFF""abcde", 4+5, UNICODE_BOM_UTF_32BE, 4}, // 0
-            {"\xFF\xFE\x00\x00""abcde", 4+5, UNICODE_BOM_UTF_32LE, 4},
-            {"\xFE\xFF""abcde",         2+5, UNICODE_BOM_UTF_16BE, 2},
-            {"\xFF\xFE""abcde",         2+5, UNICODE_BOM_UTF_16LE, 2},
-            {"\xEF\xBB\xBF""abcde",     3+5, UNICODE_BOM_UTF_8, 3},
+            {"\x00\x00\xFE\xFF""abcde", 4+5, UNICODE_ENCODING_UTF_32BE, 4}, // 0
+            {"\xFF\xFE\x00\x00""abcde", 4+5, UNICODE_ENCODING_UTF_32LE, 4},
+            {"\xFE\xFF""abcde",         2+5, UNICODE_ENCODING_UTF_16BE, 2},
+            {"\xFF\xFE""abcde",         2+5, UNICODE_ENCODING_UTF_16LE, 2},
+            {"\xEF\xBB\xBF""abcde",     3+5, UNICODE_ENCODING_UTF_8, 3},
             
-            {"\x00\x00\xFE\xFF""",      4, UNICODE_BOM_UTF_32BE, 4},   // 5
-            {"\xFF\xFE\x00\x00""",      4, UNICODE_BOM_UTF_32LE, 4},
-            {"\xFE\xFF""",              2, UNICODE_BOM_UTF_16BE, 2},
-            {"\xFF\xFE""",              2, UNICODE_BOM_UTF_16LE, 2},
-            {"\xEF\xBB\xBF""",          3, UNICODE_BOM_UTF_8, 3},
+            {"\x00\x00\xFE\xFF""",      4, UNICODE_ENCODING_UTF_32BE, 4},   // 5
+            {"\xFF\xFE\x00\x00""",      4, UNICODE_ENCODING_UTF_32LE, 4},
+            {"\xFE\xFF""",              2, UNICODE_ENCODING_UTF_16BE, 2},
+            {"\xFF\xFE""",              2, UNICODE_ENCODING_UTF_16LE, 2},
+            {"\xEF\xBB\xBF""",          3, UNICODE_ENCODING_UTF_8, 3},
 
             {"abcd",                    0+3, 0, 0},                     // 10
             {"",                        0,  -1, 0},

@@ -20,7 +20,7 @@
 
 #include "json/unicode/unicode_converter.hpp"
 #include "json/unicode/unicode_traits.hpp"
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
 #include <iomanip>
 
@@ -401,7 +401,7 @@ namespace {
     TYPED_TEST_CASE_P(CodepointToUtfConverterTest);
     
     
-    TYPED_TEST_P(CodepointToUtfConverterTest, ValidCodePpointsToUtfConvertSafe) 
+    TYPED_TEST_P(CodepointToUtfConverterTest, ValidCodePointsToUtfConvertSafe)
     {
         using unicode::code_point_t;
         using unicode::converter;
@@ -787,7 +787,7 @@ namespace {
     }
     
     // Register
-    REGISTER_TYPED_TEST_CASE_P(CodepointToUtfConverterTest, ValidCodePpointsToUtfConvertSafe, ValidCodepointsToUtfConvertUnsafeNoCheckInputRange, ValidCodepointsToUtfConvertUnsafeNoValidation, ValidCodepointsToUtfConvertUnsafe, InvalidCodepointsToUtfConvertSafe);
+    REGISTER_TYPED_TEST_CASE_P(CodepointToUtfConverterTest, ValidCodePointsToUtfConvertSafe, ValidCodepointsToUtfConvertUnsafeNoCheckInputRange, ValidCodepointsToUtfConvertUnsafeNoValidation, ValidCodepointsToUtfConvertUnsafe, InvalidCodepointsToUtfConvertSafe);
     
     // Instantiate test cases:
     typedef ::testing::Types<
@@ -1358,7 +1358,7 @@ namespace {
             while (f0 != target_vector.end() and f1 != f1_end and *f0++ == *f1++) 
             {}
             
-            std::cout << "Difference at index: " << std::distance(target_vector.begin(), f0) << 
+            std::cout << "Difference at index in target vector: " << std::distance(target_vector.begin(), f0) << 
             ", with expected code unit: " << "0x" << std::hex << std::setfill('0') << std::setw(sizeof(output_char_t)*2) << *f1 << 
             ", and actual code unit: " << "0x" << std::hex << std::setfill('0') << std::setw(sizeof(output_char_t)*2) << *f0 << std::endl;
         }
@@ -1589,6 +1589,7 @@ namespace {
     
     
     // Instantiate test cases:
+#if 1
     typedef ::testing::Types<
     conversion<UTF_8_encoding_tag, UTF_8_encoding_tag>,
 //    conversion<UTF_8_encoding_tag, UTF_16_encoding_tag>,
@@ -1626,7 +1627,12 @@ namespace {
     conversion<UTF_32BE_encoding_tag, UTF_32LE_encoding_tag>,
     conversion<UTF_32BE_encoding_tag, UTF_32BE_encoding_tag>
     >  UTF_conversions;
+#else
+    typedef ::testing::Types<
+    conversion<UTF_8_encoding_tag, UTF_16BE_encoding_tag>
+    >  UTF_conversions;
     
+#endif
     
     INSTANTIATE_TYPED_TEST_CASE_P(UTFtoUTFTests, UtfToUtfConversionsTest, UTF_conversions);
     

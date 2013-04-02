@@ -383,7 +383,7 @@ namespace json { namespace objc {
         
     public:    
         typedef typename base::error_t              error_t;
-        typedef typename base::number_info_t        number_info_t;
+        typedef typename base::number_desc_t        number_desc_t;
         typedef typename base::char_t               char_t;     // char type of the StringBuffer
         typedef typename base::encoding_t           encoding_t;
         typedef typename base::result_type          result_type;
@@ -774,7 +774,7 @@ namespace json { namespace objc {
         }
         
         
-        virtual void value_number_imp(const number_info_t& number) 
+        virtual void value_number_imp(const number_desc_t& number) 
         {
 #if defined (JSON_OBJC_REPRESENTATION_GENERATOR_USE_PERFORMANCE_COUNTER)                                                
             ++pc_.number_count_;
@@ -910,9 +910,9 @@ namespace json { namespace objc {
         
         
         
-        virtual void clear_imp() 
+        virtual void clear_imp(bool shrink_buffers)
         {
-            base::clear_imp();
+            base::clear_imp(shrink_buffers);
             clear_stack();
             markers_.clear();
 #if defined (JSON_OBJC_REPRESENTATION_GENERATOR_USE_PERFORMANCE_COUNTER)                                    

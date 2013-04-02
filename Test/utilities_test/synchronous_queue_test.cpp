@@ -6,7 +6,7 @@
 //  Copyright (c) 2011 __MyCompanyName__. All rights reserved.
 //
 
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 #include "json/utility/synchronous_queue.hpp"
 
 

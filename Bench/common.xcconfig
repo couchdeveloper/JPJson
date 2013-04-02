@@ -1,0 +1,43 @@
+//
+//  common.xcconfig
+//
+
+// Source Root Path
+SOURCE_ROOT = "$(SRCROOT)/../Source"
+
+
+//
+// Compiler and std libraries
+//
+
+// C++ Standard Library
+CLANG_CXX_LIBRARY = libc++
+
+// C++ Language Dialect
+CLANG_CXX_LANGUAGE_STANDARD = c++0x
+
+// Automatic Reference Counting
+CLANG_ENABLE_OBJC_ARC = YES
+
+
+// Compiler
+GCC_VERSION = com.apple.compilers.llvm.clang.1_0
+
+// Architectures
+ARCHS = $(NATIVE_ARCH_ACTUAL)
+
+// Deployment Target
+MACOSX_DEPLOYMENT_TARGET = 10.7
+
+// Header search paths
+COMMON_HEADER_SEARCH_PATHS = $(SOURCE_ROOT)
+
+//  Framework search paths
+COMMON_FRAMEWORK_SEARCH_PATHS = $(inherited)
+
+//  Other Linker Flags
+OTHER_LDFLAGS = -ObjC -lc++
+
+// Build Active Architecture Only
+ONLY_ACTIVE_ARCH = YES
+

@@ -7,7 +7,7 @@
 //
 
 #import "JPJson/NSData+JPJsonDetectEncoding.h"
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 #import <Foundation/Foundation.h>
 
 namespace {
@@ -62,72 +62,68 @@ namespace {
     
     TEST_F(NSDataJPJsonDetectEncodingTest, DetectUnicodeNSStringEncoding) 
     {
-        NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-        
-        
-        //   00 00 FE FF	UTF-32, big-endian
-        //   FF FE 00 00	UTF-32, little-endian
-        //   FE FF          UTF-16, big-endian
-        //   FF FE          UTF-16, little-endian
-        //   EF BB BF       UTF-8
-        
-        
-        const size_t SIZE = 16;
-        struct test_s {
-            const char s_[SIZE];
-            NSStringEncoding result_;
-        };
-        
-        
-        
-        test_s tests[] = {
-            // with BOM
-            {"\x00\x00\xFE\xFF""xx",        NSUTF32BigEndianStringEncoding}, // 0
-            {"\xFF\xFE\x00\x00""xx",        NSUTF32LittleEndianStringEncoding},
-            {"\xFE\xFF""xx",                NSUTF16BigEndianStringEncoding},
-            {"\xFF\xFE""xx",                NSUTF16LittleEndianStringEncoding},
-            {"\xEF\xBB\xBF""xx",            NSUTF8StringEncoding},
+        @autoreleasepool {
             
-            {"\x00\x00\xFE\xFF""xx",        NSUTF32BigEndianStringEncoding},   // 5
-            {"\xFF\xFE\x00\x00""xx",        NSUTF32LittleEndianStringEncoding},
-            {"\xFE\xFF""xx",                NSUTF16BigEndianStringEncoding},
-            {"\xFF\xFE""xx",                NSUTF16LittleEndianStringEncoding},
-            {"\xEF\xBB\xBF""xx",            NSUTF8StringEncoding},
+            //   00 00 FE FF	UTF-32, big-endian
+            //   FF FE 00 00	UTF-32, little-endian
+            //   FE FF          UTF-16, big-endian
+            //   FF FE          UTF-16, little-endian
+            //   EF BB BF       UTF-8
             
-            {"[]",                          NSUTF8StringEncoding},                     // 10
-            {"",                            -1},
             
-            // Broken BOM, or unknown encoding
-            {"\x00\x00\xFE""[]",            -1},                     // 12
-            {"\xFF\xFE\x00""[]",            -1},
-            {"\xFE""[]",                    -1},
-            {"\xFF""[]",                    -1},
-            {"\xEF\xBB""[]",                -1},
+            const size_t SIZE = 16;
+            struct test_s {
+                const char s_[SIZE];
+                NSStringEncoding result_;
+            };
             
-            // No BOM, "[]"
-            {"\x5B\x5D",                            NSUTF8StringEncoding},
-            {"\x00\x5B\x00\x5D",                    NSUTF16BigEndianStringEncoding},
-            {"\x5B\x00\x5D\x00",                    NSUTF16LittleEndianStringEncoding},
-            {"\x00\x00\x00\x5B\x00\x00\x00\x5D",    NSUTF32BigEndianStringEncoding},
-            {"\x5B\x00\x00\x00\x5D\x00\x00\x00",    NSUTF32LittleEndianStringEncoding}
-        };
-        
-
-        test_s* first = tests;
-        test_s* last = tests + sizeof(tests)/sizeof(test_s);
-        
-        int idx = 0;
-        while (first != last) {
-            const char* p = first->s_;
-            NSData* data = [[NSData alloc] initWithBytes:p length:SIZE];
-            NSStringEncoding result = [data jpj_detectUnicodeNSStringEncoding];
-            EXPECT_EQ(first->result_, result) << "at index " << idx;
-            [data release];
-            ++first;
-            ++idx;
+            
+            
+            test_s tests[] = {
+                // with BOM
+                {"\x00\x00\xFE\xFF""xx",        NSUTF32BigEndianStringEncoding}, // 0
+                {"\xFF\xFE\x00\x00""xx",        NSUTF32LittleEndianStringEncoding},
+                {"\xFE\xFF""xx",                NSUTF16BigEndianStringEncoding},
+                {"\xFF\xFE""xx",                NSUTF16LittleEndianStringEncoding},
+                {"\xEF\xBB\xBF""xx",            NSUTF8StringEncoding},
+                
+                {"\x00\x00\xFE\xFF""xx",        NSUTF32BigEndianStringEncoding},   // 5
+                {"\xFF\xFE\x00\x00""xx",        NSUTF32LittleEndianStringEncoding},
+                {"\xFE\xFF""xx",                NSUTF16BigEndianStringEncoding},
+                {"\xFF\xFE""xx",                NSUTF16LittleEndianStringEncoding},
+                {"\xEF\xBB\xBF""xx",            NSUTF8StringEncoding},
+                
+                {"[]",                          NSUTF8StringEncoding},                     // 10
+                {"",                            static_cast<NSStringEncoding>(-1)},
+                
+                // Broken BOM, or unknown encoding
+                {"\x00\x00\xFE""[]",            static_cast<NSStringEncoding>(-1)},                     // 12
+                {"\xFF\xFE\x00""[]",            static_cast<NSStringEncoding>(-1)},
+                {"\xFE""[]",                    static_cast<NSStringEncoding>(-1)},
+                {"\xFF""[]",                    static_cast<NSStringEncoding>(-1)},
+                {"\xEF\xBB""[]",                static_cast<NSStringEncoding>(-1)},
+                
+                // No BOM, "[]"
+                {"\x5B\x5D",                            NSUTF8StringEncoding},
+                {"\x00\x5B\x00\x5D",                    NSUTF16BigEndianStringEncoding},
+                {"\x5B\x00\x5D\x00",                    NSUTF16LittleEndianStringEncoding},
+                {"\x00\x00\x00\x5B\x00\x00\x00\x5D",    NSUTF32BigEndianStringEncoding},
+                {"\x5B\x00\x00\x00\x5D\x00\x00\x00",    NSUTF32LittleEndianStringEncoding}
+            };
+            
+            
+            test_s* first = tests;
+            test_s* last = tests + sizeof(tests)/sizeof(test_s);
+            
+            int idx = 0;
+            while (first != last) {
+                const char* p = first->s_;
+                NSData* data = [[NSData alloc] initWithBytes:p length:SIZE];
+                NSStringEncoding result = [data jpj_detectUnicodeNSStringEncoding];
+                EXPECT_EQ(first->result_, result) << "at index " << idx;
+                ++first;
+                ++idx;
+            }
         }
-
-        
-        [pool drain];
     }
 }

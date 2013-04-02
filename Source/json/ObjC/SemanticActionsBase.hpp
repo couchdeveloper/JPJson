@@ -89,7 +89,7 @@ namespace json { namespace objc {
 
     public:    
         typedef typename base::error_t              error_t;
-        typedef typename base::number_info_t        number_info_t;
+        typedef typename base::number_desc_t        number_desc_t;
         typedef typename base::char_t               char_t;     // char type of the StringBuffer
         typedef typename base::encoding_t           encoding_t;
         typedef id                                  result_type;
@@ -138,12 +138,12 @@ namespace json { namespace objc {
         virtual void end_key_value_pair_imp() {}
                 
         virtual void value_string_imp(const const_buffer_t& buffer, bool hasMore) {}        
-        virtual void value_number_imp(const number_info_t& number) {}
+        virtual void value_number_imp(const number_desc_t& number) {}
         virtual void value_null_imp() {}
         virtual void value_boolean_imp(bool b) {}
 
         
-        virtual void clear_imp() {
+        virtual void clear_imp(bool shrink_buffers) {
             error_.reset();
         } 
         

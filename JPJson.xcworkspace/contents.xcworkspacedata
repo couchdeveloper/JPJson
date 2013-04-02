@@ -8,13 +8,6 @@
          location = "group:Source"
          name = "Source">
          <Group
-            location = "group:Allocators"
-            name = "Allocators (External)">
-            <FileRef
-               location = "group:FSBAllocator.hh">
-            </FileRef>
-         </Group>
-         <Group
             location = "group:utilities"
             name = "utilities">
             <FileRef
@@ -54,10 +47,10 @@
                location = "group:endian"
                name = "endian">
                <FileRef
-                  location = "group:byte_swap.hpp">
+                  location = "group:endian.hpp">
                </FileRef>
                <FileRef
-                  location = "group:endian.hpp">
+                  location = "group:byte_swap.hpp">
                </FileRef>
             </Group>
             <Group
@@ -89,6 +82,12 @@
                location = "group:utility"
                name = "utility">
                <FileRef
+                  location = "group:mpl.hpp">
+               </FileRef>
+               <FileRef
+                  location = "group:variant.hpp">
+               </FileRef>
+               <FileRef
                   location = "group:base64.hpp">
                </FileRef>
                <FileRef
@@ -112,10 +111,22 @@
                <FileRef
                   location = "group:string_to_number.hpp">
                </FileRef>
+               <FileRef
+                  location = "group:number_to_string.hpp">
+               </FileRef>
+               <FileRef
+                  location = "group:json_number.hpp">
+               </FileRef>
+               <FileRef
+                  location = "group:arena_allocator.hpp">
+               </FileRef>
             </Group>
             <Group
                location = "group:parser"
                name = "parser">
+               <FileRef
+                  location = "group:number_description.hpp">
+               </FileRef>
                <FileRef
                   location = "group:parser_errors.hpp">
                </FileRef>
@@ -126,7 +137,7 @@
                   location = "group:semantic_actions_test.hpp">
                </FileRef>
                <FileRef
-                  location = "group:semantic_actions.hpp">
+                  location = "group:value_generator.hpp">
                </FileRef>
                <FileRef
                   location = "group:parser.hpp">
@@ -152,12 +163,34 @@
                location = "group:generator"
                name = "generator">
                <FileRef
+                  location = "group:token_traits.hpp">
+               </FileRef>
+               <FileRef
                   location = "group:generate.hpp">
+               </FileRef>
+               <FileRef
+                  location = "group:write_value.hpp">
                </FileRef>
             </Group>
             <Group
                location = "group:value"
                name = "value">
+               <Group
+                  location = "group:unused"
+                  name = "unused">
+                  <FileRef
+                     location = "group:array.hpp">
+                  </FileRef>
+                  <FileRef
+                     location = "group:number2.hpp">
+                  </FileRef>
+                  <FileRef
+                     location = "group:object.hpp">
+                  </FileRef>
+                  <FileRef
+                     location = "group:string.hpp">
+                  </FileRef>
+               </Group>
                <FileRef
                   location = "group:json_traits.hpp">
                </FileRef>
@@ -168,22 +201,16 @@
                   location = "group:Boolean.hpp">
                </FileRef>
                <FileRef
-                  location = "group:string.hpp">
+                  location = "group:integral_number.hpp">
                </FileRef>
                <FileRef
-                  location = "group:number.hpp">
+                  location = "group:decimal_number.hpp">
                </FileRef>
                <FileRef
-                  location = "group:array.hpp">
-               </FileRef>
-               <FileRef
-                  location = "group:object.hpp">
+                  location = "group:float_number.hpp">
                </FileRef>
                <FileRef
                   location = "group:value.hpp">
-               </FileRef>
-               <FileRef
-                  location = "group:number2.hpp">
                </FileRef>
             </Group>
             <Group
@@ -318,6 +345,13 @@
       <Group
          location = "group:Examples"
          name = "Examples">
+         <Group
+            location = "group:C++"
+            name = "C++">
+            <FileRef
+               location = "group:Sample1/Sample1.xcodeproj">
+            </FileRef>
+         </Group>
          <Group
             location = "group:iOS"
             name = "iOS 4.2">

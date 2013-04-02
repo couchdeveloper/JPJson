@@ -17,16 +17,15 @@
 //  limitations under the License.
 //
 
-#ifndef JSON_UNICODE_UTILITIES_HPP
-#define JSON_UNICODE_UTILITIES_HPP
+#ifndef JSON_UNICODE_UNICODE_UTILITIES_HPP
+#define JSON_UNICODE_UNICODE_UTILITIES_HPP
 
 #include "json/config.hpp"
-#include <assert.h>
-#include <boost/static_assert.hpp>
-#include <boost/type_traits.hpp>
-#include <stdint.h>
 #include "json/endian/endian.hpp"
 #include "json/endian/byte_swap.hpp"
+#include <type_traits>
+#include <cstdint>
+#include <cassert>
 
 //  
 //  A set of types and utility functions supporting Unicode
@@ -40,7 +39,7 @@
 
 //
 // Unicode Utilities
-// 
+//
 namespace json { namespace unicode {
     
 
@@ -57,29 +56,29 @@ namespace json { namespace unicode {
     
 
         
-    // code_point_t corresponds to a Unicode code point in the Unicode code-
+    // code_point_t corresponds to an Unicode code point in the Unicode code-
     // space: a range of (unsigned) integers from 0 to 0x10FFFF.
     // (Do not mismatch this type with the UTF-32 "Code Unit" which is as well
     // an unsigend 32-bit integer).
     typedef uint32_t code_point_t; 
-    BOOST_STATIC_ASSERT((boost::is_unsigned<code_point_t>::value == true));
+    static_assert((std::is_unsigned<code_point_t>::value == true), "");
     
     
     
-    const static code_point_t kReplacementCharacter = 0xFFFD;
-    const static code_point_t kUnicodeCodeSpaceMax = 0x10FFFFu;
+    static constexpr code_point_t kReplacementCharacter = 0xFFFD;
+    static constexpr code_point_t kUnicodeCodeSpaceMax = 0x10FFFFu;
     
     //const char * const kInvalidCharacterUTF8 = "\xef\xbf\xbd"; // "�"
     //size_t kInvalidCharacterUTF8Length = 3;
         
     
     // Stable. Do not change.
-    BOOST_STATIC_ASSERT((boost::is_unsigned<code_point_t>::value == true));    
+    static_assert((std::is_unsigned<code_point_t>::value == true), "");
 
     
-    // Returns true if the code point is within range of the
+    // Returns true if the code point is within the range of the
     // Unicode code space [0 .. 0x10FFFF].
-    inline bool isCodePoint(code_point_t code_point) {
+    inline constexpr bool isCodePoint(code_point_t code_point) {
         return code_point <= 0x10FFFFu;
     }
     
@@ -88,20 +87,20 @@ namespace json { namespace unicode {
     //    
     // D71: Returns true if the Unicode code point is a high-surrogate code point,
     // an Unicode code point in the range U+D800 to U+DBFF.
-    inline bool isHighSurrogate(code_point_t code_point) {
+    inline constexpr bool isHighSurrogate(code_point_t code_point) {
         //return (code_point >= 0xD800u and code_point <= 0xDBFFu);  
         return (code_point - 0xD800u) <= (0xDBFFu - 0xD800u);
     }
     // D73: Returns true if the Unicode code point is a Low-surrogate code point,
     // an Unicode code point in the range U+DC00 to U+DFFF.
-    inline bool isLowSurrogate(code_point_t code_point) {
+    inline constexpr bool isLowSurrogate(code_point_t code_point) {
         //return code_point >= 0xDC00u and code_point <= 0xDFFFu;
         return (code_point - 0xDC00u) <= (0xDFFFu - 0xDC00u);
     }
     
     // Returns true if the Unicode code point is either a high-surrogate or
     // a low surrogate.
-    inline bool isSurrogate(code_point_t code_point) {
+    inline constexpr bool isSurrogate(code_point_t code_point) {
         //return code_point >= 0xD800u and code_point <= 0xDFFFu;
         return (code_point - 0xD800u) <= (0xDFFFu - 0xD800u);
     }
@@ -112,13 +111,12 @@ namespace json { namespace unicode {
     // Returns true if this is a valid code point and if this is a noncharacter, 
     // otherwise, returns false.
     // see http://unicode.org/reports/tr20/#Noncharacters    
-    inline bool isNonCharacter(code_point_t code_point) {
-        bool result = 
+    inline constexpr bool isNonCharacter(code_point_t code_point) {
+        return
                 (((0x00FFFFu&code_point) >= 0xFFFEu) 
                  or (code_point >= 0xFDD0u and code_point <= 0xFDEFu)
                 )
             and code_point <= 0x10FFFFu;
-        return result;
     }
     
     
@@ -126,28 +124,25 @@ namespace json { namespace unicode {
     // Unicode "code point" excluding high and low surrogates). A valid 
     // value implies a valid Unicode code point.
     // D76
-    inline bool isUnicodeScalarValue(code_point_t code_point) {
-        bool result = code_point < 0xD800u or ((code_point - 0xE000u) <= (0x10FFFFu - 0xE000u));        
+    inline constexpr bool isUnicodeScalarValue(code_point_t code_point) {
+        return code_point < 0xD800u or ((code_point - 0xE000u) <= (0x10FFFFu - 0xE000u));
         //bool result = not isSurrogate(code_point) and code_point <= 0x10FFFFu;
-        return result;
     }
     
     
     // Returns true if the code point is an Unicode character (that is, 
     // an Unicode scalar value excluding noncharacters). 
-    inline bool isUnicodeCharacter(code_point_t code_point) {
-        bool result = isUnicodeScalarValue(code_point) and not isNonCharacter(code_point);        
-        return result;
+    inline constexpr bool isUnicodeCharacter(code_point_t code_point) {
+        return isUnicodeScalarValue(code_point) and not isNonCharacter(code_point);
     }
     
     
     // Returns true if the given code point is defined specifically as
     // a control code. A control point implies, that it is also a valid 
     // code point.
-    bool inline isControlCode(code_point_t code_point) {
-        bool valid = (code_point <= 0x001Fu) 
+    inline constexpr bool inline isControlCode(code_point_t code_point) {
+        return (code_point <= 0x001Fu)
             or (code_point >= 0x007Fu and code_point <= 0x009Fu);
-        return valid;
     }
 
     
@@ -170,7 +165,7 @@ namespace json { namespace unicode {
     // in this case the code unit's value is within ASCII [0 .. 0x7F] and can 
     // thus be interpreted directly as ASCII.
     //
-    inline bool utf8_is_single(uint8_t cu) {
+    inline constexpr bool utf8_is_single(uint8_t cu) {
         return !(static_cast<uint8_t>(cu) & 0x80u);
     }
     
@@ -205,19 +200,17 @@ namespace json { namespace unicode {
     //
     // The algorithm is strict and takes care of this limitation.
     // 
-    inline bool utf8_is_lead(uint8_t cu) {
+    inline constexpr bool utf8_is_lead(uint8_t cu) {
         // Do not remove any explicit typecasts or any "unsigned" modifiers 
         // applied to variables or constants - unless you really know what 
         // you are doing!!
-        bool result = (static_cast<uint8_t>(cu) - 0xC2u) < 0x33u;
-        return result;
+        return (static_cast<uint8_t>(cu) - 0xC2u) < 0x33u;
     }
     
     // Returns true if the given code unit is a trail byte, e.g. a byte with
     // the bit pattern: b10xx.xxxx
-    inline bool utf8_is_trail(uint8_t cu) {
-        bool result = (static_cast<uint8_t>(cu) & 0xC0u) == 0x80u;
-        return result;
+    inline constexpr bool utf8_is_trail(uint8_t cu) {
+        return (static_cast<uint8_t>(cu) & 0xC0u) == 0x80u;
     }
     
     // Returns the number of UTF-8 code units required to encode an Unicode 
@@ -226,25 +219,25 @@ namespace json { namespace unicode {
     // valid Unicode code point.
     // (A well-formed UTF-8 sequence shall not contain surrogates)
     // Parameter code_point: An Unicode code point.
-    inline int utf8_encoded_length(code_point_t code_point) {
-        if ( (code_point & ~0x007Fu) == 0) return  1;
-        else if (code_point <= 0x7FFu) return  2;
-        else if (code_point <= 0xD7FFu) return 3;
-        else if (code_point <= 0xDFFFu or code_point > 0x10FFFFu) return 0;
-        else if (code_point <= 0xFFFFu) return 3;
-        else return 4;
+    inline constexpr int utf8_encoded_length(code_point_t code_point) {
+        return ( (code_point & ~0x007Fu) == 0) ? 1 :
+        (code_point <= 0x7FFu) ? 2 : 
+        (code_point <= 0xD7FFu) ? 3:
+        (code_point <= 0xDFFFu or code_point > 0x10FFFFu) ? 0 :
+        (code_point <= 0xFFFFu) ? 3 :
+        4;
     }
     
     // Returns the number of UTF-8 code units required to encode an Unicode 
     // code point.
     // Parameter code_point shall be a valid Unicode code point.
     // Returns zero for invalid Unicode.  (code_point > U+10FFFF)
-    inline int utf8_encoded_length_unsafe(code_point_t code_point) {
-        if (code_point <= 0x7Fu) return  1;
-        else if (code_point <= 0x7FFu) return  2;
-        else if (code_point <= 0xFFFFu) return 3;
-        else if (code_point <= 0x10FFFFu) return 4;
-        else return 0;
+    inline constexpr int utf8_encoded_length_unsafe(code_point_t code_point) {
+        return (code_point <= 0x7Fu) ? 1 :
+        (code_point <= 0x7FFu) ? 2 :
+        (code_point <= 0xFFFFu) ? 3 :
+        (code_point <= 0x10FFFFu) ? 4 :
+        0;
     }
     
     // Returns the number of trail bytes following 'start', which is the start
@@ -297,30 +290,31 @@ namespace json { namespace unicode {
     //
     //  *) exception: false for: b1100.0000 (0xC0) and b1100.0001 (0xC1)  (overlong ASCII)
     //
-    inline int utf8_num_trails_unsafe(uint8_t first) {
+    static constexpr const int __utf8_num_trails_unsafe_table[32] =
+    {
+         0, 0, 0, 0, 0, 0, 0, 0,
+         0, 0, 0, 0, 0, 0, 0, 0,
+        -1,-1,-1,-1,-1,-1,-1,-1,
+         1, 1, 1, 1, 2, 2, 3,-1
+    };
+    inline constexpr int utf8_num_trails_unsafe(uint8_t first) {
         // assertion: utf8_is_lead(first) == true
-        const int8_t E = -1;
-        static int8_t const table[32] = {
-            0,0,0,0,0,0,0,0,
-            0,0,0,0,0,0,0,0,
-            E,E,E,E,E,E,E,E,
-            1,1,1,1,2,2,3,E            
-        };   
-        int result = table[static_cast<uint8_t>(first)>>3];
         // Note: the following assertion is for testing the **caller** code!
+        //assert(__utf8_num_trails_unsafe_table[static_cast<uint8_t>(first)>>3] >= 0 and (utf8_is_single(first) or utf8_is_lead(first)) );
+        return __utf8_num_trails_unsafe_table[static_cast<uint8_t>(first)>>3];
         // utf8_num_trails_unsafe() will return an undefined result if this assertion is not met.
-        assert(result >= 0 and (utf8_is_single(first) or utf8_is_lead(first)) );
-        return result;
-    }    
+    }
     
     
     // The following utf8_num_trails() functions are safe, that is if parameter
     // 'first' is not a valid lead byte or not a single byte the function will 
     // return -1. Otherwise, it returns 0, 1, 2 or 3.
-    inline int utf8_num_trails(uint8_t first) {
+    namespace detail {
+        static constexpr int8_t E{-1};
+    }
 #if 1
-        const int8_t E = -1;
-        static int8_t const table[256] = {
+    namespace detail {
+        static constexpr int8_t const __utf8_num_trails_table[256] = {
             0,0,0,0,0,0,0,0,  0,0,0,0,0,0,0,0,  0,0,0,0,0,0,0,0,  0,0,0,0,0,0,0,0,   //   0 ..  31
             0,0,0,0,0,0,0,0,  0,0,0,0,0,0,0,0,  0,0,0,0,0,0,0,0,  0,0,0,0,0,0,0,0,   //  32 ..  63
             0,0,0,0,0,0,0,0,  0,0,0,0,0,0,0,0,  0,0,0,0,0,0,0,0,  0,0,0,0,0,0,0,0,   //  64 ..  95
@@ -329,78 +323,37 @@ namespace json { namespace unicode {
             E,E,E,E,E,E,E,E,  E,E,E,E,E,E,E,E,  E,E,E,E,E,E,E,E,  E,E,E,E,E,E,E,E,   // 160 .. 191
             E,E,1,1,1,1,1,1,  1,1,1,1,1,1,1,1,  1,1,1,1,1,1,1,1,  1,1,1,1,1,1,1,1,   // 192 .. 223
             2,2,2,2,2,2,2,2,  2,2,2,2,2,2,2,2,  3,3,3,3,3,E,E,E,  E,E,E,E,E,E,E,E    // 224 .. 255
-        };   
-        return table[static_cast<uint8_t>(first)]; 
-        
+        };
+    }
+    
+    inline constexpr int utf8_num_trails(uint8_t first) {
+        return detail::__utf8_num_trails_table[static_cast<uint8_t>(first)];
+    }
 #elif 0
-        uint8_t ch = static_cast<uint8_t>(first);        
-        if (utf8_is_single(ch))
-            return 0;
-        const int8_t E = -1;
-        static int8_t const table[128] = {
+    namespace detail {
+    
+        static constexpr int8_t const __utf8_num_trails_table[128] = {
             E,E,E,E,E,E,E,E,  E,E,E,E,E,E,E,E,  E,E,E,E,E,E,E,E,  E,E,E,E,E,E,E,E,   // 128 .. 159
             E,E,E,E,E,E,E,E,  E,E,E,E,E,E,E,E,  E,E,E,E,E,E,E,E,  E,E,E,E,E,E,E,E,   // 160 .. 191
             E,E,1,1,1,1,1,1,  1,1,1,1,1,1,1,1,  1,1,1,1,1,1,1,1,  1,1,1,1,1,1,1,1,   // 192 .. 223
             2,2,2,2,2,2,2,2,  2,2,2,2,2,2,2,2,  3,3,3,3,3,E,E,E,  E,E,E,E,E,E,E,E    // 224 .. 255
-        };   
-        return table[static_cast<uint8_t>(first)-0x80u];        
-
-#elif 0
-        uint8_t ch = static_cast<uint8_t>(first);        
-        if (utf8_is_single(ch))
-            return 0;
-        if (ch < 0xC0u)
-            return -1;
-        const int8_t E = -1;
-        static int8_t const table[64] = {
-            E,E,1,1,1,1,1,1,  1,1,1,1,1,1,1,1,  1,1,1,1,1,1,1,1,  1,1,1,1,1,1,1,1,   // 192 .. 223
-            2,2,2,2,2,2,2,2,  2,2,2,2,2,2,2,2,  3,3,3,3,3,E,E,E,  E,E,E,E,E,E,E,E    // 224 .. 255
-        };   
-        return table[static_cast<uint8_t>(first)-0xC0u];   
-        
-#elif 0     
-        const int8_t E = -1;        
-        static int8_t const table[32] = {
-            0,0,0,0,0,0,0,0,
-            0,0,0,0,0,0,0,0,
-            E,E,E,E,E,E,E,E,
-            1,1,1,1,2,2,3,E            
-        };   
-        int result = table[static_cast<uint8_t>(first)>>3];
-        if (result > 0 and !utf8_is_lead((static_cast<uint8_t>(first))))
-            return -1;
-        return result;
-                
-        
-#elif 0
-        uint8_t ch = static_cast<uint8_t>(first);
-        if (utf8_is_single(ch))
-            return 0;
-        if (ch < 0xC2u)
-            return -1;
-        if (ch < 0xE0u)
-            return 1;
-        if (ch < 0xF0u)
-            return 2;
-        if (ch < 0xF5u)
-            return 3;
-        return -1;
-        
-        
-#endif        
-        
+        };
     }
+    
+    inline int utf8_num_trails(uint8_t first) {
+        return (utf8_is_single(static_cast<uint8_t>(first))) ? 0 :
+        detail::__utf8_num_trails_table[static_cast<uint8_t>(first)-0x80u];
+    }
+#endif        
     
     
     // The following utf8_num_trails_no_ctrl() functions are safe, that is if parameter
     // 'first' is not a valid lead byte or not a single byte the function will 
     // return -1. Otherwise, it returns -2 for an ASCII Control Character, otherwise 
     // it returns 0, 1, 2 or 3.
-    inline int utf8_num_trails_no_ctrl(uint8_t first) {
-#if 1
-        const int8_t E = -1;
-        const int8_t C = -2;
-        static int8_t const table[256] = {
+    namespace detail {
+        static constexpr int8_t C{-2};
+        static constexpr int8_t const __utf8_num_trails_no_ctrl_table[256] = {
             C,C,C,C,C,C,C,C,  C,C,C,C,C,C,C,C,  C,C,C,C,C,C,C,C,  C,C,C,C,C,C,C,C,   //   0 ..  31
             0,0,0,0,0,0,0,0,  0,0,0,0,0,0,0,0,  0,0,0,0,0,0,0,0,  0,0,0,0,0,0,0,0,   //  32 ..  63
             0,0,0,0,0,0,0,0,  0,0,0,0,0,0,0,0,  0,0,0,0,0,0,0,0,  0,0,0,0,0,0,0,0,   //  64 ..  95
@@ -409,74 +362,11 @@ namespace json { namespace unicode {
             E,E,E,E,E,E,E,E,  E,E,E,E,E,E,E,E,  E,E,E,E,E,E,E,E,  E,E,E,E,E,E,E,E,   // 160 .. 191
             E,E,1,1,1,1,1,1,  1,1,1,1,1,1,1,1,  1,1,1,1,1,1,1,1,  1,1,1,1,1,1,1,1,   // 192 .. 223
             2,2,2,2,2,2,2,2,  2,2,2,2,2,2,2,2,  3,3,3,3,3,E,E,E,  E,E,E,E,E,E,E,E    // 224 .. 255
-        };   
-        return table[static_cast<uint8_t>(first)]; 
-        
-#elif 0
-        uint8_t ch = static_cast<uint8_t>(first); 
-        if (ch < 0x20u)
-            return -2;
-        if (utf8_is_single(ch))
-            return 0;
-        const int8_t E = -1;
-        const int8_t C = -2;
-        static int8_t const table[128] = {
-            E,E,E,E,E,E,E,E,  E,E,E,E,E,E,E,E,  E,E,E,E,E,E,E,E,  E,E,E,E,E,E,E,E,   // 128 .. 159
-            E,E,E,E,E,E,E,E,  E,E,E,E,E,E,E,E,  E,E,E,E,E,E,E,E,  E,E,E,E,E,E,E,E,   // 160 .. 191
-            E,E,1,1,1,1,1,1,  1,1,1,1,1,1,1,1,  1,1,1,1,1,1,1,1,  1,1,1,1,1,1,1,1,   // 192 .. 223
-            2,2,2,2,2,2,2,2,  2,2,2,2,2,2,2,2,  3,3,3,3,3,E,E,E,  E,E,E,E,E,E,E,E    // 224 .. 255
-        };   
-        return table[static_cast<uint8_t>(first)-0x80u];        
-        
-#elif 0
-        uint8_t ch = static_cast<uint8_t>(first);
-        if (ch < 0x20u)
-            return -2;
-        if (utf8_is_single(ch))
-            return 0;
-        if (ch < 0xC0u)
-            return -1;
-        const int8_t E = -1;
-        static int8_t const table[64] = {
-            E,E,1,1,1,1,1,1,  1,1,1,1,1,1,1,1,  1,1,1,1,1,1,1,1,  1,1,1,1,1,1,1,1,   // 192 .. 223
-            2,2,2,2,2,2,2,2,  2,2,2,2,2,2,2,2,  3,3,3,3,3,E,E,E,  E,E,E,E,E,E,E,E    // 224 .. 255
-        };   
-        return table[static_cast<uint8_t>(first)-0xC0u];   
-        
-#elif 0        
-        const int8_t E = -1;
-        const int8_t C = -2;
-        static int8_t const table[32] = {
-            C,C,C,0,0,0,0,0,
-            0,0,0,0,0,0,0,0,
-            0,0,0,0,0,0,0,0,
-            1,1,1,1,2,2,3,E            
-        };   
-        int result = table[static_cast<uint8_t>(first)>>3];
-        if (result > 0 and !utf8_is_lead((static_cast<uint8_t>(first))))
-            return -1;
-        return result;
-        
-        
-#elif 0
-        uint8_t ch = static_cast<uint8_t>(first);
-        if (ch < 0x20u)
-            return -2;
-        if (utf8_is_single(ch))
-            return 0;
-        if (ch < 0xC2u)
-            return -1;
-        if (ch < 0xE0u)
-            return 1;
-        if (ch < 0xF0u)
-            return 2;
-        if (ch < 0xF5u)
-            return 3;
-        return -1;
-        
-        
-#endif        
-        
+        };
+    }
+    
+    inline constexpr int utf8_num_trails_no_ctrl(uint8_t first) {
+        return detail::__utf8_num_trails_no_ctrl_table[static_cast<uint8_t>(first)];        
     }
         
     
@@ -489,22 +379,22 @@ namespace json { namespace unicode {
 namespace json { namespace unicode {
     
     
-    inline bool utf16_is_high_surrogate(uint16_t code_unit) {
-        return isHighSurrogate(code_point_t(code_unit));  
+    inline constexpr bool utf16_is_high_surrogate(uint16_t code_unit) {
+        return isHighSurrogate(code_point_t(code_unit));
     }
-    inline bool utf16_is_lead(uint16_t code_unit) {
+    inline constexpr bool utf16_is_lead(uint16_t code_unit) {
         return isHighSurrogate(code_point_t(code_unit));  
     }
 
-    inline bool utf16_is_low_surrogate(uint16_t code_unit) {
+    inline constexpr bool utf16_is_low_surrogate(uint16_t code_unit) {
         return isLowSurrogate(code_point_t(code_unit));
     }
-    inline bool utf16_is_trail(uint16_t code_unit) {
+    inline constexpr bool utf16_is_trail(uint16_t code_unit) {
         return isLowSurrogate(code_point_t(code_unit));
     }
 
     // Returns true if the specified code unit is a surrogate (U+D800..U+DFFF)
-    inline bool utf16_is_surrogate(uint16_t cu) {
+    inline constexpr bool utf16_is_surrogate(uint16_t cu) {
         return (cu & 0xFFFFF800u) == 0xD800u;
     }
     
@@ -512,7 +402,7 @@ namespace json { namespace unicode {
     
     // Returns true if the specified single code unit encodes a 
     // code point (e.g. a BMP).
-    inline bool utf16_is_single(uint16_t cu) {
+    inline constexpr bool utf16_is_single(uint16_t cu) {
         // return true if the code unit is not a surrogate (U+D800..U+DFFF)
         return not((cu & 0xFFFFF800u) == 0xD800u);  
     }
@@ -532,33 +422,26 @@ namespace json { namespace unicode {
     // Returns the number of UTF-16 code units (1 or 2) required to encode the 
     // unicode code point into UTF-16.
     // Returns zero for invalid Unicode.  (code_point > U+10FFFF)
-    inline int utf16_encoded_length_unsafe(code_point_t code_point) {
-        if (code_point <= 0xFFFFu) 
-            return  1;
-        else if (code_point <= 0x10FFFFu)
-            return  2;
-        else 
-            return 0;
+    inline constexpr int utf16_encoded_length_unsafe(code_point_t code_point) {
+        return (code_point <= 0xFFFFu) ? 1 :
+        (code_point <= 0x10FFFFu) ? 2 :
+        0;
     }
     
     // Returns the number of UTF-16 code units (1 or 2) required to encode the 
     // unicode code point into UTF-16.
     // For surrogates and invalid Unicode code points, it returns 0.
-    inline int utf16_encoded_length(code_point_t code_point) {
-        if (isSurrogate(code_point))
-            return 0;
-        if (code_point <= 0xFFFFu) 
-            return  1;
-        else if (code_point <= 0x10FFFFu)
-            return  2;
-        else 
-            return 0;
+    inline constexpr int utf16_encoded_length(code_point_t code_point) {
+        return (isSurrogate(code_point)) ? 0 :
+        (code_point <= 0xFFFFu) ? 1 :
+        (code_point <= 0x10FFFFu) ? 2 :
+        0;
     }
     
     
     // Convert a valid surrogate pair into a code point and return the result.
     // If either surrogate is invalid, the result is undefined.
-    inline code_point_t 
+    inline constexpr code_point_t
     utf16_surrogate_pair_to_code_point(uint16_t high, uint16_t low) {
         //return (high - 0xD800u) * 0x400u + (low - 0xDC00u) + 0x10000u;
         return ((high - 0xD800u) << 10) + (low - 0xDC00u) + 0x10000u;
@@ -570,7 +453,7 @@ namespace json { namespace unicode {
     // code_point must be a valid supplementary Unicode Code Point (U+10000..U+10FFFF).
     // Returns the lead surrogate (U+D800 .. U+DBFF) for the specified code
     // point.
-    inline uint16_t
+    inline constexpr uint16_t
     utf16_get_lead(code_point_t code_point) { 
         return ((code_point >> 10) + 0xD7C0u); 
     }
@@ -579,7 +462,7 @@ namespace json { namespace unicode {
     // Get the trail surrogate for a supplementary code point.
     // code_point must be a valid suplementary Unicode Code Point (U+10000..U+10FFFF).
     // Returns the trail surrogate for the specified supplementary code point.
-    inline uint16_t
+    inline constexpr uint16_t
     utf16_get_trail(code_point_t code_point) { 
         return ((code_point & 0x3FFu) | 0xDC00u); 
     }
@@ -594,9 +477,9 @@ namespace json { namespace unicode {
 namespace json { namespace unicode {
     
     
-    const uint32_t UTF32_BOM = 0xFeFFu;
+    constexpr uint32_t UTF32_BOM = 0xFeFFu;
     
 }}  // namespace json::unicode
 
 
-#endif // JSON_UNICODE_UTILITIES_HPP
+#endif // JSON_UNICODE_UNICODE_UTILITIES_HPP

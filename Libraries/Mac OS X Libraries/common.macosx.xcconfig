@@ -1,0 +1,42 @@
+//
+//  common.macosx.xcconfig
+//
+
+
+#include "../../Xcode.config/$user.boost.xcconfig"
+
+// Source Root Path
+SOURCE_ROOT = "$(SRCROOT)/../../Source"
+
+
+
+//
+// Compiler and std libraries
+//
+
+// C++ Standard Library
+CLANG_CXX_LIBRARY = libc++
+
+// C++ Language Dialect
+CLANG_CXX_LANGUAGE_STANDARD = c++0x
+
+// Automatic Reference Counting
+CLANG_ENABLE_OBJC_ARC = NO
+
+
+//
+// Architectures
+//
+ARCHS = $(ARCHS_STANDARD_64_BIT)
+
+//
+// Deployment Target
+//
+MACOSX_DEPLOYMENT_TARGET = 10.7
+
+
+
+//
+// Header search paths
+//
+PRJ_HEADER_SEARCH_PATHS = $(SOURCE_ROOT) $(BOOST_HEADER_SEARCH_PATH)

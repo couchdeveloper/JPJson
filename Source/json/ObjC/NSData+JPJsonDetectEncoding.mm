@@ -124,5 +124,5 @@ namespace {
 
 
 // Workaround for linker bug:
-@interface DummyNSDataJPJsonDetectEncoding @end
+@interface DummyNSDataJPJsonDetectEncoding : NSObject  @end
 @implementation DummyNSDataJPJsonDetectEncoding @end

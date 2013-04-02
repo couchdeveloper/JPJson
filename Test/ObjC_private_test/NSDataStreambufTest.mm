@@ -6,7 +6,7 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 #include "json/ObjC/NSDataStreambuf.hpp"
 
 #include <dispatch/dispatch.h>

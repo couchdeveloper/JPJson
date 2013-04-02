@@ -17,21 +17,18 @@
 //  limitations under the License.
 //
 
-#ifndef JSON_UNICODE_TRAITS_HPP
-#define JSON_UNICODE_TRAITS_HPP
+#ifndef JSON_UNICODE_UNICODE_TRAITS_HPP
+#define JSON_UNICODE_UNICODE_TRAITS_HPP
 
 #include "json/config.hpp"
 #include "unicode_utilities.hpp"
-#include <assert.h>
-#include <boost/iterator/iterator_traits.hpp>
-#include <boost/type_traits.hpp>
-#include <boost/static_assert.hpp>
-#include <boost/mpl/if.hpp>
-#include <boost/utility.hpp>
-#include <boost/array.hpp>
-#include <stdint.h>
 #include "json/endian/endian.hpp"
 #include "json/endian/byte_swap.hpp"
+#include <boost/iterator/iterator_traits.hpp>
+#include <type_traits>
+#include <array>
+#include <cstdint>
+#include <cassert>
 
 
 //  For specifications, see 
@@ -63,11 +60,18 @@ namespace json { namespace unicode {
     struct platform_encoding_tag :  encoding_tag {};
     
     
-}}    
+    static constexpr UTF_8_encoding_tag UTF_8_encoding{};
+    static constexpr UTF_16_encoding_tag UTF_16_encoding{};
+    static constexpr UTF_16BE_encoding_tag UTF_16BE_encoding{};
+    static constexpr UTF_16LE_encoding_tag UTF_16LE_encoding{};
+    static constexpr UTF_32_encoding_tag UTF_32_encoding{};
+    static constexpr UTF_32BE_encoding_tag UTF_32BE_encoding{};
+    static constexpr UTF_32LE_encoding_tag UTF_32LE_encoding{};
+}}
 
 
 //
-// Unicode Traits
+// Encoding Traits
 //
 namespace json { namespace unicode {
     
@@ -98,45 +102,45 @@ namespace json { namespace unicode {
     struct encoding_traits<Encoding> 
     {
         // Is true for Unicode encodings, otherwise false
-        static const bool is_unicode_encoding = true;
+        static constexpr bool is_unicode_encoding = true;
         
         // For an Unicode encdoding scheme 'Encoding', defines the type for the Unicode encoding form
         typedef UTF_16_encoding_tag     encoding_form;
         
         // Returns the corresponding Encoding constant
-        static const Encoding       value = UnicodeEncoding;
+        static constexpr Encoding       value = UnicodeEncoding;
         
         // Returns true if the encoding may encode a character using one or multiple code units to 
         // encode a character.
-        static const bool           is_multi_code_unit  = true;
+        static constexpr bool           is_multi_code_unit  = true;
         
         // Returns the maximum number of bytes required to strore any encoded character
-        static const unsigned int   max_bytes = K;
+        static constexpr unsigned int   max_bytes = K;
         
         // Returns the minum number of bytes to strore any encoded character
-        static const unsigned int   min_bytes = K;
+        static constexpr unsigned int   min_bytes = K;
         
         // Defines the type for the code unit 
         typedef uint16_t            code_unit_type;
         
         // Returns the size of a buffer suitable to hold the number of code units for one 
         // encoded character.
-        static const int            buffer_size = N;
+        static constexpr int            buffer_size = N;
         
         // Defines the buffer type for an encoded character
         typedef code_unit_type      encode_buffer_type[buffer_size];
         
         // Returns the name of the encoding as a pointer to a c-string
-        static const char*          name();
+        static constexpr char*          name();
         
         // Defines the type for a BOM
-        typedef boost::array<code_unit_type,1>      bom_type;
+        typedef std::array<code_unit_type,1>      bom_type;
         
         // Returns the BOM for the encoding
-        static const bom_type       bom();
+        static constexpr bom_type       bom();
         
         // Returns the size in bytes for the BOM type
-        static const int            bom_byte_size;
+        static constexpr int            bom_byte_size;
         
         
         // For a given code unit whose endianness equals the encoding's endianness, 
@@ -206,7 +210,7 @@ namespace json { namespace unicode {
         //  bom_type            A static vector of values of code_unit_type which
         //                      is capable to store a BOM.
         //
-        BOOST_STATIC_ASSERT(sizeof(EncodingT) == 0);   //      
+        static_assert(sizeof(EncodingT) == 0, "");   //
     };
     
 #pragma mark - encoding_traits<UTF_8_encoding_tag>
@@ -221,27 +225,27 @@ namespace json { namespace unicode {
     
     template <>
     struct encoding_traits<UTF_8_encoding_tag> {
-        static const bool is_unicode_encoding = true;
-        typedef UTF_8_encoding_tag     encoding_form;
-        static const Encoding       value = UnicodeEncoding_UTF8;
-        static const bool           is_multi_code_unit  = true;
-        static const unsigned int   max_bytes = 4;
-        static const unsigned int   min_bytes = 1;
-        typedef char                code_unit_type;
-        static const int            buffer_size = 4;
-        typedef code_unit_type      encode_buffer_type[buffer_size];
+        static constexpr bool               is_unicode_encoding = true;
+        typedef UTF_8_encoding_tag          encoding_form;
+        static constexpr Encoding           value = UnicodeEncoding_UTF8;
+        static constexpr bool               is_multi_code_unit  = true;
+        static constexpr unsigned int       max_bytes = 4;
+        static constexpr unsigned int       min_bytes = 1;
+        typedef char                        code_unit_type;
+        static constexpr int                buffer_size = 4;
+        typedef code_unit_type              encode_buffer_type[buffer_size];
         typedef json::internal::host_endianness::type endian_tag;
-        static const char*          name() { return "UTF-8"; }
-        typedef boost::array<code_unit_type,3>      bom_type;
-        static const bom_type       bom() { bom_type result = {{code_unit_type(0xEF), code_unit_type(0xBB), code_unit_type(0xBF)}}; return result; };
-        static const int            bom_byte_size  = bom_type::static_size*sizeof(code_unit_type);
+        static constexpr char const*        name() { return "UTF-8"; }
+        typedef std::array<code_unit_type,3> bom_type;
+        static constexpr bom_type           bom() { return {code_unit_type(0xEF), code_unit_type(0xBB), code_unit_type(0xBF)}; };
+        static constexpr int                bom_byte_size = sizeof(bom_type);
         
-        static int  to_int(code_unit_type cu)        { return static_cast<int>(static_cast<uint8_t>(cu)); }
-        static unsigned to_uint(code_unit_type cu)   { return static_cast<unsigned>(static_cast<uint8_t>(cu)); }
+        static constexpr int  to_int(code_unit_type cu)        { return static_cast<int>(static_cast<uint8_t>(cu)); }
+        static constexpr unsigned to_uint(code_unit_type cu)   { return static_cast<unsigned>(static_cast<uint8_t>(cu)); }
         
-        static bool is_single(code_unit_type cu)     { return utf8_is_single(cu); }
-        static bool is_trail(code_unit_type cu)      { return utf8_is_trail(cu); }
-        static bool is_lead(code_unit_type cu)       { return utf8_is_lead(cu); }
+        static constexpr bool is_single(code_unit_type cu)     { return utf8_is_single(cu); }
+        static constexpr bool is_trail(code_unit_type cu)      { return utf8_is_trail(cu); }
+        static constexpr bool is_lead(code_unit_type cu)       { return utf8_is_lead(cu); }
     };
     
     typedef encoding_traits<UTF_8_encoding_tag> UTF_8_encoding_traits;
@@ -251,30 +255,27 @@ namespace json { namespace unicode {
     
     template <>
     struct encoding_traits<UTF_16_encoding_tag> {
-        static const bool is_unicode_encoding = true;
-        typedef UTF_16_encoding_tag     encoding_form;
-        static const Encoding       value = UnicodeEncoding_UTF16;
-        static const bool           is_multi_code_unit  = true;
-        static const unsigned int   max_bytes = 4;
-        static const unsigned int   min_bytes = 2;
-        typedef uint16_t            code_unit_type;
-        static const int            buffer_size = 2;
-        typedef code_unit_type      encode_buffer_type[buffer_size];
-        static const char*          name() { return "UTF-16"; }
-        typedef boost::array<code_unit_type,1>      bom_type;
-        static const bom_type       bom() { 
-            bom_type result = {{code_unit_type(0xFEFFu)}}; 
-            return result; 
-        };
-        static const int            bom_byte_size  = bom_type::static_size*sizeof(code_unit_type);
+        static constexpr bool               is_unicode_encoding = true;
+        typedef UTF_16_encoding_tag         encoding_form;
+        static constexpr Encoding           value = UnicodeEncoding_UTF16;
+        static constexpr bool               is_multi_code_unit  = true;
+        static constexpr unsigned int       max_bytes = 4;
+        static constexpr unsigned int       min_bytes = 2;
+        typedef uint16_t                    code_unit_type;
+        static constexpr int                buffer_size = 2;
+        typedef code_unit_type              encode_buffer_type[buffer_size];
+        static constexpr char const*        name() { return "UTF-16"; }
+        typedef std::array<code_unit_type,1>      bom_type;
+        static constexpr bom_type           bom() { return {code_unit_type(0xFEFFu)}; };
+        static constexpr int                bom_byte_size  = sizeof(bom_type);
         
-        static int  to_int(code_unit_type cu)       { return static_cast<int>(static_cast<uint16_t>(cu)); }
+        static constexpr int  to_int(code_unit_type cu)       { return static_cast<int>(static_cast<uint16_t>(cu)); }
         static unsigned to_uint(code_unit_type cu)  { return static_cast<unsigned>(static_cast<uint16_t>(cu)); }
 
         // Parameter values must be in platform endianness!
-        static bool is_single(code_unit_type cu)    { return utf16_is_single(cu); }
-        static bool is_trail(code_unit_type cu)     { return utf16_is_trail(cu); }
-        static bool is_lead(code_unit_type cu)      { return utf16_is_lead(cu); }        
+        static constexpr bool is_single(code_unit_type cu)    { return utf16_is_single(cu); }
+        static constexpr bool is_trail(code_unit_type cu)     { return utf16_is_trail(cu); }
+        static constexpr bool is_lead(code_unit_type cu)      { return utf16_is_lead(cu); }        
     };
     
     typedef encoding_traits<UTF_16_encoding_tag> UTF_16_encoding_traits;
@@ -284,35 +285,33 @@ namespace json { namespace unicode {
     
     template <>
     struct encoding_traits<UTF_16BE_encoding_tag> {
-        static const bool is_unicode_encoding = true;
-        typedef UTF_16_encoding_tag     encoding_form;
-        static const Encoding       value = UnicodeEncoding_UTF16BE;
-        static const bool           is_multi_code_unit  = true;
-        static const unsigned int   max_bytes = 4;
-        static const unsigned int   min_bytes = 2;
-        typedef uint16_t            code_unit_type;
-        static const int            buffer_size = 2;
-        typedef code_unit_type      encode_buffer_type[buffer_size];
+        static constexpr bool               is_unicode_encoding = true;
+        typedef UTF_16_encoding_tag         encoding_form;
+        static constexpr Encoding           value = UnicodeEncoding_UTF16BE;
+        static constexpr bool               is_multi_code_unit  = true;
+        static constexpr unsigned int       max_bytes = 4;
+        static constexpr unsigned int       min_bytes = 2;
+        typedef uint16_t                    code_unit_type;
+        static constexpr int                buffer_size = 2;
+        typedef code_unit_type              encode_buffer_type[buffer_size];
         
         typedef json::internal::big_endian_tag      endian_tag;
-        static const char*          name() { return "UTF-16BE"; }
-        typedef boost::array<code_unit_type,1>      bom_type;
-        static const bom_type       bom() {
-            bom_type result = {{byte_swap<host_endianness::type, endian_tag>(static_cast<code_unit_type>(0xFEFFu))}}; 
-            return result; 
-        };
-        static const int            bom_byte_size  = bom_type::static_size*sizeof(code_unit_type);         
+        static constexpr char const*         name() { return "UTF-16BE"; }
+        typedef std::array<code_unit_type,1> bom_type;
+        static constexpr bom_type           bom() { return {byte_swap<host_endianness::type, endian_tag>(static_cast<code_unit_type>(0xFEFFu))}; }
         
-        static int  to_int(code_unit_type cu)       { 
+        static constexpr int                bom_byte_size  = sizeof(bom_type);
+        
+        static constexpr int  to_int(code_unit_type cu)       { 
             return static_cast<int>(static_cast<uint16_t>(byte_swap<endian_tag, host_endianness::type>(cu))); 
         }
-        static unsigned to_uint(code_unit_type cu)  { 
+        static constexpr unsigned to_uint(code_unit_type cu)  { 
             return static_cast<unsigned>(static_cast<uint16_t>(byte_swap<endian_tag, host_endianness::type>(cu))); 
         }
         
-        static bool is_single(code_unit_type cu)    { return utf16_is_single(to_uint(cu)); }
-        static bool is_trail(code_unit_type cu)     { return utf16_is_trail(to_uint(cu)); }
-        static bool is_lead(code_unit_type cu)      { return utf16_is_lead(to_uint(cu)); }        
+        static constexpr bool is_single(code_unit_type cu)    { return utf16_is_single(to_uint(cu)); }
+        static constexpr bool is_trail(code_unit_type cu)     { return utf16_is_trail(to_uint(cu)); }
+        static constexpr bool is_lead(code_unit_type cu)      { return utf16_is_lead(to_uint(cu)); }        
     };
     
     typedef encoding_traits<UTF_16BE_encoding_tag> UTF_16BE_encoding_traits;
@@ -323,31 +322,28 @@ namespace json { namespace unicode {
     
     template <>
     struct encoding_traits<UTF_16LE_encoding_tag> {
-        static const bool is_unicode_encoding = true;
-        typedef UTF_16_encoding_tag     encoding_form;
-        static const Encoding       value = UnicodeEncoding_UTF16LE;
-        static const bool           is_multi_code_unit  = true;
-        static const unsigned int   max_bytes = 4;
-        static const unsigned int   min_bytes = 2;
-        typedef uint16_t            code_unit_type;
-        static const int            buffer_size = 2;
-        typedef code_unit_type      encode_buffer_type[buffer_size];
+        static constexpr bool               is_unicode_encoding = true;
+        typedef UTF_16_encoding_tag         encoding_form;
+        static constexpr Encoding           value = UnicodeEncoding_UTF16LE;
+        static constexpr bool               is_multi_code_unit  = true;
+        static constexpr unsigned int       max_bytes = 4;
+        static constexpr unsigned int       min_bytes = 2;
+        typedef uint16_t                    code_unit_type;
+        static constexpr int                buffer_size = 2;
+        typedef code_unit_type              encode_buffer_type[buffer_size];
         
         typedef json::internal::little_endian_tag   endian_tag;
-        static const char*          name() { return "UTF-16LE"; }
-        typedef boost::array<code_unit_type,1>      bom_type;
-        static const bom_type       bom() { 
-            bom_type result = {{byte_swap<host_endianness::type, endian_tag>(static_cast<code_unit_type>(0xFEFFu))}}; 
-            return result; 
-        };
-        static const int            bom_byte_size  = bom_type::static_size*sizeof(code_unit_type);
+        static constexpr char const*        name() { return "UTF-16LE"; }
+        typedef std::array<code_unit_type,1> bom_type;
+        static constexpr bom_type           bom() { return {byte_swap<host_endianness::type, endian_tag>(static_cast<code_unit_type>(0xFEFFu))}; }
+        static constexpr int                bom_byte_size  = sizeof(bom_type);
         
-        static int  to_int(code_unit_type cu)       { return static_cast<int>(static_cast<uint16_t>(byte_swap<endian_tag, host_endianness::type>(cu))); }
-        static unsigned to_uint(code_unit_type cu)  { return static_cast<unsigned>(static_cast<uint16_t>(byte_swap<endian_tag, host_endianness::type>(cu))); }
+        static constexpr int  to_int(code_unit_type cu)       { return static_cast<int>(static_cast<uint16_t>(byte_swap<endian_tag, host_endianness::type>(cu))); }
+        static constexpr unsigned to_uint(code_unit_type cu)  { return static_cast<unsigned>(static_cast<uint16_t>(byte_swap<endian_tag, host_endianness::type>(cu))); }
         
-        static bool is_single(code_unit_type cu)    { return utf16_is_single(to_uint(cu)); }
-        static bool is_trail(code_unit_type cu)     { return utf16_is_trail(to_uint(cu)); }
-        static bool is_lead(code_unit_type cu)      { return utf16_is_lead(to_uint(cu)); }        
+        static constexpr bool is_single(code_unit_type cu)    { return utf16_is_single(to_uint(cu)); }
+        static constexpr bool is_trail(code_unit_type cu)     { return utf16_is_trail(to_uint(cu)); }
+        static constexpr bool is_lead(code_unit_type cu)      { return utf16_is_lead(to_uint(cu)); }        
     };
     
     typedef encoding_traits<UTF_16LE_encoding_tag> UTF_16LE_encoding_traits;
@@ -357,29 +353,26 @@ namespace json { namespace unicode {
     
     template <>
     struct encoding_traits<UTF_32_encoding_tag> {
-        static const bool is_unicode_encoding = true;
-        typedef UTF_32_encoding_tag encoding_form;
-        static const Encoding       value = UnicodeEncoding_UTF32;
-        static const bool           is_multi_code_unit  = false;
-        static const unsigned int   max_bytes = 4;
-        static const unsigned int   min_bytes = 4;
-        typedef uint32_t            code_unit_type;
-        static const int            buffer_size = 1;
-        typedef code_unit_type      encode_buffer_type[buffer_size];
-        static const char*          name() { return "UTF-32"; }
-        typedef boost::array<code_unit_type,1>      bom_type;
-        static const bom_type       bom() { 
-            bom_type result = {{static_cast<code_unit_type>(0xFEFFu)}}; 
-            return result; 
-        };
-        static const int            bom_byte_size  = bom_type::static_size*sizeof(code_unit_type);
+        static constexpr bool               is_unicode_encoding = true;
+        typedef UTF_32_encoding_tag         encoding_form;
+        static constexpr Encoding           value = UnicodeEncoding_UTF32;
+        static constexpr bool               is_multi_code_unit  = false;
+        static constexpr unsigned int       max_bytes = 4;
+        static constexpr unsigned int       min_bytes = 4;
+        typedef uint32_t                    code_unit_type;
+        static constexpr int                buffer_size = 1;
+        typedef code_unit_type              encode_buffer_type[buffer_size];
+        static constexpr char const*        name() { return "UTF-32"; }
+        typedef std::array<code_unit_type,1> bom_type;
+        static constexpr bom_type           bom() { return {static_cast<code_unit_type>(0xFEFFu)}; }
+        static constexpr int                bom_byte_size  = sizeof(bom_type);
         
-        static int  to_int(code_unit_type cu)       { return static_cast<int>(static_cast<uint32_t>(cu)); }
-        static unsigned to_uint(code_unit_type cu)  { return static_cast<unsigned>(static_cast<uint32_t>(cu)); }
+        static constexpr int  to_int(code_unit_type cu)       { return static_cast<int>(static_cast<uint32_t>(cu)); }
+        static constexpr unsigned to_uint(code_unit_type cu)  { return static_cast<unsigned>(static_cast<uint32_t>(cu)); }
         
-        static bool is_single(code_unit_type)       { return true; }
-        static bool is_trail(code_unit_type)        { return false; }
-        static bool is_lead(code_unit_type)         { return false; }        
+        static constexpr bool is_single(code_unit_type)       { return true; }
+        static constexpr bool is_trail(code_unit_type)        { return false; }
+        static constexpr bool is_lead(code_unit_type)         { return false; }        
     };
     
     typedef encoding_traits<UTF_32_encoding_tag> UTF_32_encoding_traits;
@@ -389,35 +382,32 @@ namespace json { namespace unicode {
     
     template <>
     struct encoding_traits<UTF_32BE_encoding_tag> {
-        static const bool is_unicode_encoding = true;
-        typedef UTF_32_encoding_tag     encoding_form;
-        static const Encoding       value = UnicodeEncoding_UTF32BE;
-        static const bool           is_multi_code_unit  = false;
-        static const unsigned int   max_bytes = 4;
-        static const unsigned int   min_bytes = 4;
-        typedef uint32_t            code_unit_type;
-        static const int            buffer_size = 1;
-        typedef code_unit_type      encode_buffer_type[buffer_size];
+        static constexpr bool               is_unicode_encoding = true;
+        typedef UTF_32_encoding_tag         encoding_form;
+        static constexpr Encoding           value = UnicodeEncoding_UTF32BE;
+        static constexpr bool               is_multi_code_unit  = false;
+        static constexpr unsigned int       max_bytes = 4;
+        static constexpr unsigned int       min_bytes = 4;
+        typedef uint32_t                    code_unit_type;
+        static constexpr int                buffer_size = 1;
+        typedef code_unit_type              encode_buffer_type[buffer_size];
         
         typedef json::internal::big_endian_tag      endian_tag;
-        static const char*          name() { return "UTF-32BE"; }
-        typedef boost::array<code_unit_type,1>      bom_type;
-        static const bom_type       bom() { 
-            bom_type result = {{byte_swap<host_endianness::type, endian_tag>(static_cast<code_unit_type>(0xFEFFu))}}; 
-            return result; 
-        };
-        static const int            bom_byte_size  = bom_type::static_size*sizeof(code_unit_type);
+        static constexpr char const*        name() { return "UTF-32BE"; }
+        typedef std::array<code_unit_type,1> bom_type;
+        static constexpr bom_type           bom() { return {byte_swap<host_endianness::type, endian_tag>(static_cast<code_unit_type>(0xFEFFu))}; }
+        static constexpr int                bom_byte_size  = sizeof(bom_type);
         
-        static int  to_int(code_unit_type cu)       { 
+        static constexpr int  to_int(code_unit_type cu)       { 
             return static_cast<int>(static_cast<uint32_t>(byte_swap<endian_tag, host_endianness::type>(cu))); 
         }
-        static unsigned to_uint(code_unit_type cu)  { 
+        static constexpr unsigned to_uint(code_unit_type cu)  { 
             return static_cast<unsigned>(static_cast<uint32_t>(byte_swap<endian_tag, host_endianness::type>(cu))); 
         }
         
-        static bool is_single(code_unit_type)       { return true; }
-        static bool is_trail(code_unit_type)        { return false; }        
-        static bool is_lead(code_unit_type)         { return false; }        
+        static constexpr bool is_single(code_unit_type)       { return true; }
+        static constexpr bool is_trail(code_unit_type)        { return false; }        
+        static constexpr bool is_lead(code_unit_type)         { return false; }        
     };
     
     typedef encoding_traits<UTF_32BE_encoding_tag> UTF_32BE_encoding_traits;
@@ -428,35 +418,32 @@ namespace json { namespace unicode {
     
     template <>
     struct encoding_traits<UTF_32LE_encoding_tag> {
-        static const bool is_unicode_encoding = true;
-        typedef UTF_32_encoding_tag     encoding_form;
-        static const Encoding       value = UnicodeEncoding_UTF32LE;
-        static const bool           is_multi_code_unit  = false;
-        static const unsigned int   max_bytes = 4;
-        static const unsigned int   min_bytes = 4;
-        typedef uint32_t            code_unit_type;
-        static const int            buffer_size = 1;
-        typedef code_unit_type      encode_buffer_type[buffer_size];
+        static constexpr bool               is_unicode_encoding = true;
+        typedef UTF_32_encoding_tag         encoding_form;
+        static constexpr Encoding           value = UnicodeEncoding_UTF32LE;
+        static constexpr bool               is_multi_code_unit  = false;
+        static constexpr unsigned int       max_bytes = 4;
+        static constexpr unsigned int       min_bytes = 4;
+        typedef uint32_t                    code_unit_type;
+        static constexpr int                buffer_size = 1;
+        typedef code_unit_type              encode_buffer_type[buffer_size];
         
         typedef json::internal::little_endian_tag   endian_tag;
-        static const char*          name() { return "UTF-32LE"; }
-        typedef boost::array<code_unit_type,1>      bom_type;
-        static const bom_type       bom() { 
-            bom_type result = {{byte_swap<host_endianness::type, endian_tag>(static_cast<code_unit_type>(0xFEFFu))}}; 
-            return result; 
-        };
-        static const int            bom_byte_size  = bom_type::static_size*sizeof(code_unit_type);
+        static constexpr char const*        name() { return "UTF-32LE"; }
+        typedef std::array<code_unit_type,1>      bom_type;
+        static constexpr bom_type           bom() { return {byte_swap<host_endianness::type, endian_tag>(static_cast<code_unit_type>(0xFEFFu))}; }
+        static constexpr int                bom_byte_size  = sizeof(bom_type);
         
-        static int  to_int(code_unit_type cu)       { 
+        static constexpr int  to_int(code_unit_type cu)       { 
             return static_cast<int>(static_cast<uint32_t>(byte_swap<endian_tag, host_endianness::type>(cu))); 
         }
-        static unsigned to_uint(code_unit_type cu)  { 
+        static constexpr unsigned to_uint(code_unit_type cu)  { 
             return static_cast<unsigned>(static_cast<uint32_t>(byte_swap<endian_tag, host_endianness::type>(cu))); 
         }
         
-        static bool is_single(code_unit_type)       { return true; }
-        static bool is_trail(code_unit_type)        { return false; }
-        static bool is_lead(code_unit_type)         { return false; }        
+        static constexpr bool is_single(code_unit_type)       { return true; }
+        static constexpr bool is_trail(code_unit_type)        { return false; }
+        static constexpr bool is_lead(code_unit_type)         { return false; }        
     };
     
     typedef encoding_traits<UTF_32LE_encoding_tag> UTF_32LE_encoding_traits;
@@ -468,25 +455,25 @@ namespace json { namespace unicode {
     
     template <>
     struct encoding_traits<platform_encoding_tag> {
-        static const bool is_unicode_encoding = false;
-        static const Encoding value = PlatformEncoding;
+        static constexpr bool               is_unicode_encoding = false;
+        static constexpr Encoding value = PlatformEncoding;
         
-        static const bool           is_multi_code_unit  = false;
+        static constexpr bool               is_multi_code_unit  = false;
         
-        static const unsigned int   max_bytes = sizeof(wchar_t);
-        static const unsigned int   min_bytes = sizeof(wchar_t);
-        typedef wchar_t             code_unit_type;
-        static const int            buffer_size = 1;
-        typedef wchar_t             encode_buffer_type[buffer_size];
-        typedef host_endianness::type endian_tag;
-        static const char*          name() { return "platform"; }
+        static constexpr unsigned int       max_bytes = sizeof(wchar_t);
+        static constexpr unsigned int       min_bytes = sizeof(wchar_t);
+        typedef wchar_t                     code_unit_type;
+        static constexpr int                buffer_size = 1;
+        typedef wchar_t                     encode_buffer_type[buffer_size];
+        typedef host_endianness::type       endian_tag;
+        static constexpr char const*        name() { return "platform"; }
 
-        static int  to_int(code_unit_type cu)       { return static_cast<int>(static_cast<uint32_t>(cu)); }
-        static unsigned to_uint(code_unit_type cu)  { return static_cast<unsigned>(static_cast<uint32_t>(cu)); }
+        static constexpr int  to_int(code_unit_type cu)       { return static_cast<int>(static_cast<uint32_t>(cu)); }
+        static constexpr unsigned to_uint(code_unit_type cu)  { return static_cast<unsigned>(static_cast<uint32_t>(cu)); }
         
-        static bool is_single(code_unit_type)       { return true; }
-        static bool is_trail(code_unit_type)        { return false; }
-        static bool is_lead(code_unit_type)         { return false; }        
+        static constexpr bool is_single(code_unit_type)       { return true; }
+        static constexpr bool is_trail(code_unit_type)        { return false; }
+        static constexpr bool is_lead(code_unit_type)         { return false; }        
     };
     
     typedef encoding_traits<platform_encoding_tag> platform_encoding_traits;
@@ -497,25 +484,25 @@ namespace json { namespace unicode {
     
     template <>
     struct encoding_traits<code_point_t> {
-        static const bool is_unicode_encoding = false;
-        static const Encoding value = PlatformEncoding;
+        static constexpr bool               is_unicode_encoding = false;
+        static constexpr Encoding           value = PlatformEncoding;
         
-        static const bool           is_multi_code_unit  = false;
+        static constexpr bool               is_multi_code_unit  = false;
         
-        static const unsigned int   max_bytes = sizeof(code_point_t);
-        static const unsigned int   min_bytes = sizeof(code_point_t);
-        typedef code_point_t        code_unit_type;
-        static const int            buffer_size = 1;
-        typedef wchar_t             encode_buffer_type[buffer_size];
-        typedef host_endianness::type endian_tag;
-        static const char*          name() { return "Unicode code point"; }
+        static constexpr unsigned int       max_bytes = sizeof(code_point_t);
+        static constexpr unsigned int       min_bytes = sizeof(code_point_t);
+        typedef code_point_t                code_unit_type;
+        static constexpr int                buffer_size = 1;
+        typedef wchar_t                     encode_buffer_type[buffer_size];
+        typedef host_endianness::type       endian_tag;
+        static constexpr char const*        name() { return "Unicode code point"; }
         
-        static int  to_int(code_unit_type cu)       { return static_cast<int>(static_cast<uint32_t>(cu)); }
-        static unsigned to_uint(code_unit_type cu)  { return static_cast<unsigned>(static_cast<uint32_t>(cu)); }
+        static constexpr int  to_int(code_unit_type cu)       { return static_cast<int>(static_cast<uint32_t>(cu)); }
+        static constexpr unsigned to_uint(code_unit_type cu)  { return static_cast<unsigned>(static_cast<uint32_t>(cu)); }
         
-        static bool is_single(code_unit_type)       { return true; }
-        static bool is_trail(code_unit_type)        { return false; }
-        static bool is_lead(code_unit_type)         { return false; }        
+        static constexpr bool is_single(code_unit_type)       { return true; }
+        static constexpr bool is_trail(code_unit_type)        { return false; }
+        static constexpr bool is_lead(code_unit_type)         { return false; }        
     };
     
     typedef encoding_traits<platform_encoding_tag> platform_encoding_traits;
@@ -598,15 +585,16 @@ namespace json { namespace unicode {
     
     
     template <typename EncodingT, typename Enable = void> 
-    struct to_host_endianness {
-        BOOST_STATIC_ASSERT(sizeof(Enable) == 0);
-    };
+    struct to_host_endianness;
+//    {
+//        static_assert(sizeof(Enable) == 0, "");
+//    };
     
     // Specialication for UTF-8
     template <typename EncodingT> 
     struct to_host_endianness<
         EncodingT, 
-        typename boost::enable_if<boost::is_same<UTF_8_encoding_tag, EncodingT> >::type 
+        typename std::enable_if<std::is_same<UTF_8_encoding_tag, EncodingT>::value>::type
     >  
     {
         typedef EncodingT type;
@@ -617,11 +605,11 @@ namespace json { namespace unicode {
     template <typename EncodingT> 
     struct to_host_endianness<
         EncodingT, 
-        typename boost::enable_if<boost::is_base_of<UTF_16_encoding_tag, EncodingT> >::type
+        typename std::enable_if<std::is_base_of<UTF_16_encoding_tag, EncodingT>::value>::type
     >  
     {
-        typedef typename boost::mpl::if_<
-            boost::is_same<typename host_endianness::type, little_endian_tag>,
+        typedef typename std::conditional<
+            std::is_same<typename host_endianness::type, little_endian_tag>::value,
             UTF_16LE_encoding_tag,
             UTF_16BE_encoding_tag
         >::type  type;
@@ -631,11 +619,11 @@ namespace json { namespace unicode {
     template <typename EncodingT> 
     struct to_host_endianness<
         EncodingT, 
-        typename boost::enable_if<boost::is_base_of<UTF_32_encoding_tag, EncodingT> >::type 
+        typename std::enable_if<std::is_base_of<UTF_32_encoding_tag, EncodingT>::value>::type
     >  
     {
-        typedef typename boost::mpl::if_<
-            boost::is_same<typename host_endianness::type, little_endian_tag>,
+        typedef typename std::conditional<
+            std::is_same<typename host_endianness::type, little_endian_tag>::value,
             UTF_32LE_encoding_tag,
             UTF_32BE_encoding_tag
         >::type  type;
@@ -644,9 +632,9 @@ namespace json { namespace unicode {
     
     // Specialization for platform_encoding_tag
     template <typename EncodingT> 
-        struct to_host_endianness<
+    struct to_host_endianness<
         EncodingT, 
-    typename boost::enable_if<boost::is_same<platform_encoding_tag, EncodingT> >::type 
+        typename std::enable_if<std::is_same<platform_encoding_tag, EncodingT>::value>::type
     >  
     {
         typedef EncodingT type;
@@ -656,7 +644,7 @@ namespace json { namespace unicode {
     template <typename EncodingT> 
     struct to_host_endianness<
         EncodingT, 
-        typename boost::enable_if<boost::is_same<code_point_t, EncodingT> >::type 
+        typename std::enable_if<std::is_same<code_point_t, EncodingT>::value>::type
     >  
     {
         typedef EncodingT type;
@@ -683,18 +671,17 @@ namespace json { namespace unicode {
     // will not be changed.
     
     template <typename EncodingT, typename Enable = void> 
-    struct add_endianness {
-        BOOST_STATIC_ASSERT(sizeof(Enable) == 0);
-    };
+    struct add_endianness;
+//    {
+//        static_assert(sizeof(Enable) == 0, "");
+//    };
     
     template <typename EncodingT> 
     struct add_endianness<
         EncodingT, 
-        typename boost::enable_if<
-            boost::mpl::or_<
-                boost::is_same<UTF_16_encoding_tag, EncodingT>,
-                boost::is_same<UTF_32_encoding_tag, EncodingT>
-            >
+        typename std::enable_if<
+            std::is_same<UTF_16_encoding_tag, EncodingT>::value
+            or std::is_same<UTF_32_encoding_tag, EncodingT>::value
         >::type
     >  
     {
@@ -705,15 +692,13 @@ namespace json { namespace unicode {
     template <typename EncodingT> 
     struct add_endianness<
         EncodingT, 
-        typename boost::enable_if<
-            boost::mpl::or_<
-                boost::is_same<UTF_8_encoding_tag, EncodingT>,
-                boost::is_same<UTF_16BE_encoding_tag, EncodingT>,
-                boost::is_same<UTF_16LE_encoding_tag, EncodingT>,
-                boost::is_same<UTF_32BE_encoding_tag, EncodingT>,
-                boost::is_same<UTF_32LE_encoding_tag, EncodingT>
-            >
-        >::type 
+        typename std::enable_if<
+            std::is_same<UTF_8_encoding_tag, EncodingT>::value
+            or std::is_same<UTF_16BE_encoding_tag, EncodingT>::value
+            or std::is_same<UTF_16LE_encoding_tag, EncodingT>::value
+            or std::is_same<UTF_32BE_encoding_tag, EncodingT>::value
+            or std::is_same<UTF_32LE_encoding_tag, EncodingT>::value
+        >::type
     >  
     {
         typedef EncodingT type;
@@ -723,12 +708,10 @@ namespace json { namespace unicode {
     template <typename EncodingT> 
     struct add_endianness<
         EncodingT, 
-        typename boost::enable_if<
-            boost::mpl::or_<
-                boost::is_same<platform_encoding_tag, EncodingT>,
-                boost::is_same<code_point_t, EncodingT>
-            >
-        >::type 
+        typename std::enable_if<
+            std::is_same<platform_encoding_tag, EncodingT>::value
+            or std::is_same<code_point_t, EncodingT>::value
+        >::type
     >  
     {
         typedef EncodingT type;
@@ -750,7 +733,7 @@ namespace json { namespace unicode {
     // Return a default encoding in hostendianess from a given char type.
     template <typename CharT>
     struct char_type_to_encoding {
-        BOOST_STATIC_ASSERT(sizeof(CharT) == 0);
+        static_assert(sizeof(CharT) == 0, "");
     };
     
     template <>
@@ -794,7 +777,7 @@ namespace json { namespace unicode {
     struct iterator_encoding {
         // If the compiler issues an error here, the specialization
         // for the given template parameters does not exist.
-        BOOST_STATIC_ASSERT(sizeof(Iterator) == 0); 
+        static_assert(sizeof(Iterator) == 0, "");
     };
     
     
@@ -819,19 +802,19 @@ namespace json { namespace unicode {
     
     template <typename Iterator>
     struct iterator_encoding<Iterator, uint16_t> {
-        typedef typename boost::mpl::if_c<
-        json::internal::host_endianness::is_little_endian, 
-        UTF_16LE_encoding_tag, 
-        UTF_16BE_encoding_tag
+        typedef typename std::conditional<
+            json::internal::host_endianness::is_little_endian,
+            UTF_16LE_encoding_tag,
+            UTF_16BE_encoding_tag
         >::type type;
     };
     
     template <typename Iterator>
     struct iterator_encoding<Iterator, uint32_t> {
-        typedef typename boost::mpl::if_c<
-        json::internal::host_endianness::is_little_endian, 
-        UTF_32LE_encoding_tag, 
-        UTF_32BE_encoding_tag
+        typedef typename std::conditional<
+            json::internal::host_endianness::is_little_endian,
+            UTF_32LE_encoding_tag,
+            UTF_32BE_encoding_tag
         >::type type;
     };
     
@@ -842,28 +825,28 @@ namespace json { namespace unicode {
     
     template <typename T, typename U>
     struct is_encoding {
-        static const bool value = false;
+        static constexpr bool value = false;
     };
     
     template <>
     struct is_encoding<UTF_8_encoding_tag, UTF_8_encoding_tag> 
     {
-        static const bool value = true;
+        static constexpr bool value = true;
     };
     template <>
     struct is_encoding<UTF_16BE_encoding_tag, UTF_16BE_encoding_tag> 
     {
-        static const bool value = true;
+        static constexpr bool value = true;
     };
     template <>
     struct is_encoding<UTF_32LE_encoding_tag, UTF_32LE_encoding_tag> 
     {
-        static const bool value = true;
+        static constexpr bool value = true;
     };
     template <>
     struct is_encoding<UTF_32BE_encoding_tag, UTF_32BE_encoding_tag> 
     {
-        static const bool value = true;
+        static constexpr bool value = true;
     };
     
     
@@ -874,8 +857,8 @@ namespace json { namespace unicode {
     // are signed or unsigned. We check them here and set it in stone.
     // For UTF-8 all algorithms must work with either signed or usigned 
     // UTF-8 code units.    
-    BOOST_STATIC_ASSERT((boost::is_unsigned<UTF_16_encoding_traits::code_unit_type>::value == true));
-    BOOST_STATIC_ASSERT((boost::is_unsigned<UTF_32_encoding_traits::code_unit_type>::value == true));
+    static_assert((std::is_unsigned<UTF_16_encoding_traits::code_unit_type>::value == true), "");
+    static_assert((std::is_unsigned<UTF_32_encoding_traits::code_unit_type>::value == true), "");
     
     
 }}    // namespace json::unicode
@@ -883,4 +866,4 @@ namespace json { namespace unicode {
 
 
 
-#endif  // JSON_UNICODE_TRAITS_HPP
+#endif  // JSON_UNICODE_UNICODE_TRAITS_HPP

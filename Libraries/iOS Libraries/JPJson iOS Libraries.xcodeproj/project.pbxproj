@@ -52,12 +52,13 @@
 
 /* Begin PBXFileReference section */
 		A1024E2E154167F6001349EC /* libjson-iOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libjson-iOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A130A17D168CCB0400D18244 /* common.iOS.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = common.iOS.xcconfig; sourceTree = "<group>"; };
 		A16AEB351441FB2700FDB7B2 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		A16AEB391441FB2700FDB7B2 /* JPJsonLib-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "JPJsonLib-Prefix.pch"; path = "JPJsonLib/JPJsonLib-Prefix.pch"; sourceTree = "<group>"; };
 		A16AEB8E1441FDBE00FDB7B2 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		A1977E28156A98E80074D9B2 /* JPJsonWriterExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JPJsonWriterExtensions.h; path = ../../Source/json/ObjC/JPJsonWriterExtensions.h; sourceTree = "<group>"; };
-		A1CFB92E1510BE280010942D /* iOS.debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = iOS.debug.xcconfig; sourceTree = "<group>"; };
-		A1CFB9301510BE3A0010942D /* iOS.release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = iOS.release.xcconfig; sourceTree = "<group>"; };
+		A1CFB92E1510BE280010942D /* debug.iOS.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; lineEnding = 0; path = debug.iOS.xcconfig; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.xcconfig; };
+		A1CFB9301510BE3A0010942D /* release.iOS.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; lineEnding = 0; path = release.iOS.xcconfig; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.xcconfig; };
 		A1DDB9DE150E3CB300AF007F /* JPAsyncJsonParser.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = JPAsyncJsonParser.mm; sourceTree = "<group>"; };
 		A1DDB9DF150E3CB300AF007F /* JPJsonParser.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = JPJsonParser.mm; sourceTree = "<group>"; };
 		A1DDB9E0150E3CB300AF007F /* JPJsonWriter.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = JPJsonWriter.mm; sourceTree = "<group>"; };
@@ -97,11 +98,20 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		A130A17E168CCD1B00D18244 /* Xcode Config */ = {
+			isa = PBXGroup;
+			children = (
+				A130A17D168CCB0400D18244 /* common.iOS.xcconfig */,
+				A1CFB92E1510BE280010942D /* debug.iOS.xcconfig */,
+				A1CFB9301510BE3A0010942D /* release.iOS.xcconfig */,
+			);
+			name = "Xcode Config";
+			sourceTree = "<group>";
+		};
 		A16AEB251441FB0300FDB7B2 = {
 			isa = PBXGroup;
 			children = (
-				A1CFB92E1510BE280010942D /* iOS.debug.xcconfig */,
-				A1CFB9301510BE3A0010942D /* iOS.release.xcconfig */,
+				A130A17E168CCD1B00D18244 /* Xcode Config */,
 				A1ECC436146D0BB600124779 /* Public Headers */,
 				A1ECC390146D0B9000124779 /* Source */,
 				A16AEB371441FB2700FDB7B2 /* JPJsonLib */,
@@ -248,42 +258,27 @@
 /* Begin XCBuildConfiguration section */
 		A16AEB2C1441FB0300FDB7B2 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A1CFB92E1510BE280010942D /* iOS.debug.xcconfig */;
 			buildSettings = {
-				ARCHS = (
-					armv7,
-					armv6,
-				);
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				GCC_THUMB_SUPPORT = NO;
-				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
 		};
 		A16AEB2D1441FB0300FDB7B2 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A1CFB9301510BE3A0010942D /* iOS.release.xcconfig */;
 			buildSettings = {
-				ARCHS = (
-					armv7,
-					armv6,
-				);
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				GCC_THUMB_SUPPORT = NO;
-				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
 				SDKROOT = iphoneos;
 			};
 			name = Release;
 		};
 		A16AEB3E1441FB2700FDB7B2 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A1CFB92E1510BE280010942D /* debug.iOS.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = (
-					armv6,
-					armv7,
-				);
 				COPY_PHASE_STRIP = NO;
 				DSTROOT = /tmp/JPJsonLib.dst;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -300,6 +295,7 @@
 				HEADER_SEARCH_PATHS = "$(PRJ_HEADER_SEARCH_PATHS)";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_CFLAGS = "-v";
 				PRODUCT_NAME = "json-iOS";
 				SKIP_INSTALL = YES;
 				VERSION_INFO_FILE = "json-iOS";
@@ -308,12 +304,9 @@
 		};
 		A16AEB3F1441FB2700FDB7B2 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A1CFB9301510BE3A0010942D /* release.iOS.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = (
-					armv6,
-					armv7,
-				);
 				COPY_PHASE_STRIP = YES;
 				DSTROOT = /tmp/JPJsonLib.dst;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
@@ -328,6 +321,8 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "$(PRJ_HEADER_SEARCH_PATHS)";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				LLVM_LTO = YES;
+				OTHER_CFLAGS = "-v";
 				PRODUCT_NAME = "json-iOS";
 				SKIP_INSTALL = YES;
 				VALIDATE_PRODUCT = YES;

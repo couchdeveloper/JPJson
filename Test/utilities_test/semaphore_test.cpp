@@ -7,7 +7,7 @@
 //
 #include "json/ObjC/semaphore.hpp"
 
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
 #include <iostream>
 #include <iomanip>

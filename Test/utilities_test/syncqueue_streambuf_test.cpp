@@ -6,7 +6,7 @@
 //  Copyright (c) 2011 __MyCompanyName__. All rights reserved.
 //
 
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 #include "json/utility/syncqueue_streambuf.hpp"
 
 #include "json/utility/synchronous_queue.hpp"
@@ -71,16 +71,15 @@ namespace {
         CFDataBuffer buffer = CFDataBuffer(s, strlen(s)); 
         queue_t queue;
         
-        queue.put(buffer, 0);
+        EXPECT_EQ(queue_t::TIMEOUT_NOT_PICKED, queue.put(buffer, 0));
         EXPECT_EQ(false, queue.empty());
         
         stream_buffer_t sbuffer(queue);
-        
+                
         for (int i = 0; i < 10; ++i) {
             char ch = sbuffer.sbumpc();
             EXPECT_EQ(s[i], ch);
         }
-        
     }    
 
     
@@ -93,24 +92,29 @@ namespace {
         typedef std::pair<queue_t::result_type, queue_t::value_type> result_t;
         
         const char* s = "0123456789";
-        CFDataBuffer buffer = CFDataBuffer(s, strlen(s)); 
         queue_t queue;
-        queue.put(buffer, 0);
-        EXPECT_EQ(false, queue.empty());
+        queue_t& q = queue;
+        dispatch_semaphore_t sem = dispatch_semaphore_create(0);
+        dispatch_async(dispatch_get_global_queue(0, 0), ^{
+            CFDataBuffer buffer = CFDataBuffer(s, strlen(s));
+            EXPECT_EQ(queue_t::OK, q.put(buffer, 0.2)) << "put() timed out";
+            EXPECT_EQ(queue_t::OK, q.put(CFDataBuffer(), 1)) << "put() timed out";
+            dispatch_semaphore_signal(sem);
+        });
         
         stream_buffer_t sbuffer(queue);
-        
         std::istreambuf_iterator<char> eos;
         std::istreambuf_iterator<char> iit (&sbuffer); // stdin iterator
         
-                
         for (int i = 0; i < 10; ++i) {
             char ch = *iit;
-            ++iit;
             EXPECT_EQ(s[i], ch);
+            ++iit;
         }
-        
+        dispatch_semaphore_wait(sem, DISPATCH_TIME_FOREVER);
+        dispatch_release(sem);
     }    
+    
     
     TEST_F(syncqueue_streambuf_test, syncqueue_streambuf_with_istream_iterator2) 
     {
@@ -120,58 +124,31 @@ namespace {
         
         typedef std::pair<queue_t::result_type, queue_t::value_type> result_t;
         
-        const wchar_t s[] = L"0123456789";
+        const wchar_t* s = L"0123456789";
+        const size_t s_len = std::char_traits<wchar_t>::length(s);
         char const* data_ptr = reinterpret_cast<char const*>(s);
         
-        CFDataBuffer buffer = CFDataBuffer(reinterpret_cast<char const*>(data_ptr), sizeof(s)); 
         queue_t queue;
-        queue.put(buffer, 0);
-        EXPECT_EQ(false, queue.empty());
+        queue_t& q = queue;
+        dispatch_semaphore_t sem = dispatch_semaphore_create(0);
+        dispatch_async(dispatch_get_global_queue(0, 0), ^{
+            q.put(CFDataBuffer(reinterpret_cast<char const*>(data_ptr), sizeof(wchar_t)*s_len));
+            q.put(CFDataBuffer());
+            dispatch_semaphore_signal(sem);
+        });
         
         stream_buffer_t sbuffer(queue);
-        
         std::istreambuf_iterator<wchar_t> eos;
         std::istreambuf_iterator<wchar_t> iit (&sbuffer); // stdin iterator
         
-        
-        for (int i = 0; i < 10; ++i) {
-            wchar_t ch = *iit;
-            ++iit;
-            EXPECT_EQ(s[i], ch);
+        int pos = 0;
+        while (iit != eos) {
+            ASSERT_TRUE( pos < s_len );
+            EXPECT_TRUE(s[pos++] == static_cast<wchar_t>(*iit++));
         }
-        
+        dispatch_semaphore_wait(sem, DISPATCH_TIME_FOREVER);
+        dispatch_release(sem);
     }    
-    
-    
-    TEST_F(syncqueue_streambuf_test, missaligned_buffer) 
-    {
-        typedef json::objc::CFDataBuffer<char>                      CFDataBuffer;
-        typedef synchronous_queue<CFDataBuffer>                     queue_t;
-        typedef basic_syncqueue_streambuf<CFDataBuffer, wchar_t>    stream_buffer_t;
-        
-        typedef std::pair<queue_t::result_type, queue_t::value_type> result_t;
-        
-        const wchar_t s[] = L"0123456789";
-        char const* data_ptr = reinterpret_cast<char const*>(s);
-        
-        CFDataBuffer buffer = CFDataBuffer(data_ptr, sizeof(s)); 
-        
-        // Increment the data pointer to make it missaligned with a wchar_t:
-        buffer.seek(1);        
-                
-        queue_t queue;
-        queue.put(buffer, 0);
-        EXPECT_EQ(false, queue.empty());
-        
-        stream_buffer_t sbuffer(queue);
-        
-        std::istreambuf_iterator<wchar_t> eos;
-        std::istreambuf_iterator<wchar_t> iit (&sbuffer); // stdin iterator
-        
-        wchar_t  ch;
-        EXPECT_ANY_THROW(ch = *iit);
-    }    
-    
     
     
     
@@ -259,5 +236,41 @@ namespace {
         EXPECT_EQ(false, consumer_timeout_occured);
         EXPECT_EQ(true, completed);
     } 
+    
+    
+#if defined (_LIBCPP_VERSION) && _LIBCPP_VERSION == 1101
+    TEST_F(syncqueue_streambuf_test, DISABLED_missaligned_buffer)
+#else
+    TEST_F(syncqueue_streambuf_test, missaligned_buffer)
+#endif
+    {
+        typedef json::objc::CFDataBuffer<char>                      CFDataBuffer;
+        typedef synchronous_queue<CFDataBuffer>                     queue_t;
+        typedef basic_syncqueue_streambuf<CFDataBuffer, wchar_t>    stream_buffer_t;
+        
+        typedef std::pair<queue_t::result_type, queue_t::value_type> result_t;
+        
+        const wchar_t s[] = L"0123456789";
+        char const* data_ptr = reinterpret_cast<char const*>(s);
+        
+        CFDataBuffer buffer = CFDataBuffer(data_ptr, sizeof(s));
+        
+        // Increment the data pointer to make it missaligned with a wchar_t:
+        buffer.seek(1);
+        
+        queue_t queue;
+        queue.put(buffer, 0);
+        EXPECT_EQ(false, queue.empty());
+        
+        stream_buffer_t sbuffer(queue);
+        
+        std::istreambuf_iterator<wchar_t> eos;
+        std::istreambuf_iterator<wchar_t> iit (&sbuffer); // stdin iterator
+        
+        wchar_t  ch;
+        EXPECT_ANY_THROW(ch = *iit);
+    }
+    
+    
     
 }

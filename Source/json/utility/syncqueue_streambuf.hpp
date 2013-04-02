@@ -23,12 +23,10 @@
 
 
 #include "json/config.hpp"
+#include "synchronous_queue.hpp"
 #include <streambuf>
 #include <ios>
 #include <utility>
-#include <boost/utility.hpp>
-#include <boost/static_assert.hpp>
-#include "synchronous_queue.hpp"
 #include <stdint.h>
 
 
@@ -45,7 +43,7 @@ namespace json { namespace utility {
     template <typename BufferT, typename CharT, typename TraitsT = std::char_traits<CharT> >
     class basic_syncqueue_streambuf : public std::basic_streambuf<CharT, TraitsT>
     {
-        BOOST_STATIC_ASSERT(sizeof(typename BufferT::value_type) == 1 );        
+        static_assert(sizeof(typename BufferT::value_type) == 1, "" );
         typedef std::basic_streambuf<CharT, TraitsT>    base_type;
     public:
         typedef TraitsT                                 traits_type;

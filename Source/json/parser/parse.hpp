@@ -23,10 +23,7 @@
 
 
 #include "json/config.hpp"
-#include <boost/config.hpp>
-#include <boost/static_assert.hpp>
 #include <boost/iterator/iterator_traits.hpp>
-#include <boost/type_traits.hpp>
 #include "parser.hpp"
 #include "semantic_actions_base.hpp"
 #include "json/unicode/unicode_detect_bom.hpp"
@@ -486,9 +483,9 @@ namespace json {
         typedef parser<IteratorT, SourceEncoding, SemanticActions> parser_t;
         
         
-        BOOST_STATIC_ASSERT( (boost::is_base_and_derived<utf_encoding_tag, SourceEncoding>::value) );
-        BOOST_STATIC_ASSERT( (sizeof(typename boost::iterator_value<IteratorT>::type) 
-                              == sizeof(typename encoding_traits<SourceEncoding>::code_unit_type)) );
+        static_assert( (std::is_base_of<utf_encoding_tag, SourceEncoding>::value), "" );
+        static_assert( (sizeof(typename boost::iterator_value<IteratorT>::type)
+                              == sizeof(typename encoding_traits<SourceEncoding>::code_unit_type)), "" );
         
         SemanticActions sa;
         if (flags) 
@@ -555,10 +552,10 @@ namespace json {
         typedef parser<IteratorT, SourceEncoding, SemanticActionsT> parser_t;
         
         
-        //BOOST_STATIC_ASSERT( (boost::is_base_and_derived<json::semantic_actions_base, SemanticActionsT>::value) );
-        BOOST_STATIC_ASSERT( (boost::is_base_and_derived<unicode::utf_encoding_tag, SourceEncoding>::value) );
-        BOOST_STATIC_ASSERT( (sizeof(typename boost::iterator_value<IteratorT>::type) 
-                              == sizeof(typename encoding_traits<SourceEncoding>::code_unit_type)) );
+        //static_assert( (std::is_base_of<json::semantic_actions_base, SemanticActionsT>::value), "" );
+        static_assert( (std::is_base_of<unicode::utf_encoding_tag, SourceEncoding>::value), "" );
+        static_assert( (sizeof(typename boost::iterator_value<IteratorT>::type) 
+                              == sizeof(typename encoding_traits<SourceEncoding>::code_unit_type)), "" );
         
         // TODO: make a static assert which checks the semantic actions. For now, 
         // we simply assume the user's semantic actions class inherits from 

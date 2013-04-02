@@ -2,9 +2,5 @@
 //  Test.release.xcconfig
 //
 
-// Source Root Path
-JP_ROOT = $(SRCROOT)/../Source
+#include "target.common.macosx.xcconfig"
 
-#include "../Xcode.config/$user.boost.xcconfig"
-#include "../Xcode.config/$user.gtest.xcconfig"
-#include "../Xcode.config/$user.ICU.xcconfig"

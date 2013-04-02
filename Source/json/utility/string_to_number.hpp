@@ -23,6 +23,8 @@
 
 
 #include "json/config.hpp"
+#include <cstdlib>
+#include <limits>
 
 /**
  If JSON_UTILITY_STRING_TO_NUMBER_USE_QI is defined, the implemenation uses
@@ -57,8 +59,59 @@ namespace json { namespace utility {
     
     
     
-    inline void throw_number_conversion_error(const char* msg) {
+    static void throw_number_conversion_error(const char* msg) {
         throw std::runtime_error(msg);
+    }
+    
+    
+    
+    namespace detail {
+        
+        /**
+         `s` must point to character sequence of length `len`, whose characters
+         represent a decimal integer string with no leading zeros.
+         */
+        static unsigned long long s2ull(const char* s, int len)
+        {
+            assert(len > 0 and s != nullptr);
+            
+            unsigned long long result =  (*s++ - '0');
+            switch (len) {
+                        
+                case 20: result = 10*result + (*s++ - '0');
+                case 19: result = 10*result + (*s++ - '0');
+                case 18: result = 10*result + (*s++ - '0');
+                case 17: result = 10*result + (*s++ - '0');
+                case 16: result = 10*result + (*s++ - '0');
+                case 15: result = 10*result + (*s++ - '0');
+                case 14: result = 10*result + (*s++ - '0');
+                case 13: result = 10*result + (*s++ - '0');
+                case 12: result = 10*result + (*s++ - '0');
+                case 11: result = 10*result + (*s++ - '0');
+                case 10: result = 10*result + (*s++ - '0');
+                case 9:  result = 10*result + (*s++ - '0');
+                case 8:  result = 10*result + (*s++ - '0');
+                case 7:  result = 10*result + (*s++ - '0');
+                case 6:  result = 10*result + (*s++ - '0');
+                case 5:  result = 10*result + (*s++ - '0');
+                case 4:  result = 10*result + (*s++ - '0');
+                case 3:  result = 10*result + (*s++ - '0');
+                case 2:  result = 10*result + (*s++ - '0');
+                case 1: ;
+                case 0: ;
+            }
+            return result;        
+        }
+        
+        
+        static unsigned long long str2ull(const char* s)
+        {
+            return s2ull(s, static_cast<int>(strlen(s)));
+        }
+        
+        
+        
+    
     }
     
 

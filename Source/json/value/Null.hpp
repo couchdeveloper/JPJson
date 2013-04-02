@@ -22,20 +22,19 @@
 
 
 #include "json/config.hpp"
-#include <boost/config.hpp>
-#include <boost/mpl/bool.hpp>
-#include <iostream>
 #include "json_traits.hpp"
+#include <iostream>
 
 
 namespace json {
     
 #pragma mark -
 #pragma mark json::Null
+    
     //
     // Null
     //
-    // TODO: implement a "null" literal
+
     //
     //  The following traits should be defined when used in a boost::variant:
     //      has_nothrow_copy, 
@@ -44,46 +43,54 @@ namespace json {
     
     class Null {
     public:    
-        Null() throw() {}
+        constexpr Null() noexcept = default;
+        constexpr Null(const Null&) noexcept = default;
+        Null& operator=(const Null&) noexcept = default;
+        
+    private:
+        // friends
+        
+        friend inline
+        bool operator==(const Null&, const Null&) noexcept { return true; }
+
+        friend inline
+        bool operator!=(const Null&, const Null&) noexcept { return false; }
+        
+        
+        friend inline
+        std::ostream& operator<<(std::ostream& o, const Null&) {
+            o << "null"; return o;
+        }
     };
     
-    template <typename T>
-    inline bool operator==(const T&, const Null&) { return false; }
     
-    template <typename T>
-    inline bool operator==(const Null&, const T&) { return false; }
+    static const constexpr Null null = {};  // Constant null can be used to initialize instances of variant Value: Value v = null;
     
-    inline bool operator==(const Null&, const Null&) { return true; }
     
-    inline std::ostream& operator<<(std::ostream& o, const Null&) {
-        o << "null"; return o;
-    }
-    
-    static const Null null;  // Constant null can be used to initialize instances of variant Value: Value v = null;
-    
-    template <> 
-    struct is_json_type<Null> : public boost::mpl::true_
-    { 
-        static const bool value = true; 
-    };    
-    
+//    template <> 
+//    struct is_json_type<Null> : public std::true_type
+//    {
+//    };
+//    
 } // namespace json
 
+
+#if !defined (USE_JSON_UTILITY_VARIANT)
+#include <boost/type_traits.hpp>
 namespace boost {
     
-
     // The following traits must be defined for json::Null when used in a 
     // boost::variant:
     
     template <>
-    struct has_nothrow_copy< json::Null > : mpl::true_ {};
+    struct has_nothrow_copy< json::Null > : std::true_type {};
     
     template <>    
-    struct has_nothrow_constructor< json::Null >  : mpl::true_ {};
+    struct has_nothrow_constructor< json::Null >  : std::true_type {};
     
     template <>
-    struct has_nothrow_default_constructor< json::Null > : mpl::true_ {};
+    struct has_nothrow_default_constructor< json::Null > : std::true_type {};
 }
-
+#endif
 
 #endif // JSON_NULL_HPP

@@ -19,7 +19,7 @@
 
 #include "json/unicode/unicode_utilities.hpp"
 #include "json/parser/semantic_actions_test.hpp"
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
 #include <iostream>
 #include <iomanip>
@@ -70,9 +70,12 @@ namespace {
         // The result of a default constructed semantic action is equal the
         // default constructed result_type.
         
-        semantics_actions_t::result_type r;                
+        semantics_actions_t::result_type defaultResult;
         semantics_actions_t sa;
-        EXPECT_TRUE( r == sa.result() );
+        semantics_actions_t::result_type result = sa.result();
+        
+        EXPECT_TRUE( defaultResult.empty());
+        EXPECT_TRUE( result.empty());
     }
 
 

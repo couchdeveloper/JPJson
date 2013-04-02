@@ -10,3 +10,6 @@
 // additional configuration settings, except the "Source Tree" setting 
 // `JPJson.GTEST_ROOT` which need to be setup in Xcode preferences.
 
+GTEST_HEADER_SEARCH_PATH = /Library/Frameworks
+GTEST_FRAMEWORK_SEARCH_PATH = /Library/Frameworks
+//GTEST_OTHER_LDFLAGS = 

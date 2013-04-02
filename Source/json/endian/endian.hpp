@@ -42,19 +42,17 @@ namespace json {
             static bool is_little_endian() {
                 union {
                     uint16_t i;
-                    unsigned char c[sizeof(uint16_t)];
-                } u_ = {0x1234U};
-                
-                return u_.c[0] == 0x34;
+                    unsigned char c;
+                } u_ = {0x0001U};
+                return u_.c;
             }
             
-            static bool is_big_endian() { 
+            static bool is_big_endian() {
                 union {
                     uint16_t i;
-                    unsigned char c[sizeof(uint16_t)];
-                } u_ = {0x1234U};
-                
-                return u_.c[0] == 0x12;
+                    unsigned char c;
+                } u_ = {0x0100U};
+                return u_.c;
             }
         };
         
@@ -64,12 +62,12 @@ namespace json {
         struct host_endianness {
 #if defined(BOOST_LITTLE_ENDIAN)
             typedef little_endian_tag   type;
-            static const bool is_little_endian = true;
-            static const bool is_big_endian = false;
+            static constexpr bool is_little_endian = true;
+            static constexpr bool is_big_endian = false;
 #elif defined(BOOST_BIG_ENDIAN)
             typedef big_endian_tag      type;
-            static const bool is_little_endian = false;
-            static const bool is_big_endian = true;
+            static constexpr bool is_little_endian = false;
+            static constexpr bool is_big_endian = true;
 #else
 #error "unable to determine system endianness"
 #endif

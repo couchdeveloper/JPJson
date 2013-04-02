@@ -10,7 +10,7 @@
 
 
 #include "json/parser/string_buffer.hpp"
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
 
 #include <cstdlib>

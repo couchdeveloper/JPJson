@@ -467,7 +467,7 @@ namespace {
             // We strongly assume, the endianess is platform:
             length = CFStringGetLength(CFStringRef(string))*2; // number of bytes
             void* buf = malloc(length);
-            CFRange range = {0, length>>1};
+            CFRange range = {0, static_cast<CFIndex>(length>>1)};
             CFStringGetCharacters(CFStringRef(string), range, (UniChar*)buf);
             buffer = buf;
             doFreeBuffer = true;

@@ -20,7 +20,7 @@
 
 #include "json/ObjC/RepresentationGenerator.hpp"
 #include "json/unicode/unicode_utilities.hpp"   // encoding
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
 
 

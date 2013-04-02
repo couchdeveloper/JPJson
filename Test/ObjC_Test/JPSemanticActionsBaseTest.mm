@@ -7,7 +7,7 @@
 //
 
 #import "JPJson/JPSemanticActionsBase.h"
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 #import <Foundation/Foundation.h>
 
 
@@ -75,22 +75,18 @@ namespace {
     
     TEST_F(JPSemanticActionsBaseTest, JPSemanticActionsDefaultProperties) 
     {
-        NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-        
-        JPSemanticActionsBase* sa = [[JPSemanticActionsBase alloc] init];        
-        [sa release];
-        
-        [pool drain];
+        @autoreleasepool {
+            JPSemanticActionsBase* sa = [[JPSemanticActionsBase alloc] init];
+            EXPECT_TRUE(sa != nil);
+        }
     }
     
     TEST_F(JPSemanticActionsBaseTest, JPSemanticActionsSetProperties) 
     {
-        NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-        
-        JPSemanticActionsBase* sa = [[JPSemanticActionsBase alloc] init];
-        
-        [sa release];
-        [pool drain];
+        @autoreleasepool {
+            JPSemanticActionsBase* sa = [[JPSemanticActionsBase alloc] init];
+            EXPECT_TRUE(sa != nil);
+        }
     }
     
     

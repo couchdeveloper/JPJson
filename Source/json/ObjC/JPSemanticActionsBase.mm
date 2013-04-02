@@ -84,7 +84,9 @@ typedef JPSemanticActions_ErrorHandlerBlockType       ErrorHandlerBlockType;
 - (id) init {
     dispatch_queue_t handlerDispatchQueue = dispatch_queue_create("com.JPSemanticActions.handler_queue", NULL);
     self = [self initWithHandlerDispatchQueue:handlerDispatchQueue];
-    dispatch_release(handlerDispatchQueue);    
+    if (handlerDispatchQueue != NULL) {
+        dispatch_release(handlerDispatchQueue);
+    }
     return self;
 }
 

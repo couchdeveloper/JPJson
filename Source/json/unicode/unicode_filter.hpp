@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#ifndef _unicode_filter_hpp
-#define _unicode_filter_hpp
+#ifndef JSON_UNICODE_UNICODE_FILTER_HPP
+#define JSON_UNICODE_UNICODE_FILTER_HPP
 
 #include "json/config.hpp"
 #include "unicode_utilities.hpp"
@@ -127,4 +127,4 @@ namespace json { namespace unicode { namespace filter {
 }}}
 
 
-#endif
+#endif   // JSON_UNICODE_UNICODE_FILTER_HPP

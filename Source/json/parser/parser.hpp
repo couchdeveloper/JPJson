@@ -23,19 +23,7 @@
 
 
 #include "json/config.hpp"
-#include <boost/config.hpp>
-#include <boost/static_assert.hpp>
 #include <boost/iterator/iterator_traits.hpp>
-#include <boost/type_traits.hpp>
-#include <boost/utility/enable_if.hpp>
-#include <boost/mpl/and.hpp>
-#include <boost/mpl/or.hpp>
-
-#include <assert.h>
-#include <string.h>
-#include <limits>
-#include <alloca.h>
-
 #include "parser_errors.hpp"
 #include "semantic_actions_base.hpp"
 #include "string_buffer.hpp"
@@ -43,6 +31,11 @@
 #include "json/unicode/unicode_utilities.hpp"
 #include "json/unicode/unicode_converter.hpp"
 #include "json/endian/endian.hpp"
+#include <type_traits>
+#include <assert.h>
+#include <string.h>
+#include <limits>
+#include <alloca.h>
 
 
 #if defined (DEBUG)
@@ -111,7 +104,7 @@ namespace json {
     protected:        
         typedef typename SemanticActions::error_t               sa_error_t;
         typedef typename SemanticActions::encoding_t            string_buffer_encoding;   
-        typedef typename SemanticActions::number_info_t         number_info_t;
+        typedef typename SemanticActions::number_desc_t         number_desc_t;
 
         typedef parser_internal::string_buffer<
             string_buffer_encoding, SemanticActions
@@ -126,19 +119,19 @@ namespace json {
         //
         
         // SourceEncoding shall be an Unicode encoding scheme:
-        BOOST_STATIC_ASSERT( (boost::is_base_and_derived<utf_encoding_tag, SourceEncoding>::value) );
+        static_assert( (std::is_base_of<utf_encoding_tag, SourceEncoding>::value), "" );
         
         // The value type of the InputIterator shall match the corresponding code unit type
         // of its encoding:
-        BOOST_STATIC_ASSERT( (sizeof(typename boost::iterator_value<InputIterator>::type) 
-                              == sizeof(typename encoding_traits<SourceEncoding>::code_unit_type)) );
+        static_assert( (sizeof(typename boost::iterator_value<InputIterator>::type)
+                              == sizeof(typename encoding_traits<SourceEncoding>::code_unit_type)), "" );
         
         // Currently, the parser requires that the endianess of its string_buffer
         // encoding matches the platform endianness or is UTF-8 encoding.
-        BOOST_STATIC_ASSERT( (boost::is_same<
+        static_assert( (boost::is_same<
                               typename encoding_traits<typename add_endianness<string_buffer_encoding>::type>::endian_tag,
                               typename host_endianness::type
-                              >::value == true)  );
+                              >::value == true), "" );
         
     public:        
         //
@@ -176,6 +169,12 @@ namespace json {
 
     protected:
         
+        __attribute__((always_inline))
+        void next() {
+            ++p_;
+            ++pos_;
+        }
+        
         unsigned int to_uint(iterator_value_type v) const { 
             return unicode::encoding_traits<source_encoding_type>::to_uint(v); 
         }
@@ -205,8 +204,9 @@ namespace json {
                 
     protected:
 #pragma mark - Member Variables        
-        iterator                p_;     
-        iterator                last_;  
+        iterator                p_;
+        std::size_t             pos_;  // index of character  (not code_unit index)
+        iterator                last_;
         SemanticActions&        sa_;
         state_t                 state_;
         unicode::filter::NoncharacterOrNULL unicode_filter_;
@@ -218,7 +218,7 @@ namespace json {
         void parse_key_value_list();
         void parse_value();        
         void parse_string(); 
-        void parse_number(number_info_t& number_info);
+        void parse_number(number_desc_t& number_info);
         void skip_whitespaces();
         void parse_object();
         void parse_array();
@@ -263,7 +263,8 @@ namespace json {
         int
         string_buffer_pushback_unicode(unicode::code_point_t unicode) 
         {
-            if (unicode_filter_(unicode)) {
+            if ( __builtin_expect(unicode_filter_(unicode), 0) )
+            {
                 if (unicode_filter_.replace()) {
                     unicode = unicode_filter_.replacement(unicode);
                     assert(unicode != 0);
@@ -320,12 +321,13 @@ namespace json {
     {
         p_ = first;
         last_ = last;
+        pos_ = 0;
         sa_.parse_begin();
         parse_text();
         parser_error_type result = state_.error();
         if (state_.error() == JP_NO_ERROR and skipTrailingWhitespaces and p_ != last_) {
             // Increment past the last significant character:
-            ++p_;
+            next();
             skip_whitespaces();
         }
         first = p_;  // TODO: use statement first = p_;  but this would require a type cast operator defined for iterator_adaptor        
@@ -346,6 +348,7 @@ namespace json {
         state_.clear();
         string_buffer_.clear();
         number_string_buffer_.clear();
+        pos_ = 0;
     }
     
     
@@ -368,7 +371,7 @@ namespace json {
                 case '\t':
                 case '\n':
                 case '\r':
-                    ++p_;
+                    next();
                     break;
                 default:  // EOS or any other character
                     return;
@@ -461,7 +464,7 @@ namespace json {
         assert(p_ != last_);
         assert(to_uint(*p_) == '[');
         
-        ++p_;        
+        next();        
         // check if the array is empty:
         skip_whitespaces();
         if (p_ != last_) {
@@ -483,7 +486,7 @@ namespace json {
                         if (p_ != last_) {
                             unsigned int c = to_uint(*p_);
                             if (c == ',') {
-                                ++p_;
+                                next();
                                 skip_whitespaces();
                                 if (p_ != last_) {
                                     ++index;
@@ -547,7 +550,7 @@ namespace json {
         assert(p_ != last_);
         assert(to_uint(*p_) == '{');
         
-        ++p_;
+        next();
         // check if the object is empty:
         skip_whitespaces();
         if (p_ != last_) {
@@ -624,7 +627,7 @@ namespace json {
                         // ... then, eat the key_value separator ...
                         c = to_uint(*p_);                        
                         if (c == ':') {
-                            ++p_;
+                            next();
                             skip_whitespaces();
                             if (p_ != last_)
                             {    
@@ -639,7 +642,7 @@ namespace json {
                                         c = to_uint(*p_);
                                         if (c == ',') {                                
                                             // not done yet, get the next key value pair
-                                            ++p_;
+                                            next();
                                             skip_whitespaces();
                                             ++index;
                                             continue; // parse  next key_value pair
@@ -735,7 +738,7 @@ namespace json {
         unsigned int c = to_uint(*p_);
         Token token = c <= 0x7Fu ? static_cast<Token>(table[c]) : E;
         
-        number_info_t number_info;
+        number_desc_t number_info;
         
         switch (token) {
             case s:
@@ -764,7 +767,7 @@ namespace json {
                         state_.error() = JP_JSON_KEY_EXISTS_ERROR;
                         sa_.error(state_.error(), state_.error_str());
                     }
-                    ++p_;
+                    next();
                     skip_whitespaces();
                 } else {
                     // handle error object
@@ -792,7 +795,7 @@ namespace json {
                 parse_array();
                 if (state_) {
                     sa_.end_array();
-                    ++p_;
+                    next();
                     skip_whitespaces();
                 }
                 return;
@@ -844,7 +847,7 @@ namespace json {
     {
         while (n != 0 and p_ != last_ and *s == to_uint(*p_)) {
             ++s;
-            ++p_;
+            next();
             --n;
         }
         if (n != 0) {
@@ -880,35 +883,14 @@ namespace json {
         assert(to_uint(*p_) == '"');            
         assert(string_buffer_.size() == 0);  // check whether we have a new string on stack of the string storage
         
-        ++p_;
+        next();
         while (__builtin_expect(p_ != last_, 1)) 
         {
             // fast path: read ASCII (no control characters, and no ASCII NULL)
             uint32_t c = to_uint(*p_);
             if (__builtin_expect((c - 0x20u) < 0x60u, 1))  // ASCII except control-char, and no ASCII NULL
             {
-#if 0                    
-                ++p_;
-                if (c != '\\' and c != '"') {
-                    string_buffer_pushback_ASCII(c);  
-                    // note: string_buffer_pushback_ASCII() does not check for Unicode NULL
-                    continue;
-                } 
-                else if (c == '\\') {
-                    escape_sequence();
-                    if (!state_) {
-                        // error parsing escape sequence
-                        return; // error state already set
-                    }
-                    continue;
-                }
-                else {
-                    skip_whitespaces();
-                    return; // done
-                }
-                
-#else                        
-                ++p_;
+                next();
                 switch (c) {
                     default:
                         string_buffer_pushback_ASCII(c);  
@@ -925,7 +907,6 @@ namespace json {
                         skip_whitespaces();
                         return; // done
                 }
-#endif                    
             }
             
             // slow path: reading UTF-8 multi byte sequences, ASCII NULL, and 
@@ -938,13 +919,13 @@ namespace json {
             // check for Unicode noncharacters and ASCII control characters:
             
             // Note, no ASCIIs here
-            if ( (c >> 7) != 0 or c == 0) // (not ((c - 1u) < (0x20u - 1u))) 
+            if (__builtin_expect( ((c >> 7) != 0 or c == 0), 1)) // (not ((c - 1u) < (0x20u - 1u)))
             {
                 // No ASCII control chars - but possibly Unicode NULL
                 // Use a safe, stateless converter which only converts one character:
                 typedef unicode::converter<
-                source_encoding_type, unicode::code_point_t, 
-                unicode::Validation::SAFE, unicode::Stateful::No, unicode::ParseOne::Yes
+                    source_encoding_type, unicode::code_point_t,
+                    unicode::Validation::SAFE, unicode::Stateful::No, unicode::ParseOne::Yes
                 >  converter_t;
                 
                 unicode::code_point_t cp;
@@ -959,6 +940,7 @@ namespace json {
                 //      unicode::E_INVALID_UNICODE:      
                 //      unicode::E_UNEXPECTED_ENDOFINPUT:    unexpected and of input
                 if (__builtin_expect(result == unicode::NO_ERROR, 1)) {
+                    ++pos_;  // increment one character
                     // Note: the code point may still be an Unicode noncharacter, or a Unicode NULL (U+0000).
                     // We check this in string_buffer_pushback_unicode():
                     // Possible return codes:
@@ -966,7 +948,7 @@ namespace json {
                     //  0:   string buffer error (possible overflow)
                     // -1:   filter predicate failed (possible Unicode noncharacter) 
                     result = string_buffer_pushback_unicode(cp);
-                    if (result == 0)
+                    if (__builtin_expect(result == 0, 1))
                         continue;
                     else {
                         // Error state shall be set according the filter rules,
@@ -1024,11 +1006,11 @@ namespace json {
         , typename SourceEncoding
         , typename SemanticActions
     >
-    inline 
-    uint16_t 
 //#if !defined (DEBUG)
 //    __attribute__((always_inline))
-//#endif                    
+//#endif
+    inline
+    uint16_t 
     parser<InputIterator, SourceEncoding, SemanticActions>::
     hex() 
     {
@@ -1048,14 +1030,14 @@ namespace json {
 #endif        
         uint16_t uc = 0;        
         // expecting 4 hex digits:
-        for (int i = 0; i < 4; ++i, ++p_) {
+        for (int i = 0; i < 4; ++i, next()) {
             if (__builtin_expect(p_ != last_, 1)) 
             {
 #if defined (USE_LOOKUP_TABLE)
                 uint32_t c = to_uint(*p_) - 48u;
                 // check range:
                 int v;
-                if ( (c) < (111-48) and (v = lookupTable[c]) >= 0) {
+                if (__builtin_expect( ((c) < (111-48) and (v = lookupTable[c]) >= 0), 1)) {
                     uc = (uc << 4) + v;
                 }
                 else {
@@ -1117,11 +1099,11 @@ namespace json {
         , typename SourceEncoding
         , typename SemanticActions
     >
-    inline 
+//#if !defined (DEBUG)
+//    __attribute__((always_inline))
+//#endif
+    inline
     unicode::code_point_t 
-//    #if !defined (DEBUG)
-//        __attribute__((always_inline))
-//    #endif                    
         parser<InputIterator, SourceEncoding, SemanticActions>::
     escaped_unicode() 
     {
@@ -1129,13 +1111,13 @@ namespace json {
         assert(p_ != last_);
         assert(to_uint(*p_) == 'u');
         
-        ++p_;
+        next();
         uint16_t euc1 = hex();
         if (__builtin_expect(state_, 1)) 
         {
             unicode::code_point_t unicode = euc1;
-            if (unicode::isCodePoint(unicode)) {
-                if (not unicode::isSurrogate(unicode)) {
+            if (__builtin_expect(unicode::isCodePoint(unicode), 1)) {
+                if (__builtin_expect(not unicode::isSurrogate(unicode), 1)) {
                     return unicode;
                 }
                 else {
@@ -1193,13 +1175,12 @@ namespace json {
     , typename SourceEncoding
     , typename SemanticActions
     >
-    inline 
-    void 
 //#if !defined (DEBUG)
 //    __attribute__((always_inline))
-//#endif                
+//#endif
+    void
     parser<InputIterator, SourceEncoding, SemanticActions>::
-    escape_sequence() 
+    escape_sequence()
     {
         assert(state_.error() == JP_NO_ERROR);        
         
@@ -1208,21 +1189,21 @@ namespace json {
             unsigned int c = to_uint(*p_);
             uint8_t ascii;
             switch (c) {
-                case '"':   ascii = '"'; break;  // string_buffer_pushback_ASCII(stringBuffer, '"');  ++p_; return;
-                case '\\':  ascii = '\\'; break; // string_buffer_pushback_ASCII(stringBuffer, '\\'); ++p_; return;
-                case '/':   ascii = '/'; break;  // string_buffer_pushback_ASCII(stringBuffer, '/');  ++p_; return;
-                case 'b':   ascii = '\b'; break; // string_buffer_pushback_ASCII(stringBuffer, '\b'); ++p_; return;
-                case 'f':   ascii = '\f'; break; // string_buffer_pushback_ASCII(stringBuffer, '\f'); ++p_; return;
-                case 'n':   ascii = '\n'; break; // string_buffer_pushback_ASCII(stringBuffer, '\n'); ++p_; return;
-                case 'r':   ascii = '\r'; break; // string_buffer_pushback_ASCII(stringBuffer, '\r'); ++p_; return;
-                case 't':   ascii = '\t'; break; // string_buffer_pushback_ASCII(stringBuffer, '\t'); ++p_; return;
+                case '"':   ascii = '"'; break;  // string_buffer_pushback_ASCII(stringBuffer, '"');  next(); return;
+                case '\\':  ascii = '\\'; break; // string_buffer_pushback_ASCII(stringBuffer, '\\'); next(); return;
+                case '/':   ascii = '/'; break;  // string_buffer_pushback_ASCII(stringBuffer, '/');  next(); return;
+                case 'b':   ascii = '\b'; break; // string_buffer_pushback_ASCII(stringBuffer, '\b'); next(); return;
+                case 'f':   ascii = '\f'; break; // string_buffer_pushback_ASCII(stringBuffer, '\f'); next(); return;
+                case 'n':   ascii = '\n'; break; // string_buffer_pushback_ASCII(stringBuffer, '\n'); next(); return;
+                case 'r':   ascii = '\r'; break; // string_buffer_pushback_ASCII(stringBuffer, '\r'); next(); return;
+                case 't':   ascii = '\t'; break; // string_buffer_pushback_ASCII(stringBuffer, '\t'); next(); return;
                 case 'u':  { // escaped unicode
                     unicode::code_point_t cp = escaped_unicode();
-                    if (state_) {
-                        int result = string_buffer_pushback_unicode(cp);
-                        if (result == 0) {
+                    if (__builtin_expect(state_, 1)) {
+                        int result = string_buffer_pushback_unicode(cp); // returns zero on success, otherwise -1
+                        if (__builtin_expect(result == 0, 1)) {
                             return;  // success 
-                        } else if (result < 0) {
+                        } else {
                             assert(state_.error() != JP_NO_ERROR);
                             // Error state shall be set already
                             // detected Unicode noncharacter and rejected it,
@@ -1246,7 +1227,7 @@ namespace json {
             } // switch
             
             string_buffer_pushback_ASCII(ascii);  
-            ++p_; 
+            next(); 
             return;  // success
         }
         else {
@@ -1262,15 +1243,17 @@ namespace json {
 
 #pragma mark - Parse Number
     
+    
+#if 0
     template <
-          typename InputIterator
-        , typename SourceEncoding
-        , typename SemanticActions
-    >    
-    inline 
-    void 
-        parser<InputIterator, SourceEncoding, SemanticActions>::
-    parse_number(number_info_t& number_info) 
+    typename InputIterator
+    , typename SourceEncoding
+    , typename SemanticActions
+    >
+    inline
+    void
+    parser<InputIterator, SourceEncoding, SemanticActions>::
+    parse_number(number_desc_t& number_info)
     {
         assert(p_ != last_);
         
@@ -1294,25 +1277,25 @@ namespace json {
         bool isDecimal = false;
         bool hasExponent = false;
         
-        bool exponentIsNegative = false; 
+        bool exponentIsNegative = false;
         while (p_ != last_)
         {
             unsigned int c = to_uint(*p_);
             switch (s) {
                 case number_state_start:
                     switch (c) {
-                        case '-': 
-                            s = number_state_sign; 
-                            isNegative = true; 
+                        case '-':
+                            s = number_state_sign;
+                            isNegative = true;
                             number_string_buffer_.append_ascii('-');
                             break;
-                        case '0': 
-                            s = number_int_is_zero; 
+                        case '0':
+                            s = number_int_is_zero;
                             ++digits;
                             number_string_buffer_.append_ascii('0');
                             break;
-                        case '1'...'9': 
-                            s = number_state_int; 
+                        case '1'...'9':
+                            s = number_state_int;
                             ++digits;
                             number_string_buffer_.append_ascii(c);
                             ++p_;
@@ -1327,13 +1310,13 @@ namespace json {
                     break;
                 case number_state_sign:
                     switch (c) {
-                        case '0':       
-                            s = number_int_is_zero; 
+                        case '0':
+                            s = number_int_is_zero;
                             ++digits;
                             number_string_buffer_.append_ascii('0');
                             break;
-                        case '1'...'9': 
-                            s = number_state_int; 
+                        case '1'...'9':
+                            s = number_state_int;
                             ++digits;
                             number_string_buffer_.append_ascii(c);
                             ++p_;
@@ -1349,13 +1332,13 @@ namespace json {
                     break;
                 case number_int_is_zero:
                     switch (c) {
-                        case '.': 
+                        case '.':
                             s = number_state_point;
                             isDecimal = true;
                             number_string_buffer_.append_ascii('.');
                             break;
                         case 'e':
-                        case 'E': 
+                        case 'E':
                             s = number_state_exponent_start;
                             hasExponent = true;
                             number_string_buffer_.append_ascii('E');
@@ -1365,14 +1348,14 @@ namespace json {
                     break;
                 case number_state_int:
                     switch (c) {
-                        case '.': 
-                            s = number_state_point; 
+                        case '.':
+                            s = number_state_point;
                             isDecimal = true;
                             number_string_buffer_.append_ascii('.');
                             break;
                         case 'e':
-                        case 'E': 
-                            s = number_state_exponent_start; 
+                        case 'E':
+                            s = number_state_exponent_start;
                             hasExponent = true;
                             number_string_buffer_.append_ascii('E');
                             break;
@@ -1381,8 +1364,8 @@ namespace json {
                     break;
                 case number_state_point:
                     switch (c) {
-                        case '0'...'9': 
-                            s = number_state_fractional; 
+                        case '0'...'9':
+                            s = number_state_fractional;
                             ++digits;
                             number_string_buffer_.append_ascii(c);
                             ++p_;
@@ -1398,8 +1381,8 @@ namespace json {
                 case number_state_fractional:
                     switch (c) {
                         case 'e':
-                        case 'E': 
-                            s = number_state_exponent_start; 
+                        case 'E':
+                            s = number_state_exponent_start;
                             hasExponent = true;
                             number_string_buffer_.append_ascii('E');
                             break;
@@ -1407,19 +1390,19 @@ namespace json {
                     }
                     break;
                 case number_state_exponent_start:
-#if 1                    
+#if 1
                     if (c == '-' or c == '+') {
-                        s = number_state_exponent_sign; 
+                        s = number_state_exponent_sign;
                         number_string_buffer_.append_ascii(c);
-                        exponentIsNegative = c == '-'; 
+                        exponentIsNegative = c == '-';
                         ++p_;
                         if (p_ == last_) {
                             goto Number_done;  // error
                         }
                         c = to_uint(*p_);
-                    } 
+                    }
                     if (c >= '0' and c <= '9') {
-                        s = number_state_exponent; 
+                        s = number_state_exponent;
                         number_string_buffer_.append_ascii(c);
                         ++p_;
                         while (p_ != last_ and (c = to_uint(*p_)) >= '0' and c <= '9') {
@@ -1432,20 +1415,20 @@ namespace json {
                         goto Number_done;  // error
                     }
                     //break;
-#else                    
+#else
                     switch (c) {
                             
-                        case '-': 
-                            s = number_state_exponent_sign; 
+                        case '-':
+                            s = number_state_exponent_sign;
                             number_string_buffer_.append_ascii('-');
-                            exponentIsNegative = true; 
+                            exponentIsNegative = true;
                             break;
-                        case '+': 
-                            s = number_state_exponent_sign; 
+                        case '+':
+                            s = number_state_exponent_sign;
                             number_string_buffer_.append_ascii('+');
                             break;
-                        case '0' ... '9': 
-                            s = number_state_exponent; 
+                        case '0' ... '9':
+                            s = number_state_exponent;
                             number_string_buffer_.append_ascii(c);
                             ++p_;
                             while (p_ != last_ and (c = to_uint(*p_)) >= '0' and c <= '9')
@@ -1457,23 +1440,23 @@ namespace json {
                         default: goto Number_done;  // error
                     }
                     break;
-#endif                    
+#endif
                 case number_state_exponent_sign:
-                /*    
-                    switch (c) {
-                        case '0' ... '9': 
-                            s = number_state_exponent; 
-                            number_builder_.push_digit(c); 
-                            ++p_;
-                            while (p_ != last_ and (c = to_uint(*p_)) >= '0' and c <= '9')
-                            {
-                                number_builder_.push_digit(c);
-                                ++p_;
-                            }
-                            continue;
-                        default: goto Number_done;  // finished                            
-                    }
-                 */
+                    /*
+                     switch (c) {
+                     case '0' ... '9':
+                     s = number_state_exponent;
+                     number_builder_.push_digit(c);
+                     ++p_;
+                     while (p_ != last_ and (c = to_uint(*p_)) >= '0' and c <= '9')
+                     {
+                     number_builder_.push_digit(c);
+                     ++p_;
+                     }
+                     continue;
+                     default: goto Number_done;  // finished
+                     }
+                     */
                     break;
                 case number_state_exponent:
                     goto Number_done;  // finished
@@ -1485,39 +1468,154 @@ namespace json {
             ++p_;
         } // while (p_ != last_)
         
-        Number_done:        
+    Number_done:
         
         
-        typename number_info_t::NumberType numberType;
+        typename number_desc_t::NumberType numberType;
         
         switch (s) {
             case number_int_is_zero:
             case number_state_int:
-                numberType = number_info_t::Integer;
+                numberType = number_desc_t::Integer;
                 break;
             case number_state_fractional:
-                numberType = number_info_t::Decimal;
+                numberType = number_desc_t::Decimal;
                 break;
             case number_state_exponent:
-                numberType = number_info_t::Scientific;
-                break;                
+                numberType = number_desc_t::Scientific;
+                break;
             default:
                 state_.error() = JP_BADNUMBER_ERROR;
                 sa_.error(state_.error(), state_.error_str());
                 return;
-        }        
+        }
         
         number_string_buffer_.terminate_if();
-
+        
         typename number_string_buffer_t::const_buffer_type str_buffer =  number_string_buffer_.const_buffer();
-        typename number_info_t::const_buffer_type ni_buffer;
+        typename number_desc_t::const_buffer_type ni_buffer;
         ni_buffer.first = str_buffer.first;
         ni_buffer.second = str_buffer.second;
         
-        number_info = number_info_t(ni_buffer, numberType, digits);
-        skip_whitespaces();        
+        number_info = number_desc_t(ni_buffer, numberType, digits);
+        skip_whitespaces();
     }
+
+#else
+
+    template <
+        typename InputIterator
+      , typename SourceEncoding
+      , typename SemanticActions
+    >
+    inline
+    void
+        parser<InputIterator, SourceEncoding, SemanticActions>::
+    parse_number(number_desc_t& number_info)
+    {
+        typedef typename number_desc_t::NumberType number_type_t;
         
+        assert(p_ != last_);
+
+        typename number_string_buffer_t::const_buffer_type str_buffer;  // a std::pair<char const*, size_t>
+        typename number_desc_t::const_buffer_type ni_buffer;
+        number_type_t nt;
+        int digits = 0;
+        bool is_negative = false;
+        
+        unsigned int c = to_uint(*p_);
+        if (c == '-') {
+            number_string_buffer_.append_ascii('-');
+            next();
+            is_negative = true;
+        }            
+        if (p_ == last_ or not ((c = to_uint(*p_)) - '0' < 0x0A)) {
+            goto BAD_NUMBER;
+        }
+        
+        // one digit ...
+        ++digits;
+        nt = is_negative ? number_desc_t::Integer : number_desc_t::UnsignedInteger;
+        number_string_buffer_.append_ascii(c);
+        next();
+        if (c != '0' /*not a leading zero*/) {
+            while (p_ != last_ and ((c = to_uint(*p_)) - '0' < 0x0A)) {
+                ++digits;
+                number_string_buffer_.append_ascii(c);
+                next();
+            }
+            if (p_ == last_) {
+                goto GOOD_NUMBER;
+            }
+        } else {
+            if (p_ == last_) {
+                goto GOOD_NUMBER;
+            }
+        }
+        c = to_uint(*p_);
+        if (c == '.')
+        {
+            number_string_buffer_.append_ascii(c);
+            next();
+            if (p_ == last_ or not ((c = to_uint(*p_)) - '0' < 0x0A)) {
+                goto BAD_NUMBER;
+            }
+            nt = is_negative ? number_desc_t::Decimal : number_desc_t::UnsignedDecimal;
+            // one digit after decimal point
+            ++digits;
+            number_string_buffer_.append_ascii(c);
+            next();
+            while (p_ != last_ and ((c = to_uint(*p_)) - '0' < 0x0A))
+            {
+                ++digits;
+                number_string_buffer_.append_ascii(c);
+                next();
+            }
+            if (p_ == last_) {
+                goto GOOD_NUMBER;
+            }
+        }
+        if (c == 'e' or c == 'E') {
+            number_string_buffer_.append_ascii(c);
+            next();
+            if (p_ == last_)
+                goto BAD_NUMBER;
+            c = to_uint(*p_);
+            if (c == '-' or c == '+') {
+                number_string_buffer_.append_ascii(c);
+                next();
+            }
+            if (p_ == last_ or not ((c = to_uint(*p_)) - '0' < 0x0A)) {
+                goto BAD_NUMBER;
+            }
+            nt = number_desc_t::Scientific;
+ 
+            // one digit after e or E
+            number_string_buffer_.append_ascii(c);
+            next();
+            while (p_ != last_ and ((c = to_uint(*p_)) - '0' < 0x0A))
+            {
+                number_string_buffer_.append_ascii(c);
+                next();
+            }
+        }
+        
+    GOOD_NUMBER:
+        number_string_buffer_.terminate_if();
+        str_buffer =  number_string_buffer_.const_buffer();
+        ni_buffer.first = str_buffer.first;
+        ni_buffer.second = str_buffer.second;
+        number_info = number_desc_t(ni_buffer, nt, digits);
+        skip_whitespaces();
+        return;
+
+    BAD_NUMBER:
+        state_.error() = JP_BADNUMBER_ERROR;
+        sa_.error(state_.error(), state_.error_str());
+        return;
+    }
+#endif
+    
     
     
 #pragma Mark - Errors    

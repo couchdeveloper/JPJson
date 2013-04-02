@@ -1,635 +1,748 @@
 //
 //  value.hpp
 //
-//  Created by Andreas Grosam on 5/14/11.
-//  Copyright 2011 Andreas Grosam
-//
-//  Licensed under the Apache License, Version 2.0 (the "License");
-//  you may not use this file except in compliance with the License.
-//  You may obtain a copy of the License at
-//
-//  http://www.apache.org/licenses/LICENSE-2.0
-//
-//  Unless required by applicable law or agreed to in writing, software
-//  distributed under the License is distributed on an "AS IS" BASIS,
-//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//  See the License for the specific language governing permissions and
-//  limitations under the License.
+//  Created by Andreas Grosam on 13.02.13.
+//  Copyright (c) 2013 Andreas Grosam. All rights reserved.
 //
 
 #ifndef JSON_VALUE_HPP
 #define JSON_VALUE_HPP
 
 
-#include "json/config.hpp"
-#include <boost/config.hpp>
-#include <boost/type_traits.hpp>
-#include <boost/utility/enable_if.hpp> 
-#include <boost/mpl/placeholders.hpp>
-#include <boost/mpl/apply.hpp>
-#include <boost/mpl/or.hpp>
-#include <boost/mpl/and.hpp>
-#include <boost/mpl/not.hpp>
-#include <boost/swap.hpp>
-#include <boost/variant.hpp>
-#include <string.h>
-#include <string>
-#include <map>
-#include <vector>
-#include <ostream>
-#include <limits>
-#include "json_traits.hpp"
+#include "json/utility/mpl.hpp"
+#define HAS_MPL_HEADER
+#include "json/utility/variant.hpp"
 #include "Null.hpp"
 #include "Boolean.hpp"
-#include "number2.hpp"
-#include "array.hpp"
-#include "object.hpp"
-#include "string.hpp"
-#include "json/unicode/unicode_utilities.hpp"
-#include "json/unicode/unicode_traits.hpp"
-
-#if defined (BOOST_VARIANT_NO_FULL_RECURSIVE_VARIANT_SUPPORT)
-#warning BOOST_VARIANT_NO_FULL_RECURSIVE_VARIANT_SUPPORT
-#endif
-
-
-#if !defined (BOOST_NO_RVALUE_REFERENCES)
-#include <algorithm>
-#endif
+#include "float_number.hpp"
+#include "integral_number.hpp"
+#include <scoped_allocator>
+#include <string>
+#include <vector>
+#include <map>
+#include <type_traits>
+#include <iostream>
+#include <memory>
 
 
-#if defined (BOOST_NO_MOVE_SWAP_BY_OVERLOAD)
-    // This macro is set in the boost::variant library if it detects an apparen-
-    // -tly non-conforming compiler which has a defect in ADL. This detection 
-    // however, can be a false positive - which is unfortunately true for LLVM 
-    // and effectively for all gccs. I consider this a bug in the boost variant 
-    // library. When this macro is defined, the function swap will not find the 
-    // type specific overload. This however is crucial in this implementation 
-    // when using variants. Otherwise variants would perform very, very badly. 
-    // In order to alleviate the problem, you may try to define the boost macro 
-    // BOOST_STRICT_CONFIG. This forces to disable all boost workarounds and 
-    // will finally apply ADL, even when compiled with LLVM. LLVM has no issues
-    // with ADL as well as GCC, however defining BOOST_STRICT_CONFIG is a 
-    // global switch to disable all workarounds and assumes a conforing compiler.
-    // This may have undesired effects if this is not the case for the compiler.
-    #warning BOOST_NO_MOVE_SWAP_BY_OVERLOAD - this may degrade performance significantly!
-#endif
-
-
-// Disable overloaded global relational operators - they do not work well enough
-// due to issues with ambiguities.
-#define JSON_NO_OVERLOADED_RELATIONAL_OPS
-
-namespace json {
-    
-    namespace mpl = boost::mpl;
-    
-#pragma mark -
-#pragma mark json::value
+namespace json { namespace detail {
     
     
-    //
-    //  struct value_policies
-    // 
-    // value policies define the underlaying implementations of the container
-    // used in the json container. This one is the default policy.
-    //
-    struct value_policies 
+
+    template <typename Value>
+    struct type_name_getter
     {
-        typedef std::vector<boost::mpl::_>              array_imp_tt;
-        typedef std::map<boost::mpl::_, boost::mpl::_>  object_imp_tt;
-        typedef json::string<boost::mpl::_>             string_imp_tt;
-        //typedef std::basic_string<boost::mpl::_, boost::mpl::_, boost::mpl::_>        string_imp_tt;
+        typedef std::string result_type;
         
-        static const bool key_not_exists_throws = false;
-    };
-    
-    //
-    //  class value
-    //
-    template <
-        typename PoliciesT = value_policies, 
-        typename StringEncondingT = unicode::UTF_8_encoding_tag
-    >
-    class value
-    {
-    private:
-        typedef typename unicode::encoding_traits<StringEncondingT>::code_unit_type   string_char_t;
-        typedef typename PoliciesT::array_imp_tt            array_imp_tt;
-        typedef typename PoliciesT::object_imp_tt           object_imp_tt;  
-        typedef typename PoliciesT::string_imp_tt           string_imp_tt;  
-        
-    public:
-        typedef PoliciesT                                   policies_t;
-        typedef StringEncondingT                            string_encoding_t;
-        
-        typedef typename mpl::apply<string_imp_tt, StringEncondingT>::type   string_t;
-        typedef array<value, array_imp_tt>                  array_t;
-        typedef object<string_t, value, object_imp_tt>      object_t;  
-
-        typedef boost::variant<
-              Null 
-            , Boolean 
-            , Number
-            , string_t
-            , boost::recursive_wrapper<array_t> 
-            , boost::recursive_wrapper<object_t>
-        > variant_t;        
+        typedef typename Value::integral_number_type    IntNumber;
+        typedef typename Value::float_number_type       FloatNumber;
+        typedef typename Value::null_type               Null;
+        typedef typename Value::boolean_type            Boolean;
+        typedef typename Value::string_type             String;
+        typedef typename Value::array_type              Array;
+        typedef typename Value::object_type             Object;
         
         
-    public:
-        
-        //
-        // Constructors
-        //
-        
-        value() : value_(null) {}
-        
-        template <typename T>
-        value(const T& v,
-                       typename boost::enable_if<
-                            mpl::or_<
-                                boost::is_convertible<T, variant_t>
-                              , is_json_type<T>
-                            >
-                       >::type* dummy = 0
-                       )             
-        : value_(v) {}
-        
-        
-        value(value const & other) throw() : value_(other.value_)
-        {
-        }
-        
-        value(const string_char_t* s) : value_(string_t(s)) {}
-        
-        
-        value& operator=(value const& other) throw() {
-            if (this != &other) {
-                value_ = other.value_;
-            }
-            return *this;
-        }        
-        
-        
-        
-#if !defined (BOOST_NO_RVALUE_REFERENCES)
-        // Move constructor
-        value(value&& other) throw() : value_(std::move(other.value_)) { }
-        
-        // Move assignment operator
-        value& operator=(value&& other) throw() {
-            if (this != &other) {
-                value_ = std::move(other.value_);
-            }
-            return *this;
-        }        
-#else        
-        
-        // Move constructor
-        value(const internal::move_t<value>& other) throw() 
-        : value_(other.source.value_) 
-        { }
-        
-        // Move assignment operator
-        value& operator=(internal::move_t<value>& other) throw() {
-            if (this != &other.source) {
-                value_ = other.source.value_;
-            }
-            return *this;
-        }        
-#endif    
-        
-        //
-        // Query
-        //
-        
-        template <typename T>
-        bool is_type() {
-            bool result = boost::get<T>(&value_) != 0;
-            return result;
-        }
-        
-        std::string     type_name() const;
-        size_t          type_size() const;
-        std::ostream&   print(std::ostream& os, bool pretty = false, int indent = 0) const;
-        
-        bool is_equal(const value& other) const {
-            return value_ == other.value_;
-        }
-        
-        
-        //
-        //  Retrieving concrete type
-        //
-        
-        template <typename JsonT>
-        typename boost::enable_if <
-            is_json_type<JsonT>,
-            const JsonT&>::type    
-        as() const { return boost::get<JsonT>(value_); }
-        
-        template <typename JsonT>
-        typename boost::enable_if <
-            is_json_type<JsonT>,
-            JsonT&>::type    
-        as() { return boost::get<JsonT>(value_); }
-        
-        // Direct cast to a numeric type:
-        template <typename NumericT>
-        typename boost::enable_if <
-            is_numeric<NumericT>,
-            NumericT>::type    
-        as() const { return boost::get<Number>(value_).template as<NumericT>(); }
-        
-        
-        //
-        //  Support
-        //
-        
-        value make_default() const;
-        
-        void swap(value& other) {
-            if (value_.which() != other.value_.which()) {
-                value tmp = make_default();
-                boost::swap(tmp.value_, value_);//  tmp.swap(lhv);
-                value_ = other.make_default().value_;
-                boost::swap(value_, other.value_); // lhv.swap(rhv);
-                other.value_ = tmp.make_default().value_;
-                boost::swap(other.value_, tmp.value_); //rhv.swap(tmp);
-            }
-            else {
-                boost::swap(value_, other.value_);
-            }
-        }
-        
-        
-        
-    protected:    
-        variant_t value_; 
-        
-        //    
-        // Relational Operators  -  defined as inline friends:    
-        //  
-        
-        // Note: the following two relational operators will be invoked
-        // for any argument that is convertible to value, unless there is
-        // a better match for another operator defined elsewhere. This of
-        // course may involve to construct a temporary - which may have a
-        // significant performance penalty, if ctors are expensive - which
-        // is possibly the case for these kind of objects.
-        friend inline 
-        bool        
-        operator== (const value& lhv, const value& rhv) {
-            return lhv.value_ == rhv.value_;
-        }
-        friend inline 
-        bool        
-        operator!= (const value& lhv, const value& rhv) {
-            return not (lhv.value_ == rhv.value_);
-        }
-        
-        
-        
-#if !defined (JSON_NO_OVERLOADED_RELATIONAL_OPS)
-        //
-        // NOT YET IMPLEMENTED
-        //
-        // The remaining template functions are merely for oportunities
-        // to further optimizations.
-        // 
-        // Problems can arise due to ambiguity when the compiler has to selected 
-        // from several template candidates when resolving a statement involving 
-        // relational operators. To aleviate the problem, only a selected set of 
-        // template functions has been enabled.
-        // 
-        template <typename U>
-        friend inline 
-        typename boost::enable_if<
-//            mpl::and_<
-//                mpl::not_< boost::is_pointer<U> >
-//              , boost::is_convertible<U, value>
-//            >
-                is_json_type<U>
-            , bool>::type 
-        operator== (const value& lhv, const U& rhv) {
-#if (0)     
-            // Note: disabled because the default ctor trick does not
-            // work with char[] types.
-            if (lhv.value_.which() == value(U()).value_.which()) {
-                return lhv.value_ == value(rhv).value_;
-            }
-            return false;
-#else
-            return lhv.is_equal(rhv);
-#endif            
-        }
-        
-        template <typename U>
-        friend inline 
-        typename boost::enable_if<
-//            mpl::and_<
-//                mpl::not_< boost::is_pointer<U> >
-//              , boost::is_convertible<U, value>
-//            >
-                is_json_type<U>
-        , bool>::type 
-        operator== (const U& lhv, const value& rhv) {
-#if 0
-            if (rhv.value_.which() == value(U()).value_.which()) {
-                return rhv.value_ == value(lhv).value_;
-            }
-            return false;
-#else
-            return rhv.is_equal(lhv);
-#endif
-        }
-        
-        template <typename U>
-        friend inline 
-        typename boost::enable_if< is_json_type<U>, bool >::type 
-        operator!= (const value& lhv, const U& rhv) {
-            return not (lhv == rhv);
-        }
-        
-        template <typename U>
-        friend inline 
-        typename boost::enable_if< is_json_type<U>, bool >::type 
-        operator!= (const U& lhv, const value& rhv) {
-            return not (lhv == rhv);
-        }
-#endif       
-        
-        // Disambiguate with comparisons involving Null:
-        friend inline
-        bool operator== (const value& lhv, const Null& rhv) {
-            return lhv.is_equal(rhv);
-        }
-        friend inline
-        bool operator== (const Null& lhv, const value& rhv) {
-            return rhv.is_equal(lhv);
-        }
-        friend inline
-        bool operator!= (const value& lhv, const Null& rhv) {
-            return not lhv.is_equal(rhv);
-        }
-        friend inline
-        bool operator!= (const Null& lhv, const value& rhv) {
-            return not rhv.is_equal(lhv);
-        }
-        
-        // swap
-        friend inline
-        void 
-        swap(value& lhv, value& rhv) {
-            lhv.swap(rhv);
-        }
-        
-    };  // class value
-    
-    template <typename P, typename E> 
-    struct is_json_type<value<P, E> > : public boost::mpl::true_
-    {   
-        static const bool value = true; 
-    };
-    
-    
-    template <typename P, typename E>
-    inline std::ostream& operator<< (std::ostream& os, value<P, E> const& v) {
-        v.print(os, false);  // print condensed by default
-        return os;
-    }
-    
-    
-    
-}  // namespace json
-
-namespace json { namespace internal {
-#pragma mark -
-#pragma mark Namespace json::internal
-        
-        
-
-
-    // Create a value which concrete value is default constructed from
-    // the given parameter
-    template <typename P, typename E>
-    struct make_default 
-    : public boost::static_visitor<value<P, E> > 
-    {
-        template <typename T>
-        value<P, E> operator() (const T& v) const {
-            return value<P>(T());
-        }
-    };   
-
-    
-    template <typename P, typename E>
-    struct type_name 
-    : public boost::static_visitor<std::string> 
-    {
-        typedef typename value<P, E>::array_t array_t;
-        typedef typename value<P, E>::object_t object_t;
-        typedef typename value<P, E>::string_t string_t;
-        
-        template <typename T>
-        std::string operator() (const T& v) const {
-            std::string result = typeid(v).name();
-            return result;
-        }
-        
-        std::string operator() (const Null&) const {
+        std::string operator()(const Null& v) const noexcept {
             return "Null";
         }
-        std::string operator() (const Boolean&) const {
+        
+        std::string operator()(const Boolean& v) const noexcept {
             return "Boolean";
         }
-        std::string operator() (const Number&) const {
+        
+        std::string operator()(const IntNumber& v) const noexcept {
             return "Number";
         }
-        std::string operator() (const string_t&) const {
+        
+        std::string operator()(const FloatNumber& v) const noexcept {
+            return "Number";
+        }
+        
+        std::string operator()(const String& str) const noexcept {
             return "String";
         }
-        std::string operator() (const array_t&) const {
+        
+        std::string operator()(const Array& array) const noexcept {
             return "Array";
         }
-        std::string operator() (const object_t&) const {
+        
+        std::string operator()(const Object& objs) const noexcept {
             return "Object";
         }
     };
     
-    struct type_size
-    : public boost::static_visitor<size_t> 
+    
+}} // json::detail
+
+
+
+// Value Policies
+
+namespace json  {
+    
+    
+    struct array_tag {};
+    struct object_tag {};
+    struct string_tag {};
+    struct float_number_tag {};
+    struct integral_number_tag {};
+    
+    
+    template <typename Allocator>
+    using GetScopedAllocator = typename std::conditional<
+        std::is_empty<Allocator>::value,
+        Allocator,
+        std::scoped_allocator_adaptor<Allocator>
+    >::type;
+            
+        
+    template <typename Value, typename Allocator>
+    struct default_array_policy : array_tag
     {
-        template <typename T>
-        size_t operator() (const T&) const {
-            return sizeof(T);
-        }
+    private:
+        typedef Value value_type;
+        typedef typename Allocator::template rebind<value_type>::other value_type_allocator;
+        typedef GetScopedAllocator<value_type_allocator> allocator_type;
+    public:
+        typedef std::vector<value_type, allocator_type> type;
     };
     
-    template <typename P, typename E>        
-    struct print
-    : public boost::static_visitor<std::ostream&> 
+    template <typename Value, typename Allocator>
+    struct default_object_policy : object_tag
     {
-        typedef typename value<P, E>::array_t array_t;
-        typedef typename value<P, E>::object_t object_t;
-        typedef typename value<P, E>::string_t string_t;
+    private:
+        typedef typename Allocator::template rebind<char>::other key_allocator;
+        typedef std::basic_string<char, std::char_traits<char>, key_allocator> key_type;
+        typedef Value mapped_type;
+        typedef std::pair<const key_type, Value> value_type;
+        typedef typename Allocator::template rebind<value_type>::other value_type_allocator;
+        typedef GetScopedAllocator<value_type_allocator> allocator_type;
+    public:
+        typedef std::map<key_type, Value, std::less<key_type>, allocator_type> type;
+    };
+    
+    template <typename Value, typename Allocator>
+    struct default_string_policy : string_tag
+    {
+        typedef char char_type;
+        typedef typename Allocator::template rebind<char_type>::other allocator_type;            
+        typedef std::basic_string<char_type, std::char_traits<char_type>, allocator_type> type;
+    };
+    
+    template <typename Value, typename Allocator>
+    struct default_float_number_policy : float_number_tag
+    {
+        typedef json::float_number<> type;
+    };
+    
+    template <typename Value, typename Allocator>
+    struct default_integral_number_policy : integral_number_tag
+    {
+        typedef json::integral_number<> type;
+    };
+    
+    
+    typedef std::allocator<void> default_allocator;
+    
+}
+
+
+
+// class value
+namespace json {
+    
+    namespace mpl = json::utility::mpl;    
+    using json::utility::variant;
         
-        static const int tab_size_ = 2;
-        std::ostream& os_;
-        bool pretty_;
-        int indent_;
-        size_t count_;
-        
-        
-        print(std::ostream& os, bool pretty = false, int indent = 0) 
-        : os_(os), pretty_(pretty), indent_(indent), count_(0) {
-        }
-        
-        void pretty_indent(int inc = 0, bool nl = false) {
-            if (pretty_) {
-                if (nl and count_ > 0)
-                    os_.put('\n');
-                int count = (indent_ + inc)*tab_size_;
-                while (count--) {
-                    os_.put(' ');
-                }
-            }
-        }
-        
-        void pretty_space() {
-            if (pretty_)
-                os_.put(' ');
-        }
-        
+
+    template <
+        typename A = std::allocator<void>,
+        template <typename, typename> class... Policies
+    >
+    class value
+    {
+        template <typename T>
+        using IsArrayPolicy = typename std::is_base_of<array_tag, T>::type;
         
         template <typename T>
-        std::ostream& operator() (const T& v) {
-            os_ << v;
-            return os_;
+        using IsObjectPolicy = typename std::is_base_of<object_tag, T>::type;
+        
+        template <typename T>
+        using IsStringPolicy = typename std::is_base_of<string_tag, T>::type;
+        
+        template <typename T>
+        using IsFloatNumberPolicy = typename std::is_base_of<float_number_tag, T>::type;
+
+        template <typename T>
+        using IsIntegralNumberPolicy = typename std::is_base_of<integral_number_tag, T>::type;
+        
+        
+        typedef typename mpl::find_first<IsArrayPolicy, Policies<value,A>..., default_array_policy<value,A>>::type array_policy;
+        typedef typename mpl::find_first<IsObjectPolicy, Policies<value,A>..., default_object_policy<value,A>>::type object_policy;
+        typedef typename mpl::find_first<IsStringPolicy, Policies<value,A>..., default_string_policy<value,A>>::type string_policy;
+        typedef typename mpl::find_first<IsFloatNumberPolicy, Policies<value,A>..., default_float_number_policy<value,A>>::type float_number_policy;
+        typedef typename mpl::find_first<IsIntegralNumberPolicy, Policies<value,A>..., default_integral_number_policy<value,A>>::type integral_number_policy;
+        
+        
+    public:
+        typedef A propagated_allocator; // allocator, whose value_type us usually erased (rebound) while it is propagated to the containers and primitives.
+        
+        typedef json::Null                              null_type;
+        typedef json::Boolean                           boolean_type;
+        typedef typename float_number_policy::type      float_number_type;
+        typedef typename integral_number_policy::type   integral_number_type;
+        typedef typename string_policy::type            string_type;
+        typedef typename object_policy::type            object_type;
+        typedef typename array_policy::type             array_type;
+        
+        typedef typename object_type::key_type          key_type;        
+        typedef GetScopedAllocator<A>                   scoped_allocator;
+        
+        
+        
+        typedef variant<
+            null_type
+          , boolean_type
+          , float_number_type
+          , integral_number_type
+          , string_type
+          , object_type
+          , array_type
+        > variant_type;
+        
+        
+        struct
+        emplace_tag {};
+        
+        constexpr static struct
+        emplace_string_t : emplace_tag {
+            typedef string_type type;
+        } emplace_string{};
+        
+        constexpr static struct
+        emplace_array_t : emplace_tag {
+            typedef array_type type;
+        } emplace_array{};
+        
+        constexpr static struct
+        emplace_object_t : emplace_tag {
+            typedef object_type type;
+        } emplace_object{};
+        
+        constexpr static struct
+        emplace_integral_number_t : emplace_tag {
+            typedef integral_number_type type;
+        } emplace_integral_number{};
+        
+        constexpr static struct
+        emplace_float_number_t : emplace_tag {
+            typedef float_number_type type;
+        } emplace_float_number{};
+        
+        constexpr static struct
+        emplace_boolean_t : emplace_tag {
+            typedef boolean_type type;
+        } emplace_boolean{};
+        
+        constexpr static struct
+        emplace_null_t : emplace_tag {
+            typedef null_type type;
+        } emplace_null{};
+        
+        
+        
+        // type traits helper
+        template <typename T>
+        struct contains_type : variant_type::template contains_type<T> {
+        };
+        
+        // handy template aliases:
+        template <typename T>
+        using IsImpType = typename variant_type::template contains_type<T>::type;
+        
+        
+        
+        
+        
+        // default ctor
+        value() noexcept(std::is_nothrow_default_constructible<variant_type>::value)
+        {
+        };
+        
+        // copy ctor
+        value(const value& other) noexcept(std::is_nothrow_copy_constructible<variant_type>::value)
+        : value_(other.value_)
+        {
+        }
+                
+        // rvalue move ctor
+        value(value&& other)  noexcept(std::is_nothrow_move_constructible<variant_type>::value)
+        : value_(std::move(other.value_))
+        {
         }
         
-        std::ostream& operator() (const Null&) {
-            os_ << "null";
-            return os_;
+        
+#if !defined (VARIANT_NO_USES_ALLOCATOR_CONSTRUCTION)
+        // default ctor - extended allocator
+        template <typename Alloc>
+        value(std::allocator_arg_t, const Alloc&) = delete; // n.a.
+        
+        // copy ctor - extended allocator
+        template <typename Alloc>
+        value(std::allocator_arg_t, const Alloc& a, const value& other) noexcept(std::is_nothrow_copy_constructible<variant_type>::value)
+        : value_(std::allocator_arg, a, other.value_)
+        {
         }
         
-        std::ostream& operator() (const Boolean& v) {
-            os_ << (v ? "true" : "false");
-            return os_;
+        // rvalue move ctor - extended allocator
+        template <typename Alloc>
+        value(std::allocator_arg_t, const Alloc& a, value&& other)  noexcept(std::is_nothrow_move_constructible<variant_type>::value)
+        : value_(std::allocator_arg, a, std::move(other.value_))
+        {
+        }
+#endif
+        
+        
+        ~value() noexcept(std::is_nothrow_destructible<variant_type>::value)
+        {
         }
         
-        std::ostream& operator() (const Number& v) {
-            os_ << v.string();
-            return os_;
+        // forwarding ctor
+#if 0
+        template <typename T,
+            typename = typename std::enable_if<
+                !std::is_same<value, mpl::Unqualified<T>>::value
+                and std::is_constructible<variant_type, T>::value
+            >::type
+        >
+        value(T&& v) noexcept(std::is_nothrow_constructible<variant_type, T>::value)
+        : value_(std::forward<T>(v))
+        {
+        }
+#else
+        template <typename... Args,
+            typename _First = mpl::Unqualified<typename mpl::first<Args...>::type>,
+            typename Enable = typename std::enable_if<
+                !std::is_same<value, _First>::value
+                and !std::is_same<std::allocator_arg_t, _First>::value
+                and std::is_constructible<variant_type, Args...>::value
+            >::type
+        >
+        value(Args&&... args) noexcept(std::is_nothrow_constructible<variant_type, Args...>::value)
+        : value_(std::forward<Args>(args)...)
+        {
+        }
+#endif
+        
+        
+        // Explicit emplace
+        template <typename EmplaceTag, typename... Args,
+        typename IsViable = typename std::enable_if<
+                std::is_base_of<emplace_tag, EmplaceTag>::value
+                //and IsImpType<typename EmplaceTag::type>::value
+                //and std::is_constructible<T, Args...>::value
+            >::type
+        >
+        value(EmplaceTag, Args&&... args)
+        : value_(json::utility::emplace_t<typename EmplaceTag::type>(), args...)
+        {
         }
         
-        std::ostream& operator() (const string_t& v) {
-            os_ << '"' << v << '"';
-            return os_;
+        
+        // lvalue copy assignment
+        value& operator=(const value& other) noexcept (std::is_nothrow_assignable<variant_type&, variant_type const>::value)
+        {
+            value_ = other.value_;
+            return *this;
         }
         
-        std::ostream& operator() (const object_t& v) {
-            typedef typename object_t::imp_t imp_t;
-            typedef typename imp_t::const_iterator iterator_t;
-            iterator_t first = v.imp().begin();
-            iterator_t last = v.imp().end();
-            //pretty_indent(0, true);
-            os_ << '{';
-            ++count_;
-            while (first != last) {
-                pretty_indent(1, true);
-                os_ << '"' << (*first).first << '"';
-                pretty_space();
-                os_ <<  ':';
-                pretty_space();
-                (*first).second.print(os_, pretty_, indent_ + 1);
-                ++first;
-                if (first != last) {
-                    os_ << ',';
-                }
-            }
-            if (not v.imp().empty())
-                pretty_indent(0, true);
-            os_ << '}' ; 
-            return os_;
+        // rvalue move assignment
+        value& operator=(value&& other) noexcept(std::is_nothrow_assignable<variant_type&, variant_type>::value)
+        {
+            value_ = std::move(other.value_);
+            return *this;
         }
         
-        std::ostream& operator() (array_t const& a) {
-            typedef typename array_t::imp_t imp_t;
-            typedef typename imp_t::const_iterator iterator_t;
-            iterator_t first = a.imp().begin();
-            iterator_t last = a.imp().end();
-            //pretty_indent(0, true);
-            os_ << '[';
-            ++count_;                
-            while (first != last) {
-                pretty_indent(1, true);
-                (*first).print(os_, pretty_, indent_ + 1);
-                ++first;
-                if (first != last) {
-                    os_ << ',';
-                }
-            }
-            if (not a.imp().empty())
-                pretty_indent(0, true);
-            os_ << ']'; 
-            return os_;
+        // forwarding assignment
+        template <typename T,
+            typename = typename std::enable_if<
+                std::is_assignable<variant_type&, T&>::value
+            >::type
+        >
+        value& operator=(T&& v) noexcept(std::is_nothrow_assignable<variant_type&, T>::value)
+        {
+            value_ = std::forward<T>(v);
+            return *this;
         }
         
-}; //  print visitor
+        
+//        // Comparison
+//        bool operator==(value const& rhv) const {
+//            return value_ == rhv.value_;
+//        }
+//        
+//        bool operator!=(value const& rhv) const {
+//            return value_ != rhv.value_;
+//        }
+        
+        
+        
+        // Observer
+        
+        template <typename T>
+        bool is_type() const noexcept {
+            return value_.template is_type<T>();
+        }
+        
+        std::string type_name() const noexcept {
+            detail::type_name_getter<value> typeName;
+            return value_.apply_visitor(typeName);
+        }
+        
+        
+        bool is_null() const noexcept  {
+            return is_type<null_type>();
+        }
+        bool is_boolean() const noexcept {
+            return is_type<boolean_type>();
+        }
+        bool is_string() const noexcept {
+            return is_type<string_type>();
+        }
+        bool is_number() const noexcept {
+            return is_type<integral_number_type>() or is_type<float_number_type>();
+        }
+        bool is_object() const noexcept {
+            return is_type<object_type>();
+        }
+        bool is_array() const noexcept {
+            return is_type<array_type>();
+        }
+        bool is_integral_number() const noexcept {
+            return is_type<integral_number_type>();
+        }
+        bool is_float_number() const noexcept {
+            return is_type<float_number_type>();
+        }
+        
+        
+        // Value access
+        template <typename T
+//          , typename Enable = typename std::enable_if<
+//                IsImpType<mpl::Unqualified<RemovePointer<T>>>::value
+//            >::type
+        >
+        auto as() const -> decltype(std::declval<const variant_type>().template as<T>())
+        {
+            return value_.template as<T>();
+        }
+        
+        template <typename T
+//          , typename Enable = typename std::enable_if<
+//                IsImpType<mpl::Unqualified<RemovePointer<T>>>::value
+//            >::type
+        >
+        auto as() -> decltype(std::declval<variant_type>().template as<T>())
+        {
+            return value_.template as<T>();
+        }
+        
+        template <typename T>
+        T as(typename std::enable_if<
+              !IsImpType<mpl::Unqualified<T>>::value
+              and json::is_numeric<mpl::Unqualified<T>>::value and std::is_integral<mpl::Unqualified<T>>::value,
+              integral_number_tag
+              >::type* = 0) const
+        {
+            // Intentionally implicit conversion may lose precision. Watch out for warnings!
+            return value_.template as<integral_number_type>();
+        }
+        
+        template <typename T>
+        T as(typename std::enable_if<
+             !IsImpType<mpl::Unqualified<T>>::value
+             and std::is_floating_point<T>::value,
+             float_number_tag
+              >::type* = 0) const
+        {
+            // Intentionally implicit conversion may lose precision. Watch out for warnings!
+            return value_.template as<float_number_type>();
+        }
+        
+        
+        template <typename T,
+            typename Enable = typename std::enable_if<
+                IsImpType<mpl::Unqualified<T>>::value
+            >::type
+        >
+        T& interpret_as() noexcept {
+            return value_.template interpret_as<T>();
+        }
+        
+        template <typename T,
+            typename Enable = typename std::enable_if<
+                IsImpType<mpl::Unqualified<T>>::value
+            >::type
+        >
+        T const& interpret_as() const noexcept {
+            return value_.template interpret_as<T>();
+        }
+        
+        
+        //
+        // Subscript Operator
+        //
+        value& operator[](std::size_t n) {
+            return this->interpret_as<array_type>()[n];
+        }
+        
+        value const& operator[](std::size_t n) const {
+            return this->interpret_as<array_type>()[n];
+        }
+        
+        value& operator[](key_type key) {
+            return this->interpret_as<object_type>()[key];
+        }
+        
+        value const& operator[](key_type key) const {
+            return this->interpret_as<object_type>()[key];
+        }
+        
+        
+        
+        // swap
+        void swap(value& rhv) noexcept (noexcept(std::declval<variant_type>().swap(std::declval<variant_type&>())))
+        {
+            value_.swap(rhv.value_);
+        }
+        
+        
+        //
+        //  Visitor support
+        //
+        
+        template <typename Visitor, typename... Args>
+        typename Visitor::result_type
+        apply_visitor(Visitor& visitor, Args&&... args) {
+            return value_.apply_visitor(visitor, std::forward<Args>(args)...);
+        }
+        
+        template <typename Visitor, typename... Args>
+        typename Visitor::result_type
+        apply_visitor(Visitor& visitor, Args&&... args) const {
+            return value_.apply_visitor(visitor, std::forward<Args>(args)...);
+        }
+        
+        
+//        //
+//        // Print support
+//        //
+//        template <typename... Args>
+//        void print(std::ostream& os, Args&&... args) const
+//        {
+//            detail::printer<value> printer;
+//            value_.apply_visitor(printer, os, std::forward<Args>(args)...);
+//            os << std::endl;
+//        }
+//        
+//        template <typename Printer, typename... Args>
+//        void print(std::ostream& os, Printer& printer, Args&&... args) const
+//        {
+//            value_.apply_visitor(printer, os, std::forward<Args>(args)...);
+//        }
+        
+
+    private:
+        
+        
+        // Comparision  (friends)
+        
+        friend inline
+        bool operator==(value const& lhv, value const& rhv) noexcept {
+            return lhv.value_.is_equal(rhv.value_);
+        }
+        
+        friend inline
+        bool operator!=(value const& lhv, value const& rhv) noexcept {
+            return !lhv.value_.is_equal(rhv.value_);
+        }
+        
+        
+        
+        template <typename U>
+        friend inline
+        typename std::enable_if<value::IsImpType<U>::value, bool>::type
+        operator==(value const& lhv, U const& rhv)
+        noexcept
+        {
+            return lhv.value_ == rhv;
+        }
+        
+        template <typename U>
+        friend inline
+        typename std::enable_if<value::IsImpType<U>::value, bool>::type
+        operator==(U const& lhv, value const& rhv) noexcept {
+            return rhv.value_ == lhv;
+        }
+        
+        
+        template <typename U>
+        friend inline
+        typename std::enable_if<value::IsImpType<U>::value, bool>::type
+        operator!=(value const& lhv, U const& rhv) noexcept {
+            return lhv.value_ != rhv;
+        }
+        
+        template <typename U>
+        friend inline
+        typename std::enable_if<value::IsImpType<U>::value, bool>::type
+        operator!=(U const& lhv, value const& rhv) noexcept {
+            return rhv.value_ != lhv;
+        }
+
+        
+        // TODO: specialize operator== and operator != for certain types 
+        
+        
+        
+    private:
+        variant_type value_;
+    };  // class value
     
     
-}} // namespace json::internal
-
-
-
-
-namespace json {
-
-    //
-    // Value implementation
-    //
-    template <typename P, typename E>
-    inline value<P, E> 
-    value<P, E>::make_default() const
-    {
-        typedef internal::make_default<P, E> make_default; 
-        return boost::apply_visitor(make_default(), value_);
-    }
+    template <typename A, template <typename, typename> class... P>
+    typename value<A, P...>::emplace_string_t constexpr value<A, P...>::emplace_string;
     
-    template <typename P, typename E>
-    inline std::string 
-    value<P, E>::type_name() const  {
-        typedef internal::type_name<P, E> type_name; 
-        return boost::apply_visitor(type_name(), value_);
-    }
+    template <typename A, template <typename, typename> class... P>
+    typename value<A, P...>::emplace_array_t constexpr value<A, P...>::emplace_array;
     
-    template <typename P, typename E>
-    inline size_t 
-    value<P, E>::type_size() const  {
-        return boost::apply_visitor(internal::type_size(), value_);
-    }
+    template <typename A, template <typename, typename> class... P>
+    typename value<A, P...>::emplace_object_t constexpr value<A, P...>::emplace_object;
     
-    template <typename P, typename E>
-    inline std::ostream& 
-    value<P, E>::print(std::ostream& os, bool pretty, int indent) const  {
-        typedef internal::print<P, E> print;
-        print printer(os, pretty, indent);
-        return boost::apply_visitor(printer, value_);
-    }
+    template <typename A, template <typename, typename> class... P>
+    typename value<A, P...>::emplace_integral_number_t constexpr value<A, P...>::emplace_integral_number;
+    
+    template <typename A, template <typename, typename> class... P>
+    typename value<A, P...>::emplace_float_number_t constexpr value<A, P...>::emplace_float_number;
+    
+    template <typename A, template <typename, typename> class... P>
+    typename value<A, P...>::emplace_boolean_t constexpr value<A, P...>::emplace_boolean;
+    
+    template <typename A, template <typename, typename> class... P>
+    typename value<A, P...>::emplace_null_t constexpr value<A, P...>::emplace_null;
+    
+    
+    
+    
+} // namespace json
 
+
+namespace std
+{
+#if !defined (VARIANT_NO_USES_ALLOCATOR_CONSTRUCTION)
     
+    // This specialization of std::uses_allocator informs other library components
+    // that class template json::value supports uses-allocator construction,
+    // even though it does not have a nested allocator_type.
+    
+    template<
+        typename A,
+        template <typename, typename> class... P,
+        class Alloc
+    >
+    struct uses_allocator<json::value<A, P...>, Alloc> : std::true_type
+    {};
+    
+#endif
 }
 
-namespace json {
+
+
+namespace json { namespace detail { namespace test {
     
-    //
-    //  Free Functions
-    //
+    typedef json::value<> Value;
+    typedef typename Value::propagated_allocator Allocator;
+    typedef typename Value::object_type JsonObject;
+    typedef typename Value::array_type JsonArray;
+    typedef typename Value::integral_number_type JsonIntNumber;
+    typedef typename Value::float_number_type JsonFloatNumber;
+    typedef typename Value::string_type JsonString;
+    typedef typename Value::null_type JsonNull;
+    typedef typename Value::boolean_type JsonBoolean;
+    
+    static_assert( std::is_same<
+                  Value,
+                  typename JsonObject::mapped_type
+                  >::value, "");
+    
+    static_assert( std::is_same<
+                  Value,
+                  typename JsonArray::value_type
+                  >::value, "");
+
+    static_assert(std::is_same<std::allocator<void>, Allocator>::value, "");
+    
+    
+    // Object and Array use a scoped_allocator_adapter unless the allocator is stateless.
+    typedef json::GetScopedAllocator<Allocator> possibly_scoped_allocator_t;
+    
+    static_assert( std::is_same<
+                  typename possibly_scoped_allocator_t::template rebind<Value>::other,
+                  typename JsonArray::allocator_type
+                  >::value, "");
+    
+    static_assert( std::is_same<
+                  typename possibly_scoped_allocator_t::template rebind<typename JsonObject::value_type>::other,
+                  typename JsonObject::allocator_type
+                  >::value, "");
+    
+    static_assert( std::is_same<
+                  typename Allocator::template rebind<typename JsonString::value_type>::other,
+                  typename JsonString::allocator_type
+                  >::value, "");
     
 
-}
+    
+    
+    struct A {};
+    struct B {};
+    typedef typename Value::variant_type variant_type;
+    
+//    static_assert( (std::is_same<std::vector<Value>, Value::array_type>::value), "");
+//    static_assert( (std::is_same<std::map<std::string, Value>, Value::object_type>::value), "");
+    
+    
+    
+    // variant _v; Value v;
+    static_assert (std::is_default_constructible<variant_type>::value, "");
+    static_assert (std::is_default_constructible<Value>::value, "");
+    
+    // variant _v = "abc"
+    static_assert (std::is_constructible<variant_type, decltype("ab")>::value, "");
+    static_assert (std::is_constructible<Value, std::string>::value, "");
+    
+    // variant _v = 1.0
+    static_assert (std::is_constructible<variant_type, decltype(1.0)>::value, "");
+    
+    // variant _v = A(); ERROR
+    // TODO: static_assert (std::is_constructible<variant_type, A>::value == false, "");
+    
+    // _v = "abc"
+    //static_assert (std::is_assignable<variant_type&, decltype("ab")>::value, "");
+    
+    // variant _v = v;  ERROR
+    // TODO: static_assert (std::is_constructible<variant_type, Value>::value == false, "");
+    
+    // _v = v;  ERROR
+    static_assert (std::is_assignable<variant_type&, A>::value == false, "");
+    // TODO: static_assert (std::is_assignable<Value&, A>::value == false, "");
+    
+    
+    
+}}}
+
+
 
 
 #endif // JSON_VALUE_HPP
