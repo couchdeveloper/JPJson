@@ -578,12 +578,12 @@ namespace {
     }
     
     
-    TEST_F(CFDataCacheTest, BenchCreate) 
-    {
 #if defined (DEBUG)
-//        std::cout << "Performance Tests will be skipped." << std::endl;
-//        return;
+    TEST_F(CFDataCacheTest, DISABLED_BenchCreate)
+#else
+    TEST_F(CFDataCacheTest, BenchCreate)
 #endif
+    {
         typedef std::map<std::string, CFStringRef> std_map_t;
         typedef std::unordered_map<std::string, CFStringRef> std_unordered_map_t;
         typedef boost::unordered_map<std::string, CFStringRef> boost_unordered_map_t;
@@ -628,17 +628,15 @@ namespace {
         b3.run(100000);
         b4.run(100000);
         b5.run(100000);
-        
-        
     }
-    
 
-    TEST_F(CFDataCacheTest, BenchLookup) 
-    {
+        
 #if defined (DEBUG)
-        //std::cout << "Performance Tests will be skipped." << std::endl;
-        //return;
-#endif        
+    TEST_F(CFDataCacheTest, DISABLED_BenchLookup)
+#else
+    TEST_F(CFDataCacheTest, BenchLookup)
+#endif
+    {
         
         typedef std::map<std::string, CFStringRef> std_map_t;
         typedef std::unordered_map<std::string, CFStringRef> std_unordered_map_t;

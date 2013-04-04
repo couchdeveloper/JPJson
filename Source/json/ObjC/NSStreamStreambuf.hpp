@@ -23,7 +23,6 @@
 
 #include <stdexcept>
 #include <iosfwd>       // streamsize
-#include <functional>   // reference_wrapper
 
 #include <boost/iostreams/categories.hpp>  // source_tag
 #include <boost/iostreams/stream_buffer.hpp>

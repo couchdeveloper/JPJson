@@ -1495,10 +1495,10 @@
 				GCC_VERSION = "";
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				HEADER_SEARCH_PATHS = (
-					"$(BUILT_PRODUCTS_DIR)",
-					"$(JP_ROOT)",
 					"$(inherited)",
+					"$(JP_ROOT)",
 					"$(BOOST_HEADER_SEARCH_PATH)",
+					"$(ICU_HEADER_SEARCH_PATH)",
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1534,10 +1534,10 @@
 				GCC_VERSION = "";
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				HEADER_SEARCH_PATHS = (
-					"$(BUILT_PRODUCTS_DIR)",
-					"$(JP_ROOT)",
 					"$(inherited)",
+					"$(JP_ROOT)",
 					"$(BOOST_HEADER_SEARCH_PATH)",
+					"$(ICU_HEADER_SEARCH_PATH)",
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
