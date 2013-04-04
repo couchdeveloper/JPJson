@@ -50,27 +50,27 @@ namespace json {
     
     template <>
     struct ns_unicode_encoding_traits<UTF_8_encoding_tag> {
-        static const NSStringEncoding value = NSUTF8StringEncoding;
+        static constexpr NSStringEncoding value = NSUTF8StringEncoding;
     };
     
     template <>
     struct ns_unicode_encoding_traits<UTF_16BE_encoding_tag> {
-        static const NSStringEncoding value = NSUTF16BigEndianStringEncoding;
+        static constexpr NSStringEncoding value = NSUTF16BigEndianStringEncoding;
     };
     
     template <>
     struct ns_unicode_encoding_traits<UTF_16LE_encoding_tag> {
-        static const NSStringEncoding value = NSUTF16LittleEndianStringEncoding;
+        static constexpr NSStringEncoding value = NSUTF16LittleEndianStringEncoding;
     };
     
     template <>
     struct ns_unicode_encoding_traits<UTF_32BE_encoding_tag> {
-        static const NSStringEncoding value = NSUTF32BigEndianStringEncoding;
+        static constexpr NSStringEncoding value = NSUTF32BigEndianStringEncoding;
     };
     
     template <>
     struct ns_unicode_encoding_traits<UTF_32LE_encoding_tag> {
-        static const NSStringEncoding value = NSUTF32LittleEndianStringEncoding;
+        static constexpr NSStringEncoding value = NSUTF32LittleEndianStringEncoding;
     };
     
 
@@ -83,17 +83,17 @@ namespace json {
     
     template <>
     struct cf_unicode_encoding_traits<UTF_8_encoding_tag> {
-        static const CFStringEncoding value = kCFStringEncodingUTF8;
+        static constexpr CFStringEncoding value = kCFStringEncodingUTF8;
     };
     
     template <>
     struct cf_unicode_encoding_traits<UTF_16BE_encoding_tag> {
-        static const CFStringEncoding value = kCFStringEncodingUTF16BE;
+        static constexpr CFStringEncoding value = kCFStringEncodingUTF16BE;
     };
     
     template <>
     struct cf_unicode_encoding_traits<UTF_16LE_encoding_tag> {
-        static const CFStringEncoding value = kCFStringEncodingUTF16LE;
+        static constexpr CFStringEncoding value = kCFStringEncodingUTF16LE;
     };
     
     template <>
@@ -103,7 +103,7 @@ namespace json {
     
     template <>
     struct cf_unicode_encoding_traits<UTF_32LE_encoding_tag> {
-        static const CFStringEncoding value = kCFStringEncodingUTF32LE;
+        static constexpr CFStringEncoding value = kCFStringEncodingUTF32LE;
     };
     
     

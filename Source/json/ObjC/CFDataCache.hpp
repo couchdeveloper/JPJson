@@ -21,23 +21,22 @@
 #define JSON_OBJC_CFDATA_CACHE_HPP
 
 
-//#define CFDATA_CACHE_USE_FLAT_MAP
+#define CFDATA_CACHE_USE_STD_UNORDERED_MAP
 
 #include "json/config.hpp"
 #include <functional>
-#include <assert.h>
+#include <memory>
+#include <cassert>
 #include <cstring>
 #include <cstdlib>
-#include <boost/utility.hpp>
 #include "json/utility/string_hasher.hpp"
+#include "json/utility/arena_allocator.hpp"
 
-#if defined (CFDATA_CACHE_USE_FLAT_MAP)
-    #include <boost/container/flat_map.hpp>
+#if defined (CFDATA_CACHE_USE_STD_UNORDERED_MAP)
+#include <unordered_map>
 #else
-    #include <boost/unordered_map.hpp>
-    //#include <boost/container/map.hpp>
+#include <map>
 #endif
-
 #include <CoreFoundation/CoreFoundation.h>
 
 
@@ -72,14 +71,20 @@ namespace json { namespace objc {
      buffer, and hence is required to make a copy of the character sequence, too. 
      The characters are stored internally in an efficient manner.
           
-     When inserting a key-value pair, the Core Data object is retained.     
-     On destruction, the Core Data objects will be released.
+     When inserting a key-value pair, the CF object is retained.     
+     On destruction, the CF objects will be released.
 
      */
     
-    template <typename CharT /*, typename block_allocator*/>
-    class CFDataCache : boost::noncopyable
+    using json::utility::arena_allocator;
+    using json::utility::SysArena;
+    
+    template <typename CharT /*, typename Allocator */>
+    class CFDataCache
     {
+        CFDataCache(const CFDataCache&) = delete;
+        CFDataCache& operator=(const CFDataCache&) = delete;
+        
     public:
         typedef std::pair<const CharT*, std::size_t>    key_type;
         typedef CFTypeRef                               mapped_type;
@@ -99,8 +104,6 @@ namespace json { namespace objc {
                     return result < 0;
             }
         };
-        
-
         
         struct key_equal_to
         : std::binary_function<key_type, key_type, bool>
@@ -123,55 +126,35 @@ namespace json { namespace objc {
             }
         };
         
+        typedef SysArena                                arena_t;
+        typedef arena_allocator<void, arena_t>          allocator_t;
         
-        struct block_allocator {
-            typedef std::size_t size_type;
-            typedef std::ptrdiff_t difference_type;
-            
-            block_allocator(std::size_t capacity = 0) 
-            {
-            }
-            
-            void* malloc(const size_type bytes)
-            { 
-                char * p = new (std::nothrow) char[bytes];
-#if defined (DEBUG)                
-                //printf("String cache: system allocator: allocated block %p with size %lu\n", p, bytes);
-#endif                
-                return p; 
-            }
-            
-            void free(void * const block)
-            { 
-                delete [] static_cast<char*>(block); 
-#if defined (DEBUG)                
-                //printf("String Cache: system allocator: freed block %p\n", block);
-#endif                
-            }
-            
-            void clear() {};
-            
-        };
+        typedef typename allocator_t::template rebind<CharT>::other string_allocator_t;
         
+        typedef CFTypeRef                               map_mapped_t;
+        typedef std::pair<const key_type, map_mapped_t> map_value_t;
+#if !defined (CFDATA_CACHE_USE_STD_UNORDERED_MAP)
+        typedef typename allocator_t::template rebind<map_value_t>::other map_allocator_t;
+#else
+        typedef std::allocator<map_value_t> map_allocator_t;
+#endif
         
-        typedef block_allocator                             pool_t;        
-        
-        typedef CFTypeRef                                   map_mapped_t;
-        typedef std::pair<const key_type, map_mapped_t>     map_value_t;
-        typedef std::allocator<map_value_t>                 map_allocator_type;
-#if defined (CFDATA_CACHE_USE_FLAT_MAP)
-        typedef boost::container::flat_map<
-            key_type, 
-            CFTypeRef, 
-            key_less_to>                                    map_t;
-#else 
-        typedef boost::unordered_map<
+
+#if !defined (CFDATA_CACHE_USE_STD_UNORDERED_MAP)
+        typedef std::map<
+            key_type
+          , map_mapped_t
+          , key_less_to
+          , map_allocator_t
+        >                                               map_t;
+#else
+        typedef std::unordered_map<
               key_type
             , map_mapped_t
             , key_hash
             , key_equal_to
-            , map_allocator_type 
-        >                                       map_t;        
+            , map_allocator_t
+        >                                               map_t;
 #endif
         
     public:
@@ -179,17 +162,44 @@ namespace json { namespace objc {
         typedef typename map_t::iterator       iterator;        
         typedef typename map_t::const_iterator const_iterator;
         
-        explicit CFDataCache(std::size_t capacity = 1024) 
-        : pool_(capacity*16)
+                
+        explicit CFDataCache(std::size_t capacity = 128)
+        :   arena_(1024),
+#if !defined (CFDATA_CACHE_USE_STD_UNORDERED_MAP)
+            map_allocator_(arena_),
+#endif
+            string_allocator_(arena_),
+            map_(map_allocator_)
         {
-#if !defined (CFDATA_CACHE_USE_FLAT_MAP)            
+#if defined (CFDATA_CACHE_USE_STD_UNORDERED_MAP)
             map_.rehash(capacity);
-#endif            
+#endif
         }
         
         ~CFDataCache() { 
             clear();
         }
+        
+        CFDataCache(CFDataCache&& other)
+        :   arena_(std::move(other.arena)),
+            map_allocator_(std::move(other.map_allocator_)),
+            string_allocator_(std::move(other.string_allocator_)),
+            map_(std::move(other.map_))
+        {
+        }
+        
+        CFDataCache& operator=(CFDataCache&& other)
+        {
+            if (this != &other) {
+                clear();
+                map_ = std::move(other.map_);
+                arena_ = std::move(other.arena_);
+                map_allocator_ = std::move(other.map_allocator_);
+                string_allocator_ = std::move(other.string_allocator_);
+            }
+            return *this;
+        }
+        
         
         iterator        begin()         { return map_.begin(); }
         const_iterator  begin() const   { return map_.begin(); }
@@ -209,17 +219,9 @@ namespace json { namespace objc {
         std::pair<iterator, bool> 
         insert(key_type const& key, CFTypeRef v)
         {     
-            // TODO: use a faster block allocator
-            CharT* p = (CharT*)pool_.malloc(key.second*sizeof(CharT));
+            CharT* p = std::allocator_traits<string_allocator_t>::allocate(string_allocator_, key.second*sizeof(CharT));
             std::char_traits<CharT>::copy(p, key.first, key.second);
-#if 0            
-            key_type map_key;
-            map_key.first = p;
-            map_key.second = key.second;
-            std::pair<iterator, bool> result = map_.insert(value_type(map_key, v));
-#else            
             std::pair<iterator, bool> result = map_.emplace(key_type(p,key.second), v);
-#endif            
             if (result.second) {
                 if (v)
                     CFRetain(v);
@@ -236,8 +238,10 @@ namespace json { namespace objc {
                 
         
     private:
+        arena_t arena_;
+        map_allocator_t map_allocator_;
+        string_allocator_t string_allocator_;
         map_t  map_;
-        pool_t pool_;
     };    
     
 
@@ -258,8 +262,8 @@ namespace json { namespace objc {
         typename map_t::iterator iter = map_.find(key);
         if (iter != map_.end()) {
             key_type map_key = (*iter).first;
-            //pool_.free(const_cast<char*>(map_key.first), map_key.second);
-            pool_.free(static_cast<void*>(const_cast<CharT*>(map_key.first)));
+            //pool_.free(static_cast<void*>(const_cast<CharT*>(map_key.first)));
+            std::allocator_traits<string_allocator_t>::deallocate(string_allocator_, const_cast<CharT*>(map_key.first), map_key.second);
             CFTypeRef v = (*iter).second;
             if (v) {
                 CFRelease(v);
@@ -287,11 +291,11 @@ namespace json { namespace objc {
                 CFRelease( (*first).second);
             }
             key_type map_key = (*first).first;
-            pool_.free(static_cast<void*>(const_cast<CharT*>(map_key.first)));
+            std::allocator_traits<string_allocator_t>::deallocate(string_allocator_, const_cast<CharT*>(map_key.first), map_key.second);
             ++first;
         }
         map_.clear();
-        pool_.clear();
+        arena_.clear();
     }
 
     

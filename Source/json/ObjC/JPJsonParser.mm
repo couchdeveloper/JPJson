@@ -100,7 +100,7 @@ namespace json { namespace objc {
         typename boost::enable_if<boost::is_same<UTF_8_encoding_tag, EncodingT> >::type
     >
     {
-        static const JPUnicodeEncoding value = JPUnicodeEncoding_UTF8;
+        static constexpr JPUnicodeEncoding value = JPUnicodeEncoding_UTF8;
     };
     
     template <typename EncodingT>
@@ -109,7 +109,7 @@ namespace json { namespace objc {
         typename boost::enable_if<boost::is_same<UTF_16_encoding_tag, EncodingT> >::type
     >
     {
-        static const JPUnicodeEncoding value = JPUnicodeEncoding_UTF16;
+        static constexpr JPUnicodeEncoding value = JPUnicodeEncoding_UTF16;
     };
     
     template <typename EncodingT>
@@ -118,7 +118,7 @@ namespace json { namespace objc {
         typename boost::enable_if<boost::is_same<UTF_16BE_encoding_tag, EncodingT> >::type
     >
     {
-        static const JPUnicodeEncoding value = JPUnicodeEncoding_UTF16BE;
+        static constexpr JPUnicodeEncoding value = JPUnicodeEncoding_UTF16BE;
     };
     
     template <typename EncodingT>
@@ -127,7 +127,7 @@ namespace json { namespace objc {
         typename boost::enable_if<boost::is_same<UTF_16LE_encoding_tag, EncodingT> >::type
     >
     {
-        static const JPUnicodeEncoding value = JPUnicodeEncoding_UTF16LE;
+        static constexpr JPUnicodeEncoding value = JPUnicodeEncoding_UTF16LE;
     };
     
     
@@ -138,7 +138,7 @@ namespace json { namespace objc {
         typename boost::enable_if<boost::is_same<UTF_32_encoding_tag, EncodingT> >::type
     >
     {
-        static const JPUnicodeEncoding value = JPUnicodeEncoding_UTF32;
+        static constexpr JPUnicodeEncoding value = JPUnicodeEncoding_UTF32;
     };
     
     template <typename EncodingT>
@@ -147,7 +147,7 @@ namespace json { namespace objc {
         typename boost::enable_if<boost::is_same<UTF_32BE_encoding_tag, EncodingT> >::type
     >
     {
-        static const JPUnicodeEncoding value = JPUnicodeEncoding_UTF32BE;
+        static constexpr JPUnicodeEncoding value = JPUnicodeEncoding_UTF32BE;
     };
     
     template <typename EncodingT>
@@ -156,7 +156,7 @@ namespace json { namespace objc {
         typename boost::enable_if<boost::is_same<UTF_32LE_encoding_tag, EncodingT> >::type
     >
     {
-        static const JPUnicodeEncoding value = JPUnicodeEncoding_UTF32LE;
+        static constexpr JPUnicodeEncoding value = JPUnicodeEncoding_UTF32LE;
     };
     
     
@@ -166,7 +166,7 @@ namespace json { namespace objc {
     template <JPUnicodeEncoding C>
     struct jp_add_host_endianness {
         typedef typename json::unicode::add_endianness<typename jp_unicode_encoding_traits<C>::type>::type  unicode_tag;
-        static const JPUnicodeEncoding value = jp_map_unicode_encoding<unicode_tag>::value;
+        static constexpr JPUnicodeEncoding value = jp_map_unicode_encoding<unicode_tag>::value;
     };
     
 

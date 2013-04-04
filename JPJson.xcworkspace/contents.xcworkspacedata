@@ -11,6 +11,9 @@
             location = "group:utilities"
             name = "utilities">
             <FileRef
+               location = "group:bench.hpp">
+            </FileRef>
+            <FileRef
                location = "group:MinMaxAvg.hpp">
             </FileRef>
             <FileRef
@@ -175,22 +178,6 @@
             <Group
                location = "group:value"
                name = "value">
-               <Group
-                  location = "group:unused"
-                  name = "unused">
-                  <FileRef
-                     location = "group:array.hpp">
-                  </FileRef>
-                  <FileRef
-                     location = "group:number2.hpp">
-                  </FileRef>
-                  <FileRef
-                     location = "group:object.hpp">
-                  </FileRef>
-                  <FileRef
-                     location = "group:string.hpp">
-                  </FileRef>
-               </Group>
                <FileRef
                   location = "group:json_traits.hpp">
                </FileRef>
@@ -251,9 +238,6 @@
                   </FileRef>
                   <FileRef
                      location = "group:Source/json/ObjC/NSStreamStreambuf.hpp">
-                  </FileRef>
-                  <FileRef
-                     location = "group:Source/json/ObjC/NSStreamStreambuf.1.hpp">
                   </FileRef>
                </Group>
                <FileRef

@@ -32,14 +32,9 @@
 		A1070B9014780A0400C1847D /* base64_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1E95E0F147288E100A78D3F /* base64_test.cpp */; };
 		A1185508170B4565002EAEFC /* number_to_string_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A172BCAF1701EC3000A29A10 /* number_to_string_test.cpp */; };
 		A1185509170B4594002EAEFC /* write_value_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A172BCB117021E5E00A29A10 /* write_value_test.cpp */; };
-		A118550A170B45BA002EAEFC /* NSDataStreambufTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1C55DC715B6D0A500C573C6 /* NSDataStreambufTest.mm */; };
-		A118550B170B45BF002EAEFC /* NSMutableDataStreambufTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1977E64156D1D3E0074D9B2 /* NSMutableDataStreambufTest.mm */; };
-		A118550C170B45C4002EAEFC /* intrusive_json_path_test.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1FE70EF148A4A43004B962E /* intrusive_json_path_test.mm */; };
-		A118550D170B45C7002EAEFC /* CFDataCacheTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1DC52B914582CDA00CE28F2 /* CFDataCacheTest.mm */; };
-		A118550E170B45CB002EAEFC /* SemanticActionsBaseTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1DC52BD14582D6C00CE28F2 /* SemanticActionsBaseTest.mm */; };
-		A118550F170B45CF002EAEFC /* RepresentationGeneratorTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1DC52BA14582CDA00CE28F2 /* RepresentationGeneratorTest.mm */; };
 		A11E4A6016203FFD0094B278 /* NSStreamStreambufTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A11E4A5E16203FFD0094B278 /* NSStreamStreambufTest.mm */; };
 		A11E4A72162044770094B278 /* gtest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1E67819161ECE7C00E80CA7 /* gtest.framework */; };
+		A120A476170D721B0088C78E /* NSStreamStreambufTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A11E4A5E16203FFD0094B278 /* NSStreamStreambufTest.mm */; };
 		A1228A4216DF6BB1001926E8 /* IntegralNumberTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1C69CB216DE10E50078E034 /* IntegralNumberTest.cpp */; };
 		A1228A4316DF6BB8001926E8 /* FloatNumberTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A12289F816DE1FA5001926E8 /* FloatNumberTest.cpp */; };
 		A1228A4616DFAC86001926E8 /* variant_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1228A4416DFAAEB001926E8 /* variant_test.cpp */; };
@@ -60,7 +55,6 @@
 		A14F836815B034B600B49E8A /* JPAsyncJsonParserTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A192C71114239B59002EE32F /* JPAsyncJsonParserTest.mm */; };
 		A14F836915B034BF00B49E8A /* NSData+JPJsonDetectEncodingTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A12AC926146BE78F00AED943 /* NSData+JPJsonDetectEncodingTest.mm */; };
 		A14F836A15B04CFD00B49E8A /* string_to_number_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A126DCC2154FD991001E09F0 /* string_to_number_test.cpp */; };
-		A15ED8031620792000CB1E15 /* NSStreamStreambufTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A11E4A5E16203FFD0094B278 /* NSStreamStreambufTest.mm */; };
 		A16315BE14FFB9CA00422AF1 /* unicode_conversion_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A140DD1C13E94E36009DBB8C /* unicode_conversion_test.cpp */; };
 		A167EB621440716700BD2A58 /* JPJsonWriterTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A199FCB013D74363000170CD /* JPJsonWriterTest.mm */; };
 		A171E6CE13D4853300260A6B /* gtest_main.cc in Sources */ = {isa = PBXBuildFile; fileRef = A164221013D4357400796785 /* gtest_main.cc */; };
@@ -146,6 +140,12 @@
 		A1E67820161ECEDC00E80CA7 /* gtest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1E67819161ECE7C00E80CA7 /* gtest.framework */; };
 		A1F5B8DC16EDEA53002F14CC /* ValueCustomPoliciesTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A164225413D4427000796785 /* ValueCustomPoliciesTest.cpp */; };
 		A1FE70F2148A5C29004B962E /* intrusive_json_path_test.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1FE70EF148A4A43004B962E /* intrusive_json_path_test.mm */; };
+		A1FEAC5E170DA79200DCB405 /* NSDataStreambufTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1C55DC715B6D0A500C573C6 /* NSDataStreambufTest.mm */; };
+		A1FEAC5F170DA79200DCB405 /* NSMutableDataStreambufTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1977E64156D1D3E0074D9B2 /* NSMutableDataStreambufTest.mm */; };
+		A1FEAC60170DA79200DCB405 /* intrusive_json_path_test.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1FE70EF148A4A43004B962E /* intrusive_json_path_test.mm */; };
+		A1FEAC61170DA79200DCB405 /* CFDataCacheTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1DC52B914582CDA00CE28F2 /* CFDataCacheTest.mm */; };
+		A1FEAC62170DA79200DCB405 /* SemanticActionsBaseTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1DC52BD14582D6C00CE28F2 /* SemanticActionsBaseTest.mm */; };
+		A1FEAC63170DA79200DCB405 /* RepresentationGeneratorTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1DC52BA14582CDA00CE28F2 /* RepresentationGeneratorTest.mm */; };
 		A1FF8C771489201B003DF439 /* NSData+JPJsonDetectEncodingTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A12AC926146BE78F00AED943 /* NSData+JPJsonDetectEncodingTest.mm */; };
 /* End PBXBuildFile section */
 
@@ -342,8 +342,6 @@
 		A172BCAF1701EC3000A29A10 /* number_to_string_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = number_to_string_test.cpp; sourceTree = "<group>"; };
 		A172BCB117021E5E00A29A10 /* write_value_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = write_value_test.cpp; sourceTree = "<group>"; };
 		A177AB6B14630A8800BA3AED /* AllTests-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AllTests-Prefix.pch"; sourceTree = "<group>"; };
-		A180A15315A1E722004C1C02 /* JPJson.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JPJson.framework; path = "../Libraries/Mac OS X Libraries/build/Release/JPJson.framework"; sourceTree = "<group>"; };
-		A180A15515A1E83B004C1C02 /* JPJson.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JPJson.framework; path = ../Build/Products/Release/JPJson.framework; sourceTree = "<group>"; };
 		A18421CE16E227F400609385 /* arena_allocator_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = arena_allocator_test.cpp; sourceTree = "<group>"; };
 		A18DFC0B1425C6DA00DAFE2E /* synchronous_queue_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = synchronous_queue_test.cpp; sourceTree = "<group>"; };
 		A18DFC111426416800DAFE2E /* syncqueue_streambuf_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = syncqueue_streambuf_test.cpp; sourceTree = "<group>"; };
@@ -508,12 +506,6 @@
 		A16421F813D4354300796785 = {
 			isa = PBXGroup;
 			children = (
-				A180A15515A1E83B004C1C02 /* JPJson.framework */,
-				A180A15315A1E722004C1C02 /* JPJson.framework */,
-				A12712F415A1E49E00C2846E /* libjson.a */,
-				A12712F215A1E24F00C2846E /* libjson.A.dylib */,
-				A12712EE15A1DE7E00C2846E /* libjson.A.dylib */,
-				A1C29BAF15A1DA5700D3CBF7 /* libjson.a */,
 				A130A19C168DA54200D18244 /* Xcode Config */,
 				A16718A513EA85F700A39091 /* Tests */,
 				A199FC9F13D7092A000170CD /* Resources */,
@@ -632,12 +624,16 @@
 		A171E77813D497F000260A6B /* Frameworks & Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				A1E67819161ECE7C00E80CA7 /* gtest.framework */,
-				A1386FD2160B3F5A00C16B00 /* JPJson.framework */,
-				A1A9415815179E5200AF9548 /* libjson.a */,
-				A1A9415615179E3200AF9548 /* libjson.A.dylib */,
 				A199FC7B13D5DB12000170CD /* Foundation.framework */,
 				A171E77613D497E700260A6B /* CoreFoundation.framework */,
+				A1E67819161ECE7C00E80CA7 /* gtest.framework */,
+				A1386FD2160B3F5A00C16B00 /* JPJson.framework */,
+				A12712F415A1E49E00C2846E /* libjson.a */,
+				A12712F215A1E24F00C2846E /* libjson.A.dylib */,
+				A12712EE15A1DE7E00C2846E /* libjson.A.dylib */,
+				A1C29BAF15A1DA5700D3CBF7 /* libjson.a */,
+				A1A9415815179E5200AF9548 /* libjson.a */,
+				A1A9415615179E3200AF9548 /* libjson.A.dylib */,
 			);
 			name = "Frameworks & Libraries";
 			sourceTree = "<group>";
@@ -1081,13 +1077,13 @@
 			files = (
 				A144F303145871230062D5E9 /* timer.cpp in Sources */,
 				A1DC52BF1458368200CE28F2 /* gtest_main.cc in Sources */,
-				A15ED8031620792000CB1E15 /* NSStreamStreambufTest.mm in Sources */,
-				A118550A170B45BA002EAEFC /* NSDataStreambufTest.mm in Sources */,
-				A118550B170B45BF002EAEFC /* NSMutableDataStreambufTest.mm in Sources */,
-				A118550C170B45C4002EAEFC /* intrusive_json_path_test.mm in Sources */,
-				A118550D170B45C7002EAEFC /* CFDataCacheTest.mm in Sources */,
-				A118550E170B45CB002EAEFC /* SemanticActionsBaseTest.mm in Sources */,
-				A118550F170B45CF002EAEFC /* RepresentationGeneratorTest.mm in Sources */,
+				A120A476170D721B0088C78E /* NSStreamStreambufTest.mm in Sources */,
+				A1FEAC5E170DA79200DCB405 /* NSDataStreambufTest.mm in Sources */,
+				A1FEAC5F170DA79200DCB405 /* NSMutableDataStreambufTest.mm in Sources */,
+				A1FEAC60170DA79200DCB405 /* intrusive_json_path_test.mm in Sources */,
+				A1FEAC61170DA79200DCB405 /* CFDataCacheTest.mm in Sources */,
+				A1FEAC62170DA79200DCB405 /* SemanticActionsBaseTest.mm in Sources */,
+				A1FEAC63170DA79200DCB405 /* RepresentationGeneratorTest.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

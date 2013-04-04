@@ -23,8 +23,7 @@
 
 #include "json/config.hpp"
 #include <dispatch/dispatch.h>
-#include <boost/utility.hpp>
-#include <assert.h>
+#include <cassert>
 #include <stdexcept>
 #include <iostream>
 
@@ -32,17 +31,20 @@
 namespace json { namespace objc { namespace gcd {
     
     
-    class semaphore : boost::noncopyable {
+    class semaphore {
     public:
         typedef double      duration_type;
 
         
         static duration_type wait_forever() { return -1.0; }
         
+        semaphore(const semaphore&) = delete;
+        semaphore& operator=(const semaphore&) = delete;
         
         explicit semaphore(long n) : sem_(dispatch_semaphore_create(n)) {
             assert(sem_);
         }
+        
         ~semaphore() {
             dispatch_semaphore_t tmp = sem_;
             sem_ = 0;
@@ -56,9 +58,11 @@ namespace json { namespace objc { namespace gcd {
             }
             dispatch_release(tmp);
         }
+        
         void signal()  { 
             dispatch_semaphore_signal(sem_); 
         }
+        
         bool wait()  { 
             long result = dispatch_semaphore_wait(sem_, DISPATCH_TIME_FOREVER);
             if (sem_ == 0) {
@@ -66,6 +70,7 @@ namespace json { namespace objc { namespace gcd {
             }
             return result == 0;
         }
+        
         bool wait(semaphore::duration_type timeout_sec)  { 
             long result = dispatch_semaphore_wait(sem_, 
                                                   timeout_sec >= 0 ? 

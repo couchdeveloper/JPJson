@@ -23,8 +23,7 @@
 
 #include "json/config.hpp"
 #include <dispatch/dispatch.h>
-#include <boost/utility.hpp>
-#include <assert.h>
+#include <cassert>
 
 #if defined(DEBUG)
 #include <iostream>
@@ -34,12 +33,18 @@
 namespace json { namespace objc { namespace gcd {
     
     
-    class mutex : boost::noncopyable {
+    class mutex  {
     public:
+        
+        mutex(const mutex&) = delete;
+        mutex& operator=(const mutex&) = delete;
+        
         mutex() : sem_(dispatch_semaphore_create(1)) {
             assert(sem_);
         }
+        
         ~mutex() { dispatch_release(sem_); }
+        
         void lock() {
 #if defined (DEBUG)
             uint64_t timeout = NSEC_PER_SEC;
@@ -56,9 +61,11 @@ namespace json { namespace objc { namespace gcd {
 #endif                
             
         }
+        
         void unlock() { 
             dispatch_semaphore_signal(sem_); 
         }
+        
     private:
         dispatch_semaphore_t sem_;
     };

@@ -53,6 +53,7 @@ namespace test {
     public:
         typedef Timer timer;
         typedef typename Timer::duration duration;
+        typedef typename Timer::time_point time;
                 
         Derived& derived()              { return static_cast<Derived&>(*this); }
         const Derived& derived() const  { return static_cast<const Derived&>(*this); }
@@ -76,6 +77,9 @@ namespace test {
             }
             teardown();
             report(t_min_, t_max_, t_tot_, N);
+            t_min_ = duration::max();
+            t_max_ = duration::zero();
+            t_tot_ = duration::zero();
         }
         
     private:

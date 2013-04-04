@@ -20,16 +20,16 @@
 #define JSON_OBJC_NSSTREAM_STREAMBUF_HPP
 
 #include "json/config.hpp"
-#include <boost/config.hpp>
-#include <boost/move/move.hpp>
+
+#include <stdexcept>
+#include <iosfwd>       // streamsize
+#include <functional>   // reference_wrapper
+
 #include <boost/iostreams/categories.hpp>  // source_tag
 #include <boost/iostreams/stream_buffer.hpp>
 #include <boost/iostreams/stream.hpp>
-#include <boost/ref.hpp>
-#include <stdexcept>
-#include <iosfwd>                          // streamsize
-
 #include <boost/iostreams/device/file.hpp>
+#include <boost/ref.hpp>
 
 #import <Foundation/Foundation.h>
 
@@ -40,16 +40,19 @@ namespace io = boost::iostreams;
 
 namespace json { namespace objc { namespace internal {
     
-
+#pragma mark - Class NSInputStreamSource
     // Note:
     // By definition, boost::stream_buffer requires a device which is
     // CopyConstructable. This is not the case for NSInputStreamSource. Thus,
-    // a boost::stream_buffer must be constructed passing a boost::ref.
+    // a boost::stream_buffer must be constructed passing a boost::reference_wrapper
     
     class NSInputStreamSource : public io::source
     {
     private:
-        BOOST_MOVABLE_BUT_NOT_COPYABLE(NSInputStreamSource)
+        
+        // Not copyable
+        NSInputStreamSource(const NSInputStreamSource&) = delete;
+        NSInputStreamSource& operator=(const NSInputStreamSource&) = delete;
         
     public:
         // c-tor
@@ -67,7 +70,7 @@ namespace json { namespace objc { namespace internal {
         }
         
         // Move ctor
-        NSInputStreamSource(BOOST_RV_REF(NSInputStreamSource) other)
+        NSInputStreamSource(NSInputStreamSource&& other) noexcept
         :  _ns_input_stream(other._ns_input_stream),
            _consumed(other._consumed)
         {
@@ -75,11 +78,13 @@ namespace json { namespace objc { namespace internal {
         }
         
         // Move assign
-        NSInputStreamSource& operator=(BOOST_RV_REF(NSInputStreamSource) other)
+        NSInputStreamSource& operator=(NSInputStreamSource&& other) noexcept
         {
-            _ns_input_stream = other._ns_input_stream;
-            _consumed = other._consumed;
-            other._ns_input_stream = nil;
+            if (this != &other) {
+                _ns_input_stream = other._ns_input_stream;
+                _consumed = other._consumed;
+                other._ns_input_stream = nil;
+            }
             return *this;
         }
         
@@ -128,10 +133,10 @@ namespace json { namespace objc { namespace internal {
     };
     
     
+#pragma mark - Class NSInputStreamSource2
+
     class NSInputStreamSource2 : public io::source
     {
-    private:
-        BOOST_COPYABLE_AND_MOVABLE(NSInputStreamSource2)
     public:
         // c-tor
         explicit NSInputStreamSource2(NSInputStream* ns_input_stream)
@@ -142,7 +147,8 @@ namespace json { namespace objc { namespace internal {
             [_ns_input_stream retain];
         }
         
-        NSInputStreamSource2(const NSInputStreamSource2& other)
+        // Copy Constructor
+        NSInputStreamSource2(const NSInputStreamSource2& other) noexcept
         : _ns_input_stream(other._ns_input_stream),
           _consumed(other._consumed)
         {
@@ -155,31 +161,33 @@ namespace json { namespace objc { namespace internal {
             [_ns_input_stream release];
         }
         
-        // Move ctor
-        NSInputStreamSource2(BOOST_RV_REF(NSInputStreamSource2) other)
+        // Move Constructor
+        NSInputStreamSource2(NSInputStreamSource2&& other) noexcept
         :  _ns_input_stream(other._ns_input_stream),
            _consumed(other._consumed)
         {
             other._ns_input_stream = nil;            
         }
         
-        // Move assign
-        NSInputStreamSource2& operator=(BOOST_RV_REF(NSInputStreamSource2) other)
-        {
-            _ns_input_stream = other._ns_input_stream;
-            _consumed = other._consumed;
-            other._ns_input_stream = nil;
-            return *this;
-        }
-        
         // Copy assign
-        NSInputStreamSource2& operator=(BOOST_COPY_ASSIGN_REF(NSInputStreamSource2) other)
+        NSInputStreamSource2& operator=(NSInputStreamSource2 const& other) noexcept
         {
             if (&other != this) {
                 [_ns_input_stream release];
                 _ns_input_stream = other._ns_input_stream;
                 [_ns_input_stream retain];
                 _consumed = other._consumed;
+            }
+            return *this;
+        }
+        
+        // Move assign
+        NSInputStreamSource2& operator=(NSInputStreamSource2&& other) noexcept
+        {
+            if (this != &other) {
+                _ns_input_stream = other._ns_input_stream;
+                _consumed = other._consumed;
+                other._ns_input_stream = nil;
             }
             return *this;
         }
@@ -235,13 +243,20 @@ namespace json { namespace objc { namespace internal {
     namespace io = boost::iostreams;
     
     
+#pragma mark - Class NSOutputStreamSink
+
     class NSOutputStreamSink : public io::sink
     {
     private:
-        BOOST_MOVABLE_BUT_NOT_COPYABLE(NSOutputStreamSink)
+        NSOutputStreamSink(const NSOutputStreamSink&) = delete;
+        NSOutputStreamSink& operator=(NSOutputStreamSink const&) = delete;
         
     public:
-        // c-tor
+        
+        // Default Constructor
+        NSOutputStreamSink() = delete;
+        
+        // Constructor
         explicit NSOutputStreamSink(NSOutputStream* ns_output_stream)
         : _ns_output_stream(([ns_output_stream streamStatus] == NSStreamStatusOpen) ? ns_output_stream : nil),
           _written(0)
@@ -250,13 +265,13 @@ namespace json { namespace objc { namespace internal {
             [_ns_output_stream retain];
         }
         
-        // d-tor
+        // Destructor
         ~NSOutputStreamSink() {
             [_ns_output_stream release];
         }
         
-        // Move ctor
-        NSOutputStreamSink(BOOST_RV_REF(NSOutputStreamSink) other)
+        // Move Constructor
+        NSOutputStreamSink(NSOutputStreamSink&& other)
         :  _ns_output_stream(other._ns_output_stream),
            _written(other._written)
         {
@@ -264,11 +279,13 @@ namespace json { namespace objc { namespace internal {
         }
         
         // Move assign
-        NSOutputStreamSink& operator=(BOOST_RV_REF(NSOutputStreamSink) other)
+        NSOutputStreamSink& operator=(NSOutputStreamSink&& other)
         {
-            _ns_output_stream = other._ns_output_stream;
-            _written = other._written;
-            other._ns_output_stream = nil;
+            if (this != &other) {
+                _ns_output_stream = other._ns_output_stream;
+                _written = other._written;
+                other._ns_output_stream = nil;
+            }
             return *this;
         }
         
@@ -317,13 +334,22 @@ namespace json { namespace objc { namespace internal {
     };
     
     
+#pragma mark - Class NSOutputStreamSink2
+    
     class NSOutputStreamSink2 : public io::sink
-    {
-    private:
-        BOOST_COPYABLE_AND_MOVABLE(NSOutputStreamSink2)
-        
+    {        
     public:
-        // c-tor
+        
+        // Default Constructor
+        NSOutputStreamSink2() = delete;
+        
+        // d-tor
+        ~NSOutputStreamSink2()
+        {
+            [_ns_output_stream release];
+        }
+        
+        // Constructor
         explicit NSOutputStreamSink2(NSOutputStream* ns_output_stream)
         : _ns_output_stream(([ns_output_stream streamStatus] == NSStreamStatusOpen) ? ns_output_stream : nil),
           _written(0)
@@ -332,6 +358,8 @@ namespace json { namespace objc { namespace internal {
             [_ns_output_stream retain];
         }
         
+        
+        // Copy Constructor
         NSOutputStreamSink2(const NSOutputStreamSink2& other)
         : _ns_output_stream(([other._ns_output_stream streamStatus] == NSStreamStatusOpen) ? other._ns_output_stream : nil),
           _written(0)
@@ -340,33 +368,18 @@ namespace json { namespace objc { namespace internal {
             [_ns_output_stream retain];
         }
         
-        // d-tor
-        ~NSOutputStreamSink2()
-        {
-            [_ns_output_stream release];
-        }
-        
-        // Move ctor
-        NSOutputStreamSink2(BOOST_RV_REF(NSOutputStreamSink2) other)
+        // Move Constructor
+        NSOutputStreamSink2(NSOutputStreamSink2&& other)
         :  _ns_output_stream(other._ns_output_stream),
            _written(other._written)
         {
             other._ns_output_stream = nil;
         }
         
-        // Move assign
-        NSOutputStreamSink2& operator=(BOOST_RV_REF(NSOutputStreamSink2) other)
-        {
-            _ns_output_stream = other._ns_output_stream;
-            _written = other._written;
-            other._ns_output_stream = nil;
-            return *this;
-        }
-        
         // Copy assign
-        NSOutputStreamSink2& operator=(BOOST_COPY_ASSIGN_REF(NSOutputStreamSink2) other)
+        NSOutputStreamSink2& operator=(NSOutputStreamSink2 const& other)
         {
-            if (&other != this) {
+            if (this != &other) {
                 [_ns_output_stream release];
                 _ns_output_stream = other._ns_output_stream;
                 _written = other._written;
@@ -375,6 +388,16 @@ namespace json { namespace objc { namespace internal {
             return *this;
         }
         
+        // Move assign
+        NSOutputStreamSink2& operator=(NSOutputStreamSink2&& other)
+        {
+            if (this != &other) {
+                _ns_output_stream = other._ns_output_stream;
+                _written = other._written;
+                other._ns_output_stream = nil;
+            }
+            return *this;
+        }
         
         
         // Write up to n characters to the underlying data sink into the

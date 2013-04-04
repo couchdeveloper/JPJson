@@ -25,10 +25,8 @@
 #include "semaphore.hpp"
 #include "mutex.hpp"
 
-#include <boost/config.hpp>
-
 #include <list>
-#include <assert.h>
+#include <cassert>
 #include <algorithm>
 #include <iostream>
 #include <iomanip>
@@ -60,17 +58,44 @@ namespace json { namespace objc {
         typedef T const*            const_pointer;
         
         // Default Ctor
-        CFDataBuffer() 
-        : data_(NULL), buffer_(NULL), size_(0) 
-        {}  
+        CFDataBuffer() noexcept
+        : data_(nullptr), buffer_(nullptr), size_(0)
+        {}
+        
+        // Destructor
+        ~CFDataBuffer() {
+            if (data_)
+                CFRelease(data_);
+        }
+        
+        
+        // Copy constructor.
+        // The internal buffer will be shared.
+        CFDataBuffer(const CFDataBuffer& other) noexcept
+        : data_( static_cast<CFDataRef>(other.data_ != nullptr ? CFRetain(other.data_) : nullptr) ),
+        size_(other.size_),
+        buffer_(other.buffer_)
+        {
+        }
+        
+        // Move constructor
+        CFDataBuffer(CFDataBuffer&& other) noexcept
+        : data_(other.data_), size_(other.size_), buffer_(other.buffer_)
+        {
+            other.buffer_ = nullptr;
+            other.data_ = nullptr;
+            other.size_ = 0;
+        }
+        
+        
         
         // Construct from an CFData object. The CFData object will be shared.
         // If data's size equals zero, the data object will not be retained.
-        CFDataBuffer(CFDataRef data) 
+        CFDataBuffer(CFDataRef data) noexcept 
         {
-            assert(data == NULL || CFDataGetLength(data) % sizeof(T) == 0);
-            if (data == nil or (size_ = CFDataGetLength(data))/sizeof(T) == 0) {
-                data_ = NULL;
+            assert(data == nullptr || CFDataGetLength(data) % sizeof(T) == 0);
+            if (data == nullptr or (size_ = CFDataGetLength(data))/sizeof(T) == 0) {
+                data_ = nullptr;
                 size_ = 0;
                 buffer_ = 0;
             }
@@ -87,40 +112,35 @@ namespace json { namespace objc {
         
         // Construct from a pointer to a vector of len elements. This creates
         // a CFData object internally and copies the bytes from the given vector.
-        CFDataBuffer(const T* v, size_t len)
+        CFDataBuffer(const T* v, size_t len) noexcept
         {
+            data_ = nullptr;
             if (v and len > 0) {
                 data_ = CFDataCreate(kCFAllocatorDefault, reinterpret_cast<const UInt8*>(v), sizeof(T)*len);
+                assert(data_ != nullptr);
+            }
+            if (data_) {
                 size_ = len;
                 buffer_ = reinterpret_cast<T const*>(CFDataGetBytePtr(data_));
             } else {
-                data_ = NULL;
-                buffer_= NULL;
-                size_ = 0;                
+                size_ = 0;
+                buffer_= nullptr;
             }
         }
         
-        // Copy constructor.
-        // The internal buffer will be shared.
-        CFDataBuffer(const CFDataBuffer& other) 
-        : data_( static_cast<CFDataRef>(other.data_ != NULL ? CFRetain(other.data_) : NULL) ),
-          size_(other.size_),
-          buffer_(other.buffer_)
-        {        
-        }
         
-#if !defined (BOOST_NO_RVALUE_REFERENCES)
-        // Move constructor
-        CFDataBuffer(CFDataBuffer&& other) throw() 
-        : data_(other.data_), size_(other.size_), buffer_(other.buffer_)
-        { 
-            other.buffer_ = 0;
-            other.data_ = 0;
-            other.size_ = 0;
+        // Assignment operator
+        CFDataBuffer& operator=(CFDataBuffer const& other) noexcept {
+            if (this != &other) {
+                data_ = static_cast<CFDataRef>(other.data_ != nullptr ? CFRetain(other.data_) : nullptr);
+                buffer_ = other.buffer_;
+                size_ = other.size_;
+            }
+            return *this;
         }
         
         // Move assignment operator
-        CFDataBuffer& operator=(CFDataBuffer&& other) throw() {
+        CFDataBuffer& operator=(CFDataBuffer&& other) noexcept {
             if (this != &other) {
                 data_ = other.data_;
                 buffer_ = other.buffer_;
@@ -131,19 +151,14 @@ namespace json { namespace objc {
             }
             return *this;
         }        
-#endif        
         
-        
-        ~CFDataBuffer() { 
-            if (data_)
-                CFRelease(data_);
-        }
         
         
         const T*    data() const { return buffer_; }
         size_t      size() const { return size_; }
         
-        void        seek(size_t pos) {
+        void seek(size_t pos)
+        {
             pos = std::min(CFDataGetLength(data_)/sizeof(T), pos);
             buffer_ = reinterpret_cast<T const*>(CFDataGetBytePtr(data_));
             buffer_ += pos;
@@ -156,11 +171,6 @@ namespace json { namespace objc {
             std::swap(size_, other.size_);
         }
         
-        CFDataBuffer& operator= (const CFDataBuffer& other) {
-            CFDataBuffer tmp(other);
-            tmp.swap(*this);
-            return *this;
-        }
         
         void release() {
             if (data_) {

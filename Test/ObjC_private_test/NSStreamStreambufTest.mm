@@ -6,6 +6,10 @@
 //
 //
 
+#if __has_feature(objc_arc)
+    #error This file requires to be compiled with ARC disabled.
+#endif
+
 #include <gtest/gtest.h>
 #include "json/ObjC/NSStreamStreambuf.hpp"
 #include <boost/ref.hpp>
@@ -16,8 +20,37 @@
 #include <iostream>
 #include <iomanip>
 #include <iterator>
+#include <type_traits>
+#include <stdexcept>
 
 // for testing
+
+
+namespace test {
+
+    template <class SingleSequenceDevice>
+    auto
+    __has_close_test(SingleSequenceDevice&& d)
+    -> decltype(d.close(), std::true_type());
+    
+    template <class SingleSequenceDevice>
+    auto
+    __has_close_test(SingleSequenceDevice const& d)
+    -> std::false_type;
+    
+    template <class SingleSequenceDevice>
+    struct __has_close
+    : std::integral_constant<bool,
+        std::is_same<
+        decltype(__has_close_test(std::declval<SingleSequenceDevice>())),
+            std::true_type
+        >::value
+    >
+    {
+    };
+    
+    
+}
 
 
 namespace {
@@ -94,6 +127,42 @@ namespace {
     //        NSMutableData* buffer() const;
     
     
+    template <typename T>
+    using ModeOf = typename boost::iostreams::mode_of<T>::type;
+
+    template <typename T>
+    using CategoryOf = typename boost::iostreams::category_of<T>::type;
+    
+    TEST_F(NSStreamStreambufTest, NSInputStreamSource)
+    {
+        using json::objc::internal::NSInputStreamSource;
+        
+        ASSERT_TRUE(std::is_default_constructible<NSInputStreamSource>::value == false);  // default ctor is not meaningful
+        ASSERT_TRUE(std::is_copy_constructible<NSInputStreamSource>::value == false);  // not copyable
+        ASSERT_TRUE(std::is_move_constructible<NSInputStreamSource>::value == true);  // move constructible
+        ASSERT_TRUE(std::is_copy_assignable<NSInputStreamSource>::value == false);  // not copy assignable
+        ASSERT_TRUE(std::is_move_assignable<NSInputStreamSource>::value == true);  // move assignable
+        ASSERT_TRUE(test::__has_close<NSInputStreamSource>::value == true);  // has close() member function
+        
+        static_assert( std::is_base_of<boost::iostreams::device_tag, CategoryOf<NSInputStreamSource>>::value, "");
+        static_assert( std::is_base_of<boost::iostreams::closable_tag, CategoryOf<NSInputStreamSource>>::value, "");
+        static_assert( std::is_base_of<boost::iostreams::input, ModeOf<NSInputStreamSource>>::value, "");
+    }
+    
+    TEST_F(NSStreamStreambufTest, NSInputStreamSource2)
+    {
+        using json::objc::internal::NSInputStreamSource2;
+        using boost::iostreams::category_of;
+        
+        ASSERT_TRUE(std::is_default_constructible<NSInputStreamSource2>::value == false);  // default ctor is not meaningful
+        ASSERT_TRUE(std::is_copy_constructible<NSInputStreamSource2>::value == true);  // copyable
+        ASSERT_TRUE(std::is_move_constructible<NSInputStreamSource2>::value == true);  // move constructible
+        ASSERT_TRUE(std::is_copy_assignable<NSInputStreamSource2>::value == true);  // copy assignable
+        ASSERT_TRUE(std::is_move_assignable<NSInputStreamSource2>::value == true);  // move assignable
+        ASSERT_TRUE(test::__has_close<NSInputStreamSource2>::value == true);  // has close() member function
+    }
+    
+    
     
     TEST_F(NSStreamStreambufTest, NSInputStreamStreambufDefCtor)
     {
@@ -106,19 +175,6 @@ namespace {
         
         [pool drain];
     }
-    
-    TEST_F(NSStreamStreambufTest, NSOutputStreamStreambufDefCtor)
-    {
-        typedef NSOutputStreamStreambuf   stream_buffer_t;
-        
-        NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-        
-        stream_buffer_t sbuf;
-        EXPECT_EQ(std::streamsize(0), sbuf.in_avail());
-        
-        [pool drain];
-    }
-    
     
     TEST_F(NSStreamStreambufTest, NSInputStreamStreambuf_open)
     {
@@ -162,6 +218,141 @@ namespace {
         [pool drain];
     }
 
+    TEST_F(NSStreamStreambufTest, NSInputStreamStreambuf_open_error)
+    {
+        NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+        
+        const NSUInteger Size = 32000;
+        NSMutableData* data = [NSMutableData dataWithLength:Size];
+        char* start = static_cast<char*>([data mutableBytes]);
+        char* p = start;
+        for (int i = 0; i < Size; ++i, ++p) {
+            *p = (i % 10) + '0';
+        }
+        NSInputStream* nsistream = [NSInputStream inputStreamWithData:data];
+        // [nsistream open];  NOT open!
+        EXPECT_THROW(internal::NSInputStreamSource iss(nsistream), std::logic_error);
+        
+        [pool drain];
+    }
+    
+    TEST_F(NSStreamStreambufTest, NSInputStreamStreambuf_read)
+    {
+        NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+        
+        const NSUInteger Size = 32000;
+        NSMutableData* data = [NSMutableData dataWithLength:Size];
+        char* start = static_cast<char*>([data mutableBytes]);
+        char* p = start;
+        for (int i = 0; i < Size; ++i, ++p) {
+            *p = (i % 10) + '0';
+        }
+        NSInputStream* nsistream = [NSInputStream inputStreamWithData:data];
+        [nsistream open];
+        internal::NSInputStreamSource iss(nsistream);
+        
+        NSInputStreamStreambuf issbuf;
+        const int ReadBufferSize = 1024;
+        const int PushbackBufferSize = 32;
+        issbuf.open(boost::ref(iss), ReadBufferSize, PushbackBufferSize);
+        
+        
+        int count = 0;
+        std::istreambuf_iterator<char> eos;
+        std::istreambuf_iterator<char> iit(&issbuf);
+        while (iit != eos) {
+            char ch = *iit++;
+            EXPECT_EQ(static_cast<char>('0'+ (count%10)), ch );
+            ++count;
+        }
+        EXPECT_EQ(Size, count);
+        
+        
+        issbuf.close();
+        ASSERT_TRUE([nsistream streamStatus] == NSStreamStatusClosed);
+        
+        [pool drain];
+    }
+    
+    
+    
+    TEST_F(NSStreamStreambufTest, NSOutputStreamStreambufDefCtor)
+    {
+        typedef NSOutputStreamStreambuf   stream_buffer_t;
+        
+        NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+        
+        stream_buffer_t sbuf;
+        EXPECT_EQ(std::streamsize(0), sbuf.in_avail());
+        
+        [pool drain];
+    }
+    
+    TEST_F(NSStreamStreambufTest, NSOutputStreamStreambuf_open)
+    {
+        NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+        
+        NSOutputStream* nsostream = [NSOutputStream outputStreamToMemory];
+        [nsostream open];
+        internal::NSOutputStreamSink oss(nsostream);
+        
+        NSOutputStreamStreambuf ossbuf;
+        ossbuf.open(boost::ref(oss), 1024);
+        
+        EXPECT_TRUE(ossbuf.is_open());
+        
+        ossbuf.close();
+        ASSERT_TRUE([nsostream streamStatus] == NSStreamStatusClosed);
+        
+        [pool drain];
+    }
+    
+    TEST_F(NSStreamStreambufTest, NSOutputStreamStreambuf_open_error)
+    {
+        NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+        
+        NSOutputStream* nsostream = [NSOutputStream outputStreamToMemory];
+        // [nsostream open]; NOT open!
+        EXPECT_THROW(internal::NSOutputStreamSink oss(nsostream), std::logic_error);
+        
+        [pool drain];
+    }
+
+    TEST_F(NSStreamStreambufTest, NSOutputStreamStreambuf_write)
+    {
+        NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+        
+        NSOutputStream* nsostream = [NSOutputStream outputStreamToMemory];
+        [nsostream open];
+        internal::NSOutputStreamSink oss(nsostream);
+        
+        NSOutputStreamStreambuf ossbuf;
+        ossbuf.open(boost::ref(oss), 1024);
+        
+        int const N = 10000;
+        int const L = 101;
+        for (int i = 0; i < N; ++i) {
+            std::streamsize result =
+            ossbuf.sputn("1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890\n", L);
+            EXPECT_EQ(static_cast<std::streamsize>(L), result);
+        }
+        // flush buffers
+        ossbuf.pubsync();
+        
+        NSData* data = [nsostream propertyForKey:NSStreamDataWrittenToMemoryStreamKey];
+        EXPECT_EQ(N*L, [data length]);
+        
+#if defined (DEBUG_XX)
+        NSString* str = [[NSString alloc] initWithBytes:[data bytes] length:[data length] encoding:NSUTF8StringEncoding];
+        NSLog(@"%@", str);
+#endif
+        
+        [pool drain];
+    }
+    
+    
+    
+    
     TEST_F(NSStreamStreambufTest, NSInputStreamStreambuf2_open)
     {
         NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
@@ -205,29 +396,25 @@ namespace {
         [pool drain];
     }
     
-    
-    TEST_F(NSStreamStreambufTest, NSOutputStreamStreambuf_open)
+    TEST_F(NSStreamStreambufTest, NSInputStreamStreambuf2_open_error)
     {
         NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
         
-        NSOutputStream* nsostream = [NSOutputStream outputStreamToMemory];
-        [nsostream open];
-        internal::NSOutputStreamSink oss(nsostream);
-        
-        NSOutputStreamStreambuf ossbuf;
-        ossbuf.open(boost::ref(oss), 1024);
-        
-        EXPECT_TRUE(ossbuf.is_open());
-        
-        ossbuf.close();
-        ASSERT_TRUE([nsostream streamStatus] == NSStreamStatusClosed);
+        const NSUInteger Size = 32000;
+        NSMutableData* data = [NSMutableData dataWithLength:Size];
+        char* start = static_cast<char*>([data mutableBytes]);
+        char* p = start;
+        for (int i = 0; i < Size; ++i, ++p) {
+            *p = (i % 10) + '0';
+        }
+        NSInputStream* nsistream = [NSInputStream inputStreamWithData:data];
+        // [nsistream open];  NOT open!
+        EXPECT_THROW(internal::NSInputStreamSource2 iss(nsistream), std::logic_error);
         
         [pool drain];
     }
     
-    
-    
-    TEST_F(NSStreamStreambufTest, NSInputStreamStreambuf2_read1)
+    TEST_F(NSStreamStreambufTest, NSInputStreamStreambuf2_read)
     {
         NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
         
@@ -263,65 +450,73 @@ namespace {
         [pool drain];
     }
     
-#if 0
-    
-    TEST_F(NSStreamStreambufTest, Constructor2)
+
+
+    TEST_F(NSStreamStreambufTest, NSOutputStreamStreambuf2DefCtor)
     {
-        typedef NSDataStreambuf<char>   stream_buffer_t;
+        typedef NSOutputStreamStreambuf2   stream_buffer_t;
         
         NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
         
-        NSData* data = [NSData dataWithBytes:"0123456789" length:10];
+        stream_buffer_t sbuf;
+        EXPECT_EQ(std::streamsize(0), sbuf.in_avail());
         
-        stream_buffer_t ios(data);
-        EXPECT_EQ(std::streamsize(10), ios.in_avail());
-        EXPECT_TRUE(ios.data() != nil);
-        EXPECT_EQ(10, [ios.data() length]);
+        [pool drain];
+    }
+
+    TEST_F(NSStreamStreambufTest, NSOutputStreamStreambuf2_open)
+    {
+        NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+        
+        NSOutputStream* nsostream = [NSOutputStream outputStreamToMemory];
+        [nsostream open];
+        internal::NSOutputStreamSink2 oss(nsostream);
+        
+        NSOutputStreamStreambuf2 ossbuf;
+        ossbuf.open(oss, 1024);
+        
+        EXPECT_TRUE(ossbuf.is_open());
+        
+        ossbuf.close();
+        ASSERT_TRUE([nsostream streamStatus] == NSStreamStatusClosed);
         
         [pool drain];
     }
     
-    TEST_F(NSStreamStreambufTest, Constructor3)
+    TEST_F(NSStreamStreambufTest, NSOutputStreamStreambuf2_open_error)
     {
-        using namespace std;
-        
-        typedef NSDataStreambuf<char>   stream_buffer_t;
-        
         NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
         
-        NSData* data = [NSData dataWithBytes:"0123456789" length:10];
-        
-        stream_buffer_t ios(data, ios::app|ios::ate|ios::out);
-        EXPECT_EQ(0, ios.in_avail());
-        EXPECT_TRUE(ios.data() != nil);
-        EXPECT_EQ(10, [ios.data() length]);
+        NSOutputStream* nsostream = [NSOutputStream outputStreamToMemory];
+        // [nsostream open]; NOT open!
+        EXPECT_THROW(internal::NSOutputStreamSink2 oss(nsostream), std::logic_error);
         
         [pool drain];
     }
     
-    
-    
-    
-    
-    TEST_F(NSStreamStreambufTest, Write)
+    TEST_F(NSStreamStreambufTest, NSOutputStreamStreambuf2_write)
     {
-        typedef NSDataStreambuf<char>   stream_buffer_t;
-        
         NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
         
-        stream_buffer_t ios;
+        NSOutputStream* nsostream = [NSOutputStream outputStreamToMemory];
+        [nsostream open];
+        internal::NSOutputStreamSink2 oss(nsostream);
         
-        EXPECT_EQ(std::streamsize(0), ios.in_avail());
-        EXPECT_TRUE(ios.data() != nil);
-        EXPECT_EQ(0, [ios.data() length]);
+        NSOutputStreamStreambuf2 ossbuf;
+        ossbuf.open(oss, 1024);
         
         int const N = 10000;
         int const L = 101;
         for (int i = 0; i < N; ++i) {
-            ios.sputn("1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890\n", L);
+            std::streamsize result =
+            ossbuf.sputn("1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890\n", L);
+            EXPECT_EQ(static_cast<std::streamsize>(L), result);
         }
         
-        NSData* data = ios.data();
+        // flush buffers
+        ossbuf.pubsync();
+        
+        NSData* data = [nsostream propertyForKey:NSStreamDataWrittenToMemoryStreamKey];
         EXPECT_EQ(N*L, [data length]);
         
 #if defined (DEBUG_XX)
@@ -331,7 +526,6 @@ namespace {
         
         [pool drain];
     }
-
-
-#endif
+    
+    
 }

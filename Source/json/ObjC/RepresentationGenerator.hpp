@@ -27,7 +27,7 @@
 // If this macro is defined, Core Foundation mutable dictionaries will be created
 // using Foundation objects leveraging "toll-free-bridging".
 // This is a workaround for poorly performing CFMutableDictionaries when created 
-// via CF functions. CFMutbaleDictionaries created via Foundation do not expose 
+// via CF functions. CFMutableDictionaries created via Foundation do not expose 
 // this poor performance. 
 // Note: iOS 4 does not seem to have this issue.
 #define JSON_OBJC_REPRESENTATION_GENERATOR_NO_CREATE_MUTABLE_DICTIONARY_USING_CF
@@ -58,6 +58,7 @@
 #include <iostream>  // description
 #include <iomanip>   // description   
 #include <limits>
+#include <cassert>
 
 #include "SemanticActionsBase.hpp"
 #include "unicode_traits.hpp"
@@ -66,8 +67,6 @@
 #include "json/utility/simple_log.hpp"
 #include "json/utility/flags.hpp"
 #include "json/utility/string_to_number.hpp"
-
-#include <boost/static_assert.hpp>
 
 #if defined (JSON_OBJC_REPRESENTATION_GENERATOR_USE_JSON_PATH)
 #include "json/json_path/intrusive_json_path.hpp"
@@ -149,7 +148,7 @@ namespace {
     {
         typedef typename json::unicode::add_endianness<Encoding>::type encoding_type;
         typedef typename json::unicode::encoding_traits<encoding_type>::code_unit_type code_unit_t;
-        CFStringEncoding cf_encoding = json::cf_unicode_encoding_traits<encoding_type>::value;
+        constexpr CFStringEncoding cf_encoding = json::cf_unicode_encoding_traits<encoding_type>::value;
         CFStringRef str = CFStringCreateWithBytes(NULL, 
                                                   static_cast<const UInt8*>(static_cast<const void*>(s)), 
                                                   sizeof(code_unit_t)*len, 
@@ -166,7 +165,7 @@ namespace {
     {
         typedef typename json::unicode::add_endianness<Encoding>::type encoding_type;
         typedef typename json::unicode::encoding_traits<encoding_type>::code_unit_type code_unit_t;
-        CFStringEncoding cf_encoding = json::cf_unicode_encoding_traits<encoding_type>::value;
+        constexpr CFStringEncoding cf_encoding = json::cf_unicode_encoding_traits<encoding_type>::value;
         
         // First, create a temp const string
         CFStringRef tmp = CFStringCreateWithBytesNoCopy(NULL, 
@@ -191,7 +190,7 @@ namespace {
     {
         typedef typename json::unicode::add_endianness<Encoding>::type encoding_type;
         typedef typename json::unicode::encoding_traits<encoding_type>::code_unit_type code_unit_t;
-        CFStringEncoding cf_encoding = json::cf_unicode_encoding_traits<encoding_type>::value;
+        constexpr CFStringEncoding cf_encoding = json::cf_unicode_encoding_traits<encoding_type>::value;
         
         // First, create a temp const string
         CFStringRef tmp = CFStringCreateWithBytesNoCopy(NULL, 
@@ -555,7 +554,6 @@ namespace json { namespace objc {
                 // Create an immutable array with count elements
                 
                 // Get the address of the start of the range of values:this only works if stack_t is a vector!!
-                //TODO: BOOST_STATIC_ASSERT(boost::is_xx);                
                 const void** values = const_cast<const void**>(reinterpret_cast<void**>(&stack_[first_idx]));
                 //CFTypeRef* values = reinterpret_cast<void**>(&stack_[first_idx]));
                 a = (id)(CFArrayCreate(kCFAllocatorDefault, values, count, &kCFTypeArrayCallBacks));
