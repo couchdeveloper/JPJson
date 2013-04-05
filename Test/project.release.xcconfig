@@ -1,0 +1,6 @@
+//
+//  project.release.xcconfig
+//
+
+#include "project.common.macosx.xcconfig"
+

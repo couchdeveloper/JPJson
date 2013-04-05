@@ -314,7 +314,7 @@
 		A12AC926146BE78F00AED943 /* NSData+JPJsonDetectEncodingTest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "NSData+JPJsonDetectEncodingTest.mm"; sourceTree = "<group>"; };
 		A12BA48F145417900083BAA6 /* JPRepresentationGeneratorTest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = JPRepresentationGeneratorTest.mm; sourceTree = "<group>"; };
 		A12BA49114541AD40083BAA6 /* JPSemanticActionsBaseTest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = JPSemanticActionsBaseTest.mm; sourceTree = "<group>"; };
-		A130A19B168DA4F500D18244 /* target.common.macosx.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = target.common.macosx.xcconfig; sourceTree = "<group>"; };
+		A130A19B168DA4F500D18244 /* project.common.macosx.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = project.common.macosx.xcconfig; sourceTree = "<group>"; };
 		A1386FD2160B3F5A00C16B00 /* JPJson.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JPJson.framework; path = "../../../../Library/Developer/Xcode/DerivedData/JPJson-ejutwqptiebgcjcabedtzqzwdhuj/Build/Products/Debug/JPJson.framework"; sourceTree = "<group>"; };
 		A140DD1C13E94E36009DBB8C /* unicode_conversion_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = unicode_conversion_test.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		A148127214AA035200CC7BEA /* json_path_parser_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = json_path_parser_test.cpp; sourceTree = "<group>"; };
@@ -377,8 +377,8 @@
 		A1C60D4F16E0F54100B7CFE0 /* JsonContainerTest.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = JsonContainerTest.cpp; sourceTree = "<group>"; };
 		A1C60D5016E0F5F400B7CFE0 /* ObjectTest.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ObjectTest.cpp; sourceTree = "<group>"; };
 		A1C69CB216DE10E50078E034 /* IntegralNumberTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IntegralNumberTest.cpp; sourceTree = "<group>"; };
-		A1CFB92C1510B1670010942D /* Test.debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; lineEnding = 0; path = Test.debug.xcconfig; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.xcconfig; };
-		A1CFB92D1510B1FB0010942D /* Test.release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; lineEnding = 0; path = Test.release.xcconfig; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.xcconfig; };
+		A1CFB92C1510B1670010942D /* project.debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; lineEnding = 0; path = project.debug.xcconfig; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.xcconfig; };
+		A1CFB92D1510B1FB0010942D /* project.release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; lineEnding = 0; path = project.release.xcconfig; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.xcconfig; };
 		A1D2529013DDA2AE00960381 /* unicode_test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = unicode_test; sourceTree = BUILT_PRODUCTS_DIR; };
 		A1D2529413DDA3A100960381 /* utilities_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = utilities_test.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		A1DC4BE414582BB700CE28F2 /* ObjC_private_test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ObjC_private_test; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -488,9 +488,9 @@
 		A130A19C168DA54200D18244 /* Xcode Config */ = {
 			isa = PBXGroup;
 			children = (
-				A130A19B168DA4F500D18244 /* target.common.macosx.xcconfig */,
-				A1CFB92D1510B1FB0010942D /* Test.release.xcconfig */,
-				A1CFB92C1510B1670010942D /* Test.debug.xcconfig */,
+				A130A19B168DA4F500D18244 /* project.common.macosx.xcconfig */,
+				A1CFB92D1510B1FB0010942D /* project.release.xcconfig */,
+				A1CFB92C1510B1670010942D /* project.debug.xcconfig */,
 			);
 			name = "Xcode Config";
 			sourceTree = "<group>";
@@ -1135,7 +1135,6 @@
 /* Begin XCBuildConfiguration section */
 		A130A1A5168DB65700D18244 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A1CFB92C1510B1670010942D /* Test.debug.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
 				COMBINE_HIDPI_IMAGES = YES;
@@ -1145,7 +1144,6 @@
 		};
 		A130A1A6168DB65700D18244 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A1CFB92D1510B1FB0010942D /* Test.release.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
 				COMBINE_HIDPI_IMAGES = YES;
@@ -1155,7 +1153,9 @@
 		};
 		A164220A13D4354300796785 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A1CFB92C1510B1670010942D /* project.debug.xcconfig */;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "$(PRJ_FRAMEWORK_SEARCH_PATHS)";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = "__ASSERT_MACROS_DEFINE_VERSIONS_WITHOUT_UNDERSCORES=0";
@@ -1170,7 +1170,9 @@
 		};
 		A164220B13D4354300796785 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A1CFB92D1510B1FB0010942D /* project.release.xcconfig */;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "$(PRJ_FRAMEWORK_SEARCH_PATHS)";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_PREPROCESSOR_DEFINITIONS = "__ASSERT_MACROS_DEFINE_VERSIONS_WITHOUT_UNDERSCORES=0";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -1182,7 +1184,6 @@
 		};
 		A164224A13D4424300796785 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A1CFB92C1510B1670010942D /* Test.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = NO;
@@ -1210,7 +1211,6 @@
 		};
 		A164224B13D4424300796785 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A1CFB92D1510B1FB0010942D /* Test.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = YES;
@@ -1239,7 +1239,6 @@
 		};
 		A16718B213EA86DF00A39091 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A1CFB92C1510B1670010942D /* Test.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = NO;
@@ -1274,7 +1273,6 @@
 		};
 		A16718B313EA86DF00A39091 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A1CFB92D1510B1FB0010942D /* Test.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = YES;
@@ -1309,7 +1307,6 @@
 		};
 		A171E6C613D45E3800260A6B /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A1CFB92C1510B1670010942D /* Test.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = NO;
@@ -1331,7 +1328,6 @@
 		};
 		A171E6C713D45E3800260A6B /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A1CFB92D1510B1FB0010942D /* Test.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = YES;
@@ -1354,7 +1350,6 @@
 		};
 		A171E6DC13D4859500260A6B /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A1CFB92C1510B1670010942D /* Test.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = NO;
@@ -1376,7 +1371,6 @@
 		};
 		A171E6DD13D4859500260A6B /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A1CFB92D1510B1FB0010942D /* Test.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = YES;
@@ -1399,7 +1393,6 @@
 		};
 		A171E75113D4966E00260A6B /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A1CFB92C1510B1670010942D /* Test.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = NO;
@@ -1418,7 +1411,6 @@
 		};
 		A171E75213D4966E00260A6B /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A1CFB92D1510B1FB0010942D /* Test.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = YES;
@@ -1438,7 +1430,6 @@
 		};
 		A191B52315298FB8007F9471 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A1CFB92C1510B1670010942D /* Test.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = NO;
@@ -1460,7 +1451,6 @@
 		};
 		A191B52415298FB8007F9471 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A1CFB92D1510B1FB0010942D /* Test.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = YES;
@@ -1478,7 +1468,6 @@
 		};
 		A1AF4B471462B4970065B048 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A1CFB92C1510B1670010942D /* Test.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = NO;
@@ -1517,7 +1506,6 @@
 		};
 		A1AF4B481462B4970065B048 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A1CFB92D1510B1FB0010942D /* Test.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = YES;
@@ -1556,7 +1544,6 @@
 		};
 		A1D2528E13DDA2AE00960381 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A1CFB92C1510B1670010942D /* Test.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = NO;
@@ -1588,7 +1575,6 @@
 		};
 		A1D2528F13DDA2AE00960381 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A1CFB92D1510B1FB0010942D /* Test.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = YES;
@@ -1621,10 +1607,8 @@
 		};
 		A1DC4BEF14582BB800CE28F2 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A1CFB92C1510B1670010942D /* Test.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ENABLE_OBJC_ARC = NO;
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
@@ -1647,15 +1631,14 @@
 					"$(inherited)",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
 		A1DC4BF014582BB800CE28F2 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A1CFB92D1510B1FB0010942D /* Test.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ENABLE_OBJC_ARC = NO;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
@@ -1679,6 +1662,7 @@
 					"$(inherited)",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
 			};
 			name = Release;
 		};

@@ -1,6 +1,0 @@
-//
-//  Test.release.xcconfig
-//
-
-#include "target.common.macosx.xcconfig"
-

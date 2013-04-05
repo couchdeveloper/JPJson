@@ -271,7 +271,7 @@ typedef NSUInteger JPSemanticActionsNumberGeneratorOption;
 /**
  Returns the input encoding of the current or last parsed JSON document.
  */
-@property (nonatomic, readonly) NSString* inputEncoding;
+@property (weak, nonatomic, readonly) NSString* inputEncoding;
 
 
 /**

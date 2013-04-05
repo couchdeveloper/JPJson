@@ -1,5 +1,0 @@
-//
-//  Test.debug.xcconfig
-//
-
-#include "target.common.macosx.xcconfig"

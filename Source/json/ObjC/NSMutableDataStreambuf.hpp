@@ -21,6 +21,11 @@
 #ifndef JSON_OBJC_NSMUTABLEDATA_STREAMBUF_HPP
 #define JSON_OBJC_NSMUTABLEDATA_STREAMBUF_HPP
 
+#if !__has_feature(objc_arc)
+#warning error This Objective-C file shall be compiled with ARC enabled.
+#endif
+
+
 
 #include "json/config.hpp"
 #include <streambuf>
@@ -92,7 +97,7 @@ namespace json { namespace objc {
     #endif
         
         ~NSMutableDataStreambuf() {
-            [_data release];
+            _data;
         }
 #if 0
         void swap(NSMutableDataStreambuf& __rhs);
@@ -135,7 +140,6 @@ namespace json { namespace objc {
     {
         NSMutableData* __data = [[NSMutableData alloc] init];
         data(__data);
-        [__data release];
     }
 
     template <class CharT, class Traits>
@@ -237,7 +241,6 @@ namespace json { namespace objc {
             }
                 break;
         }        
-        [_data release];
         _data = (__data != nil) ? [__data mutableCopy] : [[NSMutableData alloc] init];
         _hm = 0;
 

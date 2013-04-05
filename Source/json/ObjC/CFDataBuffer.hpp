@@ -89,7 +89,7 @@ namespace json { namespace objc {
         
         
         
-        // Construct from an CFData object. The CFData object will be shared.
+        // Construct from an CFData object. The CFData object will be retained.
         // If data's size equals zero, the data object will not be retained.
         CFDataBuffer(CFDataRef data) noexcept 
         {

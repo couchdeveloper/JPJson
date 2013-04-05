@@ -17,9 +17,10 @@
 //  limitations under the License.
 //
 
-#if __has_feature(objc_arc) 
-#error This Objective-C file shall be compiled with ARC disabled.
+#if !__has_feature(objc_arc)
+#error This Objective-C file shall be compiled with ARC enabled.
 #endif
+
 
 // #include <boost/spirit/include/karma.hpp>
 
@@ -151,15 +152,11 @@ namespace {
     return [self initWithData:nil];
 }
 
-- (void) dealloc {
-    [_error release];
-    [super dealloc];
-}
 
 - (BOOL) write:(const void*)buffer length:(int)length
 {
     if (_error) {
-        [_error release], _error = nil;
+        _error = nil;
     }
     BOOL result;
     if (length == 1) {
@@ -219,7 +216,7 @@ namespace {
 @end
 
 @interface JPOutputStreamStreambuffer ()
-@property (nonatomic, readwrite) NSError* error;
+@property (weak, nonatomic, readwrite) NSError* error;
 @end
 
 @interface JPOutputStreamStreambuffer (Internal) <JPJsonStreambufferInternalProtocol>
@@ -246,10 +243,6 @@ namespace {
     return [self initWithOutputStream:nil];
 }
 
-- (void) dealloc {
-    [_error release];
-    [super dealloc];
-}
 
 - (BOOL) write:(const void*)buffer length:(int)length
 {
@@ -268,6 +261,12 @@ namespace {
         }
     }
     return result;
+}
+
+
+- (BOOL) flush {
+    int result = _streambuf.pubsync();
+    return result == 0;
 }
 
 - (BOOL) close {
@@ -372,17 +371,13 @@ namespace {
     {
         NSString* errStr = [[NSString alloc] initWithUTF8String:errorStr];
         NSString* localizedErrStr = NSLocalizedString(errStr, errStr);
-        [errStr release];
         NSArray* objectsArray = [[NSArray alloc] initWithObjects: localizedErrStr, nil];
         NSArray* keysArray = [[NSArray alloc] initWithObjects: NSLocalizedDescriptionKey, nil];            
         NSMutableDictionary* userInfoDict = [[NSMutableDictionary alloc] initWithObjects:objectsArray forKeys: keysArray];
         if (underlayingError) {
             [userInfoDict setObject:underlayingError forKey:NSUnderlyingErrorKey];
         }
-        [objectsArray release];
-        [keysArray release];        
         NSError* error = [NSError errorWithDomain:@"JPJsonWriter" code:errorCode userInfo:userInfoDict];
-        [userInfoDict release];
         return error;
     }
     
@@ -470,7 +465,7 @@ namespace {
         char* end_cap = tmp_buffer + sizeof(tmp_buffer);
 #endif        
         int count = 0;      // the number of bytes in tmp_buffer
-        char numberType = *[(id)number objCType];
+        char numberType = *[(__bridge id)number objCType];
         Boolean conversionSucceeded = false;
         switch (numberType) {
             case 'c':
@@ -805,7 +800,7 @@ namespace {
             }
         }    
         NSUInteger i = count;
-        for (id value in object) {
+        for (__strong id value in object) {
             if (value == nil) {
                 value = [NSNull null];
             }
@@ -1048,7 +1043,7 @@ namespace {
             return 0;  // success
         }
     }
-    return serializeNumberIntoBuffer(CFNumberRef(self), streambuf, NULL, encoding);
+    return serializeNumberIntoBuffer(CFNumberRef((__bridge CFNumberRef)(self)), streambuf, NULL, encoding);
 }
 
 @end
@@ -1132,10 +1127,6 @@ namespace {
     return self;
 }
 
-- (void)dealloc
-{
-    [super dealloc];
-}
 
 
 
@@ -1184,7 +1175,6 @@ namespace {
             if (error) {
                 *error = makeError(4, "Unknown error occured", streambuf.error);
             }
-            [streambuf release];
             return nil;
         }     
     }
@@ -1193,11 +1183,9 @@ namespace {
         if (error) {
             *error = makeError(5, "Could not serialize JSON into NSData object", streambuf.error);
         }
-        [streambuf release];
         return nil;
     }
     NSData*  data = [streambuf data];
-    [streambuf release];
 
     return data;
 }
@@ -1259,7 +1247,6 @@ namespace {
             if (error) {
                 *error = makeError(4, "Unknown error occured", streambuf.error);
             }
-            [streambuf release];
             return nil;
         }
     }
@@ -1268,19 +1255,20 @@ namespace {
         if (error) {
             *error = makeError(5, "Could not serialize JSON", streambuf.error);
         }
-        [streambuf release];
         return 0;
     }
+    
+    [streambuf flush];
+    NSInteger written = streambuf.written;
+    
+    
     if (![streambuf close]) {
         if (error) {
             *error = makeError(5, "Could not close stream", streambuf.error);
         }
-        [streambuf release];
         return 0;
     }
     
-    NSInteger written = streambuf.written;
-    [streambuf release];
     return written;
 }
 

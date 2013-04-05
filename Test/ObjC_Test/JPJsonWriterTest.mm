@@ -598,8 +598,8 @@ namespace {
             CFReadStreamRef readStream = NULL;
             CFWriteStreamRef writeStream = NULL;
             CFStreamCreateBoundPair(NULL, &readStream, &writeStream, BufferSize);
-            NSInputStream* istream = (__bridge id)readStream;
-            NSOutputStream* ostream = (__bridge id)writeStream;
+            NSInputStream* istream = CFBridgingRelease(readStream);
+            NSOutputStream* ostream = CFBridgingRelease(writeStream);
             
             // Invoke the JPJsonWriter asynchronously on its own thread:
             __block NSError* serializerError;

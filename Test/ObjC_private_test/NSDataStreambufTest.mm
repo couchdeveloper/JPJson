@@ -94,30 +94,30 @@ namespace {
     {
         typedef NSDataStreambuf<char>   stream_buffer_t;
         
-        NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+        @autoreleasepool {
         
-        stream_buffer_t ios;
-        EXPECT_EQ(std::streamsize(0), ios.in_avail());
-        EXPECT_TRUE(ios.data() != nil);
-        EXPECT_EQ(0, [ios.data() length]);
+            stream_buffer_t ios;
+            EXPECT_EQ(std::streamsize(0), ios.in_avail());
+            EXPECT_TRUE(ios.data() != nil);
+            EXPECT_EQ(0, [ios.data() length]);
         
-        [pool drain];
+        }
     }
     
     TEST_F(NSDataStreambufTest, Constructor2)
     {
         typedef NSDataStreambuf<char>   stream_buffer_t;
         
-        NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+        @autoreleasepool {
         
-        NSData* data = [NSData dataWithBytes:"0123456789" length:10];
+            NSData* data = [NSData dataWithBytes:"0123456789" length:10];
+            
+            stream_buffer_t ios(data);
+            EXPECT_EQ(std::streamsize(10), ios.in_avail());
+            EXPECT_TRUE(ios.data() != nil);
+            EXPECT_EQ(10, [ios.data() length]);
         
-        stream_buffer_t ios(data);
-        EXPECT_EQ(std::streamsize(10), ios.in_avail());
-        EXPECT_TRUE(ios.data() != nil);
-        EXPECT_EQ(10, [ios.data() length]);
-        
-        [pool drain];
+        }
     }
     
     TEST_F(NSDataStreambufTest, Constructor3)
@@ -126,16 +126,16 @@ namespace {
         
         typedef NSDataStreambuf<char>   stream_buffer_t;
         
-        NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+        @autoreleasepool {
         
-        NSData* data = [NSData dataWithBytes:"0123456789" length:10];
+            NSData* data = [NSData dataWithBytes:"0123456789" length:10];
+            
+            stream_buffer_t ios(data, ios::app|ios::ate|ios::out);
+            EXPECT_EQ(0, ios.in_avail());
+            EXPECT_TRUE(ios.data() != nil);
+            EXPECT_EQ(10, [ios.data() length]);
         
-        stream_buffer_t ios(data, ios::app|ios::ate|ios::out);
-        EXPECT_EQ(0, ios.in_avail());
-        EXPECT_TRUE(ios.data() != nil);
-        EXPECT_EQ(10, [ios.data() length]);
-        
-        [pool drain];
+        }
     }
     
     
@@ -146,29 +146,29 @@ namespace {
     {
         typedef NSDataStreambuf<char>   stream_buffer_t;
         
-        NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+        @autoreleasepool {
         
-        stream_buffer_t ios;
-        
-        EXPECT_EQ(std::streamsize(0), ios.in_avail());
-        EXPECT_TRUE(ios.data() != nil);
-        EXPECT_EQ(0, [ios.data() length]);
-        
-        int const N = 10000;
-        int const L = 101;
-        for (int i = 0; i < N; ++i) {
-            ios.sputn("1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890\n", L);
-        }
+            stream_buffer_t ios;
+            
+            EXPECT_EQ(std::streamsize(0), ios.in_avail());
+            EXPECT_TRUE(ios.data() != nil);
+            EXPECT_EQ(0, [ios.data() length]);
+            
+            int const N = 10000;
+            int const L = 101;
+            for (int i = 0; i < N; ++i) {
+                ios.sputn("1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890\n", L);
+            }
 
-        NSData* data = ios.data();
-        EXPECT_EQ(N*L, [data length]);
+            NSData* data = ios.data();
+            EXPECT_EQ(N*L, [data length]);
 
 #if defined (DEBUG_XX)
         NSString* str = [[NSString alloc] initWithBytes:[data bytes] length:[data length] encoding:NSUTF8StringEncoding];
         NSLog(@"%@", str);
 #endif
         
-        [pool drain];
+        }
     }
     
 }

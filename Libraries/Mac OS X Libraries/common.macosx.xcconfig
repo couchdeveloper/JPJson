@@ -21,7 +21,7 @@ CLANG_CXX_LIBRARY = libc++
 CLANG_CXX_LANGUAGE_STANDARD = c++0x
 
 // Automatic Reference Counting
-CLANG_ENABLE_OBJC_ARC = NO
+CLANG_ENABLE_OBJC_ARC = YES
 
 
 //

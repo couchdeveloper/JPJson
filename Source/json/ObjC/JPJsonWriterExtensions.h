@@ -25,6 +25,16 @@
 @protocol JPJsonStreambufferProtocol <NSObject>
 
 
+
+/**
+ Flush any pending bytes from internal buffer to the output device.
+
+ @return Returns `YES` on success, otherwise `NO` indicating an error.
+ */
+
+- (BOOL) flush;
+
+
 /**
  Write a sequence of bytes.
  
@@ -46,7 +56,7 @@
 /**
  Close a stream buffer.
  
- Write any remaining bytes into the underlaying device.
+ Write any remaining bytes to the output device and close it.
 
  
  @return Returns `YES` on success, otherwise `NO` indicating an error.

@@ -143,7 +143,7 @@ namespace json {
         
         typedef json::utility::logger<LOG_MAX_LEVEL>        logger_t;
         
-        semantic_actions_base()    
+        semantic_actions_base() noexcept
         :   nch_option_(SignalErrorOnUnicodeNoncharacter),
             ncon_flags_(ExtensionOptions::AllowNone),
             opt_ignore_spurious_trailing_bytes_(false),
@@ -425,7 +425,7 @@ namespace json {
         typedef typename base::const_buffer_t           const_buffer_t;
         
     public:    
-        semantic_actions_noop(){}
+        semantic_actions_noop() noexcept {}
         bool additionalInputIsError_imp() const             { return true; }
         void parse_begin_imp()                              {}
         void parse_end_imp()                                {}

@@ -85,35 +85,35 @@ namespace {
         typedef SemanticActionsBase<UTF_8_encoding_tag> semantic_actions_type; 
         typedef semantic_actions_type::error_t error_t;
 
-        NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+        @autoreleasepool {
                 
-        semantic_actions_type sa; 
-        sa.error(-1, "Test error");
-        
-        EXPECT_FALSE(sa.ok());
-        EXPECT_EQ(-1, sa.error().code());
-        EXPECT_EQ(std::string("Test error"), sa.error().description());
-        
-        sa.cancel();
-        EXPECT_TRUE(sa.is_canceled());
+            semantic_actions_type sa; 
+            sa.error(-1, "Test error");
+            
+            EXPECT_FALSE(sa.ok());
+            EXPECT_EQ(-1, sa.error().code());
+            EXPECT_EQ(std::string("Test error"), sa.error().description());
+            
+            sa.cancel();
+            EXPECT_TRUE(sa.is_canceled());
 
-        sa.clear();
-        EXPECT_FALSE(sa.is_canceled());
-        EXPECT_EQ(0, sa.error().code());
-        EXPECT_EQ(std::string(""), sa.error().description());
-        
-        
-        sa.cancel();
-        EXPECT_TRUE(sa.is_canceled());
-        EXPECT_FALSE(sa.ok());
+            sa.clear();
+            EXPECT_FALSE(sa.is_canceled());
+            EXPECT_EQ(0, sa.error().code());
+            EXPECT_EQ(std::string(""), sa.error().description());
+            
+            
+            sa.cancel();
+            EXPECT_TRUE(sa.is_canceled());
+            EXPECT_FALSE(sa.ok());
 
-        sa.clear();
-        EXPECT_TRUE(sa.ok());
+            sa.clear();
+            EXPECT_TRUE(sa.ok());
+            
+            
+            std::cout << "description:\n" << sa << std::endl;
         
-        
-        std::cout << "description:\n" << sa << std::endl;
-        
-        [pool drain];
+        }
     }
     
     

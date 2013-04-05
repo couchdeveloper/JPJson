@@ -99,66 +99,66 @@ namespace {
         typedef RepresentationGenerator<UTF_8_encoding_tag> sa_t;
         typedef sa_t::const_buffer_t  const_buffer_t;
         
-        NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+        @autoreleasepool {
         
         
-        sa_t sa; 
-                
-        sa.parse_begin();
-        sa.begin_array();
-        const int J = 10;
-        const int N = 20;
-        const int K = 10;
-        for (int j = 0; j < J; ++j)
-        {
-            sa.begin_value_at_index(j);            
-            sa.begin_object();
-            
-            for (int i = 0; i < N; ++i) {
-                char buffer[256];
-                std::size_t len = snprintf(buffer, sizeof(buffer), "key#%d", i);
-                sa.begin_key_value_pair(const_buffer_t(buffer, len), i);
-                sa.value_string(const_buffer_t("string", 6));
-                sa.end_key_value_pair();                              
-                //std::cout << sa.json_path() << " = " << std::endl;
-            }
-            
-            sa.begin_key_value_pair(const_buffer_t("list", 4), N);
+            sa_t sa; 
+                    
+            sa.parse_begin();
             sa.begin_array();
-            for (int k = 0; k < K; ++k) {
-                sa.begin_value_at_index(k);
-                char buffer[246];
-                std::size_t len = snprintf(buffer, sizeof(buffer), "string#%d", k);
-                sa.value_string(const_buffer_t(buffer, len));
-                sa.end_value_at_index(k);
-                //std::cout << sa.json_path() << " = " << std::endl;
+            const int J = 10;
+            const int N = 20;
+            const int K = 10;
+            for (int j = 0; j < J; ++j)
+            {
+                sa.begin_value_at_index(j);            
+                sa.begin_object();
+                
+                for (int i = 0; i < N; ++i) {
+                    char buffer[256];
+                    std::size_t len = snprintf(buffer, sizeof(buffer), "key#%d", i);
+                    sa.begin_key_value_pair(const_buffer_t(buffer, len), i);
+                    sa.value_string(const_buffer_t("string", 6));
+                    sa.end_key_value_pair();                              
+                    //std::cout << sa.json_path() << " = " << std::endl;
+                }
+                
+                sa.begin_key_value_pair(const_buffer_t("list", 4), N);
+                sa.begin_array();
+                for (int k = 0; k < K; ++k) {
+                    sa.begin_value_at_index(k);
+                    char buffer[246];
+                    std::size_t len = snprintf(buffer, sizeof(buffer), "string#%d", k);
+                    sa.value_string(const_buffer_t(buffer, len));
+                    sa.end_value_at_index(k);
+                    //std::cout << sa.json_path() << " = " << std::endl;
+                }
+                sa.end_array();
+                sa.end_key_value_pair();                              
+                
+                
+                sa.end_object();            
+                sa.end_value_at_index(j);
             }
+            
             sa.end_array();
-            sa.end_key_value_pair();                              
+            sa.parse_end();
+            sa.finished();
             
+            id result = sa.result();
+            EXPECT_TRUE(result != nil);
+            EXPECT_EQ(J, [result count]);
             
-            sa.end_object();            
-            sa.end_value_at_index(j);
-        }
-        
-        sa.end_array();
-        sa.parse_end();
-        sa.finished();
-        
-        id result = sa.result();
-        EXPECT_TRUE(result != nil);
-        EXPECT_EQ(J, [result count]);
-        
-        EXPECT_EQ(N+1, sa.cache_miss_count());
-        EXPECT_EQ(J*(N+1)-(N+1), sa.cache_hit_count());
-        EXPECT_EQ(N+1, sa.cache_size());
+            EXPECT_EQ(N+1, sa.cache_miss_count());
+            EXPECT_EQ(J*(N+1)-(N+1), sa.cache_hit_count());
+            EXPECT_EQ(N+1, sa.cache_size());
         
 #if defined (XX_DEBUG)
         NSLog(@"\n%@", result);
 #endif        
         
         
-        [pool drain];
+        }
     }
     
     

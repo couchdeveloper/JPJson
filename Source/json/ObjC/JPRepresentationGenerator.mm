@@ -17,9 +17,10 @@
 //  limitations under the License.
 //
 
-#if __has_feature(objc_arc) 
-#error This Objective-C file shall be compiled with ARC disabled.
+#if !__has_feature(objc_arc)
+#error This Objective-C file shall be compiled with ARC enabled.
 #endif
+
 
 #include <dispatch/dispatch.h>
 #include <assert.h>
@@ -77,7 +78,6 @@ typedef json::objc::RepresentationGenerator<JP_CFStringEncoding>    Representati
 - (void) dealloc 
 {
     delete sa_;
-    [super dealloc];
 }
 
 #pragma mark - 

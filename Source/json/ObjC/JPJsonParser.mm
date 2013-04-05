@@ -17,9 +17,10 @@
 //  limitations under the License.
 //
 
-#if __has_feature(objc_arc) 
-#error This Objective-C file shall be compiled with ARC disabled.
+#if !__has_feature(objc_arc)
+#error This Objective-C file shall be compiled with ARC enabled.
 #endif
+
 
 #include "json/parser/parse.hpp"
 #include "json/unicode/unicode_detect_bom.hpp"
@@ -185,7 +186,7 @@ namespace {
         explicit sync_parser_runtime_error(const std::string& msg) 
         : std::runtime_error(msg)
         {}        
-        virtual ~sync_parser_runtime_error() throw() {}
+        virtual ~sync_parser_runtime_error() {}
     };
     
     
@@ -485,13 +486,12 @@ namespace {
     if (success) {
         // result is owned by sa only  - need to retain,autorelease it since we
         // dealloc sa.
-        result = [[[sa result] retain] autorelease]; 
+        result = [sa result]; 
     } else {
         if (error)
             *error = [sa error];  // error returns an autorelease object
     }
     
-    [sa release];
     return result;
 }
 
@@ -521,16 +521,15 @@ namespace {
     if (success) {
         // result is owned by sa only  - need to retain,autorelease it since we
         // dealloc sa.
-        result = [[[sa result] retain] autorelease];
+        result = [sa result];
     } else {
         if (error)
-            *error = [[[sa error] retain] autorelease]; // error may return an autoreleased object, but we don't know for sure ...
+            *error = [sa error]; // error may return an autoreleased object, but we don't know for sure ...
     }
     
 #if defined (DEBUG)
     NSLog(@"%@", [sa description]);
 #endif    
-    [sa release];
     return result;
 }
 
@@ -561,16 +560,15 @@ namespace {
     if (success) {
         // result is owned by sa only  - need to retain,autorelease it since we
         // dealloc sa.
-        result = [[[sa result] retain] autorelease];
+        result = [sa result];
     } else {
         if (error)
-            *error = [[[sa error] retain] autorelease]; // error may return an autoreleased object, but we don't know for sure ...
+            *error = [sa error]; // error may return an autoreleased object, but we don't know for sure ...
     }
     
 #if defined (DEBUG)
     NSLog(@"%@", [sa description]);
 #endif    
-    [sa release];
     return result;
 }
 

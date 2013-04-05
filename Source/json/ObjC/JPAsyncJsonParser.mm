@@ -17,9 +17,10 @@
 //  limitations under the License.
 //
 
-#if __has_feature(objc_arc) 
-#error This Objective-C file shall be compiled with ARC disabled.
+#if !__has_feature(objc_arc)
+#error This Objective-C file shall be compiled with ARC enabled.
 #endif
+
 
 #include "json/parser/parse.hpp"
 #include "json/utility/syncqueue_streambuf.hpp"
@@ -61,7 +62,7 @@ namespace {
         explicit parser_runtime_error(const std::string& msg) 
         : std::runtime_error(msg)
         {}        
-        virtual ~parser_runtime_error() throw() {}
+        virtual ~parser_runtime_error() {}
     };
     
     
@@ -318,7 +319,7 @@ namespace {
             sa_ = [[JPRepresentationGenerator alloc] initWithHandlerDispatchQueue:handlerDispatchQueue];
             dispatch_release(handlerDispatchQueue);
         } else {
-            sa_ = [sa retain];
+            sa_ = sa;
         }
         if (workerQueue == NULL) {
             workerDispatchQueue_ = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0); 
@@ -341,7 +342,6 @@ namespace {
 
 - (void) dealloc 
 {
-    [sa_ release];
     if (workerDispatchQueue_) {
         dispatch_release(workerDispatchQueue_);
     }
@@ -349,7 +349,6 @@ namespace {
         dispatch_release(idle_);
     }
     
-    [super dealloc];    
 }
 
 
@@ -370,48 +369,48 @@ namespace {
     }
     NSParameterAssert(sa_);
     dispatch_async(workerDispatchQueue_, ^{
-        NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
+        @autoreleasepool {
         
-        SemanticActionsBase* sa_imp_ptr = [sa_ imp];
-        assert(sa_imp_ptr !=  NULL);
-        bool success = false;
-        try {
-            success = run(syncQueue_, sa_);
-        }
-        catch (parser_runtime_error& ex) {
-            typedef SemanticActionsBase::error_t error_t;
-            killed_ = true;
-            sa_imp_ptr->error(json::JP_PARSER_CLIENT, ex.what());
-        }
-        catch (std::exception& ex) {            
-            typedef SemanticActionsBase::error_t error_t;
-            killed_ = true;
-            sa_imp_ptr->error(json::JP_UNEXPECTED_ERROR, ex.what());
-        }
-        catch (...) {
-            typedef SemanticActionsBase::error_t error_t;
-            killed_ = true;
-            sa_imp_ptr->error(json::JP_UNKNOWN_ERROR, 
-                                      json::parser_error_str(json::JP_UNKNOWN_ERROR));
-        }
-        if (not success) 
-        {
-            // We should cancel any waiting producers, as well clearing the
-            // buffer queue.
-            while (syncQueue_.get(0.0).first == sync_queue_t::OK) 
+            SemanticActionsBase* sa_imp_ptr = [sa_ imp];
+            assert(sa_imp_ptr !=  NULL);
+            bool success = false;
+            try {
+                success = run(syncQueue_, sa_);
+            }
+            catch (parser_runtime_error& ex) {
+                typedef SemanticActionsBase::error_t error_t;
+                killed_ = true;
+                sa_imp_ptr->error(json::JP_PARSER_CLIENT, ex.what());
+            }
+            catch (std::exception& ex) {            
+                typedef SemanticActionsBase::error_t error_t;
+                killed_ = true;
+                sa_imp_ptr->error(json::JP_UNEXPECTED_ERROR, ex.what());
+            }
+            catch (...) {
+                typedef SemanticActionsBase::error_t error_t;
+                killed_ = true;
+                sa_imp_ptr->error(json::JP_UNKNOWN_ERROR, 
+                                          json::parser_error_str(json::JP_UNKNOWN_ERROR));
+            }
+            if (not success) 
             {
+                // We should cancel any waiting producers, as well clearing the
+                // buffer queue.
+                while (syncQueue_.get(0.0).first == sync_queue_t::OK) 
+                {
 #if defined (DEBUG)        
-                NSLog(@"JPAsyncJsonParser removed buffer from synchronous queue");
+                    NSLog(@"JPAsyncJsonParser removed buffer from synchronous queue");
 #endif                
-            }                        
+                }                        
 #if defined (DEBUG)        
-            NSLog(@"JPAsyncParser did fail with error %@", [sa_ error]);
+                NSLog(@"JPAsyncParser did fail with error %@", [sa_ error]);
 #endif
-        }
-        dispatch_semaphore_signal(idle_);
-        finished_ = true;        
+            }
+            dispatch_semaphore_signal(idle_);
+            finished_ = true;        
         
-        [pool drain];
+        }
     });   
     
     return YES;
@@ -516,7 +515,7 @@ namespace {
     // check if the receiver was killed, and if so return NO, otherwise
     // retry.
     int timedout = 0;
-    while (syncQueue_.put(CFDataByteBuffer(CFDataRef(buffer)), 5.0) == sync_queue_t::TIMEOUT_NOT_DELIVERED)
+    while (syncQueue_.put(CFDataByteBuffer((__bridge CFDataRef)buffer), 5.0) == sync_queue_t::TIMEOUT_NOT_DELIVERED)
     {
         if (killed_  or finished_) {
             return NO;

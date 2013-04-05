@@ -155,7 +155,7 @@
 /**
  Returns the semantic actions object.
 */ 
-@property (nonatomic, readonly, retain) JPSemanticActionsBase* semanticActions;
+@property (nonatomic, readonly, strong) JPSemanticActionsBase* semanticActions;
 
 
 /** @name Starting the Parser Asynchronously */

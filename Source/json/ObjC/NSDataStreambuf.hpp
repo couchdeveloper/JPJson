@@ -21,6 +21,11 @@
 #ifndef JSON_OBJC_NSDATA_STREAMBUF_HPP
 #define JSON_OBJC_NSDATA_STREAMBUF_HPP
 
+#if !__has_feature(objc_arc)
+#warning error This Objective-C file shall be compiled with ARC enabled.
+#endif
+
+
 
 #include "json/config.hpp"
 #include <streambuf>

@@ -17,9 +17,10 @@
 //  limitations under the License.
 //
 
-#if __has_feature(objc_arc) 
-#error This Objective-C file shall be compiled with ARC disabled.
+#if !__has_feature(objc_arc)
+#error This Objective-C file shall be compiled with ARC enabled.
 #endif
+
 
 
 #import "JPSemanticActionsBase.h"
@@ -95,7 +96,6 @@ typedef JPSemanticActions_ErrorHandlerBlockType       ErrorHandlerBlockType;
     if (handlerDispatchQueue_ != NULL) {
         dispatch_release(handlerDispatchQueue_);
     }
-    [super dealloc];
 }
 
 
@@ -173,14 +173,10 @@ typedef JPSemanticActions_ErrorHandlerBlockType       ErrorHandlerBlockType;
     }
     NSString* errStr = [[NSString alloc] initWithUTF8String:sa_error.c_str()];
     NSString* localizedErrStr = NSLocalizedString(errStr, errStr);
-    [errStr release];
     NSArray* objectsArray = [[NSArray alloc] initWithObjects: localizedErrStr, nil];
     NSArray* keysArray = [[NSArray alloc] initWithObjects: NSLocalizedDescriptionKey, nil];            
     NSDictionary* userInfoDict = [[NSDictionary alloc] initWithObjects:objectsArray forKeys: keysArray];
-    [objectsArray release];
-    [keysArray release];        
     NSError* error = [NSError errorWithDomain:@"JPSemanticActions" code:sa_error.first userInfo:userInfoDict];
-    [userInfoDict release];
     return error;
 }
 
@@ -444,7 +440,6 @@ typedef JPSemanticActions_ErrorHandlerBlockType       ErrorHandlerBlockType;
     std::stringstream ss;
     self.imp->print(ss);
     NSString* desc = [[NSString alloc] initWithUTF8String:ss.str().c_str()];
-    [desc autorelease];
     return desc;
 }
 

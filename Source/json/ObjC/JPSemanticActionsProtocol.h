@@ -329,7 +329,10 @@
  @param encoding The _Unicode encoding scheme_ for the character sequence.
  @param index The current index of the key-value pair of the JSON Object.
  */ 
-- (void) parserFoundKeyValuePairBeginWithKey:(const void*)bytes length:(size_t)length encoding:(NSStringEncoding)encoding index:(size_t)index;
+- (void) parserFoundKeyValuePairBeginWithKey:(const void*)bytes
+                                      length:(size_t)length
+                                    encoding:(NSStringEncoding)encoding
+                                       index:(size_t)index;
 
 
 /** 

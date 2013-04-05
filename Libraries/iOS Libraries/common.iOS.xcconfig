@@ -46,7 +46,7 @@ CLANG_CXX_LANGUAGE_STANDARD = c++0x
 // Note: the current implementation very likey does not benefit from ARC, since
 // its manual memory management is already highly optimized. Nonetheless, a
 // future impementation will switch to ARC eventually.
-CLANG_ENABLE_OBJC_ARC = NO
+CLANG_ENABLE_OBJC_ARC = YES
 
 
 

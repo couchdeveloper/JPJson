@@ -313,7 +313,7 @@ typedef void (^JPSemanticActions_ErrorHandlerBlockType)(NSError*);
 /**  
  Returns the error object from the receiver or `nil` if there is no error.
  */ 
-@property (atomic, readonly) NSError* error;
+@property (weak, atomic, readonly) NSError* error;
 
 
 
@@ -431,7 +431,7 @@ errorHandlerBlock;
  
  @return An object if a result is available, otherwise `nil`.
  */ 
-@property (nonatomic, readonly) id result;
+@property (unsafe_unretained, nonatomic, readonly) id result;
 
 
 

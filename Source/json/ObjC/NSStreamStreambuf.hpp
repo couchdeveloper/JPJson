@@ -19,6 +19,12 @@
 #ifndef JSON_OBJC_NSSTREAM_STREAMBUF_HPP
 #define JSON_OBJC_NSSTREAM_STREAMBUF_HPP
 
+#if !__has_feature(objc_arc)
+#warning error This Objective-C file shall be compiled with ARC enabled.
+#endif
+
+
+
 #include "json/config.hpp"
 
 #include <stdexcept>
@@ -60,12 +66,10 @@ namespace json { namespace objc { namespace internal {
           _consumed(0)
         {
             if (_ns_input_stream == nil) throw std::invalid_argument("invalid input stream or nil (stream must be openend)");
-            [_ns_input_stream retain];
         }
                 
         // d-tor
         ~NSInputStreamSource() {
-            [_ns_input_stream release];
         }
         
         // Move ctor
@@ -143,7 +147,6 @@ namespace json { namespace objc { namespace internal {
           _consumed(0)
         {
             if (_ns_input_stream == nil) throw std::invalid_argument("invalid input stream or nil (stream must be openend)");
-            [_ns_input_stream retain];
         }
         
         // Copy Constructor
@@ -151,13 +154,11 @@ namespace json { namespace objc { namespace internal {
         : _ns_input_stream(other._ns_input_stream),
           _consumed(other._consumed)
         {
-            [_ns_input_stream retain];
         }
         
         // d-tor
         ~NSInputStreamSource2() {
             //printf("~NSInputStreamSource2\n");
-            [_ns_input_stream release];
         }
         
         // Move Constructor
@@ -172,9 +173,7 @@ namespace json { namespace objc { namespace internal {
         NSInputStreamSource2& operator=(NSInputStreamSource2 const& other) noexcept
         {
             if (&other != this) {
-                [_ns_input_stream release];
                 _ns_input_stream = other._ns_input_stream;
-                [_ns_input_stream retain];
                 _consumed = other._consumed;
             }
             return *this;
@@ -261,12 +260,10 @@ namespace json { namespace objc { namespace internal {
           _written(0)
         {
             if (_ns_output_stream == nil) throw std::invalid_argument("invalid input stream or nil (stream must be openend)");
-            [_ns_output_stream retain];
         }
         
         // Destructor
         ~NSOutputStreamSink() {
-            [_ns_output_stream release];
         }
         
         // Move Constructor
@@ -345,7 +342,6 @@ namespace json { namespace objc { namespace internal {
         // d-tor
         ~NSOutputStreamSink2()
         {
-            [_ns_output_stream release];
         }
         
         // Constructor
@@ -354,7 +350,6 @@ namespace json { namespace objc { namespace internal {
           _written(0)
         {
             if (_ns_output_stream == nil) throw std::invalid_argument("invalid input stream or nil (stream must be open)");
-            [_ns_output_stream retain];
         }
         
         
@@ -364,7 +359,6 @@ namespace json { namespace objc { namespace internal {
           _written(0)
         {
             if (_ns_output_stream == nil) throw std::invalid_argument("invalid input stream or nil (stream must be openend)");
-            [_ns_output_stream retain];
         }
         
         // Move Constructor
@@ -379,10 +373,8 @@ namespace json { namespace objc { namespace internal {
         NSOutputStreamSink2& operator=(NSOutputStreamSink2 const& other)
         {
             if (this != &other) {
-                [_ns_output_stream release];
                 _ns_output_stream = other._ns_output_stream;
                 _written = other._written;
-                [_ns_output_stream retain];
             }
             return *this;
         }
@@ -409,7 +401,7 @@ namespace json { namespace objc { namespace internal {
             NSUInteger remaining = n;
             
             while (1) {
-                written = CFWriteStreamWrite((CFWriteStreamRef)_ns_output_stream, p, remaining);
+                written = CFWriteStreamWrite((__bridge CFWriteStreamRef)_ns_output_stream, p, remaining);
                 //written = [_ns_output_stream write:p maxLength:remaining];
                 if (written > 0) {
                     p += written;

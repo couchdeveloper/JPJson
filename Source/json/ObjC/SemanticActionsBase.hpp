@@ -92,7 +92,7 @@ namespace json { namespace objc {
         typedef typename base::number_desc_t        number_desc_t;
         typedef typename base::char_t               char_t;     // char type of the StringBuffer
         typedef typename base::encoding_t           encoding_t;
-        typedef id                                  result_type;
+        typedef __strong id                         result_type;
         
         typedef typename base::buffer_t             buffer_t;
         typedef typename base::const_buffer_t       const_buffer_t;
@@ -101,7 +101,7 @@ namespace json { namespace objc {
         
 #pragma mark - Public Members        
                 
-        SemanticActionsBase(id<JPSemanticActionsProtocol> delegate = nil) 
+        SemanticActionsBase(id<JPSemanticActionsProtocol> delegate = nil) noexcept
         : delegate_(delegate)
         {
         }

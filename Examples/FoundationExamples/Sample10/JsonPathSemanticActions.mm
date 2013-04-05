@@ -34,7 +34,7 @@
 
 
 #if !__has_feature(objc_arc)
-    #error This Objective-C file shall be compiled with ARC enabled.
+#error This Objective-C file shall be compiled with ARC enabled.
 #endif
 
 @interface JsonPathSemanticActions () 

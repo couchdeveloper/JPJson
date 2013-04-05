@@ -94,30 +94,30 @@ namespace {
     {
         typedef NSMutableDataStreambuf<char>   stream_buffer_t;
         
-        NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+        @autoreleasepool {
         
-        stream_buffer_t ios;
-        EXPECT_EQ(std::streamsize(0), ios.in_avail());
-        EXPECT_TRUE(ios.data() != nil);
-        EXPECT_EQ(0, [ios.data() length]);
+            stream_buffer_t ios;
+            EXPECT_EQ(std::streamsize(0), ios.in_avail());
+            EXPECT_TRUE(ios.data() != nil);
+            EXPECT_EQ(0, [ios.data() length]);
         
-        [pool drain];
+        }
     }    
     
     TEST_F(NSMutableDataStreambufTest, Constructor2) 
     {
         typedef NSMutableDataStreambuf<char>   stream_buffer_t;
         
-        NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+        @autoreleasepool {
         
-        NSData* data = [NSData dataWithBytes:"0123456789" length:10];
+            NSData* data = [NSData dataWithBytes:"0123456789" length:10];
+            
+            stream_buffer_t ios(data);
+            EXPECT_EQ(std::streamsize(10), ios.in_avail());
+            EXPECT_TRUE(ios.data() != nil);
+            EXPECT_EQ(10, [ios.data() length]);
         
-        stream_buffer_t ios(data);
-        EXPECT_EQ(std::streamsize(10), ios.in_avail());
-        EXPECT_TRUE(ios.data() != nil);
-        EXPECT_EQ(10, [ios.data() length]);
-        
-        [pool drain];
+        }
     }    
     
     TEST_F(NSMutableDataStreambufTest, Constructor3) 
@@ -126,16 +126,16 @@ namespace {
         
         typedef NSMutableDataStreambuf<char>   stream_buffer_t;
         
-        NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+        @autoreleasepool {
         
-        NSData* data = [NSData dataWithBytes:"0123456789" length:10];
+            NSData* data = [NSData dataWithBytes:"0123456789" length:10];
+            
+            stream_buffer_t ios(data, ios::app|ios::ate|ios::out);
+            EXPECT_EQ(std::streamsize(10), ios.in_avail());
+            EXPECT_TRUE(ios.data() != nil);
+            EXPECT_EQ(10, [ios.data() length]);
         
-        stream_buffer_t ios(data, ios::app|ios::ate|ios::out);
-        EXPECT_EQ(std::streamsize(10), ios.in_avail());
-        EXPECT_TRUE(ios.data() != nil);
-        EXPECT_EQ(10, [ios.data() length]);
-        
-        [pool drain];
+        }
     }    
     
     
@@ -146,13 +146,13 @@ namespace {
     {
         typedef NSMutableDataStreambuf<char>   stream_buffer_t;
         
-        NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+        @autoreleasepool {
         
-        stream_buffer_t ios;
-        
-        EXPECT_EQ(std::streamsize(0), ios.in_avail());
-        EXPECT_TRUE(ios.data() != nil);
-        EXPECT_EQ(0, [ios.data() length]);
+            stream_buffer_t ios;
+            
+            EXPECT_EQ(std::streamsize(0), ios.in_avail());
+            EXPECT_TRUE(ios.data() != nil);
+            EXPECT_EQ(0, [ios.data() length]);
         
         //        for (int i = 0; i < 100; ++i) {
         //            ios.sputn("1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890\n", 101);
@@ -181,7 +181,7 @@ namespace {
          }
          */      
         
-        [pool drain];
+        }
     }    
     
     
