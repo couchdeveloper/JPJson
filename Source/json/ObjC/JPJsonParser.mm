@@ -507,29 +507,32 @@ namespace {
     // flag "JPJsonParserParseMultipleDocuments" - if set.
     options &= ~JPJsonParserParseMultipleDocuments;
     
-    // Since we don't need handlers, we do not need a dispatch queue, so
-    // create a semantic actions object without a dispatch queue:
-    JPRepresentationGenerator* sa = [[JPRepresentationGenerator alloc] initWithHandlerDispatchQueue:NULL];
-    [sa configureWithOptions:options];    
     
     id result = nil;
-    const void* bytes = static_cast<const void*>([data bytes]);    
-    BOOL success = [JPJsonParser runWithBytes:bytes 
-                                       length:[data length] 
-                                     encoding:JPUnicodeEncoding_Unknown 
-                              semanticActions:sa];    
-    if (success) {
-        // result is owned by sa only  - need to retain,autorelease it since we
-        // dealloc sa.
-        result = [sa result];
-    } else {
-        if (error)
-            *error = [sa error]; // error may return an autoreleased object, but we don't know for sure ...
+    @autoreleasepool {
+        // Since we don't need handlers, we do not need a dispatch queue, so
+        // create a semantic actions object without a dispatch queue:
+        JPRepresentationGenerator* sa = [[JPRepresentationGenerator alloc] initWithHandlerDispatchQueue:NULL];
+        [sa configureWithOptions:options];
+        
+        const void* bytes = static_cast<const void*>([data bytes]);
+        BOOL success = [JPJsonParser runWithBytes:bytes
+                                           length:[data length]
+                                         encoding:JPUnicodeEncoding_Unknown
+                                  semanticActions:sa];
+        if (success) {
+            // result is owned by sa only  - need to retain,autorelease it since we
+            // dealloc sa.
+            result = [sa result];
+        } else {
+            if (error)
+                *error = [sa error]; // error may return an autoreleased object, but we don't know for sure ...
+        }
+        
+//#if defined (DEBUG)
+//        NSLog(@"%@", [sa description]);
+//#endif    
     }
-    
-#if defined (DEBUG)
-    NSLog(@"%@", [sa description]);
-#endif    
     return result;
 }
 
@@ -546,29 +549,32 @@ namespace {
     // flag "JPJsonParserParseMultipleDocuments" - if set.
     options &= ~JPJsonParserParseMultipleDocuments;
     
-    // Since we don't need handlers, we do not need a dispatch queue, so
-    // create a semantic actions object without a dispatch queue:
-    JPRepresentationGenerator* sa = [[JPRepresentationGenerator alloc] initWithHandlerDispatchQueue:NULL];
-    [sa configureWithOptions:options];    
-    
     id result = nil;
-    const void* bytes = static_cast<const void*>([data bytes]);    
-    BOOL success = [JPJsonParser runWithBytes:bytes 
-                                       length:[data length] 
-                                     encoding:JPUnicodeEncoding_Unknown 
-                              semanticActions:sa];    
-    if (success) {
-        // result is owned by sa only  - need to retain,autorelease it since we
-        // dealloc sa.
-        result = [sa result];
-    } else {
-        if (error)
-            *error = [sa error]; // error may return an autoreleased object, but we don't know for sure ...
-    }
-    
+    @autoreleasepool {
+        // Since we don't need handlers, we do not need a dispatch queue, so
+        // create a semantic actions object without a dispatch queue:
+        JPRepresentationGenerator* sa = [[JPRepresentationGenerator alloc] initWithHandlerDispatchQueue:NULL];
+        [sa configureWithOptions:options];
+        
+        const void* bytes = static_cast<const void*>([data bytes]);
+        BOOL success = [JPJsonParser runWithBytes:bytes
+                                           length:[data length]
+                                         encoding:JPUnicodeEncoding_Unknown
+                                  semanticActions:sa];
+        if (success) {
+            // result is owned by sa only  - need to retain,autorelease it since we
+            // dealloc sa.
+            result = [sa result];
+        } else {
+            if (error)
+                *error = [sa error]; // error may return an autoreleased object, but we don't know for sure ...
+        }
+        
 #if defined (DEBUG)
-    NSLog(@"%@", [sa description]);
+        NSLog(@"%@", [sa description]);
 #endif    
+
+    }
     return result;
 }
 
@@ -581,11 +587,14 @@ namespace {
 + (BOOL) parseData:(NSData*)data semanticActions:(JPSemanticActionsBase*)sa
 {
     NSParameterAssert(sa != nil);
-    const void* bytes = static_cast<const void*>([data bytes]);
-    BOOL success = [JPJsonParser runWithBytes:bytes 
-                                       length:[data length] 
-                                     encoding:JPUnicodeEncoding_Unknown 
-                              semanticActions:sa];    
+    BOOL success;
+    @autoreleasepool {
+        const void* bytes = static_cast<const void*>([data bytes]);
+        success = [JPJsonParser runWithBytes:bytes
+                                      length:[data length]
+                                    encoding:JPUnicodeEncoding_Unknown
+                             semanticActions:sa];
+    }
     return success;
 }
 
@@ -595,43 +604,45 @@ namespace {
 + (BOOL) parseString:(NSString*)string semanticActions:(JPSemanticActionsBase*)sa
 {
     typedef SemanticActions::error_t error_t;
-    NSParameterAssert(sa != nil);    
-    // Try to get the string's content in UTF-16:
-    const void* bytes = CFStringGetCharactersPtr(CFStringRef(string));
-    size_t length = 0; // length in bytes
-#if 0 
-    // We cannot be sure we get a UTF-8 Encoding!!
-    if (not bytes) {
-        bytes = CFStringGetCStringPtr();  // UTF-8?
-        length = [string lengthOfBytesUsingEncoding:NSUTF16StringEncoding];
-    }
-#endif    
-    if (not bytes) {
-        // Performance may be suboptimal - even if we choose to use
-        // UTF-16 encoding - this may CFString require to internally 
-        // allocate a contigues buffer and copy bytes.
-        bytes = [string UTF8String];
-        length = [string lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
-    }
-    const char* first = static_cast<const char*>(bytes);
-    const char* last = first + length;
-    SemanticActions* sa_imp_ptr = [sa imp];
-    bool success = false;
-    assert(sa_imp_ptr !=  NULL);
-    try {
-        success = run(first, last, sa);
-    }
-    catch (sync_parser_runtime_error& ex) {
-        sa_imp_ptr->error(error_t(json::JP_PARSER_CLIENT, ex.what()));
-    }
-    catch (std::exception& ex) {            
-        sa_imp_ptr->error(error_t(json::JP_UNEXPECTED_ERROR, ex.what()));
-    }
-    catch (...) {
-        sa_imp_ptr->error(error_t(json::JP_UNKNOWN_ERROR, 
-                                  json::parser_error_str(json::JP_UNKNOWN_ERROR)));
-    }
+    NSParameterAssert(sa != nil);
     
+    bool success = false;
+    @autoreleasepool {
+        // Try to get the string's content in UTF-16:
+        const void* bytes = CFStringGetCharactersPtr(CFStringRef(string));
+        size_t length = 0; // length in bytes
+#if 0
+        // We cannot be sure we get a UTF-8 Encoding!!
+        if (not bytes) {
+            bytes = CFStringGetCStringPtr();  // UTF-8?
+            length = [string lengthOfBytesUsingEncoding:NSUTF16StringEncoding];
+        }
+#endif
+        if (not bytes) {
+            // Performance may be suboptimal - even if we choose to use
+            // UTF-16 encoding - this may CFString require to internally
+            // allocate a contigues buffer and copy bytes.
+            bytes = [string UTF8String];
+            length = [string lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
+        }
+        const char* first = static_cast<const char*>(bytes);
+        const char* last = first + length;
+        SemanticActions* sa_imp_ptr = [sa imp];
+        assert(sa_imp_ptr !=  NULL);
+        try {
+            success = run(first, last, sa);
+        }
+        catch (sync_parser_runtime_error& ex) {
+            sa_imp_ptr->error(error_t(json::JP_PARSER_CLIENT, ex.what()));
+        }
+        catch (std::exception& ex) {
+            sa_imp_ptr->error(error_t(json::JP_UNEXPECTED_ERROR, ex.what()));
+        }
+        catch (...) {
+            sa_imp_ptr->error(error_t(json::JP_UNKNOWN_ERROR,
+                                      json::parser_error_str(json::JP_UNKNOWN_ERROR)));
+        }
+    }
     return success;
 }
 

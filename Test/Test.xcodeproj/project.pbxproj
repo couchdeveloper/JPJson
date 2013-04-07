@@ -34,7 +34,6 @@
 		A1185509170B4594002EAEFC /* write_value_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A172BCB117021E5E00A29A10 /* write_value_test.cpp */; };
 		A11E4A6016203FFD0094B278 /* NSStreamStreambufTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A11E4A5E16203FFD0094B278 /* NSStreamStreambufTest.mm */; };
 		A11E4A72162044770094B278 /* gtest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1E67819161ECE7C00E80CA7 /* gtest.framework */; };
-		A120A476170D721B0088C78E /* NSStreamStreambufTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A11E4A5E16203FFD0094B278 /* NSStreamStreambufTest.mm */; };
 		A1228A4216DF6BB1001926E8 /* IntegralNumberTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1C69CB216DE10E50078E034 /* IntegralNumberTest.cpp */; };
 		A1228A4316DF6BB8001926E8 /* FloatNumberTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A12289F816DE1FA5001926E8 /* FloatNumberTest.cpp */; };
 		A1228A4616DFAC86001926E8 /* variant_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1228A4416DFAAEB001926E8 /* variant_test.cpp */; };
@@ -126,6 +125,7 @@
 		A1C0602E16232A9B00BB201D /* gtest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1E67819161ECE7C00E80CA7 /* gtest.framework */; };
 		A1C060341624A4BB00BB201D /* NSDataStreambufTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1C55DC715B6D0A500C573C6 /* NSDataStreambufTest.mm */; };
 		A1C0603A1624A50C00BB201D /* NSMutableDataStreambufTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1977E64156D1D3E0074D9B2 /* NSMutableDataStreambufTest.mm */; };
+		A1CC0A791710037B00679BCF /* CFDataCacheTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1DC52B914582CDA00CE28F2 /* CFDataCacheTest.mm */; };
 		A1D2527E13DDA2AE00960381 /* gtest_main.cc in Sources */ = {isa = PBXBuildFile; fileRef = A164221013D4357400796785 /* gtest_main.cc */; };
 		A1DC4BE614582BB700CE28F2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A199FC7B13D5DB12000170CD /* Foundation.framework */; };
 		A1DC52BF1458368200CE28F2 /* gtest_main.cc in Sources */ = {isa = PBXBuildFile; fileRef = A164221013D4357400796785 /* gtest_main.cc */; };
@@ -140,12 +140,6 @@
 		A1E67820161ECEDC00E80CA7 /* gtest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1E67819161ECE7C00E80CA7 /* gtest.framework */; };
 		A1F5B8DC16EDEA53002F14CC /* ValueCustomPoliciesTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A164225413D4427000796785 /* ValueCustomPoliciesTest.cpp */; };
 		A1FE70F2148A5C29004B962E /* intrusive_json_path_test.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1FE70EF148A4A43004B962E /* intrusive_json_path_test.mm */; };
-		A1FEAC5E170DA79200DCB405 /* NSDataStreambufTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1C55DC715B6D0A500C573C6 /* NSDataStreambufTest.mm */; };
-		A1FEAC5F170DA79200DCB405 /* NSMutableDataStreambufTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1977E64156D1D3E0074D9B2 /* NSMutableDataStreambufTest.mm */; };
-		A1FEAC60170DA79200DCB405 /* intrusive_json_path_test.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1FE70EF148A4A43004B962E /* intrusive_json_path_test.mm */; };
-		A1FEAC61170DA79200DCB405 /* CFDataCacheTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1DC52B914582CDA00CE28F2 /* CFDataCacheTest.mm */; };
-		A1FEAC62170DA79200DCB405 /* SemanticActionsBaseTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1DC52BD14582D6C00CE28F2 /* SemanticActionsBaseTest.mm */; };
-		A1FEAC63170DA79200DCB405 /* RepresentationGeneratorTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1DC52BA14582CDA00CE28F2 /* RepresentationGeneratorTest.mm */; };
 		A1FF8C771489201B003DF439 /* NSData+JPJsonDetectEncodingTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A12AC926146BE78F00AED943 /* NSData+JPJsonDetectEncodingTest.mm */; };
 /* End PBXBuildFile section */
 
@@ -1077,13 +1071,7 @@
 			files = (
 				A144F303145871230062D5E9 /* timer.cpp in Sources */,
 				A1DC52BF1458368200CE28F2 /* gtest_main.cc in Sources */,
-				A120A476170D721B0088C78E /* NSStreamStreambufTest.mm in Sources */,
-				A1FEAC5E170DA79200DCB405 /* NSDataStreambufTest.mm in Sources */,
-				A1FEAC5F170DA79200DCB405 /* NSMutableDataStreambufTest.mm in Sources */,
-				A1FEAC60170DA79200DCB405 /* intrusive_json_path_test.mm in Sources */,
-				A1FEAC61170DA79200DCB405 /* CFDataCacheTest.mm in Sources */,
-				A1FEAC62170DA79200DCB405 /* SemanticActionsBaseTest.mm in Sources */,
-				A1FEAC63170DA79200DCB405 /* RepresentationGeneratorTest.mm in Sources */,
+				A1CC0A791710037B00679BCF /* CFDataCacheTest.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

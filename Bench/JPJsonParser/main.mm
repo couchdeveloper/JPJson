@@ -265,9 +265,11 @@ namespace {
             if ((i+1) == N) {
                 NSLog(@"%@", result);
             }
-#endif        
+#endif                    
             [result release];
             [pool release];
+            
+            //usleep(10*1000);
             
             if (!result)
                 break;
@@ -992,7 +994,7 @@ int main (int argc, const char * argv[])
 #if defined (DEBUG)
     int N = 1;
 #else
-    int N = 10000;
+    int N = 1000;
 #endif    
 
     
@@ -1005,22 +1007,22 @@ int main (int argc, const char * argv[])
     NSLog(@"Start Bench");
         
     bench_JPJsonParser1a(JSON_TEST_FILE, N);
-//    bench_JPJsonParserString1(JSON_TEST_FILE,N);
-//    bench_JPJsonParser1a(JSON_TEST_FILE, N);
-//    bench_JPJsonParser1b(JSON_TEST_FILE, N);
-//    bench_JPJsonParser1x(JSON_TEST_FILE, N);
-//    bench_JPJsonParser1d(JSON_TEST_FILE, N);
-//    bench_JPJsonParser2(JSON_TEST_FILE, N);
-//    bench_JPAsyncJsonParser(JSON_TEST_FILE, N);
-//#if defined (USE_JSONKit)
-//    bench_JSONKit1(JSON_TEST_FILE, N);
-//    bench_JSONKit2(JSON_TEST_FILE, N);
-//    bench_JSONKitString1(JSON_TEST_FILE, N);
-//#endif    
-//#if 1    
-//    bench_NSJSONSerialization1(JSON_TEST_FILE, N);
-//    bench_NSJSONSerialization2(JSON_TEST_FILE, N);
-//#endif    
+    bench_JPJsonParserString1(JSON_TEST_FILE,N);
+    bench_JPJsonParser1a(JSON_TEST_FILE, N);
+    bench_JPJsonParser1b(JSON_TEST_FILE, N);
+    bench_JPJsonParser1x(JSON_TEST_FILE, N);
+    bench_JPJsonParser1d(JSON_TEST_FILE, N);
+    bench_JPJsonParser2(JSON_TEST_FILE, N);
+    bench_JPAsyncJsonParser(JSON_TEST_FILE, N);
+#if defined (USE_JSONKit)
+    bench_JSONKit1(JSON_TEST_FILE, N);
+    bench_JSONKit2(JSON_TEST_FILE, N);
+    bench_JSONKitString1(JSON_TEST_FILE, N);
+#endif    
+#if 1    
+    bench_NSJSONSerialization1(JSON_TEST_FILE, N);
+    bench_NSJSONSerialization2(JSON_TEST_FILE, N);
+#endif    
     [pool drain];
     return 0;
 }

@@ -176,7 +176,8 @@ namespace {
     return result;
 }
 
-- (BOOL) close {
+
+- (BOOL) flush {
     int result = _streambuf.pubsync();
     if (result != 0) {
         _error = [[NSError alloc] initWithDomain:@"JPDataStreambuffer"
@@ -189,6 +190,11 @@ namespace {
     else {
         return YES;
     }
+}
+
+
+- (BOOL) close {
+    return [self flush];
 }
 
 

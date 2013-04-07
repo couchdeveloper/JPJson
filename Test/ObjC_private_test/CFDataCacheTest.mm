@@ -23,23 +23,23 @@
 #include <gtest/gtest.h>
 
 
-
-// mutex and semaphores
-//#include "json/ObjC/mutex.hpp"
-//#include "json/ObjC/semaphore.hpp"
-
-
 // for testing
 #include "utilities/bench.hpp"
+#include "json/utility/arena_allocator.hpp"
 #include <dispatch/dispatch.h>
-#include <string.h>
-#include <stdio.h>
+
 #include <stdexcept>
 #include <map>
 #include <unordered_map>
 #include <algorithm>
+#include <scoped_allocator>
+#include <cstring>
+#include <cstdio>
+
 #include <boost/tr1/unordered_map.hpp>
+
 #import <Foundation/Foundation.h>
+#import <CoreFoundation/CoreFoundation.h> 
 
 
 using namespace json;
@@ -122,7 +122,7 @@ namespace test {
             time t0;
             duration result = duration::zero();
             char buffer[245];
-            map_t map;
+            map_t map;  // almost zero duration!
             for (int i = 0; i < count_; ++i) {
                 snprintf(buffer, sizeof(buffer), "key-%12.d",  keys_[i]);
                 t0 = timer.now();
@@ -137,6 +137,68 @@ namespace test {
         std::vector<int> keys_;
     };
 
+
+    template < template <typename...> class Map>
+    struct bench_map_arena_allocator_create : bench_datacache_base<bench_map_arena_allocator_create<Map>>
+    {
+        typedef json::utility::arena_allocator<char, json::utility::SysArena> allocator_t;
+        typedef typename allocator_t::template rebind<char>::other string_allocator_t;
+        typedef std::basic_string<char, std::char_traits<char>, string_allocator_t> key_t;
+        typedef std::less<key_t> compare_t;
+        typedef typename std::scoped_allocator_adaptor<allocator_t> scoped_allocator_t;        
+        typedef Map<key_t, CFTypeRef, compare_t, scoped_allocator_t> map_t;
+        
+        typedef bench_datacache_base<bench_map_arena_allocator_create<Map>> base;
+        typedef typename base::timer timer;
+        typedef typename base::time time;
+        typedef typename base::duration duration;
+        
+        
+        bench_map_arena_allocator_create(const std::string& title)
+        : base(title),
+          arena_(4096),
+          allocator_(arena_)
+        {}
+        
+        void prepare_imp(int count)
+        {
+            count_ = count;
+            base::prepare_imp();
+            std::cout << "function map::emplace" << std::endl;
+            for (int i = 0; i < count_; ++i) {
+                keys_.push_back(i);
+            }
+            std::random_shuffle(keys_.begin(), keys_.end());
+        }
+        
+        duration bench_imp()
+        {
+            timer timer;
+            time t0;
+            duration result = duration::zero();
+            char buffer[245];
+            map_t map(allocator_);  // almost zero duration!
+            for (int i = 0; i < count_; ++i) {
+                snprintf(buffer, sizeof(buffer), "key-%12.d",  keys_[i]);
+                t0 = timer.now();
+                map.emplace(key_t(buffer, 16, allocator_), static_cast<CFStringRef>(nullptr));
+                result += timer.now() - t0;
+            }
+            return result;
+        }
+        
+        void teardown_imp()
+        {
+            arena_.clear();
+        }
+        
+    private:
+        json::utility::SysArena arena_;
+        allocator_t allocator_;
+        int count_;
+        std::vector<int> keys_;
+    };
+    
     
     struct bench_NSMutableDictionary_create : bench_datacache_base<bench_NSMutableDictionary_create>
     {
@@ -163,19 +225,24 @@ namespace test {
             timer timer;
             time t0;
             duration result = duration::zero();
+            duration creation_duration = duration::zero();
             
             @autoreleasepool {
                 char buffer[245];
+                t0 = timer.now();
                 NSMutableDictionary* dict = [[NSMutableDictionary alloc] initWithCapacity:count_];
+                creation_duration = timer.now() - t0;
                 for (int i = 0; i < count_; ++i) {
                     snprintf(buffer, sizeof(buffer), "key-%12.d", keys_[i]);
                     t0 = timer.now();
-                    NSString* key = [[NSString alloc] initWithUTF8String:buffer];
-                    [dict setObject:[NSNull null] forKey:key];
+                    @autoreleasepool {
+                        NSString* key = [[NSString alloc] initWithUTF8String:buffer];
+                        [dict setObject:[NSNull null] forKey:key];
+                    }
                     result += timer.now() - t0;
                 }
             }
-            return result;
+            return result + creation_duration;
         }
         
     private:
@@ -183,6 +250,65 @@ namespace test {
         std::vector<int> keys_;
         
     };
+    
+
+    struct bench_CFMutableDictionary_create : bench_datacache_base<bench_CFMutableDictionary_create>
+    {
+        typedef bench_datacache_base<bench_CFMutableDictionary_create> base;
+        typedef typename base::timer timer;
+        typedef typename base::time time;
+        typedef typename base::duration duration;
+        
+        bench_CFMutableDictionary_create(const std::string& title) : base(title)  {}
+        
+        void prepare_imp(int count)
+        {
+            count_ = count;
+            base::prepare_imp();
+            std::cout << "function CFStringCreateWithBytes" << std::endl;
+            for (int i = 0; i < count_; ++i) {
+                keys_.push_back(i);
+            }
+            std::random_shuffle(keys_.begin(), keys_.end());
+        }
+        
+        duration bench_imp()
+        {
+            timer timer;
+            time t0;
+            duration result = duration::zero();
+            duration creation_duration = duration::zero();
+            
+            char buffer[245];
+            const UInt8* bytes = reinterpret_cast<const UInt8*>(&buffer[0]);
+            t0 = timer.now();
+            CFMutableDictionaryRef cfDict = CFDictionaryCreateMutable(
+                    kCFAllocatorDefault,
+                    0,
+                    &kCFTypeDictionaryKeyCallBacks,
+                    &kCFTypeDictionaryValueCallBacks);
+            creation_duration = timer.now() - t0;
+            for (int i = 0; i < count_; ++i) {
+                snprintf(buffer, sizeof(buffer), "key-%12.d", keys_[i]);
+                t0 = timer.now();
+                CFStringRef cfKey = CFStringCreateWithBytes(
+                    kCFAllocatorDefault,
+                    bytes, 16, kCFStringEncodingUTF8,
+                    false);
+                CFDictionaryAddValue(cfDict, cfKey, kCFNull);
+                CFRelease(cfKey);
+                result += timer.now() - t0;
+            }
+            CFRelease(cfDict);
+            return result + creation_duration;
+        }
+        
+    private:
+        int count_;
+        std::vector<int> keys_;
+        
+    };
+    
     
     
     struct bench_CFDataCache_create : bench_datacache_base<bench_CFDataCache_create>
@@ -301,21 +427,23 @@ namespace test {
         
         void prepare_imp(int count)
         {
-            count_ = count;
-            base::prepare_imp();
-            std::cout << "method objectForKey:" << std::endl;
-            for (int i = 0; i < count_; ++i) {
-                keys_.push_back(i);
+            @autoreleasepool {
+                count_ = count;
+                base::prepare_imp();
+                std::cout << "method objectForKey:" << std::endl;
+                for (int i = 0; i < count_; ++i) {
+                    keys_.push_back(i);
+                }
+                std::random_shuffle(keys_.begin(), keys_.end());
+                char buffer[245];
+                dict_ = [[NSMutableDictionary alloc] initWithCapacity:count_];
+                for (int i = 0; i < count_; ++i) {
+                    snprintf(buffer, sizeof(buffer), "key-%12.d", keys_[i]);
+                    NSString* key = [[NSString alloc] initWithUTF8String:buffer];
+                    [dict_ setObject:[NSNull null] forKey:key];
+                    key = nil; // try to disassociate key from the autorelease pool
+                }
             }
-            std::random_shuffle(keys_.begin(), keys_.end());
-            char buffer[245];
-            dict_ = [[NSMutableDictionary alloc] initWithCapacity:count_];
-            for (int i = 0; i < count_; ++i) {
-                snprintf(buffer, sizeof(buffer), "key-%12.d", keys_[i]);
-                NSString* key = [[NSString alloc] initWithUTF8String:buffer];
-                [dict_ setObject:[NSNull null] forKey:key];
-            }
-            
         }
         
         duration bench_imp()
@@ -329,8 +457,11 @@ namespace test {
                 for (int i = 0; i < count_; ++i) {
                     snprintf(buffer, sizeof(buffer), "key-%12.d", keys_[i]);
                     t0 = timer.now();
-                    NSString* key = [[NSString alloc] initWithUTF8String:buffer];
-                    id obj = [dict_ objectForKey:key];
+                    id obj;
+                    @autoreleasepool {
+                        NSString* key = [[NSString alloc] initWithUTF8String:buffer];
+                        obj = [dict_ objectForKey:key];
+                    }
                     result += timer.now() - t0;
                     if (obj == nil) {
                         throw std::logic_error("did not find object in dictionary");
@@ -344,6 +475,79 @@ namespace test {
         int count_;
         std::vector<int> keys_;
         NSMutableDictionary* dict_;
+    };
+    
+
+    struct bench_CFMutableDictionary_lookup : bench_datacache_base<bench_CFMutableDictionary_lookup>
+    {
+        typedef bench_datacache_base<bench_CFMutableDictionary_lookup> base;
+        typedef typename base::timer timer;
+        typedef typename base::time time;
+        typedef typename base::duration duration;
+        
+        bench_CFMutableDictionary_lookup(const std::string& title) : base(title), cfDict_(NULL)  {}
+        
+        void prepare_imp(int count)
+        {
+            count_ = count;
+            base::prepare_imp();
+            std::cout << "function CFDictionaryGetValue" << std::endl;
+            for (int i = 0; i < count_; ++i) {
+                keys_.push_back(i);
+            }
+            std::random_shuffle(keys_.begin(), keys_.end());
+            char buffer[245];
+            cfDict_ = CFDictionaryCreateMutable(
+                          kCFAllocatorDefault,
+                          0,
+                          &kCFTypeDictionaryKeyCallBacks,
+                          &kCFTypeDictionaryValueCallBacks);
+            for (int i = 0; i < count_; ++i) {
+                snprintf(buffer, sizeof(buffer), "key-%12.d", keys_[i]);
+                CFStringRef cfKey = CFStringCreateWithBytes(
+                                                            kCFAllocatorDefault,
+                                                            (const UInt8*)buffer, 16, kCFStringEncodingUTF8,
+                                                            false);
+                CFDictionaryAddValue(cfDict_, cfKey, kCFNull);
+                CFRelease(cfKey);
+            }
+        }
+        
+        void teardown_imp()
+        {
+            CFRelease(cfDict_);
+            cfDict_ = NULL;
+        }
+        
+        
+        duration bench_imp()
+        {
+            timer timer;
+            time t0;
+            duration result = duration::zero();
+            
+            char buffer[245];
+            for (int i = 0; i < count_; ++i) {
+                snprintf(buffer, sizeof(buffer), "key-%12.d", keys_[i]);
+                t0 = timer.now();
+                CFStringRef cfKey = CFStringCreateWithBytes(
+                        kCFAllocatorDefault,
+                        (const UInt8*)buffer, 16, kCFStringEncodingUTF8,
+                        false);
+               
+                CFTypeRef element = CFDictionaryGetValue(cfDict_, cfKey);
+                result += timer.now() - t0;
+                if (element == NULL) {
+                    throw std::logic_error("did not find element in CoreFoundation dictionary");
+                }
+            }
+            return result;
+        }
+        
+    private:
+        int count_;
+        std::vector<int> keys_;
+        CFMutableDictionaryRef cfDict_;
     };
     
     
@@ -403,6 +607,331 @@ namespace test {
     };
     
 
+    
+#pragma mark - String Bench
+    
+    
+    template <typename Derived, typename CharT>
+    struct bench_string_base : bench_base<Derived, N>
+    {
+        typedef bench_base<Derived> base;
+        typedef typename base::timer timer;
+        typedef typename base::time time;
+        typedef typename base::duration duration;
+        
+        typedef std::basic_string<CharT>    string_t;
+        
+        
+        bench_string_base(std::string title) : title_(title) {}
+        
+        void prepare_imp(int count, int size = 16)
+        {
+            std::cout << "\n--- " << title_ << " ---\n";
+            
+            char t[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            for (int n = 0; n < count; ++n) {
+                std::random_shuffle(t, t+sizeof(t));
+                string_t s;
+                s.reserve(size);
+                for (int i = 0; i < size; ++i) {
+                    s.push_back( static_cast<CharT>(t[i%sizeof(t)]) );
+                }
+                source_strings_.emplace_back(std::move(s));
+            }
+        }
+        
+        void report_imp(duration min, duration max, duration tot, std::size_t n)
+        {
+            std::cout << "elapsed time:\n"
+            << "min: " << formatted_duration(min) <<
+            ", max: " << formatted_duration(max) <<
+            ", avg: " << formatted_duration(tot/n) << std::endl;
+        }
+        
+        bool result() const { return result_; }
+        bool& result() { return result_; }
+        
+        void teardown_imp() {
+            source_strings_.clear();
+        };
+        
+    protected:
+        
+        std::vector<string_t> source_strings_;
+        std::string title_;
+        bool result_;
+    };
+    
+    
+    struct bench_NSString_createUTF8 : bench_string_base<bench_NSString_createUTF8, char>
+    {
+        typedef bench_string_base<bench_NSString_createUTF8, char> base;
+        typedef typename base::timer timer;
+        typedef typename base::time time;
+        typedef typename base::duration duration;
+        
+        bench_NSString_createUTF8(const std::string& title) : base(title)  {}
+        
+        void prepare_imp(int count, int size = 16)
+        {
+            count_ = count;
+            base::prepare_imp(count, size);
+            std::cout << "method initWithBytes:length:encoding: (" << count << " times),  with length: "
+            << size << ", encoding equals NSUTF8StringEncoding" << std::endl;
+        }
+        
+        duration bench_imp()
+        {
+            timer timer;
+            time t0;
+            duration result = duration::zero();
+            
+            strings_.reserve(count_);
+            
+            for (int i = 0; i < count_; ++i) {
+                const void* bytes = (const void*)(source_strings_[i].data());
+                NSUInteger length = source_strings_[i].size();
+                t0 = timer.now();
+                NSString* string = [[NSString alloc] initWithBytes:bytes length:length encoding:NSUTF8StringEncoding];
+                result += timer.now() - t0;
+                strings_.emplace_back(string);
+            }
+            strings_.clear();
+            return result;
+        }
+        
+    private:
+        int count_;
+        std::vector<NSString*> strings_;
+    };
+    
+    
+    struct bench_NSString_createUTF16 : bench_string_base<bench_NSString_createUTF16, char16_t>
+    {
+        typedef bench_string_base<bench_NSString_createUTF16, char16_t> base;
+        typedef typename base::timer timer;
+        typedef typename base::time time;
+        typedef typename base::duration duration;
+        
+        bench_NSString_createUTF16(const std::string& title) : base(title)  {}
+        
+        void prepare_imp(int count, int size = 16)
+        {
+            count_ = count;
+            base::prepare_imp(count, size);
+            std::cout << "method initWithBytes:length:encoding: (" << count << " times),  with number of bytes: " << size*2 << ", encoding equals NSUTF16StringEncoding" << std::endl;
+        }
+        
+        duration bench_imp()
+        {
+            timer timer;
+            time t0;
+            duration result = duration::zero();
+            
+            strings_.reserve(count_);
+            
+            for (int i = 0; i < count_; ++i) {
+                const void* bytes = (const void*)(source_strings_[i].data());
+                NSUInteger length = source_strings_[i].size() * 2;
+                t0 = timer.now();
+                NSString* string = [[NSString alloc] initWithBytes:bytes length:length encoding:NSUTF16StringEncoding];
+                result += timer.now() - t0;
+                strings_.emplace_back(string);
+            }
+            strings_.clear();
+            return result;
+        }
+        
+    private:
+        int count_;
+        std::vector<NSString*> strings_;
+    };
+    
+    
+    struct bench_CFString_createUTF8 : bench_string_base<bench_CFString_createUTF8, char>
+    {
+        typedef bench_string_base<bench_CFString_createUTF8, char> base;
+        typedef typename base::timer timer;
+        typedef typename base::time time;
+        typedef typename base::duration duration;
+        
+        bench_CFString_createUTF8(const std::string& title) : base(title)  {}
+        
+        void prepare_imp(int count, int size = 16)
+        {
+            count_ = count;
+            base::prepare_imp(count, size);
+            std::cout << "function CFStringCreateWithBytes (" << count << " times),  with size: " << size << ", encoding equals kCFStringEncodingUTF8" << std::endl;
+        }
+        
+        duration bench_imp()
+        {
+            timer timer;
+            time t0;
+            duration result = duration::zero();
+            
+            strings_.reserve(count_);
+            
+            for (int i = 0; i < count_; ++i) {
+                const UInt8* bytes = (const UInt8*)(source_strings_[i].data());
+                CFIndex numBytes = source_strings_[i].size();
+                t0 = timer.now();
+                CFStringRef cfString = CFStringCreateWithBytes(
+                                                            kCFAllocatorDefault,
+                                                            bytes, numBytes, kCFStringEncodingUTF8,
+                                                            false);
+                result += timer.now() - t0;
+                strings_.emplace_back(cfString);
+            }
+            for (CFStringRef cfString : strings_) {
+                CFRelease(cfString);
+            }
+            strings_.clear();
+            return result;
+        }
+        
+    private:
+        int count_;
+        std::vector<CFStringRef> strings_;
+    };
+    
+
+    struct bench_CFString_createUTF16 : bench_string_base<bench_CFString_createUTF16, char16_t>
+    {
+        typedef bench_string_base<bench_CFString_createUTF16, char16_t> base;
+        typedef typename base::timer timer;
+        typedef typename base::time time;
+        typedef typename base::duration duration;
+        
+        bench_CFString_createUTF16(const std::string& title) : base(title)  {}
+        
+        void prepare_imp(int count, int size = 16)
+        {
+            count_ = count;
+            base::prepare_imp(count, size);
+            std::cout << "function CFStringCreateWithBytes (" << count << " times),  with number of bytes: "
+            << size*2 << ", encoding equals kCFStringEncodingUTF16" << std::endl;
+        }
+        
+        duration bench_imp()
+        {
+            timer timer;
+            time t0;
+            duration result = duration::zero();
+            
+            strings_.reserve(count_);
+            
+            for (int i = 0; i < count_; ++i) {
+                const UInt8* bytes = (const UInt8*)(source_strings_[i].data());
+                CFIndex numBytes = source_strings_[i].size() * 2;
+                t0 = timer.now();
+                CFStringRef cfString = CFStringCreateWithBytes(
+                                                               kCFAllocatorDefault,
+                                                               bytes, numBytes, kCFStringEncodingUTF16,
+                                                               false);
+                result += timer.now() - t0;
+                strings_.emplace_back(cfString);
+            }
+            for (CFStringRef cfString : strings_) {
+                CFRelease(cfString);
+            }
+            strings_.clear();
+            return result;
+        }
+        
+    private:
+        int count_;
+        std::vector<CFStringRef> strings_;
+    };
+    
+
+    
+    
+    struct bench_std_string_createUTF8 : bench_string_base<bench_std_string_createUTF8, char>
+    {
+        typedef bench_string_base<bench_std_string_createUTF8, char> base;
+        typedef typename base::timer timer;
+        typedef typename base::time time;
+        typedef typename base::duration duration;
+        
+        bench_std_string_createUTF8(const std::string& title) : base(title)  {}
+        
+        void prepare_imp(int count, int size = 16)
+        {
+            count_ = count;
+            base::prepare_imp(count, size);
+            std::cout << "function basic_string(const CharT*, size_type count) (" << count << " times),  with size: "
+            << size << ", encoding equals UTF-8" << std::endl;
+        }
+        
+        duration bench_imp()
+        {
+            timer timer;
+            time t0;
+            duration result = duration::zero();
+            
+            strings_.reserve(count_);
+            
+            for (int i = 0; i < count_; ++i) {
+                const char* s = source_strings_[i].data();
+                size_t size = source_strings_[i].size();
+                t0 = timer.now();
+                std::string string(s, size);
+                result += timer.now() - t0;
+                strings_.emplace_back(std::move(string));
+            }
+            strings_.clear();
+            return result;
+        }
+        
+    private:
+        int count_;
+        std::vector<std::string> strings_;
+    };
+
+    
+    struct bench_std_string_createUTF16 : bench_string_base<bench_std_string_createUTF16, char16_t>
+    {
+        typedef bench_string_base<bench_std_string_createUTF16, char16_t> base;
+        typedef typename base::timer timer;
+        typedef typename base::time time;
+        typedef typename base::duration duration;
+        
+        bench_std_string_createUTF16(const std::string& title) : base(title)  {}
+        
+        void prepare_imp(int count, int size = 16)
+        {
+            count_ = count;
+            base::prepare_imp(count, size);
+            std::cout << "function basic_string(const CharT*, size_type count) (" << count << " times),  with size: "
+            << size << ", encoding equals UTF-16" << std::endl;
+        }
+        
+        duration bench_imp()
+        {
+            timer timer;
+            time t0;
+            duration result = duration::zero();
+            
+            strings_.reserve(count_);
+            
+            for (int i = 0; i < count_; ++i) {
+                const char16_t* s = source_strings_[i].data();
+                size_t size = source_strings_[i].size();
+                t0 = timer.now();
+                std::u16string string(s, size);
+                result += timer.now() - t0;
+                strings_.emplace_back(std::move(string));
+            }
+            strings_.clear();
+            return result;
+        }
+        
+    private:
+        int count_;
+        std::vector<std::u16string> strings_;
+    };
+    
 }
 
 
@@ -578,7 +1107,77 @@ namespace {
     }
     
     
-#if defined (DEBUG)
+#if 0 and defined (DEBUG)
+    TEST_F(CFDataCacheTest, DISABLED_BenchStringCreation)
+#else
+    TEST_F(CFDataCacheTest, BenchStringCreation)
+#endif
+    {
+        std::cout << "\n== Bench Create CFString with UTF-8 source string ==" << std::endl;
+        test::bench_CFString_createUTF8 b1("CFStringRef");
+        
+        b1.run(1000, 4);
+        b1.run(1000, 16);
+        b1.run(1000, 22);
+        b1.run(1000, 32);
+        b1.run(1000, 78);
+        b1.run(1000, 128);
+        
+        std::cout << "\n\n== Bench Create NSString with UTF-8 source string==" << std::endl;
+        test::bench_NSString_createUTF8 b2("NSString");
+        
+        b2.run(1000, 4);
+        b2.run(1000, 16);
+        b2.run(1000, 22);
+        b2.run(1000, 32);
+        b2.run(1000, 78);
+        b2.run(1000, 128);
+        
+        std::cout << "\n== Bench Create CFString with UTF-16 source string ==" << std::endl;
+        test::bench_CFString_createUTF16 b3("CFStringRef");
+        
+        b3.run(1000, 4);
+        b3.run(1000, 16);
+        b3.run(1000, 22);
+        b3.run(1000, 32);
+        b3.run(1000, 78);
+        b3.run(1000, 128);
+        
+        std::cout << "\n\n== Bench Create NSString with UTF-16 source string==" << std::endl;
+        test::bench_NSString_createUTF16 b4("NSString");
+        
+        b4.run(1000, 4);
+        b4.run(1000, 16);
+        b4.run(1000, 22);
+        b4.run(1000, 32);
+        b4.run(1000, 78);
+        b4.run(1000, 128);
+        
+        
+        
+        std::cout << "\n== Bench Create std::string with UTF-8 source string ==" << std::endl;
+        test::bench_std_string_createUTF8 b5("std::string");
+        
+        b5.run(1000, 4);
+        b5.run(1000, 16);
+        b5.run(1000, 22);
+        b5.run(1000, 32);
+        b5.run(1000, 78);
+        b5.run(1000, 128);
+        
+        std::cout << "\n\n== Bench Create std::u16string with UTF-16 source string==" << std::endl;
+        test::bench_std_string_createUTF16 b6("std::u16string");
+        
+        b6.run(1000, 4);
+        b6.run(1000, 16);
+        b6.run(1000, 22);
+        b6.run(1000, 32);
+        b6.run(1000, 128);
+        
+    }
+    
+    
+#if 0 and defined (DEBUG)
     TEST_F(CFDataCacheTest, DISABLED_BenchCreate)
 #else
     TEST_F(CFDataCacheTest, BenchCreate)
@@ -592,7 +1191,10 @@ namespace {
         test::bench_map_create<std_unordered_map_t> b2("std::unordered_map<std::string, CFStringRef>");
         test::bench_map_create<boost_unordered_map_t> b3("boost::unordered_map<std::string, CFStringRef>");
         test::bench_NSMutableDictionary_create b4("NSMutableDictionary");
-        test::bench_CFDataCache_create b5("CFDataCache");
+        test::bench_CFMutableDictionary_create b5("CFMutableDictionary");
+        test::bench_CFDataCache_create b6("CFDataCache");
+        test::bench_map_arena_allocator_create<std::map> b10("std:map with arena allocator");
+        
         
         std::cout << "\n== Number of elements: 10 ==" << std::endl;
         b1.run(10);
@@ -600,6 +1202,8 @@ namespace {
         b3.run(10);
         b4.run(10);
         b5.run(10);
+        b6.run(10);
+        b10.run(10);
         
         std::cout << "\n\n== Number of elements: 100 ==" << std::endl;
         b1.run(100);
@@ -607,6 +1211,8 @@ namespace {
         b3.run(100);
         b4.run(100);
         b5.run(100);
+        b6.run(100);
+        b10.run(100);
         
         std::cout << "\n\n== Number of elements: 1000 ==" << std::endl;
         b1.run(1000);
@@ -614,6 +1220,8 @@ namespace {
         b3.run(1000);
         b4.run(1000);
         b5.run(1000);
+        b6.run(1000);
+        b10.run(1000);
         
         std::cout << "\n\n== Number of elements: 10000 ==" << std::endl;
         b1.run(10000);
@@ -621,6 +1229,8 @@ namespace {
         b3.run(10000);
         b4.run(10000);
         b5.run(10000);
+        b6.run(10000);
+        b10.run(10000);
         
         std::cout << "\n\n== Number of elements: 100000 ==" << std::endl;
         b1.run(100000);
@@ -628,10 +1238,13 @@ namespace {
         b3.run(100000);
         b4.run(100000);
         b5.run(100000);
+        b6.run(100000);
+        b10.run(100000);
+        
     }
 
         
-#if defined (DEBUG)
+#if 0 and defined (DEBUG)
     TEST_F(CFDataCacheTest, DISABLED_BenchLookup)
 #else
     TEST_F(CFDataCacheTest, BenchLookup)
@@ -646,7 +1259,8 @@ namespace {
         test::bench_map_lookup<std_unordered_map_t> b2("std::unordered_map<std::string, CFStringRef>");
         test::bench_map_lookup<boost_unordered_map_t> b3("boost::unordered_map<std::string, CFStringRef>");
         test::bench_NSMutableDictionary_lookup b4("NSMutableDictionary");
-        test::bench_CFDataCache_lookup b5("CFDataCache");
+        test::bench_NSMutableDictionary_lookup b5("CFMutableDictionary");
+        test::bench_CFDataCache_lookup b6("CFDataCache");
         
         
         std::cout << "\n== Accessing all elements: 10 ==" << std::endl;
@@ -655,6 +1269,7 @@ namespace {
         b3.run(10);
         b4.run(10);
         b5.run(10);
+        b6.run(10);
         
         std::cout << "\n\n== Accessing all elements: 100 ==" << std::endl;
         b1.run(100);
@@ -662,6 +1277,7 @@ namespace {
         b3.run(100);
         b4.run(100);
         b5.run(100);
+        b6.run(100);
         
         std::cout << "\n\n== Accessing all elements: 1000 ==" << std::endl;
         b1.run(1000);
@@ -669,6 +1285,7 @@ namespace {
         b3.run(1000);
         b4.run(1000);
         b5.run(1000);
+        b6.run(1000);
         
         std::cout << "\n\n== Accessing all elements: 10000 ==" << std::endl;
         b1.run(10000);
@@ -676,6 +1293,7 @@ namespace {
         b3.run(10000);
         b4.run(10000);
         b5.run(10000);
+        b6.run(10000);
         
         std::cout << "\n\n== Accessing all elements: 100000 ==" << std::endl;
         b1.run(100000);
@@ -683,6 +1301,7 @@ namespace {
         b3.run(100000);
         b4.run(100000);
         b5.run(100000);
+        b6.run(100000);
         
         
     }

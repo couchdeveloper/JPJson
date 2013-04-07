@@ -391,7 +391,7 @@ namespace json { namespace objc {
         typedef typename base::number_desc_t        number_desc_t;
         typedef typename base::char_t               char_t;     // char type of the StringBuffer
         typedef typename base::encoding_t           encoding_t;
-        typedef typename base::result_type          result_type;  // id
+        typedef typename base::result_type          result_type;  // __strong id
         
         typedef typename base::buffer_t             buffer_t;
         typedef typename base::const_buffer_t       const_buffer_t;
@@ -429,7 +429,7 @@ namespace json { namespace objc {
 #pragma mark - Public Members        
         
                 
-        RepresentationGenerator(id<JPSemanticActionsProtocol> delegate = nil) noexcept
+        RepresentationGenerator(__unsafe_unretained id<JPSemanticActionsProtocol> delegate = nil) noexcept
         :   base(delegate),
             result_(nil),
             tmp_data_str_(NULL),
@@ -477,22 +477,35 @@ namespace json { namespace objc {
         
         virtual void parse_end_imp()                            
         {
-            if (stack_.size() != 1 or markers_.size() != 0) 
+            // When the parser finished, we have only one remaining element (an
+            // instance of CFTypeRef whose retain count equals one) which is stored
+            // in stack_[0]. There shall be no other elements.
+            assert(stack_.size() == 1);
+            assert(markers_.size() == 0);
+            assert(CFGetRetainCount(stack_[0]) == 1);
+
+            if (stack_.size() != 1 or markers_.size() != 0) {
+//                for (CFTypeRef o : stack_) {
+//                    CFRelease(o);
+//                }
+//                stack_.clear();
                 throwLogicError("json::RepresentationGenerator: logic error");
+            }
             
-            // The last and only element is the result of the parser. This object
-            // is retained when put on the stack. When assigned to result_ we need 
-            // not to forget to release result_ (the previous if any) if it is 
-            // not nil!
-            result_ = CFBridgingRelease(stack_.back());
+            // The the only remaining element in stack_[0] becomes the result of
+            // the parser. This object is retained when put on the stack. When
+            // assigned to member object result_ we transfer ownership.
+            // The previous object result_ (if not nil) will be released and
+            // possibly deallocated.
+            result_ = nil;
+            CFTypeRef root = stack_.back();
+            result_ = CFBridgingRelease(root);
             stack_.clear();
-            //markers_.clear();
 #if defined (JSON_OBJC_REPRESENTATION_GENERATOR_USE_PERFORMANCE_COUNTER)            
             pc_.t_.stop();
 #endif            
-            // result_ contains the result of the parser. It's retained.
-            assert (tmp_data_str_ == 0);            
-            base::parse_end_imp();  // notifyies delegate
+            assert (tmp_data_str_ == 0);  // tmp_data_str_ shall be set to NULL whenever a string has been completed.
+            base::parse_end_imp();  // notifies delegate
         }
         
         
@@ -546,10 +559,10 @@ namespace json { namespace objc {
                 //cfArray = CFBridgingRetain([[NSMutableArray alloc] initWithCapacity: count]);
                 // Populate the array with the values on the stack from first to last:
                 while (first != last) {
+                    assert(CFGetRetainCount(*first) == 1);
                     f_cf_ArrayAppendValue((CFMutableArrayRef)cfArray, *first);
-                    f_cf_release(*first);
-                    (*first) = nil;
-                    ++first;
+                    assert(CFGetRetainCount(*first) == 2);
+                    f_cf_release(*first++);
                 }                     
             }
             else 
@@ -561,9 +574,8 @@ namespace json { namespace objc {
                 cfArray = CFArrayCreate(kCFAllocatorDefault, values, count, &kCFTypeArrayCallBacks);
                 // release the CFTypes:
                 while (first != last) {
-                    f_cf_release(*first);
-                    (*first) = nil;
-                    ++first;
+                    assert(CFGetRetainCount(*first) == 2);
+                    f_cf_release(*first++);
                 }                     
             }
             // Remove those values from the stack:
@@ -718,8 +730,7 @@ namespace json { namespace objc {
             // which have to be inserted into the object:
             first = first_saved;
             while (first != last) {
-                f_cf_release(*first);   
-                ++first;
+                f_cf_release(*first++);
             }
             stack_.erase(first_saved, last);
             
@@ -1079,12 +1090,8 @@ namespace json { namespace objc {
         
     private:
         void clear_stack() noexcept {
-            typedef stack_t::iterator iterator;
-            iterator first = stack_.begin();
-            iterator last = stack_.end();
-            while (first != last) {
-                CFRelease(*first);
-                ++first;
+            for (CFTypeRef o : stack_) {
+                CFRelease(o);
             }
             stack_.clear();
         }
@@ -1092,7 +1099,6 @@ namespace json { namespace objc {
 #if defined (JSON_OBJC_REPRESENTATION_GENERATOR_USE_CACHE) 
         void clear_cache() noexcept {
             string_cache_.clear();
-            assert(string_cache_.size() == 0);
             cache_hit_count_ = cache_miss_count_ = 0;
         }
         

@@ -75,7 +75,7 @@ typedef json::objc::RepresentationGenerator<JP_CFStringEncoding>    Representati
     return self;
 }
 
-- (void) dealloc 
+- (void) dealloc
 {
     delete sa_;
 }

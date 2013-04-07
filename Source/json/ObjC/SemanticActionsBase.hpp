@@ -101,7 +101,7 @@ namespace json { namespace objc {
         
 #pragma mark - Public Members        
                 
-        SemanticActionsBase(id<JPSemanticActionsProtocol> delegate = nil) noexcept
+        SemanticActionsBase(__unsafe_unretained id<JPSemanticActionsProtocol> delegate = nil) noexcept
         : delegate_(delegate)
         {
         }
@@ -164,7 +164,7 @@ namespace json { namespace objc {
         virtual result_type result() { return nil; }
         
     protected:    
-        id<JPSemanticActionsProtocol>  delegate_;  
+        __unsafe_unretained id<JPSemanticActionsProtocol>  delegate_;
         
     private:    
         error_t         error_;
