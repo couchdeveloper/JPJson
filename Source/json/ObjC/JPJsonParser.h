@@ -43,7 +43,7 @@
  The JSON document can be provided either with a `NSString` or with a `NSData` 
  object. The JSON text contained in a `NSData` object shall be encoded in one
  of the _Unicode encoding schemes_: UTF-8, UTF-16, UTF-16LE, UTF-16BE, UTF-32, 
- UTF-32LE or UTF-32BE. A _BOM_ may optionally preceed the start of the byte 
+ UTF-32LE or UTF-32BE. A _BOM_ may optionally precede the start of the byte
  stream.
 
  A number of options can be set in parameter `options` which are ored flags from
@@ -54,10 +54,10 @@
  
  -  `+parseData:semanticActions:`
  
- A _Semantic Actions Object_ acts as a delegate for the _internal json parser_. 
+ A _Semantic Actions Object_ acts as a delegate for the _internal JSON parser_. 
  It conforms to the protocol <JPSemanticActionsProtocol> and implements a set of 
  _semantic actions_ to corresponding _parse events_. The parse events will be 
- sent from the internal json parser to the semantic actions delegate when it 
+ sent from the internal JSON parser to the semantic actions delegate when it 
  encounters JSON elements in the JSON document.
  
  
@@ -67,12 +67,12 @@
  
  -  `JPJsonParserSignalErrorOnNoncharacter`
  
- If this option is set, the parser will singnal an error if it encounters
+ If this option is set, the parser will signal an error if it encounters
  an _Unicode noncharacter_ within the JSON document.
  This is the default setting.
  
  
- -  `JPJsonParserSubstituteUnicodeNoncharacters`
+ -  `JPJsonParserSubstituteUnicodeNoncharacter`
  
  If this option is set, the parser will substitute _Unicode noncharacters_
  encountered within JSON Strings in the input text with the _Unicode 
@@ -82,13 +82,13 @@
  noncharacter_ may modify the meaning of the input source and should be used 
  with care. Usually, _Unicode noncharacters_ are not allowed in valid Unicode 
  sequences which is used to transmit data.
- Ocurrences of _Unicode noncharacters_ outside of JSON Strings will be always 
+ Occurrences of _Unicode noncharacters_ outside of JSON Strings will be always
  syntax errors and treated as such.
  
  -  `JPJsonParserSkipUnicodeNoncharacter`
  
  If this option is set, the parser will ignore the _Unicode noncharacter_
- and remove it from the _decoded_ JSON string when generating a repesentation.
+ and remove it from the _decoded_ JSON string when generating a representation.
  *Note:* this feature is not yet implemented
  
  
@@ -97,7 +97,7 @@
  -  `JPJsonParserIgnoreSpuriousTrailingBytes`
  
  If this options is set, the parser will ignore any additional characters 
- that occure after the last significant character of a valid JSON document 
+ that occur after the last significant character of a valid JSON document
  (namely, either a "}" or a "]").
  Otherwise, if the parser encounters code units which can not be interpreted 
  as white-space Unicode characters it will issue an error and `Unicode NULL (U+0000)` 
@@ -110,7 +110,7 @@
  receives `EOF`. Otherwise, the parser treats any non white spaces after the
  first JSON document as an error. 
  
- *Note:* This option is ignored when invoking the json parser through one of
+ *Note:* This option is ignored when invoking the JSON parser through one of
  the two convenience methods (listed below) since parsing multiple documents 
  require to use a Semantic Actions object, and possibly a asynchronous parser.
  
@@ -123,13 +123,13 @@
  
  If this option is set, the parser invokes the `jsonObjectHandlerBlock`
  asynchronously and immediately processes the next JSON document within the 
- input data. The json container is then retained in the dispatch queue till 
+ input data. The JSON container is then retained in the dispatch queue till 
  it is processed by the client. This may tie up a lot of system resources if 
- the client processess frees the JSON containers slowly.
+ the client processes frees the JSON containers slowly.
  If the flag is `NO`, the parser's thread is blocked until the handler routine 
  returns.
  
- *Note:* This option has no effect when invoking the json parser through one of
+ *Note:* This option has no effect when invoking the JSON parser through one of
  the convenience methods:
  
  -  `+parseString:options:error:`
@@ -137,7 +137,7 @@
  
  It is recommended to leave this flag disabled in systems where system resources 
  are scarce or if the data input possibly contains many and large JSON documents. 
- When downloading large data, this helps throtteling the consumption of system 
+ When downloading large data, this helps throttling the consumption of system
  resources by the underlaying network layer.
  
  
@@ -154,13 +154,13 @@
  -  `JPJsonParserCreateMutableContainers`
  
   If this option is set, the semantic actions object creates a JSON representation 
-  with mutable containers. That is, a JSON Array will be repesented by a 
+  with mutable containers. That is, a JSON Array will be represented by a
   `NSMutableArray` and a JSON Object will be represented by a `NSMutableDictionary`.
  
  
  #### Number Generation Options ####
  
- *Note:* The options for number generation can be used only mutal exclusive.
+ *Note:* The options for number generation can be used only mutual exclusive.
  
  
  -  `JPJsonParserNumberGeneratorGenerateAuto`
@@ -174,8 +174,8 @@
  
  If this option is set, the parser number generator creates a `NSString` when 
  it encounters numbers in the input text and initializes it accordingly. 
- Ususally, you wouldn't select this option if you want to output a json 
- container into a string or stream as a proper json text. In this case it 
+ Usually, you wouldn't select this option if you want to output a JSON
+ container into a string or stream as a proper JSON text. In this case it 
  would treat the numbers as JSON Strings enclosed in quotes. However, when 
  using a string it preserves the format of the number.
  
@@ -270,16 +270,16 @@
  see _JPJsonParserOptions_.
 
  @param error A pointer to a NSError object. If this is not NULL, and if an error
- occured during parsing the parameter error contains and NSError object
+ occurred during parsing the parameter error contains and NSError object
  describing the issue.
 
- @return A Foundation object representing the root object of the repesentation of 
- the JSON text specified in parameter _string_, or nil if an error occured.
+ @return A Foundation object representing the root object of the representation of
+ the JSON text specified in parameter _string_, or nil if an error occurred.
 
 */
 + (id) parseString:(NSString*)string 
            options:(JPJsonParserOptions)options 
-             error:(NSError**)error;
+             error:(__autoreleasing NSError**)error;
 
 
 /** @name Parse a JSON Document from a NSData object */
@@ -294,7 +294,7 @@
 
  The data must contain text in one of the following Unicode encoding schemes:
  UTF-8, UTF-16, UTF-16LE, UTF-16BE, UTF-32, UTF-32LE or UTF-32BE. A BOM
- may optionally preceed the start of the byte stream.
+ may optionally precede the start of the byte stream.
  
  This method internally creates a `JPRepresentationGenerator` instance and configures 
  it according the specified options. Then it starts parsing immediately and returns
@@ -311,25 +311,25 @@
  @param options A bit mask specifying various options for parsing. For possible values see 
  _JPJsonParserOptions_.
 
- @param error A pointer to a NSError object. If this is not NULL, and if an error occured 
+ @param error A pointer to a NSError object. If this is not NULL, and if an error occurred
  during parsing the parameter error contains and NSError object describing the 
  issue.
 
  @return A Foundation object representing the JSON text in "data", or nil if an 
- error occured.
+ error occurred.
 
  @see + parseString:options:error:
  
 */
 + (id) parseData:(NSData*)data 
          options:(JPJsonParserOptions)options
-           error:(NSError**)error;
+           error:(__autoreleasing NSError**)error;
 
 
 + (id) parseData:(NSData*)data 
         encoding:(JPUnicodeEncoding) encoding
          options:(JPJsonParserOptions)options
-           error:(NSError**)error;
+           error:(__autoreleasing NSError**)error;
 
 
 
@@ -347,7 +347,7 @@
  
  The data must contain text in one of the following Unicode encoding schemes:
  UTF-8, UTF-16, UTF-16LE, UTF-16BE, UTF-32, UTF-32LE or UTF-32BE. A BOM may
- optionally preceed the start of the byte stream.
+ optionally precede the start of the byte stream.
  
  The semantic actions object must be properly configured before this method
  will be invoked. The exact behavior of a "semantic actions" class depends 
@@ -366,7 +366,7 @@
  
  @return Returns YES, if the input could be successfully parsed and successfully 
  processed by the semantic actions object.
- Otherwise, if an error occured returns NO.
+ Otherwise, if an error occurred returns NO.
 
  @see + parseString:options:error:
 

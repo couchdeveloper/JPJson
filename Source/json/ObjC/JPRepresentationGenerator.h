@@ -58,14 +58,14 @@ typedef NSUInteger JPSemanticActionsNumberGeneratorOption;
  ## Using a JPRepresentationGenerator ##
  
  An instance of `JPRepresentationGenerator` can be setup individually and its 
- behavoir can be tailored by setting properties. An instance of a semantic actions
+ behavior can be tailored by setting properties. An instance of a semantic actions
  object can be specified as a parameter when creating a parser.
  
  For example a `JPRepresentationGenerator` object can be set as parameter 
  `semanticActions` in method `+parseData:semanticActions:` of class `JPJsonParser`.
  
  As a result, the parser will create a representation in form of a hierarchy of 
- Foundation objects from the JSON text. When the parser is finished, this json 
+ Foundation objects from the JSON text. When the parser is finished, this JSON 
  structure can be retrieved with property `result` of the semantic actions object. 
  
  *Note:* The convenience methods of class <JPJsonParser> `+parseString:options:error:`
@@ -79,16 +79,16 @@ typedef NSUInteger JPSemanticActionsNumberGeneratorOption;
  possibly a dispatch queue for the semantic actions instance. 
  
  The handler blocks will be called by the `JPRepresentationGenerator` instance on 
- the occurence of the following events:
+ the occurrence of the following events:
  
  - The start of a JSON document was detected.
  - A JSON document could be parsed completely and a Foundation object 
- has been created, which will be passed as paramenter to the client.
+ has been created, which will be passed as parameter to the client.
  - The parser finished parsing the text.
- - An error occured.
+ - An error occurred.
  
  The semantic actions object also contains additional information, for example
- an error object, which can be retrieved in case an error occured.
+ an error object, which can be retrieved in case an error occurred.
  
  
  
@@ -141,7 +141,7 @@ typedef NSUInteger JPSemanticActionsNumberGeneratorOption;
     indicate the possibly loss of precision while converting a
     JSON Number to a `NSDecimalNumber`.
 
- 6. Otherwise, the conversion fails, and the parser stopps parsing
+ 6. Otherwise, the conversion fails, and the parser stops parsing
     with a corresponding runtime error.
     
 
@@ -166,7 +166,7 @@ typedef NSUInteger JPSemanticActionsNumberGeneratorOption;
  
  A number in scientific form has an optional decimal point and an exponent.
 
- 1. A JSON number in scientific format will allways be converted to a NSNumber
+ 1. A JSON number in scientific format will always be converted to a NSNumber
     with an underlaying `double` type. If the resulting value is out of range, 
     a range error will be signaled.
  
@@ -186,12 +186,12 @@ typedef NSUInteger JPSemanticActionsNumberGeneratorOption;
  Parameter handlerQueue may be NULL, in which case no handlers will be
  executed.
  
- @param handlerQueue A dispatch queue or NULL. The receicer will retain the
+ @param handlerQueue A dispatch queue or NULL. The receiver will retain the
  dispatch queue.
 */ 
 - (id) initWithHandlerDispatchQueue:(dispatch_queue_t)handlerQueue;
 
-// Initialzes a `JPRepresentationGenerator` object with a private default dispatch queue  
+// Initializes a `JPRepresentationGenerator` object with a private default dispatch queue
 // where handler blocks will be dispatched. The dispatch queue is a serial 
 // dispatch queue.
 //- (id) init;

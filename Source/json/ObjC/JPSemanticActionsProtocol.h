@@ -25,14 +25,14 @@
 
 /**
  JPSemanticActionsProtocol defines the interface between the _underlaying 
- json parser_ and the semantic actions object. The protocol must be implemented 
+ JSON parser_ and the semantic actions object. The protocol must be implemented
  by concrete subclasses of JPSemanticActionsBase.
  
- The json parser will not perform _semantic actions_ by itself, instead it will 
+ The JSON parser will not perform _semantic actions_ by itself, instead it will
  notify the semantic actions object of certain _parse events_ and provide 
  necessary information for the event. 
   
- Parse events are signaled by the underlaying json parser via messages sent to
+ Parse events are signaled by the underlaying JSON parser via messages sent to
  the semantic actions object whose signature is prefixed with "parserFound". The 
  semantic actions object is supposed to implement a corresponding "semantic action" 
  appropriate for the event and the current context and current state.
@@ -40,13 +40,13 @@
  A "begin" message, that is a `parserFoundArrayBegin` or a `parserFoundObjectBegin`
  message, indicates the start of a JSON container (a JSON Array, or a JSON Object).
  An "end" message, that is a `parserFoundArrayEnd` or a `parserFoundObjectEnd`
- message, indicates the end of the container which referes to the container
- signaled with the "begin" message immediately preceeding this "end" message.
+ message, indicates the end of the container which refers to the container
+ signaled with the "begin" message immediately preceding this "end" message.
  
  Additionally, there are two events `parserFoundKeyValuePairBeginWithKey:length:encoding:index:` 
  and `parserFoundKeyValuePairEnd` which are sent when the parser encountered
  a JSON string which is a key in the key-value pair of a JSON Object, and when
- the parser encountred the end of the JSON Value associated to this key.
+ the parser encountered the end of the JSON Value associated to this key.
  
  "begin" and "end" messages are strictly balanced and reflect the recursive, 
  respectively hierarchical, structure of a JSON representation.
@@ -55,7 +55,7 @@
  Finally, the underlaying parser sends messages parserFound<JSON_primitive>, that 
  is `parserFoundString`, `parserFoundNull`, `parserFoundBoolean` and
  `parserFoundNumber` when it encounters a corresponding JSON primitive value. 
- JSON Strings (which inlcude keys) will be unescaped by the parser.
+ JSON Strings (which include keys) will be unescaped by the parser.
  
  
  Below is a typical flow of the complete messages:
@@ -101,7 +101,7 @@
  A `parserFoundString` message may be possibly sent repeatedly, if the string
  is handled in "chunks". The method has a parameter `hasMore` which indicates 
  when the string is eventually complete. A data string will be split into chunks 
- if its size becomes large. The exact size of a chunk is dependend on the 
+ if its size becomes large. The exact size of a chunk is dependent on the
  implementation. Currently, this equals about 2000 code units. Occasionally, 
  this may become larger if the implementation can utilize an already allocated 
  buffer whose size is larger.
@@ -144,7 +144,7 @@
  element of another container. 
  
  Note that the corresponding action on an "end" message for JSON Array 
- repsectively JSON Object do differ slightly, since a JSON Object expects 
+ respectively JSON Object do differ slightly, since a JSON Object expects
  key-value pairs on the stack and a JSON Array expects values in a sequence 
  and must retain the order of elements. 
  
@@ -208,7 +208,7 @@
  
  The setHasBOM method will be invoked by the JPJsonParser and JPAsyncJsonParser
  when they try to determine the encoding of the input and thereby check for 
- a BOM. The semantic actions instance may use this information if requried.
+ a BOM. The semantic actions instance may use this information if required.
  
  @param value A boolean value.
 */ 
@@ -238,41 +238,41 @@
 @optional
 /** @name Delegate Methods  */
  
-// This interface is accessed by the json parser, respectively by
+// This interface is accessed by the JSON parser, respectively by
 // the "semantic actions implementation" class.
  
 
 /** 
- Sent to the delegate when the json parser found the start of a JSON document.
+ Sent to the delegate when the JSON parser found the start of a JSON document.
  
- Delegates should implement this method as a minimal implemenation in order 
- to perform appropriate actions when the json parser starts to parse a JSON
+ Delegates should implement this method as a minimal implementation in order
+ to perform appropriate actions when the JSON parser starts to parse a JSON
  document.
 */
 - (void) parserFoundJsonBegin;
 
 
 /** 
- Sent to the delegate when the json parser found the end of a JSON document.
+ Sent to the delegate when the JSON parser found the end of a JSON document.
 */
 - (void) parserFoundJsonEnd;
 
 /** 
- Sent to the delegate when the json parser finished parsing the last JSON 
+ Sent to the delegate when the JSON parser finished parsing the last JSON
  document from its input.
 
- Delegates should implement this method as a minimal implemenation in order 
- to perform appropriate actions when the json parser finished to parse the 
+ Delegates should implement this method as a minimal implementation in order
+ to perform appropriate actions when the JSON parser finished to parse the
  input which possibly contains one or more JSON documents.
 */
 - (void) parserFinished;
 
 
 /** 
- Sent to the delegate when the json parser detected a parse error.
+ Sent to the delegate when the JSON parser detected a parse error.
 
- Delegates should implement this method as a minimal implemenation in order 
- to perform appropriate actions when the json parser detected a parse error.
+ Delegates should implement this method as a minimal implementation in order
+ to perform appropriate actions when the JSON parser detected a parse error.
 */ 
 - (void) parserDetectedError;
 
@@ -280,28 +280,28 @@
 
 
 /** 
- Sent to the delegate when the json parser found the start of a JSON Array,
+ Sent to the delegate when the JSON parser found the start of a JSON Array,
  that is when it encountered the '[' character.
  */
 - (void) parserFoundArrayBegin;
 
 
 /** 
- Sent to the delegate when the json parser found the end of a JSON Array,
+ Sent to the delegate when the JSON parser found the end of a JSON Array,
  that is when it encountered the ']' character.
  */
 - (void) parserFoundArrayEnd;
 
 
 /** 
- Sent to the delegate when the json parser found the start of a JSON Object,
+ Sent to the delegate when the JSON parser found the start of a JSON Object,
  that is when it encountered the '{' character.
  */
 - (void) parserFoundObjectBegin;
 
 
 /** 
- Sent to the delegate when the json parser found the end of a JSON Object,
+ Sent to the delegate when the JSON parser found the end of a JSON Object,
  that is when it encountered the '}' character.
  */
 - (bool) parserFoundObjectEnd;
@@ -309,15 +309,15 @@
 
 
 /** 
- Sent to the delegate when the parser found the start of the n'th key-value pair
+ Sent to the delegate when the parser found the start of the nth key-value pair
  within a JSON Object.
  
- The json parser will pass the key as a _decoded_ JSON String. _Decoding_ a JSON 
+ The JSON parser will pass the key as a _decoded_ JSON String. _Decoding_ a JSON
  string involves unescaping, possibly replacing certain Unicode characters with 
  their replacement character as specified in the semantic actions configuration, 
  and possibly converting from the source encoding to the specified Unicode encoding 
  form. 
- Subsequently, the delegate will be sent parse events which constitue the value 
+ Subsequently, the delegate will be sent parse events which constitute the value
  associated to the key.
  
  @warning *Note:* The specified Unicode encoding scheme in parameter `encoding` 
@@ -369,15 +369,15 @@
 
 
 /**
- Sent to the delegate when the json parser found a JSON String as a value.
+ Sent to the delegate when the JSON parser found a JSON String as a value.
 
  If parameter `hasMore` equals `YES`, the parser found a large string and is 
  delivering the JSON String in several chunks. Each chunk has been _decoded_ and 
  in case of multibyte encodings, the byte sequence will end at a complete character 
  boundary. The parser will send as many chunks as necessary to complement the 
- string through sending consequtive messages to the receiver.
+ string through sending consecutive messages to the receiver.
   
- The json parser will send a _decoded_ string. _Decoding_ a JSON string 
+ The JSON parser will send a _decoded_ string. _Decoding_ a JSON string
  involves unescaping, possibly replacing certain Unicode characters with their 
  replacement character as specified in the semantic actions configuration, and 
  possibly converting from the source encoding to the specified Unicode encoding 
@@ -400,9 +400,9 @@
 
 
 /** 
- Sent to the delegate when the json parser found a JSON Number.
+ Sent to the delegate when the JSON parser found a JSON Number.
 
- The json parser will pass the JSON Number "as is", though converted into ASCII 
+ The JSON parser will pass the JSON Number "as is", though converted into ASCII 
  which for number strings is equal to UTF-8 encoding.
 
  @param numberString A const char pointer to the start of the sequence of the JSON Number encoded in ASCII.
@@ -412,14 +412,14 @@
 
 
 /** 
- Sent to the delegate when the json parser found a JSON Boolean.
+ Sent to the delegate when the JSON parser found a JSON Boolean.
  @param value    Corresponds to the boolean value of the JSON Boolean.
 */  
 - (void) parserFoundBoolean:(BOOL)value;
 
 
 /** 
- Sent to the delegate when the json parser found a JSON Null. 
+ Sent to the delegate when the JSON parser found a JSON Null. 
 */
 - (void) parserFoundNull;
 

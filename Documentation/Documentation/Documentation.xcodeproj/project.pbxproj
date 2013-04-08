@@ -85,14 +85,14 @@
 		A1D1C05D14652D9B000C145F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				JP_ROOT = "$(SRCROOT)/../../Source";
+				SOURCE_ROOT = "$(SRCROOT)/../../Source";
 			};
 			name = Debug;
 		};
 		A1D1C05E14652D9B000C145F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				JP_ROOT = "$(SRCROOT)/../../Source";
+				SOURCE_ROOT = "$(SRCROOT)/../../Source";
 			};
 			name = Release;
 		};

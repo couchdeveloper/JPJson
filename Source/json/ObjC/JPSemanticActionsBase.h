@@ -53,7 +53,7 @@ typedef NSUInteger JPSemanticActionsNonConformanceOptions;
 
 
 
-/** Function pointer type definitiond for handler blocks */
+/** Function pointer type definition for handler blocks */
 typedef void (^JPSemanticActions_StartJsonHandlerBlockType)(void);
 typedef void (^JPSemanticActions_EndJsonHandlerBlockType)(id);
 typedef void (^JPSemanticActions_CompletionHandlerBlockType)(void);
@@ -84,7 +84,7 @@ typedef void (^JPSemanticActions_ErrorHandlerBlockType)(NSError*);
  as is, `JPStreamSemanticActions` may be subclassed or alternatively used with
  a delegate.
  
- The delegate methods will be invoked when the json parser successfully parsed 
+ The delegate methods will be invoked when the JSON parser successfully parsed 
  a certain rule, that is when the parser detects the various JSON elements, or 
  the start and the end of the document. For more information see <JPSemanticActionsProtocol>.
  
@@ -107,7 +107,7 @@ typedef void (^JPSemanticActions_ErrorHandlerBlockType)(NSError*);
  
  Semantic actions classes shall conform to the protocol <JPSemanticActionsProtocol>. 
  
- There are two "built-in" semantic actions classes inherting from `JPSemanticActionsBase`:
+ There are two "built-in" semantic actions classes inheriting from `JPSemanticActionsBase`:
  
  - <JPRepresentationGenerator> and
  - <JPStreamSemanticActions>
@@ -186,7 +186,7 @@ typedef void (^JPSemanticActions_ErrorHandlerBlockType)(NSError*);
  Sets or returns the parse option "ignoreSpuriousTrailingBytes".
  
  If this options is set, the parser will not treat any additional characters 
- which may occure after the last significant character of a valid JSON document 
+ which may occur after the last significant character of a valid JSON document
  as an error. Otherwise, any code units which can not be interpreted as 
  white-space Unicode characters, except `Unicode NULL` (U+0000) and an `EOF`,
  following a JSON document will cause an error. `Unicode NULL` and `EOF` will issue 
@@ -217,15 +217,15 @@ typedef void (^JPSemanticActions_ErrorHandlerBlockType)(NSError*);
  
  If this option is set, the parser invokes the `jsonObjectHandlerBlock`
  asynchronously and immediately processes the next JSON document within the 
- input data. The json container is then retained in the dispatch queue till 
+ input data. The JSON container is then retained in the dispatch queue till 
  it is processed by the client. This may tie up a lot of system resources if 
- the client processess frees the JSON containers slowly.
+ the client processes frees the JSON containers slowly.
  If the flag is `NO`, the parser's thread is blocked until the handler routine 
  returns.
  
  It is recommended to leave this flag disabled in systems where system resources 
  are scarce or if the data input possibly contains many and large JSON documents. 
- When downloading large data, this helps throtteling the consumption of system 
+ When downloading large data, this helps throttling the consumption of system
  resources by the underlaying network layer.
 
  Default: `NO`
@@ -235,7 +235,7 @@ typedef void (^JPSemanticActions_ErrorHandlerBlockType)(NSError*);
 
 /**
  Sets or returns the log level of the semantic actions instance and the
- underlaying json parser. 
+ underlaying JSON parser. 
  
  Possible values are constants defined in enumeration `JPSemanticActionsLogLevel`:
  
@@ -255,7 +255,7 @@ typedef void (^JPSemanticActions_ErrorHandlerBlockType)(NSError*);
 
 /**
  Sets or returns the policy for handling Unicode noncharacters of the receiver 
- and the underlaying json parser. 
+ and the underlaying JSON parser. 
  
  Possible values are constants defined in enumeration `JPSemanticActionsUnicodeNoncharacterHandling`:
  
@@ -269,7 +269,7 @@ typedef void (^JPSemanticActions_ErrorHandlerBlockType)(NSError*);
 
 
 /**
- Sets or returns the strictness of the underlaying json parser.
+ Sets or returns the strictness of the underlaying JSON parser.
  
  Possible values are ored flags which are defined in enumeration `JPSemanticActionsNonConformanceOptions`:
  
@@ -293,14 +293,14 @@ typedef void (^JPSemanticActions_ErrorHandlerBlockType)(NSError*);
  Set error and description.
  
  Allows a client, that is a JPJsonParser and JPAsyncJsonParser instance, to
- set an error code and an associated description which is safed by the 
+ set an error code and an associated description which is saved by the
  semantic actions instance. This is useful in cases where the clients itself 
  detect a error and want the semantic actions instance to safe the error 
  information on behalf of the clients since they lack an interface which let
  users access the error state. 
  
  JPJsonParser and JPAsyncJsonParser set the error state when they detect
- unexpected errors not cought by the semantic actions instance, or when 
+ unexpected errors not caught by the semantic actions instance, or when
  they detect errors during determining the input encoding.
  
  @param error An integer indicating the error code. error should be negative.
@@ -327,7 +327,7 @@ typedef void (^JPSemanticActions_ErrorHandlerBlockType)(NSError*);
  
  The dispatch queue will be retained - with function `dispatch_retain()`.
  If parameter queue is set to `NULL`, handler blocks will not be called.
- The disaptch queue must only be modified before a parser associated to 
+ The dispatch queue must only be modified before a parser associated to
  the receiver is not yet started. 
  
  @warning Setting a dispatch queue while a parser is started, may result in a crash.
@@ -342,12 +342,12 @@ typedef void (^JPSemanticActions_ErrorHandlerBlockType)(NSError*);
 /**
  Sets or returns the startJson handler block of type `void (^)(void)`.
 
- This handler block will be called when the json parser has found the start of
+ This handler block will be called when the JSON parser has found the start of
  a JSON root element within the input text. 
  If property parseMultipleDocuments equals YES this block will be called 
  each time a the parsers detects the start of a JSON root element.
 
- Note, that this handler will only be called after the json parser actually has
+ Note, that this handler will only be called after the JSON parser actually has
  been started, which only happens after determining the input encoding, which
  possibly can fail.
 
@@ -361,7 +361,7 @@ startJsonHandlerBlock;
 /**
  Sets or returns the endJson handler block of type `void (^)(id result)`.
  
- The endJsonHandlerBlock is called when the parser has successully parsed a 
+ The endJsonHandlerBlock is called when the parser has successfully parsed a
  JSON text and the semantic actions instance was able to create a result (e.g.
  a JSON representation created upon Foundation objects) from this JSON text.
  The result will be passed in parameter result.
@@ -388,13 +388,13 @@ endJsonHandlerBlock;
 /**
  Sets or returns the completion handler block of type `void (^)(void)`.
  
- If it's not `NULL`, the completionBlock is called when the json parser finished 
+ If it's not `NULL`, the completionBlock is called when the JSON parser finished 
  parsing, regardless if there has been a parse error signaled via the error 
- handler block during parsing. The start of the json parser was previously 
+ handler block during parsing. The start of the JSON parser was previously 
  signaled by calling the startJsonHandlerBlock block.
- Note that the error handler may be possibly called _before_ the json parser
+ Note that the error handler may be possibly called _before_ the JSON parser
  even started parsing, e.g. when JPJsonParser and JPAsyncJsonParser detect an
- error during determining the input encoding. In this case, the json parser
+ error during determining the input encoding. In this case, the JSON parser
  will not be started, and consequently, startJsonHandlerBlock and
  completionHandlerBlock will not be called.
  completionBlock may be set to `NULL`.
@@ -409,8 +409,8 @@ completionHandlerBlock;
  Sets or retrieves the error handler block of type `void (^)(NSError*)`.
 
  The errorHandlerBlock will be called when an error has been detected by the
- JPJsonParser/JPAsyncJsonParser during determing the input encoding, by the
- json parser during parsing, or by the semantic actions instance while per-
+ JPJsonParser/JPAsyncJsonParser during determining the input encoding, by the
+ JSON parser during parsing, or by the semantic actions instance while per-
  forming a semantic action.
  errorHandlerBlock may be set to `NULL` in which case no errors will be reported
  by this means.
@@ -426,7 +426,7 @@ errorHandlerBlock;
 /** 
  Returns `nil`.
  
- This method may be overriden by subclasses in order to return the result 
+ This method may be overridden by subclasses in order to return the result
  of the semantic actions. 
  
  @return An object if a result is available, otherwise `nil`.

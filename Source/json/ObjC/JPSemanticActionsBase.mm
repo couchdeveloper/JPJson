@@ -61,7 +61,7 @@ typedef JPSemanticActions_ErrorHandlerBlockType       ErrorHandlerBlockType;
  @property (readonly, nonatomic) SemanticActionsBase* imp;
  @end
  
- The property imp shall be impemented in the subclass
+ The property imp shall be implemented in the subclass
  */
 @dynamic imp;
 
@@ -162,7 +162,7 @@ typedef JPSemanticActions_ErrorHandlerBlockType       ErrorHandlerBlockType;
 
 // Creates and returns an autoreleased NSError object from the error state of 
 // the internal implementation sa, or nil if there is no error.
-- (NSError*) makeError
+- (__autoreleasing NSError*) __attribute__((ns_returns_autoreleased)) makeError
 {
     if (self.imp == 0) {
         return nil;
@@ -184,7 +184,7 @@ typedef JPSemanticActions_ErrorHandlerBlockType       ErrorHandlerBlockType;
 // property readonly error
 - (NSError*) error 
 {
-    NSError* err = [self makeError];
+    __autoreleasing NSError* err = [self makeError];
     return err;
 }
 

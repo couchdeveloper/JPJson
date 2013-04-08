@@ -275,7 +275,7 @@ static NSString* JsonTestFile = @"Test-UTF8-esc.json";
     
     NSString* fileName = [[[NSBundle mainBundle] resourcePath] 
                           stringByAppendingPathComponent:JsonTestFile];
-    NSError* error;
+    __autoreleasing NSError* error;
     NSData* data = [[NSData alloc] initWithContentsOfFile:fileName
                                                   options:NSDataReadingUncached 
                                                     error:&error];
@@ -341,7 +341,7 @@ static NSString* JsonTestFile = @"Test-UTF8-esc.json";
     
     NSString* fileName = [[[NSBundle mainBundle] resourcePath] 
                           stringByAppendingPathComponent:JsonTestFile];
-    NSError* error;
+    __autoreleasing NSError* error;
     NSData* data = [[NSData alloc] initWithContentsOfFile:fileName
                                                   options:NSDataReadingUncached 
                                                     error:&error];
@@ -405,7 +405,7 @@ static NSString* JsonTestFile = @"Test-UTF8-esc.json";
     
     NSString* fileName = [[[NSBundle mainBundle] resourcePath] 
                           stringByAppendingPathComponent:JsonTestFile];
-    NSError* error;
+    __autoreleasing NSError* error;
     NSData* data = [[NSData alloc] initWithContentsOfFile:fileName
                                                   options:NSDataReadingUncached 
                                                     error:&error];
@@ -466,7 +466,7 @@ static NSString* JsonTestFile = @"Test-UTF8-esc.json";
     
     NSString* fileName = [[[NSBundle mainBundle] resourcePath] 
                           stringByAppendingPathComponent:JsonTestFile];
-    NSError* error;
+    __autoreleasing NSError* error;
     NSData* data = [[NSData alloc] initWithContentsOfFile:fileName
                                                   options:NSDataReadingUncached 
                                                     error:&error];

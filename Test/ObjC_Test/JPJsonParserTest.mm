@@ -135,7 +135,7 @@ namespace {
     {
         @autoreleasepool {
             NSString* jsonText = @"[\"Sample string\"]";
-            NSError* error;
+            __autoreleasing NSError* error;
             
             id result = [JPJsonParser parseString:jsonText
                                           options:(JPJsonParserOptions)0
@@ -155,7 +155,7 @@ namespace {
         @autoreleasepool {
             const char* s = "[\"Sample string\"]";
             NSData* data = [[NSData alloc] initWithBytes:s length:strlen(s)];
-            NSError* error;
+            __autoreleasing NSError* error;
             
             id result = [JPJsonParser parseData:data
                                         options:(JPJsonParserOptions)0
@@ -173,7 +173,7 @@ namespace {
     {
         @autoreleasepool {
             NSString* jsonText = @"{\"key1\":1,\"key1\":2}";
-            NSError* error;
+            __autoreleasing NSError* error;
             
             // 1) Duplicate key errors are ignored:
             //    In case of a duplicate key, the key-value pair cannot be inserted.
@@ -203,7 +203,7 @@ namespace {
     { 
         @autoreleasepool {
             NSString* fileName = @"Resources/Test-UTF8-esc.json";
-            NSError* error;
+            __autoreleasing NSError* error;
             NSData* data = [[NSData alloc] initWithContentsOfFile:fileName
                                                           options:NSDataReadingUncached
                                                             error:&error];
@@ -318,7 +318,7 @@ namespace {
             {
                 NSString* json_text = [NSString stringWithFormat:(*first).json_format, (*first).json_arg];
                 //NSLog(@"JSON input:  \"%@\"", json_text);
-                NSError* error;
+                __autoreleasing NSError* error;
                 id json = [JPJsonParser parseString:json_text
                                             options:(JPJsonParserOptions)0
                                               error:&error];
@@ -420,7 +420,7 @@ namespace {
             {
                 NSString* json_text = [NSString stringWithFormat:(*first).json_format, (*first).json_arg];
                 NSLog(@"JSON input:  \"%@\"", json_text);
-                NSError* error;
+                __autoreleasing NSError* error;
                 id json = [JPJsonParser parseString:json_text
                                             options:(JPJsonParserOptions)0
                                               error:&error];
@@ -537,7 +537,7 @@ namespace {
         @autoreleasepool {
             NSString* jsonText = @"[\"abc\uFFFEdef\"]";
             
-            NSError* error = nil;
+            __autoreleasing NSError* error = nil;
             id json = [JPJsonParser parseString:jsonText
                                         options:(JPJsonParserOptions)JPJsonParserSignalErrorOnNoncharacter
                                           error:&error];
@@ -577,7 +577,7 @@ namespace {
         @autoreleasepool {
             NSString* jsonText = @"[\"abcdef\"] x y z";
             
-            NSError* error = nil;
+            __autoreleasing NSError* error = nil;
             id json = [JPJsonParser parseString:jsonText
                                         options:(JPJsonParserOptions)0
                                           error:&error];

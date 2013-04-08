@@ -68,7 +68,8 @@
 
 //#define LOOP_INFINITIVE
 
-static NSError* makeError(NSString* domain, NSInteger code, NSString* errString) {
+static __autoreleasing NSError* __attribute__((ns_returns_autoreleased))
+makeError(NSString* domain, NSInteger code, NSString* errString) {
     // setup an error object:
     NSString* localizedErrStr = errString; //NSLocalizedString(errStr, errStr);
     NSArray* objectsArray = [[NSArray alloc] initWithObjects: localizedErrStr, nil];
@@ -846,7 +847,7 @@ static NSString* kTempFileName = @"download.data";
             abort();
         }
         NSAssert(canAccessTempFile, @"could not access temporary file");
-        NSError* error;
+        __autoreleasing NSError* error;
         NSData* data = [[NSData alloc] initWithContentsOfURL:self.tempFileURL
                                                      options:NSDataReadingMappedIfSafe | NSDataReadingUncached
                                                        error:&error];
@@ -914,7 +915,7 @@ static NSString* kTempFileName = @"download.data";
         }
         NSFileManager* fm = [[NSFileManager alloc] init];        
         if ([fm fileExistsAtPath:[tempFileURL_ path]]) {
-            NSError* error;
+            __autoreleasing NSError* error;
             BOOL result = [fm removeItemAtURL:tempFileURL_ error:&error];
             if (!result) {
                 NSLog(@"[NSFileManager] removeItemAtURL did fail with error %@", error);
@@ -968,7 +969,7 @@ static NSString* kTempFileName = @"download.data";
     NSAssert(success == YES, @"createFileAtPath did fail");
 
     // Create a file handle
-    NSError* error;
+    __autoreleasing NSError* error;
     tempFileHandle_ = [[NSFileHandle fileHandleForWritingToURL:tempFileURL_ error:&error] retain];
     [fm release];
     NSAssert(tempFileHandle_ != nil, @"temporary file handle is nil");
@@ -987,7 +988,7 @@ static NSString* kTempFileName = @"download.data";
         }
         NSFileManager* fm = [[NSFileManager alloc] init];        
         if ([fm fileExistsAtPath:[tempFileURL_ path]]) {
-            NSError* error;
+            __autoreleasing NSError* error;
             BOOL result = [fm removeItemAtURL:tempFileURL_ error:&error];
             if (!result) {
                 NSLog(@"[NSFileManager] removeItemAtURL did fail with error: %@", error);

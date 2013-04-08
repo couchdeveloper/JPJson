@@ -11,7 +11,7 @@
 
 
 /**
- JPJsonStreambufferProtocol defines the interface for an stream buffer:
+ JPJsonStreambufferProtocol defines the interface for a stream buffer:
  
  Custom classes which map to a JSON primitive element will use the stream buffer 
  in their implementation of method JPJson_serializeTo:encoding:options:level: in
@@ -104,14 +104,14 @@
  
  @param options Options that tailor the format of the output.
  
- @param level The current level of the hierarchy of the object structur. This is 
+ @param level The current level of the hierarchy of the object structure. This is
  used only when additional format characters shall be inserted into the JSON text,
  for example when "pretty printing".
  
  @return Returns zero on success, otherwise an integer value indicating the error.
  
  The character sequence shall be a valid JSON element according RFC 4627, including 
- the appropariate syntax elements.
+ the appropriate syntax elements.
  
 */ 
 - (int) JPJson_serializeTo:(id<JPJsonStreambufferProtocol>) streambuf
@@ -154,13 +154,13 @@
  
  @param options Options that tailor the format of the output.
  
- @param level The current level of the hierarchy of the object structur. This is 
+ @param level The current level of the hierarchy of the object structure. This is
  used only when additional format characters shall be inserted into the JSON text,
  for example when "pretty printing".
  
- @return TODO
+ @return Returns 0 on success, otherwise -1.
  
- Parmeter `object` shall respond to message `count` and shall implement the 
+ Parmeter `object` shall respond to message `count` and shall implement the
  protocol NSFastEnumeration. 
  */
 + (int) serializeObjectAsJSONArray:(id) object 
@@ -185,13 +185,13 @@
  
  @param options Options that tailor the format of the output.
  
- @param level The current level of the hierarchy of the object structur. This is 
+ @param level The current level of the hierarchy of the object structure. This is
  used only when additional format characters shall be inserted into the JSON text,
  for example when "pretty printing".
   
- @return TODO
+ @return Returns zero on success, otherwise -1.
  
- Parmeter `object` shall respond to message `count` and message objectForKey:
+ Parameter `object` shall respond to message `count` and message objectForKey:
  and shall implement the protocol NSFastEnumeration. 
  */
 + (int) serializeObjectAsJSONObject:(id) object 

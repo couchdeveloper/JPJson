@@ -437,52 +437,57 @@ namespace {
 // 
 + (id) parseString:(NSString*)string 
            options:(JPJsonParserOptions)options 
-             error:(NSError**)error
+             error:(__autoreleasing NSError**)error
 {
     NSParameterAssert(string);
         
     // Use the "default semantic actions" aka "JPRepresentationGenerator".
-    // Multiple documents cannot be parsed - silently clear the 
+    // Multiple documents cannot be parsed - silently clear the
     // flag "JPJsonParserParseMultipleDocuments" - if set.
     options &= ~JPJsonParserParseMultipleDocuments;
     
-    // Since we don't need handlers, we do not need a dispatch queue, so
-    // create a semantic actions object without a dispatch queue.
-    JPRepresentationGenerator* sa = [[JPRepresentationGenerator alloc] initWithHandlerDispatchQueue:NULL];
-    [sa configureWithOptions:options];    
     
-    // Try to get the string's content in UTF-16:
-    JPUnicodeEncoding encoding = JPUnicodeEncoding_Unknown;
-    bool doFreeBuffer = false;
-    const void* buffer = string ? CFStringGetCharactersPtr(CFStringRef(string)) : NULL;
-    size_t length = buffer ? CFStringGetLength(CFStringRef(string))*2 : 0; // length equals number of bytes
-    if (not buffer and string) {
-        // attempt to get the internal buffer in UTF-8:
-        buffer = CFStringGetCStringPtr(CFStringRef(string), kCFStringEncodingUTF8);
-        if (buffer) {
-            length = [string lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
-            encoding = JPUnicodeEncoding_UTF8;
-        } else {
-            // No Unicode: performance is suboptimal.
-            // Retrive the NSString's content as UTF-16 and store it into an allocated buffer:
-            // We strongly assume, the endianess is platform:
-            length = CFStringGetLength(CFStringRef(string))*2; // number of bytes
-            void* buf = malloc(length);
-            CFRange range = {0, static_cast<CFIndex>(length>>1)};
-            CFStringGetCharacters(CFStringRef(string), range, (UniChar*)buf);
-            buffer = buf;
-            doFreeBuffer = true;
-            encoding = JPUnicodeEncoding_UTF16;  // platform endianness
+    id result;
+    BOOL success;
+    JPRepresentationGenerator* sa = [[JPRepresentationGenerator alloc] initWithHandlerDispatchQueue:NULL];
+    @autoreleasepool {
+        // Since we don't need handlers, we do not need a dispatch queue, so
+        // create a semantic actions object without a dispatch queue.
+        [sa configureWithOptions:options];
+        
+        // Try to get the string's content in UTF-16:
+        JPUnicodeEncoding encoding = JPUnicodeEncoding_Unknown;
+        bool doFreeBuffer = false;
+        const void* buffer = string ? CFStringGetCharactersPtr(CFStringRef(string)) : NULL;
+        size_t length = buffer ? CFStringGetLength(CFStringRef(string))*2 : 0; // length equals number of bytes
+        if (not buffer and string) {
+            // attempt to get the internal buffer in UTF-8:
+            buffer = CFStringGetCStringPtr(CFStringRef(string), kCFStringEncodingUTF8);
+            if (buffer) {
+                length = [string lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
+                encoding = JPUnicodeEncoding_UTF8;
+            } else {
+                // No Unicode: performance is suboptimal.
+                // Retrive the NSString's content as UTF-16 and store it into an allocated buffer:
+                // We strongly assume, the endianess is platform:
+                length = CFStringGetLength(CFStringRef(string))*2; // number of bytes
+                void* buf = malloc(length);
+                CFRange range = {0, static_cast<CFIndex>(length>>1)};
+                CFStringGetCharacters(CFStringRef(string), range, (UniChar*)buf);
+                buffer = buf;
+                doFreeBuffer = true;
+                encoding = JPUnicodeEncoding_UTF16;  // platform endianness
+            }
+        }
+        success = [JPJsonParser runWithBytes:buffer
+                                      length:length
+                                    encoding:encoding
+                             semanticActions:sa];
+        if (doFreeBuffer) {
+            free(const_cast<void*>(buffer));
         }
     }
-    BOOL success = [JPJsonParser runWithBytes:buffer
-                                       length:length 
-                                     encoding:encoding 
-                              semanticActions:sa];
-    if (doFreeBuffer) {
-        free(const_cast<void*>(buffer));
-    }
-    id result = nil;
+    
     if (success) {
         // result is owned by sa only  - need to retain,autorelease it since we
         // dealloc sa.
@@ -491,7 +496,6 @@ namespace {
         if (error)
             *error = [sa error];  // error returns an autorelease object
     }
-    
     return result;
 }
 
@@ -500,39 +504,36 @@ namespace {
 // autodetecting the input encoding.
 + (id) parseData:(NSData*)data 
          options:(JPJsonParserOptions)options
-           error:(NSError**)error
+           error:(__autoreleasing NSError**)error
 {
     // Use the "default semantic actions" aka "JPRepresentationGenerator".
     // Multiple documents cannot be parsed - silently clear the 
     // flag "JPJsonParserParseMultipleDocuments" - if set.
     options &= ~JPJsonParserParseMultipleDocuments;
     
-    
     id result = nil;
+    BOOL success;
+    JPRepresentationGenerator* sa = [[JPRepresentationGenerator alloc] initWithHandlerDispatchQueue:NULL];
     @autoreleasepool {
         // Since we don't need handlers, we do not need a dispatch queue, so
         // create a semantic actions object without a dispatch queue:
-        JPRepresentationGenerator* sa = [[JPRepresentationGenerator alloc] initWithHandlerDispatchQueue:NULL];
         [sa configureWithOptions:options];
         
         const void* bytes = static_cast<const void*>([data bytes]);
-        BOOL success = [JPJsonParser runWithBytes:bytes
-                                           length:[data length]
-                                         encoding:JPUnicodeEncoding_Unknown
-                                  semanticActions:sa];
-        if (success) {
-            // result is owned by sa only  - need to retain,autorelease it since we
-            // dealloc sa.
-            result = [sa result];
-        } else {
-            if (error)
-                *error = [sa error]; // error may return an autoreleased object, but we don't know for sure ...
-        }
-        
-//#if defined (DEBUG)
-//        NSLog(@"%@", [sa description]);
-//#endif    
+        success = [JPJsonParser runWithBytes:bytes
+                                      length:[data length]
+                                    encoding:JPUnicodeEncoding_Unknown
+                             semanticActions:sa];
     }
+    if (success) {
+        // result is owned by sa only  - need to retain,autorelease it since we
+        // dealloc sa.
+        result = [sa result];
+    } else {
+        if (error)
+            *error = [sa error]; // error may return an autoreleased object, but we don't know for sure ...
+    }
+    
     return result;
 }
 
@@ -542,7 +543,7 @@ namespace {
 + (id) parseData:(NSData*)data 
         encoding:(JPUnicodeEncoding)encoding
          options:(JPJsonParserOptions)options
-           error:(NSError**)error
+           error:(__autoreleasing NSError**)error
 {
     // Use the "default semantic actions" aka "JPRepresentationGenerator".
     // Multiple documents cannot be parsed - silently clear the 
@@ -550,37 +551,29 @@ namespace {
     options &= ~JPJsonParserParseMultipleDocuments;
     
     id result = nil;
+    BOOL success;
+    JPRepresentationGenerator* sa = [[JPRepresentationGenerator alloc] initWithHandlerDispatchQueue:NULL];
     @autoreleasepool {
         // Since we don't need handlers, we do not need a dispatch queue, so
         // create a semantic actions object without a dispatch queue:
-        JPRepresentationGenerator* sa = [[JPRepresentationGenerator alloc] initWithHandlerDispatchQueue:NULL];
         [sa configureWithOptions:options];
         
         const void* bytes = static_cast<const void*>([data bytes]);
-        BOOL success = [JPJsonParser runWithBytes:bytes
-                                           length:[data length]
-                                         encoding:JPUnicodeEncoding_Unknown
-                                  semanticActions:sa];
-        if (success) {
-            // result is owned by sa only  - need to retain,autorelease it since we
-            // dealloc sa.
-            result = [sa result];
-        } else {
-            if (error)
-                *error = [sa error]; // error may return an autoreleased object, but we don't know for sure ...
-        }
-        
-#if defined (DEBUG)
-        NSLog(@"%@", [sa description]);
-#endif    
-
+        success = [JPJsonParser runWithBytes:bytes
+                                      length:[data length]
+                                    encoding:JPUnicodeEncoding_Unknown
+                             semanticActions:sa];
+    }
+    if (success) {
+        // result is owned by sa only  - need to retain,autorelease it since we
+        // dealloc sa.
+        result = [sa result];
+    } else {
+        if (error)
+            *error = [sa error]; // error may return an autoreleased object, but we don't know for sure ...
     }
     return result;
 }
-
-
-
-
 
 
 
@@ -597,6 +590,8 @@ namespace {
     }
     return success;
 }
+
+
 
 
 #if NOT_YET_IMPLEMENTED

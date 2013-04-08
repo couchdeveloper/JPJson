@@ -387,7 +387,7 @@ namespace {
         NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
         const char* s = "[\"Sample string\"]";
         NSData* data = [[NSData alloc] initWithBytes:s length:strlen(s)];
-        NSError* error;
+        __autoreleasing NSError* error;
         
         id result = [JPJsonParser parseData:data 
                                     options:(JPJsonParserOptions)0 
@@ -404,7 +404,7 @@ namespace {
         
         
         NSString* jsonText = @"{\"key1\":1,\"key1\":2}";
-        NSError* error;
+        __autoreleasing NSError* error;
         
         // 1) Duplicate key errors are ignored:
         //    In case of a duplicate key, the key-value pair cannot be inserted. 

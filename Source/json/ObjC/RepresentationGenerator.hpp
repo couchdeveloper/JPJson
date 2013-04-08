@@ -482,7 +482,6 @@ namespace json { namespace objc {
             // in stack_[0]. There shall be no other elements.
             assert(stack_.size() == 1);
             assert(markers_.size() == 0);
-            assert(CFGetRetainCount(stack_[0]) == 1);
 
             if (stack_.size() != 1 or markers_.size() != 0) {
 //                for (CFTypeRef o : stack_) {
@@ -521,7 +520,7 @@ namespace json { namespace objc {
 #if defined (JSON_OBJC_REPRESENTATION_GENERATOR_USE_PERFORMANCE_COUNTER)            
             ++pc_.array_count_;
 #endif            
-            markers_.push_back(stack_.size());  // marker points to the next value which shall be inserted into the array, if any.
+            markers_.emplace_back(stack_.size());  // marker points to the next value which shall be inserted into the array, if any.
             //t0_.pause();
 #if defined (JSON_OBJC_REPRESENTATION_GENERATOR_USE_JSON_PATH)            
             json_path_.push_index(-1);  // push dummy index
@@ -559,9 +558,7 @@ namespace json { namespace objc {
                 //cfArray = CFBridgingRetain([[NSMutableArray alloc] initWithCapacity: count]);
                 // Populate the array with the values on the stack from first to last:
                 while (first != last) {
-                    assert(CFGetRetainCount(*first) == 1);
                     f_cf_ArrayAppendValue((CFMutableArrayRef)cfArray, *first);
-                    assert(CFGetRetainCount(*first) == 2);
                     f_cf_release(*first++);
                 }                     
             }
@@ -574,14 +571,13 @@ namespace json { namespace objc {
                 cfArray = CFArrayCreate(kCFAllocatorDefault, values, count, &kCFTypeArrayCallBacks);
                 // release the CFTypes:
                 while (first != last) {
-                    assert(CFGetRetainCount(*first) == 2);
                     f_cf_release(*first++);
                 }                     
             }
             // Remove those values from the stack:
             stack_.erase(first_saved, last);            
             // finally, add the array onto the stack:
-            stack_.push_back(cfArray);
+            stack_.emplace_back(cfArray);
             //t1_.pause();
         }
         
@@ -593,7 +589,7 @@ namespace json { namespace objc {
             //++c0_;
             ++pc_.object_count_;
 #endif            
-            markers_.push_back(stack_.size()); // marker points to the next value which shall be inserted into the object, if any.
+            markers_.emplace_back(stack_.size()); // marker points to the next value which shall be inserted into the object, if any.
             
 #if defined (JSON_OBJC_REPRESENTATION_GENERATOR_USE_PERFORMANCE_COUNTER)                        
             //pc_.t0_.pause();
@@ -657,17 +653,15 @@ namespace json { namespace objc {
                 // use CF to create a dictionary
                 CFMutableDictionaryRef o =
                 CFDictionaryCreateMutable(NULL, num_elements, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
-#else                
+#else
                 // Workaround: use Foundation to create a dictionary
                 CFMutableDictionaryRef o = (CFMutableDictionaryRef)CFBridgingRetain([[NSMutableDictionary alloc] initWithCapacity:num_elements + 16]);
 #endif                
-                while (first != last) 
-                {
+                while (first != last) {
                     // get the key and the value from the stack and insert it:
                     CFTypeRef key =  *first++;
                     CFDictionaryAddValue(o, key, *first++);
                 }
-                
                 if (this->checkDuplicateKey()) {
                     if (CFDictionaryGetCount((CFDictionaryRef)o) != num_elements) {
                         duplicateKeyError = true;
@@ -675,7 +669,7 @@ namespace json { namespace objc {
                         cf_vector_t _keys;
                         auto _f = first_saved;
                         while (_f != last) {
-                            _keys.push_back(*_f++);
+                            _keys.emplace_back(*_f++);
                             _f++;
                         }
                         NSArray* keysArray = CFBridgingRelease(
@@ -699,16 +693,20 @@ namespace json { namespace objc {
                 // as opposed to a const size vector on the stack (at max 3µsec).
                 tmp_cf_keys_.clear();
                 tmp_cf_values_.clear();
-                //                tmp_cf_keys_.reserve(num_elements);
-                //                tmp_cf_values_.reserve(num_elements);                
-                while (first != last)
-                {
-                    tmp_cf_keys_.push_back(*first++);
-                    tmp_cf_values_.push_back(*first++);
+//                assert(tmp_cf_keys_.size() == 0);
+//                assert(tmp_cf_values_.size() == 0);
+//                tmp_cf_keys_.reserve(num_elements);
+//                tmp_cf_values_.reserve(num_elements);
+                while (first != last) {
+                    tmp_cf_keys_.emplace_back(*first++);
+                    tmp_cf_values_.emplace_back(*first++);
                 }
                 // Create immutable JSON object via CF functions:
                 CFDictionaryRef o = 
-                CFDictionaryCreate(NULL, tmp_cf_keys_.data(), tmp_cf_values_.data(), num_elements, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+                CFDictionaryCreate(NULL, tmp_cf_keys_.data(), tmp_cf_values_.data(),
+                                   num_elements,
+                                   &kCFTypeDictionaryKeyCallBacks,
+                                   &kCFTypeDictionaryValueCallBacks);
                 
                 if (this->checkDuplicateKey()) {
                     if (CFDictionaryGetCount(CFDictionaryRef(o)) != num_elements) {
@@ -726,7 +724,7 @@ namespace json { namespace objc {
             
             assert(cfObject != NULL);
             
-            // Regardless of duplicateKeyError erase the stack from the objects 
+            // Regardless of duplicateKeyError erase the stack from the objects
             // which have to be inserted into the object:
             first = first_saved;
             while (first != last) {
@@ -735,7 +733,7 @@ namespace json { namespace objc {
             stack_.erase(first_saved, last);
             
             // finally, add the JSON object onto the stack:
-            stack_.push_back(cfObject);
+            stack_.emplace_back(cfObject);
             
             //t2_.pause();
             return not duplicateKeyError;                
@@ -874,7 +872,7 @@ namespace json { namespace objc {
                         // finished generating a float
                     }
                     assert(cfNumber != NULL);
-                    stack_.push_back(cfNumber);
+                    stack_.emplace_back(cfNumber);
                 }
                     break;
                     
@@ -887,7 +885,7 @@ namespace json { namespace objc {
                                             "WARNING: JSON number to NSDecimalNumber conversion may loose precision. Original JSON number: %.*s", 
                                             number.c_str_len(), number.c_str());
                     }
-                    stack_.push_back(cfNumber);
+                    stack_.emplace_back(cfNumber);
                 }
                     break;
             }
@@ -902,7 +900,7 @@ namespace json { namespace objc {
             ++pc_.boolean_count_;
 #endif            
             CFBooleanRef boolean = b ? kCFBooleanTrue : kCFBooleanFalse;
-            stack_.push_back(boolean);
+            stack_.emplace_back(boolean);
 #if defined (JSON_OBJC_REPRESENTATION_GENERATOR_USE_PERFORMANCE_COUNTER)                                    
             //t0_.pause();
 #endif            
@@ -916,7 +914,7 @@ namespace json { namespace objc {
             //++c0_;
             ++pc_.null_count_;
 #endif            
-            stack_.push_back(kCFNull);
+            stack_.emplace_back(kCFNull);
 #if defined (JSON_OBJC_REPRESENTATION_GENERATOR_USE_PERFORMANCE_COUNTER)                                    
             //t0_.pause();
 #endif            
@@ -1021,7 +1019,7 @@ namespace json { namespace objc {
                 str = (*iter).second;
                 f_cf_retain(str);
             }
-            stack_.push_back(str);
+            stack_.emplace_back(str);
             return const_buffer_t((*iter).first.first, (*iter).first.second);
         }
 #endif
@@ -1031,7 +1029,7 @@ namespace json { namespace objc {
             if (tmp_data_str_ == 0 and not hasMore) {
                 // Create an immutable string
                 CFStringRef str = createString(buffer.first, buffer.second, EncodingT());
-                stack_.push_back(str);  // Do not release str!
+                stack_.emplace_back(str);  // Do not release str!
             }
             else if (tmp_data_str_ == 0 and hasMore)
             {
@@ -1041,7 +1039,7 @@ namespace json { namespace objc {
             else if (tmp_data_str_ != 0 and not hasMore) {
                 // append to mutable tmp_data_str_ and push it to the stack:
                 appendString(tmp_data_str_, buffer.first, buffer.second, EncodingT());
-                stack_.push_back(tmp_data_str_);
+                stack_.emplace_back(tmp_data_str_);
                 tmp_data_str_ = NULL;  // don't CFRelease!
             }
             else /* tmp_data_str_ != 0 and hasMore */ {
@@ -1118,6 +1116,9 @@ namespace json { namespace objc {
         stack_t             stack_;
         cf_vector_t         tmp_cf_keys_;      // used when creating immutable dictionaries
         cf_vector_t         tmp_cf_values_;    // dito
+//        std::vector<const id>     tmp_id_keys_;      // used when creating immutable dictionaries
+//        std::vector<const id>     tmp_id_values_;    // dito
+        
         CFMutableStringRef  tmp_data_str_;
         
         //json_path_t     path_;

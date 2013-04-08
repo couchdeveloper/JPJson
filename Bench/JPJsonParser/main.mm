@@ -112,7 +112,7 @@ namespace {
     NSData* createDataFromFileInResourceFolder(NSString* path)
     {
         NSString* filePath = [@"Resources" stringByAppendingPathComponent:path];
-        NSError* error;
+        __autoreleasing NSError* error;
         NSData* data = [[NSData alloc] initWithContentsOfFile:filePath 
                                                       options:NSDataReadingUncached 
                                                         error:&error];
@@ -134,12 +134,12 @@ namespace {
 namespace {    
     
     // -----------------------------------------------------------------------------
-    //  bench_AJPJsonParserString1()
+    //  bench_JPJsonParserWithNSString1()
     //  Class JPJsonParser
     //  Using a NSString as input and interface method:
     //  +parseString:options:error:
     // -----------------------------------------------------------------------------
-    void bench_JPJsonParserString1(NSString* file, const int N, bool printInfo = false)
+    void bench_JPJsonParserWithNSString1(NSString* file, const int N, bool printInfo = false)
     {
         using namespace utilities;
         
@@ -147,7 +147,7 @@ namespace {
         
         printf("\n");
         printf("--------------------------------------------\n");
-        printf("Running bench_JPJsonParserString1 %d times.\n", N);
+        printf("Running bench_JPJsonParserWithNSString1 %d times.\n", N);
         printf("--------------------------------------------\n");    
         printf("Using a NSString as input and interface method:\n"
                "+parseString:options:error: (JPJsonParser)\n"
@@ -213,13 +213,13 @@ namespace {
     
     
     // -----------------------------------------------------------------------------
-    //  bench_JPJsonParser1a()
+    //  bench_JPJsonParserWithNSData1a()
     //  Class JPJsonParser
     //  Using a NSData with UTF-8 content as input and interface method:
     //  +parseData:options:error:
     //  options: 0
     // -----------------------------------------------------------------------------
-    void bench_JPJsonParser1a(NSString* file, const int N, bool printInfo = false)
+    void bench_JPJsonParserWithNSData1a(NSString* file, const int N, bool printInfo = false)
     {
         using namespace utilities;
 
@@ -227,7 +227,7 @@ namespace {
         
         printf("\n");
         printf("--------------------------------------------\n");
-        printf("Running bench_JPJsonParser1a %d times.\n", N);
+        printf("Running bench_JPJsonParserWithNSData1a %d times.\n", N);
         printf("--------------------------------------------\n");    
         NSData* data = createDataFromFileInResourceFolder(JSON_TEST_FILE);
         NSStringEncoding encoding = [data jpj_detectUnicodeNSStringEncoding];
@@ -289,14 +289,14 @@ namespace {
     
     
     // -----------------------------------------------------------------------------
-    //  bench_JPJsonParser1b()
+    //  bench_JPJsonParserWithNSData1b()
     //  Class JPJsonParser
     //  Using a NSData with UTF-8 content as input and interface method:
     //  +parseData:options:error:
-    //  options: 0
+    //  options: JPJsonParserCreateMutableContainers
     //  The input encoding will be detected automatically.
     // -----------------------------------------------------------------------------
-    void bench_JPJsonParser1b(NSString* file, const int N, bool printInfo = false)
+    void bench_JPJsonParserWithNSData1b(NSString* file, const int N, bool printInfo = false)
     {
         using namespace utilities;
         
@@ -304,7 +304,7 @@ namespace {
         
         printf("\n");
         printf("--------------------------------------------\n");
-        printf("Running bench_JPJsonParser1b %d times.\n", N);
+        printf("Running bench_JPJsonParserWithNSData1b %d times.\n", N);
         printf("--------------------------------------------\n");    
         NSData* data = createDataFromFileInResourceFolder(JSON_TEST_FILE);
         NSStringEncoding encoding = [data jpj_detectUnicodeNSStringEncoding];
@@ -315,7 +315,7 @@ namespace {
         printf("Class JPJsonParser"
                "Using a NSData with %s content as input and interface method:\n"
                "+parseData:options:error:\n"
-               "options: none\n"
+               "options: JPJsonParserCreateMutableContainers\n"
                "The input encoding will be detected automatically\n",
                NSStringEncodingToUnicodeSchemeCStr(encoding));
         printf("Input file: %s, size: %d, encoding: %s\n", 
@@ -333,7 +333,7 @@ namespace {
             // This method creates and destroys the internal semantic actions
             // instance.
             id result = [JPJsonParser parseData:data 
-                                        options:(JPJsonParserOptions)0
+                                        options:(JPJsonParserOptions)JPJsonParserCreateMutableContainers
                                           error:&error];
             [result retain];
             t.stop();
@@ -364,14 +364,14 @@ namespace {
     
     
     // -----------------------------------------------------------------------------
-    //  bench_JPJsonParser1x()
+    //  bench_JPJsonParserSAXStyle1x()
     //  Class JPJsonParser
     //  Using a NSData with UTF-8 content as input and interface method:
     //  +parseData:semanticActions:
     //  semantic actions class: JPStreamSemanticActions
     //  The input encoding will be detected automatically.
     // -----------------------------------------------------------------------------
-    void bench_JPJsonParser1x(NSString* file, const int N, bool printInfo = false)
+    void bench_JPJsonParserSAXStyle1x(NSString* file, const int N, bool printInfo = false)
     {
         using namespace utilities;
         
@@ -379,7 +379,7 @@ namespace {
         
         printf("\n");
         printf("--------------------------------------------\n");
-        printf("Running bench_JPJsonParser1x %d times.\n", N);
+        printf("Running bench_JPJsonParserSAXStyle1x %d times.\n", N);
         printf("--------------------------------------------\n");    
         NSData* data = createDataFromFileInResourceFolder(JSON_TEST_FILE);
         NSStringEncoding encoding = [data jpj_detectUnicodeNSStringEncoding];
@@ -390,7 +390,7 @@ namespace {
         printf("Class JPJsonParser"
                "Using a NSData with %s content as input and interface method:\n"
                "+parseData:semanticActions:\n"
-               "Semantic Actions: JPStreamSemanticActions\n"
+               "Semantic Actions: JPStreamSemanticActions  (SAX style)\n"
                "The input encoding will be detected automatically\n",
                NSStringEncodingToUnicodeSchemeCStr(encoding));
         printf("Input file: %s, size: %d, encoding: %s\n", 
@@ -1005,24 +1005,26 @@ int main (int argc, const char * argv[])
     std::time(&time_info);
     printf("%s\n%s\n", ctime(&time_info), BOOST_COMPILER);
     NSLog(@"Start Bench");
-        
-    bench_JPJsonParser1a(JSON_TEST_FILE, N);
-    bench_JPJsonParserString1(JSON_TEST_FILE,N);
-    bench_JPJsonParser1a(JSON_TEST_FILE, N);
-    bench_JPJsonParser1b(JSON_TEST_FILE, N);
-    bench_JPJsonParser1x(JSON_TEST_FILE, N);
-    bench_JPJsonParser1d(JSON_TEST_FILE, N);
-    bench_JPJsonParser2(JSON_TEST_FILE, N);
-    bench_JPAsyncJsonParser(JSON_TEST_FILE, N);
-#if defined (USE_JSONKit)
-    bench_JSONKit1(JSON_TEST_FILE, N);
-    bench_JSONKit2(JSON_TEST_FILE, N);
-    bench_JSONKitString1(JSON_TEST_FILE, N);
-#endif    
-#if 1    
-    bench_NSJSONSerialization1(JSON_TEST_FILE, N);
-    bench_NSJSONSerialization2(JSON_TEST_FILE, N);
-#endif    
+
+    
+//    bench_JPJsonParserSAXStyle1x(JSON_TEST_FILE, N);
+//    bench_JPJsonParserWithNSData1a(JSON_TEST_FILE, N);
+    bench_JPJsonParserWithNSData1b(JSON_TEST_FILE, N);
+//    bench_JPJsonParserWithNSString1(JSON_TEST_FILE,N);
+//    bench_JPJsonParser1d(JSON_TEST_FILE, N);
+//    bench_JPJsonParser2(JSON_TEST_FILE, N);
+//    bench_JPAsyncJsonParser(JSON_TEST_FILE, N);
+//#if 1
+//    bench_NSJSONSerialization1(JSON_TEST_FILE, N);
+//    bench_NSJSONSerialization2(JSON_TEST_FILE, N);
+//#endif
+    
+    //#if defined (USE_JSONKit)
+    //    bench_JSONKit1(JSON_TEST_FILE, N);
+    //    bench_JSONKit2(JSON_TEST_FILE, N);
+    //    bench_JSONKitString1(JSON_TEST_FILE, N);
+    //#endif    
+    
     [pool drain];
     return 0;
 }

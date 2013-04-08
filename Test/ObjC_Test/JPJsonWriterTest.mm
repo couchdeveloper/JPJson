@@ -91,7 +91,7 @@ namespace {
     TEST_F(JPJsonWriterTest, BasicWriterTest) 
     {
         @autoreleasepool {
-            NSError* error;
+            __autoreleasing NSError* error;
             
             // Each JSON string will be parsed in order to get a JSON representation
             NSArray* strings = [NSArray arrayWithObjects:
@@ -124,7 +124,7 @@ namespace {
                                                                 length:[jsonData length]
                                                               encoding:NSUTF8StringEncoding];
                 
-                EXPECT_TRUE([inString isEqualToString:jsonString]);
+                EXPECT_TRUE([inString isEqualToString:jsonString]) << [jsonString UTF8String] << std::endl;
             }
 
         }
@@ -143,7 +143,7 @@ namespace {
                               [NSNumber numberWithBool:2],
                               [NSNumber numberWithBool:0xFF],
                               nil];
-            NSError* error;
+            __autoreleasing NSError* error;
             NSData* jsonData = [JPJsonWriter dataWithObject:array
                                                    encoding:JPUnicodeEncoding_UTF8
                                                     options:0
@@ -169,7 +169,7 @@ namespace {
                               [NSNumber numberWithChar:0xFF],
                               nil];
             
-            NSError* error;
+            __autoreleasing NSError* error;
             NSData* jsonData = [JPJsonWriter dataWithObject:array
                                                    encoding:JPUnicodeEncoding_UTF8
                                                     options:0
@@ -196,7 +196,7 @@ namespace {
                               [NSNumber numberWithUnsignedChar:0xFF],
                               nil];
             
-            NSError* error;
+           __autoreleasing  NSError* error;
             NSData* jsonData = [JPJsonWriter dataWithObject:array
                                                    encoding:JPUnicodeEncoding_UTF8
                                                     options:0
@@ -221,7 +221,7 @@ namespace {
                               [NSNumber numberWithShort:SHRT_MIN],
                               nil];
             
-            NSError* error;
+            __autoreleasing NSError* error;
             NSData* jsonData = [JPJsonWriter dataWithObject:array
                                                    encoding:JPUnicodeEncoding_UTF8
                                                     options:0
@@ -244,7 +244,7 @@ namespace {
                               [NSNumber numberWithUnsignedShort:1],
                               [NSNumber numberWithUnsignedShort:USHRT_MAX],
                               nil];
-            NSError* error;
+            __autoreleasing NSError* error;
             NSData* jsonData = [JPJsonWriter dataWithObject:array
                                                    encoding:JPUnicodeEncoding_UTF8
                                                     options:0
@@ -271,7 +271,7 @@ namespace {
                               [NSNumber numberWithInt:INT_MIN],
                               nil];
             
-            NSError* error;
+            __autoreleasing NSError* error;
             NSData* jsonData = [JPJsonWriter dataWithObject:array
                                                    encoding:JPUnicodeEncoding_UTF8
                                                     options:0
@@ -296,7 +296,7 @@ namespace {
                               [NSNumber numberWithUnsignedInt:UINT_MAX],
                               nil];
             
-            NSError* error;
+            __autoreleasing NSError* error;
             NSData* jsonData = [JPJsonWriter dataWithObject:array
                                                    encoding:JPUnicodeEncoding_UTF8
                                                     options:0
@@ -323,7 +323,7 @@ namespace {
                               [NSNumber numberWithLong:LONG_MIN],
                               nil];
             
-            NSError* error;
+            __autoreleasing NSError* error;
             NSData* jsonData = [JPJsonWriter dataWithObject:array
                                                    encoding:JPUnicodeEncoding_UTF8
                                                     options:0
@@ -348,7 +348,7 @@ namespace {
                               [NSNumber numberWithUnsignedLong:ULONG_MAX],
                               nil];
             
-            NSError* error;
+            __autoreleasing NSError* error;
             NSData* jsonData = [JPJsonWriter dataWithObject:array
                                                    encoding:JPUnicodeEncoding_UTF8
                                                     options:0
@@ -375,7 +375,7 @@ namespace {
                               [NSNumber numberWithLongLong:LLONG_MIN],
                               nil];
             
-            NSError* error;
+            __autoreleasing NSError* error;
             NSData* jsonData = [JPJsonWriter dataWithObject:array
                                                    encoding:JPUnicodeEncoding_UTF8
                                                     options:0
@@ -400,7 +400,7 @@ namespace {
                               [NSNumber numberWithUnsignedLongLong:ULLONG_MAX],
                               nil];
             
-            NSError* error;
+            __autoreleasing NSError* error;
             NSData* jsonData = [JPJsonWriter dataWithObject:array
                                                    encoding:JPUnicodeEncoding_UTF8
                                                     options:0
@@ -426,7 +426,7 @@ namespace {
     TEST_F(JPJsonWriterTest, TestUTF8Strings)
     {
         @autoreleasepool {
-            NSError* error;
+            __autoreleasing NSError* error;
             NSArray* strings = [NSArray arrayWithObjects:
                                 @"[\"µöä\"]",
                                 @"[\"艾小薇\"]",
@@ -459,7 +459,7 @@ namespace {
     TEST_F(JPJsonWriterTest, TestUTF8StringsEscaped) 
     {
         @autoreleasepool {
-            NSError* error;
+            __autoreleasing NSError* error;
             NSArray* strings = [NSArray arrayWithObjects:
                                 @"[\"80\u540e\uff0c\u5904\u5973\u5ea7\uff0c\u65e0\u4e3b\u7684\u808b\u9aa8\uff0c\u5b85+\u5fae\u8150\u3002\u5b8c\u7f8e\u63a7\uff0c\u7ea0\u7ed3\u63a7\u3002\u5728\u76f8\u4eb2\u7684\u6253\u51fb\u4e0e\u88ab\u6253\u51fb\u4e2d\u4e0d\u65ad\u6210\u957fing\"]",
                                 nil];
@@ -506,7 +506,7 @@ namespace {
         // exponent is an integer from –128 through 127.
             
         @autoreleasepool {
-            NSError* error;
+            __autoreleasing NSError* error;
             NSArray* strings = [NSArray arrayWithObjects:
                                 @"[0]",
                                 @"[1]",

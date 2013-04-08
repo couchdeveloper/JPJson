@@ -58,7 +58,7 @@ typedef NSUInteger JPJsonWriterOptions;
 
  -  `JPJsonWriterEscapeUnicodeCharacters`
 
-    If this option is set, the generator escapes Unicode chararacters 
+    If this option is set, the generator escapes Unicode characters
     in JSON strings if they cannot be represented in one code unit. This
     option should only be used when encoding in UTF-8. If this option is set,
     the output effectively becomes ASCII compatible if encoded in UTF-8.
@@ -108,18 +108,18 @@ typedef NSUInteger JPJsonWriterOptions;
  values see "JPJsonWriterOptions".
 
  @param error A pointer to a `NSError` object. If this is not `NULL`, and if 
- an error occured during serializing the parameter error contains an `NSError` 
+ an error occurred during serializing the parameter error contains an `NSError`
  object describing the issue.
 
 
  @return A NSData object representing the JSON in parameter 'object' as text, 
- or `nil` if an error occured.
+ or `nil` if an error occurred.
 */
 
 + (NSData*)dataWithObject:(id)object 
                  encoding:(JPUnicodeEncoding)encoding
                   options:(JPJsonWriterOptions)options 
-                    error:(NSError**)error;
+                    error:(__autoreleasing NSError**)error;
 
 
 /**
@@ -136,17 +136,17 @@ typedef NSUInteger JPJsonWriterOptions;
  values see "JPJsonWriterOptions".
  
  @param error A pointer to a `NSError` object. If this is not `NULL`, and if
- an error occured during serializing the parameter error contains an `NSError`
+ an error occurred during serializing the parameter error contains an `NSError`
  object describing the issue.
  
  
  @return A NSData object representing the JSON in parameter 'object' as text,
- or `nil` if an error occured.
+ or `nil` if an error occurred.
  */
 
 + (NSData*)dataWithObject:(id)object
                   options:(JPJsonWriterOptions)options
-                    error:(NSError**)error;
+                    error:(__autoreleasing NSError**)error;
 
 
 
@@ -170,11 +170,11 @@ typedef NSUInteger JPJsonWriterOptions;
  values see "JPJsonWriterOptions".
  
  @param error A pointer to a `NSError` object. If this is not `NULL`, and if
- an error occured during serializing the parameter error contains an `NSError`
+ an error occurred during serializing the parameter error contains an `NSError`
  object describing the issue.
  
  
- @return The number of bytes written into the stream, or zero if an error occured.
+ @return The number of bytes written into the stream, or zero if an error occurred.
  
  
  */
@@ -183,7 +183,7 @@ typedef NSUInteger JPJsonWriterOptions;
                       toStream:(NSOutputStream*)stream
                       encoding:(JPUnicodeEncoding)encoding
                        options:(JPJsonWriterOptions)options
-                         error:(NSError**)error;
+                         error:(__autoreleasing NSError**)error;
 
 
 
@@ -203,11 +203,11 @@ typedef NSUInteger JPJsonWriterOptions;
  values see "JPJsonWriterOptions".
  
  @param error A pointer to a `NSError` object. If this is not `NULL`, and if
- an error occured during serializing the parameter error contains an `NSError`
+ an error occurred during serializing the parameter error contains an `NSError`
  object describing the issue.
  
  
- @return The number of bytes written into the stream, or zero if an error occured.
+ @return The number of bytes written into the stream, or zero if an error occurred.
  
  
  */
@@ -215,7 +215,7 @@ typedef NSUInteger JPJsonWriterOptions;
 + (NSUInteger) serializeObject:(id)object
                       toStream:(NSOutputStream*)stream
                        options:(JPJsonWriterOptions)options
-                         error:(NSError**)error;
+                         error:(__autoreleasing NSError**)error;
 
 
 
