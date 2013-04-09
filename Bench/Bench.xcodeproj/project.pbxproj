@@ -308,7 +308,7 @@
 				A10E4288170B4FF100E8AE24 /* common.xcconfig */,
 				A16EEE3E1487DA3B00D12DA2 /* Bench.debug.xcconfig */,
 				A16EEE3F1487DB6D00D12DA2 /* Bench.release.xcconfig */,
-				A17DD7E6146BB950000AD974 /* benches */,
+				A17DD7E6146BB950000AD974 /* benchmarks */,
 				A17DD7C6146AF503000AD974 /* utilities */,
 				A14BE8F114681E8D0077EA5C /* Vendor */,
 				A199FCBC13D76F64000170CD /* Resources */,
@@ -350,7 +350,7 @@
 			path = ../Source/utilities;
 			sourceTree = "<group>";
 		};
-		A17DD7E6146BB950000AD974 /* benches */ = {
+		A17DD7E6146BB950000AD974 /* benchmarks */ = {
 			isa = PBXGroup;
 			children = (
 				A1AA929C1529E20700181B93 /* CFStringStringBufferBench */,
@@ -364,7 +364,7 @@
 				A19F3B1F1428C89D00266273 /* Allocator_bench */,
 				A11D218E144C9B6300D24AA8 /* parse_number */,
 			);
-			name = benches;
+			name = benchmarks;
 			sourceTree = "<group>";
 		};
 		A187B4D313FAA7AF00FB63BD /* unicode_conversion */ = {

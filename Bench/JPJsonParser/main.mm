@@ -764,7 +764,7 @@ namespace {
             abort();
         }
         printf("using a NSData with %s content as input,\n"
-               "interface method: mutableObjectWithData: (JSONDecoder),\n"
+               "interface method: objectWithData: (JSONDecoder),\n"
                "JKParseOptionFlags = 0\n",
                NSStringEncodingToUnicodeSchemeCStr(encoding));
         printf("Input file: %s, size: %d, encoding: %s\n", 
@@ -780,7 +780,7 @@ namespace {
             NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
             t.start();
             JSONDecoder* decoder = [[JSONDecoder alloc] initWithParseOptions:(JKParseOptionFlags)JKParseOptionNone];
-            id result = [decoder mutableObjectWithData:data];
+            id result = [decoder objectWithData:data];
             [result retain];
             [decoder release];
             t.stop();
@@ -822,7 +822,7 @@ namespace {
         }
         printf("Timing includes destruction of objects\n");
         printf("using a NSData with %s content as input,\n"
-               "interface method: mutableObjectWithData: (JSONDecoder),\n"
+               "interface method: objectWithData: (JSONDecoder),\n"
                "JKParseOptionFlags = 0\n",
                NSStringEncodingToUnicodeSchemeCStr(encoding));
         printf("Input file: %s, size: %d, encoding: %s\n", 
@@ -838,7 +838,7 @@ namespace {
             t.start();
             NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
             JSONDecoder* decoder = [[JSONDecoder alloc] initWithParseOptions:(JKParseOptionFlags)JKParseOptionNone];
-            id result = [decoder mutableObjectWithData:data];
+            id result = [decoder objectWithData:data];
             [result retain];
             [decoder release];
             [result release];
@@ -885,7 +885,7 @@ namespace {
         }
         printf("using a NSData with %s content as input,\n"
                "interface method: JSONObjectWithData:options:error:, \n"
-               "options: NSJSONReadingMutableContainers\n",
+               "options: none\n",
                NSStringEncodingToUnicodeSchemeCStr(encoding));
         printf("Input file: %s, size: %d, encoding: %s\n", 
                [JSON_TEST_FILE UTF8String], (int)[data length], NSStringEncodingToUnicodeSchemeCStr(encoding));
@@ -900,7 +900,7 @@ namespace {
         {
             NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
             t.start();
-            id result = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
+            id result = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
             gotError = result == nil;
             [result retain];
             t.stop();
@@ -943,7 +943,7 @@ namespace {
         printf("Timing includes destruction of objects, too\n");
         printf("using a NSData with %s content as input,\n"
                "interface method: JSONObjectWithData:options:error:, \n"
-               "options: NSJSONReadingMutableContainers\n",
+               "options: none\n",
                NSStringEncodingToUnicodeSchemeCStr(encoding));
         printf("Input file: %s, size: %d, encoding: %s\n", 
                [JSON_TEST_FILE UTF8String], (int)[data length], NSStringEncodingToUnicodeSchemeCStr(encoding));
@@ -958,7 +958,7 @@ namespace {
         {
             t.start();
             NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-            id result = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
+            id result = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
             gotError = result == nil;
             [result retain];
             [result release];
@@ -1007,23 +1007,23 @@ int main (int argc, const char * argv[])
     NSLog(@"Start Bench");
 
     
-//    bench_JPJsonParserSAXStyle1x(JSON_TEST_FILE, N);
-//    bench_JPJsonParserWithNSData1a(JSON_TEST_FILE, N);
+    bench_JPJsonParserSAXStyle1x(JSON_TEST_FILE, N);
+    bench_JPJsonParserWithNSData1a(JSON_TEST_FILE, N);
     bench_JPJsonParserWithNSData1b(JSON_TEST_FILE, N);
-//    bench_JPJsonParserWithNSString1(JSON_TEST_FILE,N);
-//    bench_JPJsonParser1d(JSON_TEST_FILE, N);
-//    bench_JPJsonParser2(JSON_TEST_FILE, N);
-//    bench_JPAsyncJsonParser(JSON_TEST_FILE, N);
-//#if 1
-//    bench_NSJSONSerialization1(JSON_TEST_FILE, N);
-//    bench_NSJSONSerialization2(JSON_TEST_FILE, N);
-//#endif
+    bench_JPJsonParserWithNSString1(JSON_TEST_FILE,N);
+    bench_JPJsonParser1d(JSON_TEST_FILE, N);
+    bench_JPJsonParser2(JSON_TEST_FILE, N);
+    bench_JPAsyncJsonParser(JSON_TEST_FILE, N);
+#if 1
+    bench_NSJSONSerialization1(JSON_TEST_FILE, N);
+    bench_NSJSONSerialization2(JSON_TEST_FILE, N);
+#endif
     
-    //#if defined (USE_JSONKit)
-    //    bench_JSONKit1(JSON_TEST_FILE, N);
-    //    bench_JSONKit2(JSON_TEST_FILE, N);
-    //    bench_JSONKitString1(JSON_TEST_FILE, N);
-    //#endif    
+#if defined (USE_JSONKit)
+    bench_JSONKit1(JSON_TEST_FILE, N);
+    bench_JSONKit2(JSON_TEST_FILE, N);
+    bench_JSONKitString1(JSON_TEST_FILE, N);
+#endif
     
     [pool drain];
     return 0;

@@ -352,7 +352,7 @@
       </Group>
       <Group
          location = "group:Bench"
-         name = "Bench">
+         name = "Benchmark">
          <FileRef
             location = "group:Bench.xcodeproj">
          </FileRef>

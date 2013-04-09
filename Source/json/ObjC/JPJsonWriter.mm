@@ -1306,7 +1306,7 @@ namespace {
         
         
         
-        
+#pragma mark - JPJsonWriter (Extension)
         
         
 @implementation JPJsonWriter (Extension)

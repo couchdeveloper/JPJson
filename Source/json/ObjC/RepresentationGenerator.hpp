@@ -73,6 +73,7 @@
 #include "json/utility/simple_log.hpp"
 #include "json/utility/flags.hpp"
 #include "json/utility/string_to_number.hpp"
+#include "json/utility/arena_allocator.hpp"
 
 #if defined (JSON_OBJC_REPRESENTATION_GENERATOR_USE_JSON_PATH)
 #include "json/json_path/intrusive_json_path.hpp"
@@ -107,11 +108,67 @@ namespace  {
 
 
 
+#pragma mark - Arena Allocator
 namespace {
     
+    using json::utility::SysArena;
+    
+    
+    
+    void* arenaAllocator_allocate(CFIndex size, CFOptionFlags hint, void *info)
+    {
+        return reinterpret_cast<SysArena*>(info)->allocate(size);
+    }
+
+//    void*   arenaAllocator_reallocate(void *ptr, CFIndex newsize, CFOptionFlags hint, void *info)
+//    {
+//    }
+    
+    void arenaAllocator_deallocate(void *ptr, void *info)
+    {
+        reinterpret_cast<SysArena*>(info)->deallocate(ptr);
+    }
+    
+    void arenaAllocator_deleteArena(const void *info)
+    {
+        delete reinterpret_cast<SysArena const*>(info);
+    }
+
+    CFAllocatorRef ArenaAllocatorCreate(int blockSize = 4096)
+    {
+        CFAllocatorContext context =
+        {
+            0,          // version;
+            NULL,       // arena;
+            NULL,       // CFAllocatorRetainCallBack retain
+            arenaAllocator_deleteArena,       // CFAllocatorReleaseCallBack release
+            NULL,       // CFAllocatorCopyDescriptionCallBack	copyDescription;
+            arenaAllocator_allocate,
+            NULL,       // CFAllocatorReallocateCallBack	reallocate
+            arenaAllocator_deallocate,
+            NULL //CFAllocatorPreferredSizeCallBack	preferredSize;
+        };
+        
+        context.info = new SysArena(blockSize);
+        return CFAllocatorCreate(NULL, &context);
+    }
+    
+    void ArenaAllocatorClear(CFAllocatorRef arenaAllocator)
+    {
+        CFAllocatorContext context;
+        CFAllocatorGetContext(arenaAllocator, &context);
+        SysArena* arena = reinterpret_cast<SysArena*>(context.info);
+        if (arena) {
+            arena->clear();
+        }
+    }
+    
+}
+
+    
 #pragma mark - Private Functions
-    
-    
+namespace {
+        
     void throwRuntimeError(const char* msg) {
         throw std::runtime_error(msg);
     }
@@ -124,7 +181,7 @@ namespace {
     }
 
     
-    NSDecimalNumber*  newDecimalNumberFromString(const char* buffer, std::size_t len) 
+    NSDecimalNumber*  newDecimalNumberFromString(const char* buffer, std::size_t len)
     {
         NSString* numberString = CFBridgingRelease(
             CFStringCreateWithBytesNoCopy( NULL,
@@ -150,12 +207,12 @@ namespace {
     // Creates a CFString from a buffer 's' containing 'len' code units encoded 
     // in 'Encoding'. Ownership of the string folows the "Create" rule.
     template <typename Encoding, typename CharT>
-    CFStringRef createString(const CharT* s, std::size_t len, Encoding) 
+    CFStringRef createString(const CharT* s, std::size_t len, Encoding, CFAllocatorRef allocator)
     {
         typedef typename json::unicode::add_endianness<Encoding>::type encoding_type;
         typedef typename json::unicode::encoding_traits<encoding_type>::code_unit_type code_unit_t;
         constexpr CFStringEncoding cf_encoding = json::cf_unicode_encoding_traits<encoding_type>::value;
-        CFStringRef str = CFStringCreateWithBytes(NULL, 
+        CFStringRef str = CFStringCreateWithBytes(allocator, 
                                                   static_cast<const UInt8*>(static_cast<const void*>(s)), 
                                                   sizeof(code_unit_t)*len, 
                                                   cf_encoding, 0);
@@ -165,7 +222,7 @@ namespace {
     
     
     // Creates a CFMutableString from a buffer 's' containing 'len' code units encoded in
-    // 'Encoding'. Ownership of the string folows the "Create" rule.
+    // 'Encoding'. Ownership of the string follows the "Create" rule.
     template <typename Encoding, typename CharT>
     CFMutableStringRef createMutableString(const CharT* s, std::size_t len, Encoding) 
     {
@@ -438,6 +495,8 @@ namespace json { namespace objc {
             opt_cache_data_strings_(false),
             opt_create_mutable_json_containers_(false)
         {
+            arena_allocator_ = ArenaAllocatorCreate(4*1024);
+            assert(arena_allocator_);
             f_cf_retain = CFRetain;
             f_cf_release = CFRelease;
             numberGeneratorOption(number_generator_option_);
@@ -448,6 +507,8 @@ namespace json { namespace objc {
         
         virtual ~RepresentationGenerator() noexcept
         {
+            if (arena_allocator_)
+                CFRelease(arena_allocator_);
             clear_stack();
 #if defined (JSON_OBJC_REPRESENTATION_GENERATOR_USE_CACHE) 
             //clear_cache();
@@ -568,7 +629,7 @@ namespace json { namespace objc {
                 
                 // Get the address of the start of the range of values:this only works if stack_t is a vector!!
                 CFTypeRef* values = stack_.data() + first_idx;
-                cfArray = CFArrayCreate(kCFAllocatorDefault, values, count, &kCFTypeArrayCallBacks);
+                cfArray = CFArrayCreate(arena_allocator_, values, count, &kCFTypeArrayCallBacks);
                 // release the CFTypes:
                 while (first != last) {
                     f_cf_release(*first++);
@@ -703,7 +764,7 @@ namespace json { namespace objc {
                 }
                 // Create immutable JSON object via CF functions:
                 CFDictionaryRef o = 
-                CFDictionaryCreate(NULL, tmp_cf_keys_.data(), tmp_cf_values_.data(),
+                CFDictionaryCreate(arena_allocator_, tmp_cf_keys_.data(), tmp_cf_values_.data(),
                                    num_elements,
                                    &kCFTypeDictionaryKeyCallBacks,
                                    &kCFTypeDictionaryValueCallBacks);
@@ -806,17 +867,17 @@ namespace json { namespace objc {
                             //boost::spirit::qi::parse(number.c_str(), number.c_str() + number.c_str_len(), boost::spirit::int_, val);
                             // TODO: revert test code
                             int val = json::utility::string_to_number<int>(number.c_str(), number.c_str_len());
-                            cfNumber = CFNumberCreate(NULL, kCFNumberIntType, &val);
+                            cfNumber = CFNumberCreate(arena_allocator_, kCFNumberIntType, &val);
                         }
                         else if (digits <= std::numeric_limits<long>::digits10) {
                             //boost::spirit::qi::parse(number.c_str(), number.c_str() + number.c_str_len(), boost::spirit::long_, val);                            
                             // TODO: revert test code
                             long val = json::utility::string_to_number<long>(number.c_str(), number.c_str_len());
-                            cfNumber = CFNumberCreate(NULL, kCFNumberLongType, &val);
+                            cfNumber = CFNumberCreate(arena_allocator_, kCFNumberLongType, &val);
                         }
                         else if (digits <= std::numeric_limits<long long>::digits10) {
                             long long val = json::utility::string_to_number<long long>(number.c_str(), number.c_str_len());
-                            cfNumber = CFNumberCreate(NULL, kCFNumberLongLongType, &val);
+                            cfNumber = CFNumberCreate(arena_allocator_, kCFNumberLongLongType, &val);
                         } 
                         else if (digits <= 38){
                             // use NSDecimalNumber  
@@ -845,7 +906,7 @@ namespace json { namespace objc {
                                 number.c_str_len(), number.c_str());
                         }
                         double d = json::utility::string_to_number<double>(number.c_str(), number.c_str_len());
-                        cfNumber = CFNumberCreate(NULL, kCFNumberDoubleType, &d);
+                        cfNumber = CFNumberCreate(arena_allocator_, kCFNumberDoubleType, &d);
                     }
                     else /* number is decimal*/
                     {
@@ -856,7 +917,7 @@ namespace json { namespace objc {
                         {      
                             // use an NSNumber with underlaying double
                             double d = json::utility::string_to_number<double>(number.c_str(), number.c_str_len());
-                            cfNumber = CFNumberCreate(NULL, kCFNumberDoubleType, &d);
+                            cfNumber = CFNumberCreate(arena_allocator_, kCFNumberDoubleType, &d);
                         }
                         else 
                         {
@@ -926,6 +987,7 @@ namespace json { namespace objc {
         {
             base::clear_imp(shrink_buffers);
             clear_stack();
+            ArenaAllocatorClear(arena_allocator_);
             markers_.clear();
 #if defined (JSON_OBJC_REPRESENTATION_GENERATOR_USE_PERFORMANCE_COUNTER)                                    
             pc_.clear();
@@ -1011,7 +1073,7 @@ namespace json { namespace objc {
             if (iter == string_cache_.end()) {
                 ++cache_miss_count_;
                 // The string is not in the cache, create one and insert it into the cache:
-                str = createString(buffer.first, buffer.second, EncodingT());
+                str = createString(buffer.first, buffer.second, EncodingT(), arena_allocator_);
                 iter = string_cache_.insert(cache_key, str).first;
             } 
             else {
@@ -1028,7 +1090,7 @@ namespace json { namespace objc {
         {
             if (tmp_data_str_ == 0 and not hasMore) {
                 // Create an immutable string
-                CFStringRef str = createString(buffer.first, buffer.second, EncodingT());
+                CFStringRef str = createString(buffer.first, buffer.second, EncodingT(), arena_allocator_);
                 stack_.emplace_back(str);  // Do not release str!
             }
             else if (tmp_data_str_ == 0 and hasMore)
@@ -1106,7 +1168,8 @@ namespace json { namespace objc {
 #endif        
         
     protected:
-        result_type     result_;
+        CFAllocatorRef      arena_allocator_;
+        result_type         result_;
         
 #pragma mark -   Private Members
     private:    
