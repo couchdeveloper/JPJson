@@ -198,7 +198,7 @@
 /**
  Retrieves the (abstract) result of the semantic actions instance. 
  
- The property may return nil. 
+ The property may return `nil`. 
 */ 
 - (id) result;
 
@@ -312,15 +312,21 @@
  Sent to the delegate when the parser found the start of the nth key-value pair
  within a JSON Object.
  
- The JSON parser will pass the key as a _decoded_ JSON String. _Decoding_ a JSON
- string involves unescaping, possibly replacing certain Unicode characters with 
- their replacement character as specified in the semantic actions configuration, 
- and possibly converting from the source encoding to the specified Unicode encoding 
- form. 
+ If property `generateEncodedStrings` equals `NO` (default) the JSON parser will 
+ pass the key as a _decoded_ JSON String. If property `generateEncodedStrings`
+ equals `YES` the character sequence represents an _encoded_ JSON string as specified
+ in RFC 4627.
+ 
+ _Decoding_ a JSON string involves unescaping, possibly replacing certain Unicode
+ characters with their replacement character as specified in the semantic actions
+ configuration, and possibly converting from the source encoding to the specified
+ Unicode encoding form. The resulting string should compare equal to the original
+ string.
+  
  Subsequently, the delegate will be sent parse events which constitute the value
  associated to the key.
  
- @warning *Note:* The specified Unicode encoding scheme in parameter `encoding` 
+ @note The specified Unicode encoding scheme in parameter _encoding_ 
  corresponds to the Library Build Option `JSON_SEMANTIC_ACTIONS_STRING_ENCODING` and
  cannot be selected at runtime.
  
@@ -371,19 +377,27 @@
 /**
  Sent to the delegate when the JSON parser found a JSON String as a value.
 
- If parameter `hasMore` equals `YES`, the parser found a large string and is 
- delivering the JSON String in several chunks. Each chunk has been _decoded_ and 
- in case of multibyte encodings, the byte sequence will end at a complete character 
- boundary. The parser will send as many chunks as necessary to complement the 
- string through sending consecutive messages to the receiver.
-  
- The JSON parser will send a _decoded_ string. _Decoding_ a JSON string
- involves unescaping, possibly replacing certain Unicode characters with their 
- replacement character as specified in the semantic actions configuration, and 
- possibly converting from the source encoding to the specified Unicode encoding 
- form. 
+ If parameter _hasMore_ equals `YES`, the parser found a large string and is 
+ delivering the JSON String in several chunks. 
  
- @warning *Note:* The specified Unicode encoding scheme in parameter `encoding` 
+ If property `generateEncodedStrings` equals `NO` (default) each chunk has been 
+ _decoded_ and should compare equal to the original string. If property `generateEncodedStrings` 
+ equals `YES` the character sequence represents an _encoded_ JSON string as specified
+ in RFC 4627.
+ 
+ In case of multibyte encodings, it is guaranteed that the  byte sequence will 
+ always end at a complete character boundary.
+ 
+ The parser will send as many chunks as necessary to complement the string through 
+ sending consecutive messages to the receiver.
+  
+ _Decoding_ a JSON string involves unescaping, possibly replacing certain Unicode 
+ characters with their replacement character as specified in the semantic actions 
+ configuration, and possibly converting from the source encoding to the specified 
+ Unicode encoding form. The resulting string should compare equal to the original 
+ string.
+ 
+ @note The specified Unicode encoding scheme in parameter _encoding_ 
  corresponds to the Library Build Option `JSON_SEMANTIC_ACTIONS_STRING_ENCODING` and
  cannot be selected at runtime.
  

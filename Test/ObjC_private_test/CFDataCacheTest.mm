@@ -344,7 +344,7 @@ namespace test {
             for (int i = 0; i < count_; ++i) {
                 snprintf(buffer, sizeof(buffer), "key-%12.d", keys_[i]);
                 t0 = timer.now();
-                cache.insert(cache_t::key_type(buffer, 16), NULL);
+                cache.insert(cache_t::key_type(buffer, 16), kCFNull);
                 result += timer.now() - t0;
             }
             return result;
@@ -575,7 +575,7 @@ namespace test {
             char buffer[245];
             for (int i = 0; i < count_; ++i) {
                 snprintf(buffer, sizeof(buffer), "key-%12.d", keys_[i]);
-                cache_.insert(cache_t::key_type(buffer, 16), NULL);
+                cache_.insert(cache_t::key_type(buffer, 16), kCFNull);
             }
             
         }
@@ -1009,7 +1009,7 @@ namespace {
         
         for (int i = 0; i < N; ++i) {
             snprintf(buffer, sizeof(buffer), "key-%d", i);
-            std::pair<iterator, bool> result = cache.insert(key_t(buffer, strlen(buffer)), NULL);
+            std::pair<iterator, bool> result = cache.insert(key_t(buffer, strlen(buffer)), kCFNull);
             iterator iter = result.first;
             value_t value = *iter;
             EXPECT_TRUE(buffer != value.first.first);

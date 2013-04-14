@@ -11,13 +11,13 @@
 
 
 /**
- JPJsonStreambufferProtocol defines the interface for a stream buffer:
+ JPJsonStreambufferProtocol defines the interface for a stream-buffer:
  
- Custom classes which map to a JSON primitive element will use the stream buffer 
+ Custom classes which map to a JSON primitive element will use the stream-buffer 
  in their implementation of method JPJson_serializeTo:encoding:options:level: in
  order to serialize itself into the stream. (Custom classes for JSON __containers__, 
  like array and object will instead use the predefined class methods 
- serializeObjectAsJSONArray and serializeObjectAsJSONObject).
+ `serializeObjectAsJSONArray` and `serializeObjectAsJSONObject`).
  
  Caution: Preliminary. At a later version this protocol may change, supporting
  a higher level abstraction of "stream" instead of "buffer".
@@ -39,7 +39,7 @@
  Write a sequence of bytes.
  
  Write `length` bytes from the array of bytes pointed to by `buffer` into the
- stream buffer. This may block the current thread until after the requested
+ stream-buffer. This may block the current thread until after the requested
  number of bytes have been written.
  
  @param buffer A pointer to the sequence of bytes to be written.
@@ -54,7 +54,7 @@
 
 
 /**
- Close a stream buffer.
+ Close a stream-buffer.
  
  Write any remaining bytes to the output device and close it.
 
@@ -65,7 +65,7 @@
 
 
 /**
- @return Returns the error of the last operation, nil if there was success.
+ @return Returns the error of the last operation, `nil` if there was success.
  */
 
 @property (nonatomic, readonly) NSError* error;
@@ -78,16 +78,16 @@
 
 
 /**
- The JPJsonSerializableProtocol must be implemented for *custom* classes,
+ The `JPJsonSerializableProtocol` must be implemented for *custom classes*,
  which shall be serialized into a JSON document. By default, only the 
  Objective-C classes specified in the mapping can be used to be serialized as
  JSON. 
 
- When implementing the JPJsonSerializableProtocol for a class, the objects 
+ When implementing the `JPJsonSerializableProtocol` for a class, the objects
  will be serialized into their corresponding JSON element - provided the 
- implementation meets all requirements. For example, a NSDate object could be 
+ implementation meets all requirements. For example, a `NSDate` object could be 
  serialized as a JSON String, while formatting the date into an appropriate 
- date string, or an NSImage could be base64 encoded and then serialized as a 
+ date string, or an `NSImage` could be base64 encoded and then serialized as a 
  JSON string, too.
 */
 @protocol JPJsonSerializableProtocol <NSObject>
@@ -95,9 +95,9 @@
 
 /**
  An implementation shall serialize itself as a character sequence and write the 
- characters into the stream `buffer`.
+ characters into the stream-buffer _streambuf_.
  
- @param streambuf A stream buffer into which the characters will be written.
+ @param streambuf A stream-buffer into which the characters will be written.
  
  @param encoding The output encoding of the character sequence for the serialized 
  object.
@@ -134,7 +134,7 @@
 //
 ///**
 // 
-// Returns the default number formatter for NSDecimalNumber
+// Returns the default number formatter for `NSDecimalNumber`
 // 
 // */
 //+ NSNumberFormatter* defaultDecimalNumberFormatter;
@@ -147,7 +147,7 @@
  
  @param object The "array like" object which shall be serialized
  
- @param streambuf A stream buffer into which the characters will be written.
+ @param streambuf A stream-buffer into which the characters will be written.
  
  @param encoding The output encoding of the character sequence for the serialized 
  object.
@@ -178,7 +178,7 @@
  
  @param object The "dictionary like" object which shall be serialized
  
- @param streambuf A stream buffer into which the characters will be written.
+ @param streambuf A stream-buffer into which the characters will be written.
  
  @param encoding The output encoding of the character sequence for the serialized 
  object.

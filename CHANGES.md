@@ -81,3 +81,35 @@
 
 
 
+### Version 0.7 beta
+
+* Quite a lot has been changed within the details of the implementation. Now, the implementation utilizes and requires clang's standard C++ library and C++11 features, with the effect of some nice performance improvements and a simplification of the source code.
+
+* The minumim iOS versions is now 5.0. (4.2 is no longer supported, due to the change towards most recent C++ compiler and standard C++ library features)
+
+* Updated all projects to most recent Xcode version (as of writing: v4.6.1).
+
+* The performance of the Objective-C parser has been improved slightly:
+  On ARM it is now quite noticable faster than the fastest competitor: JSONKit, 
+  and almost about twice as fast as NSJSONSerialization for many work loads.
+
+
+* The C++ API has been finished, including a pretty nice version of a JSON representation, class `json::value`, which utilizes standard containers and a discriminated union class: `json::variant`.
+  
+  When speed matters: the performance of the C++ parser generating a JSON representation  with standard containers utilizing an arena allocator is about twice as fast as the Objective-C parser which creates a representation of Foundation objects.
+
+* The C++ API now requires a conforming C++11 compiler and a C++11 standard library. The _full_ set of features of the C++ JSON representation, class `json::value`, will require a C++11 library which fully implemented the "scoped allocator model" for containers. At the time of writing, gcc 4.8's standard library does not fulfil this requirement.
+
+* Note: currently, the C++ API is only tested with clang on Mac OS X/iOS.
+
+
+* The gtest framwork required a few changes in order to compile Unit tests in C++11 utilizing a C++11 standard library. Thus, gtest should now be cloned from GitHub which already contains these modifications and compiles successfully (please consult the INSTALL document where and how to clone gtest from GitHub).
+
+
+#### Bug fixes
+
+* Fixed a memory leak bug in when creating a NSDecimalNumber.
+
+
+  
+  

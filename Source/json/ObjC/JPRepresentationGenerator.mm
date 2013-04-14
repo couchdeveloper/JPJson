@@ -129,6 +129,7 @@ typedef json::objc::RepresentationGenerator<JP_CFStringEncoding>    Representati
     self.keepStringCacheOnClear = JPJsonParserKeepStringCacheOnClear & options ? YES : NO;
     self.cacheDataStrings = JPJsonParserCacheDataStrings & options ? YES : NO;
     self.createMutableContainers = JPJsonParserCreateMutableContainers & options ? YES : NO;
+    self.useArenaAllocator = JPJsonParserGeneratorUseArenaAllocator & options ? YES : NO;
     
     if (JPJsonParserNumberGeneratorOptions & options) {
         if (JPJsonParserNumberGeneratorGenerateAuto & options)
@@ -176,6 +177,13 @@ typedef json::objc::RepresentationGenerator<JP_CFStringEncoding>    Representati
     sa_->createMutableContainers(static_cast<bool>(value));
 }
 
+//@property (nonatomic, assign) BOOL useArenaAllocator;
+- (BOOL) useArenaAllocator  {
+    return (BOOL)sa_->useArenaAllocator();
+}
+- (void) setUseArenaAllocator:(BOOL)value {
+    sa_->useArenaAllocator(static_cast<bool>(value));
+}
 
 
 

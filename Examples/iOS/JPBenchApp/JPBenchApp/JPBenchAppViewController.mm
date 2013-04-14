@@ -28,7 +28,7 @@
 #include <mach/mach_time.h>
 #include <unistd.h>
 #include <dispatch/dispatch.h>
-#include "utilities/timer.hpp"
+#include "timer.hpp"
 #include <utility>
 #include <algorithm>
 
@@ -292,7 +292,7 @@ static NSString* JsonTestFile = @"Test-UTF8-esc.json";
     printf("--------------------------------------------\n");    
     printf("Using a NSData with UTF-8 content as input and interface method:\n"
            "+parseData:options:error: (class JPJsonParser)\n"
-           "options: 0\n"
+           "options: JPJsonParserGeneratorUseArenaAllocator\n"
            "Automatic detection of input encoding, immutable containers\n");
         
     
@@ -308,7 +308,7 @@ static NSString* JsonTestFile = @"Test-UTF8-esc.json";
         // This method creates and destroys the internal semantic actions
         // instance.
         id result = [JPJsonParser parseData:data 
-                                    options:(JPJsonParserOptions)0
+                                    options:(JPJsonParserOptions)JPJsonParserGeneratorUseArenaAllocator
                                       error:&error];
         [result retain];
         t.stop();
@@ -359,7 +359,7 @@ static NSString* JsonTestFile = @"Test-UTF8-esc.json";
     printf("Timing includes destruction of objects, too\n");
     printf("Using a NSData with UTF-8 content as input and interface method:\n"
            "+parseData:options:error: (class JPJsonParser)\n"
-           "options: 0\n"
+           "options: JPJsonParserGeneratorUseArenaAllocator\n"
            "Automatic detection of input encoding, immutable containers\n");
     
     MinMaxAvgTime te;
@@ -374,7 +374,7 @@ static NSString* JsonTestFile = @"Test-UTF8-esc.json";
         // This method creates and destroys the internal semantic actions
         // instance.
         id result = [JPJsonParser parseData:data 
-                                    options:(JPJsonParserOptions)0
+                                    options:(JPJsonParserOptions)JPJsonParserGeneratorUseArenaAllocator
                                       error:&error];
         [pool release];
         

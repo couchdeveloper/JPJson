@@ -5,6 +5,10 @@
 //  Created by Andreas Grosam on 9/20/11.
 //  Copyright (c) 2011 __MyCompanyName__. All rights reserved.
 //
+#if !__has_feature(objc_arc)
+#warning TODO This Objective-C file shall be compiled with ARC enabled.
+#endif
+
 
 #import "AppDelegate.h"
 

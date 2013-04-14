@@ -43,17 +43,13 @@ You can view the online Documentation for the Objective-C API at [http://couchde
 
 - there is a minor issue related to formatting numbers into JSON Numbers. Well, the current behavior still conforms to RFC 4627, but it could be made better.
 
-- Performance of the "Writer" has not been checked. There is room for improvements, too.
-  
-  
   
 ***)** Due to its Beta status, not all minor features are implemented in this version. Well, the feature might actually be there and may be well tested, but a higher level function may not actually use it, or the higher level API simply does not make it public.
   
-The following features are not yet implemented in version 0.1, but planned in the next beta version:
+The following features are not yet implemented, but planned in one of the next beta version:
 
 ### Not Yet Implemented 
 
-*   writing into streams when generating JSON text 
 *   when generating JSON text from a repesentation only UTF-8 can be specified.
 
 
@@ -73,7 +69,9 @@ The following features are not yet implemented in version 0.1, but planned in th
 
 The library is designed for flexibility. It is devided into several independent sub-modules and utility classes, each comming with its own unit tests and benchmark tests.
 
-The implementation has been rigorously fine-tuned for performance and low memory foot-print. The performance is comparable to the currently fastest available Objective-C implementation (JSONKit). However, the JPJsonParser can be used to simultaneously download and parse JSON text of arbitrary size, and thus is cleary superior in those scenarios, escpecically on hardware with more than one CPU.
+The implementation has been rigorously fine-tuned for performance and low memory foot-print. Internally, it's implemented using C++11 and utilizes the standard C++11 library and the boost library when appropriate.
+
+ The performance of the Objective-C API is comparable to the currently fastest available Objective-C implementation (JSONKit). However, the JPJsonParser can be used to simultaneously download and parse JSON text of arbitrary size, and thus is cleary superior in those scenarios, escpecically on hardware with more than one CPU.
 
 
 Included in the package are sample projects showing the basic and advanced usage, unit tests, benchmark tests, library and framework projects, and more complete iOS projects showing how to download and parse a very large JSON text without exceeding restricted memory. Additionaly, there is an AppleDoc build phase for generating the Objective-C API help documents.

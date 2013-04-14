@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		A10E428D170B5BFF00E8AE24 /* libjson.A.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A10E428C170B5BFF00E8AE24 /* libjson.A.dylib */; };
 		A10E428F170B5D3300E8AE24 /* libjson.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A10E428E170B5D3300E8AE24 /* libjson.a */; };
-		A10E429C170B64E100E8AE24 /* JPJson.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A10E429B170B64E100E8AE24 /* JPJson.framework */; };
 		A126812014556BB500131E77 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A126811F14556BB500131E77 /* main.m */; };
 		A126813014556D4900131E77 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1F001371440A27E007A72A9 /* Foundation.framework */; };
 		A126813814557F4A00131E77 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1F001371440A27E007A72A9 /* Foundation.framework */; };
@@ -21,6 +20,7 @@
 		A129D98C17133568001DF586 /* JPJson.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A10E429B170B64E100E8AE24 /* JPJson.framework */; };
 		A129D98D17133597001DF586 /* JPJson.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A10E429B170B64E100E8AE24 /* JPJson.framework */; };
 		A1314AE015530FA500CC4910 /* sample_json.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = A1314ADE15530F7F00CC4910 /* sample_json.json */; };
+		A15728E2171830900007C3F2 /* JPJson.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A10E429B170B64E100E8AE24 /* JPJson.framework */; };
 		A15E63671456D4EC000F22F6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1F001371440A27E007A72A9 /* Foundation.framework */; };
 		A15E636A1456D4EC000F22F6 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A15E63691456D4EC000F22F6 /* main.m */; };
 		A15E63781456D649000F22F6 /* JsonPathSemanticActions.mm in Sources */ = {isa = PBXBuildFile; fileRef = A15E63771456D649000F22F6 /* JsonPathSemanticActions.mm */; };
@@ -156,7 +156,7 @@
 		A199EFDF144480D200B53269 /* Sample2-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Sample2-Prefix.pch"; sourceTree = "<group>"; };
 		A19AD783151B332000D2A086 /* JPJson.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JPJson.framework; path = "../../../../../Library/Developer/Xcode/DerivedData/JPJson-ejutwqptiebgcjcabedtzqzwdhuj/Build/Products/Debug/JPJson.framework"; sourceTree = "<group>"; };
 		A1CA8B411441D42E0076C0CB /* Readme.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = Readme.rtf; sourceTree = "<group>"; };
-		A1CFB9321510C8CA0010942D /* common.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = common.xcconfig; sourceTree = "<group>"; };
+		A1CFB9321510C8CA0010942D /* project.common.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = project.common.xcconfig; sourceTree = "<group>"; };
 		A1D4607F158241AF004D330F /* Test-UTF8.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = "Test-UTF8.json"; path = "../../Resources/Test-UTF8.json"; sourceTree = "<group>"; };
 		A1D46081158241C8004D330F /* Test-UTF8-esc.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = "Test-UTF8-esc.json"; path = "../../Resources/Test-UTF8-esc.json"; sourceTree = "<group>"; };
 		A1E2FC1914517346009D68EF /* Out-UTF8-pretty.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "Out-UTF8-pretty.json"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -198,7 +198,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A10E429C170B64E100E8AE24 /* JPJson.framework in Frameworks */,
+				A15728E2171830900007C3F2 /* JPJson.framework in Frameworks */,
 				A15E63671456D4EC000F22F6 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -350,7 +350,7 @@
 		A1F001281440A27E007A72A9 = {
 			isa = PBXGroup;
 			children = (
-				A1CFB9321510C8CA0010942D /* common.xcconfig */,
+				A1CFB9321510C8CA0010942D /* project.common.xcconfig */,
 				A10E4289170B58F200E8AE24 /* project.debug.xcconfig */,
 				A10E428A170B58F200E8AE24 /* project.release.xcconfig */,
 				A10E428B170B59D300E8AE24 /* project.dist.xcconfig */,
@@ -820,9 +820,10 @@
 				GCC_PREFIX_HEADER = "Sample10/Sample10-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
 					"$(COMMON_HEADER_SEARCH_PATHS)",
-					"$(SOURCE_ROOT)",
+					"$(JPSOURCE_ROOT)",
 					"$(BOOST_HEADER_SEARCH_PATH)",
 				);
+				JPJSON_ROOT = "$(SRCROOT)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Dist;
@@ -838,9 +839,10 @@
 				GCC_PREFIX_HEADER = "Sample10/Sample10-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
 					"$(COMMON_HEADER_SEARCH_PATHS)",
-					"$(SOURCE_ROOT)",
+					"$(JPSOURCE_ROOT)",
 					"$(BOOST_HEADER_SEARCH_PATH)",
 				);
+				JPJSON_ROOT = "\"$(SRCROOT)/../../Source\"";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -856,9 +858,10 @@
 				GCC_PREFIX_HEADER = "Sample10/Sample10-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
 					"$(COMMON_HEADER_SEARCH_PATHS)",
-					"$(SOURCE_ROOT)",
+					"$(JPSOURCE_ROOT)",
 					"$(BOOST_HEADER_SEARCH_PATH)",
 				);
+				JPJSON_ROOT = "\"$(SRCROOT)/../../Source\"";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

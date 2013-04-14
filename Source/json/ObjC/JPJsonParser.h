@@ -46,7 +46,7 @@
  UTF-32LE or UTF-32BE. A _BOM_ may optionally precede the start of the byte
  stream.
 
- A number of options can be set in parameter `options` which are ored flags from
+ A number of options can be set in parameter _options_ which are ored flags from
  constants defined in enum "JPJsonParserOptions".
  
  A more powerful class method can be used in conjunction with a 
@@ -100,8 +100,7 @@
  that occur after the last significant character of a valid JSON document
  (namely, either a "}" or a "]").
  Otherwise, if the parser encounters code units which can not be interpreted 
- as white-space Unicode characters it will issue an error and `Unicode NULL (U+0000)` 
- or `EOF` will issue a warning to the console.
+ as white-space Unicode characters it will issue an error, and if it encounters an `Unicode NULL (U+0000)` or `EOF` it will issue a warning to the console.
  
  
  -  `JPJsonParserParseMultipleDocuments`
@@ -111,12 +110,9 @@
  first JSON document as an error. 
  
  *Note:* This option is ignored when invoking the JSON parser through one of
- the two convenience methods (listed below) since parsing multiple documents 
- require to use a Semantic Actions object, and possibly a asynchronous parser.
- 
- -  `+parseString:options:error:`
- -  `+parseData:options:error:`
- 
+ the two convenience methods `+parseString:options:error:` and `+parseData:options:error:`
+ since parsing multiple documents require to use a Semantic Actions object, and 
+ possibly a asynchronous parser.
  
  
  -  `JPJsonParserParseMultipleDocumentsAsynchronously`
@@ -130,10 +126,7 @@
  returns.
  
  *Note:* This option has no effect when invoking the JSON parser through one of
- the convenience methods:
- 
- -  `+parseString:options:error:`
- -  `+parseData:options:error:`
+ the convenience methods `+parseString:options:error:` and `+parseData:options:error:`.
  
  It is recommended to leave this flag disabled in systems where system resources 
  are scarce or if the data input possibly contains many and large JSON documents. 
@@ -208,7 +201,7 @@
  ### Using a Semantic Actions object ###
  
  
- Each parser, that is an instance of <JPJsonParser> or and instance of 
+ Each parser, that is an instance of `JPJsonParser` or and instance of
  <JPAsyncJsonParser>, needs to be associated to a _Semantic Actions_ object. If 
  none is specified when a parser is created, the parser itself creates a default 
  one, which is a `JPRepresentationGenerator`. 
@@ -252,7 +245,7 @@
 // + (id) parseString:(NSString*)string options:(JPJsonParserOptions)options error:(NSError**)error
 //
 /**
- Parses the input text with the specified options and returns a representation
+ Parses the JSON text given in parameter _string_ and returns a representation
  of the JSON text as a Foundation object.
  
  This method internally creates a `JPRepresentationGenerator` instance and configures 
@@ -269,12 +262,12 @@
  @param options A bit mask specifying various options for parsing. For possible values
  see _JPJsonParserOptions_.
 
- @param error A pointer to a NSError object. If this is not NULL, and if an error
- occurred during parsing the parameter error contains and NSError object
+ @param error A pointer to a NSError object. If this is not `NULL`, and if an error
+ occurred during parsing the parameter _error_ contains and `NSError` object
  describing the issue.
 
  @return A Foundation object representing the root object of the representation of
- the JSON text specified in parameter _string_, or nil if an error occurred.
+ the JSON text specified in parameter _string_, or `nil` if an error occurred.
 
 */
 + (id) parseString:(NSString*)string 
@@ -289,8 +282,8 @@
 
 
 /**
- Parses the input text contained in "data" with the specified options and 
- returns a representation of the JSON text in form of a Foundation object.
+ Parses the JSON text given in parameter _data_ and returns a representation 
+ of the JSON text as a Foundation object.
 
  The data must contain text in one of the following Unicode encoding schemes:
  UTF-8, UTF-16, UTF-16LE, UTF-16BE, UTF-32, UTF-32LE or UTF-32BE. A BOM
@@ -311,11 +304,11 @@
  @param options A bit mask specifying various options for parsing. For possible values see 
  _JPJsonParserOptions_.
 
- @param error A pointer to a NSError object. If this is not NULL, and if an error occurred
+ @param error A pointer to a NSError object. If this is not `NULL`, and if an error occurred
  during parsing the parameter error contains and NSError object describing the 
  issue.
 
- @return A Foundation object representing the JSON text in "data", or nil if an 
+ @return A Foundation object representing the JSON text in _data_, or `nil` if an 
  error occurred.
 
  @see + parseString:options:error:
@@ -340,9 +333,9 @@
 // + (BOOL) parseData:(NSData*)data semanticActions:(JPSemanticActionsBase*)sa;
 //
 /**
- Parses the input text contained in "data" and processes the JSON elements
+ Parses the JSON text given in parameter _data_ and processes the JSON elements
  according the actual semantic actions object provided in parameter 
- semanticActions. 
+ _semanticActions_.
  
  
  The data must contain text in one of the following Unicode encoding schemes:
@@ -359,14 +352,14 @@
  encoding scheme.
  
  @param semanticActions A "semantic actions" object which provides the semantic 
- actions for the parser. This parameter must not be nil. For detailed information 
+ actions for the parser. This parameter must not be `nil`. For detailed information 
  about semantic actions see class <JPSemanticActionsBase>, <JPRepresentationGenerator>,
  <JPStreamSemanticActions> and <JPSemanticActionsProtocol>.
 
  
- @return Returns YES, if the input could be successfully parsed and successfully 
+ @return Returns `YES`, if the input could be successfully parsed and successfully 
  processed by the semantic actions object.
- Otherwise, if an error occurred returns NO.
+ Otherwise, if an error occurred returns `NO`. The actual error object can be retrieved from the current semantics actions object.
 
  @see + parseString:options:error:
 

@@ -10,7 +10,6 @@
 		A10369AD157E76B7003A6EB0 /* Test-UTF8-esc.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = A1A9D4DB157A063F00211F1B /* Test-UTF8-esc.json */; };
 		A11D2190144C9B6300D24AA8 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A11D218F144C9B6300D24AA8 /* main.cpp */; };
 		A122FDE2150CF22600D6C7C7 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1A3399913D96A6B000CE571 /* main.cpp */; };
-		A12B3EB2168609ED00F6EF0D /* libjson.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A12B3EB1168609ED00F6EF0D /* libjson.a */; };
 		A171E72313D4924D00260A6B /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = A171E72213D4924D00260A6B /* main.mm */; };
 		A171E72913D4938E00260A6B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A171E72813D4938E00260A6B /* Foundation.framework */; };
 		A177EAFE150E430F009A1299 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1FF8C6D14891C07003DF439 /* main.cpp */; };
@@ -27,6 +26,7 @@
 		A1995FBC1420A96E00595100 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1995FBB1420A96E00595100 /* main.cpp */; };
 		A19F3B1E1428C89D00266273 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A171E72413D4928400260A6B /* CoreFoundation.framework */; };
 		A19F3B211428C89D00266273 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A19F3B201428C89D00266273 /* main.cpp */; };
+		A1A3CB241715B7D600E72719 /* JPJson.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1A3CB231715B7D600E72719 /* JPJson.framework */; };
 		A1A9D4E1157A07F600211F1B /* Test-UTF8-esc.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = A1A9D4DB157A063F00211F1B /* Test-UTF8-esc.json */; };
 		A1A9D4E2157A07F600211F1B /* Test-UTF8.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = A1A9D4DC157A063F00211F1B /* Test-UTF8.json */; };
 		A1AA929B1529E20700181B93 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A171E72413D4928400260A6B /* CoreFoundation.framework */; };
@@ -174,6 +174,7 @@
 		A1995FBB1420A96E00595100 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = main.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		A19F3B201428C89D00266273 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		A1A3399913D96A6B000CE571 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = main.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		A1A3CB231715B7D600E72719 /* JPJson.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JPJson.framework; path = ../DerivedData/JPJson/Build/Products/Release/JPJson.framework; sourceTree = "<group>"; };
 		A1A8878016FC56DC00490B07 /* bench.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = bench.hpp; sourceTree = "<group>"; };
 		A1A9D4DB157A063F00211F1B /* Test-UTF8-esc.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "Test-UTF8-esc.json"; sourceTree = "<group>"; };
 		A1A9D4DC157A063F00211F1B /* Test-UTF8.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "Test-UTF8.json"; sourceTree = "<group>"; };
@@ -205,7 +206,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A12B3EB2168609ED00F6EF0D /* libjson.a in Frameworks */,
+				A1A3CB241715B7D600E72719 /* JPJson.framework in Frameworks */,
 				A1C9A5571541BD39004B4ED6 /* CoreFoundation.framework in Frameworks */,
 				A171E72913D4938E00260A6B /* Foundation.framework in Frameworks */,
 			);
@@ -304,6 +305,7 @@
 		A171E6E313D488FC00260A6B = {
 			isa = PBXGroup;
 			children = (
+				A1A3CB231715B7D600E72719 /* JPJson.framework */,
 				A12B3EB1168609ED00F6EF0D /* libjson.a */,
 				A10E4288170B4FF100E8AE24 /* common.xcconfig */,
 				A16EEE3E1487DA3B00D12DA2 /* Bench.debug.xcconfig */,
@@ -890,7 +892,7 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_OBJC_ARC = NO;
 				COPY_PHASE_STRIP = NO;
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_DYNAMIC_NO_PIC = YES;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				HEADER_SEARCH_PATHS = (
@@ -899,10 +901,7 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_CFLAGS = "-v";
-				OTHER_LDFLAGS = (
-					"-ObjC",
-					"-ljson",
-				);
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = JPJsonParser;
 			};
 			name = Debug;
@@ -918,7 +917,6 @@
 				COPY_PHASE_STRIP = YES;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_DYNAMIC_NO_PIC = YES;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				HEADER_SEARCH_PATHS = (
@@ -928,10 +926,7 @@
 				LLVM_LTO = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_CFLAGS = "-v";
-				OTHER_LDFLAGS = (
-					"-ObjC",
-					"-ljson",
-				);
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = JPJsonParser;
 			};
 			name = Release;

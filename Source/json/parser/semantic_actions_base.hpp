@@ -58,6 +58,7 @@ namespace json { namespace semanticactions {
         SkipUnicodeNoncharacters,
     };
     
+    
     // (Not yet implemented)
     // Extensions
     // Note: setting any of these flags will break JSON conformance.
@@ -149,6 +150,7 @@ namespace json {
             opt_ignore_spurious_trailing_bytes_(false),
             opt_multiple_documents_(false),
             opt_check_duplicate_key_(true),
+            opt_pass_escaped_string_(false),
             canceled_(false)
         {
         }
@@ -263,6 +265,9 @@ namespace json {
         bool    checkDuplicateKey() const               { return opt_check_duplicate_key_; }
         void    checkDuplicateKey(bool set)             { opt_check_duplicate_key_ = set; }
                 
+        bool    passEscapdedString() const              { return opt_pass_escaped_string_; }
+        void    passEscapdedString(bool set)            { opt_pass_escaped_string_ = set; }
+        
         
         
         
@@ -351,6 +356,7 @@ namespace json {
         bool                    opt_ignore_spurious_trailing_bytes_;
         bool                    opt_multiple_documents_;
         bool                    opt_check_duplicate_key_;
+        bool                    opt_pass_escaped_string_;
         bool                    canceled_;
         
         
@@ -365,6 +371,7 @@ namespace json {
             << "Unicode noncharacter handling: " << 
                 ((sa.nch_option_==SignalErrorOnUnicodeNoncharacter) ? "SignalErrorOnUnicodeNoncharacter"
                 : ((sa.nch_option_==SubstituteUnicodeNoncharacter) ? "SubstituteUnicodeNoncharacter" : "SkipUnicodeNoncharacters"))
+            << "\nPass Escaped Strings: " << (sa.passEscapdedString() ? "YES" : "NO")
             << "\n"
             << "\nBasic Json Parser Options:"
             << "\n\tCheck For Duplicate Keys: " << (sa.opt_check_duplicate_key_ ? "YES" : "NO")

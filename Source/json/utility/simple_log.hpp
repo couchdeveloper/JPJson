@@ -27,12 +27,10 @@
 #include <cstdarg>
 #include <ctime>
 #include <string>
-#include <boost/utility.hpp>
-#include <boost/type_traits.hpp>
-#include <boost/mpl/placeholders.hpp>
-#include <boost/mpl/greater_equal.hpp>
-#include <boost/mpl/bool.hpp>
-#include <boost/mpl/not.hpp>
+#include <type_traits>
+
+#include <sys/types.h>
+#include <unistd.h>
 
 #if defined (__APPLE_CC__)
 #include <TargetConditionals.h>
@@ -239,7 +237,7 @@ namespace json { namespace utility {
     
     template <LOG_Level S>
     struct log_severity {
-        static const LOG_Level value = S;
+        static constexpr LOG_Level value = S;
         
     };
     
@@ -254,28 +252,27 @@ namespace json { namespace utility {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wunused-variable"
     
-    static log_trace   LOG_TRACE;
-    static log_debug   LOG_DEBUG;
-    static log_info    LOG_INFO;
-    static log_warning LOG_WARNING;
-    static log_error   LOG_ERROR;
-    static log_fatal   LOG_FATAL;
-    static log_none    LOG_NONE;
+    static constexpr log_trace   LOG_TRACE{};
+    static constexpr log_debug   LOG_DEBUG{};
+    static constexpr log_info    LOG_INFO{};
+    static constexpr log_warning LOG_WARNING{};
+    static constexpr log_error   LOG_ERROR{};
+    static constexpr log_fatal   LOG_FATAL{};
+    static constexpr log_none    LOG_NONE{};
     
 #pragma clang diagnostic pop
     
     
     template <typename MaxSeverity = log_warning >
-    class logger {
+    class logger
+    {
     public:    
         
-        
-        logger() 
+        logger()
         : max_severity_(MaxSeverity::value)
         {
         }
-        
-        
+                
         template <typename LogSeverity>
         void log_level(LogSeverity) {
             max_severity_ = LogSeverity::value;
@@ -293,7 +290,7 @@ namespace json { namespace utility {
         
         
         template <typename LogSeverity>
-        typename boost::enable_if<boost::mpl::bool_<(LogSeverity::value <= MaxSeverity::value)>, void>::type
+        typename std::enable_if< (LogSeverity::value <= MaxSeverity::value), void>::type
         log(LogSeverity severity, const char* format, ...) const
         {
             if (LogSeverity::value > max_severity_) 
@@ -305,7 +302,7 @@ namespace json { namespace utility {
         }
         
         template <typename LogSeverity>
-        typename boost::enable_if<boost::mpl::bool_<(LogSeverity::value > MaxSeverity::value )>, void>::type
+        typename std::enable_if<(LogSeverity::value > MaxSeverity::value ), void>::type
         log(LogSeverity severity, const char* format, ...) const
         {
         }

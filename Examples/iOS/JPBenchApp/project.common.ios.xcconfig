@@ -1,0 +1,48 @@
+//
+//  project.common.ios.xcconfig
+//
+
+
+//
+// Compiler and std libraries
+//
+
+// C++ Standard Library
+CLANG_CXX_LIBRARY = libc++
+
+// C++ Language Dialect
+CLANG_CXX_LANGUAGE_STANDARD = c++0x
+
+// Automatic Reference Counting
+CLANG_ENABLE_OBJC_ARC = NO
+
+//
+// Base SDK  (Latest)
+//
+SDKROOT = iphoneos
+
+//
+// Architectures
+//
+// Note: Xcode IDE >= 4.5 does not support armv6 devices anymore.
+ARCHS = armv7 armv7s
+
+//
+// Deployment Target
+//
+// Note: the deployment target version must be equal or higher of the
+// deployment target of each of its libraries which it links against.
+//
+// Note: the reason for setting the deployment target to >= 5.0, is that
+// Xcode IDE >= 4.5 does not support armv6 devices anymore which run up to
+// iOS 4.2.x. This is sad, since this library doesn't depend on fancy iOS
+// features.
+// On the other hand, now with deployment target >= 5, clangs new C++ standard
+// library is now available and new C++11 features can now be used in the code.
+IPHONEOS_DEPLOYMENT_TARGET = 6.0
+
+
+//
+// Other Linker Flags
+// 
+OTHER_LDFLAGS = -ObjC -lc++

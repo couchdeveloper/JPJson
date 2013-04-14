@@ -141,12 +141,10 @@
 		A110B65B146D26E90017B77F /* NSData+JPJsonDetectEncoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSData+JPJsonDetectEncoding.h"; path = "../../Source/json/ObjC/NSData+JPJsonDetectEncoding.h"; sourceTree = "<group>"; };
 		A166031A151243E90028F5D5 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.7.sdk/System/Library/Frameworks/CoreFoundation.framework; sourceTree = DEVELOPER_DIR; };
 		A166031E151244450028F5D5 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.7.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
-		A1977E21156A98870074D9B2 /* JPJsonWriterExtensions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = JPJsonWriterExtensions.h; path = ../../Source/json/ObjC/JPJsonWriterExtensions.h; sourceTree = "<group>"; };
 		A1977E24156A98B10074D9B2 /* JPJsonWriterExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JPJsonWriterExtensions.h; path = ../../Source/json/ObjC/JPJsonWriterExtensions.h; sourceTree = "<group>"; };
-		A1AE43FE155277CC007E5498 /* JPRepresentationGenerator.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = JPRepresentationGenerator.mm; path = ../../Source/json/ObjC/JPRepresentationGenerator.mm; sourceTree = "<group>"; };
-		A1C9660314D1587800DF4C00 /* common.macosx.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; lineEnding = 0; path = common.macosx.xcconfig; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.xcconfig; };
-		A1C9660514D1589200DF4C00 /* debug.macosx.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = debug.macosx.xcconfig; sourceTree = "<group>"; };
-		A1C9660614D158A000DF4C00 /* release.macosx.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = release.macosx.xcconfig; sourceTree = "<group>"; };
+		A1C9660314D1587800DF4C00 /* project.common.macosx.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; lineEnding = 0; path = project.common.macosx.xcconfig; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.xcconfig; };
+		A1C9660514D1589200DF4C00 /* project.debug.macosx.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = project.debug.macosx.xcconfig; sourceTree = "<group>"; };
+		A1C9660614D158A000DF4C00 /* project.release.macosx.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = project.release.macosx.xcconfig; sourceTree = "<group>"; };
 		A1CA8B831441E4860076C0CB /* JPJson-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "JPJson-Info.plist"; sourceTree = "<group>"; };
 		A1CA8B851441E4860076C0CB /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		A1CA8B871441E4860076C0CB /* JPJson-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "JPJson-Prefix.pch"; sourceTree = "<group>"; };
@@ -224,9 +222,9 @@
 		A130A17C168CCAB400D18244 /* Xcode Config */ = {
 			isa = PBXGroup;
 			children = (
-				A1C9660314D1587800DF4C00 /* common.macosx.xcconfig */,
-				A1C9660614D158A000DF4C00 /* release.macosx.xcconfig */,
-				A1C9660514D1589200DF4C00 /* debug.macosx.xcconfig */,
+				A1C9660314D1587800DF4C00 /* project.common.macosx.xcconfig */,
+				A1C9660614D158A000DF4C00 /* project.release.macosx.xcconfig */,
+				A1C9660514D1589200DF4C00 /* project.debug.macosx.xcconfig */,
 			);
 			name = "Xcode Config";
 			sourceTree = "<group>";
@@ -234,8 +232,6 @@
 		A1CA8B6A1441E45E0076C0CB = {
 			isa = PBXGroup;
 			children = (
-				A1977E21156A98870074D9B2 /* JPJsonWriterExtensions.h */,
-				A1AE43FE155277CC007E5498 /* JPRepresentationGenerator.mm */,
 				A130A17C168CCAB400D18244 /* Xcode Config */,
 				A110B789146D27390017B77F /* Public Headers */,
 				A110B63C146D26E90017B77F /* Source */,
@@ -573,26 +569,23 @@
 		};
 		A1CA8B711441E45E0076C0CB /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A1C9660514D1589200DF4C00 /* project.debug.macosx.xcconfig */;
 			buildSettings = {
-				GCC_PREPROCESSOR_DEFINITIONS = "$(PRJ_GCC_PREPROCESSOR_DEFINITIONS)";
-				HEADER_SEARCH_PATHS = "$(PRJ_HEADER_SEARCH_PATHS)";
 				OTHER_CPLUSPLUSFLAGS = "$(OTHER_CFLAGS)";
 			};
 			name = Debug;
 		};
 		A1CA8B721441E45E0076C0CB /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A1C9660614D158A000DF4C00 /* project.release.macosx.xcconfig */;
 			buildSettings = {
 				GCC_OPTIMIZATION_LEVEL = 3;
-				GCC_PREPROCESSOR_DEFINITIONS = "$(PRJ_GCC_PREPROCESSOR_DEFINITIONS)";
-				HEADER_SEARCH_PATHS = "$(PRJ_HEADER_SEARCH_PATHS)";
 				OTHER_CPLUSPLUSFLAGS = "$(OTHER_CFLAGS)";
 			};
 			name = Release;
 		};
 		A1CA8B8C1441E4860076C0CB /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A1C9660514D1589200DF4C00 /* debug.macosx.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -606,13 +599,11 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "JPJson/JPJson-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "JPJson/JPJson-Info.plist";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				ONLY_ACTIVE_ARCH = YES;
@@ -624,7 +615,6 @@
 		};
 		A1CA8B8D1441E4860076C0CB /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A1C9660614D158A000DF4C00 /* release.macosx.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -637,14 +627,11 @@
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "JPJson/JPJson-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "JPJson/JPJson-Info.plist";
-				LLVM_LTO = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
@@ -654,7 +641,6 @@
 		};
 		A1CA8B9B1441E4A20076C0CB /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A1C9660514D1589200DF4C00 /* debug.macosx.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -665,13 +651,11 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "JPJsonLib/JPJsonLib-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = "$(inherited)";
 				INSTALL_PATH = "$(BUILT_PRODUCTS_DIR)";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				ONLY_ACTIVE_ARCH = YES;
@@ -684,7 +668,6 @@
 		};
 		A1CA8B9C1441E4A20076C0CB /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A1C9660614D158A000DF4C00 /* release.macosx.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -695,20 +678,12 @@
 				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "JPJsonLib/JPJsonLib-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
-				"GCC_PREPROCESSOR_DEFINITIONS[arch=*]" = (
-					"$(inherited)",
-					NDEBUG,
-					NS_BLOCK_ASSERTIONS,
-				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = "$(inherited)";
 				INSTALL_PATH = "$(BUILT_PRODUCTS_DIR)";
-				LLVM_LTO = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = json;
 				PUBLIC_HEADERS_FOLDER_PATH = JPJson;
@@ -719,7 +694,6 @@
 		};
 		A1CA8BAA1441E4E30076C0CB /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A1C9660514D1589200DF4C00 /* debug.macosx.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -732,13 +706,11 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "JPJsonDylib/JPJsonDylib-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = "$(inherited)";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "json.$(FRAMEWORK_VERSION)";
@@ -749,7 +721,6 @@
 		};
 		A1CA8BAB1441E4E30076C0CB /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A1C9660614D158A000DF4C00 /* release.macosx.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -761,13 +732,10 @@
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "JPJsonDylib/JPJsonDylib-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = "$(inherited)";
-				LLVM_LTO = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = "json.$(FRAMEWORK_VERSION)";
 				PUBLIC_HEADERS_FOLDER_PATH = include/JPJson;

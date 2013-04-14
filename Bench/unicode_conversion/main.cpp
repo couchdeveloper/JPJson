@@ -177,7 +177,7 @@ namespace {
         BENCH_ALL =             BENCH_ICU | BENCH_JP_SAFE | BENCH_JP_UNSAFE
     };
     
-    const int kBenchFlags = BENCH_JP_SAFE | BENCH_ICU;
+    const int kBenchFlags =  BENCH_JP_SAFE | BENCH_ICU;
     //const int kBenchFlags = BENCH_JP;
     
 
@@ -1677,10 +1677,10 @@ int main (int argc, const char * argv[])
         bench_UTF16_to_codepoint();
         bench_UTF32_to_codepoint();
         
-        bench_codepoint_to_UTF8();
-        bench_codepoint_to_UTF16();
-        bench_codepoint_to_UTF32();
-        bench_codepoint_to_UTF();
+//        bench_codepoint_to_UTF8();
+//        bench_codepoint_to_UTF16();
+//        bench_codepoint_to_UTF32();
+//        bench_codepoint_to_UTF();
     
         
         //bench_UTF8_to_UTF8(1000*1000, 100);

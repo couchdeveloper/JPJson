@@ -23,10 +23,11 @@
 
 
 #include "json/config.hpp"
-#include <boost/type_traits.hpp>
-#include <boost/utility.hpp>
-#include <boost/mpl/bool.hpp>
-#include <boost/assert.hpp>
+#include <type_traits>
+//#include <boost/type_traits.hpp>
+//#include <boost/utility.hpp>
+//#include <boost/mpl/bool.hpp>
+//#include <boost/assert.hpp>
 
 //
 //  Typesafe Bitwise Enum
@@ -84,7 +85,7 @@
 namespace json { namespace utility { 
     
     template <typename T>
-    struct flags_enable : boost::mpl::false_ {
+    struct flags_enable : std::false_type {
     };
     
     
@@ -99,7 +100,7 @@ namespace json { namespace utility {
         
         typedef typename T::enum_type       enum_type;        
 
-        BOOST_STATIC_ASSERT( boost::is_enum<enum_type>::value );
+        static_assert( std::is_enum<enum_type>::value, "" );
         
         
         flags(const flags& other) : flags_(other.flags_) {}
@@ -191,8 +192,8 @@ namespace {
     
     template <class EnumT>
     inline 
-    typename boost::enable_if<
-        flags_enable<EnumT>, 
+    typename std::enable_if<
+        flags_enable<EnumT>::value,
         flags<typename flags_enable<EnumT>::type>
     >::type    
     operator&(EnumT lhv, EnumT rhv)
@@ -200,8 +201,8 @@ namespace {
     
     template <class EnumT> 
     inline 
-    typename boost::enable_if<
-        flags_enable<EnumT>, 
+    typename std::enable_if<
+        flags_enable<EnumT>::value,
         flags<typename flags_enable<EnumT>::type>
     >::type        
     operator|(EnumT lhv, EnumT rhv)
@@ -209,8 +210,8 @@ namespace {
     
     template <class EnumT> 
     inline
-    typename boost::enable_if<
-        flags_enable<EnumT>, 
+    typename std::enable_if<
+        flags_enable<EnumT>::value,
         flags<typename flags_enable<EnumT>::type>
     >::type        
     operator^(EnumT lhv, EnumT rhv)
@@ -218,8 +219,8 @@ namespace {
     
     template <class EnumT> 
     inline 
-    typename boost::enable_if<
-        flags_enable<EnumT>, 
+    typename std::enable_if<
+        flags_enable<EnumT>::value,
         flags<typename flags_enable<EnumT>::type>&
     >::type        
     operator|=(EnumT& lhv, EnumT rhv)
@@ -227,8 +228,8 @@ namespace {
     
     template <class EnumT> 
     inline 
-    typename boost::enable_if<
-        flags_enable<EnumT>, 
+    typename std::enable_if<
+        flags_enable<EnumT>::value,
         flags<typename flags_enable<EnumT>::type>&
     >::type        
     operator&=(EnumT& lhv, EnumT rhv)
@@ -236,8 +237,8 @@ namespace {
     
     template <class EnumT> 
     inline 
-    typename boost::enable_if<
-        flags_enable<EnumT>, 
+    typename std::enable_if<
+        flags_enable<EnumT>::value,
         flags<typename flags_enable<EnumT>::type>&
     >::type        
     operator^=(EnumT& lhv, EnumT rhv)
@@ -245,8 +246,8 @@ namespace {
     
     template <class EnumT> 
     inline 
-    typename boost::enable_if<
-        flags_enable<EnumT>, 
+    typename std::enable_if<
+        flags_enable<EnumT>::value,
         flags<typename flags_enable<EnumT>::type>
     >::type        
     operator~(EnumT v)
@@ -257,7 +258,7 @@ namespace {
 #define UTILITY_DEFINE_FLAG_OPERATORS(T)                        \
 namespace json { namespace utility {                            \
     template <>                                                 \
-    struct flags_enable<T::enum_type> : boost::mpl::true_ {     \
+    struct flags_enable<T::enum_type> : std::true_type {     \
         typedef T type;                                         \
     };                                                          \
 }}

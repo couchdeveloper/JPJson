@@ -10,7 +10,8 @@
 
 #import "JPJson/JPJsonCommon.h"
 
-
+#import "JPJson/JPJsonWriter.h"
+#import "JPJson/JPJsonParser.h"
 
 // Note:
 // This Objective-C class uses some private headers and a private
@@ -165,9 +166,9 @@ typedef json::unicode::encoding_traits<JP_CFStringEncoding>::code_unit_type char
 
 - (bool) parserFoundObjectEnd {
     --level_;
-    return true;
     char_t ch = static_cast<char_t>('}');
     [jsonBranch_ appendBytes:&ch length:sizeof(ch)];    
+    return true;
 }
 
 - (void) parserFoundValueBeginAtIndex:(size_t)index
@@ -237,7 +238,7 @@ typedef json::unicode::encoding_traits<JP_CFStringEncoding>::code_unit_type char
 
 // Convert content of jsonBranch_ from JP_CFStringEncoding to UTF-8 and print
 // it to the console
-- (void) printBranch 
+- (void) printBranch
 {
     std::ostream_iterator<char> out_it(std::cout);    
     char_t const* first = static_cast<char_t const*>([jsonBranch_ bytes]);
@@ -245,6 +246,27 @@ typedef json::unicode::encoding_traits<JP_CFStringEncoding>::code_unit_type char
     int result = json::unicode::convert_unsafe(first, last, JP_CFStringEncoding(),
                                   out_it, json::unicode::UTF_8_encoding_tag());
     NSAssert(result == 0, @"Unicode conversion failed");
+    std::cout << std::endl;
+    
+    // Parse the JSON branch:
+    NSError* error;
+    NSDictionary* json = [JPJsonParser parseData:jsonBranch_ options:(JPJsonParserOptions)0 error:&error];
+    if (!json) {
+        NSLog(@"Parsing JSON document failed with error: %@", error);
+        return;
+    }
+    
+    NSData* jsonData = [JPJsonWriter dataWithObject:json
+                                           encoding:JPUnicodeEncoding_UTF8
+                                            options:(JPJsonWriterOptions)(JPJsonWriterPrettyPrint)
+                                              error:&error];
+    if (!jsonData) {
+        NSLog(@"Extracting JSON into string failed with error: %@", error);
+        return;
+    }
+    // Log the JSON text to the console:
+    NSString* outputString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    NSLog(@"JSON text:\n%@", outputString);
 }
 
 @end

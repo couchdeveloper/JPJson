@@ -20,7 +20,11 @@
 //
 //  Objectives:
 //
-//  Create a Semantic Actions class which prints JSON paths.
+//  Create a Semantic Actions class which expects to receive a JSON
+//  Array caining many JSON Objects. Create a "branch" that is a JSON text
+//  from each of the inner JSON Object and pass each of these branches to an
+//  extra parser which creates representations from them. Print out the resulting
+//  JSONs 
 //  The main part is implemented in @class JsonPathSemanticActions.
 
 
@@ -66,6 +70,7 @@ int main (int argc, const char * argv[])
         // options available for this semantic actions object and which may also
         // affect the parser:
         sa.parseMultipleDocuments = NO;  // this is the default anyway, but just as an example
+        sa.generateEncodedStrings = YES; // This causes the parser to pass JSON String encoded strings as we require it in the JSON branch.
         sa.logLevel = JPSemanticActionsLogLevelDebug; // log verbose
         
         

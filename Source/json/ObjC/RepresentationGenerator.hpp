@@ -212,10 +212,11 @@ namespace {
         typedef typename json::unicode::add_endianness<Encoding>::type encoding_type;
         typedef typename json::unicode::encoding_traits<encoding_type>::code_unit_type code_unit_t;
         constexpr CFStringEncoding cf_encoding = json::cf_unicode_encoding_traits<encoding_type>::value;
+        constexpr Boolean isExternalRepresentation = false; //cf_encoding == kCFStringEncodingUTF8 ? true : false;
         CFStringRef str = CFStringCreateWithBytes(allocator, 
                                                   static_cast<const UInt8*>(static_cast<const void*>(s)), 
                                                   sizeof(code_unit_t)*len, 
-                                                  cf_encoding, 0);
+                                                  cf_encoding, isExternalRepresentation);
         assert(str != NULL);
         return str;
     }
@@ -312,10 +313,10 @@ namespace json { namespace objc {
     //
     //  Class RepresentationGenerator
     //
-    //  The class `RepresentationGenerator` is a specialized subclass of  
-    //  `SemanticActionsBase`. It is responsible for creating the corresponding 
-    //  JSON representation as Foundation objects. It is not meant to be 
-    //  subclassed.
+    //  The class `RepresentationGenerator` is a private C++ class which is a
+    //  concrete implementation of an abstract semantic actions class. It is
+    //  responsible for creating the corresponding JSON representation, which is
+    //  itself composed of Foundation objects. It is not meant to be subclassed.
     //  
     //  An instance of this class is used as the implementation object for the
     //  Objective-C class `JPRepresentationGenerator`, the associated Objective-C 
@@ -337,8 +338,8 @@ namespace json { namespace objc {
     //  
     //
     //
-    // Template parameter EncodingT shall be derived from json::utf_encoding_tag.
-    // EncodingT shall match the StringBufferEncoding of the parser. Usullay, 
+    // Template parameter `EncodingT` shall be derived from `json::utf_encoding_tag`.
+    // `EncodingT` shall match the StringBufferEncoding of the parser. Usullay, 
     // this is a UTF-16 encoding.
     //
     // This semantic-actions class provides a string cache which stores NSString
@@ -493,10 +494,10 @@ namespace json { namespace objc {
             number_generator_option_(sa_options::NumberGeneratorGenerateAuto),
             opt_keep_string_cache_on_clear_(false),
             opt_cache_data_strings_(false),
-            opt_create_mutable_json_containers_(false)
+            opt_create_mutable_json_containers_(false),
+            opt_use_arena_allocator_(false),
+            arena_allocator_(NULL)
         {
-            arena_allocator_ = ArenaAllocatorCreate(4*1024);
-            assert(arena_allocator_);
             f_cf_retain = CFRetain;
             f_cf_release = CFRelease;
             numberGeneratorOption(number_generator_option_);
@@ -523,7 +524,16 @@ namespace json { namespace objc {
         virtual void parse_begin_imp() {
 #if defined (JSON_OBJC_REPRESENTATION_GENERATOR_USE_PERFORMANCE_COUNTER)            
             pc_.t_.start();
-#endif            
+#endif    
+            // Each representation uses its own arena allocator - release the
+            // previous one if any:
+            if (arena_allocator_) {
+                CFRelease(arena_allocator_);
+                arena_allocator_ = NULL;
+            }            
+            if (opt_use_arena_allocator_) {
+                arena_allocator_ = ArenaAllocatorCreate(4*1024);
+            }
             stack_.reserve(200);
             markers_.reserve(20);
             tmp_cf_keys_.reserve(100);
@@ -538,6 +548,14 @@ namespace json { namespace objc {
         
         virtual void parse_end_imp()                            
         {
+            // If we are using an arena allocator, release it:
+            // (the arena allocator will eventually be deallocated when there
+            // are no more objects allocated from this allocator)
+//            if (arena_allocator_) {
+//                CFRelease(arena_allocator_);
+//                arena_allocator_ = NULL;
+//            }
+            
             // When the parser finished, we have only one remaining element (an
             // instance of CFTypeRef whose retain count equals one) which is stored
             // in stack_[0]. There shall be no other elements.
@@ -626,10 +644,13 @@ namespace json { namespace objc {
             else 
             {
                 // Create an immutable array with count elements
+                assert( (opt_use_arena_allocator_ == false and arena_allocator_ == NULL)
+                       or (opt_use_arena_allocator_ == true and arena_allocator_ != NULL) );
                 
+                CFAllocatorRef cfAllocator = opt_use_arena_allocator_ ? arena_allocator_ : kCFAllocatorDefault;
                 // Get the address of the start of the range of values:this only works if stack_t is a vector!!
                 CFTypeRef* values = stack_.data() + first_idx;
-                cfArray = CFArrayCreate(arena_allocator_, values, count, &kCFTypeArrayCallBacks);
+                cfArray = CFArrayCreate(cfAllocator, values, count, &kCFTypeArrayCallBacks);
                 // release the CFTypes:
                 while (first != last) {
                     f_cf_release(*first++);
@@ -747,6 +768,8 @@ namespace json { namespace objc {
                 //
                 //  Create an immutable JSON object
                 //
+                assert( (opt_use_arena_allocator_ == false and arena_allocator_ == NULL)
+                       or (opt_use_arena_allocator_ == true and arena_allocator_ != NULL) );
                 
                 // Copy the key-refs and value-refs from the stack to a temporary 
                 // vector from which we can create a CFDictionary/NSDictionary
@@ -763,8 +786,9 @@ namespace json { namespace objc {
                     tmp_cf_values_.emplace_back(*first++);
                 }
                 // Create immutable JSON object via CF functions:
-                CFDictionaryRef o = 
-                CFDictionaryCreate(arena_allocator_, tmp_cf_keys_.data(), tmp_cf_values_.data(),
+                CFAllocatorRef cfAllocator = opt_use_arena_allocator_ ? arena_allocator_ : kCFAllocatorDefault;
+                CFDictionaryRef o =
+                CFDictionaryCreate(cfAllocator, tmp_cf_keys_.data(), tmp_cf_values_.data(),
                                    num_elements,
                                    &kCFTypeDictionaryKeyCallBacks,
                                    &kCFTypeDictionaryValueCallBacks);
@@ -851,7 +875,11 @@ namespace json { namespace objc {
         {
 #if defined (JSON_OBJC_REPRESENTATION_GENERATOR_USE_PERFORMANCE_COUNTER)                                                
             ++pc_.number_count_;
-#endif            
+#endif        
+            assert( (opt_use_arena_allocator_ == false and arena_allocator_ == NULL)
+                   or (opt_use_arena_allocator_ == true and arena_allocator_ != NULL) );
+            CFAllocatorRef cfAllocator = opt_use_arena_allocator_ ? arena_allocator_ : kCFAllocatorDefault;
+            
             switch (number_generator_option_) {
                 case sa_options::NumberGeneratorGenerateString:
                     push_number_string(number.c_str(), number.c_str_len(), unicode::UTF_8_encoding_tag());
@@ -867,17 +895,17 @@ namespace json { namespace objc {
                             //boost::spirit::qi::parse(number.c_str(), number.c_str() + number.c_str_len(), boost::spirit::int_, val);
                             // TODO: revert test code
                             int val = json::utility::string_to_number<int>(number.c_str(), number.c_str_len());
-                            cfNumber = CFNumberCreate(arena_allocator_, kCFNumberIntType, &val);
+                            cfNumber = CFNumberCreate(cfAllocator, kCFNumberIntType, &val);
                         }
                         else if (digits <= std::numeric_limits<long>::digits10) {
                             //boost::spirit::qi::parse(number.c_str(), number.c_str() + number.c_str_len(), boost::spirit::long_, val);                            
                             // TODO: revert test code
                             long val = json::utility::string_to_number<long>(number.c_str(), number.c_str_len());
-                            cfNumber = CFNumberCreate(arena_allocator_, kCFNumberLongType, &val);
+                            cfNumber = CFNumberCreate(cfAllocator, kCFNumberLongType, &val);
                         }
                         else if (digits <= std::numeric_limits<long long>::digits10) {
                             long long val = json::utility::string_to_number<long long>(number.c_str(), number.c_str_len());
-                            cfNumber = CFNumberCreate(arena_allocator_, kCFNumberLongLongType, &val);
+                            cfNumber = CFNumberCreate(cfAllocator, kCFNumberLongLongType, &val);
                         } 
                         else if (digits <= 38){
                             // use NSDecimalNumber  
@@ -906,7 +934,7 @@ namespace json { namespace objc {
                                 number.c_str_len(), number.c_str());
                         }
                         double d = json::utility::string_to_number<double>(number.c_str(), number.c_str_len());
-                        cfNumber = CFNumberCreate(arena_allocator_, kCFNumberDoubleType, &d);
+                        cfNumber = CFNumberCreate(cfAllocator, kCFNumberDoubleType, &d);
                     }
                     else /* number is decimal*/
                     {
@@ -917,7 +945,7 @@ namespace json { namespace objc {
                         {      
                             // use an NSNumber with underlaying double
                             double d = json::utility::string_to_number<double>(number.c_str(), number.c_str_len());
-                            cfNumber = CFNumberCreate(arena_allocator_, kCFNumberDoubleType, &d);
+                            cfNumber = CFNumberCreate(cfAllocator, kCFNumberDoubleType, &d);
                         }
                         else 
                         {
@@ -987,7 +1015,10 @@ namespace json { namespace objc {
         {
             base::clear_imp(shrink_buffers);
             clear_stack();
-            ArenaAllocatorClear(arena_allocator_);
+            if (arena_allocator_) {
+                CFRelease(arena_allocator_);
+                arena_allocator_ = NULL;
+            }
             markers_.clear();
 #if defined (JSON_OBJC_REPRESENTATION_GENERATOR_USE_PERFORMANCE_COUNTER)                                    
             pc_.clear();
@@ -1013,6 +1044,9 @@ namespace json { namespace objc {
         
         void    createMutableContainers(bool set)  { opt_create_mutable_json_containers_ = set; }
         bool    createMutableContainers() const    { return opt_create_mutable_json_containers_; }
+        
+        void    useArenaAllocator(bool set)  { opt_use_arena_allocator_ = set; }
+        bool    useArenaAllocator() const    { return opt_use_arena_allocator_; }
         
         sa_options::number_generator_option numberGeneratorOption() const { return number_generator_option_; }
         void    numberGeneratorOption(sa_options::number_generator_option opt) { number_generator_option_ = opt; }
@@ -1066,32 +1100,41 @@ namespace json { namespace objc {
         // associated in the cache.
         const_buffer_t push_string_cached(const const_buffer_t& buffer) 
         {
+            assert( (opt_use_arena_allocator_ == false and arena_allocator_ == NULL)
+                   or (opt_use_arena_allocator_ == true and arena_allocator_ != NULL) );
+            
             // (performance critical function)
             const cache_key_t cache_key = cache_key_t(buffer.first, buffer.second);
             cache_iterator iter = string_cache_.find(cache_key);
-            cache_mapped_t str;    // CFTypeRef         
+            cache_mapped_t cfStr;    // CFTypeRef
             if (iter == string_cache_.end()) {
+                CFAllocatorRef cfAllocator = opt_use_arena_allocator_ ? arena_allocator_ : kCFAllocatorDefault;                
                 ++cache_miss_count_;
                 // The string is not in the cache, create one and insert it into the cache:
-                str = createString(buffer.first, buffer.second, EncodingT(), arena_allocator_);
-                iter = string_cache_.insert(cache_key, str).first;
+                cfStr = createString(buffer.first, buffer.second, EncodingT(), cfAllocator);
+                assert(cfStr != NULL);
+                iter = string_cache_.insert(cache_key, cfStr).first;
             } 
             else {
                 ++cache_hit_count_;
-                str = (*iter).second;
-                f_cf_retain(str);
+                cfStr = (*iter).second;
+                f_cf_retain(cfStr);
             }
-            stack_.emplace_back(str);
+            stack_.emplace_back(cfStr);
             return const_buffer_t((*iter).first.first, (*iter).first.second);
         }
 #endif
         
         void push_string_uncached(const const_buffer_t& buffer, bool hasMore)
         {
+            assert( (opt_use_arena_allocator_ == false and arena_allocator_ == NULL)
+                   or (opt_use_arena_allocator_ == true and arena_allocator_ != NULL) );
+            
             if (tmp_data_str_ == 0 and not hasMore) {
                 // Create an immutable string
-                CFStringRef str = createString(buffer.first, buffer.second, EncodingT(), arena_allocator_);
-                stack_.emplace_back(str);  // Do not release str!
+                CFAllocatorRef cfAllocator = opt_use_arena_allocator_ ? arena_allocator_ : kCFAllocatorDefault;
+                CFStringRef cfStr = createString(buffer.first, buffer.second, EncodingT(), cfAllocator);
+                stack_.emplace_back(cfStr);  // Do not release str!
             }
             else if (tmp_data_str_ == 0 and hasMore)
             {
@@ -1207,6 +1250,7 @@ namespace json { namespace objc {
         bool                opt_keep_string_cache_on_clear_;
         bool                opt_cache_data_strings_;        
         bool                opt_create_mutable_json_containers_;
+        bool                opt_use_arena_allocator_;
         
     protected:
 #if defined (JSON_OBJC_REPRESENTATION_GENERATOR_USE_PERFORMANCE_COUNTER)        
@@ -1227,6 +1271,7 @@ namespace json { namespace objc {
             
             os << "\nExtended Json Parser Options:"
             << "\n\tCreate Mutable Containers : " << (sa.opt_create_mutable_json_containers_ ? "YES" : "NO")
+            << "\n\tUses Arean Allocator for immutable Objects : " << (sa.opt_use_arena_allocator_ ? "YES" : "NO")
             << "\n\tKeep String Cache On Clear: " << (sa.opt_keep_string_cache_on_clear_ ? "YES" : "NO")
             << "\n\tCache Data Strings:       " << (sa.opt_cache_data_strings_ ? "YES" : "NO")
             << "\n\tNumber Parsing Option:  " << (sa.number_generator_option_ == sa_options::NumberGeneratorGenerateString ? 

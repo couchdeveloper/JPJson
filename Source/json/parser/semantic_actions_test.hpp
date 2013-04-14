@@ -370,7 +370,7 @@ namespace json { namespace internal {
             std::back_insert_iterator<std::string> dest(result);
             const char_t* first = s;
             
-#if defined (DEBUG)
+#if !defined (NDEBUG)
             int cvt_result =
 #endif
             json::generator_internal::escape_convert_unsafe(
@@ -390,7 +390,7 @@ namespace json { namespace internal {
             std::back_insert_iterator<std::string> dest(str);
             const char_t* first = s;
             
-#if defined (DEBUG)
+#if !defined (NDEBUG)
             int cvt_result =
 #endif
             json::generator_internal::escape_convert_unsafe(

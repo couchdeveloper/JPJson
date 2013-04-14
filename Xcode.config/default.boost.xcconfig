@@ -6,8 +6,21 @@
 //  In your project, rename this file to $user.boost.xconfig 
 // 
 
+//
 // Configuration for boost.
-// Define the header search path and boost specific preprocessor macros
+//
+// Define the header search path and boost specific preprocessor macros.
+//
 
-BOOST_HEADER_SEARCH_PATH = $(BOOST)/boost_1_52_0
-BOOST_GCC_PREPROCESSOR_DEFINITIONS = BOOST_DISABLE_THREADS BOOST_STRICT_CONFIG
+// Example:
+// This assumes that there is a "Source Tree" defined in Xcode (open
+// Xcode Preferenes... -> Source Trees), whose "Setting Name" equals BOOST
+// and which "Path" property is set to a folder *containing* a boost folder,
+// e.g. "boost_53_0".
+//
+// BOOST_HEADER_SEARCH_PATH = $(BOOST)/boost_1_53_0
+// BOOST_GCC_PREPROCESSOR_DEFINITIONS = BOOST_DISABLE_THREADS
+
+
+BOOST_HEADER_SEARCH_PATH = <path/to/boost>
+BOOST_GCC_PREPROCESSOR_DEFINITIONS = BOOST_DISABLE_THREADS

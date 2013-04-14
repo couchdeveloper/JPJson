@@ -28,7 +28,7 @@ If you are only interested in compiling the JPJson *libraries* which you need fo
 ------------
 ### Installing Boost
 
-In order to create applications linking against the JPJson library or framework you need to build JPJson. JPJson depends on [boost](http://www.boost.org/). Thus, you need to install boost on *your* developer machines, unless you haven't done it so far. For JPJson it suffices to just download the most recent boost archive and put the decompressed folder anywhere on your local disk and you are done with installing boost. The version of boost shall be the newest one, which is at the time of writing v1.51.0.
+In order to create applications linking against the JPJson library or framework you need to build JPJson. JPJson depends on [boost](http://www.boost.org/). Thus, you need to install boost on *your* developer machines, unless you haven't done it so far. For JPJson it suffices to just download the most recent boost archive and put the decompressed folder anywhere on your local disk and you are done with installing boost. The version of boost shall be the newest one, which is at the time of writing v1.53.0.
 
 Other ways to install boost is to use one of the package managers available for Mac OS X, for instance [MacPorts](http://www.macports.org/) or [Homebrew](http://mxcl.github.com/homebrew/).
 
@@ -72,32 +72,24 @@ The gtest framework will be used in various Unit test applications in the JPJson
 
 > Hint: If you develop in C++, you may find this Unit testing framework very useful, since it provides support for testing C++ templates, which is usually lacking in other Unit test frameworks.
 
-The gtest framework will be installed as a proper framework in the `/Library/Frameworks` folder on the developer's machine. This makes it quite easy to setup Unit test projects using the gtest framework. 
 
-It would be possible to use a package manager to install gtest, but unfortunately, there is no up to date version available with Homebrew nor MacPorts. So we need to install the most recent version manually.
+Since version 0.7, JPJson's Unit Tests build with the C++11 standard library. A few changes have been required in order to compile gtest successfully with a most recent C++11 library. The applied modifications and an updated Xcode project are now available on GitHub: [gtest](https://github.com/couchdeveloper/gtest).
 
-With your browser navigate to the [The Goggle C++ Testing Framework](http://code.google.com/p/googletest/). Select the download tab and download the [gtest-1.6.0.zip](http://code.google.com/p/googletest/downloads/list) source archive. Decompress it and copy the extracted folder whose name is `gtest-1.6.0` to a suitable folder on your developer machine, say into folder `$(HOME)/Develop/gtest`.
+In order to clone the gtest project, create an appropriate destination folder on your developer machine, say into `~/Develop/GTest`, open a console window with Terminal and `cd` into the newly created folder. Then, type the following into the console:
 
-The gtest package contains an Xcode project. Though it seems the project is not yet updated for Xcode 4, the framework can be build successfully with Xcode 4. So, one way to compile and install the framework is to use Xcode, which is described below briefly.
+`git clone git://github.com/couchdeveloper/gtest.git`
+
+
+The gtest framework will be installed in the `/Library/Frameworks` folder on the developer's machine. This makes it quite easy to setup Unit test projects using the gtest framework. 
+
+The gtest packackage can be build in various ways, one of which is using Xcode which is described below briefly:
 
 What we want to achieve is to first *build* the gtest framework and once it has been build successfully, *install* it in the appropriate location for third party frameworks. Apple suggest to install third party frameworks into the `/Library/Frameworks` directory. Installing it into this location requires *privileged access* to this folder.
 
-A few of gtest's project build settings need to be adjusted before it can be build on your system. Locate the Xcode project in the gtest folder (in folder `gtest-1.6.0/xcode/`) and open it with Xcode.
-
-> Note: the following instructions are for Xcode 4.5, but other versions should have comparable settings and names.
-
-Select the gtest project in the Navigator area. Then, in the Editor area select the gtest project. Change/set the following build settings:
-
-*  In section *Architectures* set build setting **Base SDK** to "Latest OS X (Mac OS 10.x)".
-*  In section *Architectures* set build setting **Architectures** to "Native Architecture of Build Machine".
-*  In section *Build Options* set **Compiler for C/C++/Objective-C** to "Default Compiler" which should be the recent "Apple LLVM compiler".
-*  In the *Deployment Section* set **Installation Directory** (`INSTALL_PATH`) to `/Library/Frameworks` (`$(LOCAL_LIBRARY_DIR)/Frameworks`).
-
-
-Now build the gtest Framework with Xcode in order to check that it builds successfully:
+Build the gtest Framework with Xcode in order to check that it builds successfully:
 
 *  Set the active Scheme to `gtest-framework`. 
-*  Edit this Scheme in order to change the active  **Build Configuration** to **Release**.
+*  Ensure that the active  **Build Configuration** is set to **Release** in the corresponding Scheme.
 *  Choose command **Product -> Build**.
 
 If this was successful, you may clear the build folder and proceed with installing gtest using `xcodebuild` tool:
@@ -122,16 +114,24 @@ Note: If you are not a sudoer, you may build the Release Configuration with Xcod
 ------------
 ### Setting up Xcode
 
-Before you can build the JPJson library you need to add a few *Source Trees* settings in Xcode preferences. This needs only to be done *once* for all your projects. 
-
-The JPJson projects needs to locate a few *source folders* of external libraries namely for 
+In order to build the products, Xcode requires user defined settings. The JPJson projects need to locate a few *source folders* of external libraries namely for
 
 - **boost**, and
 
-- **gtest**, which is required only if you want to run Unit tests.
+- **gtest**, (which is required only if you want to run Unit tests)
 
 
-The most reliable way when building under Xcode is to use Xcode's "Source Trees" concept to refer to that external source code:
+User defined settings are accomplished with the combination of "Source Trees" and an user specific Xcode config file. A "Source Tree" defines a path to header search paths or library search path, and the Xcode config file defines the corresponding build settings which are then available in the project settings, target settings and also in Xcode config files.
+
+Note: User defined settings, including the user specific Xcode config files are not tracked by the source code management. They exist only locally and may be different for each "user" (developer), as it is intended.
+
+
+Before you can build the JPJson libraries you need to add *Source Trees* settings in Xcode preferences and you need to modify or create user Xcode config files which are located in folder "<JPJson ROOT>/Xcode.config" (see below in "User Specific Settings in the JPJson Package"). This needs to be done only *once*.
+
+
+
+
+The most reliable way to refer to external source code when building under Xcode is to use Xcode's "Source Trees" concept :
 
 Open Xcode Preferences and navigate to the "Source Trees" panel which is under the "Locations" tab. You need to create at least the entry for `JPJson.BOOST_ROOT`. The entry for `JPJson.GTEST_ROOT` is only required if you want to run the Unit tests (recommended).
 
@@ -142,13 +142,19 @@ Open Xcode Preferences and navigate to the "Source Trees" panel which is under t
     JPJson.GTEST_ROOT       GTEST_ROOT              /local/path/to/gtest
 
 
-The path to boost shall be set as follows: suppose, after downloading and decompressing the archive `boost_1_49_0.zip` a folder has been created whose name is `boost_1_49_0`. Given this example, you need to specify the absolute path to that folder including its name, for example: `/Users/Me/Develop/boost/boost_1_49_0`. 
+The path to boost can be set as follows: suppose, after downloading and decompressing the archive `boost_1_49_0.zip` a folder has been created whose name is `boost_1_49_0`. Given this example, you need to specify the absolute path to that folder including its name, for example: `/Users/Me/Develop/boost/boost_1_49_0`. 
 Of course, this may be different on your system.
 Note: Don't add a trailing '/'.
 
 Likewise, suppose you have downloaded and extracted the gtest package `gtest-1.6.0.zip`, which created a folder `gtest-1.6.0`. Specify the path including the folder name, for example:
 `/Users/Me/Develop/gtest/gtest-1.6.0`. 
 Note: Don't add a trailing '/'.
+
+
+As mentioned, these "JPJson.BOOST_ROOT" and "JPJson.GTEST_ROOT" are now available as build settings in Xcode projects, targets and Xcode config files.
+
+Note also that you can define different names for the Setting name - just ensure that the corresponding Xcode config file (see below in "User Specific Settings in the JPJson Package") reads the correct variable and initializes a corresponding build setting correctly.
+
 
 
 ------------
@@ -162,7 +168,13 @@ Locate the Xcode config files prefixed with `default` with the JPJson package an
 *  `default.gtest.xcconfig` becomes `$user.gtest.xcconfig`
 *  `default.ICU.xcconfig` becomes `$user.ICU.xcconfig`
 
-You probably don't need to make changes to the configuration itself, but in case you have, these files are kept as user settings and will not be tracked by git.
+
+You may now modify your local copy of the Xcode config file in order to setup user specific settings appropriately tailored for your development environment. The Xcode config file may define build settings which derive from Source Tree settings. Ensure you use the correct names in order to set them up correctly.
+
+Please refere to the comments in the Xcode config files, in order to get more info.
+
+
+Note again, that user specific Xcode config files will not be tracked by the source code management.
 
 
 

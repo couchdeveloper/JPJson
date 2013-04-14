@@ -41,11 +41,13 @@ typedef uint32_t JPUnicodeEncoding;
 
 
 
-// The options available for the "default semantic actions" class:
-// JPRepresentationGenerator
+// The options available for the "default semantic actions"
 
 enum  {
     
+    //
+    // JPSemanticActionsBase
+    //
     JPJsonParserIgnoreSpuriousTrailingBytes                 = 1UL << 0,
     JPJsonParserParseMultipleDocuments                      = 1UL << 1,
     JPJsonParserParseMultipleDocumentsAsynchronously        = 1UL << 2,
@@ -70,8 +72,12 @@ enum  {
     JPJsonParserAllowLeadingPlusInNumbers                   = 1UL << 12,
     JPJsonParserAllowLeadingZerosInIntegers                 = 1UL << 13,
     
+    JPJsonParserEncodedStrings                              = 1UL << 14,
     
     
+    //
+    // JPRepresentationGenerator
+    //
     JPJsonParserCheckForDuplicateKey                        = 1UL << 16,
     JPJsonParserKeepStringCacheOnClear                      = 1UL << 17,
     JPJsonParserCacheDataStrings                            = 1UL << 18,
@@ -83,6 +89,8 @@ enum  {
     JPJsonParserNumberGeneratorGenerateStrings              = 1UL << 21,
     JPJsonParserGeneratorGenerateDecimals                   = 1UL << 22,
     
+    // Miscellenous
+    JPJsonParserGeneratorUseArenaAllocator                  = 1UL << 24,
     
     
     JPJsonParserNoncharacterHandling = 
@@ -117,8 +125,8 @@ typedef uint32_t JPJsonParserOptions;
 //  that occur after the last significant character of a valid JSON document
 //  (namely, either a "}" or a "]").
 //  Otherwise, if the parser encounters code units which can not be interpreted 
-//  as white-space Unicode characters it will issue an error and Unicode NULL (U+0000) 
-//  or `EOF` will issue a warning to the console.
+//  as white-space Unicode characters it will issue an error. If it encounters
+//  an Unicode NULL (U+0000) or `EOF` it will issue a warning to the console.
 
 
 //  JPJsonParserParseMultipleDocuments
@@ -146,6 +154,18 @@ typedef uint32_t JPJsonParserOptions;
 //  When downloading large data, this helps throttling the consumption of system
 //  resources by the underlaying network layer.
  
+//
+// JPJsonParserEncodedStrings
+//
+// If enabled, the parser sends properly _encoded_ JSON Strings to the semantic
+// actions object in method `-parserFoundKeyValuePairBeginWithKey:length:encoding:index:`
+// and method `-parserFoundString:length:hasMore:encoding:`. That is, the string
+// is encoded as required by RFC 4627.
+//
+// Otherwise (the default), the parser sends properly decoded strings to the
+// semantic actions object which match the original source string.
+
+
 
 
 // JPJsonParserCheckForDuplicateKey     
@@ -203,6 +223,27 @@ typedef uint32_t JPJsonParserOptions;
 //  NSDecimalNumber object when encountering a number in the input.
 //
 //
+
+//
+// JPJsonParserGeneratorUseArenaAllocator
+//
+// If enabled, the receiver uses an _arena allocator_ when it creates _immutable_
+// Foundations objects.
+//
+// Using an arena allocator improves performance, increases memory locality for the
+// objects comprising the representation and reduces heap fragmentation. However,
+// there is also a caveat:
+//
+// The memory allocated for the whole representation will eventually be freed only
+// until after _ALL_ objects of the representation have been deallocated. Thus, in
+// order to avoid possibly large memory areas hanging around unsused, this option is
+// only useful if the representation is used as a whole and released as a whole without
+// having objects elsewhere referencing one or more objects from the representation.
+
+
+
+
+
 
 //
 // Unicode Handling

@@ -1,0 +1,8 @@
+//
+//  debug.xcconfig
+//
+
+#include "project.common.ios.xcconfig"
+
+// Preprocessor Definitions
+GCC_PREPROCESSOR_DEFINITIONS = DEBUG=1 __ASSERT_MACROS_DEFINE_VERSIONS_WITHOUT_UNDERSCORES=0

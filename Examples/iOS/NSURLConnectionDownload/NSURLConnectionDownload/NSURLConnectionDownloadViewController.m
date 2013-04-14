@@ -18,6 +18,11 @@
 //  limitations under the License.
 //
 
+#if !__has_feature(objc_arc)
+#warning TODO This Objective-C file shall be compiled with ARC enabled.
+#endif
+
+
 #import "NSURLConnectionDownloadViewController.h"
 
 #import "JPJson/JPAsyncJsonParser.h"
@@ -27,6 +32,7 @@
 #include <mach/mach_time.h>
 #include <unistd.h>
 #include <dispatch/dispatch.h>
+
 
 
 //#define DEBUG_LOG

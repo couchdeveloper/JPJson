@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A113FB7A1714531C00D65C91 /* project.common.ios.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = A113FB791714531C00D65C91 /* project.common.ios.xcconfig */; };
+		A113FB7E171455F600D65C91 /* libjson-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A18DC6E315B3F58800F921C2 /* libjson-iOS.a */; };
+		A113FB811714588C00D65C91 /* timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A113FB7F1714588C00D65C91 /* timer.cpp */; };
 		A125E034156FBF2A006EB6FD /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = A125E031156FBF2A006EB6FD /* JSONKit.m */; };
 		A138814113D0D57B0006461E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A138814013D0D57B0006461E /* UIKit.framework */; };
 		A138814313D0D57B0006461E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A138814213D0D57B0006461E /* Foundation.framework */; };
@@ -18,10 +21,8 @@
 		A138815713D0D57B0006461E /* JPBenchAppViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = A138815613D0D57B0006461E /* JPBenchAppViewController.mm */; };
 		A138815A13D0D57B0006461E /* JPBenchAppViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A138815813D0D57B0006461E /* JPBenchAppViewController.xib */; };
 		A156BE94146C181400BE6E82 /* Test-UTF8-esc.json in Resources */ = {isa = PBXBuildFile; fileRef = A156BE93146C181400BE6E82 /* Test-UTF8-esc.json */; };
-		A167D83A146C3CD300C7FAD3 /* timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A167D838146C3CD300C7FAD3 /* timer.cpp */; };
 		A18A705D1512292000FEB03C /* Test-UTF8.json in Resources */ = {isa = PBXBuildFile; fileRef = A18A705C1512292000FEB03C /* Test-UTF8.json */; };
 		A1B0AE5F15B1E90500E0C685 /* JPJson iOS Libraries.xcodeproj in Resources */ = {isa = PBXBuildFile; fileRef = A1B0AE5E15B1E90500E0C685 /* JPJson iOS Libraries.xcodeproj */; };
-		A1B0AE6715B1E9E400E0C685 /* libjson-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A1B0AE6615B1E9E400E0C685 /* libjson-iOS.a */; };
 		A1FAF1DD143F225500CD2CCB /* UIDevice-Hardware.m in Sources */ = {isa = PBXBuildFile; fileRef = A1FAF1DC143F225500CD2CCB /* UIDevice-Hardware.m */; };
 /* End PBXBuildFile section */
 
@@ -36,6 +37,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A113FB791714531C00D65C91 /* project.common.ios.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = project.common.ios.xcconfig; sourceTree = "<group>"; };
+		A113FB7F1714588C00D65C91 /* timer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = timer.cpp; sourceTree = "<group>"; };
+		A113FB801714588C00D65C91 /* timer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = timer.hpp; sourceTree = "<group>"; };
 		A125E02F156FBF2A006EB6FD /* CHANGELOG.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CHANGELOG.md; sourceTree = "<group>"; };
 		A125E030156FBF2A006EB6FD /* JSONKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONKit.h; sourceTree = "<group>"; };
 		A125E031156FBF2A006EB6FD /* JSONKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSONKit.m; sourceTree = "<group>"; };
@@ -55,12 +59,8 @@
 		A138815613D0D57B0006461E /* JPBenchAppViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; path = JPBenchAppViewController.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		A138815913D0D57B0006461E /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/JPBenchAppViewController.xib; sourceTree = "<group>"; };
 		A156BE93146C181400BE6E82 /* Test-UTF8-esc.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "Test-UTF8-esc.json"; path = "../../../Resources/Test-UTF8-esc.json"; sourceTree = "<group>"; };
-		A167D838146C3CD300C7FAD3 /* timer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = timer.cpp; sourceTree = "<group>"; };
-		A167D839146C3CD300C7FAD3 /* timer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = timer.hpp; sourceTree = "<group>"; };
-		A17DD7B7146AE95B000AD974 /* timer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = timer.cpp; path = ../../../../Source/utilities/timer.cpp; sourceTree = "<group>"; };
-		A17DD7B8146AE95B000AD974 /* timer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = timer.hpp; path = ../../../../Source/utilities/timer.hpp; sourceTree = "<group>"; };
-		A18A705A1511F9E000FEB03C /* debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; lineEnding = 0; path = debug.xcconfig; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.xcconfig; };
-		A18A705B1511F9EE00FEB03C /* release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; lineEnding = 0; path = release.xcconfig; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.xcconfig; };
+		A18A705A1511F9E000FEB03C /* project.debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; lineEnding = 0; path = project.debug.xcconfig; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.xcconfig; };
+		A18A705B1511F9EE00FEB03C /* project.release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; lineEnding = 0; path = project.release.xcconfig; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.xcconfig; };
 		A18A705C1512292000FEB03C /* Test-UTF8.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "Test-UTF8.json"; path = "../../../Resources/Test-UTF8.json"; sourceTree = "<group>"; };
 		A1AC40231577BAB500AE34CC /* random.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = random.json; path = ../../../Resources/random.json; sourceTree = "<group>"; };
 		A1B0AE5E15B1E90500E0C685 /* JPJson iOS Libraries.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "JPJson iOS Libraries.xcodeproj"; path = "../../../Libraries/iOS Libraries/JPJson iOS Libraries.xcodeproj"; sourceTree = "<group>"; };
@@ -74,7 +74,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A1B0AE6715B1E9E400E0C685 /* libjson-iOS.a in Frameworks */,
+				A113FB7E171455F600D65C91 /* libjson-iOS.a in Frameworks */,
 				A138814113D0D57B0006461E /* UIKit.framework in Frameworks */,
 				A138814313D0D57B0006461E /* Foundation.framework in Frameworks */,
 				A138814513D0D57B0006461E /* CoreGraphics.framework in Frameworks */,
@@ -107,10 +107,10 @@
 		A138813113D0D57B0006461E = {
 			isa = PBXGroup;
 			children = (
+				A113FB791714531C00D65C91 /* project.common.ios.xcconfig */,
+				A18A705A1511F9E000FEB03C /* project.debug.xcconfig */,
+				A18A705B1511F9EE00FEB03C /* project.release.xcconfig */,
 				A125E02C156FBECD006EB6FD /* Vendor */,
-				A18A705A1511F9E000FEB03C /* debug.xcconfig */,
-				A18A705B1511F9EE00FEB03C /* release.xcconfig */,
-				A167D837146C3CD300C7FAD3 /* utilities */,
 				A138816413D0DD680006461E /* Resources */,
 				A138814613D0D57B0006461E /* JPBenchApp */,
 				A17DD7B6146AE90D000AD974 /* Libraries */,
@@ -140,8 +140,8 @@
 		A138814613D0D57B0006461E /* JPBenchApp */ = {
 			isa = PBXGroup;
 			children = (
-				A17DD7B7146AE95B000AD974 /* timer.cpp */,
-				A17DD7B8146AE95B000AD974 /* timer.hpp */,
+				A113FB7F1714588C00D65C91 /* timer.cpp */,
+				A113FB801714588C00D65C91 /* timer.hpp */,
 				A1FAF1DB143F225500CD2CCB /* UIDevice-Hardware.h */,
 				A1FAF1DC143F225500CD2CCB /* UIDevice-Hardware.m */,
 				A138814F13D0D57B0006461E /* JPBenchAppAppDelegate.h */,
@@ -174,16 +174,6 @@
 				A1AC40231577BAB500AE34CC /* random.json */,
 			);
 			name = Resources;
-			sourceTree = "<group>";
-		};
-		A167D837146C3CD300C7FAD3 /* utilities */ = {
-			isa = PBXGroup;
-			children = (
-				A167D838146C3CD300C7FAD3 /* timer.cpp */,
-				A167D839146C3CD300C7FAD3 /* timer.hpp */,
-			);
-			name = utilities;
-			path = ../../../Source/utilities;
 			sourceTree = "<group>";
 		};
 		A17DD7B6146AE90D000AD974 /* Libraries */ = {
@@ -275,6 +265,7 @@
 				A156BE94146C181400BE6E82 /* Test-UTF8-esc.json in Resources */,
 				A18A705D1512292000FEB03C /* Test-UTF8.json in Resources */,
 				A1B0AE5F15B1E90500E0C685 /* JPJson iOS Libraries.xcodeproj in Resources */,
+				A113FB7A1714531C00D65C91 /* project.common.ios.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -289,8 +280,8 @@
 				A138815113D0D57B0006461E /* JPBenchAppAppDelegate.m in Sources */,
 				A138815713D0D57B0006461E /* JPBenchAppViewController.mm in Sources */,
 				A1FAF1DD143F225500CD2CCB /* UIDevice-Hardware.m in Sources */,
-				A167D83A146C3CD300C7FAD3 /* timer.cpp in Sources */,
 				A125E034156FBF2A006EB6FD /* JSONKit.m in Sources */,
+				A113FB811714588C00D65C91 /* timer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -326,32 +317,24 @@
 /* Begin XCBuildConfiguration section */
 		A138815B13D0D57B0006461E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A18A705A1511F9E000FEB03C /* debug.xcconfig */;
+			baseConfigurationReference = A18A705A1511F9E000FEB03C /* project.debug.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
-				SDKROOT = iphoneos5.1;
 			};
 			name = Debug;
 		};
 		A138815C13D0D57B0006461E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A18A705B1511F9EE00FEB03C /* release.xcconfig */;
+			baseConfigurationReference = A18A705B1511F9EE00FEB03C /* project.release.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
-				SDKROOT = iphoneos5.1;
 			};
 			name = Release;
 		};
@@ -359,27 +342,19 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = (
-					armv6,
-					"$(ARCHS_STANDARD_32_BIT)",
-				);
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "JPBenchApp/JPBenchApp-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = "$(PRJ_GCC_PREPROCESSOR_DEFINITIONS)";
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				HEADER_SEARCH_PATHS = (
 					"$(JP_ROOT)",
 					"$(SRCROOT)/Vendor",
 				);
 				INFOPLIST_FILE = "JPBenchApp/JPBenchApp-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = "-v";
-				OTHER_LDFLAGS = (
-					"-lstdc++",
-					"-ObjC",
-				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -389,25 +364,17 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = (
-					armv6,
-					"$(ARCHS_STANDARD_32_BIT)",
-				);
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "JPBenchApp/JPBenchApp-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = "$(PRJ_GCC_PREPROCESSOR_DEFINITIONS)";
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				HEADER_SEARCH_PATHS = (
 					"$(JP_ROOT)",
 					"$(SRCROOT)/Vendor",
 				);
 				INFOPLIST_FILE = "JPBenchApp/JPBenchApp-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_CFLAGS = "-v";
-				OTHER_LDFLAGS = (
-					"-lstdc++",
-					"-ObjC",
-				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;

@@ -49,10 +49,17 @@ typedef NSUInteger JPSemanticActionsNumberGeneratorOption;
  A `JPRepresentationGenerator` instance is the _default_ semantic actions class 
  for a JPJsonParser, unless another one is specified explicitly.
   
- Class `JPRepresentationGenerator is "self-contained" which means that it consumes
+ Class `JPRepresentationGenerator` is "self-contained" which means that it consumes
  and handles ALL "parse events" itself and thus, will not have a delegate nor 
  is it meant to be subclassed.
+  
+ `JPRepresentationGenerator` manages an internal cache for key strings and manages
+ internal buffers that are required for parsing and for the highly efficient memory
+ allocator which is used to create foundation objects. That cache, the buffers and 
+ the allocator can be reused when multiple JSON documents shall be parsed.
  
+ *Note:* Reusing a sematic actions object can reduce memory foot-print and speeds up 
+ parsing of multiple JSON documents.
  
  
  ## Using a JPRepresentationGenerator ##
@@ -64,7 +71,7 @@ typedef NSUInteger JPSemanticActionsNumberGeneratorOption;
  For example a `JPRepresentationGenerator` object can be set as parameter 
  `semanticActions` in method `+parseData:semanticActions:` of class `JPJsonParser`.
  
- As a result, the parser will create a representation in form of a hierarchy of 
+ As a result, the parser will create a representation as a hierarchy of 
  Foundation objects from the JSON text. When the parser is finished, this JSON 
  structure can be retrieved with property `result` of the semantic actions object. 
  
@@ -183,10 +190,10 @@ typedef NSUInteger JPSemanticActionsNumberGeneratorOption;
 
  Initializes a `JPRepresentationGenerator` object with the specified dispatch queue where
  handler blocks will be dispatched.
- Parameter handlerQueue may be NULL, in which case no handlers will be
+ Parameter _handlerQueue_ may be `NULL`, in which case no handlers will be
  executed.
  
- @param handlerQueue A dispatch queue or NULL. The receiver will retain the
+ @param handlerQueue A dispatch queue or `NULL`. The receiver will retain the
  dispatch queue.
 */ 
 - (id) initWithHandlerDispatchQueue:(dispatch_queue_t)handlerQueue;
@@ -223,7 +230,7 @@ typedef NSUInteger JPSemanticActionsNumberGeneratorOption;
  already exists. If it exists, a "duplicate key error" will be logged to the  
  console and error state will be set.
  
- Default: NO
+ Default: `NO`
 */ 
 @property (nonatomic, assign) BOOL checkForDuplicateKey;
 
@@ -232,9 +239,9 @@ typedef NSUInteger JPSemanticActionsNumberGeneratorOption;
  Sets or returns the option "keepStringCacheOnClear".
  
  If this option is set, the receiver does not clear the internal string cache 
- when it receives the clear message.
+ when it receives the message `clear`.
 
- Default: NO
+ Default: `NO`
 */
 @property (nonatomic, assign) BOOL keepStringCacheOnClear;
 
@@ -244,7 +251,7 @@ typedef NSUInteger JPSemanticActionsNumberGeneratorOption;
  If this option is set, the receiver caches data strings in addition to 
  key strings.
 
- Default: NO 
+ Default: `NO` 
  */
 @property (nonatomic, assign) BOOL cacheDataStrings;
 
@@ -253,11 +260,37 @@ typedef NSUInteger JPSemanticActionsNumberGeneratorOption;
  Sets or returns the option "createMutableContainers".
 
  If enabled, the receiver creates its representation using mutable Foundation 
- arrays and mutable Foundation dictionaries.
+ arrays and mutable Foundation dictionaries. 
  
- Default: NO
+ Note: NSStrings objects will still be immutable.
+ 
+ Default: `NO`
  */
 @property (nonatomic, assign) BOOL createMutableContainers;
+
+
+/**
+ Sets or returns the option "useArenaAllocator".
+ 
+ If enabled, the receiver uses an _arena allocator_ when it creates _immutable_ 
+ Foundations objects. For each representation one dedicated arena allocator is 
+ used.
+ 
+ Using an arena allocator improves performance, increases memory locality for the 
+ objects comprising the representation and reduces heap fragmentation. However, 
+ there is also a caveat: 
+ 
+ The memory allocated for the whole representation will eventually be freed only
+ until after _ALL_ objects of the representation have been deallocated. Thus, in 
+ order to avoid possibly large memory areas hanging around unsused, this option is 
+ only useful if the representation is used as a whole and released as a whole without 
+ having objects elsewhere referencing one or more objects from the representation.
+
+ 
+ Default: `NO`
+ */
+@property (nonatomic, assign) BOOL useArenaAllocator;
+
 
 
 /**
@@ -293,9 +326,10 @@ typedef NSUInteger JPSemanticActionsNumberGeneratorOption;
 
 /** @name Clearing Internal State */
 /**
- Clears internal cached data.
+ Clears internal cached data and property result.
  */
 - (void) clear;
+
 
 /** @name Canceling a Running Parser */
 /**

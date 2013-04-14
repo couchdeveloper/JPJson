@@ -110,6 +110,7 @@ typedef JPSemanticActions_ErrorHandlerBlockType       ErrorHandlerBlockType;
     self.ignoreSpuriousTrailingBytes = (options & JPJsonParserIgnoreSpuriousTrailingBytes) != 0;
     self.parseMultipleDocuments = (options & JPJsonParserParseMultipleDocuments) != 0;
     self.parseMultipleDocumentsAsynchronously = (options & JPJsonParserParseMultipleDocumentsAsynchronously) != 0;
+    self.generateEncodedStrings = (options & JPJsonParserEncodedStrings) != 0;
     
     if (JPJsonParserNoncharacterHandling & options) {
         if (JPJsonParserSignalErrorOnNoncharacter & options) {
@@ -162,7 +163,7 @@ typedef JPSemanticActions_ErrorHandlerBlockType       ErrorHandlerBlockType;
 
 // Creates and returns an autoreleased NSError object from the error state of 
 // the internal implementation sa, or nil if there is no error.
-- (__autoreleasing NSError*) __attribute__((ns_returns_autoreleased)) makeError
+- (NSError*) __attribute__((ns_returns_autoreleased)) makeError
 {
     if (self.imp == 0) {
         return nil;
@@ -184,7 +185,7 @@ typedef JPSemanticActions_ErrorHandlerBlockType       ErrorHandlerBlockType;
 // property readonly error
 - (NSError*) error 
 {
-    __autoreleasing NSError* err = [self makeError];
+    NSError* err = [self makeError];
     return err;
 }
 
@@ -363,6 +364,17 @@ typedef JPSemanticActions_ErrorHandlerBlockType       ErrorHandlerBlockType;
     assert("bad log-level"==0);
     return json::semanticactions::LogLevelWarning;
 }
+
+
+// @property (nonatomic, assign) bool generateEncodedStrings;
+- (BOOL) generateEncodedStrings  {
+    return (BOOL)self.imp->passEscapdedString();
+}
+
+- (void) setGenerateEncodedStrings:(BOOL)value {
+    self.imp->passEscapdedString(static_cast<bool>(value));
+}
+
 
 
 

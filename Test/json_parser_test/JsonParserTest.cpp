@@ -472,7 +472,7 @@ namespace {
             // formed sequence by replacing malformed chars with Unicode replacement 
             // characters.
             char* d = buffer;
-#if defined (DEBUG)
+#if !defined (NDEBUG)
             int cvt_result =
 #endif
             json::unicode::convert(s, end, UTF_8_encoding_tag(), d, UTF_8_encoding_tag(), unicode::ReplaceIllFormed);

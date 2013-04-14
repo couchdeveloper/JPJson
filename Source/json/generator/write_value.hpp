@@ -205,7 +205,7 @@ namespace json { namespace detail {
             auto first = str.begin();
             auto last = str.end();
             const unsigned int options = (flags()&escape_solidus) ? generator_internal::string_encoder_base::EscapeSolidus : 0;
-#if defined (DEBUG)
+#if !defined (NDEBUG)
             int cvt_result =
 #endif            
             encode_string(first, last, string_encoding_type(),
@@ -254,7 +254,7 @@ namespace json { namespace detail {
                 auto first = iter.first.begin();
                 auto last = iter.first.end();
                 const unsigned int options = (flags()&escape_solidus) ? generator_internal::string_encoder_base::EscapeSolidus : 0;
-#if defined (DEBUG)
+#if !defined (NDEBUG)
                 int cvt_result =
 #endif
                 encode_string(first, last, key_encoding_type(),

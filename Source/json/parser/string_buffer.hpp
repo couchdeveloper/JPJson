@@ -246,7 +246,7 @@ namespace json { namespace parser_internal {
             typedef converter<code_point_t, to_encoding_t, Validation::UNSAFE, Stateful::No, ParseOne::Yes> cvt_t;
             base::extend(4/sizeof(code_unit_type));
             json::unicode::code_point_t* first = &codepoint;
-#if defined (DEBUG)            
+#if !defined (NDEBUG)
             int result =
 #endif            
             cvt_t::convert(first, first+1, base::dest());
@@ -341,7 +341,7 @@ namespace json { namespace parser_internal {
             code_unit_type const* last = first + base::size();
             sa_char_t* start = reinterpret_cast<sa_char_t*>(static_cast<void*>(base::data()));
             sa_char_t* dest = start;
-#if defined (DEBUG)
+#if !defined (NDEBUG)
             int cvt_result = 
 #endif            
             cvt_t().convert(first, last, dest);

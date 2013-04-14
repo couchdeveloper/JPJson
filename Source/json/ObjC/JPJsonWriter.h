@@ -108,11 +108,11 @@ typedef NSUInteger JPJsonWriterOptions;
  values see "JPJsonWriterOptions".
 
  @param error A pointer to a `NSError` object. If this is not `NULL`, and if 
- an error occurred during serializing the parameter error contains an `NSError`
+ an error occurred during serializing the parameter _error_ contains an `NSError`
  object describing the issue.
 
 
- @return A NSData object representing the JSON in parameter 'object' as text, 
+ @return A NSData object representing the JSON in parameter _object_ as text,
  or `nil` if an error occurred.
 */
 
@@ -136,11 +136,11 @@ typedef NSUInteger JPJsonWriterOptions;
  values see "JPJsonWriterOptions".
  
  @param error A pointer to a `NSError` object. If this is not `NULL`, and if
- an error occurred during serializing the parameter error contains an `NSError`
+ an error occurred during serializing the parameter _error_ contains an `NSError`
  object describing the issue.
  
  
- @return A NSData object representing the JSON in parameter 'object' as text,
+ @return A NSData object representing the JSON in parameter _object_ as text,
  or `nil` if an error occurred.
  */
 
@@ -170,7 +170,7 @@ typedef NSUInteger JPJsonWriterOptions;
  values see "JPJsonWriterOptions".
  
  @param error A pointer to a `NSError` object. If this is not `NULL`, and if
- an error occurred during serializing the parameter error contains an `NSError`
+ an error occurred during serializing the parameter _error_ contains an `NSError`
  object describing the issue.
  
  
@@ -203,7 +203,7 @@ typedef NSUInteger JPJsonWriterOptions;
  values see "JPJsonWriterOptions".
  
  @param error A pointer to a `NSError` object. If this is not `NULL`, and if
- an error occurred during serializing the parameter error contains an `NSError`
+ an error occurred during serializing the parameter _error_ contains an `NSError`
  object describing the issue.
  
  

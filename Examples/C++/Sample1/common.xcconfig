@@ -3,5 +3,5 @@
 //
 
 // Source Root Path
-SOURCE_ROOT = "$(SRCROOT)/../../../Source"
+JPSOURCE_ROOT = "$(SRCROOT)/../../../Source"
 

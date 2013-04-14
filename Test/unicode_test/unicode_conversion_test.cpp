@@ -309,7 +309,7 @@ namespace {
         
         UErrorCode error = U_ZERO_ERROR;
         int32_t icu_output_bytes = 
-        ucnv_convert_48(unicode::encoding_traits<to_encoding_t>::name() /*to*/, 
+        ucnv_convert(unicode::encoding_traits<to_encoding_t>::name() /*to*/,
                         unicode::encoding_traits<from_encoding_t>::name() /*from*/, 
                         target, target_size, 
                         source,  source_length, &error); 
@@ -426,7 +426,7 @@ namespace {
         
         UErrorCode error = U_ZERO_ERROR;
         int32_t icu_output_bytes = 
-        ucnv_convert_48(unicode::encoding_traits<to_encoding_t>::name() /*to*/, 
+        ucnv_convert(unicode::encoding_traits<to_encoding_t>::name() /*to*/,
                         unicode::encoding_traits<from_encoding_t>::name() /*from*/, 
                         target, target_size, 
                         source,  source_length, &error); 
@@ -500,7 +500,7 @@ namespace {
         
         UErrorCode error = U_ZERO_ERROR;
         int32_t icu_output_bytes = 
-        ucnv_convert_48(unicode::encoding_traits<to_encoding_t>::name() /*to*/, 
+        ucnv_convert(unicode::encoding_traits<to_encoding_t>::name() /*to*/,
                         unicode::encoding_traits<from_encoding_t>::name() /*from*/, 
                         target, target_size, 
                         source,  source_length, &error); 
@@ -574,7 +574,7 @@ namespace {
         
         UErrorCode error = U_ZERO_ERROR;
         int32_t icu_output_bytes = 
-        ucnv_convert_48(unicode::encoding_traits<to_encoding_t>::name() /*to*/, 
+        ucnv_convert(unicode::encoding_traits<to_encoding_t>::name() /*to*/, 
                         unicode::encoding_traits<from_encoding_t>::name() /*from*/, 
                         target, target_size, 
                         source,  source_length, &error); 

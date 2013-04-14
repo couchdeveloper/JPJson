@@ -285,6 +285,28 @@ typedef void (^JPSemanticActions_ErrorHandlerBlockType)(NSError*);
 
 
 
+
+/**
+ Sets or returns the option whether the receiver will get passed encoded JSON strings.
+ 
+ Usually, a semantic actions object will require a properly decoded JSON string
+ that matches the orginal source string. If this options is enabled however, the 
+ underlaying parser passes properly _encoded_ JSON Strings in method 
+ `-parserFoundKeyValuePairBeginWithKey:length:encoding:index:` and 
+ `-parserFoundString:length:hasMore:encoding:`. That is, the string is encoded
+ as required by RFC 4627.
+
+ Otherwise (the default), the parser passes properly decoded JSON strings to the
+ receiver which match the original source string.
+ 
+ This option corresponds to `JPJsonParserOptions` flag `JPJsonParserEncodedStrings`.
+
+ Default: `NO` 
+*/
+@property (nonatomic, assign) BOOL generateEncodedStrings;
+
+
+
 // -----------------------------------------------------------------------------
 /** @name Set and Retrieve Error State */
 // -----------------------------------------------------------------------------
@@ -326,7 +348,7 @@ typedef void (^JPSemanticActions_ErrorHandlerBlockType)(NSError*);
  Returns or sets the dispatch queue where handler blocks will be scheduled.
  
  The dispatch queue will be retained - with function `dispatch_retain()`.
- If parameter queue is set to `NULL`, handler blocks will not be called.
+ If the property is set to `NULL`, handler blocks will not be called.
  The dispatch queue must only be modified before a parser associated to
  the receiver is not yet started. 
  
@@ -344,7 +366,7 @@ typedef void (^JPSemanticActions_ErrorHandlerBlockType)(NSError*);
 
  This handler block will be called when the JSON parser has found the start of
  a JSON root element within the input text. 
- If property parseMultipleDocuments equals YES this block will be called 
+ If property parseMultipleDocuments equals `YES` this block will be called 
  each time a the parsers detects the start of a JSON root element.
 
  Note, that this handler will only be called after the JSON parser actually has
@@ -364,19 +386,19 @@ startJsonHandlerBlock;
  The endJsonHandlerBlock is called when the parser has successfully parsed a
  JSON text and the semantic actions instance was able to create a result (e.g.
  a JSON representation created upon Foundation objects) from this JSON text.
- The result will be passed in parameter result.
- If property parseMultipleDocuments equals YES this block will be called for
+ The result will be passed in parameter _result_.
+ If property `parseMultipleDocuments` equals `YES` this block will be called for
  each result which will be created by the semantic actions instance.
 
- If  property parseMultipleDocumentsAsynchronously returns `NO` (the default) the 
+ If  property `parseMultipleDocumentsAsynchronously` returns `NO` (the default) the 
  parser's thread is blocked until the handler finishes. This is a measurement 
  to balance the process of generating result objects (e.g. JSON representations
  as Foundation objects) - which may tie up a large amount of system resources
  - with the actual processing of this result - which may free these resources 
  again.
- Otherwise, if parseMultipleDocumentsAsynchronously returns YES, the parser 
+ Otherwise, if `parseMultipleDocumentsAsynchronously` returns `YES`, the parser
  will immediately continue to parse the input source on its own thread. Be 
- carefully, when considering parseMultipleDocumentsAsynchronously set to YES.
+ carefully, when considering parseMultipleDocumentsAsynchronously set to `YES`.
 
  endJsonHandlerBlock may be set to `nil`.
 */ 
@@ -388,16 +410,17 @@ endJsonHandlerBlock;
 /**
  Sets or returns the completion handler block of type `void (^)(void)`.
  
- If it's not `NULL`, the completionBlock is called when the JSON parser finished 
- parsing, regardless if there has been a parse error signaled via the error 
+ If the property is not `NULL`, the completion block is called when the JSON parser 
+ finished parsing, regardless if there has been a parse error signaled via the error
  handler block during parsing. The start of the JSON parser was previously 
- signaled by calling the startJsonHandlerBlock block.
+ signaled by calling the `startJsonHandlerBlock` block.
+ 
  Note that the error handler may be possibly called _before_ the JSON parser
- even started parsing, e.g. when JPJsonParser and JPAsyncJsonParser detect an
+ even started parsing, e.g. when `JPJsonParser` and `JPAsyncJsonParser` detect an
  error during determining the input encoding. In this case, the JSON parser
- will not be started, and consequently, startJsonHandlerBlock and
- completionHandlerBlock will not be called.
- completionBlock may be set to `NULL`.
+ will not be started, and consequently, `startJsonHandlerBlock` and
+ `completionHandlerBlock` will not be called.
+ `completionBlock` may be set to `NULL`.
 */ 
 @property (nonatomic, copy)  JPSemanticActions_CompletionHandlerBlockType 
 completionHandlerBlock;
@@ -408,11 +431,11 @@ completionHandlerBlock;
 /**
  Sets or retrieves the error handler block of type `void (^)(NSError*)`.
 
- The errorHandlerBlock will be called when an error has been detected by the
- JPJsonParser/JPAsyncJsonParser during determining the input encoding, by the
+ The `errorHandlerBlock` will be called when an error has been detected by the
+ `JPJsonParser`/`JPAsyncJsonParser` during determining the input encoding, by the
  JSON parser during parsing, or by the semantic actions instance while per-
  forming a semantic action.
- errorHandlerBlock may be set to `NULL` in which case no errors will be reported
+ `errorHandlerBlock` may be set to `NULL` in which case no errors will be reported
  by this means.
 */ 
 @property (nonatomic, copy) JPSemanticActions_ErrorHandlerBlockType 
@@ -431,7 +454,7 @@ errorHandlerBlock;
  
  @return An object if a result is available, otherwise `nil`.
  */ 
-@property (unsafe_unretained, nonatomic, readonly) id result;
+@property (nonatomic, readonly) id result;
 
 
 

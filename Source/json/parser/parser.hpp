@@ -151,7 +151,7 @@ namespace json {
         //  C-tor
         //
         parser(SemanticActions& sa) 
-        : sa_(sa), string_buffer_(sa), unicode_filter_(0)
+        : sa_(sa), string_buffer_(sa), unicode_filter_(0), opt_pass_escaped_string_(false)
         {
             configure();
         }
@@ -197,7 +197,7 @@ namespace json {
                     unicode_filter_.replacement_character(0);
                     break;
             } 
-            
+            opt_pass_escaped_string_ = sa_.passEscapdedString();
             sa_.inputEncoding(encoding_traits<source_encoding_type>::name());
             //semanticactions::non_conformance_flags ncon_flags = sa.extensions();
         }
@@ -212,6 +212,7 @@ namespace json {
         unicode::filter::NoncharacterOrNULL unicode_filter_;
         string_buffer_t         string_buffer_;
         number_string_buffer_t  number_string_buffer_;
+        bool                    opt_pass_escaped_string_;
 
     private:        
         void parse_text();
@@ -875,10 +876,7 @@ namespace json {
         parser<InputIterator, SourceEncoding, SemanticActions>::
     parse_string() 
     {
-        //TEST: TODO: fix
-        //((void)printf ("%s:%u: test assertion\n", __FILE__, __LINE__), abort());
-        
-        assert(state_.error() == JP_NO_ERROR); 
+        assert(state_.error() == JP_NO_ERROR);
         assert(p_ != last_);
         assert(to_uint(*p_) == '"');            
         assert(string_buffer_.size() == 0);  // check whether we have a new string on stack of the string storage
@@ -893,7 +891,7 @@ namespace json {
                 next();
                 switch (c) {
                     default:
-                        string_buffer_pushback_ASCII(c);  
+                        string_buffer_pushback_ASCII(c);
                         // note: string_buffer_pushback_ASCII() does not check for Unicode NULL
                         continue;
                     case '\\': // escape sequence
@@ -1198,6 +1196,7 @@ namespace json {
                 case 'r':   ascii = '\r'; break; // string_buffer_pushback_ASCII(stringBuffer, '\r'); next(); return;
                 case 't':   ascii = '\t'; break; // string_buffer_pushback_ASCII(stringBuffer, '\t'); next(); return;
                 case 'u':  { // escaped unicode
+                    // note: escaped unicode will ignore option opt_pass_escaped_string
                     unicode::code_point_t cp = escaped_unicode();
                     if (__builtin_expect(state_, 1)) {
                         int result = string_buffer_pushback_unicode(cp); // returns zero on success, otherwise -1
@@ -1226,8 +1225,13 @@ namespace json {
                     
             } // switch
             
-            string_buffer_pushback_ASCII(ascii);  
-            next(); 
+            if (opt_pass_escaped_string_) {
+                string_buffer_pushback_ASCII('\\');
+                string_buffer_pushback_ASCII(c);
+            } else {
+                string_buffer_pushback_ASCII(ascii);
+            }
+            next();
             return;  // success
         }
         else {

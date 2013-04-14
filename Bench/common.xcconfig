@@ -3,7 +3,7 @@
 //
 
 // Source Root Path
-SOURCE_ROOT = "$(SRCROOT)/../Source"
+JPSOURCE_ROOT = "$(SRCROOT)/../Source"
 
 
 //
@@ -30,7 +30,7 @@ ARCHS = $(NATIVE_ARCH_ACTUAL)
 MACOSX_DEPLOYMENT_TARGET = 10.7
 
 // Header search paths
-COMMON_HEADER_SEARCH_PATHS = $(SOURCE_ROOT)
+COMMON_HEADER_SEARCH_PATHS = $(JPSOURCE_ROOT)
 
 //  Framework search paths
 COMMON_FRAMEWORK_SEARCH_PATHS = $(inherited)

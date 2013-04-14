@@ -133,7 +133,7 @@ namespace json { namespace objc {
         
         typedef CFTypeRef                               map_mapped_t;
         typedef std::pair<const key_type, map_mapped_t> map_value_t;
-#if !defined (CFDATA_CACHE_USE_STD_UNORDERED_MAP)
+#if 1 // !defined (CFDATA_CACHE_USE_STD_UNORDERED_MAP)
         typedef typename allocator_t::template rebind<map_value_t>::other map_allocator_t;
 #else
         typedef std::allocator<map_value_t> map_allocator_t;
@@ -164,11 +164,12 @@ namespace json { namespace objc {
         
                 
         explicit CFDataCache(std::size_t capacity = 128)
-        :   arena_(1024),
-#if !defined (CFDATA_CACHE_USE_STD_UNORDERED_MAP)
-            map_allocator_(arena_),
+        :   data_arena_(1024),
+#if 1 //!defined (CFDATA_CACHE_USE_STD_UNORDERED_MAP)
+            map_arena_(1024),
+            map_allocator_(map_arena_),
 #endif
-            string_allocator_(arena_),
+            string_allocator_(data_arena_),
             map_(map_allocator_)
         {
 #if defined (CFDATA_CACHE_USE_STD_UNORDERED_MAP)
@@ -181,7 +182,8 @@ namespace json { namespace objc {
         }
         
         CFDataCache(CFDataCache&& other)
-        :   arena_(std::move(other.arena)),
+        :   data_arena_(std::move(other.data_arena_)),
+            map_arena_(std::move(other.map_arena_)),
             map_allocator_(std::move(other.map_allocator_)),
             string_allocator_(std::move(other.string_allocator_)),
             map_(std::move(other.map_))
@@ -193,7 +195,8 @@ namespace json { namespace objc {
             if (this != &other) {
                 clear();
                 map_ = std::move(other.map_);
-                arena_ = std::move(other.arena_);
+                map_arena_ = std::move(other.map_arena_);
+                data_arena_ = std::move(other.data_arena_);
                 map_allocator_ = std::move(other.map_allocator_);
                 string_allocator_ = std::move(other.string_allocator_);
             }
@@ -218,7 +221,8 @@ namespace json { namespace objc {
                 
         std::pair<iterator, bool> 
         insert(key_type const& key, CFTypeRef v)
-        {     
+        {
+            assert(v != NULL); // Must not be nececssary  !NULL but should be.
             CharT* p = std::allocator_traits<string_allocator_t>::allocate(string_allocator_, key.second*sizeof(CharT));
             std::char_traits<CharT>::copy(p, key.first, key.second);
             std::pair<iterator, bool> result = map_.emplace(key_type(p,key.second), v);
@@ -238,7 +242,8 @@ namespace json { namespace objc {
                 
         
     private:
-        arena_t arena_;
+        arena_t data_arena_;
+        arena_t map_arena_;
         map_allocator_t map_allocator_;
         string_allocator_t string_allocator_;
         map_t  map_;
@@ -262,7 +267,6 @@ namespace json { namespace objc {
         typename map_t::iterator iter = map_.find(key);
         if (iter != map_.end()) {
             key_type map_key = (*iter).first;
-            //pool_.free(static_cast<void*>(const_cast<CharT*>(map_key.first)));
             std::allocator_traits<string_allocator_t>::deallocate(string_allocator_, const_cast<CharT*>(map_key.first), map_key.second);
             CFTypeRef v = (*iter).second;
             if (v) {
@@ -281,21 +285,23 @@ namespace json { namespace objc {
     inline void 
     CFDataCache<CharT>::clear() 
     {
-#if defined (DEBUG)        
+#if !defined (NDEBUG)
         //printf("clearing string cache. size: %ld\n", size());
 #endif        
         typename map_t::iterator first = map_.begin();
         typename map_t::iterator last = map_.end();
         while (first != last) {
-            if ((*first).second) {
-                CFRelease( (*first).second);
+            CFStringRef* cfStr = (CFStringRef*)((*first).second);
+            assert(cfStr != NULL);
+            if (cfStr != NULL) {
+                CFRelease(cfStr);
             }
             key_type map_key = (*first).first;
             std::allocator_traits<string_allocator_t>::deallocate(string_allocator_, const_cast<CharT*>(map_key.first), map_key.second);
             ++first;
         }
         map_.clear();
-        arena_.clear();
+        data_arena_.clear();
     }
 
     

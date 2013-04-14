@@ -3,7 +3,7 @@
 //
 
 
-#include "common.xcconfig"
+#include "project.common.xcconfig"
 
 
 HEADER_SEARCH_PATHS = $(COMMON_HEADER_SEARCH_PATHS) 

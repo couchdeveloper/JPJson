@@ -338,7 +338,7 @@
          </Group>
          <Group
             location = "group:iOS"
-            name = "iOS 4.2">
+            name = "iOS 5">
             <FileRef
                location = "group:JPBenchApp/JPBenchApp.xcodeproj">
             </FileRef>

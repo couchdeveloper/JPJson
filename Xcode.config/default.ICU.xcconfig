@@ -6,8 +6,14 @@
 //  In your project, rename this file to $user.ICU.xconfig 
 // 
 
-// This configuration is only required in the test suite. The following
-// settings are appropriate if ICU has been installed with HomeBrew.
+// This configuration is only required in the test suite. The following is an
+// example setting if ICU has been installed with HomeBrew:
+
+// ICU_ROOT = /usr/local/Cellar/icu4c/50.1
+// ICU_HEADER_SEARCH_PATH = $(ICU_ROOT)/include
+// ICU_LIBRARY_SEARCH_PATH = $(ICU_ROOT)/lib
+// ICU_OTHER_LDFLAGS = -licuuc
+
 
 
 ICU_ROOT = <my/path/to/local/ICU>

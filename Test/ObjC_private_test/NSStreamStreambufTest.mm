@@ -6,8 +6,8 @@
 //
 //
 
-#if __has_feature(objc_arc)
-#warning error This Objective-C file shall be compiled with ARC disabled.
+#if !__has_feature(objc_arc)
+#error This Objective-C file shall be compiled with ARC enabled.
 #endif
 
 #include <gtest/gtest.h>
@@ -231,7 +231,7 @@ namespace {
             }
             NSInputStream* nsistream = [NSInputStream inputStreamWithData:data];
             // [nsistream open];  NOT open!
-            EXPECT_THROW(internal::NSInputStreamSource iss(nsistream), std::logic_error);
+            EXPECT_THROW(internal::NSInputStreamSource iss(nsistream), std::invalid_argument);
         
         }
     }
@@ -313,7 +313,7 @@ namespace {
         
             NSOutputStream* nsostream = [NSOutputStream outputStreamToMemory];
             // [nsostream open]; NOT open!
-            EXPECT_THROW(internal::NSOutputStreamSink oss(nsostream), std::logic_error);
+            EXPECT_THROW(internal::NSOutputStreamSink oss(nsostream), std::invalid_argument);
         
         }
     }
@@ -409,7 +409,7 @@ namespace {
             }
             NSInputStream* nsistream = [NSInputStream inputStreamWithData:data];
             // [nsistream open];  NOT open!
-            EXPECT_THROW(internal::NSInputStreamSource2 iss(nsistream), std::logic_error);
+            EXPECT_THROW(internal::NSInputStreamSource2 iss(nsistream), std::invalid_argument);
         
         }
     }
@@ -489,7 +489,7 @@ namespace {
         
             NSOutputStream* nsostream = [NSOutputStream outputStreamToMemory];
             // [nsostream open]; NOT open!
-            EXPECT_THROW(internal::NSOutputStreamSink2 oss(nsostream), std::logic_error);
+            EXPECT_THROW(internal::NSOutputStreamSink2 oss(nsostream), std::invalid_argument);
         
         }
     }

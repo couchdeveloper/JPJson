@@ -6,7 +6,7 @@
 #include "../../Xcode.config/$user.boost.xcconfig"
 
 // Source Root Path
-SOURCE_ROOT = "$(SRCROOT)/../../Source"
+JPSOURCE_ROOT = "$(SRCROOT)/../../Source"
 
 
 //
@@ -54,6 +54,6 @@ CLANG_ENABLE_OBJC_ARC = YES
 //
 // Header search paths
 //
-PRJ_HEADER_SEARCH_PATHS = $(SOURCE_ROOT) $(BOOST_HEADER_SEARCH_PATH)
+PRJ_HEADER_SEARCH_PATHS = $(JPSOURCE_ROOT) $(BOOST_HEADER_SEARCH_PATH)
 
 

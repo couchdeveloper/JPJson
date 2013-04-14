@@ -318,7 +318,7 @@ namespace std {
         }
         template <typename CharT>
         back_insert_iterator& operator= (CharT const& value) { 
-#if defined (DEBUG)            
+#if !defined (NDEBUG)
             int result = 
 #endif            
             streambuf_->sputn(static_cast<char const*>(static_cast<void const*>(&value)), sizeof(value)); 
@@ -468,7 +468,7 @@ namespace {
         char tmp_buffer[128];
         char* begin = tmp_buffer;
         char* p = tmp_buffer;
-#if defined (DEBUG)        
+#if !defined (NDEBUG)
         char* end_cap = tmp_buffer + sizeof(tmp_buffer);
 #endif        
         int count = 0;      // the number of bytes in tmp_buffer
@@ -550,7 +550,7 @@ namespace {
             }        
             CFStringRef numberString = CFNumberFormatterCreateStringWithNumber(kCFAllocatorDefault, s_numberFormatter, number);
             CFIndex usedBufLen;
-#if defined (DEBUG)            
+#if !defined (NDEBUG)            
             CFIndex numConverted = 
 #endif            
             CFStringGetBytes(numberString, CFRangeMake(0, CFStringGetLength(numberString)),

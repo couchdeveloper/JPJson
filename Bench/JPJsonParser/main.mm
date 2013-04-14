@@ -237,7 +237,7 @@ namespace {
         }
         printf("Using a NSData with %s content as input and interface method:\n"
                "+parseData:options:error: (JPJsonParser)\n"
-               "options: none\n"
+               "options: JPJsonParserGeneratorUseArenaAllocator\n"
                "The input encoding will be detected automatically\n",
                NSStringEncodingToUnicodeSchemeCStr(encoding));
         printf("Input file: %s, size: %d, encoding: %s\n", 
@@ -255,7 +255,7 @@ namespace {
             // This method creates and destroys the internal semantic actions
             // instance.
             id result = [JPJsonParser parseData:data 
-                                        options:(JPJsonParserOptions)0   //(JPJsonParserCreateMutableContainers)
+                                        options:(JPJsonParserOptions)JPJsonParserGeneratorUseArenaAllocator   //(JPJsonParserGeneratorUseArenaAllocator | JPJsonParserCreateMutableContainers )
                                           error:&error];
             [result retain];
             t.stop();
@@ -280,6 +280,83 @@ namespace {
         }
         else {
             NSLog(@"JPJsonParser: elapsed time for parsing:\nmin: %.3f ms, max: %0.3f ms, avg: %0.3f ms\n", 
+                  te.min()*1e3, te.max()*1e3, te.avg()*1e3);
+        }
+        
+        [data release];
+    }
+    
+    
+    
+    // -----------------------------------------------------------------------------
+    //  bench_JPJsonParserWithNSDataReuseSemanticActionsObject()
+    //  Class JPJsonParser
+    //  Using a NSData with UTF-8 content as input and interface method:
+    //  +parseData:options:error:
+    //  options: 0
+    // -----------------------------------------------------------------------------
+    void bench_JPJsonParserWithNSDataReuseSemanticActionsObject(NSString* file, const int N, bool printInfo = false)
+    {
+        using namespace utilities;
+        
+        assert(N > 0);
+        
+        printf("\n");
+        printf("--------------------------------------------\n");
+        printf("Running bench_JPJsonParserWithNSDataReuseSemanticActionsObject %d times.\n", N);
+        printf("--------------------------------------------\n");
+        NSData* data = createDataFromFileInResourceFolder(JSON_TEST_FILE);
+        NSStringEncoding encoding = [data jpj_detectUnicodeNSStringEncoding];
+        if (encoding == -1) {
+            NSLog(@"ERROR: NSData doesn't contain text encoded in Unicode");
+            abort();
+        }
+        printf("Using a NSData with %s content as input and interface method:\n"
+               "+parseData:semanticActions: (JPJsonParser)\n"
+               "semantic actions: JPRepresentationGenerator with useArenaAllocator == YES\n"
+               "The semantic actions object will be reused\n"
+               "The input encoding will be detected automatically\n",
+               NSStringEncodingToUnicodeSchemeCStr(encoding));
+        printf("Input file: %s, size: %d, encoding: %s\n",
+               [JSON_TEST_FILE UTF8String], (int)[data length], NSStringEncodingToUnicodeSchemeCStr(encoding));
+        
+        MinMaxAvg<double> te;
+        timer t = timer();
+        
+        JPRepresentationGenerator* sa = [[JPRepresentationGenerator alloc] initWithHandlerDispatchQueue:NULL];
+        sa.useArenaAllocator = YES;
+        sa.keepStringCacheOnClear = YES;
+        //sa.cacheDataStrings = YES;
+        
+        NSError* error;
+        BOOL gotError = NO;
+        for (int i = 0; i < N; ++i)
+        {
+            NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+            t.start();
+            BOOL success = [JPJsonParser parseData:data semanticActions:sa];
+            //id result = sa.result;
+            t.stop();
+            te.set(t.seconds());
+            t.reset();
+#if defined (XX_DEBUG)
+            if ((i+1) == N) {
+                NSLog(@"%@", result);
+            }
+#endif
+            // deallocate result by clearing the sa
+            [sa clear];
+            [pool release];
+            
+            if (!success)
+                break;
+        }
+        
+        if (gotError) {
+            NSLog(@"ERROR: %@", error);
+        }
+        else {
+            NSLog(@"JPJsonParser: elapsed time for parsing:\nmin: %.3f ms, max: %0.3f ms, avg: %0.3f ms\n",
                   te.min()*1e3, te.max()*1e3, te.avg()*1e3);
         }
         
@@ -361,6 +438,7 @@ namespace {
         
         [data release];
     }
+
     
     
     // -----------------------------------------------------------------------------
@@ -887,7 +965,7 @@ namespace {
                "interface method: JSONObjectWithData:options:error:, \n"
                "options: none\n",
                NSStringEncodingToUnicodeSchemeCStr(encoding));
-        printf("Input file: %s, size: %d, encoding: %s\n", 
+        printf("Input file: %s, size: %d, encoding: %s\n",
                [JSON_TEST_FILE UTF8String], (int)[data length], NSStringEncodingToUnicodeSchemeCStr(encoding));
         
         NSError* error;
@@ -1009,6 +1087,7 @@ int main (int argc, const char * argv[])
     
     bench_JPJsonParserSAXStyle1x(JSON_TEST_FILE, N);
     bench_JPJsonParserWithNSData1a(JSON_TEST_FILE, N);
+    bench_JPJsonParserWithNSDataReuseSemanticActionsObject(JSON_TEST_FILE, N);
     bench_JPJsonParserWithNSData1b(JSON_TEST_FILE, N);
     bench_JPJsonParserWithNSString1(JSON_TEST_FILE,N);
     bench_JPJsonParser1d(JSON_TEST_FILE, N);
@@ -1018,12 +1097,12 @@ int main (int argc, const char * argv[])
     bench_NSJSONSerialization1(JSON_TEST_FILE, N);
     bench_NSJSONSerialization2(JSON_TEST_FILE, N);
 #endif
-    
-#if defined (USE_JSONKit)
-    bench_JSONKit1(JSON_TEST_FILE, N);
-    bench_JSONKit2(JSON_TEST_FILE, N);
-    bench_JSONKitString1(JSON_TEST_FILE, N);
-#endif
+//
+//#if defined (USE_JSONKit)
+//    bench_JSONKit1(JSON_TEST_FILE, N);
+//    bench_JSONKit2(JSON_TEST_FILE, N);
+//    bench_JSONKitString1(JSON_TEST_FILE, N);
+//#endif
     
     [pool drain];
     return 0;
