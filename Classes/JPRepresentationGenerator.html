@@ -1,0 +1,1136 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="html/html; charset=utf-8" />
+		<title>JPRepresentationGenerator Class Reference</title>
+		<meta id="xcode-display" name="xcode-display" content="render"/>
+		<meta name="viewport" content="width=550" />
+		<link rel="stylesheet" type="text/css" href="../css/styles.css" media="all" />
+		<link rel="stylesheet" type="text/css" media="print" href="../css/stylesPrint.css" />
+		<meta name="generator" content="appledoc 2.0.5 (build 789)" />
+	</head>
+	<body>
+		<header id="top_header">
+			<div id="library" class="hideInXcode">
+				<h1><a id="libraryTitle" href="../index.html">JPJson </a></h1>
+				<a id="developerHome" href="../index.html">Bit Passion</a>
+			</div>
+			
+			<div id="title" role="banner">
+				<h1 class="hideInXcode">JPRepresentationGenerator Class Reference</h1>
+			</div>
+			<ul id="headerButtons" role="toolbar">
+				<li id="toc_button">
+					<button aria-label="Show Table of Contents" role="checkbox" class="open" id="table_of_contents"><span class="disclosure"></span>Table of Contents</button>
+				</li>
+				<li id="jumpto_button" role="navigation">
+					<select id="jumpTo">
+	<option value="top">Jump To&#133;</option>
+	
+	<option value="overview">Overview</option>
+	
+	
+	
+	
+	<option value="tasks">Tasks</option>
+	
+	
+	
+	
+	
+	<option value="properties">Properties</option>
+	
+	<option value="//api/name/cacheDataStrings">&nbsp;&nbsp;&nbsp;&nbsp;cacheDataStrings</option>
+	
+	<option value="//api/name/checkForDuplicateKey">&nbsp;&nbsp;&nbsp;&nbsp;checkForDuplicateKey</option>
+	
+	<option value="//api/name/createMutableContainers">&nbsp;&nbsp;&nbsp;&nbsp;createMutableContainers</option>
+	
+	<option value="//api/name/hasBOM">&nbsp;&nbsp;&nbsp;&nbsp;hasBOM</option>
+	
+	<option value="//api/name/inputEncoding">&nbsp;&nbsp;&nbsp;&nbsp;inputEncoding</option>
+	
+	<option value="//api/name/keepStringCacheOnClear">&nbsp;&nbsp;&nbsp;&nbsp;keepStringCacheOnClear</option>
+	
+	<option value="//api/name/numberGeneratorOption">&nbsp;&nbsp;&nbsp;&nbsp;numberGeneratorOption</option>
+	
+	<option value="//api/name/useArenaAllocator">&nbsp;&nbsp;&nbsp;&nbsp;useArenaAllocator</option>
+	
+	
+	
+	
+	
+	
+	<option value="instance_methods">Instance Methods</option>
+	
+	<option value="//api/name/cancel">&nbsp;&nbsp;&nbsp;&nbsp;- cancel</option>
+	
+	<option value="//api/name/clear">&nbsp;&nbsp;&nbsp;&nbsp;- clear</option>
+	
+	<option value="//api/name/configureWithOptions:">&nbsp;&nbsp;&nbsp;&nbsp;- configureWithOptions:</option>
+	
+	<option value="//api/name/initWithHandlerDispatchQueue:">&nbsp;&nbsp;&nbsp;&nbsp;- initWithHandlerDispatchQueue:</option>
+	
+	<option value="//api/name/result">&nbsp;&nbsp;&nbsp;&nbsp;- result</option>
+	
+	
+	
+</select>
+				</li>
+			</ul>
+		</header>
+		<nav id="tocContainer" class="isShowingTOC">
+			<ul id="toc" role="tree">
+				
+<li role="treeitem"><span class="nodisclosure"></span><span class="sectionName"><a href="#overview">Overview</a></span></li>
+
+
+
+
+<li role="treeitem" id="task_treeitem"><span class="nodisclosure"></span><span class="sectionName"><a href="#tasks">Tasks</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Initialization">Initialization</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Configuration">Configuration</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Properties">Properties</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Retrieving the Result of the Semantic Actions">Retrieving the Result of the Semantic Actions</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Clearing Internal State">Clearing Internal State</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Canceling a Running Parser">Canceling a Running Parser</a></span></li>
+	
+</ul></li>
+
+
+
+
+
+<li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#properties">Properties</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/cacheDataStrings">cacheDataStrings</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/checkForDuplicateKey">checkForDuplicateKey</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/createMutableContainers">createMutableContainers</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/hasBOM">hasBOM</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/inputEncoding">inputEncoding</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/keepStringCacheOnClear">keepStringCacheOnClear</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/numberGeneratorOption">numberGeneratorOption</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/useArenaAllocator">useArenaAllocator</a></span></li>
+	
+</ul></li>
+
+
+
+
+
+<li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#instance_methods">Instance Methods</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/cancel">cancel</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/clear">clear</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/configureWithOptions:">configureWithOptions:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/initWithHandlerDispatchQueue:">initWithHandlerDispatchQueue:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/result">result</a></span></li>
+	
+</ul></li>
+
+
+			</ul>
+		</nav>
+		<article>
+			<div id="contents" class="isShowingTOC" role="main">
+				<a title="JPRepresentationGenerator Class Reference" name="top"></a>
+				<div class="main-navigation navigation-top">
+					<ul>
+	<li><a href="../index.html">Index</a></li>
+	<li><a href="../hierarchy.html">Hierarchy</a></li>
+</ul>
+				</div>
+				<div id="header">
+					<div class="section-header">
+						<h1 class="title title-header">JPRepresentationGenerator Class Reference</h1>
+					</div>		
+				</div>
+				<div id="container">	
+					
+					<div class="section section-specification"><table cellspacing="0"><tbody>
+						<tr>
+	<td class="specification-title">Inherits from</td>
+	<td class="specification-value"><a href="../Classes/JPSemanticActionsBase.html">JPSemanticActionsBase</a> : NSObject</td>
+</tr><tr>
+	<td class="specification-title">Declared in</td>
+	<td class="specification-value">JPRepresentationGenerator.h<br />JPRepresentationGenerator.mm</td>
+</tr>
+						</tbody></table></div>
+					
+					
+					
+					
+					<div class="section section-overview">
+						<a title="Overview" name="overview"></a>
+						<h2 class="subtitle subtitle-overview">Overview</h2>
+						<p>A <code>JPRepresentationGenerator</code> class is a semantic actions class which can be
+associated to a JSON parser. It implements a set of semantic actions in order
+to generate a JSON representation of Foundation objects from a JSON document.
+A <code>JPRepresentationGenerator</code> instance is the <em>default</em> semantic actions class
+for a JPJsonParser, unless another one is specified explicitly.</p>
+
+<p>Class <code>JPRepresentationGenerator</code> is &ldquo;self-contained&rdquo; which means that it consumes
+and handles ALL &ldquo;parse events&rdquo; itself and thus, will not have a delegate nor
+is it meant to be subclassed.</p>
+
+<p><code>JPRepresentationGenerator</code> manages an internal cache for key strings and manages
+internal buffers that are required for parsing and for the highly efficient memory
+allocator which is used to create foundation objects. That cache, the buffers and
+the allocator can be reused when multiple JSON documents shall be parsed.</p>
+
+<p><em>Note:</em> Reusing a sematic actions object can reduce memory foot-print and speeds up
+parsing of multiple JSON documents.</p>
+
+<h2>Using a JPRepresentationGenerator</h2>
+
+<p>An instance of <code>JPRepresentationGenerator</code> can be setup individually and its
+behavior can be tailored by setting properties. An instance of a semantic actions
+object can be specified as a parameter when creating a parser.</p>
+
+<p>For example a <code>JPRepresentationGenerator</code> object can be set as parameter
+<code>semanticActions</code> in method <code>+parseData:semanticActions:</code> of class <code>JPJsonParser</code>.</p>
+
+<p>As a result, the parser will create a representation as a hierarchy of
+Foundation objects from the JSON text. When the parser is finished, this JSON
+structure can be retrieved with property <code>result</code> of the semantic actions object.</p>
+
+<p><em>Note:</em> The convenience methods of class <a href="../Classes/JPJsonParser.html">JPJsonParser</a> <code>+parseString:options:error:</code>
+and <code>+parseData:options:error:</code> just use a <code>JPRepresentationGenerator</code> object
+internally and configure it using the options provided in parameter <code>options</code>.</p>
+
+<p>Depending on the configuration of the <code>JPRepresentationGenerator</code> instance, the
+parser may parse one or more JSON documents within one input. If more than one
+JSON documents shall be parsed, the client is required to setup handler blocks and
+possibly a dispatch queue for the semantic actions instance.</p>
+
+<p>The handler blocks will be called by the <code>JPRepresentationGenerator</code> instance on
+the occurrence of the following events:</p>
+
+<ul>
+<li>The start of a JSON document was detected.</li>
+<li>A JSON document could be parsed completely and a Foundation object
+has been created, which will be passed as parameter to the client.</li>
+<li>The parser finished parsing the text.</li>
+<li>An error occurred.</li>
+</ul>
+
+
+<p>The semantic actions object also contains additional information, for example
+an error object, which can be retrieved in case an error occurred.</p>
+
+<h3>Setting Up Handler Blocks</h3>
+
+<p>This is described in <a href="../Classes/JPSemanticActionsBase.html">JPSemanticActionsBase</a>  <em>Setting Up Handler Blocks</em>.</p>
+
+<h2>Mapping JSON Elements to Foundation Classes</h2>
+
+<p>The conversion and mapping of JSON values will be done as
+follows:</p>
+
+<ul>
+<li>JSON Object      maps to a <code>NSDictionary</code>/<code>NSMutableDictionary</code>.</li>
+<li>JSON Array       maps to a <code>NSArray</code>/<code>NSMutableArray</code>.</li>
+<li>JSON String      maps to a <code>NSString</code>.</li>
+<li>JSON Number      maps to a <code>NSDecimalNumber</code>/<code>NSNumber</code></li>
+<li>JSON Boolean     maps to a <code>NSNumber</code> initialized with a BOOL.</li>
+<li>JSON Null        maps to a <code>NSNull</code>.</li>
+</ul>
+
+
+<h3>I Detailed Mapping of an Integral JSON Number</h3>
+
+<ol>
+<li><p>If the number of digits of a JSON <em>integer number</em> is equal or
+ smaller than the maximal number of digits (in decimal base) that
+ can be represented by a <code>signed int</code> without overflow, then a
+ <code>NSNumber</code> with underlaying type <code>signed int</code> will be generated.</p></li>
+<li><p>Otherwise, if the number of digits of a JSON <em>integer number</em> is
+ equal or smaller than the maximal number of digits (in decimal
+ base) that can be represented by a <code>signed long</code>  without overflow,
+ then a <code>NSNumber</code> with an underlaying type <code>signed long</code> will be
+ generated.</p></li>
+<li><p>Otherwise, if the number of digits of the JSON <em>integer number</em> is
+ equal or smaller than the maximal number of digits (in decimal
+ base) that can be represented by a <code>signed long long</code> without
+ overflow, then a <code>NSNumber</code> with an underlaying type <code>signed long long</code>
+ will be generated.</p></li>
+<li><p>Otherwise, if the number of digits of the JSON <em>integer number</em> is
+ equal or smaller than the maximal number of digits (in decimal
+ base) that can be represented by a <code>NSDecimalNumber</code> without
+ loosing precision, then a <code>NSDecimalNumber</code> will be generated.</p></li>
+<li><p>Otherwise, a <code>NSDecimalNumber</code> will be generated, and if this is
+ successful, a warning will be logged to the error console to
+ indicate the possibly loss of precision while converting a
+ JSON Number to a <code>NSDecimalNumber</code>.</p></li>
+<li><p>Otherwise, the conversion fails, and the parser stops parsing
+ with a corresponding runtime error.</p></li>
+</ol>
+
+
+<h3>II Detailed Mapping of a Decimal JSON Number</h3>
+
+<p>A decimal number is a number with a decimal point but no exponent.</p>
+
+<ol>
+<li><p>If the number of digits of the decimal number is equal or smaller than
+ the maximal number of digits (in decimal base) that can be represented by
+ a <code>double</code>, then a <code>NSNumber</code> with underlaying type <code>double</code> will be
+ generated.</p></li>
+<li><p>Otherwise, <code>NSDecimalNumber</code> will be generated. If the <code>NSDecimalNumber</code>
+ cannot represent the decimal value with the same precision as in the
+ JSON number, an additional warning will be logged.
+ If the decimal value cannot represent the JSON number because it is out of
+ range, a range error will be signaled.</p></li>
+</ol>
+
+
+<h3>II Detailed Mapping of a Scientific JSON Number</h3>
+
+<p>A number in scientific form has an optional decimal point and an exponent.</p>
+
+<ol>
+<li>A JSON number in scientific format will always be converted to a NSNumber
+ with an underlaying <code>double</code> type. If the resulting value is out of range,
+ a range error will be signaled.</li>
+</ol>
+
+					</div>
+					
+					
+					
+					
+					
+					<div class="section section-tasks">
+						<a title="Tasks" name="tasks"></a>
+						<h2 class="subtitle subtitle-tasks">Tasks</h2>
+						
+						
+						<a title="Initialization" name="task_Initialization"></a>
+						<h3 class="subsubtitle task-title">Initialization</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/initWithHandlerDispatchQueue:">&ndash;&nbsp;initWithHandlerDispatchQueue:</a></code>
+		<span class="tooltip"><p><em>Designated Initializer</em></p></span>
+	</span>
+	
+	
+</li>
+						</ul>
+						
+						
+						<a title="Configuration" name="task_Configuration"></a>
+						<h3 class="subsubtitle task-title">Configuration</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/configureWithOptions:">&ndash;&nbsp;configureWithOptions:</a></code>
+		<span class="tooltip"><p>Configures a <code>JPRepresentationGenerator</code> instance with the specified options.</p></span>
+	</span>
+	
+	
+</li>
+						</ul>
+						
+						
+						<a title="Properties" name="task_Properties"></a>
+						<h3 class="subsubtitle task-title">Properties</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/checkForDuplicateKey">&nbsp;&nbsp;checkForDuplicateKey</a></code>
+		<span class="tooltip"><p>Sets or returns the option &ldquo;checkForDuplicateKey&rdquo;.</p></span>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/keepStringCacheOnClear">&nbsp;&nbsp;keepStringCacheOnClear</a></code>
+		<span class="tooltip"><p>Sets or returns the option &ldquo;keepStringCacheOnClear&rdquo;.</p></span>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/cacheDataStrings">&nbsp;&nbsp;cacheDataStrings</a></code>
+		<span class="tooltip"><p>Sets or returns the option &ldquo;cacheDataStrings&rdquo;.</p></span>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/createMutableContainers">&nbsp;&nbsp;createMutableContainers</a></code>
+		<span class="tooltip"><p>Sets or returns the option &ldquo;createMutableContainers&rdquo;.</p></span>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/useArenaAllocator">&nbsp;&nbsp;useArenaAllocator</a></code>
+		<span class="tooltip"><p>Sets or returns the option &ldquo;useArenaAllocator&rdquo;.</p></span>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/numberGeneratorOption">&nbsp;&nbsp;numberGeneratorOption</a></code>
+		<span class="tooltip"><p>Sets or returns the option &ldquo;numberGeneratorOption&rdquo;.</p>
+
+<p>Default: JPSemanticActionsNumberGeneratorGenerateAuto</p></span>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/inputEncoding">&nbsp;&nbsp;inputEncoding</a></code>
+		<span class="tooltip"><p>Returns the input encoding of the current or last parsed JSON document.</p></span>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/hasBOM">&nbsp;&nbsp;hasBOM</a></code>
+		<span class="tooltip"><p>Returns true if the current input has a BOM.</p></span>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li>
+						</ul>
+						
+						
+						<a title="Retrieving the Result of the Semantic Actions" name="task_Retrieving the Result of the Semantic Actions"></a>
+						<h3 class="subsubtitle task-title">Retrieving the Result of the Semantic Actions</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/result">&ndash;&nbsp;result</a></code>
+		<span class="tooltip"><p>Returns the result of the receiver, which is a representation of the
+parsed JSON text as Foundation objects, or <code>nil</code> in case of an error.</p></span>
+	</span>
+	
+	
+</li>
+						</ul>
+						
+						
+						<a title="Clearing Internal State" name="task_Clearing Internal State"></a>
+						<h3 class="subsubtitle task-title">Clearing Internal State</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/clear">&ndash;&nbsp;clear</a></code>
+		<span class="tooltip"><p>Clears internal cached data and property result.</p></span>
+	</span>
+	
+	
+</li>
+						</ul>
+						
+						
+						<a title="Canceling a Running Parser" name="task_Canceling a Running Parser"></a>
+						<h3 class="subsubtitle task-title">Canceling a Running Parser</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/cancel">&ndash;&nbsp;cancel</a></code>
+		<span class="tooltip"><p>Sets a cancelation request which the underlaying parser is supposed to
+read which in turn causes it to cancel.</p></span>
+	</span>
+	
+	
+</li>
+						</ul>
+						
+					</div>
+					
+					
+					
+					
+					
+					<div class="section section-methods">
+						<a title="Properties" name="properties"></a>
+						<h2 class="subtitle subtitle-methods">Properties</h2>
+						
+						<div class="section-method">
+	<a name="//api/name/cacheDataStrings" title="cacheDataStrings"></a>
+	<h3 class="subsubtitle method-title">cacheDataStrings</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Sets or returns the option &ldquo;cacheDataStrings&rdquo;.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, assign) BOOL cacheDataStrings</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>If this option is set, the receiver caches data strings in addition to
+key strings.</p>
+
+<p>Default: <code>NO</code></p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">JPRepresentationGenerator.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/checkForDuplicateKey" title="checkForDuplicateKey"></a>
+	<h3 class="subsubtitle method-title">checkForDuplicateKey</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Sets or returns the option &ldquo;checkForDuplicateKey&rdquo;.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, assign) BOOL checkForDuplicateKey</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>If this option is set, the receiver checks whether a key for a JSON object
+already exists. If it exists, a &ldquo;duplicate key error&rdquo; will be logged to the
+console and error state will be set.</p>
+
+<p>Default: <code>NO</code></p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">JPRepresentationGenerator.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/createMutableContainers" title="createMutableContainers"></a>
+	<h3 class="subsubtitle method-title">createMutableContainers</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Sets or returns the option &ldquo;createMutableContainers&rdquo;.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, assign) BOOL createMutableContainers</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>If enabled, the receiver creates its representation using mutable Foundation
+arrays and mutable Foundation dictionaries.</p>
+
+<p>Note: NSStrings objects will still be immutable.</p>
+
+<p>Default: <code>NO</code></p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">JPRepresentationGenerator.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/hasBOM" title="hasBOM"></a>
+	<h3 class="subsubtitle method-title">hasBOM</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Returns true if the current input has a BOM.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly, assign) BOOL hasBOM</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">JPRepresentationGenerator.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/inputEncoding" title="inputEncoding"></a>
+	<h3 class="subsubtitle method-title">inputEncoding</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Returns the input encoding of the current or last parsed JSON document.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>@property (weak, nonatomic, readonly) NSString *inputEncoding</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">JPRepresentationGenerator.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/keepStringCacheOnClear" title="keepStringCacheOnClear"></a>
+	<h3 class="subsubtitle method-title">keepStringCacheOnClear</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Sets or returns the option &ldquo;keepStringCacheOnClear&rdquo;.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, assign) BOOL keepStringCacheOnClear</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>If this option is set, the receiver does not clear the internal string cache
+when it receives the message <code>clear</code>.</p>
+
+<p>Default: <code>NO</code></p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">JPRepresentationGenerator.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/numberGeneratorOption" title="numberGeneratorOption"></a>
+	<h3 class="subsubtitle method-title">numberGeneratorOption</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Sets or returns the option &ldquo;numberGeneratorOption&rdquo;.</p>
+
+<p>Default: JPSemanticActionsNumberGeneratorGenerateAuto</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, assign) JPSemanticActionsNumberGeneratorOption numberGeneratorOption</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">JPRepresentationGenerator.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/useArenaAllocator" title="useArenaAllocator"></a>
+	<h3 class="subsubtitle method-title">useArenaAllocator</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Sets or returns the option &ldquo;useArenaAllocator&rdquo;.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, assign) BOOL useArenaAllocator</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>If enabled, the receiver uses an <em>arena allocator</em> when it creates <em>immutable</em>
+Foundations objects. For each representation one dedicated arena allocator is
+used.</p>
+
+<p>Using an arena allocator improves performance, increases memory locality for the
+objects comprising the representation and reduces heap fragmentation. However,
+there is also a caveat:</p>
+
+<p>The memory allocated for the whole representation will eventually be freed only
+until after <em>ALL</em> objects of the representation have been deallocated. Thus, in
+order to avoid possibly large memory areas hanging around unsused, this option is
+only useful if the representation is used as a whole and released as a whole without
+having objects elsewhere referencing one or more objects from the representation.</p>
+
+<p>Default: <code>NO</code></p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">JPRepresentationGenerator.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+					</div>
+					
+					
+					
+					
+					
+					<div class="section section-methods">
+						<a title="Instance Methods" name="instance_methods"></a>
+						<h2 class="subtitle subtitle-methods">Instance Methods</h2>
+						
+						<div class="section-method">
+	<a name="//api/name/cancel" title="cancel"></a>
+	<h3 class="subsubtitle method-title">cancel</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Sets a cancelation request which the underlaying parser is supposed to
+read which in turn causes it to cancel.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (void)cancel</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">JPRepresentationGenerator.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/clear" title="clear"></a>
+	<h3 class="subsubtitle method-title">clear</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Clears internal cached data and property result.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (void)clear</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">JPRepresentationGenerator.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/configureWithOptions:" title="configureWithOptions:"></a>
+	<h3 class="subsubtitle method-title">configureWithOptions:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Configures a <code>JPRepresentationGenerator</code> instance with the specified options.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (void)configureWithOptions:(JPJsonParserOptions)<em>options</em></code></div>
+	
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>options</em></dt>
+			<dd><p>A set of ored flags from constants of enum <code>JPJsonParserOptions</code>.</p>
+
+<p>This method will be invoked internally from JPJsonParser&rsquo;s convenience methods.
+The receiver will set only those options which are &ldquo;understood&rdquo; by the
+receiver. &ldquo;Unknown&rdquo; flags will be ignored and may be used in subclasses. A
+subclass shall invoke super.</p>
+
+<p>For possible values for options see <JPJsonParserOptions>.</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">JPRepresentationGenerator.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/initWithHandlerDispatchQueue:" title="initWithHandlerDispatchQueue:"></a>
+	<h3 class="subsubtitle method-title">initWithHandlerDispatchQueue:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p><em>Designated Initializer</em></p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (id)initWithHandlerDispatchQueue:(dispatch_queue_t)<em>handlerQueue</em></code></div>
+	
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>handlerQueue</em></dt>
+			<dd><p>A dispatch queue or <code>NULL</code>. The receiver will retain the
+dispatch queue.</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Initializes a <code>JPRepresentationGenerator</code> object with the specified dispatch queue where
+handler blocks will be dispatched.
+Parameter <em>handlerQueue</em> may be <code>NULL</code>, in which case no handlers will be
+executed.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">JPRepresentationGenerator.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/result" title="result"></a>
+	<h3 class="subsubtitle method-title">result</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Returns the result of the receiver, which is a representation of the
+parsed JSON text as Foundation objects, or <code>nil</code> in case of an error.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (id)result</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">JPRepresentationGenerator.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+					</div>
+					
+					
+				</div>
+				<div class="main-navigation navigation-bottom">
+					<ul>
+	<li><a href="../index.html">Index</a></li>
+	<li><a href="../hierarchy.html">Hierarchy</a></li>
+</ul>
+				</div>
+				<div id="footer">
+					<hr />
+					<div class="footer-copyright">
+						<p><span class="copyright">&copy; 2013 Bit Passion. All rights reserved. (Last updated: 2013-04-14)</span><br />
+						
+						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.0.5 (build 789)</a>.</span></p>
+						
+					</div>
+				</div>
+			</div>
+		</article>
+		<script type="text/javascript">
+			function jumpToChange()
+			{
+				window.location.hash = this.options[this.selectedIndex].value;
+			}
+			
+			function toggleTOC()
+			{
+				var contents = document.getElementById('contents');
+				var tocContainer = document.getElementById('tocContainer');
+				
+				if (this.getAttribute('class') == 'open')
+				{
+					this.setAttribute('class', '');
+					contents.setAttribute('class', '');
+					tocContainer.setAttribute('class', '');
+					
+					window.name = "hideTOC";
+				}
+				else
+				{
+					this.setAttribute('class', 'open');
+					contents.setAttribute('class', 'isShowingTOC');
+					tocContainer.setAttribute('class', 'isShowingTOC');
+					
+					window.name = "";
+				}
+				return false;
+			}
+			
+			function toggleTOCEntryChildren(e)
+			{
+				e.stopPropagation();
+				var currentClass = this.getAttribute('class');
+				if (currentClass == 'children') {
+					this.setAttribute('class', 'children open');
+				}
+				else if (currentClass == 'children open') {
+					this.setAttribute('class', 'children');
+				}
+				return false;
+			}
+			
+			function tocEntryClick(e)
+			{
+				e.stopPropagation();
+				return true;
+			}
+			
+			function init()
+			{
+				var selectElement = document.getElementById('jumpTo');
+				selectElement.addEventListener('change', jumpToChange, false);
+				
+				var tocButton = document.getElementById('table_of_contents');
+				tocButton.addEventListener('click', toggleTOC, false);
+				
+				var taskTreeItem = document.getElementById('task_treeitem');
+				if (taskTreeItem.getElementsByTagName('li').length > 0)
+				{
+					taskTreeItem.setAttribute('class', 'children');
+					taskTreeItem.firstChild.setAttribute('class', 'disclosure');
+				}
+				
+				var tocList = document.getElementById('toc');
+				
+				var tocEntries = tocList.getElementsByTagName('li');
+				for (var i = 0; i < tocEntries.length; i++) {
+					tocEntries[i].addEventListener('click', toggleTOCEntryChildren, false);
+				}
+				
+				var tocLinks = tocList.getElementsByTagName('a');
+				for (var i = 0; i < tocLinks.length; i++) {
+					tocLinks[i].addEventListener('click', tocEntryClick, false);
+				}
+				
+				if (window.name == "hideTOC") {
+					toggleTOC.call(tocButton);
+				}
+			}
+			
+			window.onload = init;
+			
+			// If showing in Xcode, hide the TOC and Header
+			if (navigator.userAgent.match(/xcode/i)) {
+				document.getElementById("contents").className = "hideInXcode"
+				document.getElementById("tocContainer").className = "hideInXcode"
+				document.getElementById("top_header").className = "hideInXcode"
+			}
+			
+		</script>
+	</body>
+</html>

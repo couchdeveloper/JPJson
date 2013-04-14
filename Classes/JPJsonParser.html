@@ -1,0 +1,790 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="html/html; charset=utf-8" />
+		<title>JPJsonParser Class Reference</title>
+		<meta id="xcode-display" name="xcode-display" content="render"/>
+		<meta name="viewport" content="width=550" />
+		<link rel="stylesheet" type="text/css" href="../css/styles.css" media="all" />
+		<link rel="stylesheet" type="text/css" media="print" href="../css/stylesPrint.css" />
+		<meta name="generator" content="appledoc 2.0.5 (build 789)" />
+	</head>
+	<body>
+		<header id="top_header">
+			<div id="library" class="hideInXcode">
+				<h1><a id="libraryTitle" href="../index.html">JPJson </a></h1>
+				<a id="developerHome" href="../index.html">Bit Passion</a>
+			</div>
+			
+			<div id="title" role="banner">
+				<h1 class="hideInXcode">JPJsonParser Class Reference</h1>
+			</div>
+			<ul id="headerButtons" role="toolbar">
+				<li id="toc_button">
+					<button aria-label="Show Table of Contents" role="checkbox" class="open" id="table_of_contents"><span class="disclosure"></span>Table of Contents</button>
+				</li>
+				<li id="jumpto_button" role="navigation">
+					<select id="jumpTo">
+	<option value="top">Jump To&#133;</option>
+	
+	<option value="overview">Overview</option>
+	
+	
+	
+	
+	<option value="tasks">Tasks</option>
+	
+	
+	
+	
+	
+	
+	
+	<option value="class_methods">Class Methods</option>
+	
+	<option value="//api/name/parseData:options:error:">&nbsp;&nbsp;&nbsp;&nbsp;+ parseData:options:error:</option>
+	
+	<option value="//api/name/parseData:semanticActions:">&nbsp;&nbsp;&nbsp;&nbsp;+ parseData:semanticActions:</option>
+	
+	<option value="//api/name/parseString:options:error:">&nbsp;&nbsp;&nbsp;&nbsp;+ parseString:options:error:</option>
+	
+	
+	
+	
+	
+</select>
+				</li>
+			</ul>
+		</header>
+		<nav id="tocContainer" class="isShowingTOC">
+			<ul id="toc" role="tree">
+				
+<li role="treeitem"><span class="nodisclosure"></span><span class="sectionName"><a href="#overview">Overview</a></span></li>
+
+
+
+
+<li role="treeitem" id="task_treeitem"><span class="nodisclosure"></span><span class="sectionName"><a href="#tasks">Tasks</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Parse a JSON Document from a NSString object">Parse a JSON Document from a NSString object</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Parse a JSON Document from a NSData object">Parse a JSON Document from a NSData object</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Using a Semantic Actions Object">Using a Semantic Actions Object</a></span></li>
+	
+</ul></li>
+
+
+
+
+
+
+
+<li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#class_methods">Class Methods</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/parseData:options:error:">parseData:options:error:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/parseData:semanticActions:">parseData:semanticActions:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/parseString:options:error:">parseString:options:error:</a></span></li>
+	
+</ul></li>
+
+
+
+
+			</ul>
+		</nav>
+		<article>
+			<div id="contents" class="isShowingTOC" role="main">
+				<a title="JPJsonParser Class Reference" name="top"></a>
+				<div class="main-navigation navigation-top">
+					<ul>
+	<li><a href="../index.html">Index</a></li>
+	<li><a href="../hierarchy.html">Hierarchy</a></li>
+</ul>
+				</div>
+				<div id="header">
+					<div class="section-header">
+						<h1 class="title title-header">JPJsonParser Class Reference</h1>
+					</div>		
+				</div>
+				<div id="container">	
+					
+					<div class="section section-specification"><table cellspacing="0"><tbody>
+						<tr>
+	<td class="specification-title">Inherits from</td>
+	<td class="specification-value">NSObject</td>
+</tr><tr>
+	<td class="specification-title">Declared in</td>
+	<td class="specification-value">JPJsonParser.h<br />JPJsonParser.mm</td>
+</tr>
+						</tbody></table></div>
+					
+					
+					
+					
+					<div class="section section-overview">
+						<a title="Overview" name="overview"></a>
+						<h2 class="subtitle subtitle-overview">Overview</h2>
+						<p>JPJsonParser provides two class methods for conveniently parse JSON documents
+which return a JSON representation of Foundation objects:</p>
+
+<ul>
+<li><code>+parseString:options:error:</code></li>
+<li><code>+parseData:options:error:</code></li>
+</ul>
+
+
+<p>The JSON document can be provided either with a <code>NSString</code> or with a <code>NSData</code>
+object. The JSON text contained in a <code>NSData</code> object shall be encoded in one
+of the <em>Unicode encoding schemes</em>: UTF-8, UTF-16, UTF-16LE, UTF-16BE, UTF-32,
+UTF-32LE or UTF-32BE. A <em>BOM</em> may optionally precede the start of the byte
+stream.</p>
+
+<p>A number of options can be set in parameter <em>options</em> which are ored flags from
+constants defined in enum &ldquo;JPJsonParserOptions&rdquo;.</p>
+
+<p>A more powerful class method can be used in conjunction with a
+<em>Semantic Actions Object</em>:</p>
+
+<ul>
+<li><code>+parseData:semanticActions:</code></li>
+</ul>
+
+
+<p>A <em>Semantic Actions Object</em> acts as a delegate for the <em>internal JSON parser</em>.
+It conforms to the protocol <a href="../Protocols/JPSemanticActionsProtocol.html">JPSemanticActionsProtocol</a> and implements a set of
+<em>semantic actions</em> to corresponding <em>parse events</em>. The parse events will be
+sent from the internal JSON parser to the semantic actions delegate when it
+encounters JSON elements in the JSON document.</p>
+
+<h3>JPJsonParserOptions</h3>
+
+<h4>Unicode Handling</h4>
+
+<ul>
+<li><code>JPJsonParserSignalErrorOnNoncharacter</code></li>
+</ul>
+
+
+<p>If this option is set, the parser will signal an error if it encounters
+an <em>Unicode noncharacter</em> within the JSON document.
+This is the default setting.</p>
+
+<ul>
+<li><code>JPJsonParserSubstituteUnicodeNoncharacter</code></li>
+</ul>
+
+
+<p>If this option is set, the parser will substitute <em>Unicode noncharacters</em>
+encountered within JSON Strings in the input text with the <em>Unicode
+replacement character</em> <code>U+FFFD</code> when creating the strings for a JSON container.</p>
+
+<p>It is not recommended to enable this option. Substituting an <em>Unicode
+noncharacter</em> may modify the meaning of the input source and should be used
+with care. Usually, <em>Unicode noncharacters</em> are not allowed in valid Unicode
+sequences which is used to transmit data.
+Occurrences of <em>Unicode noncharacters</em> outside of JSON Strings will be always
+syntax errors and treated as such.</p>
+
+<ul>
+<li><code>JPJsonParserSkipUnicodeNoncharacter</code></li>
+</ul>
+
+
+<p>If this option is set, the parser will ignore the <em>Unicode noncharacter</em>
+and remove it from the <em>decoded</em> JSON string when generating a representation.
+<em>Note:</em> this feature is not yet implemented</p>
+
+<h4>Parser Options</h4>
+
+<ul>
+<li><code>JPJsonParserIgnoreSpuriousTrailingBytes</code></li>
+</ul>
+
+
+<p>If this options is set, the parser will ignore any additional characters
+that occur after the last significant character of a valid JSON document
+(namely, either a &ldquo;}&rdquo; or a &ldquo;]&rdquo;).
+Otherwise, if the parser encounters code units which can not be interpreted
+as white-space Unicode characters it will issue an error, and if it encounters an <code>Unicode NULL (U+0000)</code> or <code>EOF</code> it will issue a warning to the console.</p>
+
+<ul>
+<li><code>JPJsonParserParseMultipleDocuments</code></li>
+</ul>
+
+
+<p>If this option is set, the parser parses one or more documents from the input until it
+receives <code>EOF</code>. Otherwise, the parser treats any non white spaces after the
+first JSON document as an error.</p>
+
+<p><em>Note:</em> This option is ignored when invoking the JSON parser through one of
+the two convenience methods <code>+parseString:options:error:</code> and <code>+parseData:options:error:</code>
+since parsing multiple documents require to use a Semantic Actions object, and
+possibly a asynchronous parser.</p>
+
+<ul>
+<li><code>JPJsonParserParseMultipleDocumentsAsynchronously</code></li>
+</ul>
+
+
+<p>If this option is set, the parser invokes the <code>jsonObjectHandlerBlock</code>
+asynchronously and immediately processes the next JSON document within the
+input data. The JSON container is then retained in the dispatch queue till
+it is processed by the client. This may tie up a lot of system resources if
+the client processes frees the JSON containers slowly.
+If the flag is <code>NO</code>, the parser&rsquo;s thread is blocked until the handler routine
+returns.</p>
+
+<p><em>Note:</em> This option has no effect when invoking the JSON parser through one of
+the convenience methods <code>+parseString:options:error:</code> and <code>+parseData:options:error:</code>.</p>
+
+<p>It is recommended to leave this flag disabled in systems where system resources
+are scarce or if the data input possibly contains many and large JSON documents.
+When downloading large data, this helps throttling the consumption of system
+resources by the underlaying network layer.</p>
+
+<ul>
+<li><code>JPJsonParserEncodedStrings</code></li>
+</ul>
+
+
+<p>If this option is set, the parser sends properly <em>encoded</em> JSON Strings to the semantic
+actions object in method <code>-parserFoundKeyValuePairBeginWithKey:length:encoding:index:</code>
+and method <code>-parserFoundString:length:hasMore:encoding:</code>. That is, the string
+is encoded as required by RFC 4627.</p>
+
+<p>Otherwise (the default), the parser sends properly decoded strings to the
+semantic actions object which match the original source string.</p>
+
+<h4>JSON Representation Generation</h4>
+
+<ul>
+<li><code>JPJsonParserCheckForDuplicateKey</code></li>
+</ul>
+
+
+<p>Checks whether a key for a JSON object already exists. If it exists, an
+&ldquo;duplicate key error&rdquo; will be logged to error console and error will
+be set.</p>
+
+<ul>
+<li><code>JPJsonParserCreateMutableContainers</code></li>
+</ul>
+
+
+<p>  If this option is set, the semantic actions object creates a JSON representation
+  with mutable containers. That is, a JSON Array will be represented by a
+  <code>NSMutableArray</code> and a JSON Object will be represented by a <code>NSMutableDictionary</code>.</p>
+
+<h4>Number Generation Options</h4>
+
+<p><em>Note:</em> The options for number generation can be used only mutual exclusive.</p>
+
+<ul>
+<li><code>JPJsonParserNumberGeneratorGenerateAuto</code></li>
+</ul>
+
+
+<p>The parser&rsquo;s number generator creates a suitable <code>NSNumber</code> or a
+<code>NSDecimalNumber</code> object when it encounters a number in the input text.
+<code>JPJsonParserNumberGeneratorGenerateAuto</code> equals zero and is the default option.</p>
+
+<ul>
+<li><code>JPJsonParserNumberGeneratorGenerateStrings</code></li>
+</ul>
+
+
+<p>If this option is set, the parser number generator creates a <code>NSString</code> when
+it encounters numbers in the input text and initializes it accordingly.
+Usually, you wouldn&rsquo;t select this option if you want to output a JSON
+container into a string or stream as a proper JSON text. In this case it
+would treat the numbers as JSON Strings enclosed in quotes. However, when
+using a string it preserves the format of the number.</p>
+
+<ul>
+<li><code>JPJsonParserNumberGeneratorGenerateDecimals</code></li>
+</ul>
+
+
+<p>If this option is set the parser&rsquo;s number generator will always create a
+<code>NSDecimalNumber</code> object when encountering a number in the input.</p>
+
+<p><em>Note:</em> Detailed information about mapping of JSON number to a
+corresponding Foundation class can be found in class <a href="../Classes/JPRepresentationGenerator.html">JPRepresentationGenerator</a>.</p>
+
+<h4>Other options</h4>
+
+<ul>
+<li><code>JPJsonParserKeepStringCacheOnClear</code></li>
+</ul>
+
+
+<p>Clears the string cache if the semantic actions is receives the message
+<code>clear</code>.</p>
+
+<ul>
+<li><code>JPJsonParserCacheDataStrings</code></li>
+</ul>
+
+
+<p>Caches data strings in addition to key strings.</p>
+
+<h3>Using a Semantic Actions object</h3>
+
+<p>Each parser, that is an instance of <code>JPJsonParser</code> or and instance of
+<a href="../Classes/JPAsyncJsonParser.html">JPAsyncJsonParser</a>, needs to be associated to a <em>Semantic Actions</em> object. If
+none is specified when a parser is created, the parser itself creates a default
+one, which is a <code>JPRepresentationGenerator</code>.</p>
+
+<p><em>Info:</em>  A parser sends <em>parse events</em> to the semantic actions object as they
+appear in the JSON text. The task of a semantic actions object is to handle
+these events appropriately.</p>
+
+<p>There are two &ldquo;built-in&rdquo; semantic actions classes:</p>
+
+<ul>
+<li><a href="../Classes/JPRepresentationGenerator.html">JPRepresentationGenerator</a> and</li>
+<li><a href="../Classes/JPStreamSemanticActions.html">JPStreamSemanticActions</a></li>
+</ul>
+
+					</div>
+					
+					
+					
+					
+					
+					<div class="section section-tasks">
+						<a title="Tasks" name="tasks"></a>
+						<h2 class="subtitle subtitle-tasks">Tasks</h2>
+						
+						
+						<a title="Parse a JSON Document from a NSString object" name="task_Parse a JSON Document from a NSString object"></a>
+						<h3 class="subsubtitle task-title">Parse a JSON Document from a NSString object</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/parseString:options:error:">+&nbsp;parseString:options:error:</a></code>
+		<span class="tooltip"><p>Parses the JSON text given in parameter <em>string</em> and returns a representation
+of the JSON text as a Foundation object.</p></span>
+	</span>
+	
+	
+</li>
+						</ul>
+						
+						
+						<a title="Parse a JSON Document from a NSData object" name="task_Parse a JSON Document from a NSData object"></a>
+						<h3 class="subsubtitle task-title">Parse a JSON Document from a NSData object</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/parseData:options:error:">+&nbsp;parseData:options:error:</a></code>
+		<span class="tooltip"><p>Parses the JSON text given in parameter <em>data</em> and returns a representation
+of the JSON text as a Foundation object.</p></span>
+	</span>
+	
+	
+</li>
+						</ul>
+						
+						
+						<a title="Using a Semantic Actions Object" name="task_Using a Semantic Actions Object"></a>
+						<h3 class="subsubtitle task-title">Using a Semantic Actions Object</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/parseData:semanticActions:">+&nbsp;parseData:semanticActions:</a></code>
+		<span class="tooltip"><p>Parses the JSON text given in parameter <em>data</em> and processes the JSON elements
+according the actual semantic actions object provided in parameter
+<em>semanticActions</em>.</p></span>
+	</span>
+	
+	
+</li>
+						</ul>
+						
+					</div>
+					
+					
+					
+					
+					
+					
+					
+					<div class="section section-methods">
+						<a title="Class Methods" name="class_methods"></a>
+						<h2 class="subtitle subtitle-methods">Class Methods</h2>
+						
+						<div class="section-method">
+	<a name="//api/name/parseData:options:error:" title="parseData:options:error:"></a>
+	<h3 class="subsubtitle method-title">parseData:options:error:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Parses the JSON text given in parameter <em>data</em> and returns a representation
+of the JSON text as a Foundation object.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>+ (id)parseData:(NSData *)<em>data</em> options:(JPJsonParserOptions)<em>options</em> error:(__autoreleasing NSError **)<em>error</em></code></div>
+	
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>data</em></dt>
+			<dd><p>A byte sequence containing JSON text</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>options</em></dt>
+			<dd><p>A bit mask specifying various options for parsing. For possible values see
+<em>JPJsonParserOptions</em>.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>error</em></dt>
+			<dd><p>A pointer to a NSError object. If this is not <code>NULL</code>, and if an error occurred
+during parsing the parameter error contains and NSError object describing the
+issue.</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>A Foundation object representing the JSON text in <em>data</em>, or <code>nil</code> if an
+error occurred.</p>
+	</div>
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>The data must contain text in one of the following Unicode encoding schemes:
+UTF-8, UTF-16, UTF-16LE, UTF-16BE, UTF-32, UTF-32LE or UTF-32BE. A BOM
+may optionally precede the start of the byte stream.</p>
+
+<p>This method internally creates a <code>JPRepresentationGenerator</code> instance and configures
+it according the specified options. Then it starts parsing immediately and returns
+the result. For a detailed description of class  <code>JPRepresentationGenerator</code>
+see <a href="../Classes/JPRepresentationGenerator.html">JPRepresentationGenerator</a>.</p>
+
+<p>Using this method, the parser can only parse one JSON document contained
+within the data object. That is, &ldquo;data&rdquo; should not contain multiple JSON
+documents.</p>
+	</div>
+	
+	
+	
+	
+	
+	<div class="method-subsection see-also-section">
+		<h4 class="method-subtitle">See Also</h4>
+		<ul>
+			
+			<li><code><ul>
+<li><a href="#//api/name/parseString:options:error:">+ parseString:options:error:</a></li>
+</ul>
+</code></li>
+			
+		</ul>
+	</div>
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">JPJsonParser.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/parseData:semanticActions:" title="parseData:semanticActions:"></a>
+	<h3 class="subsubtitle method-title">parseData:semanticActions:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Parses the JSON text given in parameter <em>data</em> and processes the JSON elements
+according the actual semantic actions object provided in parameter
+<em>semanticActions</em>.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>+ (BOOL)parseData:(NSData *)<em>data</em> semanticActions:(JPSemanticActionsBase *)<em>semanticActions</em></code></div>
+	
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>data</em></dt>
+			<dd><p>A byte sequence containing JSON text encoded in one of the valid Unicode
+encoding scheme.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>semanticActions</em></dt>
+			<dd><p>A &ldquo;semantic actions&rdquo; object which provides the semantic
+actions for the parser. This parameter must not be <code>nil</code>. For detailed information
+about semantic actions see class <a href="../Classes/JPSemanticActionsBase.html">JPSemanticActionsBase</a>, <a href="../Classes/JPRepresentationGenerator.html">JPRepresentationGenerator</a>,
+<a href="../Classes/JPStreamSemanticActions.html">JPStreamSemanticActions</a> and <a href="../Protocols/JPSemanticActionsProtocol.html">JPSemanticActionsProtocol</a>.</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>Returns <code>YES</code>, if the input could be successfully parsed and successfully
+processed by the semantic actions object.
+Otherwise, if an error occurred returns <code>NO</code>. The actual error object can be retrieved from the current semantics actions object.</p>
+	</div>
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>The data must contain text in one of the following Unicode encoding schemes:
+UTF-8, UTF-16, UTF-16LE, UTF-16BE, UTF-32, UTF-32LE or UTF-32BE. A BOM may
+optionally precede the start of the byte stream.</p>
+
+<p>The semantic actions object must be properly configured before this method
+will be invoked. The exact behavior of a &ldquo;semantic actions&rdquo; class depends
+on its actual implementation.</p>
+	</div>
+	
+	
+	
+	
+	
+	<div class="method-subsection see-also-section">
+		<h4 class="method-subtitle">See Also</h4>
+		<ul>
+			
+			<li><code><ul>
+<li><a href="#//api/name/parseString:options:error:">+ parseString:options:error:</a></li>
+</ul>
+</code></li>
+			
+		</ul>
+	</div>
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">JPJsonParser.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/parseString:options:error:" title="parseString:options:error:"></a>
+	<h3 class="subsubtitle method-title">parseString:options:error:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Parses the JSON text given in parameter <em>string</em> and returns a representation
+of the JSON text as a Foundation object.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>+ (id)parseString:(NSString *)<em>string</em> options:(JPJsonParserOptions)<em>options</em> error:(__autoreleasing NSError **)<em>error</em></code></div>
+	
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>string</em></dt>
+			<dd><p>A NSString object containing one JSON text document.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>options</em></dt>
+			<dd><p>A bit mask specifying various options for parsing. For possible values
+see <em>JPJsonParserOptions</em>.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>error</em></dt>
+			<dd><p>A pointer to a NSError object. If this is not <code>NULL</code>, and if an error
+occurred during parsing the parameter <em>error</em> contains and <code>NSError</code> object
+describing the issue.</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>A Foundation object representing the root object of the representation of
+the JSON text specified in parameter <em>string</em>, or <code>nil</code> if an error occurred.</p>
+	</div>
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>This method internally creates a <code>JPRepresentationGenerator</code> instance and configures
+it according the specified options. Then it starts parsing immediately and returns
+the result. For a detailed description of class  <code>JPRepresentationGenerator</code>
+see <a href="../Classes/JPRepresentationGenerator.html">JPRepresentationGenerator</a>.</p>
+
+<p>Using this convenience method, the parser can only parse one JSON document. That
+is, parameter <em>string</em> should not contain multiple JSON documents.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">JPJsonParser.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+					</div>
+					
+					
+					
+					
+				</div>
+				<div class="main-navigation navigation-bottom">
+					<ul>
+	<li><a href="../index.html">Index</a></li>
+	<li><a href="../hierarchy.html">Hierarchy</a></li>
+</ul>
+				</div>
+				<div id="footer">
+					<hr />
+					<div class="footer-copyright">
+						<p><span class="copyright">&copy; 2013 Bit Passion. All rights reserved. (Last updated: 2013-04-14)</span><br />
+						
+						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.0.5 (build 789)</a>.</span></p>
+						
+					</div>
+				</div>
+			</div>
+		</article>
+		<script type="text/javascript">
+			function jumpToChange()
+			{
+				window.location.hash = this.options[this.selectedIndex].value;
+			}
+			
+			function toggleTOC()
+			{
+				var contents = document.getElementById('contents');
+				var tocContainer = document.getElementById('tocContainer');
+				
+				if (this.getAttribute('class') == 'open')
+				{
+					this.setAttribute('class', '');
+					contents.setAttribute('class', '');
+					tocContainer.setAttribute('class', '');
+					
+					window.name = "hideTOC";
+				}
+				else
+				{
+					this.setAttribute('class', 'open');
+					contents.setAttribute('class', 'isShowingTOC');
+					tocContainer.setAttribute('class', 'isShowingTOC');
+					
+					window.name = "";
+				}
+				return false;
+			}
+			
+			function toggleTOCEntryChildren(e)
+			{
+				e.stopPropagation();
+				var currentClass = this.getAttribute('class');
+				if (currentClass == 'children') {
+					this.setAttribute('class', 'children open');
+				}
+				else if (currentClass == 'children open') {
+					this.setAttribute('class', 'children');
+				}
+				return false;
+			}
+			
+			function tocEntryClick(e)
+			{
+				e.stopPropagation();
+				return true;
+			}
+			
+			function init()
+			{
+				var selectElement = document.getElementById('jumpTo');
+				selectElement.addEventListener('change', jumpToChange, false);
+				
+				var tocButton = document.getElementById('table_of_contents');
+				tocButton.addEventListener('click', toggleTOC, false);
+				
+				var taskTreeItem = document.getElementById('task_treeitem');
+				if (taskTreeItem.getElementsByTagName('li').length > 0)
+				{
+					taskTreeItem.setAttribute('class', 'children');
+					taskTreeItem.firstChild.setAttribute('class', 'disclosure');
+				}
+				
+				var tocList = document.getElementById('toc');
+				
+				var tocEntries = tocList.getElementsByTagName('li');
+				for (var i = 0; i < tocEntries.length; i++) {
+					tocEntries[i].addEventListener('click', toggleTOCEntryChildren, false);
+				}
+				
+				var tocLinks = tocList.getElementsByTagName('a');
+				for (var i = 0; i < tocLinks.length; i++) {
+					tocLinks[i].addEventListener('click', tocEntryClick, false);
+				}
+				
+				if (window.name == "hideTOC") {
+					toggleTOC.call(tocButton);
+				}
+			}
+			
+			window.onload = init;
+			
+			// If showing in Xcode, hide the TOC and Header
+			if (navigator.userAgent.match(/xcode/i)) {
+				document.getElementById("contents").className = "hideInXcode"
+				document.getElementById("tocContainer").className = "hideInXcode"
+				document.getElementById("top_header").className = "hideInXcode"
+			}
+			
+		</script>
+	</body>
+</html>

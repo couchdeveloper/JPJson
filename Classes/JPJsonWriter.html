@@ -1,0 +1,817 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="html/html; charset=utf-8" />
+		<title>JPJsonWriter Class Reference</title>
+		<meta id="xcode-display" name="xcode-display" content="render"/>
+		<meta name="viewport" content="width=550" />
+		<link rel="stylesheet" type="text/css" href="../css/styles.css" media="all" />
+		<link rel="stylesheet" type="text/css" media="print" href="../css/stylesPrint.css" />
+		<meta name="generator" content="appledoc 2.0.5 (build 789)" />
+	</head>
+	<body>
+		<header id="top_header">
+			<div id="library" class="hideInXcode">
+				<h1><a id="libraryTitle" href="../index.html">JPJson </a></h1>
+				<a id="developerHome" href="../index.html">Bit Passion</a>
+			</div>
+			
+			<div id="title" role="banner">
+				<h1 class="hideInXcode">JPJsonWriter Class Reference</h1>
+			</div>
+			<ul id="headerButtons" role="toolbar">
+				<li id="toc_button">
+					<button aria-label="Show Table of Contents" role="checkbox" class="open" id="table_of_contents"><span class="disclosure"></span>Table of Contents</button>
+				</li>
+				<li id="jumpto_button" role="navigation">
+					<select id="jumpTo">
+	<option value="top">Jump To&#133;</option>
+	
+	<option value="overview">Overview</option>
+	
+	
+	
+	
+	<option value="tasks">Tasks</option>
+	
+	
+	
+	
+	
+	
+	
+	<option value="class_methods">Class Methods</option>
+	
+	<option value="//api/name/dataWithObject:encoding:options:error:">&nbsp;&nbsp;&nbsp;&nbsp;+ dataWithObject:encoding:options:error:</option>
+	
+	<option value="//api/name/dataWithObject:options:error:">&nbsp;&nbsp;&nbsp;&nbsp;+ dataWithObject:options:error:</option>
+	
+	<option value="//api/name/serializeObject:toStream:encoding:options:error:">&nbsp;&nbsp;&nbsp;&nbsp;+ serializeObject:toStream:encoding:options:error:</option>
+	
+	<option value="//api/name/serializeObject:toStream:options:error:">&nbsp;&nbsp;&nbsp;&nbsp;+ serializeObject:toStream:options:error:</option>
+	
+	<option value="//api/name/serializeObjectAsJSONArray:buffer:encoding:options:level:">&nbsp;&nbsp;&nbsp;&nbsp;+ serializeObjectAsJSONArray:buffer:encoding:options:level:</option>
+	
+	<option value="//api/name/serializeObjectAsJSONObject:buffer:encoding:options:level:">&nbsp;&nbsp;&nbsp;&nbsp;+ serializeObjectAsJSONObject:buffer:encoding:options:level:</option>
+	
+	
+	
+	
+	
+</select>
+				</li>
+			</ul>
+		</header>
+		<nav id="tocContainer" class="isShowingTOC">
+			<ul id="toc" role="tree">
+				
+<li role="treeitem"><span class="nodisclosure"></span><span class="sectionName"><a href="#overview">Overview</a></span></li>
+
+
+
+
+<li role="treeitem" id="task_treeitem"><span class="nodisclosure"></span><span class="sectionName"><a href="#tasks">Tasks</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Extension Methods">Extension Methods</a></span></li>
+	
+</ul></li>
+
+
+
+
+
+
+
+<li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#class_methods">Class Methods</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/dataWithObject:encoding:options:error:">dataWithObject:encoding:options:error:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/dataWithObject:options:error:">dataWithObject:options:error:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/serializeObject:toStream:encoding:options:error:">serializeObject:toStream:encoding:options:error:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/serializeObject:toStream:options:error:">serializeObject:toStream:options:error:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/serializeObjectAsJSONArray:buffer:encoding:options:level:">serializeObjectAsJSONArray:buffer:encoding:options:level:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/serializeObjectAsJSONObject:buffer:encoding:options:level:">serializeObjectAsJSONObject:buffer:encoding:options:level:</a></span></li>
+	
+</ul></li>
+
+
+
+
+			</ul>
+		</nav>
+		<article>
+			<div id="contents" class="isShowingTOC" role="main">
+				<a title="JPJsonWriter Class Reference" name="top"></a>
+				<div class="main-navigation navigation-top">
+					<ul>
+	<li><a href="../index.html">Index</a></li>
+	<li><a href="../hierarchy.html">Hierarchy</a></li>
+</ul>
+				</div>
+				<div id="header">
+					<div class="section-header">
+						<h1 class="title title-header">JPJsonWriter Class Reference</h1>
+					</div>		
+				</div>
+				<div id="container">	
+					
+					<div class="section section-specification"><table cellspacing="0"><tbody>
+						<tr>
+	<td class="specification-title">Inherits from</td>
+	<td class="specification-value">NSObject</td>
+</tr><tr>
+	<td class="specification-title">Declared in</td>
+	<td class="specification-value">JPJsonWriter.h<br />JPJsonWriter.mm</td>
+</tr>
+						</tbody></table></div>
+					
+					
+					
+					
+					<div class="section section-overview">
+						<a title="Overview" name="overview"></a>
+						<h2 class="subtitle subtitle-overview">Overview</h2>
+						<p>A JPJsonWriter class will be used to serialize a Foundation object into
+a JSON text.</p>
+
+<h3>JPJsonWriter Options</h3>
+
+<ul>
+<li><p><code>JPJsonWriterPrettyPrint</code></p>
+
+<p>  If this option is set, a more conveniently readable output is generated
+  through inserting tabs, new lines and indents.</p></li>
+<li><p><code>JPJsonWriterSortKeys</code></p>
+
+<p> If this option is set, JSON objects will be sorted by key.</p></li>
+<li><p><code>JPJsonWriterEscapeUnicodeCharacters</code></p>
+
+<p> If this option is set, the generator escapes Unicode characters
+ in JSON strings if they cannot be represented in one code unit. This
+ option should only be used when encoding in UTF-8. If this option is set,
+ the output effectively becomes ASCII compatible if encoded in UTF-8.
+ (Feature not implemented in this version)</p></li>
+<li><p><code>JPJsonWriterWriteBOM</code></p>
+
+<p>  If this option is set, the generator prefixes the output with a BOM
+  according the current Unicode encoding.</p></li>
+<li><p><code>JPJsonWriterEscapeSolidus</code></p>
+
+<p>  If this option is set, the generator will escape the &ldquo;solidus&rdquo; (<code>/</code>)
+  character.</p></li>
+</ul>
+
+
+<p>JPJsonWriter (Extension) defines some additional methods which help in serializing
+objects.</p>
+					</div>
+					
+					
+					
+					
+					
+					<div class="section section-tasks">
+						<a title="Tasks" name="tasks"></a>
+						<h2 class="subtitle subtitle-tasks">Tasks</h2>
+						
+						
+						
+						<h3 class="subsubtitle task-title">Other Methods</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/dataWithObject:encoding:options:error:">+&nbsp;dataWithObject:encoding:options:error:</a></code>
+		<span class="tooltip"><p>Serializes the Foundation object with the specified Unicode encoding into a
+NSData object and returns it.</p></span>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/dataWithObject:options:error:">+&nbsp;dataWithObject:options:error:</a></code>
+		<span class="tooltip"><p>Serializes the Foundation object as UTF-8 Unicode encoded string into a
+NSData object and returns it.</p></span>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/serializeObject:toStream:encoding:options:error:">+&nbsp;serializeObject:toStream:encoding:options:error:</a></code>
+		<span class="tooltip"><p>Serializes the Foundation object with the specified Unicode
+encoding and options.</p></span>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/serializeObject:toStream:options:error:">+&nbsp;serializeObject:toStream:options:error:</a></code>
+		<span class="tooltip"><p>Serializes the Foundation object as UTF-8 Unicode encoded string into the stream
+and returns the number of bytes written.</p></span>
+	</span>
+	
+	
+</li>
+						</ul>
+						
+						
+						<a title="Extension Methods" name="task_Extension Methods"></a>
+						<h3 class="subsubtitle task-title">Extension Methods</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/serializeObjectAsJSONArray:buffer:encoding:options:level:">+&nbsp;serializeObjectAsJSONArray:buffer:encoding:options:level:</a></code>
+		<span class="tooltip"><p>Serialize an object which shall be represented as a JSON Array. This method already
+implements the boiler plate code necessary to serialize an object as a JSON Array.</p></span>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/serializeObjectAsJSONObject:buffer:encoding:options:level:">+&nbsp;serializeObjectAsJSONObject:buffer:encoding:options:level:</a></code>
+		<span class="tooltip"><p>Serialize an object which shall be represented as a JSON Object. This method already
+implements the boiler plate code necessary to serialize an object as a JSON Array.</p></span>
+	</span>
+	
+	
+</li>
+						</ul>
+						
+					</div>
+					
+					
+					
+					
+					
+					
+					
+					<div class="section section-methods">
+						<a title="Class Methods" name="class_methods"></a>
+						<h2 class="subtitle subtitle-methods">Class Methods</h2>
+						
+						<div class="section-method">
+	<a name="//api/name/dataWithObject:encoding:options:error:" title="dataWithObject:encoding:options:error:"></a>
+	<h3 class="subsubtitle method-title">dataWithObject:encoding:options:error:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Serializes the Foundation object with the specified Unicode encoding into a
+NSData object and returns it.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>+ (NSData *)dataWithObject:(id)<em>object</em> encoding:(JPUnicodeEncoding)<em>encoding</em> options:(JPJsonWriterOptions)<em>options</em> error:(__autoreleasing NSError **)<em>error</em></code></div>
+	
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>object</em></dt>
+			<dd><p>A hierarchy of Foundation objects which all implement the
+<code>JPJsonSerializableProtocol</code>. The root object shall be a either a <code>NSDictionary</code>,
+<code>NSArray</code> or a corresponding subclass or any other object which implements
+`JPJsonSerializableProtocol and poses as a dictionary or array.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>encoding</em></dt>
+			<dd><p>One of the constants defined in enum <code>JPUnicodeEncoding</code> which
+specifies the Unicode encoding scheme for the generated output.</p>
+
+<p><em>Warning:</em> Currently, only UTF-8 encoding is supported.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>options</em></dt>
+			<dd><p>A bit mask specifying options for serializing. For possible
+values see &ldquo;JPJsonWriterOptions&rdquo;.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>error</em></dt>
+			<dd><p>A pointer to a <code>NSError</code> object. If this is not <code>NULL</code>, and if
+an error occurred during serializing the parameter <em>error</em> contains an <code>NSError</code>
+object describing the issue.</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>A NSData object representing the JSON in parameter <em>object</em> as text,
+or <code>nil</code> if an error occurred.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">JPJsonWriter.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/dataWithObject:options:error:" title="dataWithObject:options:error:"></a>
+	<h3 class="subsubtitle method-title">dataWithObject:options:error:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Serializes the Foundation object as UTF-8 Unicode encoded string into a
+NSData object and returns it.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>+ (NSData *)dataWithObject:(id)<em>object</em> options:(JPJsonWriterOptions)<em>options</em> error:(__autoreleasing NSError **)<em>error</em></code></div>
+	
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>object</em></dt>
+			<dd><p>A hierarchy of Foundation objects which all implement the
+<code>JPJsonSerializableProtocol</code>. The root object shall be a either a <code>NSDictionary</code>,
+<code>NSArray</code> or a corresponding subclass or any other object which implements
+`JPJsonSerializableProtocol and poses as a dictionary or array.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>options</em></dt>
+			<dd><p>A bit mask specifying options for serializing. For possible
+values see &ldquo;JPJsonWriterOptions&rdquo;.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>error</em></dt>
+			<dd><p>A pointer to a <code>NSError</code> object. If this is not <code>NULL</code>, and if
+an error occurred during serializing the parameter <em>error</em> contains an <code>NSError</code>
+object describing the issue.</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>A NSData object representing the JSON in parameter <em>object</em> as text,
+or <code>nil</code> if an error occurred.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">JPJsonWriter.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/serializeObject:toStream:encoding:options:error:" title="serializeObject:toStream:encoding:options:error:"></a>
+	<h3 class="subsubtitle method-title">serializeObject:toStream:encoding:options:error:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Serializes the Foundation object with the specified Unicode
+encoding and options.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>+ (NSUInteger)serializeObject:(id)<em>object</em> toStream:(NSOutputStream *)<em>stream</em> encoding:(JPUnicodeEncoding)<em>encoding</em> options:(JPJsonWriterOptions)<em>options</em> error:(__autoreleasing NSError **)<em>error</em></code></div>
+	
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>object</em></dt>
+			<dd><p>A hierarchy of Foundation objects which all implement the
+<code>JPJsonSerializableProtocol</code>. The root object shall be a either a <code>NSDictionary</code>,
+<code>NSArray</code> or a corresponding subclass or any other object which implements
+`JPJsonSerializableProtocol and poses as a dictionary or array.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>stream</em></dt>
+			<dd><p>An output stream. The stream should be unopened.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>encoding</em></dt>
+			<dd><p>One of the constants defined in enum <code>JPUnicodeEncoding</code> which
+specifies the Unicode encoding scheme for the generated output.</p>
+
+<p><em>Warning:</em> Currently, only UTF-8 encoding is supported.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>options</em></dt>
+			<dd><p>A bit mask specifying options for serializing. For possible
+values see &ldquo;JPJsonWriterOptions&rdquo;.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>error</em></dt>
+			<dd><p>A pointer to a <code>NSError</code> object. If this is not <code>NULL</code>, and if
+an error occurred during serializing the parameter <em>error</em> contains an <code>NSError</code>
+object describing the issue.</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>The number of bytes written into the stream, or zero if an error occurred.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">JPJsonWriter.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/serializeObject:toStream:options:error:" title="serializeObject:toStream:options:error:"></a>
+	<h3 class="subsubtitle method-title">serializeObject:toStream:options:error:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Serializes the Foundation object as UTF-8 Unicode encoded string into the stream
+and returns the number of bytes written.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>+ (NSUInteger)serializeObject:(id)<em>object</em> toStream:(NSOutputStream *)<em>stream</em> options:(JPJsonWriterOptions)<em>options</em> error:(__autoreleasing NSError **)<em>error</em></code></div>
+	
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>object</em></dt>
+			<dd><p>A hierarchy of Foundation objects which all implement the
+<code>JPJsonSerializableProtocol</code>. The root object shall be a either a <code>NSDictionary</code>,
+<code>NSArray</code> or a corresponding subclass or any other object which implements
+`JPJsonSerializableProtocol and poses as a dictionary or array.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>stream</em></dt>
+			<dd><p>An output stream. The stream must be opened. On return, the
+stream is closed.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>options</em></dt>
+			<dd><p>A bit mask specifying options for serializing. For possible
+values see &ldquo;JPJsonWriterOptions&rdquo;.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>error</em></dt>
+			<dd><p>A pointer to a <code>NSError</code> object. If this is not <code>NULL</code>, and if
+an error occurred during serializing the parameter <em>error</em> contains an <code>NSError</code>
+object describing the issue.</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>The number of bytes written into the stream, or zero if an error occurred.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">JPJsonWriter.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/serializeObjectAsJSONArray:buffer:encoding:options:level:" title="serializeObjectAsJSONArray:buffer:encoding:options:level:"></a>
+	<h3 class="subsubtitle method-title">serializeObjectAsJSONArray:buffer:encoding:options:level:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Serialize an object which shall be represented as a JSON Array. This method already
+implements the boiler plate code necessary to serialize an object as a JSON Array.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>+ (int)serializeObjectAsJSONArray:(id)<em>object</em> buffer:(id&lt;JPJsonStreambufferProtocol&gt;)<em>streambuf</em> encoding:(JPUnicodeEncoding)<em>encoding</em> options:(JPJsonWriterOptions)<em>options</em> level:(int)<em>level</em></code></div>
+	
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>object</em></dt>
+			<dd><p>The &ldquo;array like&rdquo; object which shall be serialized</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>streambuf</em></dt>
+			<dd><p>A stream-buffer into which the characters will be written.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>encoding</em></dt>
+			<dd><p>The output encoding of the character sequence for the serialized
+object.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>options</em></dt>
+			<dd><p>Options that tailor the format of the output.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>level</em></dt>
+			<dd><p>The current level of the hierarchy of the object structure. This is
+used only when additional format characters shall be inserted into the JSON text,
+for example when &ldquo;pretty printing&rdquo;.</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>Returns 0 on success, otherwise -1.</p>
+
+<p>Parmeter <code>object</code> shall respond to message <code>count</code> and shall implement the
+protocol NSFastEnumeration.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">JPJsonWriterExtensions.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/serializeObjectAsJSONObject:buffer:encoding:options:level:" title="serializeObjectAsJSONObject:buffer:encoding:options:level:"></a>
+	<h3 class="subsubtitle method-title">serializeObjectAsJSONObject:buffer:encoding:options:level:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Serialize an object which shall be represented as a JSON Object. This method already
+implements the boiler plate code necessary to serialize an object as a JSON Array.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>+ (int)serializeObjectAsJSONObject:(id)<em>object</em> buffer:(id&lt;JPJsonStreambufferProtocol&gt;)<em>streambuf</em> encoding:(JPUnicodeEncoding)<em>encoding</em> options:(JPJsonWriterOptions)<em>options</em> level:(int)<em>level</em></code></div>
+	
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>object</em></dt>
+			<dd><p>The &ldquo;dictionary like&rdquo; object which shall be serialized</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>streambuf</em></dt>
+			<dd><p>A stream-buffer into which the characters will be written.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>encoding</em></dt>
+			<dd><p>The output encoding of the character sequence for the serialized
+object.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>options</em></dt>
+			<dd><p>Options that tailor the format of the output.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>level</em></dt>
+			<dd><p>The current level of the hierarchy of the object structure. This is
+used only when additional format characters shall be inserted into the JSON text,
+for example when &ldquo;pretty printing&rdquo;.</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>Returns zero on success, otherwise -1.</p>
+
+<p>Parameter <code>object</code> shall respond to message <code>count</code> and message objectForKey:
+and shall implement the protocol NSFastEnumeration.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">JPJsonWriterExtensions.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+					</div>
+					
+					
+					
+					
+				</div>
+				<div class="main-navigation navigation-bottom">
+					<ul>
+	<li><a href="../index.html">Index</a></li>
+	<li><a href="../hierarchy.html">Hierarchy</a></li>
+</ul>
+				</div>
+				<div id="footer">
+					<hr />
+					<div class="footer-copyright">
+						<p><span class="copyright">&copy; 2013 Bit Passion. All rights reserved. (Last updated: 2013-04-14)</span><br />
+						
+						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.0.5 (build 789)</a>.</span></p>
+						
+					</div>
+				</div>
+			</div>
+		</article>
+		<script type="text/javascript">
+			function jumpToChange()
+			{
+				window.location.hash = this.options[this.selectedIndex].value;
+			}
+			
+			function toggleTOC()
+			{
+				var contents = document.getElementById('contents');
+				var tocContainer = document.getElementById('tocContainer');
+				
+				if (this.getAttribute('class') == 'open')
+				{
+					this.setAttribute('class', '');
+					contents.setAttribute('class', '');
+					tocContainer.setAttribute('class', '');
+					
+					window.name = "hideTOC";
+				}
+				else
+				{
+					this.setAttribute('class', 'open');
+					contents.setAttribute('class', 'isShowingTOC');
+					tocContainer.setAttribute('class', 'isShowingTOC');
+					
+					window.name = "";
+				}
+				return false;
+			}
+			
+			function toggleTOCEntryChildren(e)
+			{
+				e.stopPropagation();
+				var currentClass = this.getAttribute('class');
+				if (currentClass == 'children') {
+					this.setAttribute('class', 'children open');
+				}
+				else if (currentClass == 'children open') {
+					this.setAttribute('class', 'children');
+				}
+				return false;
+			}
+			
+			function tocEntryClick(e)
+			{
+				e.stopPropagation();
+				return true;
+			}
+			
+			function init()
+			{
+				var selectElement = document.getElementById('jumpTo');
+				selectElement.addEventListener('change', jumpToChange, false);
+				
+				var tocButton = document.getElementById('table_of_contents');
+				tocButton.addEventListener('click', toggleTOC, false);
+				
+				var taskTreeItem = document.getElementById('task_treeitem');
+				if (taskTreeItem.getElementsByTagName('li').length > 0)
+				{
+					taskTreeItem.setAttribute('class', 'children');
+					taskTreeItem.firstChild.setAttribute('class', 'disclosure');
+				}
+				
+				var tocList = document.getElementById('toc');
+				
+				var tocEntries = tocList.getElementsByTagName('li');
+				for (var i = 0; i < tocEntries.length; i++) {
+					tocEntries[i].addEventListener('click', toggleTOCEntryChildren, false);
+				}
+				
+				var tocLinks = tocList.getElementsByTagName('a');
+				for (var i = 0; i < tocLinks.length; i++) {
+					tocLinks[i].addEventListener('click', tocEntryClick, false);
+				}
+				
+				if (window.name == "hideTOC") {
+					toggleTOC.call(tocButton);
+				}
+			}
+			
+			window.onload = init;
+			
+			// If showing in Xcode, hide the TOC and Header
+			if (navigator.userAgent.match(/xcode/i)) {
+				document.getElementById("contents").className = "hideInXcode"
+				document.getElementById("tocContainer").className = "hideInXcode"
+				document.getElementById("top_header").className = "hideInXcode"
+			}
+			
+		</script>
+	</body>
+</html>

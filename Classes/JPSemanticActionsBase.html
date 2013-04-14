@@ -1,0 +1,1470 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="html/html; charset=utf-8" />
+		<title>JPSemanticActionsBase Class Reference</title>
+		<meta id="xcode-display" name="xcode-display" content="render"/>
+		<meta name="viewport" content="width=550" />
+		<link rel="stylesheet" type="text/css" href="../css/styles.css" media="all" />
+		<link rel="stylesheet" type="text/css" media="print" href="../css/stylesPrint.css" />
+		<meta name="generator" content="appledoc 2.0.5 (build 789)" />
+	</head>
+	<body>
+		<header id="top_header">
+			<div id="library" class="hideInXcode">
+				<h1><a id="libraryTitle" href="../index.html">JPJson </a></h1>
+				<a id="developerHome" href="../index.html">Bit Passion</a>
+			</div>
+			
+			<div id="title" role="banner">
+				<h1 class="hideInXcode">JPSemanticActionsBase Class Reference</h1>
+			</div>
+			<ul id="headerButtons" role="toolbar">
+				<li id="toc_button">
+					<button aria-label="Show Table of Contents" role="checkbox" class="open" id="table_of_contents"><span class="disclosure"></span>Table of Contents</button>
+				</li>
+				<li id="jumpto_button" role="navigation">
+					<select id="jumpTo">
+	<option value="top">Jump To&#133;</option>
+	
+	<option value="overview">Overview</option>
+	
+	
+	
+	
+	<option value="tasks">Tasks</option>
+	
+	
+	
+	
+	
+	<option value="properties">Properties</option>
+	
+	<option value="//api/name/completionHandlerBlock">&nbsp;&nbsp;&nbsp;&nbsp;completionHandlerBlock</option>
+	
+	<option value="//api/name/endJsonHandlerBlock">&nbsp;&nbsp;&nbsp;&nbsp;endJsonHandlerBlock</option>
+	
+	<option value="//api/name/error">&nbsp;&nbsp;&nbsp;&nbsp;error</option>
+	
+	<option value="//api/name/errorHandlerBlock">&nbsp;&nbsp;&nbsp;&nbsp;errorHandlerBlock</option>
+	
+	<option value="//api/name/generateEncodedStrings">&nbsp;&nbsp;&nbsp;&nbsp;generateEncodedStrings</option>
+	
+	<option value="//api/name/handlerDispatchQueue">&nbsp;&nbsp;&nbsp;&nbsp;handlerDispatchQueue</option>
+	
+	<option value="//api/name/ignoreSpuriousTrailingBytes">&nbsp;&nbsp;&nbsp;&nbsp;ignoreSpuriousTrailingBytes</option>
+	
+	<option value="//api/name/logLevel">&nbsp;&nbsp;&nbsp;&nbsp;logLevel</option>
+	
+	<option value="//api/name/nonConformanceOptions">&nbsp;&nbsp;&nbsp;&nbsp;nonConformanceOptions</option>
+	
+	<option value="//api/name/parseMultipleDocuments">&nbsp;&nbsp;&nbsp;&nbsp;parseMultipleDocuments</option>
+	
+	<option value="//api/name/parseMultipleDocumentsAsynchronously">&nbsp;&nbsp;&nbsp;&nbsp;parseMultipleDocumentsAsynchronously</option>
+	
+	<option value="//api/name/result">&nbsp;&nbsp;&nbsp;&nbsp;result</option>
+	
+	<option value="//api/name/startJsonHandlerBlock">&nbsp;&nbsp;&nbsp;&nbsp;startJsonHandlerBlock</option>
+	
+	<option value="//api/name/unicodeNoncharacterHandling">&nbsp;&nbsp;&nbsp;&nbsp;unicodeNoncharacterHandling</option>
+	
+	
+	
+	
+	
+	
+	<option value="instance_methods">Instance Methods</option>
+	
+	<option value="//api/name/configureWithOptions:">&nbsp;&nbsp;&nbsp;&nbsp;- configureWithOptions:</option>
+	
+	<option value="//api/name/init">&nbsp;&nbsp;&nbsp;&nbsp;- init</option>
+	
+	<option value="//api/name/initWithHandlerDispatchQueue:">&nbsp;&nbsp;&nbsp;&nbsp;- initWithHandlerDispatchQueue:</option>
+	
+	<option value="//api/name/setErrorCode:description:">&nbsp;&nbsp;&nbsp;&nbsp;- setErrorCode:description:</option>
+	
+	
+	
+</select>
+				</li>
+			</ul>
+		</header>
+		<nav id="tocContainer" class="isShowingTOC">
+			<ul id="toc" role="tree">
+				
+<li role="treeitem"><span class="nodisclosure"></span><span class="sectionName"><a href="#overview">Overview</a></span></li>
+
+
+
+
+<li role="treeitem" id="task_treeitem"><span class="nodisclosure"></span><span class="sectionName"><a href="#tasks">Tasks</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Initialization">Initialization</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Configuration">Configuration</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Parse Options">Parse Options</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Set and Retrieve Error State">Set and Retrieve Error State</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Handlers and Dispatch Queue">Handlers and Dispatch Queue</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Retrieving Result">Retrieving Result</a></span></li>
+	
+</ul></li>
+
+
+
+
+
+<li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#properties">Properties</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/completionHandlerBlock">completionHandlerBlock</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/endJsonHandlerBlock">endJsonHandlerBlock</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/error">error</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/errorHandlerBlock">errorHandlerBlock</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/generateEncodedStrings">generateEncodedStrings</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/handlerDispatchQueue">handlerDispatchQueue</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/ignoreSpuriousTrailingBytes">ignoreSpuriousTrailingBytes</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/logLevel">logLevel</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/nonConformanceOptions">nonConformanceOptions</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/parseMultipleDocuments">parseMultipleDocuments</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/parseMultipleDocumentsAsynchronously">parseMultipleDocumentsAsynchronously</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/result">result</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/startJsonHandlerBlock">startJsonHandlerBlock</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/unicodeNoncharacterHandling">unicodeNoncharacterHandling</a></span></li>
+	
+</ul></li>
+
+
+
+
+
+<li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#instance_methods">Instance Methods</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/configureWithOptions:">configureWithOptions:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/init">init</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/initWithHandlerDispatchQueue:">initWithHandlerDispatchQueue:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/setErrorCode:description:">setErrorCode:description:</a></span></li>
+	
+</ul></li>
+
+
+			</ul>
+		</nav>
+		<article>
+			<div id="contents" class="isShowingTOC" role="main">
+				<a title="JPSemanticActionsBase Class Reference" name="top"></a>
+				<div class="main-navigation navigation-top">
+					<ul>
+	<li><a href="../index.html">Index</a></li>
+	<li><a href="../hierarchy.html">Hierarchy</a></li>
+</ul>
+				</div>
+				<div id="header">
+					<div class="section-header">
+						<h1 class="title title-header">JPSemanticActionsBase Class Reference</h1>
+					</div>		
+				</div>
+				<div id="container">	
+					
+					<div class="section section-specification"><table cellspacing="0"><tbody>
+						<tr>
+	<td class="specification-title">Inherits from</td>
+	<td class="specification-value">NSObject</td>
+</tr><tr>
+	<td class="specification-title">Conforms to</td>
+	<td class="specification-value"><a href="../Protocols/JPSemanticActionsProtocol.html">JPSemanticActionsProtocol</a></td>
+</tr><tr>
+	<td class="specification-title">Declared in</td>
+	<td class="specification-value">JPSemanticActionsBase.h<br />JPSemanticActionsBase.mm</td>
+</tr>
+						</tbody></table></div>
+					
+					
+					
+					
+					<div class="section section-overview">
+						<a title="Overview" name="overview"></a>
+						<h2 class="subtitle subtitle-overview">Overview</h2>
+						<p>Abstract Base Class for concrete Semantic Actions classes.</p>
+
+<p>A <strong>Semantic Actions Object</strong> acts as an internal delegate of a JSON parser.
+It receives <em>parse events</em> sent from the parser and handles them in corresponding
+<em>semantic actions</em>. The class conforms to the protocol <code>JPSemanticActionsProtocol</code>
+and provides a default implementation for the following optional methods declared
+in <code>JPSemanticActionsProtocol</code>:</p>
+
+<ul>
+<li><code>-parserFoundJsonBegin</code></li>
+<li><code>-parserFoundJsonEnd</code></li>
+<li><code>-parserFinished</code></li>
+<li><code>-parserDetectedError</code></li>
+</ul>
+
+
+<p><code>JPSemanticActionsBase</code> is meant to be subclassed. Subclasses may override the
+methods mentioned above and may define the additional methods declared in
+protocol <code>JPSemanticActionsProtocol</code>.</p>
+
+<p>There are two prominent subclasses: <code>JPRepresentationGenerator</code> and
+<code>JPStreamSemanticActions</code>. While <code>JPRepresentationGenerator</code> shall be used
+as is, <code>JPStreamSemanticActions</code> may be subclassed or alternatively used with
+a delegate.</p>
+
+<p>The delegate methods will be invoked when the JSON parser successfully parsed
+a certain rule, that is when the parser detects the various JSON elements, or
+the start and the end of the document. For more information see <a href="../Protocols/JPSemanticActionsProtocol.html">JPSemanticActionsProtocol</a>.</p>
+
+<h3>Using a Semantic Actions object</h3>
+
+<p>Each parser, that is an instance of <a href="../Classes/JPJsonParser.html">JPJsonParser</a> or and instance of
+<a href="../Classes/JPAsyncJsonParser.html">JPAsyncJsonParser</a>, needs to be associated to a <em>Semantic Actions</em> object. If
+none is specified when a parser is created, the parser itself creates a default
+one, which is a <code>JPRepresentationGenerator</code>.</p>
+
+<p><em>Info:</em>  A parser sends <em>parse events</em> to the semantic actions object as they
+appear in the JSON text. The task of a semantic actions object is to handle
+these events appropriately.</p>
+
+<p>All semantic actions classes shall inherit from <JPSemanticActionsBase>.
+<code>JPSemanticActionsBase</code> implements all required common aspects for a semantic
+actions object.</p>
+
+<p>Semantic actions classes shall conform to the protocol <a href="../Protocols/JPSemanticActionsProtocol.html">JPSemanticActionsProtocol</a>.</p>
+
+<p>There are two &ldquo;built-in&rdquo; semantic actions classes inheriting from <code>JPSemanticActionsBase</code>:</p>
+
+<ul>
+<li><a href="../Classes/JPRepresentationGenerator.html">JPRepresentationGenerator</a> and</li>
+<li><a href="../Classes/JPStreamSemanticActions.html">JPStreamSemanticActions</a></li>
+</ul>
+
+
+<h3>Setting Up Handler Blocks</h3>
+
+<p>An <code>JPSemanticActions</code> class provides four Blocks (callbacks) which handle principal
+events:</p>
+
+<ul>
+<li>Notifying the start of a JSON text</li>
+<li>Notifying the end of a JSON text</li>
+<li>Notifying the completion of a semantic actions task</li>
+<li>Notifying a possible error</li>
+</ul>
+
+
+<p>These principal handlers are common to all semantic actions classes. They will
+be implemented using <em>Blocks</em> and the class provides properties to access them.</p>
+
+<p>For a description of each, see section <em>Handlers and Dispatch Queue</em>.</p>
+					</div>
+					
+					
+					
+					
+					
+					<div class="section section-tasks">
+						<a title="Tasks" name="tasks"></a>
+						<h2 class="subtitle subtitle-tasks">Tasks</h2>
+						
+						
+						<a title="Initialization" name="task_Initialization"></a>
+						<h3 class="subsubtitle task-title">Initialization</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/initWithHandlerDispatchQueue:">&ndash;&nbsp;initWithHandlerDispatchQueue:</a></code>
+		<span class="tooltip"><p><em>Designated Initializer</em></p></span>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/init">&ndash;&nbsp;init</a></code>
+		<span class="tooltip"><p>Initializes a <code>JPSemanticActions</code> instance with a private default dispatch queue.</p></span>
+	</span>
+	
+	
+</li>
+						</ul>
+						
+						
+						<a title="Configuration" name="task_Configuration"></a>
+						<h3 class="subsubtitle task-title">Configuration</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/configureWithOptions:">&ndash;&nbsp;configureWithOptions:</a></code>
+		<span class="tooltip"><p>Configures a <code>JPSemanticActionsBase</code> instance with the specified options.</p></span>
+	</span>
+	
+	
+</li>
+						</ul>
+						
+						
+						<a title="Parse Options" name="task_Parse Options"></a>
+						<h3 class="subsubtitle task-title">Parse Options</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/ignoreSpuriousTrailingBytes">&nbsp;&nbsp;ignoreSpuriousTrailingBytes</a></code>
+		<span class="tooltip"><p>Sets or returns the parse option &ldquo;ignoreSpuriousTrailingBytes&rdquo;.</p></span>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/parseMultipleDocuments">&nbsp;&nbsp;parseMultipleDocuments</a></code>
+		<span class="tooltip"><p>Sets or returns the parse option &ldquo;parseMultipleDocuments&rdquo;.</p></span>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/parseMultipleDocumentsAsynchronously">&nbsp;&nbsp;parseMultipleDocumentsAsynchronously</a></code>
+		<span class="tooltip"><p>Sets or returns the parse option &ldquo;parseMultipleDocumentsAsynchronously&rdquo;.</p></span>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/logLevel">&nbsp;&nbsp;logLevel</a></code>
+		<span class="tooltip"><p>Sets or returns the log level of the semantic actions instance and the
+underlaying JSON parser.</p></span>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/unicodeNoncharacterHandling">&nbsp;&nbsp;unicodeNoncharacterHandling</a></code>
+		<span class="tooltip"><p>Sets or returns the policy for handling Unicode noncharacters of the receiver
+and the underlaying JSON parser.</p></span>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/nonConformanceOptions">&nbsp;&nbsp;nonConformanceOptions</a></code>
+		<span class="tooltip"><p>Sets or returns the strictness of the underlaying JSON parser.</p></span>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/generateEncodedStrings">&nbsp;&nbsp;generateEncodedStrings</a></code>
+		<span class="tooltip"><p>Sets or returns the option whether the receiver will get passed encoded JSON strings.</p></span>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li>
+						</ul>
+						
+						
+						<a title="Set and Retrieve Error State" name="task_Set and Retrieve Error State"></a>
+						<h3 class="subsubtitle task-title">Set and Retrieve Error State</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/setErrorCode:description:">&ndash;&nbsp;setErrorCode:description:</a></code>
+		<span class="tooltip"><p>Set error and description.</p></span>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/error">&nbsp;&nbsp;error</a></code>
+		<span class="tooltip"><p>Returns the error object from the receiver or <code>nil</code> if there is no error.</p></span>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li>
+						</ul>
+						
+						
+						<a title="Handlers and Dispatch Queue" name="task_Handlers and Dispatch Queue"></a>
+						<h3 class="subsubtitle task-title">Handlers and Dispatch Queue</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/handlerDispatchQueue">&nbsp;&nbsp;handlerDispatchQueue</a></code>
+		<span class="tooltip"><p>Returns or sets the dispatch queue where handler blocks will be scheduled.</p></span>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/startJsonHandlerBlock">&nbsp;&nbsp;startJsonHandlerBlock</a></code>
+		<span class="tooltip"><p>Sets or returns the startJson handler block of type <code>void (^)(void)</code>.</p></span>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/endJsonHandlerBlock">&nbsp;&nbsp;endJsonHandlerBlock</a></code>
+		<span class="tooltip"><p>Sets or returns the endJson handler block of type <code>void (^)(id result)</code>.</p></span>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/completionHandlerBlock">&nbsp;&nbsp;completionHandlerBlock</a></code>
+		<span class="tooltip"><p>Sets or returns the completion handler block of type <code>void (^)(void)</code>.</p></span>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/errorHandlerBlock">&nbsp;&nbsp;errorHandlerBlock</a></code>
+		<span class="tooltip"><p>Sets or retrieves the error handler block of type <code>void (^)(NSError*)</code>.</p></span>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li>
+						</ul>
+						
+						
+						<a title="Retrieving Result" name="task_Retrieving Result"></a>
+						<h3 class="subsubtitle task-title">Retrieving Result</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/result">&nbsp;&nbsp;result</a></code>
+		<span class="tooltip"><p>Returns <code>nil</code>.</p></span>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li>
+						</ul>
+						
+					</div>
+					
+					
+					
+					
+					
+					<div class="section section-methods">
+						<a title="Properties" name="properties"></a>
+						<h2 class="subtitle subtitle-methods">Properties</h2>
+						
+						<div class="section-method">
+	<a name="//api/name/completionHandlerBlock" title="completionHandlerBlock"></a>
+	<h3 class="subsubtitle method-title">completionHandlerBlock</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Sets or returns the completion handler block of type <code>void (^)(void)</code>.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, copy) JPSemanticActions_CompletionHandlerBlockType completionHandlerBlock</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>If the property is not <code>NULL</code>, the completion block is called when the JSON parser
+finished parsing, regardless if there has been a parse error signaled via the error
+handler block during parsing. The start of the JSON parser was previously
+signaled by calling the <code>startJsonHandlerBlock</code> block.</p>
+
+<p>Note that the error handler may be possibly called <em>before</em> the JSON parser
+even started parsing, e.g. when <code>JPJsonParser</code> and <code>JPAsyncJsonParser</code> detect an
+error during determining the input encoding. In this case, the JSON parser
+will not be started, and consequently, <code>startJsonHandlerBlock</code> and
+<code>completionHandlerBlock</code> will not be called.
+<code>completionBlock</code> may be set to <code>NULL</code>.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">JPSemanticActionsBase.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/endJsonHandlerBlock" title="endJsonHandlerBlock"></a>
+	<h3 class="subsubtitle method-title">endJsonHandlerBlock</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Sets or returns the endJson handler block of type <code>void (^)(id result)</code>.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, copy) JPSemanticActions_EndJsonHandlerBlockType endJsonHandlerBlock</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>The endJsonHandlerBlock is called when the parser has successfully parsed a
+JSON text and the semantic actions instance was able to create a result (e.g.
+a JSON representation created upon Foundation objects) from this JSON text.
+The result will be passed in parameter <em>result</em>.
+If property <code>parseMultipleDocuments</code> equals <code>YES</code> this block will be called for
+each result which will be created by the semantic actions instance.</p>
+
+<p>If  property <code>parseMultipleDocumentsAsynchronously</code> returns <code>NO</code> (the default) the
+parser&rsquo;s thread is blocked until the handler finishes. This is a measurement
+to balance the process of generating result objects (e.g. JSON representations
+as Foundation objects) &ndash; which may tie up a large amount of system resources
+&ndash; with the actual processing of this result &ndash; which may free these resources
+again.
+Otherwise, if <code>parseMultipleDocumentsAsynchronously</code> returns <code>YES</code>, the parser
+will immediately continue to parse the input source on its own thread. Be
+carefully, when considering parseMultipleDocumentsAsynchronously set to <code>YES</code>.</p>
+
+<p>endJsonHandlerBlock may be set to <code>nil</code>.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">JPSemanticActionsBase.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/error" title="error"></a>
+	<h3 class="subsubtitle method-title">error</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Returns the error object from the receiver or <code>nil</code> if there is no error.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>@property (weak, atomic, readonly) NSError *error</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">JPSemanticActionsBase.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/errorHandlerBlock" title="errorHandlerBlock"></a>
+	<h3 class="subsubtitle method-title">errorHandlerBlock</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Sets or retrieves the error handler block of type <code>void (^)(NSError*)</code>.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, copy) JPSemanticActions_ErrorHandlerBlockType errorHandlerBlock</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>The <code>errorHandlerBlock</code> will be called when an error has been detected by the
+<code>JPJsonParser</code>/<code>JPAsyncJsonParser</code> during determining the input encoding, by the
+JSON parser during parsing, or by the semantic actions instance while per-
+forming a semantic action.
+<code>errorHandlerBlock</code> may be set to <code>NULL</code> in which case no errors will be reported
+by this means.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">JPSemanticActionsBase.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/generateEncodedStrings" title="generateEncodedStrings"></a>
+	<h3 class="subsubtitle method-title">generateEncodedStrings</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Sets or returns the option whether the receiver will get passed encoded JSON strings.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, assign) BOOL generateEncodedStrings</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Usually, a semantic actions object will require a properly decoded JSON string
+that matches the orginal source string. If this options is enabled however, the
+underlaying parser passes properly <em>encoded</em> JSON Strings in method
+<code>-parserFoundKeyValuePairBeginWithKey:length:encoding:index:</code> and
+<code>-parserFoundString:length:hasMore:encoding:</code>. That is, the string is encoded
+as required by RFC 4627.</p>
+
+<p>Otherwise (the default), the parser passes properly decoded JSON strings to the
+receiver which match the original source string.</p>
+
+<p>This option corresponds to <code>JPJsonParserOptions</code> flag <code>JPJsonParserEncodedStrings</code>.</p>
+
+<p>Default: <code>NO</code></p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">JPSemanticActionsBase.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/handlerDispatchQueue" title="handlerDispatchQueue"></a>
+	<h3 class="subsubtitle method-title">handlerDispatchQueue</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Returns or sets the dispatch queue where handler blocks will be scheduled.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, assign) dispatch_queue_t handlerDispatchQueue</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>The dispatch queue will be retained &ndash; with function <code>dispatch_retain()</code>.
+If the property is set to <code>NULL</code>, handler blocks will not be called.
+The dispatch queue must only be modified before a parser associated to
+the receiver is not yet started.</p><div class="warning"><p><strong>Warning:</strong> Setting a dispatch queue while a parser is started, may result in a crash.</p>
+
+<p>The value shall be a concurrent or a serial dispatch queue or <code>NULL</code>.</p></div>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">JPSemanticActionsBase.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/ignoreSpuriousTrailingBytes" title="ignoreSpuriousTrailingBytes"></a>
+	<h3 class="subsubtitle method-title">ignoreSpuriousTrailingBytes</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Sets or returns the parse option &ldquo;ignoreSpuriousTrailingBytes&rdquo;.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, assign) BOOL ignoreSpuriousTrailingBytes</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>If this options is set, the parser will not treat any additional characters
+which may occur after the last significant character of a valid JSON document
+as an error. Otherwise, any code units which can not be interpreted as
+white-space Unicode characters, except <code>Unicode NULL</code> (U+0000) and an <code>EOF</code>,
+following a JSON document will cause an error. <code>Unicode NULL</code> and <code>EOF</code> will issue
+a warning.</p>
+
+<p>Default: <code>NO</code></p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">JPSemanticActionsBase.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/logLevel" title="logLevel"></a>
+	<h3 class="subsubtitle method-title">logLevel</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Sets or returns the log level of the semantic actions instance and the
+underlaying JSON parser.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, assign) JPSemanticActionsLogLevel logLevel</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Possible values are constants defined in enumeration <code>JPSemanticActionsLogLevel</code>:</p>
+
+<ul>
+<li><code>JPSemanticActionsLogLevelDebug</code>
+  Verbose logging.</li>
+<li><code>JPSemanticActionsLogLevelWarning</code>
+  Logs warning messages as well as errors.</li>
+<li><code>JPSemanticActionsLogLevelError</code>
+  Logs only error messages.</li>
+<li><code>JPSemanticActionsLogLevelNone</code>
+  Does not log anything.</li>
+</ul>
+
+
+<p>Default: <code>JPSemanticActionsLogLevelError</code></p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">JPSemanticActionsBase.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/nonConformanceOptions" title="nonConformanceOptions"></a>
+	<h3 class="subsubtitle method-title">nonConformanceOptions</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Sets or returns the strictness of the underlaying JSON parser.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, assign) JPSemanticActionsNonConformanceOptions nonConformanceOptions</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Possible values are ored flags which are defined in enumeration <code>JPSemanticActionsNonConformanceOptions</code>:</p>
+
+<ul>
+<li><code>JPSemanticActionsAllowNone</code></li>
+<li><code>JPSemanticActionsAllowComments</code></li>
+<li><code>JPSemanticActionsAllowControlCharacters</code></li>
+<li><code>JPSemanticActionsAllowLeadingPlusInNumbers</code></li>
+<li><code>JPSemanticActionsAllowLeadingZerosInIntegers</code></li>
+</ul>
+
+
+<p>Default: <code>JPSemanticActionsAllowNone</code></p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">JPSemanticActionsBase.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/parseMultipleDocuments" title="parseMultipleDocuments"></a>
+	<h3 class="subsubtitle method-title">parseMultipleDocuments</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Sets or returns the parse option &ldquo;parseMultipleDocuments&rdquo;.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, assign) BOOL parseMultipleDocuments</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>If this option is set, the parser parses more than one document from the input
+until it receives an <code>EOF</code> in the input data.</p>
+
+<p>This flag becomes especially useful if the parser will be fed  from a &ldquo;stream&rdquo;
+of JSON documents &ndash; possibly from input downloaded in a single network connection
+supporting a &ldquo;Streaming API&rdquo;.</p>
+
+<p>Default: <code>NO</code></p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">JPSemanticActionsBase.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/parseMultipleDocumentsAsynchronously" title="parseMultipleDocumentsAsynchronously"></a>
+	<h3 class="subsubtitle method-title">parseMultipleDocumentsAsynchronously</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Sets or returns the parse option &ldquo;parseMultipleDocumentsAsynchronously&rdquo;.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, assign) BOOL parseMultipleDocumentsAsynchronously</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>If this option is set, the parser invokes the <code>jsonObjectHandlerBlock</code>
+asynchronously and immediately processes the next JSON document within the
+input data. The JSON container is then retained in the dispatch queue till
+it is processed by the client. This may tie up a lot of system resources if
+the client processes frees the JSON containers slowly.
+If the flag is <code>NO</code>, the parser&rsquo;s thread is blocked until the handler routine
+returns.</p>
+
+<p>It is recommended to leave this flag disabled in systems where system resources
+are scarce or if the data input possibly contains many and large JSON documents.
+When downloading large data, this helps throttling the consumption of system
+resources by the underlaying network layer.</p>
+
+<p>Default: <code>NO</code></p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">JPSemanticActionsBase.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/result" title="result"></a>
+	<h3 class="subsubtitle method-title">result</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Returns <code>nil</code>.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly) id result</code></div>
+	
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>An object if a result is available, otherwise <code>nil</code>.</p>
+	</div>
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>This method may be overridden by subclasses in order to return the result
+of the semantic actions.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">JPSemanticActionsBase.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/startJsonHandlerBlock" title="startJsonHandlerBlock"></a>
+	<h3 class="subsubtitle method-title">startJsonHandlerBlock</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Sets or returns the startJson handler block of type <code>void (^)(void)</code>.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, copy) JPSemanticActions_StartJsonHandlerBlockType startJsonHandlerBlock</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>This handler block will be called when the JSON parser has found the start of
+a JSON root element within the input text.
+If property parseMultipleDocuments equals <code>YES</code> this block will be called
+each time a the parsers detects the start of a JSON root element.</p>
+
+<p>Note, that this handler will only be called after the JSON parser actually has
+been started, which only happens after determining the input encoding, which
+possibly can fail.</p>
+
+<p>startJsonHandlerBlock can be set to <code>nil</code>.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">JPSemanticActionsBase.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/unicodeNoncharacterHandling" title="unicodeNoncharacterHandling"></a>
+	<h3 class="subsubtitle method-title">unicodeNoncharacterHandling</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Sets or returns the policy for handling Unicode noncharacters of the receiver
+and the underlaying JSON parser.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, assign) JPSemanticActionsUnicodeNoncharacterHandling unicodeNoncharacterHandling</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Possible values are constants defined in enumeration <code>JPSemanticActionsUnicodeNoncharacterHandling</code>:</p>
+
+<ul>
+<li><code>JPSemanticActionsSignalErrorOnUnicodeNoncharacter</code></li>
+<li><code>JPSemanticActionsSubstituteUnicodeNoncharacter</code></li>
+<li><code>JPSemanticActionsSkipUnicodeNoncharacters</code></li>
+</ul>
+
+
+<p>Default: <code>JPSemanticActionsSignalErrorOnUnicodeNoncharacter</code></p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">JPSemanticActionsBase.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+					</div>
+					
+					
+					
+					
+					
+					<div class="section section-methods">
+						<a title="Instance Methods" name="instance_methods"></a>
+						<h2 class="subtitle subtitle-methods">Instance Methods</h2>
+						
+						<div class="section-method">
+	<a name="//api/name/configureWithOptions:" title="configureWithOptions:"></a>
+	<h3 class="subsubtitle method-title">configureWithOptions:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Configures a <code>JPSemanticActionsBase</code> instance with the specified options.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (void)configureWithOptions:(JPJsonParserOptions)<em>options</em></code></div>
+	
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>options</em></dt>
+			<dd><p>A set of ored flags from constants of enum <code>JPJsonParserOptions</code>.</p>
+
+<p>This method will be invoked internally from JPJsonParser&rsquo;s convenience methods.
+The receiver will set only those options which are &ldquo;understood&rdquo; by the
+receiver. &ldquo;Unknown&rdquo; flags will be ignored and may be used in subclasses. A
+subclass shall invoke super.</p>
+
+<p>For possible values for options see <JPJsonParserOptions>.</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">JPSemanticActionsBase.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/init" title="init"></a>
+	<h3 class="subsubtitle method-title">init</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Initializes a <code>JPSemanticActions</code> instance with a private default dispatch queue.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (id)init</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>The receiver creates a serial dispatch queue where handler blocks will be
+scheduled.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">JPSemanticActionsBase.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/initWithHandlerDispatchQueue:" title="initWithHandlerDispatchQueue:"></a>
+	<h3 class="subsubtitle method-title">initWithHandlerDispatchQueue:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p><em>Designated Initializer</em></p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (id)initWithHandlerDispatchQueue:(dispatch_queue_t)<em>handlerQueue</em></code></div>
+	
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>handlerQueue</em></dt>
+			<dd><p>The dispatch queue where handler blocks will be scheduled,
+or <code>nil</code>, in which case no handlers will be executed.</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Initializes a <code>JPSemanticActionsBase</code> instance with the specified dispatch queue.
+If parameter <code>handlerQueue</code> equals <code>nil</code> no dispatch queue will be used and no
+handler blocks will be scheduled.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">JPSemanticActionsBase.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/setErrorCode:description:" title="setErrorCode:description:"></a>
+	<h3 class="subsubtitle method-title">setErrorCode:description:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Set error and description.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (void)setErrorCode:(int)<em>error</em> description:(NSString *)<em>description</em></code></div>
+	
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>error</em></dt>
+			<dd><p>An integer indicating the error code. error should be negative.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>description</em></dt>
+			<dd><p>A string describing the error.</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Allows a client, that is a JPJsonParser and JPAsyncJsonParser instance, to
+set an error code and an associated description which is saved by the
+semantic actions instance. This is useful in cases where the clients itself
+detect a error and want the semantic actions instance to safe the error
+information on behalf of the clients since they lack an interface which let
+users access the error state.</p>
+
+<p>JPJsonParser and JPAsyncJsonParser set the error state when they detect
+unexpected errors not caught by the semantic actions instance, or when
+they detect errors during determining the input encoding.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">JPSemanticActionsBase.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+					</div>
+					
+					
+				</div>
+				<div class="main-navigation navigation-bottom">
+					<ul>
+	<li><a href="../index.html">Index</a></li>
+	<li><a href="../hierarchy.html">Hierarchy</a></li>
+</ul>
+				</div>
+				<div id="footer">
+					<hr />
+					<div class="footer-copyright">
+						<p><span class="copyright">&copy; 2013 Bit Passion. All rights reserved. (Last updated: 2013-04-14)</span><br />
+						
+						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.0.5 (build 789)</a>.</span></p>
+						
+					</div>
+				</div>
+			</div>
+		</article>
+		<script type="text/javascript">
+			function jumpToChange()
+			{
+				window.location.hash = this.options[this.selectedIndex].value;
+			}
+			
+			function toggleTOC()
+			{
+				var contents = document.getElementById('contents');
+				var tocContainer = document.getElementById('tocContainer');
+				
+				if (this.getAttribute('class') == 'open')
+				{
+					this.setAttribute('class', '');
+					contents.setAttribute('class', '');
+					tocContainer.setAttribute('class', '');
+					
+					window.name = "hideTOC";
+				}
+				else
+				{
+					this.setAttribute('class', 'open');
+					contents.setAttribute('class', 'isShowingTOC');
+					tocContainer.setAttribute('class', 'isShowingTOC');
+					
+					window.name = "";
+				}
+				return false;
+			}
+			
+			function toggleTOCEntryChildren(e)
+			{
+				e.stopPropagation();
+				var currentClass = this.getAttribute('class');
+				if (currentClass == 'children') {
+					this.setAttribute('class', 'children open');
+				}
+				else if (currentClass == 'children open') {
+					this.setAttribute('class', 'children');
+				}
+				return false;
+			}
+			
+			function tocEntryClick(e)
+			{
+				e.stopPropagation();
+				return true;
+			}
+			
+			function init()
+			{
+				var selectElement = document.getElementById('jumpTo');
+				selectElement.addEventListener('change', jumpToChange, false);
+				
+				var tocButton = document.getElementById('table_of_contents');
+				tocButton.addEventListener('click', toggleTOC, false);
+				
+				var taskTreeItem = document.getElementById('task_treeitem');
+				if (taskTreeItem.getElementsByTagName('li').length > 0)
+				{
+					taskTreeItem.setAttribute('class', 'children');
+					taskTreeItem.firstChild.setAttribute('class', 'disclosure');
+				}
+				
+				var tocList = document.getElementById('toc');
+				
+				var tocEntries = tocList.getElementsByTagName('li');
+				for (var i = 0; i < tocEntries.length; i++) {
+					tocEntries[i].addEventListener('click', toggleTOCEntryChildren, false);
+				}
+				
+				var tocLinks = tocList.getElementsByTagName('a');
+				for (var i = 0; i < tocLinks.length; i++) {
+					tocLinks[i].addEventListener('click', tocEntryClick, false);
+				}
+				
+				if (window.name == "hideTOC") {
+					toggleTOC.call(tocButton);
+				}
+			}
+			
+			window.onload = init;
+			
+			// If showing in Xcode, hide the TOC and Header
+			if (navigator.userAgent.match(/xcode/i)) {
+				document.getElementById("contents").className = "hideInXcode"
+				document.getElementById("tocContainer").className = "hideInXcode"
+				document.getElementById("top_header").className = "hideInXcode"
+			}
+			
+		</script>
+	</body>
+</html>

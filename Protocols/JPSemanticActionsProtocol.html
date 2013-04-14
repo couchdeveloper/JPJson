@@ -1,0 +1,1550 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="html/html; charset=utf-8" />
+		<title>JPSemanticActionsProtocol Protocol Reference</title>
+		<meta id="xcode-display" name="xcode-display" content="render"/>
+		<meta name="viewport" content="width=550" />
+		<link rel="stylesheet" type="text/css" href="../css/styles.css" media="all" />
+		<link rel="stylesheet" type="text/css" media="print" href="../css/stylesPrint.css" />
+		<meta name="generator" content="appledoc 2.0.5 (build 789)" />
+	</head>
+	<body>
+		<header id="top_header">
+			<div id="library" class="hideInXcode">
+				<h1><a id="libraryTitle" href="../index.html">JPJson </a></h1>
+				<a id="developerHome" href="../index.html">Bit Passion</a>
+			</div>
+			
+			<div id="title" role="banner">
+				<h1 class="hideInXcode">JPSemanticActionsProtocol Protocol Reference</h1>
+			</div>
+			<ul id="headerButtons" role="toolbar">
+				<li id="toc_button">
+					<button aria-label="Show Table of Contents" role="checkbox" class="open" id="table_of_contents"><span class="disclosure"></span>Table of Contents</button>
+				</li>
+				<li id="jumpto_button" role="navigation">
+					<select id="jumpTo">
+	<option value="top">Jump To&#133;</option>
+	
+	<option value="overview">Overview</option>
+	
+	
+	
+	
+	<option value="tasks">Tasks</option>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<option value="instance_methods">Instance Methods</option>
+	
+	<option value="//api/name/cancel">&nbsp;&nbsp;&nbsp;&nbsp;- cancel</option>
+	
+	<option value="//api/name/clear">&nbsp;&nbsp;&nbsp;&nbsp;- clear</option>
+	
+	<option value="//api/name/parserDetectedError">&nbsp;&nbsp;&nbsp;&nbsp;- parserDetectedError</option>
+	
+	<option value="//api/name/parserFinished">&nbsp;&nbsp;&nbsp;&nbsp;- parserFinished</option>
+	
+	<option value="//api/name/parserFoundArrayBegin">&nbsp;&nbsp;&nbsp;&nbsp;- parserFoundArrayBegin</option>
+	
+	<option value="//api/name/parserFoundArrayEnd">&nbsp;&nbsp;&nbsp;&nbsp;- parserFoundArrayEnd</option>
+	
+	<option value="//api/name/parserFoundBoolean:">&nbsp;&nbsp;&nbsp;&nbsp;- parserFoundBoolean:</option>
+	
+	<option value="//api/name/parserFoundJsonBegin">&nbsp;&nbsp;&nbsp;&nbsp;- parserFoundJsonBegin</option>
+	
+	<option value="//api/name/parserFoundJsonEnd">&nbsp;&nbsp;&nbsp;&nbsp;- parserFoundJsonEnd</option>
+	
+	<option value="//api/name/parserFoundKeyValuePairBeginWithKey:length:encoding:index:">&nbsp;&nbsp;&nbsp;&nbsp;- parserFoundKeyValuePairBeginWithKey:length:encoding:index:</option>
+	
+	<option value="//api/name/parserFoundKeyValuePairEnd">&nbsp;&nbsp;&nbsp;&nbsp;- parserFoundKeyValuePairEnd</option>
+	
+	<option value="//api/name/parserFoundNull">&nbsp;&nbsp;&nbsp;&nbsp;- parserFoundNull</option>
+	
+	<option value="//api/name/parserFoundNumber:length:">&nbsp;&nbsp;&nbsp;&nbsp;- parserFoundNumber:length:</option>
+	
+	<option value="//api/name/parserFoundObjectBegin">&nbsp;&nbsp;&nbsp;&nbsp;- parserFoundObjectBegin</option>
+	
+	<option value="//api/name/parserFoundObjectEnd">&nbsp;&nbsp;&nbsp;&nbsp;- parserFoundObjectEnd</option>
+	
+	<option value="//api/name/parserFoundString:length:hasMore:encoding:">&nbsp;&nbsp;&nbsp;&nbsp;- parserFoundString:length:hasMore:encoding:</option>
+	
+	<option value="//api/name/parserFoundValueBeginAtIndex:">&nbsp;&nbsp;&nbsp;&nbsp;- parserFoundValueBeginAtIndex:</option>
+	
+	<option value="//api/name/parserFoundValueEndAtIndex:">&nbsp;&nbsp;&nbsp;&nbsp;- parserFoundValueEndAtIndex:</option>
+	
+	<option value="//api/name/result">&nbsp;&nbsp;&nbsp;&nbsp;- result</option>
+	
+	<option value="//api/name/setHasBOM:">&nbsp;&nbsp;&nbsp;&nbsp;- setHasBOM:</option>
+	
+	
+	
+</select>
+				</li>
+			</ul>
+		</header>
+		<nav id="tocContainer" class="isShowingTOC">
+			<ul id="toc" role="tree">
+				
+<li role="treeitem"><span class="nodisclosure"></span><span class="sectionName"><a href="#overview">Overview</a></span></li>
+
+
+
+
+<li role="treeitem" id="task_treeitem"><span class="nodisclosure"></span><span class="sectionName"><a href="#tasks">Tasks</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Delegate Methods">Delegate Methods</a></span></li>
+	
+</ul></li>
+
+
+
+
+
+
+
+
+
+<li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#instance_methods">Instance Methods</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/cancel">cancel</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/clear">clear</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/parserDetectedError">parserDetectedError</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/parserFinished">parserFinished</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/parserFoundArrayBegin">parserFoundArrayBegin</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/parserFoundArrayEnd">parserFoundArrayEnd</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/parserFoundBoolean:">parserFoundBoolean:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/parserFoundJsonBegin">parserFoundJsonBegin</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/parserFoundJsonEnd">parserFoundJsonEnd</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/parserFoundKeyValuePairBeginWithKey:length:encoding:index:">parserFoundKeyValuePairBeginWithKey:length:encoding:index:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/parserFoundKeyValuePairEnd">parserFoundKeyValuePairEnd</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/parserFoundNull">parserFoundNull</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/parserFoundNumber:length:">parserFoundNumber:length:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/parserFoundObjectBegin">parserFoundObjectBegin</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/parserFoundObjectEnd">parserFoundObjectEnd</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/parserFoundString:length:hasMore:encoding:">parserFoundString:length:hasMore:encoding:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/parserFoundValueBeginAtIndex:">parserFoundValueBeginAtIndex:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/parserFoundValueEndAtIndex:">parserFoundValueEndAtIndex:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/result">result</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/setHasBOM:">setHasBOM:</a></span></li>
+	
+</ul></li>
+
+
+			</ul>
+		</nav>
+		<article>
+			<div id="contents" class="isShowingTOC" role="main">
+				<a title="JPSemanticActionsProtocol Protocol Reference" name="top"></a>
+				<div class="main-navigation navigation-top">
+					<ul>
+	<li><a href="../index.html">Index</a></li>
+	<li><a href="../hierarchy.html">Hierarchy</a></li>
+</ul>
+				</div>
+				<div id="header">
+					<div class="section-header">
+						<h1 class="title title-header">JPSemanticActionsProtocol Protocol Reference</h1>
+					</div>		
+				</div>
+				<div id="container">	
+					
+					<div class="section section-specification"><table cellspacing="0"><tbody>
+						<tr>
+	<td class="specification-title">Conforms to</td>
+	<td class="specification-value">NSObject</td>
+</tr><tr>
+	<td class="specification-title">Declared in</td>
+	<td class="specification-value">JPSemanticActionsProtocol.h</td>
+</tr>
+						</tbody></table></div>
+					
+					
+					
+					
+					<div class="section section-overview">
+						<a title="Overview" name="overview"></a>
+						<h2 class="subtitle subtitle-overview">Overview</h2>
+						<p>JPSemanticActionsProtocol defines the interface between the <em>underlaying
+JSON parser</em> and the semantic actions object. The protocol must be implemented
+by concrete subclasses of JPSemanticActionsBase.</p>
+
+<p>The JSON parser will not perform <em>semantic actions</em> by itself, instead it will
+notify the semantic actions object of certain <em>parse events</em> and provide
+necessary information for the event.</p>
+
+<p>Parse events are signaled by the underlaying JSON parser via messages sent to
+the semantic actions object whose signature is prefixed with &ldquo;parserFound&rdquo;. The
+semantic actions object is supposed to implement a corresponding &ldquo;semantic action&rdquo;
+appropriate for the event and the current context and current state.</p>
+
+<p>A &ldquo;begin&rdquo; message, that is a <code>parserFoundArrayBegin</code> or a <code>parserFoundObjectBegin</code>
+message, indicates the start of a JSON container (a JSON Array, or a JSON Object).
+An &ldquo;end&rdquo; message, that is a <code>parserFoundArrayEnd</code> or a <code>parserFoundObjectEnd</code>
+message, indicates the end of the container which refers to the container
+signaled with the &ldquo;begin&rdquo; message immediately preceding this &ldquo;end&rdquo; message.</p>
+
+<p>Additionally, there are two events <code>parserFoundKeyValuePairBeginWithKey:length:encoding:index:</code>
+and <code>parserFoundKeyValuePairEnd</code> which are sent when the parser encountered
+a JSON string which is a key in the key-value pair of a JSON Object, and when
+the parser encountered the end of the JSON Value associated to this key.</p>
+
+<p>&ldquo;begin&rdquo; and &ldquo;end&rdquo; messages are strictly balanced and reflect the recursive,
+respectively hierarchical, structure of a JSON representation.</p>
+
+<p>Finally, the underlaying parser sends messages parserFound&lt;JSON_primitive>, that
+is <code>parserFoundString</code>, <code>parserFoundNull</code>, <code>parserFoundBoolean</code> and
+<code>parserFoundNumber</code> when it encounters a corresponding JSON primitive value.</p>
+
+<p>If the semantic actions property <code>generateEncodedStrings</code> returns <code>NO</code> (the default)
+the parser sends <em>decoded</em> JSON Strings (which include keys) to the semantic actions object.
+Otherwise, if the property <code>generateEncodedStrings</code> returns <code>YES</code>, the parser sends
+encoded JSON Strings to the semantic actions object. (see also <a href="../Classes/JPSemanticActionsBase.html">JPSemanticActionsBase</a>)
+If the parser uses a representation generator as a semantic actions object, it usually
+requires a properly <em>decoded</em> string which is equal to the original source string.</p>
+
+<p>Below is a typical flow of the complete messages:</p>
+
+<pre><code>parserFoundArrayBegin
+    parserFoundObjectBegin
+        parserFoundKeyValuePairBeginWithKey:length:encoding:index:
+            parserFoundArrayBegin
+                parserFoundValueBeginAtIndex:
+                parserFoundString:length:hasMore:encoding:
+                parserFoundString:length:hasMore:encoding:
+                parserFoundValueEndAtIndex:
+
+                parserFoundValueBeginAtIndex:
+                parserFoundString:length:hasMore:encoding:
+                parserFoundValueEndAtIndex:
+
+
+            parserFoundArrayEnd
+        parserFoundKeyValuePairEnd
+
+        parserFoundKeyValuePairBeginWithKey:length:encoding:index:
+            parserFoundArrayBegin
+                parserFoundValueBeginAtIndex:
+                parserFoundNumber:length:
+                parserFoundValueEndAtIndex:
+
+                parserFoundValueBeginAtIndex:
+                parserFoundNumber:length:
+                parserFoundValueEndAtIndex:
+                ..
+            parserFoundArrayEnd
+        parserFoundKeyValuePairEnd
+
+    parserFoundObjectEnd
+    parserFoundObjectBegin
+        ..
+    parserFoundObjectEnd
+ parserFoundArrayEnd
+</code></pre>
+
+<p>A <code>parserFoundString</code> message may be possibly sent repeatedly, if the string
+is handled in &ldquo;chunks&rdquo;. The method has a parameter <code>hasMore</code> which indicates
+when the string is eventually complete. A data string will be split into chunks
+if its size becomes large. The exact size of a chunk is dependent on the
+implementation. Currently, this equals about 2000 code units. Occasionally,
+this may become larger if the implementation can utilize an already allocated
+buffer whose size is larger.</p>
+
+<p>Implementing actions for &ldquo;begin&rdquo;, &ldquo;end&rdquo; and &ldquo;found primitive value&rdquo; messages
+will be usually sufficient to implement a semantic actions class which creates
+a JSON representation., e.g. with Foundation objects as containers and
+primitive values.</p>
+
+<p>A concrete implementation would purposefully use an internal stack in order
+to aid the construction of a JSON representation, e.g. with Foundation
+objects.</p>
+
+<p>Basically, a &ldquo;representation generator&rdquo; could be implemented as follows:</p>
+
+<p>A &ldquo;begin&rdquo; message will be the first message sent from the parser &ndash; besides
+the more informative &ldquo;parserFoundJsonBegin&rdquo; event. A valid JSON starts with
+either a JSON Array or a JSON Object.</p>
+
+<p>Now, a &ldquo;begin&rdquo; event may not be immediately followed by the corresponding
+&ldquo;end&rdquo; event &ndash; rather, since a JSON representation is a hierarchical data
+structure, &ldquo;begin&rdquo; may be followed by one or more other &ldquo;begin&rdquo; events. But
+eventually, the &ldquo;begin&rdquo; and &ldquo;end&rdquo; become balanced. Nonetheless, the basic
+principle of building a representation remains simple:</p>
+
+<p>So, on a &ldquo;begin&rdquo; message, the generator would create the corresponding
+container (for Foundation, a NSArray or NSDictionary object) and push it
+onto its internal stack.</p>
+
+<p>On a &ldquo;found primitive value&rdquo; message, the generator would simply construct a
+corresponding representation (e.g. a Foundation object) for a JSON String (Key),
+JSON Boolean, and a JSON Null and push them onto the stack as well.</p>
+
+<p>On an &ldquo;end&rdquo; message the generator would pop all objects from laying above
+the current container to the top of the stack and insert them into it. Now,
+this container will become the top of the stack &ndash; which in turn may be an
+element of another container.</p>
+
+<p>Note that the corresponding action on an &ldquo;end&rdquo; message for JSON Array
+respectively JSON Object do differ slightly, since a JSON Object expects
+key-value pairs on the stack and a JSON Array expects values in a sequence
+and must retain the order of elements.</p>
+
+<p>The process ends with the last message, an &ldquo;end&rdquo; message, whose action is
+exactly the same: pop the elements from the stack and insert them into the
+current container. The current container is, of course, the last remaining
+object residing in the stack, and this becomes the final result.</p>
+
+<p>The four methods</p>
+
+<ul>
+<li><code>-parserFoundValueBeginAtIndex:</code>,</li>
+<li><code>-parserFoundValueEndAtIndex:</code>,</li>
+<li><code>-parserFoundValueBeginWithKey:length:encoding:index</code> and</li>
+<li><code>-parserFoundValueEndWithKey:length:encoding:index</code></li>
+</ul>
+
+
+<p>are helpful when implementing a streaming API. These additional messages
+give fine grained control for all relevant parser events.
+For more information see <a href="JPSemanticActionsProtocol.html">JPSemanticActionsProtocol</a> and <a href="../Classes/JPStreamSemanticActions.html">JPStreamSemanticActions</a>.</p>
+
+<p>For instance, these messages will be required, reconstructing the JSON text
+from the parser events (possibly converted to another Unicode encoding, with
+unescaped Unicode characters, removed comments, etc.)</p>
+
+<p>These message are invoked as follows:</p>
+
+<pre><code>parserFoundArrayBegin
+    parserFoundValueBeginAtIndex:
+    parserFoundValueEndAtIndex:
+parserFoundArrayEnd
+
+parserFoundObjectBegin
+    parserFoundKeyValuePairBeginWithKey:length:encoding:index:
+    parserFoundKeyValuePairEnd
+parserFoundObjectEnd
+</code></pre>
+					</div>
+					
+					
+					
+					
+					
+					<div class="section section-tasks">
+						<a title="Tasks" name="tasks"></a>
+						<h2 class="subtitle subtitle-tasks">Tasks</h2>
+						
+						
+						
+						<h3 class="subsubtitle task-title">Other Methods</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/result">&ndash;&nbsp;result</a></code>
+		<span class="tooltip"><p>Retrieves the (abstract) result of the semantic actions instance.</p></span>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/setHasBOM:">&ndash;&nbsp;setHasBOM:</a></code>
+		<span class="tooltip"><p>Sets the property hasBOM.</p></span>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/clear">&ndash;&nbsp;clear</a></code>
+		<span class="tooltip"><p>Clears internal cached data.</p></span>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/cancel">&ndash;&nbsp;cancel</a></code>
+		<span class="tooltip"><p>Terminates a run as soon as possible.</p></span>
+	</span>
+	
+	
+</li>
+						</ul>
+						
+						
+						<a title="Delegate Methods" name="task_Delegate Methods"></a>
+						<h3 class="subsubtitle task-title">Delegate Methods</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/parserFoundJsonBegin">&ndash;&nbsp;parserFoundJsonBegin</a></code>
+		<span class="tooltip"><p>Sent to the delegate when the JSON parser found the start of a JSON document.</p></span>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/parserFoundJsonEnd">&ndash;&nbsp;parserFoundJsonEnd</a></code>
+		<span class="tooltip"><p>Sent to the delegate when the JSON parser found the end of a JSON document.</p></span>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/parserFinished">&ndash;&nbsp;parserFinished</a></code>
+		<span class="tooltip"><p>Sent to the delegate when the JSON parser finished parsing the last JSON
+document from its input.</p></span>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/parserDetectedError">&ndash;&nbsp;parserDetectedError</a></code>
+		<span class="tooltip"><p>Sent to the delegate when the JSON parser detected a parse error.</p></span>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/parserFoundArrayBegin">&ndash;&nbsp;parserFoundArrayBegin</a></code>
+		<span class="tooltip"><p>Sent to the delegate when the JSON parser found the start of a JSON Array,
+that is when it encountered the &lsquo;[&rsquo; character.</p></span>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/parserFoundArrayEnd">&ndash;&nbsp;parserFoundArrayEnd</a></code>
+		<span class="tooltip"><p>Sent to the delegate when the JSON parser found the end of a JSON Array,
+that is when it encountered the &lsquo;]&rsquo; character.</p></span>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/parserFoundObjectBegin">&ndash;&nbsp;parserFoundObjectBegin</a></code>
+		<span class="tooltip"><p>Sent to the delegate when the JSON parser found the start of a JSON Object,
+that is when it encountered the &lsquo;{&rsquo; character.</p></span>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/parserFoundObjectEnd">&ndash;&nbsp;parserFoundObjectEnd</a></code>
+		<span class="tooltip"><p>Sent to the delegate when the JSON parser found the end of a JSON Object,
+that is when it encountered the &lsquo;}&rsquo; character.</p></span>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/parserFoundKeyValuePairBeginWithKey:length:encoding:index:">&ndash;&nbsp;parserFoundKeyValuePairBeginWithKey:length:encoding:index:</a></code>
+		<span class="tooltip"><p>Sent to the delegate when the parser found the start of the nth key-value pair
+within a JSON Object.</p></span>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/parserFoundKeyValuePairEnd">&ndash;&nbsp;parserFoundKeyValuePairEnd</a></code>
+		<span class="tooltip"><p>Sent to the delegate when the parser found the end of a key-value pair of a
+JSON Object.</p></span>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/parserFoundValueBeginAtIndex:">&ndash;&nbsp;parserFoundValueBeginAtIndex:</a></code>
+		<span class="tooltip"><p>Sent to the delegate when the parser found the start of a JSON Value
+belonging to an JSON Array at the specified index.</p></span>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/parserFoundValueEndAtIndex:">&ndash;&nbsp;parserFoundValueEndAtIndex:</a></code>
+		<span class="tooltip"><p>Sent to the delegate when the parser found the end of a JSON Value
+belonging to an JSON Array at the specified index.</p></span>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/parserFoundString:length:hasMore:encoding:">&ndash;&nbsp;parserFoundString:length:hasMore:encoding:</a></code>
+		<span class="tooltip"><p>Sent to the delegate when the JSON parser found a JSON String as a value.</p></span>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/parserFoundNumber:length:">&ndash;&nbsp;parserFoundNumber:length:</a></code>
+		<span class="tooltip"><p>Sent to the delegate when the JSON parser found a JSON Number.</p></span>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/parserFoundBoolean:">&ndash;&nbsp;parserFoundBoolean:</a></code>
+		<span class="tooltip"><p>Sent to the delegate when the JSON parser found a JSON Boolean.</p></span>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/parserFoundNull">&ndash;&nbsp;parserFoundNull</a></code>
+		<span class="tooltip"><p>Sent to the delegate when the JSON parser found a JSON Null.</p></span>
+	</span>
+	
+	
+</li>
+						</ul>
+						
+					</div>
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					<div class="section section-methods">
+						<a title="Instance Methods" name="instance_methods"></a>
+						<h2 class="subtitle subtitle-methods">Instance Methods</h2>
+						
+						<div class="section-method">
+	<a name="//api/name/cancel" title="cancel"></a>
+	<h3 class="subsubtitle method-title">cancel</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Terminates a run as soon as possible.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (void)cancel</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>The error state after a cancel may be undefined, but ideally it should be
+&ldquo;canceled&rdquo;. JPAsyncJsonParser will invoke this method when itself receiving
+the cancel  message.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">JPSemanticActionsProtocol.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/clear" title="clear"></a>
+	<h3 class="subsubtitle method-title">clear</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Clears internal cached data.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (void)clear</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Method clear shall clear internal data which has been collected during a run.
+That is, it shall reset error information and temporary data like caches.</p><div class="note"><p><strong>Note:</strong> JPJsonParser and JPAsyncJsonParser do not invoke this method.</p></div>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">JPSemanticActionsProtocol.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/parserDetectedError" title="parserDetectedError"></a>
+	<h3 class="subsubtitle method-title">parserDetectedError</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Sent to the delegate when the JSON parser detected a parse error.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (void)parserDetectedError</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Delegates should implement this method as a minimal implementation in order
+to perform appropriate actions when the JSON parser detected a parse error.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">JPSemanticActionsProtocol.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/parserFinished" title="parserFinished"></a>
+	<h3 class="subsubtitle method-title">parserFinished</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Sent to the delegate when the JSON parser finished parsing the last JSON
+document from its input.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (void)parserFinished</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Delegates should implement this method as a minimal implementation in order
+to perform appropriate actions when the JSON parser finished to parse the
+input which possibly contains one or more JSON documents.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">JPSemanticActionsProtocol.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/parserFoundArrayBegin" title="parserFoundArrayBegin"></a>
+	<h3 class="subsubtitle method-title">parserFoundArrayBegin</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Sent to the delegate when the JSON parser found the start of a JSON Array,
+that is when it encountered the &lsquo;[&rsquo; character.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (void)parserFoundArrayBegin</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">JPSemanticActionsProtocol.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/parserFoundArrayEnd" title="parserFoundArrayEnd"></a>
+	<h3 class="subsubtitle method-title">parserFoundArrayEnd</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Sent to the delegate when the JSON parser found the end of a JSON Array,
+that is when it encountered the &lsquo;]&rsquo; character.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (void)parserFoundArrayEnd</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">JPSemanticActionsProtocol.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/parserFoundBoolean:" title="parserFoundBoolean:"></a>
+	<h3 class="subsubtitle method-title">parserFoundBoolean:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Sent to the delegate when the JSON parser found a JSON Boolean.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (void)parserFoundBoolean:(BOOL)<em>value</em></code></div>
+	
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>value</em></dt>
+			<dd><p>Corresponds to the boolean value of the JSON Boolean.</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">JPSemanticActionsProtocol.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/parserFoundJsonBegin" title="parserFoundJsonBegin"></a>
+	<h3 class="subsubtitle method-title">parserFoundJsonBegin</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Sent to the delegate when the JSON parser found the start of a JSON document.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (void)parserFoundJsonBegin</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Delegates should implement this method as a minimal implementation in order
+to perform appropriate actions when the JSON parser starts to parse a JSON
+document.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">JPSemanticActionsProtocol.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/parserFoundJsonEnd" title="parserFoundJsonEnd"></a>
+	<h3 class="subsubtitle method-title">parserFoundJsonEnd</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Sent to the delegate when the JSON parser found the end of a JSON document.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (void)parserFoundJsonEnd</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">JPSemanticActionsProtocol.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/parserFoundKeyValuePairBeginWithKey:length:encoding:index:" title="parserFoundKeyValuePairBeginWithKey:length:encoding:index:"></a>
+	<h3 class="subsubtitle method-title">parserFoundKeyValuePairBeginWithKey:length:encoding:index:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Sent to the delegate when the parser found the start of the nth key-value pair
+within a JSON Object.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (void)parserFoundKeyValuePairBeginWithKey:(const void *)<em>bytes</em> length:(size_t)<em>length</em> encoding:(NSStringEncoding)<em>encoding</em> index:(size_t)<em>index</em></code></div>
+	
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>bytes</em></dt>
+			<dd><p>A const void pointer to the start of the sequence of the JSON String.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>length</em></dt>
+			<dd><p>The number of bytes of the character sequence.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>encoding</em></dt>
+			<dd><p>The <em>Unicode encoding scheme</em> for the character sequence.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>index</em></dt>
+			<dd><p>The current index of the key-value pair of the JSON Object.</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>If property <code>generateEncodedStrings</code> equals <code>NO</code> (default) the JSON parser will
+pass the key as a <em>decoded</em> JSON String. If property <code>generateEncodedStrings</code>
+equals <code>YES</code> the character sequence represents an <em>encoded</em> JSON string as specified
+in RFC 4627.</p>
+
+<p><em>Decoding</em> a JSON string involves unescaping, possibly replacing certain Unicode
+characters with their replacement character as specified in the semantic actions
+configuration, and possibly converting from the source encoding to the specified
+Unicode encoding form. The resulting string should compare equal to the original
+string.</p>
+
+<p>Subsequently, the delegate will be sent parse events which constitute the value
+associated to the key.</p><div class="note"><p><strong>Note:</strong> The specified Unicode encoding scheme in parameter <em>encoding</em>
+corresponds to the Library Build Option <code>JSON_SEMANTIC_ACTIONS_STRING_ENCODING</code> and
+cannot be selected at runtime.</p></div>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">JPSemanticActionsProtocol.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/parserFoundKeyValuePairEnd" title="parserFoundKeyValuePairEnd"></a>
+	<h3 class="subsubtitle method-title">parserFoundKeyValuePairEnd</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Sent to the delegate when the parser found the end of a key-value pair of a
+JSON Object.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (void)parserFoundKeyValuePairEnd</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">JPSemanticActionsProtocol.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/parserFoundNull" title="parserFoundNull"></a>
+	<h3 class="subsubtitle method-title">parserFoundNull</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Sent to the delegate when the JSON parser found a JSON Null.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (void)parserFoundNull</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">JPSemanticActionsProtocol.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/parserFoundNumber:length:" title="parserFoundNumber:length:"></a>
+	<h3 class="subsubtitle method-title">parserFoundNumber:length:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Sent to the delegate when the JSON parser found a JSON Number.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (void)parserFoundNumber:(const char *)<em>numberString</em> length:(size_t)<em>length</em></code></div>
+	
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>numberString</em></dt>
+			<dd><p>A const char pointer to the start of the sequence of the JSON Number encoded in ASCII.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>length</em></dt>
+			<dd><p>The number of bytes of the character sequence.</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>The JSON parser will pass the JSON Number &ldquo;as is&rdquo;, though converted into ASCII
+which for number strings is equal to UTF-8 encoding.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">JPSemanticActionsProtocol.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/parserFoundObjectBegin" title="parserFoundObjectBegin"></a>
+	<h3 class="subsubtitle method-title">parserFoundObjectBegin</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Sent to the delegate when the JSON parser found the start of a JSON Object,
+that is when it encountered the &lsquo;{&rsquo; character.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (void)parserFoundObjectBegin</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">JPSemanticActionsProtocol.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/parserFoundObjectEnd" title="parserFoundObjectEnd"></a>
+	<h3 class="subsubtitle method-title">parserFoundObjectEnd</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Sent to the delegate when the JSON parser found the end of a JSON Object,
+that is when it encountered the &lsquo;}&rsquo; character.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (bool)parserFoundObjectEnd</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">JPSemanticActionsProtocol.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/parserFoundString:length:hasMore:encoding:" title="parserFoundString:length:hasMore:encoding:"></a>
+	<h3 class="subsubtitle method-title">parserFoundString:length:hasMore:encoding:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Sent to the delegate when the JSON parser found a JSON String as a value.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (void)parserFoundString:(const void *)<em>bytes</em> length:(size_t)<em>length</em> hasMore:(BOOL)<em>hasMore</em> encoding:(NSStringEncoding)<em>encoding</em></code></div>
+	
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>bytes</em></dt>
+			<dd><p>A void pointer to the start of the possibly partial sequence of the JSON String.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>length</em></dt>
+			<dd><p>The number of bytes of the sequence.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>hasMore</em></dt>
+			<dd><p>A boolean value which equals <code>YES</code> in order to indicate that there are more characters available for this JSON string.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>encoding</em></dt>
+			<dd><p>The <em>Unicode encoding scheme</em> for the character sequence.</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>If parameter <em>hasMore</em> equals <code>YES</code>, the parser found a large string and is
+delivering the JSON String in several chunks.</p>
+
+<p>If property <code>generateEncodedStrings</code> equals <code>NO</code> (default) each chunk has been
+<em>decoded</em> and should compare equal to the original string. If property <code>generateEncodedStrings</code>
+equals <code>YES</code> the character sequence represents an <em>encoded</em> JSON string as specified
+in RFC 4627.</p>
+
+<p>In case of multibyte encodings, it is guaranteed that the  byte sequence will
+always end at a complete character boundary.</p>
+
+<p>The parser will send as many chunks as necessary to complement the string through
+sending consecutive messages to the receiver.</p>
+
+<p><em>Decoding</em> a JSON string involves unescaping, possibly replacing certain Unicode
+characters with their replacement character as specified in the semantic actions
+configuration, and possibly converting from the source encoding to the specified
+Unicode encoding form. The resulting string should compare equal to the original
+string.</p><div class="note"><p><strong>Note:</strong> The specified Unicode encoding scheme in parameter <em>encoding</em>
+corresponds to the Library Build Option <code>JSON_SEMANTIC_ACTIONS_STRING_ENCODING</code> and
+cannot be selected at runtime.</p></div>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">JPSemanticActionsProtocol.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/parserFoundValueBeginAtIndex:" title="parserFoundValueBeginAtIndex:"></a>
+	<h3 class="subsubtitle method-title">parserFoundValueBeginAtIndex:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Sent to the delegate when the parser found the start of a JSON Value
+belonging to an JSON Array at the specified index.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (void)parserFoundValueBeginAtIndex:(size_t)<em>index</em></code></div>
+	
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>index</em></dt>
+			<dd><p>The index of at which the value is added to the JSON Array.</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">JPSemanticActionsProtocol.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/parserFoundValueEndAtIndex:" title="parserFoundValueEndAtIndex:"></a>
+	<h3 class="subsubtitle method-title">parserFoundValueEndAtIndex:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Sent to the delegate when the parser found the end of a JSON Value
+belonging to an JSON Array at the specified index.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (void)parserFoundValueEndAtIndex:(size_t)<em>index</em></code></div>
+	
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>index</em></dt>
+			<dd><p>The index of at which the value is added to the JSON Array.</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>The associated value at this index has been notified by the parser by the
+corresponding event which has been sent immediately before this message.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">JPSemanticActionsProtocol.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/result" title="result"></a>
+	<h3 class="subsubtitle method-title">result</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Retrieves the (abstract) result of the semantic actions instance.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (id)result</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>The property may return <code>nil</code>.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">JPSemanticActionsProtocol.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/setHasBOM:" title="setHasBOM:"></a>
+	<h3 class="subsubtitle method-title">setHasBOM:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Sets the property hasBOM.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (void)setHasBOM:(BOOL)<em>value</em></code></div>
+	
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>value</em></dt>
+			<dd><p>A boolean value.</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>The setHasBOM method will be invoked by the JPJsonParser and JPAsyncJsonParser
+when they try to determine the encoding of the input and thereby check for
+a BOM. The semantic actions instance may use this information if required.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">JPSemanticActionsProtocol.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+					</div>
+					
+					
+				</div>
+				<div class="main-navigation navigation-bottom">
+					<ul>
+	<li><a href="../index.html">Index</a></li>
+	<li><a href="../hierarchy.html">Hierarchy</a></li>
+</ul>
+				</div>
+				<div id="footer">
+					<hr />
+					<div class="footer-copyright">
+						<p><span class="copyright">&copy; 2013 Bit Passion. All rights reserved. (Last updated: 2013-04-14)</span><br />
+						
+						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.0.5 (build 789)</a>.</span></p>
+						
+					</div>
+				</div>
+			</div>
+		</article>
+		<script type="text/javascript">
+			function jumpToChange()
+			{
+				window.location.hash = this.options[this.selectedIndex].value;
+			}
+			
+			function toggleTOC()
+			{
+				var contents = document.getElementById('contents');
+				var tocContainer = document.getElementById('tocContainer');
+				
+				if (this.getAttribute('class') == 'open')
+				{
+					this.setAttribute('class', '');
+					contents.setAttribute('class', '');
+					tocContainer.setAttribute('class', '');
+					
+					window.name = "hideTOC";
+				}
+				else
+				{
+					this.setAttribute('class', 'open');
+					contents.setAttribute('class', 'isShowingTOC');
+					tocContainer.setAttribute('class', 'isShowingTOC');
+					
+					window.name = "";
+				}
+				return false;
+			}
+			
+			function toggleTOCEntryChildren(e)
+			{
+				e.stopPropagation();
+				var currentClass = this.getAttribute('class');
+				if (currentClass == 'children') {
+					this.setAttribute('class', 'children open');
+				}
+				else if (currentClass == 'children open') {
+					this.setAttribute('class', 'children');
+				}
+				return false;
+			}
+			
+			function tocEntryClick(e)
+			{
+				e.stopPropagation();
+				return true;
+			}
+			
+			function init()
+			{
+				var selectElement = document.getElementById('jumpTo');
+				selectElement.addEventListener('change', jumpToChange, false);
+				
+				var tocButton = document.getElementById('table_of_contents');
+				tocButton.addEventListener('click', toggleTOC, false);
+				
+				var taskTreeItem = document.getElementById('task_treeitem');
+				if (taskTreeItem.getElementsByTagName('li').length > 0)
+				{
+					taskTreeItem.setAttribute('class', 'children');
+					taskTreeItem.firstChild.setAttribute('class', 'disclosure');
+				}
+				
+				var tocList = document.getElementById('toc');
+				
+				var tocEntries = tocList.getElementsByTagName('li');
+				for (var i = 0; i < tocEntries.length; i++) {
+					tocEntries[i].addEventListener('click', toggleTOCEntryChildren, false);
+				}
+				
+				var tocLinks = tocList.getElementsByTagName('a');
+				for (var i = 0; i < tocLinks.length; i++) {
+					tocLinks[i].addEventListener('click', tocEntryClick, false);
+				}
+				
+				if (window.name == "hideTOC") {
+					toggleTOC.call(tocButton);
+				}
+			}
+			
+			window.onload = init;
+			
+			// If showing in Xcode, hide the TOC and Header
+			if (navigator.userAgent.match(/xcode/i)) {
+				document.getElementById("contents").className = "hideInXcode"
+				document.getElementById("tocContainer").className = "hideInXcode"
+				document.getElementById("top_header").className = "hideInXcode"
+			}
+			
+		</script>
+	</body>
+</html>
