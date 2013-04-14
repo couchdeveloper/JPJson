@@ -105,7 +105,7 @@
  
  -  `JPJsonParserParseMultipleDocuments`
  
- If enabled, the parser parses one or more documents from the input until it 
+ If this option is set, the parser parses one or more documents from the input until it 
  receives `EOF`. Otherwise, the parser treats any non white spaces after the
  first JSON document as an error. 
  
@@ -133,6 +133,17 @@
  When downloading large data, this helps throttling the consumption of system
  resources by the underlaying network layer.
  
+ 
+-  `JPJsonParserEncodedStrings`
+
+ If this option is set, the parser sends properly _encoded_ JSON Strings to the semantic
+ actions object in method `-parserFoundKeyValuePairBeginWithKey:length:encoding:index:`
+ and method `-parserFoundString:length:hasMore:encoding:`. That is, the string
+ is encoded as required by RFC 4627.
+
+ Otherwise (the default), the parser sends properly decoded strings to the
+ semantic actions object which match the original source string.
+
  
  
  #### JSON Representation Generation ####

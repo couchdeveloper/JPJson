@@ -55,7 +55,14 @@
  Finally, the underlaying parser sends messages parserFound<JSON_primitive>, that 
  is `parserFoundString`, `parserFoundNull`, `parserFoundBoolean` and
  `parserFoundNumber` when it encounters a corresponding JSON primitive value. 
- JSON Strings (which include keys) will be unescaped by the parser.
+
+ If the semantic actions property `generateEncodedStrings` returns `NO` (the default) 
+ the parser sends _decoded_ JSON Strings (which include keys) to the semantic actions object.
+ Otherwise, if the property `generateEncodedStrings` returns `YES`, the parser sends
+ encoded JSON Strings to the semantic actions object. (see also <JPSemanticActionsBase> for parse options) 
+ If the parser uses a representation generator as a semantic actions object, it usually 
+ requires a properly _decoded_ string which is equal to the original source string.
+ 
  
  
  Below is a typical flow of the complete messages:
