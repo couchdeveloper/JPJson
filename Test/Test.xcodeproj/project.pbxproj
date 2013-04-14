@@ -7,9 +7,9 @@
 	objects = {
 
 /* Begin PBXAggregateTarget section */
-		A130A1A3168DB65700D18244 /* All Tests */ = {
+		A130A1A3168DB65700D18244 /* Build All Tests */ = {
 			isa = PBXAggregateTarget;
-			buildConfigurationList = A130A1A4168DB65700D18244 /* Build configuration list for PBXAggregateTarget "All Tests" */;
+			buildConfigurationList = A130A1A4168DB65700D18244 /* Build configuration list for PBXAggregateTarget "Build All Tests" */;
 			buildPhases = (
 			);
 			dependencies = (
@@ -22,7 +22,7 @@
 				A130A1B4168DB66400D18244 /* PBXTargetDependency */,
 				A130A1B6168DB66400D18244 /* PBXTargetDependency */,
 			);
-			name = "All Tests";
+			name = "Build All Tests";
 			productName = "All Tests";
 		};
 /* End PBXAggregateTarget section */
@@ -30,7 +30,6 @@
 /* Begin PBXBuildFile section */
 		A103FB6A13EA8BC4009FA571 /* gtest_main.cc in Sources */ = {isa = PBXBuildFile; fileRef = A164221013D4357400796785 /* gtest_main.cc */; };
 		A1070B9014780A0400C1847D /* base64_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1E95E0F147288E100A78D3F /* base64_test.cpp */; };
-		A113FB8A17154FC500D65C91 /* JPJson.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A113FB8917154FC500D65C91 /* JPJson.framework */; };
 		A1185508170B4565002EAEFC /* number_to_string_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A172BCAF1701EC3000A29A10 /* number_to_string_test.cpp */; };
 		A1185509170B4594002EAEFC /* write_value_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A172BCB117021E5E00A29A10 /* write_value_test.cpp */; };
 		A11E4A6016203FFD0094B278 /* NSStreamStreambufTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A11E4A5E16203FFD0094B278 /* NSStreamStreambufTest.mm */; };
@@ -42,7 +41,6 @@
 		A126DCB8154EDF7F001E09F0 /* string_buffer_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1070B9114780A2C00C1847D /* string_buffer_test.cpp */; };
 		A126DCB9154EDF84001E09F0 /* string_buffer_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1070B9114780A2C00C1847D /* string_buffer_test.cpp */; };
 		A126DCBA154EF54B001E09F0 /* string_storage_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A126DCB6154EC071001E09F0 /* string_storage_test.cpp */; };
-		A1386FD3160B3F5A00C16B00 /* JPJson.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1386FD2160B3F5A00C16B00 /* JPJson.framework */; };
 		A144F303145871230062D5E9 /* timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A199FC7613D5D186000170CD /* timer.cpp */; };
 		A146C87F150518C10067A55B /* unicode_detect_bom_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1A1BE6A142B448B00335044 /* unicode_detect_bom_test.cpp */; };
 		A146C880150519B10067A55B /* unicode_conversion_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A140DD1C13E94E36009DBB8C /* unicode_conversion_test.cpp */; };
@@ -132,6 +130,9 @@
 		A1C0603A1624A50C00BB201D /* NSMutableDataStreambufTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1977E64156D1D3E0074D9B2 /* NSMutableDataStreambufTest.mm */; };
 		A1CC0A791710037B00679BCF /* CFDataCacheTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1DC52B914582CDA00CE28F2 /* CFDataCacheTest.mm */; };
 		A1D2527E13DDA2AE00960381 /* gtest_main.cc in Sources */ = {isa = PBXBuildFile; fileRef = A164221013D4357400796785 /* gtest_main.cc */; };
+		A1DA320E171A9AE800E0C210 /* gtest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1E67819161ECE7C00E80CA7 /* gtest.framework */; };
+		A1DA3210171A9E0100E0C210 /* JPJson.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1DA320F171A9E0100E0C210 /* JPJson.framework */; };
+		A1DA3212171A9F4E00E0C210 /* libjson.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A1DA3211171A9F4E00E0C210 /* libjson.a */; };
 		A1DC4BE614582BB700CE28F2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A199FC7B13D5DB12000170CD /* Foundation.framework */; };
 		A1DC52BF1458368200CE28F2 /* gtest_main.cc in Sources */ = {isa = PBXBuildFile; fileRef = A164221013D4357400796785 /* gtest_main.cc */; };
 		A1DC74BF16DBC79100B7730A /* DecimalNumberTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A158A90A16D79E10001E3645 /* DecimalNumberTest.cpp */; };
@@ -380,6 +381,8 @@
 		A1CFB92D1510B1FB0010942D /* project.release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; lineEnding = 0; path = project.release.xcconfig; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.xcconfig; };
 		A1D2529013DDA2AE00960381 /* unicode_test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = unicode_test; sourceTree = BUILT_PRODUCTS_DIR; };
 		A1D2529413DDA3A100960381 /* utilities_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = utilities_test.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		A1DA320F171A9E0100E0C210 /* JPJson.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JPJson.framework; path = ../DerivedData/JPJson/Build/Products/Debug/JPJson.framework; sourceTree = "<group>"; };
+		A1DA3211171A9F4E00E0C210 /* libjson.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjson.a; path = ../DerivedData/JPJson/Build/Products/Release/libjson.a; sourceTree = "<group>"; };
 		A1DC4BE414582BB700CE28F2 /* ObjC_private_test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ObjC_private_test; sourceTree = BUILT_PRODUCTS_DIR; };
 		A1DC4BEB14582BB800CE28F2 /* ObjC_private_test-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ObjC_private_test-Prefix.pch"; sourceTree = "<group>"; };
 		A1DC52B914582CDA00CE28F2 /* CFDataCacheTest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; path = CFDataCacheTest.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -428,8 +431,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A1DA3210171A9E0100E0C210 /* JPJson.framework in Frameworks */,
 				A1C0602E16232A9B00BB201D /* gtest.framework in Frameworks */,
-				A1386FD3160B3F5A00C16B00 /* JPJson.framework in Frameworks */,
 				A199FC7C13D5DB12000170CD /* Foundation.framework in Frameworks */,
 				A171E77713D497E700260A6B /* CoreFoundation.framework in Frameworks */,
 			);
@@ -447,7 +450,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A113FB8A17154FC500D65C91 /* JPJson.framework in Frameworks */,
+				A1DA3212171A9F4E00E0C210 /* libjson.a in Frameworks */,
+				A1DA320E171A9AE800E0C210 /* gtest.framework in Frameworks */,
 				A1AF4B751462C59B0065B048 /* CoreFoundation.framework in Frameworks */,
 				A1AF4B761462C5A20065B048 /* Foundation.framework in Frameworks */,
 			);
@@ -504,6 +508,8 @@
 		A16421F813D4354300796785 = {
 			isa = PBXGroup;
 			children = (
+				A1DA3211171A9F4E00E0C210 /* libjson.a */,
+				A1DA320F171A9E0100E0C210 /* JPJson.framework */,
 				A130A19C168DA54200D18244 /* Xcode Config */,
 				A16718A513EA85F700A39091 /* Tests */,
 				A199FC9F13D7092A000170CD /* Resources */,
@@ -918,7 +924,7 @@
 				A1DC4BE314582BB700CE28F2 /* ObjC_private_test */,
 				A171E74913D4966E00260A6B /* ObjC_Test */,
 				A1AF4B3E1462B4960065B048 /* AllTests */,
-				A130A1A3168DB65700D18244 /* All Tests */,
+				A130A1A3168DB65700D18244 /* Build All Tests */,
 			);
 		};
 /* End PBXProject section */
@@ -1313,6 +1319,10 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../DerivedData/JPJson/Build/Products/Debug\"",
+				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				HEADER_SEARCH_PATHS = "";
@@ -1327,6 +1337,10 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../DerivedData/JPJson/Build/Products/Debug\"",
+				);
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_OPTIMIZATION_LEVEL = 3;
 				HEADER_SEARCH_PATHS = "";
@@ -1378,6 +1392,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(ICU_LIBRARY_SEARCH_PATH)",
+					"\"$(SRCROOT)/../DerivedData/JPJson/Build/Products/Release\"",
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -1406,6 +1421,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(ICU_LIBRARY_SEARCH_PATH)",
+					"\"$(SRCROOT)/../DerivedData/JPJson/Build/Products/Release\"",
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -1498,7 +1514,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		A130A1A4168DB65700D18244 /* Build configuration list for PBXAggregateTarget "All Tests" */ = {
+		A130A1A4168DB65700D18244 /* Build configuration list for PBXAggregateTarget "Build All Tests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				A130A1A5168DB65700D18244 /* Debug */,

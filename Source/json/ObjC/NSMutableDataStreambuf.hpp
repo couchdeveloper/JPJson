@@ -22,7 +22,7 @@
 #define JSON_OBJC_NSMUTABLEDATA_STREAMBUF_HPP
 
 #if !__has_feature(objc_arc)
-#warning error This Objective-C file shall be compiled with ARC enabled.
+#error This Objective-C file shall be compiled with ARC enabled.
 #endif
 
 
@@ -97,7 +97,6 @@ namespace json { namespace objc {
     #endif
         
         ~NSMutableDataStreambuf() {
-            _data;
         }
 #if 0
         void swap(NSMutableDataStreambuf& __rhs);
