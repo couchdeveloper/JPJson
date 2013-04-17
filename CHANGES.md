@@ -80,6 +80,12 @@
 * Improved installation document and fixed typos.
 
 
+### Version 0.6.1 beta
+
+* Added NSOutputStream API to JPJSONWriter.
+
+
+
 
 ### Version 0.7 beta
 
