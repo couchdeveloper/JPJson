@@ -213,14 +213,16 @@ That is, you are not required to add a header search path for the client target.
 
 Yet, there are still a few settings required:
 
-The JPJson Lib requires to be linked itself with the stdc++ library. We need to setup this in a build setting for the client by adding a the option `-lstdc++` to the **Other Linker Flags** build setting.
+The JPJson Lib requires to be linked itself with the standard C++ library. This requires a corresponding build setting in the _main_ product that produces the executable binary. Since version 0.7 JPJson uses clang's standard C++ library instead of gcc's. We need to adding a the option `-lc++` to the **Other Linker Flags** build setting of the product producing the executable.
+
+Note: Linking against gcc's standard C++ library would require to add a flag `-lstdc++`.
 
 Furthermore, in order to ensure the linker puts all possibly required code from the static archive containing Objective-C code into the final executable we need to add the option `-ObjC ` to the **Other Linker Flags**, too.
 
  - In the target build settings of the client, add the following two options to **Other Linker Flags**:  
-    `-ObjC -lstdc++`  
+    `-ObjC -lc++`  
     e.g.:  
-    `OTHER_LDFLAGS = -ObjC -lstdc++`
+    `OTHER_LDFLAGS = -ObjC -lc++`
 
 
  - Optionally, but recommended, add a few macros to the target build setting **Preprocessor Macros** of your client:

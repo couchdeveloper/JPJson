@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "A130A1A3168DB65700D18244"
-               BuildableName = "All Tests"
+               BuildableName = "Build All Tests"
                BlueprintName = "Build All Tests"
                ReferencedContainer = "container:Test.xcodeproj">
             </BuildableReference>
