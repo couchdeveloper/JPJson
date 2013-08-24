@@ -204,40 +204,43 @@
                location = "group:ObjC"
                name = "ObjC">
                <Group
-                  location = "group:JPJsonParser/json/ObjC"
+                  location = "group:"
                   name = "Private">
                   <FileRef
-                     location = "group:Source/json/ObjC/mutex.hpp">
+                     location = "group:OSCompatibility.h">
                   </FileRef>
                   <FileRef
-                     location = "group:Source/json/ObjC/semaphore.hpp">
+                     location = "group:mutex.hpp">
                   </FileRef>
                   <FileRef
-                     location = "group:Source/json/ObjC/SemanticActionsBase.hpp">
+                     location = "group:semaphore.hpp">
                   </FileRef>
                   <FileRef
-                     location = "group:Source/json/ObjC/unicode_traits.hpp">
+                     location = "group:SemanticActionsBase.hpp">
                   </FileRef>
                   <FileRef
-                     location = "group:Source/json/ObjC/RepresentationGenerator.hpp">
+                     location = "group:unicode_traits.hpp">
                   </FileRef>
                   <FileRef
-                     location = "group:Source/json/ObjC/CFDataCache.hpp">
+                     location = "group:RepresentationGenerator.hpp">
                   </FileRef>
                   <FileRef
-                     location = "group:Source/json/ObjC/CFDataBuffer.hpp">
+                     location = "group:CFDataCache.hpp">
                   </FileRef>
                   <FileRef
-                     location = "group:Source/json/ObjC/JPSemanticActionsBase_private.h">
+                     location = "group:CFDataBuffer.hpp">
                   </FileRef>
                   <FileRef
-                     location = "group:Source/json/ObjC/NSMutableDataStreambuf.hpp">
+                     location = "group:JPSemanticActionsBase_private.h">
                   </FileRef>
                   <FileRef
-                     location = "group:Source/json/ObjC/NSDataStreambuf.hpp">
+                     location = "group:NSMutableDataStreambuf.hpp">
                   </FileRef>
                   <FileRef
-                     location = "group:Source/json/ObjC/NSStreamStreambuf.hpp">
+                     location = "group:NSDataStreambuf.hpp">
+                  </FileRef>
+                  <FileRef
+                     location = "group:NSStreamStreambuf.hpp">
                   </FileRef>
                </Group>
                <FileRef

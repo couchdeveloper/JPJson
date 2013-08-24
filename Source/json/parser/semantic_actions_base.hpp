@@ -53,11 +53,18 @@ namespace json { namespace semanticactions {
     
     // Parser configuration
     enum noncharacter_handling_option {
-        SignalErrorOnUnicodeNoncharacter,
-        SubstituteUnicodeNoncharacter,
-        SkipUnicodeNoncharacters,
+        AllowUnicodeNoncharacter,          // allows unicode noncharacters
+        SignalErrorOnUnicodeNoncharacter,   // halts the parser with an error
+        SubstituteUnicodeNoncharacter,      // replaces any occurrence of noncharacter with the replacement character
+        RemoveUnicodeNoncharacter           // removes a noncharacter from the input
     };
     
+    enum nullcharacter_handling_option {
+        AllowUnicodeNULLCharacter,          // allows Unicode 'NULL' (U+0000) in strings
+        SignalErrorOnUnicodeNULLCharacter,  // halts the parser with an error
+        SubstituteUnicodeNULLCharacter,     // replaces any occurrence of Unicode 'NULL' with the replacement character
+        RemoveUnicodeNULLCharacter          // removes a Unicode 'NULL' character from the input
+    };
     
     // (Not yet implemented)
     // Extensions
@@ -145,7 +152,8 @@ namespace json {
         typedef json::utility::logger<LOG_MAX_LEVEL>        logger_t;
         
         semantic_actions_base() noexcept
-        :   nch_option_(SignalErrorOnUnicodeNoncharacter),
+        :   noncharacter_handling_option_(SignalErrorOnUnicodeNoncharacter),
+            nullcharacter_handling_option_(SignalErrorOnUnicodeNULLCharacter),
             ncon_flags_(ExtensionOptions::AllowNone),
             opt_ignore_spurious_trailing_bytes_(false),
             opt_multiple_documents_(false),
@@ -310,11 +318,19 @@ namespace json {
         
         
         noncharacter_handling_option unicode_noncharacter_handling() const {
-            return nch_option_;
+            return noncharacter_handling_option_;
         }
         
         void unicode_noncharacter_handling(noncharacter_handling_option opt) {
-            nch_option_ = opt;
+            noncharacter_handling_option_ = opt;
+        }
+
+        nullcharacter_handling_option unicode_nullcharacter_handling() const {
+            return nullcharacter_handling_option_;
+        }
+        
+        void unicode_nullcharacter_handling(nullcharacter_handling_option opt) {
+            nullcharacter_handling_option_ = opt;
         }
         
         ExtensionOptions extensions() const { return ncon_flags_; }
@@ -349,15 +365,16 @@ namespace json {
         void* result() const { return static_cast<void*>(0); }
         
     protected:
-        logger_t                logger_;
-        noncharacter_handling_option nch_option_;
-        ExtensionOptions        ncon_flags_;
-        std::string             inputEncoding_;
-        bool                    opt_ignore_spurious_trailing_bytes_;
-        bool                    opt_multiple_documents_;
-        bool                    opt_check_duplicate_key_;
-        bool                    opt_pass_escaped_string_;
-        bool                    canceled_;
+        logger_t                        logger_;
+        noncharacter_handling_option    noncharacter_handling_option_;
+        nullcharacter_handling_option   nullcharacter_handling_option_;
+        ExtensionOptions                ncon_flags_;
+        std::string                     inputEncoding_;
+        bool                            opt_ignore_spurious_trailing_bytes_;
+        bool                            opt_multiple_documents_;
+        bool                            opt_check_duplicate_key_;
+        bool                            opt_pass_escaped_string_;
+        bool                            canceled_;
         
         
     private:
@@ -369,8 +386,8 @@ namespace json {
             os << "Input encoding: " << sa.inputEncoding() << "\n"
 
             << "Unicode noncharacter handling: " << 
-                ((sa.nch_option_==SignalErrorOnUnicodeNoncharacter) ? "SignalErrorOnUnicodeNoncharacter"
-                : ((sa.nch_option_==SubstituteUnicodeNoncharacter) ? "SubstituteUnicodeNoncharacter" : "SkipUnicodeNoncharacters"))
+                ((sa.noncharacter_handling_option_==SignalErrorOnUnicodeNoncharacter) ? "SignalErrorOnUnicodeNoncharacter"
+                : ((sa.noncharacter_handling_option_==SubstituteUnicodeNoncharacter) ? "SubstituteUnicodeNoncharacter" : "SkipUnicodeNoncharacters"))
             << "\nPass Escaped Strings: " << (sa.passEscapdedString() ? "YES" : "NO")
             << "\n"
             << "\nBasic Json Parser Options:"

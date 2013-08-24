@@ -25,6 +25,7 @@
 
 #import "JPSemanticActionsBase.h"
 #import "JPSemanticActionsBase_private.h"
+#import "OSCompatibility.h"
 
 
 typedef JPSemanticActions_StartJsonHandlerBlockType   StartJsonHandlerBlockType;
@@ -75,7 +76,7 @@ typedef JPSemanticActions_ErrorHandlerBlockType       ErrorHandlerBlockType;
     if (self) {
         if (handlerQueue != NULL) {
             handlerDispatchQueue_ = handlerQueue; 
-            dispatch_retain(handlerDispatchQueue_);
+            JP_DISPATCH_RETAIN(handlerDispatchQueue_);
         }
     }    
     return self;
@@ -86,7 +87,7 @@ typedef JPSemanticActions_ErrorHandlerBlockType       ErrorHandlerBlockType;
     dispatch_queue_t handlerDispatchQueue = dispatch_queue_create("com.JPSemanticActions.handler_queue", NULL);
     self = [self initWithHandlerDispatchQueue:handlerDispatchQueue];
     if (handlerDispatchQueue != NULL) {
-        dispatch_release(handlerDispatchQueue);
+        JP_DISPATCH_RELEASE(handlerDispatchQueue);
     }
     return self;
 }
@@ -94,7 +95,7 @@ typedef JPSemanticActions_ErrorHandlerBlockType       ErrorHandlerBlockType;
 - (void) dealloc 
 {
     if (handlerDispatchQueue_ != NULL) {
-        dispatch_release(handlerDispatchQueue_);
+        JP_DISPATCH_RELEASE(handlerDispatchQueue_);
     }
 }
 
@@ -112,14 +113,30 @@ typedef JPSemanticActions_ErrorHandlerBlockType       ErrorHandlerBlockType;
     self.parseMultipleDocumentsAsynchronously = (options & JPJsonParserParseMultipleDocumentsAsynchronously) != 0;
     self.generateEncodedStrings = (options & JPJsonParserEncodedStrings) != 0;
     
+    if (JPJsonParserNULLCharacterHandling & options) {
+        if (JPJsonParserSignalErrorOnNULLCharacter & options) {
+            self.unicodeNULLCharacterHandling = JPSemanticActionsSignalErrorOnUnicodeNULLCharacter;
+        } else if (JPJsonParserSubstituteUnicodeNULLCharacter & options) {
+            self.unicodeNULLCharacterHandling = JPSemanticActionsSubstituteUnicodeNULLCharacter;
+        } else if (JPJsonParserRemoveUnicodeNULLCharacter & options) {
+            self.unicodeNULLCharacterHandling = JPSemanticActionsRemoveUnicodeNULLCharacter;
+        }
+    }
+    else {
+        self.unicodeNULLCharacterHandling = JPSemanticActionsAllowUnicodeNULLCharacter;
+    }
+    
     if (JPJsonParserNoncharacterHandling & options) {
         if (JPJsonParserSignalErrorOnNoncharacter & options) {
             self.unicodeNoncharacterHandling = JPSemanticActionsSignalErrorOnUnicodeNoncharacter;
         } else if (JPJsonParserSubstituteUnicodeNoncharacter & options) {
             self.unicodeNoncharacterHandling = JPSemanticActionsSubstituteUnicodeNoncharacter;
-        } else if (JPJsonParserSkipUnicodeNoncharacter & options) {
-            self.unicodeNoncharacterHandling = JPSemanticActionsSkipUnicodeNoncharacters;
-        } 
+        } else if (JPJsonParserRemoveUnicodeNoncharacter & options) {
+            self.unicodeNoncharacterHandling = JPSemanticActionsRemoveUnicodeNoncharacter;
+        }
+    }
+    else {
+        self.unicodeNoncharacterHandling = JPSemanticActionsAllowUnicodeNoncharacter;
     }
     
     if (JPJsonParserLogLevel && options) {
@@ -215,10 +232,10 @@ typedef JPSemanticActions_ErrorHandlerBlockType       ErrorHandlerBlockType;
 {
     if (queue != handlerDispatchQueue_) {
         if (handlerDispatchQueue_) {
-            dispatch_release(handlerDispatchQueue_);
+            JP_DISPATCH_RELEASE(handlerDispatchQueue_);
         }
         if (queue) {
-            dispatch_retain(queue);
+            JP_DISPATCH_RETAIN(queue);
         }
         handlerDispatchQueue_ = queue;
     }
@@ -377,18 +394,54 @@ typedef JPSemanticActions_ErrorHandlerBlockType       ErrorHandlerBlockType;
 
 
 
+- (void) setUnicodeNULLCharacterHandling:(JPSemanticActionsUnicodeNULLCharacterHandling)opt
+{
+    switch (opt) {
+        case JPSemanticActionsAllowUnicodeNULLCharacter:
+            self.imp->unicode_nullcharacter_handling(json::semanticactions::AllowUnicodeNULLCharacter);
+            break;
+        case JPSemanticActionsSignalErrorOnUnicodeNULLCharacter:
+            self.imp->unicode_nullcharacter_handling(json::semanticactions::SignalErrorOnUnicodeNULLCharacter);
+            break;
+        case JPSemanticActionsSubstituteUnicodeNULLCharacter:
+            self.imp->unicode_nullcharacter_handling(json::semanticactions::SubstituteUnicodeNULLCharacter);
+            break;
+        case JPSemanticActionsRemoveUnicodeNULLCharacter:
+            self.imp->unicode_nullcharacter_handling(json::semanticactions::RemoveUnicodeNULLCharacter);
+            break;
+    }
+}
+
+- (JPSemanticActionsUnicodeNULLCharacterHandling) unicodeNULLCharacterHandling
+{
+    switch (self.imp->unicode_noncharacter_handling()) {
+        case json::semanticactions::AllowUnicodeNoncharacter:
+            return JPSemanticActionsAllowUnicodeNULLCharacter;
+        case json::semanticactions::SignalErrorOnUnicodeNoncharacter:
+            return JPSemanticActionsSignalErrorOnUnicodeNoncharacter;
+        case json::semanticactions::SubstituteUnicodeNoncharacter:
+            return JPSemanticActionsSubstituteUnicodeNoncharacter;
+        case json::semanticactions::RemoveUnicodeNoncharacter:
+            return JPSemanticActionsRemoveUnicodeNoncharacter;
+    }
+}
+
+
 
 - (void) setUnicodeNoncharacterHandling:(JPSemanticActionsUnicodeNoncharacterHandling)opt
 {
     switch (opt) {
+        case JPSemanticActionsAllowUnicodeNoncharacter:
+            self.imp->unicode_noncharacter_handling(json::semanticactions::AllowUnicodeNoncharacter);
+            break;
         case JPSemanticActionsSignalErrorOnUnicodeNoncharacter:
             self.imp->unicode_noncharacter_handling(json::semanticactions::SignalErrorOnUnicodeNoncharacter);
             break;
         case JPSemanticActionsSubstituteUnicodeNoncharacter:
             self.imp->unicode_noncharacter_handling(json::semanticactions::SubstituteUnicodeNoncharacter);
             break;
-        case JPSemanticActionsSkipUnicodeNoncharacters: 
-            self.imp->unicode_noncharacter_handling(json::semanticactions::SkipUnicodeNoncharacters);
+        case JPSemanticActionsRemoveUnicodeNoncharacter:
+            self.imp->unicode_noncharacter_handling(json::semanticactions::RemoveUnicodeNoncharacter);
             break;
     }
 }
@@ -396,15 +449,15 @@ typedef JPSemanticActions_ErrorHandlerBlockType       ErrorHandlerBlockType;
 - (JPSemanticActionsUnicodeNoncharacterHandling) unicodeNoncharacterHandling
 {
     switch (self.imp->unicode_noncharacter_handling()) {
+        case json::semanticactions::AllowUnicodeNoncharacter:
+            return JPSemanticActionsAllowUnicodeNoncharacter;
         case json::semanticactions::SignalErrorOnUnicodeNoncharacter:
             return JPSemanticActionsSignalErrorOnUnicodeNoncharacter;
         case json::semanticactions::SubstituteUnicodeNoncharacter:
             return JPSemanticActionsSubstituteUnicodeNoncharacter;
-        case json::semanticactions::SkipUnicodeNoncharacters: 
-            return JPSemanticActionsSkipUnicodeNoncharacters;
+        case json::semanticactions::RemoveUnicodeNoncharacter:
+            return JPSemanticActionsRemoveUnicodeNoncharacter;
     }
-    assert("bad JPSemanticActionsUnicodeNoncharacterHandling" == 0);
-    return json::semanticactions::SignalErrorOnUnicodeNoncharacter;
 }
 
 

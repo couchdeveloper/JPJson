@@ -78,6 +78,10 @@ namespace json {
     //
     //  Maps json::unicode encoding types to CFStringEncoding constants
     //
+    
+//    kCFStringEncodingUnicode
+//    kTextEncodingUnicodeDefault
+    
     template <typename EncodingT>
     struct cf_unicode_encoding_traits {};
     
@@ -88,12 +92,12 @@ namespace json {
     
     template <>
     struct cf_unicode_encoding_traits<UTF_16BE_encoding_tag> {
-        static constexpr CFStringEncoding value = kCFStringEncodingUTF16BE;
+        static constexpr CFStringEncoding value = internal::host_endianness::is_big_endian ? kCFStringEncodingUnicode : kCFStringEncodingUTF16BE;
     };
     
     template <>
     struct cf_unicode_encoding_traits<UTF_16LE_encoding_tag> {
-        static constexpr CFStringEncoding value = kCFStringEncodingUTF16LE;
+        static constexpr CFStringEncoding value = internal::host_endianness::is_little_endian ? kCFStringEncodingUnicode : kCFStringEncodingUTF16LE;
     };
     
     template <>

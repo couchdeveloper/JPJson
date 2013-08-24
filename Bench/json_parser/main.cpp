@@ -43,7 +43,7 @@
 namespace {
     
     
-    const char* TEST_JSON = "Test-UTF8.json";
+    const char* TEST_JSON = "mesh.json";
     //const char* TEST_JSON = "sample.json";
     
     std::vector<char> loadFileFromResourceFolder(const char* fileName) 
@@ -165,7 +165,7 @@ namespace test {
         {
             base::prepare_imp();
             std::cout << "parsing file at path " << filePath << std::endl;
-            std::cout << "using vector<char> iterators, continuously using one sematic actions objects" << std::endl;
+            std::cout << "using vector<char> iterators, continuously using one semantic actions objects" << std::endl;
             json_ = loadFileFromResourceFolder(filePath.c_str());
         }
         
@@ -211,7 +211,7 @@ namespace test {
         {
             base::prepare_imp();
             std::cout << "parsing file at path " << filePath << std::endl;
-            std::cout << "using vector<char> iterators, continuously using one sematic actions objects" << std::endl;
+            std::cout << "using vector<char> iterators, continuously using one semantic actions objects" << std::endl;
             json_ = loadFileFromResourceFolder(filePath.c_str());
         }
         
@@ -264,7 +264,7 @@ namespace test {
             base::prepare_imp();
             std::cout << "parsing file at path " << filePath << std::endl;
             std::cout << "using vector<char> iterators, "
-                "\ncontinuously using one sematic actions objects (clearing it for each run)"
+                "\ncontinuously using one semantic actions objects (clearing it for each run)"
                 "\ncontinuously using one arena (clearing it for each run)" 
             << std::endl;
             json_ = loadFileFromResourceFolder(filePath.c_str());
@@ -323,7 +323,7 @@ namespace test {
         {
             base::prepare_imp();
             std::cout << "parsing file at path " << filePath << std::endl;
-            std::cout << "using istream iterators, continuously using one sematic actions objects" << std::endl;
+            std::cout << "using istream iterators, continuously using one semantic actions objects" << std::endl;
             buffer_ = static_cast<char*>(malloc(4096));
             ifs_.rdbuf()->pubsetbuf(buffer_, 4096);
             ifs_.open(std::string("Resources/").append(filePath), std::ios::binary);

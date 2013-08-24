@@ -22,6 +22,7 @@
 
 
 #include "json/config.hpp"
+#include "OSCompatibility.h"
 #include <dispatch/dispatch.h>
 #include <cassert>
 #include <stdexcept>
@@ -56,7 +57,7 @@ namespace json { namespace objc { namespace gcd {
                 std::cerr << "semaphore: resumed waiting thread in d-tor" << std::endl;
 #endif                
             }
-            dispatch_release(tmp);
+            JP_DISPATCH_RELEASE(tmp);
         }
         
         void signal()  { 

@@ -113,7 +113,7 @@ namespace json { namespace unicode {
     // see http://unicode.org/reports/tr20/#Noncharacters    
     inline constexpr bool isNonCharacter(code_point_t code_point) {
         return
-                (((0x00FFFFu&code_point) >= 0xFFFEu) 
+                (((0x00FFFFu & code_point) >= 0xFFFEu)
                  or (code_point >= 0xFDD0u and code_point <= 0xFDEFu)
                 )
             and code_point <= 0x10FFFFu;

@@ -32,8 +32,9 @@
 /** Number generator options */
 enum  {
     JPSemanticActionsNumberGeneratorGenerateAuto = 0,
-    JPSemanticActionsNumberGeneratorGenerateNSDecimalNumber =  1,
-    JPSemanticActionsNumberGeneratorGenerateNSString  = 2,
+    JPSemanticActionsNumberGeneratorGenerateAutoWithDecimal = 1,
+    JPSemanticActionsNumberGeneratorGenerateNSDecimalNumber =  2,
+    JPSemanticActionsNumberGeneratorGenerateNSString  = 3
 };
 typedef NSUInteger JPSemanticActionsNumberGeneratorOption;
 
@@ -119,55 +120,64 @@ typedef NSUInteger JPSemanticActionsNumberGeneratorOption;
  - JSON Null        maps to a `NSNull`.
 
  
+ Th following rules apply when option `JPSemanticActionsNumberGeneratorGenerateAuto`
+ OR option `JPSemanticActionsNumberGeneratorGenerateAutoWithDecimal` is set.
+ 
+
  ### I Detailed Mapping of an Integral JSON Number ###
+ 
+ 1.  If the number of digits of a JSON *integer number* is equal or
+     smaller than the maximal number of digits (in decimal base) that
+     can be represented by a `signed int` without overflow, then a
+     `NSNumber` with underlaying type `signed int` will be generated.
 
- 1. If the number of digits of a JSON *integer number* is equal or
-    smaller than the maximal number of digits (in decimal base) that 
-    can be represented by a `signed int` without overflow, then a 
-    `NSNumber` with underlaying type `signed int` will be generated.
+ 2.  Otherwise, if the number of digits of a JSON *integer number* is
+     equal or smaller than the maximal number of digits (in decimal
+     base) that can be represented by a `signed long`  without overflow,
+     then a `NSNumber` with an underlaying type `signed long` will be
+     generated.
 
- 2. Otherwise, if the number of digits of a JSON *integer number* is
-    equal or smaller than the maximal number of digits (in decimal
-    base) that can be represented by a `signed long`  without overflow,
-    then a `NSNumber` with an underlaying type `signed long` will be 
-    generated.
+ 3.  Otherwise, if the number of digits of the JSON *integer number* is
+     equal or smaller than the maximal number of digits (in decimal
+     base) that can be represented by a `signed long long` without
+     overflow, then a `NSNumber` with an underlaying type `signed long long`
+     will be generated.
 
- 3. Otherwise, if the number of digits of the JSON *integer number* is
-    equal or smaller than the maximal number of digits (in decimal
-    base) that can be represented by a `signed long long` without
-    overflow, then a `NSNumber` with an underlaying type `signed long long` 
-    will be generated.
+ 4.  Otherwise:
+ 
+ 4.1 If option `JPSemanticActionsNumberGeneratorGenerateAutoWithDecimal` is defined:
+     A `NSDecimalNumber` is created. If the number of digits is larger than the
+     maximum number of digits that a NSDecimalNumber can represent without
+     loosing precision (larger than 38 digits), a warning is logged to the 
+     console.
+ 
+ 4.2 else, the integral JSON Number will be represented as a double, and a 
+     warning will be logged to the console that the integral value cannot be
+     represented by a corresponding integral type.
 
- 4. Otherwise, if the number of digits of the JSON *integer number* is
-    equal or smaller than the maximal number of digits (in decimal
-    base) that can be represented by a `NSDecimalNumber` without
-    loosing precision, then a `NSDecimalNumber` will be generated.
-
- 5. Otherwise, a `NSDecimalNumber` will be generated, and if this is
-    successful, a warning will be logged to the error console to 
-    indicate the possibly loss of precision while converting a
-    JSON Number to a `NSDecimalNumber`.
-
- 6. Otherwise, the conversion fails, and the parser stops parsing
-    with a corresponding runtime error.
     
 
- ### II Detailed Mapping of a Decimal JSON Number ###
+ ### II Detailed Mapping of a JSON Number in Fixed Number Notation ###
  
- A decimal number is a number with a decimal point but no exponent.
+ A fixed number notation is a number string with a decimal point but no exponent.
  
- 1. If the number of digits of the decimal number is equal or smaller than 
-    the maximal number of digits (in decimal base) that can be represented by 
-    a `double`, then a `NSNumber` with underlaying type `double` will be 
-    generated. 
+ 1.  If the number of digits of the decimal number including leading zeros is equal
+     or smaller than the maximal number of digits (in decimal base) that are required
+     for converting the string into a `double` and back to a string without loss of
+     accuracy, then a `NSNumber` with underlaying type `double` will be generated.
 
- 2. Otherwise, `NSDecimalNumber` will be generated. If the `NSDecimalNumber`
-    cannot represent the decimal value with the same precision as in the
-    JSON number, an additional warning will be logged.
-    If the decimal value cannot represent the JSON number because it is out of
-    range, a range error will be signaled.
+ 2.  Otherwise:
+ 
+ 2.1 If option `JPSemanticActionsNumberGeneratorGenerateAutoWithDecimal` is defined:
+     A `NSDecimalNumber` is created. If the `NSDecimalNumber` cannot represent 
+     the value with the same precision as the JSON number (having more than 38 
+     digits), a warning will be logged to the console.
+ 
+ 2.1 else, an `NSNumber` with an underlaying `double` will be created and a warning
+     will be logged to the console that the conversion may loose precision.
  
  
+
  
  ### II Detailed Mapping of a Scientific JSON Number ###
  
@@ -175,7 +185,16 @@ typedef NSUInteger JPSemanticActionsNumberGeneratorOption;
 
  1. A JSON number in scientific format will always be converted to a NSNumber
     with an underlaying `double` type. If the resulting value is out of range, 
-    a range error will be signaled.
+    a warning will be logged to the console.
+
+ 
+ 
+ 
+ 
+ Generally, JSON generators should avoid to generate number strings with unreasonable 
+ high precision, especially if the source of the number string was a double and on the
+ target site it should generate a double again.
+ 
  
 */
 

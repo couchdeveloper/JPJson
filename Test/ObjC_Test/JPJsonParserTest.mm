@@ -101,8 +101,9 @@ namespace {
     
     // Number generator options
     // (mutual exclusive flags)
-    JPJsonParserNumberGeneratorGenerateAuto     
-    JPJsonParserNumberGeneratorGenerateStrings  
+    JPJsonParserNumberGeneratorGenerateAuto
+    JPJsonParserNumberGeneratorGenerateAutoWithDecimals
+    JPJsonParserNumberGeneratorGenerateStrings
     JPJsonParserGeneratorGenerateDecimals       
     
     

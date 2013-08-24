@@ -45,58 +45,72 @@ typedef uint32_t JPUnicodeEncoding;
 
 enum  {
     
-    //
-    // JPSemanticActionsBase
-    //
-    JPJsonParserIgnoreSpuriousTrailingBytes                 = 1UL << 0,
-    JPJsonParserParseMultipleDocuments                      = 1UL << 1,
-    JPJsonParserParseMultipleDocumentsAsynchronously        = 1UL << 2,
-    
-    // Handling of Unicode noncharacters 
+    // Handling of Unicode noncharacters Options
     // (Mutual exclusive flags)
-    JPJsonParserSignalErrorOnNoncharacter                   = 1UL << 3,
-    JPJsonParserSubstituteUnicodeNoncharacter               = 1UL << 4,
-    JPJsonParserSkipUnicodeNoncharacter                     = 1UL << 5,
+    // (If no option is set, Unicode noncharacters are accepted and retained)
+    JPJsonParserSignalErrorOnNoncharacter                   = 1UL << 0,
+    JPJsonParserSubstituteUnicodeNoncharacter               = 1UL << 1,
+    JPJsonParserRemoveUnicodeNoncharacter                   = 1UL << 2,
+
+    // Handling of Unicode 'NULL' (U+0000)
+    // (Mutual exclusive flags)
+    // (If no bit is set, Unicode noncharacters are allowed)
+    JPJsonParserSignalErrorOnNULLCharacter                   = 1UL << 3,
+    JPJsonParserSubstituteUnicodeNULLCharacter               = 1UL << 4,
+    JPJsonParserRemoveUnicodeNULLCharacter                   = 1UL << 5,
+
+    
+    // JSON Documents Stream Options
+    JPJsonParserIgnoreSpuriousTrailingBytes                 = 1UL << 6,
+    JPJsonParserParseMultipleDocuments                      = 1UL << 7,
+    JPJsonParserParseMultipleDocumentsAsynchronously        = 1UL << 8,
+    
     
     // Log behavior
     // (Mutual exclusive flags)
-    JPJsonParserLogLevelDebug                               = 1UL << 6,
-    JPJsonParserLogLevelWarning                             = 1UL << 7,
-    JPJsonParserLogLevelError                               = 1UL << 8,
-    JPJsonParserLogLevelNone                                = 1UL << 9,
+    JPJsonParserLogLevelDebug                               = 1UL << 9,
+    JPJsonParserLogLevelWarning                             = 1UL << 10,
+    JPJsonParserLogLevelError                               = 1UL << 11,
+    JPJsonParserLogLevelNone                                = 1UL << 12,
     
     // non_conformance_flags (can be ored)
     // (not yet implemented!)
-    JPJsonParserAllowComments                               = 1UL << 10,              
-    JPJsonParserAllowControlCharacters                      = 1UL << 11,     
-    JPJsonParserAllowLeadingPlusInNumbers                   = 1UL << 12,
-    JPJsonParserAllowLeadingZerosInIntegers                 = 1UL << 13,
+    JPJsonParserAllowComments                               = 1UL << 13,
+    JPJsonParserAllowControlCharacters                      = 1UL << 14,
+    JPJsonParserAllowLeadingPlusInNumbers                   = 1UL << 15,
+    JPJsonParserAllowLeadingZerosInIntegers                 = 1UL << 16,
     
-    JPJsonParserEncodedStrings                              = 1UL << 14,
+    JPJsonParserEncodedStrings                              = 1UL << 17,
     
     
     //
     // JPRepresentationGenerator
     //
-    JPJsonParserCheckForDuplicateKey                        = 1UL << 16,
-    JPJsonParserKeepStringCacheOnClear                      = 1UL << 17,
-    JPJsonParserCacheDataStrings                            = 1UL << 18,
-    JPJsonParserCreateMutableContainers                     = 1UL << 19,
+    JPJsonParserCheckForDuplicateKey                        = 1UL << 18,
+    JPJsonParserKeepStringCacheOnClear                      = 1UL << 19,
+    JPJsonParserCacheDataStrings                            = 1UL << 20,
+    JPJsonParserCreateMutableContainers                     = 1UL << 21,
     
     // Number generator options
     // (mutual exclusive flags)
-    JPJsonParserNumberGeneratorGenerateAuto                 = 1UL << 20,
-    JPJsonParserNumberGeneratorGenerateStrings              = 1UL << 21,
-    JPJsonParserGeneratorGenerateDecimals                   = 1UL << 22,
+    JPJsonParserNumberGeneratorGenerateAuto                 = 1UL << 22,
+    JPJsonParserNumberGeneratorGenerateAutoWithDecimals     = 1UL << 23,
+    JPJsonParserNumberGeneratorGenerateStrings              = 1UL << 24,
+    JPJsonParserNumberGeneratorGenerateDecimals             = 1UL << 25,
     
     // Miscellenous
-    JPJsonParserGeneratorUseArenaAllocator                  = 1UL << 24,
+    JPJsonParserGeneratorUseArenaAllocator                  = 1UL << 26,
     
     
-    JPJsonParserNoncharacterHandling = 
+    JPJsonParserNULLCharacterHandling =
+    JPJsonParserSignalErrorOnNULLCharacter
+    | JPJsonParserSubstituteUnicodeNULLCharacter
+    | JPJsonParserRemoveUnicodeNULLCharacter,
+    
+    JPJsonParserNoncharacterHandling =
     JPJsonParserSignalErrorOnNoncharacter 
     | JPJsonParserSubstituteUnicodeNoncharacter 
-    | JPJsonParserSkipUnicodeNoncharacter,
+    | JPJsonParserRemoveUnicodeNoncharacter,
     
     JPJsonParserLogLevel = 
     JPJsonParserLogLevelDebug | 
@@ -113,25 +127,113 @@ enum  {
     JPJsonParserNumberGeneratorOptions = 
     JPJsonParserNumberGeneratorGenerateAuto |
     JPJsonParserNumberGeneratorGenerateStrings |
-    JPJsonParserGeneratorGenerateDecimals
+    JPJsonParserNumberGeneratorGenerateDecimals |
+    JPJsonParserNumberGeneratorGenerateAutoWithDecimals
 };
 typedef uint32_t JPJsonParserOptions;
 
 
 
+
+//
+// Unicode 'NULL' (U+0000) Handling
+//
+
+//  JPJsonParserSignalErrorOnNULLCharacter
+//
+//  If this option is set, the parser will signal an error if it encounters an
+//  Unicode 'NULL' character within a JSON String. Note that a Unicode 'NULL'
+//  in a JSON String is a valid character. However, Unicode 'NULL' characters
+//  may be problematic in string representations like NSString, and applications.
+//  Thus, this option may be set to detect unwanted Unicode 'NULL' characters.
+//
+//
+// JPJsonParserSubstituteUnicodeNULLCharacter
+//
+//  If this option is set, the parser will substitute Unicode 'NULL' characters
+//  encountered within JSON strings in the input text with the Unicode replace-
+//  ment character U+FFFD when creating the string representation.
+//
+//  It is not recommended to enable this option. Substituting an Unicode 'NULL'
+//  character will modify the meaning of the input source and should be used
+//  with care.
+//
+//
+// JPJsonParserRemoveUnicodeNULLCharacter
+//
+//  If this option is set, the parser will not retain the Unicode 'NULL' character
+//  in the _decoded_ JSON string when generating a representation.
+//
+//  It is not recommended to enable this option. Removing an Unicode 'NULL'
+//  character will modify the meaning of the input source and should be used
+//  with care.
+//
+//
+//
+//  If none of the above Unicode 'NULL' handling options is set, the parser will
+//  retain any Unicode 'NULL' characters in the string representation.
+//
+//  Note: Occurrences of Unicode 'NULL' characters outside of JSON strings will
+//  be always syntax errors and treated as such.
+
+
+
+//
+// Unicode Noncharacter Handling
+//
+
+//  JPJsonParserSignalErrorOnNoncharacter
+//
+//  If this option is set, the parser will signal an error if it encounters an
+//  Unicode noncharacter within a JSON String. Note that a Unicode noncharacter
+//  in a JSON String does not make the unicode string illformed. However, Unicode
+//  noncharacters are rarely useful in a meaningful JSON String. On the other hand,
+//  Unicode noncharacters may be problematic in string representations on the
+//  application level.
+//
+//
+// JPJsonParserSubstituteUnicodeNoncharacter
+//
+//  If this option is set, the parser will substitute Unicode noncharacters
+//  encountered within JSON strings in the input text with the Unicode replace-
+//  ment character U+FFFD when creating the string representation.
+//
+//  It is not recommended to enable this option. Substituting an Unicode noncharacter
+//  will modify the meaning of the input source and should be used with care.
+//
+//
+// JPJsonParserRemoveUnicodeNoncharacter
+//
+//  If this option is set, the parser will not retain the Unicode noncharacter
+//  in the _decoded_ JSON string when generating a representation.
+//
+//  It is not recommended to enable this option. Removing an Unicode noncharacter
+//  will modify the meaning of the input source and should be used with care.
+//
+//
+//
+//  If none of the above Unicode Noncharacter Handling options is set, the parser
+//  will retain any Unicode 'NULL' characters in the string representation.
+//
+//  Note: Occurrences of Unicode noncharacters outside of JSON strings will
+//  be always syntax errors and treated as such.
+
+
+
+
 //  JPJsonParserIgnoreSpuriousTrailingBytes
 //
-//  If this options is set, the parser will ignore any additional characters 
+//  If this options is set, the parser will ignore any additional characters
 //  that occur after the last significant character of a valid JSON document
 //  (namely, either a "}" or a "]").
-//  Otherwise, if the parser encounters code units which can not be interpreted 
+//  Otherwise, if the parser encounters code units which can not be interpreted
 //  as white-space Unicode characters it will issue an error. If it encounters
 //  an Unicode NULL (U+0000) or `EOF` it will issue a warning to the console.
 
 
 //  JPJsonParserParseMultipleDocuments
 //
-//  If enabled, the parser parses one or more documents from the input until it 
+//  If enabled, the parser parses one or more documents from the input until it
 //  receives `EOF`. Otherwise, the parser treats any non white spaces after the
 //  first JSON document as an error.
 //
@@ -142,18 +244,18 @@ typedef uint32_t JPJsonParserOptions;
 // JPJsonParserParseMultipleDocumentsAsynchronously
 //
 //  If this option is set, the parser invokes the `jsonObjectHandlerBlock`
-//  asynchronously and immediately processes the next JSON document within the 
+//  asynchronously and immediately processes the next JSON document within the
 //  input data. The JSON container is then retained in the dispatch queue till
-//  it is processed by the client. This may tie up a lot of system resources if 
+//  it is processed by the client. This may tie up a lot of system resources if
 //  the client processes frees the JSON containers slowly.
-//  If the flag is `NO`, the parser's thread is blocked until the handler routine 
+//  If the flag is `NO`, the parser's thread is blocked until the handler routine
 //  returns.
 //
-//  It is recommended to leave this flag disabled in systems where system resources 
-//  are scarce or if the data input possibly contains many and large JSON documents. 
+//  It is recommended to leave this flag disabled in systems where system resources
+//  are scarce or if the data input possibly contains many and large JSON documents.
 //  When downloading large data, this helps throttling the consumption of system
 //  resources by the underlaying network layer.
- 
+
 //
 // JPJsonParserEncodedStrings
 //
@@ -168,27 +270,27 @@ typedef uint32_t JPJsonParserOptions;
 
 
 
-// JPJsonParserCheckForDuplicateKey     
+// JPJsonParserCheckForDuplicateKey
 //
-//  Checks whether a key for a JSON object already exists. If it exists, an 
-//  "duplicate key error" will be logged to error console and error will 
+//  Checks whether a key for a JSON object already exists. If it exists, an
+//  "duplicate key error" will be logged to error console and error will
 //  be set.
-//                                
+//
 //
 // JPJsonParserKeepStringCacheOnClear
-// 
-//  Clears the string cache if the semantic actions is cleared via function 
+//
+//  Clears the string cache if the semantic actions is cleared via function
 //  clear().
 //
 //
 // JPJsonParserCacheDataStrings
-// 
+//
 //  Caches data strings in addition to key strings.
 //
-// 
-// JPJsonParserCreateMutableContainers      
 //
-//  If this option is set, the semantic actions object creates a JSON representation 
+// JPJsonParserCreateMutableContainers
+//
+//  If this option is set, the semantic actions object creates a JSON representation
 //  with mutable containers. That is, a JSON Array will be represented by a
 //  NSMutableArray and a JSON Object will be represented by a NSMutableDictionary.
 //
@@ -197,20 +299,26 @@ typedef uint32_t JPJsonParserOptions;
 // Number Generation Options:
 //
 // The options for number generation can be used only mutual exclusive.
-// 
+//
 // JPJsonParserNumberGeneratorGenerateAuto
-// 
-//  The parser's number generator creates suitable NSNumber objects when it
-//  encounters a number in the input text. 
-//  // TODO: If a NSNumber is not capable to hold the number, a NSDecimalNumber
-//           will be created.
-// JPJsonParserNumberGeneratorGenerateAuto equals zero and is the default option.
+//
+//  The parser's number generator creates a suitable NSNumber object
+//  when it encounters a number in the input text.
+//
+//  JPJsonParserNumberGeneratorGenerateAuto equals zero and is the default option.
+//
+//
+// JPJsonParserNumberGeneratorGenerateAutoWithDecimals
+//
+//  The parser's number generator creates a suitable NSNumber or NSDecimal object
+//  when it encounters a number in the input text.
+//
 //
 //
 // JPJsonParserNumberGeneratorGenerateStrings
 //
-//  If this option is set, the parser number generator creates a NSString when 
-//  it encounters numbers in the input text and initializes it accordingly. 
+//  If this option is set, the parser number generator creates a NSString when
+//  it encounters numbers in the input text and initializes it accordingly.
 //  Usually, you wouldn't select this option if you want to output a JSON
 //  container into a string or stream as a proper JSON text. In this case it
 //  would treat the numbers as JSON strings enclosed in quotes. However, when
@@ -218,8 +326,8 @@ typedef uint32_t JPJsonParserOptions;
 //
 //
 // JPJsonParserNumberGeneratorGenerateDecimals
-// 
-//  If this option is set the parser's number generator will always create a 
+//
+//  If this option is set the parser's number generator will always create a
 //  NSDecimalNumber object when encountering a number in the input.
 //
 //
@@ -242,38 +350,6 @@ typedef uint32_t JPJsonParserOptions;
 
 
 
-
-
-
-//
-// Unicode Handling
-//
-
-// JPJsonParserSignalErrorOnNoncharacter
-//
-// If this option is set, the parser will signal an error if it encounters
-// an Unicode noncharacter within the JSON document.
-// This is the default setting.
-
-// JPJsonParserSubstituteUnicodeNoncharacter
-//  
-//  If this option is set, the parser will substitute Unicode noncharacters
-//  encountered within JSON strings in the input text with the Unicode replace-
-//  ment character U+FFFD when creating the strings for a JSON container. Other-
-//  wise the parser stops parsing the input at the occurrence of an Unicode non-
-//  character and signals an error.
-//  It is not recommended to enable this option. Substituting an Unicode non-
-//  character may modify the meaning of the input source and should be used 
-//  with care. Usually, Unicode noncharacters are not allowed in valid Unicode 
-//  sequences which is used to transmit data.
-//  Occurrences of Unicode noncharacters outside of JSON strings will be always
-//  syntax errors and treated as such.
-
-// JPJsonParserSkipUnicodeNoncharacter
-//
-// If this option is set, the parser will ignore the Unicode noncharacter
-// and remove it from the _decoded_ JSON string when generating a representation.
-// *Note:* this i not yet implemented
 
 
 

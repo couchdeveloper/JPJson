@@ -10,6 +10,8 @@
 		A10369AD157E76B7003A6EB0 /* Test-UTF8-esc.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = A1A9D4DB157A063F00211F1B /* Test-UTF8-esc.json */; };
 		A11D2190144C9B6300D24AA8 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A11D218F144C9B6300D24AA8 /* main.cpp */; };
 		A122FDE2150CF22600D6C7C7 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1A3399913D96A6B000CE571 /* main.cpp */; };
+		A16C49C417C774360061CC8B /* JPJson.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A16C49C317C774360061CC8B /* JPJson.framework */; };
+		A16C49C517C77E040061CC8B /* sample.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = A1E9C4C416E5152700F04BB0 /* sample.json */; };
 		A171E72313D4924D00260A6B /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = A171E72213D4924D00260A6B /* main.mm */; };
 		A171E72913D4938E00260A6B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A171E72813D4938E00260A6B /* Foundation.framework */; };
 		A177EAFE150E430F009A1299 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1FF8C6D14891C07003DF439 /* main.cpp */; };
@@ -26,18 +28,27 @@
 		A1995FBC1420A96E00595100 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1995FBB1420A96E00595100 /* main.cpp */; };
 		A19F3B1E1428C89D00266273 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A171E72413D4928400260A6B /* CoreFoundation.framework */; };
 		A19F3B211428C89D00266273 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A19F3B201428C89D00266273 /* main.cpp */; };
-		A1A3CB241715B7D600E72719 /* JPJson.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1A3CB231715B7D600E72719 /* JPJson.framework */; };
 		A1A9D4E1157A07F600211F1B /* Test-UTF8-esc.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = A1A9D4DB157A063F00211F1B /* Test-UTF8-esc.json */; };
 		A1A9D4E2157A07F600211F1B /* Test-UTF8.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = A1A9D4DC157A063F00211F1B /* Test-UTF8.json */; };
 		A1AA929B1529E20700181B93 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A171E72413D4928400260A6B /* CoreFoundation.framework */; };
 		A1AA929E1529E20700181B93 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1AA929D1529E20700181B93 /* main.cpp */; };
 		A1AA92A41529EC9D00181B93 /* timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A17DD7C7146AF503000AD974 /* timer.cpp */; };
 		A1AE440E1552CADA007E5498 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = A1AE440D1552CA49007E5498 /* JSONKit.m */; };
+		A1C05DAF178CC35000C7A117 /* apache_builds.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = A1C05DA4178CC32100C7A117 /* apache_builds.json */; };
+		A1C05DB0178CC35000C7A117 /* github_events.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = A1C05DA5178CC32100C7A117 /* github_events.json */; };
+		A1C05DB1178CC35000C7A117 /* instruments.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = A1C05DA6178CC32100C7A117 /* instruments.json */; };
+		A1C05DB2178CC35000C7A117 /* mesh.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = A1C05DA7178CC32100C7A117 /* mesh.json */; };
+		A1C05DB3178CC35000C7A117 /* mesh.pretty.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = A1C05DA8178CC32100C7A117 /* mesh.pretty.json */; };
+		A1C05DB4178CC35000C7A117 /* nested.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = A1C05DA9178CC32100C7A117 /* nested.json */; };
+		A1C05DB5178CC35000C7A117 /* random.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = A1C05DAA178CC32100C7A117 /* random.json */; };
+		A1C05DB6178CC35000C7A117 /* repeat.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = A1C05DAB178CC32100C7A117 /* repeat.json */; };
+		A1C05DB7178CC35000C7A117 /* truenull.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = A1C05DAC178CC32100C7A117 /* truenull.json */; };
+		A1C05DB8178CC35000C7A117 /* twitter_timeline.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = A1C05DAD178CC32100C7A117 /* twitter_timeline.json */; };
+		A1C05DB9178CC35000C7A117 /* update-center.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = A1C05DAE178CC32100C7A117 /* update-center.json */; };
 		A1C9A5571541BD39004B4ED6 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A171E72413D4928400260A6B /* CoreFoundation.framework */; };
 		A1E9C4E516E643F200F04BB0 /* Test-UTF8.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = A1A9D4DC157A063F00211F1B /* Test-UTF8.json */; };
 		A1EF0DA1142666BF0083221D /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1EF0DA0142666BF0083221D /* main.cpp */; };
 		A1EF0DA814266A230083221D /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A171E72413D4928400260A6B /* CoreFoundation.framework */; };
-		A1F61B69156FE0FF00444883 /* libjson.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A1F61B68156FE0FF00444883 /* libjson.a */; };
 		A1FBA581157A0B030004204A /* Test-UTF8-esc.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = A1A9D4DB157A063F00211F1B /* Test-UTF8-esc.json */; };
 		A1FBA582157A0B030004204A /* Test-UTF8.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = A1A9D4DC157A063F00211F1B /* Test-UTF8.json */; };
 /* End PBXBuildFile section */
@@ -69,6 +80,18 @@
 			dstPath = Resources;
 			dstSubfolderSpec = 16;
 			files = (
+				A16C49C517C77E040061CC8B /* sample.json in CopyFiles */,
+				A1C05DAF178CC35000C7A117 /* apache_builds.json in CopyFiles */,
+				A1C05DB0178CC35000C7A117 /* github_events.json in CopyFiles */,
+				A1C05DB1178CC35000C7A117 /* instruments.json in CopyFiles */,
+				A1C05DB2178CC35000C7A117 /* mesh.json in CopyFiles */,
+				A1C05DB3178CC35000C7A117 /* mesh.pretty.json in CopyFiles */,
+				A1C05DB4178CC35000C7A117 /* nested.json in CopyFiles */,
+				A1C05DB5178CC35000C7A117 /* random.json in CopyFiles */,
+				A1C05DB6178CC35000C7A117 /* repeat.json in CopyFiles */,
+				A1C05DB7178CC35000C7A117 /* truenull.json in CopyFiles */,
+				A1C05DB8178CC35000C7A117 /* twitter_timeline.json in CopyFiles */,
+				A1C05DB9178CC35000C7A117 /* update-center.json in CopyFiles */,
 				A1FBA581157A0B030004204A /* Test-UTF8-esc.json in CopyFiles */,
 				A1FBA582157A0B030004204A /* Test-UTF8.json in CopyFiles */,
 			);
@@ -154,10 +177,9 @@
 		A10942D7156E86DF0051793A /* JPJsonWriter */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = JPJsonWriter; sourceTree = BUILT_PRODUCTS_DIR; };
 		A10E4288170B4FF100E8AE24 /* common.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = common.xcconfig; sourceTree = "<group>"; };
 		A11D218F144C9B6300D24AA8 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = main.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		A126DCBB154FD366001E09F0 /* libjson.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjson.a; path = ../Build/Products/Release/libjson.a; sourceTree = "<group>"; };
-		A12B3EB1168609ED00F6EF0D /* libjson.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjson.a; path = ../DerivedData/JPJson/Build/Products/Release/libjson.a; sourceTree = "<group>"; };
 		A139AC6F1488B70B003E3881 /* unicode_conversion.debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = unicode_conversion.debug.xcconfig; sourceTree = "<group>"; };
 		A139AC701488B749003E3881 /* unicode_conversion.release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = unicode_conversion.release.xcconfig; sourceTree = "<group>"; };
+		A16C49C317C774360061CC8B /* JPJson.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = JPJson.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A16EEE3E1487DA3B00D12DA2 /* Bench.debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; lineEnding = 0; path = Bench.debug.xcconfig; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.xcconfig; };
 		A16EEE3F1487DB6D00D12DA2 /* Bench.release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; lineEnding = 0; path = Bench.release.xcconfig; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.xcconfig; };
 		A171E72113D4924D00260A6B /* JPJsonParser-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "JPJsonParser-Prefix.pch"; sourceTree = "<group>"; };
@@ -170,20 +192,28 @@
 		A191B514152982C3007F9471 /* MinMaxAvg.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MinMaxAvg.hpp; sourceTree = "<group>"; };
 		A1977E4E156CBE920074D9B2 /* main.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = main.mm; sourceTree = "<group>"; };
 		A1977E51156CBE920074D9B2 /* JPJsonWriter-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "JPJsonWriter-Prefix.pch"; sourceTree = "<group>"; };
-		A1977E57156CBF1A0074D9B2 /* JPJson.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JPJson.framework; path = ../Build/Products/Release/JPJson.framework; sourceTree = "<group>"; };
 		A1995FBB1420A96E00595100 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = main.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		A19F3B201428C89D00266273 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		A1A3399913D96A6B000CE571 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = main.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		A1A3CB231715B7D600E72719 /* JPJson.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JPJson.framework; path = ../DerivedData/JPJson/Build/Products/Release/JPJson.framework; sourceTree = "<group>"; };
 		A1A8878016FC56DC00490B07 /* bench.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = bench.hpp; sourceTree = "<group>"; };
 		A1A9D4DB157A063F00211F1B /* Test-UTF8-esc.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "Test-UTF8-esc.json"; sourceTree = "<group>"; };
 		A1A9D4DC157A063F00211F1B /* Test-UTF8.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "Test-UTF8.json"; sourceTree = "<group>"; };
 		A1AA929D1529E20700181B93 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		A1AE440C1552CA49007E5498 /* JSONKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JSONKit.h; sourceTree = "<group>"; };
 		A1AE440D1552CA49007E5498 /* JSONKit.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JSONKit.m; sourceTree = "<group>"; };
+		A1C05DA4178CC32100C7A117 /* apache_builds.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = apache_builds.json; sourceTree = "<group>"; };
+		A1C05DA5178CC32100C7A117 /* github_events.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = github_events.json; sourceTree = "<group>"; };
+		A1C05DA6178CC32100C7A117 /* instruments.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = instruments.json; sourceTree = "<group>"; };
+		A1C05DA7178CC32100C7A117 /* mesh.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = mesh.json; sourceTree = "<group>"; };
+		A1C05DA8178CC32100C7A117 /* mesh.pretty.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = mesh.pretty.json; sourceTree = "<group>"; };
+		A1C05DA9178CC32100C7A117 /* nested.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = nested.json; sourceTree = "<group>"; };
+		A1C05DAA178CC32100C7A117 /* random.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = random.json; sourceTree = "<group>"; };
+		A1C05DAB178CC32100C7A117 /* repeat.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = repeat.json; sourceTree = "<group>"; };
+		A1C05DAC178CC32100C7A117 /* truenull.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = truenull.json; sourceTree = "<group>"; };
+		A1C05DAD178CC32100C7A117 /* twitter_timeline.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = twitter_timeline.json; sourceTree = "<group>"; };
+		A1C05DAE178CC32100C7A117 /* update-center.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "update-center.json"; sourceTree = "<group>"; };
 		A1E9C4C416E5152700F04BB0 /* sample.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = sample.json; sourceTree = "<group>"; };
 		A1EF0DA0142666BF0083221D /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
-		A1F61B68156FE0FF00444883 /* libjson.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjson.a; path = "../Libraries/Mac OS X Libraries/build/Release/libjson.a"; sourceTree = "<group>"; };
 		A1FF8C6D14891C07003DF439 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -206,7 +236,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A1A3CB241715B7D600E72719 /* JPJson.framework in Frameworks */,
+				A16C49C417C774360061CC8B /* JPJson.framework in Frameworks */,
 				A1C9A5571541BD39004B4ED6 /* CoreFoundation.framework in Frameworks */,
 				A171E72913D4938E00260A6B /* Foundation.framework in Frameworks */,
 			);
@@ -230,7 +260,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A1F61B69156FE0FF00444883 /* libjson.a in Frameworks */,
 				A1977E4C156CBE920074D9B2 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -305,8 +334,6 @@
 		A171E6E313D488FC00260A6B = {
 			isa = PBXGroup;
 			children = (
-				A1A3CB231715B7D600E72719 /* JPJson.framework */,
-				A12B3EB1168609ED00F6EF0D /* libjson.a */,
 				A10E4288170B4FF100E8AE24 /* common.xcconfig */,
 				A16EEE3E1487DA3B00D12DA2 /* Bench.debug.xcconfig */,
 				A16EEE3F1487DB6D00D12DA2 /* Bench.release.xcconfig */,
@@ -322,6 +349,7 @@
 		A171E72013D4924D00260A6B /* JPJsonParser */ = {
 			isa = PBXGroup;
 			children = (
+				A16C49C317C774360061CC8B /* JPJson.framework */,
 				A171E72113D4924D00260A6B /* JPJsonParser-Prefix.pch */,
 				A171E72213D4924D00260A6B /* main.mm */,
 			);
@@ -331,9 +359,6 @@
 		A171E72613D4929F00260A6B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				A1F61B68156FE0FF00444883 /* libjson.a */,
-				A1977E57156CBF1A0074D9B2 /* JPJson.framework */,
-				A126DCBB154FD366001E09F0 /* libjson.a */,
 				A171E72813D4938E00260A6B /* Foundation.framework */,
 				A171E72413D4928400260A6B /* CoreFoundation.framework */,
 			);
@@ -407,6 +432,17 @@
 		A199FCBC13D76F64000170CD /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				A1C05DA4178CC32100C7A117 /* apache_builds.json */,
+				A1C05DA5178CC32100C7A117 /* github_events.json */,
+				A1C05DA6178CC32100C7A117 /* instruments.json */,
+				A1C05DA7178CC32100C7A117 /* mesh.json */,
+				A1C05DA8178CC32100C7A117 /* mesh.pretty.json */,
+				A1C05DA9178CC32100C7A117 /* nested.json */,
+				A1C05DAA178CC32100C7A117 /* random.json */,
+				A1C05DAB178CC32100C7A117 /* repeat.json */,
+				A1C05DAC178CC32100C7A117 /* truenull.json */,
+				A1C05DAD178CC32100C7A117 /* twitter_timeline.json */,
+				A1C05DAE178CC32100C7A117 /* update-center.json */,
 				A1E9C4C416E5152700F04BB0 /* sample.json */,
 				A1A9D4DB157A063F00211F1B /* Test-UTF8-esc.json */,
 				A1A9D4DC157A063F00211F1B /* Test-UTF8.json */,
@@ -832,6 +868,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_DYNAMIC_NO_PIC = YES;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = fast;
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				LLVM_LTO = YES;
@@ -871,7 +908,6 @@
 			buildSettings = {
 				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_PREPROCESSOR_DEFINITIONS = "$(BENCH_GCC_PREPROCESSOR_DEFINITIONS)";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -893,6 +929,7 @@
 				CLANG_ENABLE_OBJC_ARC = NO;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_DYNAMIC_NO_PIC = YES;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				HEADER_SEARCH_PATHS = (
@@ -917,8 +954,10 @@
 				COPY_PHASE_STRIP = YES;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_DYNAMIC_NO_PIC = YES;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = fast;
 				HEADER_SEARCH_PATHS = (
 					"$(BENCH_HEADER_SEARCH_PATHS)",
 					Vendor,

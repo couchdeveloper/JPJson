@@ -32,6 +32,7 @@
 #import "JPSemanticActionsBase_private.h"
 #import "JPRepresentationGenerator.h"  // Default Semantic Actions
 #include <dispatch/dispatch.h>
+#include "OSCompatibility.h"
 #include <iterator>
 #include <stdexcept>
 
@@ -317,7 +318,7 @@ namespace {
             // Create the default semantic actions object:
             dispatch_queue_t handlerDispatchQueue = dispatch_queue_create("com.JPAsyncParser.handler_queue", NULL);
             sa_ = [[JPRepresentationGenerator alloc] initWithHandlerDispatchQueue:handlerDispatchQueue];
-            dispatch_release(handlerDispatchQueue);
+            JP_DISPATCH_RELEASE(handlerDispatchQueue);
         } else {
             sa_ = sa;
         }
@@ -325,7 +326,7 @@ namespace {
             workerDispatchQueue_ = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0); 
         } else {
             workerDispatchQueue_ = workerQueue;
-            dispatch_retain(workerDispatchQueue_);
+            JP_DISPATCH_RETAIN(workerDispatchQueue_);
         }     
         idle_ = dispatch_semaphore_create(1);        
     }
@@ -343,10 +344,10 @@ namespace {
 - (void) dealloc 
 {
     if (workerDispatchQueue_) {
-        dispatch_release(workerDispatchQueue_);
+        JP_DISPATCH_RELEASE(workerDispatchQueue_);
     }
     if (idle_) {
-        dispatch_release(idle_);
+        JP_DISPATCH_RELEASE(idle_);
     }
     
 }

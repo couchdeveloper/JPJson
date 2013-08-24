@@ -63,6 +63,7 @@ namespace {
      JPJsonParserParseMultipleDocuments
      JPJsonParserParseMultipleDocumentsAsynchronously
      JPJsonParserNumberGeneratorGenerateAuto
+     JPJsonParserNumberGeneratorGenerateAutoWithDecimals
      JPJsonParserNumberGeneratorGenerateStrings
      JPJsonParserNumberGeneratorGenerateDecimals
      

@@ -74,7 +74,7 @@ namespace json {
             >::type        
         >
         constexpr integral_number(U const& value) noexcept
-        : value_{value}
+        : value_{static_cast<T>(value)}
         {}
         
         

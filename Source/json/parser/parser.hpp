@@ -151,7 +151,7 @@ namespace json {
         //  C-tor
         //
         parser(SemanticActions& sa) 
-        : sa_(sa), string_buffer_(sa), unicode_filter_(0), opt_pass_escaped_string_(false)
+        : sa_(sa), string_buffer_(sa), opt_pass_escaped_string_(false)
         {
             configure();
         }
@@ -184,19 +184,10 @@ namespace json {
         void configure() 
         {
             //string_storage_.enable_partial_strings(true);
-            semanticactions::noncharacter_handling_option nch_option = sa_.unicode_noncharacter_handling();
-            switch (nch_option) {
-                case semanticactions::SignalErrorOnUnicodeNoncharacter:
-                    unicode_filter_.replacement_character(0);
-                    break;
-                case semanticactions::SubstituteUnicodeNoncharacter:                     
-                    unicode_filter_.replacement_character(unicode::kReplacementCharacter);
-                    break;
-                case semanticactions::SkipUnicodeNoncharacters: 
-                    assert("feature not yet implemented"==NULL);
-                    unicode_filter_.replacement_character(0);
-                    break;
-            } 
+            
+            nonch_opt_ = sa_.unicode_noncharacter_handling();
+            nullch_opt_ = sa_.unicode_nullcharacter_handling();
+            
             opt_pass_escaped_string_ = sa_.passEscapdedString();
             sa_.inputEncoding(encoding_traits<source_encoding_type>::name());
             //semanticactions::non_conformance_flags ncon_flags = sa.extensions();
@@ -204,12 +195,13 @@ namespace json {
                 
     protected:
 #pragma mark - Member Variables        
-        iterator                p_;
-        std::size_t             pos_;  // index of character  (not code_unit index)
-        iterator                last_;
         SemanticActions&        sa_;
+        std::size_t             pos_;  // index of character  (not code_unit index)
+        iterator                p_;
+        iterator                last_;
+        semanticactions::noncharacter_handling_option nonch_opt_;
+        semanticactions::nullcharacter_handling_option nullch_opt_;
         state_t                 state_;
-        unicode::filter::NoncharacterOrNULL unicode_filter_;
         string_buffer_t         string_buffer_;
         number_string_buffer_t  number_string_buffer_;
         bool                    opt_pass_escaped_string_;
@@ -264,29 +256,52 @@ namespace json {
         int
         string_buffer_pushback_unicode(unicode::code_point_t unicode) 
         {
-            if ( __builtin_expect(unicode_filter_(unicode), 0) )
-            {
-                if (unicode_filter_.replace()) {
-                    unicode = unicode_filter_.replacement(unicode);
-                    assert(unicode != 0);
-                } else {
-                    // Filtered invalid Unicode code point and did not
-                    // replace it. This forces the parser to stop.
-                    if (unicode::isNonCharacter(unicode))
-                        state_.error() = JP_UNICODE_NONCHARACTER_ERROR;
-                    else if (unicode == 0){
-                        state_.error() = JP_UNICODE_NULL_NOT_ALLOWED_ERROR;  // TODO: use better error code
+            if (nonch_opt_ != semanticactions::AllowUnicodeNoncharacter) {
+                if (__builtin_expect(unicode::isNonCharacter(unicode), 0)) {
+                    switch (nonch_opt_) {
+                        case semanticactions::AllowUnicodeNoncharacter:
+                            break;
+                        case semanticactions::SignalErrorOnUnicodeNoncharacter:
+                            state_.error() = JP_UNICODE_NONCHARACTER_ERROR;
+                            sa_.error(state_.error(), state_.error_str());
+                            return -1;
+                            break;
+
+                        case semanticactions::SubstituteUnicodeNoncharacter:
+                            unicode = unicode::kReplacementCharacter;
+                            break;
+                            
+                        case semanticactions::RemoveUnicodeNoncharacter:
+                            break;
                     }
-                    else {
-                        state_.error() = JP_UNICODE_REJECTED_BY_FILTER;
-                    }
-                    sa_.error(state_.error(), state_.error_str());
-                    return -1;
+                }
+                else {
+                    /* do nothing */
                 }
             }
+            if (__builtin_expect(unicode == 0, 0)) {
+                switch (nullch_opt_) {
+                    case semanticactions::AllowUnicodeNULLCharacter:
+                        break;
+                    case semanticactions::SignalErrorOnUnicodeNULLCharacter:
+                        state_.error() = JP_UNICODE_NULL_NOT_ALLOWED_ERROR;  // TODO: use better error code
+                        sa_.error(state_.error(), state_.error_str());
+                        return -1;
+                        break;
+                    case semanticactions::SubstituteUnicodeNULLCharacter:
+                        unicode = unicode::kReplacementCharacter;
+                        break;
+                        
+                    case semanticactions::RemoveUnicodeNULLCharacter:
+                        return 0;
+                        break;
+                }
+            }
+            
             string_buffer_.append_unicode(unicode);  // shall not fail
             return 0;
         }
+        
         
         void throwLogicError(const char* msg); 
         

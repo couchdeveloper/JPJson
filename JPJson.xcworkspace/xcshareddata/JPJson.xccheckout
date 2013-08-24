@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>4C11882E-4B92-48A1-9726-61B0C933023B</string>
+	<key>IDESourceControlProjectName</key>
+	<string>JPJson</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>23B36F5C-7C20-45C2-BA11-473E9E8041FB</key>
+		<string>ssh://github.com/couchdeveloper/JPJson.git</string>
+		<key>E948A886-EE89-46DB-8355-A755618A4A88</key>
+		<string>ssh://github.com/couchdeveloper/gtest.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>JPJson.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>23B36F5C-7C20-45C2-BA11-473E9E8041FB</key>
+		<string>..</string>
+		<key>E948A886-EE89-46DB-8355-A755618A4A88</key>
+		<string>../../../GTest/gtest-1.6.0</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>ssh://github.com/couchdeveloper/JPJson.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>23B36F5C-7C20-45C2-BA11-473E9E8041FB</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>23B36F5C-7C20-45C2-BA11-473E9E8041FB</string>
+			<key>IDESourceControlWCCName</key>
+			<string>JPJson-0</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>E948A886-EE89-46DB-8355-A755618A4A88</string>
+			<key>IDESourceControlWCCName</key>
+			<string>gtest-1.6</string>
+		</dict>
+	</array>
+</dict>
+</plist>

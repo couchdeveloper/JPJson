@@ -22,7 +22,9 @@
 
 
 #include "json/config.hpp"
+#include "OSCompatibility.h"
 #include <dispatch/dispatch.h>
+
 #include <cassert>
 
 #if defined(DEBUG)
@@ -43,7 +45,7 @@ namespace json { namespace objc { namespace gcd {
             assert(sem_);
         }
         
-        ~mutex() { dispatch_release(sem_); }
+        ~mutex() { JP_DISPATCH_RELEASE(sem_); }
         
         void lock() {
 #if defined (DEBUG)

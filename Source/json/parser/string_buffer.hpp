@@ -197,7 +197,7 @@ namespace json { namespace parser_internal {
         void        
         append_ascii(char ch)
         {
-            assert(ch >= 0 and ch < 0x80);
+            assert(ch >= 0);
             base::append(byte_swap<host_endian_t, to_endian_t>(static_cast<code_unit_type>(ch)));
         }
         

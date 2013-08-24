@@ -22,12 +22,22 @@
 #import "JPJsonCommon.h"
 #import <Foundation/Foundation.h>
 
+/** Unicode 'NULL' (U+0000) Handling */
+enum {
+    JPSemanticActionsAllowUnicodeNULLCharacter,
+    JPSemanticActionsSignalErrorOnUnicodeNULLCharacter,
+    JPSemanticActionsSubstituteUnicodeNULLCharacter,
+    JPSemanticActionsRemoveUnicodeNULLCharacter
+};
+typedef NSUInteger JPSemanticActionsUnicodeNULLCharacterHandling;
+
 
 /** Unicode Noncharacter Handling */
 enum {
+    JPSemanticActionsAllowUnicodeNoncharacter,
     JPSemanticActionsSignalErrorOnUnicodeNoncharacter,
     JPSemanticActionsSubstituteUnicodeNoncharacter, 
-    JPSemanticActionsSkipUnicodeNoncharacters
+    JPSemanticActionsRemoveUnicodeNoncharacter
 };
 typedef NSUInteger JPSemanticActionsUnicodeNoncharacterHandling;
 
@@ -253,6 +263,22 @@ typedef void (^JPSemanticActions_ErrorHandlerBlockType)(NSError*);
 @property (nonatomic, assign) JPSemanticActionsLogLevel logLevel;
 
 
+
+/**
+ Sets or returns the policy for handling Unicode 'NULL' characters of the receiver
+ and the underlaying JSON parser.
+ 
+ Possible values are constants defined in enumeration `JPSemanticActionsUnicodeNULLCharacterHandling`:
+ 
+ - `JPSemanticActionsSignalErrorOnUnicodeNoncharacter`
+ - `JPSemanticActionsSubstituteUnicodeNoncharacter`
+ - `JPSemanticActionsRemoveUnicodeNULLCharacter`
+ 
+ Default: `JPSemanticActionsSignalErrorOnUnicodeNoncharacter`
+ */
+@property (nonatomic, assign) JPSemanticActionsUnicodeNULLCharacterHandling  unicodeNULLCharacterHandling;
+
+
 /**
  Sets or returns the policy for handling Unicode noncharacters of the receiver 
  and the underlaying JSON parser. 
@@ -261,7 +287,7 @@ typedef void (^JPSemanticActions_ErrorHandlerBlockType)(NSError*);
  
  - `JPSemanticActionsSignalErrorOnUnicodeNoncharacter`
  - `JPSemanticActionsSubstituteUnicodeNoncharacter`
- - `JPSemanticActionsSkipUnicodeNoncharacters`
+ - `JPSemanticActionsRemoveUnicodeNoncharacter`
 
  Default: `JPSemanticActionsSignalErrorOnUnicodeNoncharacter`
  */ 

@@ -35,7 +35,7 @@
 
 #include <algorithm>
 #include <ctime>
-
+#include <string>
 
 #include <boost/config.hpp>
 
@@ -91,12 +91,148 @@ namespace {
     }
     
     
+    std::string JPJsonParserOptionsToString(JPJsonParserOptions opt)
+    {
+        if (opt == 0) {
+            return "none";
+        }
+        std::string result;
+        if (opt & JPJsonParserSignalErrorOnNoncharacter) {
+            result += "JPJsonParserSignalErrorOnNoncharacter ";
+        }
+        if (opt & JPJsonParserSignalErrorOnNoncharacter) {
+            result += "JPJsonParserSignalErrorOnNoncharacter ";
+        }
+        if (opt & JPJsonParserSubstituteUnicodeNoncharacter) {
+            result += "JPJsonParserSubstituteUnicodeNoncharacter ";
+        }
+        if (opt & JPJsonParserRemoveUnicodeNoncharacter) {
+            result += "JPJsonParserRemoveUnicodeNoncharacter ";
+        }
+        if (opt & JPJsonParserSignalErrorOnNULLCharacter) {
+            result += "JPJsonParserSignalErrorOnNULLCharacter ";
+        }
+        if (opt & JPJsonParserSubstituteUnicodeNULLCharacter) {
+            result += "JPJsonParserSubstituteUnicodeNULLCharacter ";
+        }
+        if (opt & JPJsonParserRemoveUnicodeNULLCharacter) {
+            result += "JPJsonParserRemoveUnicodeNULLCharacter ";
+        }
+        if (opt & JPJsonParserIgnoreSpuriousTrailingBytes) {
+            result += "JPJsonParserIgnoreSpuriousTrailingBytes ";
+        }
+        if (opt & JPJsonParserParseMultipleDocuments) {
+            result += "JPJsonParserParseMultipleDocuments ";
+        }
+        if (opt & JPJsonParserParseMultipleDocumentsAsynchronously) {
+            result += "JPJsonParserParseMultipleDocumentsAsynchronously ";
+        }
+        if (opt & JPJsonParserLogLevelDebug) {
+            result += "JPJsonParserLogLevelDebug ";
+        }
+        if (opt & JPJsonParserLogLevelWarning) {
+            result += "JPJsonParserLogLevelWarning ";
+        }
+        if (opt & JPJsonParserLogLevelError) {
+            result += "JPJsonParserLogLevelError ";
+        }
+        if (opt & JPJsonParserLogLevelNone) {
+            result += "JPJsonParserLogLevelNone ";
+        }
+        if (opt & JPJsonParserAllowComments) {
+            result += "JPJsonParserAllowComments ";
+        }
+        if (opt & JPJsonParserAllowControlCharacters) {
+            result += "JPJsonParserAllowControlCharacters ";
+        }
+        if (opt & JPJsonParserAllowLeadingPlusInNumbers) {
+            result += "JPJsonParserAllowLeadingPlusInNumbers ";
+        }
+        if (opt & JPJsonParserAllowLeadingZerosInIntegers) {
+            result += "JPJsonParserAllowLeadingZerosInIntegers ";
+        }
+        if (opt & JPJsonParserEncodedStrings) {
+            result += "JPJsonParserEncodedStrings ";
+        }
+        if (opt & JPJsonParserCheckForDuplicateKey) {
+            result += "JPJsonParserCheckForDuplicateKey ";
+        }
+        if (opt & JPJsonParserKeepStringCacheOnClear) {
+            result += "JPJsonParserKeepStringCacheOnClear ";
+        }
+        if (opt & JPJsonParserCacheDataStrings) {
+            result += "JPJsonParserCacheDataStrings ";
+        }
+        if (opt & JPJsonParserCreateMutableContainers) {
+            result += "JPJsonParserCreateMutableContainers ";
+        }
+        if (opt & JPJsonParserNumberGeneratorGenerateAuto) {
+            result += "JPJsonParserNumberGeneratorGenerateAuto ";
+        }
+        if (opt & JPJsonParserNumberGeneratorGenerateAutoWithDecimals) {
+            result += "JPJsonParserNumberGeneratorGenerateAutoWithDecimals ";
+        }
+        if (opt & JPJsonParserNumberGeneratorGenerateStrings) {
+            result += "JPJsonParserNumberGeneratorGenerateStrings ";
+        }
+        if (opt & JPJsonParserNumberGeneratorGenerateDecimals) {
+            result += "JPJsonParserNumberGeneratorGenerateDecimals ";
+        }
+        if (opt & JPJsonParserGeneratorUseArenaAllocator) {
+            result += "JPJsonParserGeneratorUseArenaAllocator ";
+        }
+        
+        return result;
+    }
     
-    // -------------------------------------------------------------------------
-    // Path to a JSON file which is used globally for all tests.
-    // -------------------------------------------------------------------------
-    //NSString* JSON_TEST_FILE = @"Test-UTF8-esc.json";
-    NSString* JSON_TEST_FILE = @"Test-UTF8.json";
+    
+    std::string JSONKitParseOptionsToString(JKParseOptionFlags opt) {
+        if (opt == 0) {
+            return "none";
+        }
+        std::string result;
+
+        if (JKParseOptionStrict & opt) {
+            result += "JKParseOptionStrict ";
+        }
+        if (JKParseOptionComments & opt) {
+            result += "JKParseOptionComments ";
+        }
+        if (JKParseOptionUnicodeNewlines & opt) {
+            result += "JKParseOptionUnicodeNewlines ";
+        }
+        if (JKParseOptionLooseUnicode & opt) {
+            result += "JKParseOptionLooseUnicode ";
+        }
+        if (JKParseOptionPermitTextAfterValidJSON & opt) {
+            result += "JKParseOptionPermitTextAfterValidJSON ";
+        }
+
+        return result;
+    }
+    
+    
+    
+    std::string NSJSONSerializationParseOptionsToString(NSJSONReadingOptions opt) {
+        if (opt == 0) {
+            return "none";
+        }
+        std::string result;
+        if (NSJSONReadingMutableContainers & opt) {
+            result += "NSJSONReadingMutableContainers ";
+        }
+        if (NSJSONReadingMutableLeaves & opt) {
+            result += "NSJSONReadingMutableLeaves ";
+        }
+        if (NSJSONReadingAllowFragments & opt) {
+            result += "NSJSONReadingAllowFragments ";
+        }
+        if (opt == 0) {
+            result = "none";
+        }
+        
+        return result;
+    }
     
     
     using utilities::timer;
@@ -134,29 +270,30 @@ namespace {
 namespace {    
     
     // -----------------------------------------------------------------------------
-    //  bench_JPJsonParserWithNSString1()
+    //  bench_JPJsonParserWithNSString()
     //  Class JPJsonParser
     //  Using a NSString as input and interface method:
     //  +parseString:options:error:
     // -----------------------------------------------------------------------------
-    void bench_JPJsonParserWithNSString1(NSString* file, const int N, bool printInfo = false)
+    void bench_JPJsonParserWithNSString(JPJsonParserOptions opt, NSString* file, const int N, bool printInfo = false)
     {
         using namespace utilities;
         
         assert(N > 0);
         
+        NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
         printf("\n");
         printf("--------------------------------------------\n");
-        printf("Running bench_JPJsonParserWithNSString1 %d times.\n", N);
+        printf("Running bench_JPJsonParserWithNSString %d times.\n", N);
         printf("--------------------------------------------\n");    
         printf("Using a NSString as input and interface method:\n"
                "+parseString:options:error: (JPJsonParser)\n"
-               "options: JPJsonParserCreateMutableContainers\n");
+               "options: %s\n", JPJsonParserOptionsToString(opt).c_str());
         
-        NSData* data = createDataFromFileInResourceFolder(JSON_TEST_FILE);
+        NSData* data = createDataFromFileInResourceFolder(file);
         NSStringEncoding encoding = [data jpj_detectUnicodeNSStringEncoding];
         printf("Input file: %s, size: %d, encoding: %s\n", 
-               [JSON_TEST_FILE UTF8String], (int)[data length], NSStringEncodingToCStr(encoding));
+               [file UTF8String], (int)[data length], NSStringEncodingToCStr(encoding));
         if (encoding == -1) {
             NSLog(@"ERROR: NSData doesn't contain text encoded in Unicode");
             abort();
@@ -165,11 +302,11 @@ namespace {
                 
         MinMaxAvg<double> te;
         timer t = timer();        
-        NSError* error;
         BOOL gotError = NO;
         for (int i = 0; i < N; ++i) 
         {
             NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+            NSError* error;
             NSString* input = [[NSString alloc] initWithBytes:[data bytes] length:[data length] encoding:encoding];
             if (input == nil) {
                 NSLog(@"ERROR: Could not create a NSString from NSData object. Probably encoding error.");
@@ -179,7 +316,7 @@ namespace {
             // This method creates and destroys the internal semantic actions
             // instance.
             id result = [JPJsonParser parseString:input 
-                                          options:(JPJsonParserOptions)(JPJsonParserCreateMutableContainers)
+                                          options:(JPJsonParserOptions)(opt)
                                             error:&error];
             [result retain];
             t.stop();
@@ -192,44 +329,45 @@ namespace {
 #endif        
             [result release];
             [input release];
-            [pool release];
             
+            if (!result) {
+                NSLog(@"PJsonParser ERROR: %@", error);
+            }
+            [pool release];
             if (!result)
                 break;
         }
                         
-        if (gotError) {
-            NSLog(@"ERROR: %@", error);
-        }
-        else {
-            printf("JPJsonParser: elapsed time for parsing:\nmin: %.3f ms, max: %0.3f ms, avg: %0.3f ms\n", 
+        if (!gotError) {
+            printf("JPJsonParser: elapsed time for parsing:\nmin: %.3f ms, max: %0.3f ms, avg: %0.3f ms\n",
                   te.min()*1e3, te.max()*1e3, te.avg()*1e3);
         }
 
         [data release];
+        [pool release];
     }
     
     
     
     
     // -----------------------------------------------------------------------------
-    //  bench_JPJsonParserWithNSData1a()
+    //  bench_JPJsonParserWithNSData()
     //  Class JPJsonParser
     //  Using a NSData with UTF-8 content as input and interface method:
     //  +parseData:options:error:
-    //  options: 0
     // -----------------------------------------------------------------------------
-    void bench_JPJsonParserWithNSData1a(NSString* file, const int N, bool printInfo = false)
+    void bench_JPJsonParserWithNSData(JPJsonParserOptions opt, NSString* file, const int N, bool printInfo = false)
     {
         using namespace utilities;
 
         assert(N > 0);
         
+        NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
         printf("\n");
         printf("--------------------------------------------\n");
-        printf("Running bench_JPJsonParserWithNSData1a %d times.\n", N);
+        printf("Running bench_JPJsonParserWithNSData %d times.\n", N);
         printf("--------------------------------------------\n");    
-        NSData* data = createDataFromFileInResourceFolder(JSON_TEST_FILE);
+        NSData* data = createDataFromFileInResourceFolder(file);
         NSStringEncoding encoding = [data jpj_detectUnicodeNSStringEncoding];
         if (encoding == -1) {
             NSLog(@"ERROR: NSData doesn't contain text encoded in Unicode");
@@ -237,25 +375,25 @@ namespace {
         }
         printf("Using a NSData with %s content as input and interface method:\n"
                "+parseData:options:error: (JPJsonParser)\n"
-               "options: JPJsonParserGeneratorUseArenaAllocator\n"
+               "options: %s\n"
                "The input encoding will be detected automatically\n",
-               NSStringEncodingToUnicodeSchemeCStr(encoding));
+               NSStringEncodingToUnicodeSchemeCStr(encoding), JPJsonParserOptionsToString(opt).c_str());
         printf("Input file: %s, size: %d, encoding: %s\n", 
-               [JSON_TEST_FILE UTF8String], (int)[data length], NSStringEncodingToUnicodeSchemeCStr(encoding));
+               [file UTF8String], (int)[data length], NSStringEncodingToUnicodeSchemeCStr(encoding));
         
         MinMaxAvg<double> te;
         timer t = timer();
         
-        NSError* error;
         BOOL gotError = NO;
         for (int i = 0; i < N; ++i) 
         {
             NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+            NSError* error;
             t.start();
             // This method creates and destroys the internal semantic actions
             // instance.
             id result = [JPJsonParser parseData:data 
-                                        options:(JPJsonParserOptions)JPJsonParserGeneratorUseArenaAllocator   //(JPJsonParserGeneratorUseArenaAllocator | JPJsonParserCreateMutableContainers )
+                                        options:(JPJsonParserOptions)opt
                                           error:&error];
             [result retain];
             t.stop();
@@ -267,25 +405,22 @@ namespace {
             }
 #endif                    
             [result release];
+            if (!result) {
+                NSLog(@"PJsonParser ERROR: %@", error);
+            }
             [pool release];
-            
-            //usleep(10*1000);
-            
             if (!result)
                 break;
         }
         
-        if (gotError) {
-            NSLog(@"ERROR: %@", error);
-        }
-        else {
+        if (!gotError) {
             NSLog(@"JPJsonParser: elapsed time for parsing:\nmin: %.3f ms, max: %0.3f ms, avg: %0.3f ms\n", 
                   te.min()*1e3, te.max()*1e3, te.avg()*1e3);
         }
         
         [data release];
+        [pool release];
     }
-    
     
     
     // -----------------------------------------------------------------------------
@@ -293,48 +428,44 @@ namespace {
     //  Class JPJsonParser
     //  Using a NSData with UTF-8 content as input and interface method:
     //  +parseData:options:error:
-    //  options: 0
     // -----------------------------------------------------------------------------
-    void bench_JPJsonParserWithNSDataReuseSemanticActionsObject(NSString* file, const int N, bool printInfo = false)
+    void bench_JPJsonParserWithNSDataReuseSemanticActionsObject(JPJsonParserOptions opt, NSString* file, const int N, bool printInfo = false)
     {
         using namespace utilities;
         
         assert(N > 0);
         
+        NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
         printf("\n");
         printf("--------------------------------------------\n");
         printf("Running bench_JPJsonParserWithNSDataReuseSemanticActionsObject %d times.\n", N);
         printf("--------------------------------------------\n");
-        NSData* data = createDataFromFileInResourceFolder(JSON_TEST_FILE);
+        NSData* data = createDataFromFileInResourceFolder(file);
         NSStringEncoding encoding = [data jpj_detectUnicodeNSStringEncoding];
         if (encoding == -1) {
             NSLog(@"ERROR: NSData doesn't contain text encoded in Unicode");
             abort();
         }
         printf("Using a NSData with %s content as input and interface method:\n"
-               "+parseData:semanticActions: (JPJsonParser)\n"
-               "semantic actions: JPRepresentationGenerator with useArenaAllocator == YES\n"
-               "The semantic actions object will be reused\n"
+               "+parseData:options:error: (JPJsonParser)\n"
+               "options: %s\n"
                "The input encoding will be detected automatically\n",
-               NSStringEncodingToUnicodeSchemeCStr(encoding));
+               NSStringEncodingToUnicodeSchemeCStr(encoding), JPJsonParserOptionsToString(opt).c_str());
         printf("Input file: %s, size: %d, encoding: %s\n",
-               [JSON_TEST_FILE UTF8String], (int)[data length], NSStringEncodingToUnicodeSchemeCStr(encoding));
+               [file UTF8String], (int)[data length], NSStringEncodingToUnicodeSchemeCStr(encoding));
         
         MinMaxAvg<double> te;
         timer t = timer();
         
         JPRepresentationGenerator* sa = [[JPRepresentationGenerator alloc] initWithHandlerDispatchQueue:NULL];
-        sa.useArenaAllocator = YES;
-        sa.keepStringCacheOnClear = YES;
-        //sa.cacheDataStrings = YES;
+        [sa configureWithOptions:opt];
         
-        NSError* error;
         BOOL gotError = NO;
         for (int i = 0; i < N; ++i)
         {
             NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
             t.start();
-            BOOL success = [JPJsonParser parseData:data semanticActions:sa];
+            gotError = ![JPJsonParser parseData:data semanticActions:sa];
             //id result = sa.result;
             t.stop();
             te.set(t.seconds());
@@ -346,120 +477,46 @@ namespace {
 #endif
             // deallocate result by clearing the sa
             [sa clear];
+            if (gotError) {
+                NSLog(@"PJsonParser ERROR: %@", sa.error);
+            }
             [pool release];
-            
-            if (!success)
+            if (gotError)
                 break;
         }
         
-        if (gotError) {
-            NSLog(@"ERROR: %@", error);
-        }
-        else {
+        if (!gotError) {
             NSLog(@"JPJsonParser: elapsed time for parsing:\nmin: %.3f ms, max: %0.3f ms, avg: %0.3f ms\n",
                   te.min()*1e3, te.max()*1e3, te.avg()*1e3);
         }
-        
+        [sa release];
         [data release];
+        [pool release];
     }
     
     
     
-    // -----------------------------------------------------------------------------
-    //  bench_JPJsonParserWithNSData1b()
-    //  Class JPJsonParser
-    //  Using a NSData with UTF-8 content as input and interface method:
-    //  +parseData:options:error:
-    //  options: JPJsonParserCreateMutableContainers
-    //  The input encoding will be detected automatically.
-    // -----------------------------------------------------------------------------
-    void bench_JPJsonParserWithNSData1b(NSString* file, const int N, bool printInfo = false)
-    {
-        using namespace utilities;
-        
-        assert(N > 0);
-        
-        printf("\n");
-        printf("--------------------------------------------\n");
-        printf("Running bench_JPJsonParserWithNSData1b %d times.\n", N);
-        printf("--------------------------------------------\n");    
-        NSData* data = createDataFromFileInResourceFolder(JSON_TEST_FILE);
-        NSStringEncoding encoding = [data jpj_detectUnicodeNSStringEncoding];
-        if (encoding == -1) {
-            NSLog(@"ERROR: NSData doesn't contain text encoded in Unicode");
-            abort();
-        }
-        printf("Class JPJsonParser"
-               "Using a NSData with %s content as input and interface method:\n"
-               "+parseData:options:error:\n"
-               "options: JPJsonParserCreateMutableContainers\n"
-               "The input encoding will be detected automatically\n",
-               NSStringEncodingToUnicodeSchemeCStr(encoding));
-        printf("Input file: %s, size: %d, encoding: %s\n", 
-               [JSON_TEST_FILE UTF8String], (int)[data length], NSStringEncodingToUnicodeSchemeCStr(encoding));
-        
-        MinMaxAvg<double> te;
-        timer t = timer();
-        
-        NSError* error;
-        BOOL gotError = NO;
-        for (int i = 0; i < N; ++i) 
-        {
-            NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-            t.start();
-            // This method creates and destroys the internal semantic actions
-            // instance.
-            id result = [JPJsonParser parseData:data 
-                                        options:(JPJsonParserOptions)JPJsonParserCreateMutableContainers
-                                          error:&error];
-            [result retain];
-            t.stop();
-            te.set(t.seconds());
-            t.reset();
-#if defined (XX_DEBUG)
-            if ((i+1) == N) {
-                NSLog(@"%@", result);
-            }
-#endif        
-            [result release];
-            [pool release];
-            
-            if (!result)
-                break;
-        }
-        
-        if (gotError) {
-            NSLog(@"ERROR: %@", error);
-        }
-        else {
-            NSLog(@"JPJsonParser: elapsed time for parsing:\nmin: %.3f ms, max: %0.3f ms, avg: %0.3f ms\n", 
-                  te.min()*1e3, te.max()*1e3, te.avg()*1e3);
-        }
-        
-        [data release];
-    }
-
-    
     
     // -----------------------------------------------------------------------------
-    //  bench_JPJsonParserSAXStyle1x()
+    //  bench_JPJsonParserSAXStyle()
     //  Class JPJsonParser
     //  Using a NSData with UTF-8 content as input and interface method:
     //  +parseData:semanticActions:
     //  semantic actions class: JPStreamSemanticActions
     //  The input encoding will be detected automatically.
     // -----------------------------------------------------------------------------
-    void bench_JPJsonParserSAXStyle1x(NSString* file, const int N, bool printInfo = false)
+    void bench_JPJsonParserSAXStyle(JPJsonParserOptions opt, NSString* file, const int N, bool printInfo = false)
     {
         using namespace utilities;
         
         assert(N > 0);
         
+        NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
         printf("\n");
         printf("--------------------------------------------\n");
-        printf("Running bench_JPJsonParserSAXStyle1x %d times.\n", N);
+        printf("Running bench_JPJsonParserSAXStyle %d times.\n", N);
         printf("--------------------------------------------\n");    
-        NSData* data = createDataFromFileInResourceFolder(JSON_TEST_FILE);
+        NSData* data = createDataFromFileInResourceFolder(file);
         NSStringEncoding encoding = [data jpj_detectUnicodeNSStringEncoding];
         if (encoding == -1) {
             NSLog(@"ERROR: NSData doesn't contain text encoded in Unicode");
@@ -469,12 +526,12 @@ namespace {
                "Using a NSData with %s content as input and interface method:\n"
                "+parseData:semanticActions:\n"
                "Semantic Actions: JPStreamSemanticActions  (SAX style)\n"
+               "options: %s\n"
                "The input encoding will be detected automatically\n",
-               NSStringEncodingToUnicodeSchemeCStr(encoding));
+               NSStringEncodingToUnicodeSchemeCStr(encoding), JPJsonParserOptionsToString(opt).c_str());
         printf("Input file: %s, size: %d, encoding: %s\n", 
-               [JSON_TEST_FILE UTF8String], (int)[data length], NSStringEncodingToUnicodeSchemeCStr(encoding));
+               [file UTF8String], (int)[data length], NSStringEncodingToUnicodeSchemeCStr(encoding));
         
-        NSError* error = nil;
         MinMaxAvg<double> te;
         timer t = timer();
         BOOL success = NO;
@@ -487,32 +544,31 @@ namespace {
             
             JPStreamSemanticActions* sa = [[JPStreamSemanticActions alloc] initWithHandlerDispatchQueue:NULL];        
             success = [JPJsonParser parseData:data semanticActions:sa];
+            [sa configureWithOptions:opt];
             t.stop();
             te.set(t.seconds());
             t.reset();
             if (!success) {
-                error = sa.error;
-                [sa release];
-                break;
+                NSLog(@"PJsonParser ERROR: %@", sa.error);
             }
             [sa release];
-            [pool release];        
+            [pool release];
+            if (!success)
+                break;
         }
         
-        if (!success) {
-            NSLog(@"ERROR: %@", error);
-        }
-        else {
+        if (success) {
             NSLog(@"JPJsonParser: elapsed time for parsing:\nmin: %.3f ms, max: %0.3f ms, avg: %0.3f ms\n", 
                   te.min()*1e3, te.max()*1e3, te.avg()*1e3);
         }
         
         [data release];
+        [pool release];
     }
     
     
     // -----------------------------------------------------------------------------
-    //  bench_JPJsonParser1d()
+    //  bench_JPJsonParserIncludingDestruction()
     //  Class JPJsonParser
     //  Reading data from file, using interface method:
     //  +parseData:options:error:
@@ -520,31 +576,33 @@ namespace {
     //  The input encoding will be detected automatically.
     //  Timing includes destruction of objects
     // -----------------------------------------------------------------------------
-    void bench_JPJsonParser1d(NSString* file, const int N, bool printInfo = false)
+    void bench_JPJsonParserIncludingDestruction(JPJsonParserOptions opt, NSString* file, const int N, bool printInfo = false)
     {
         using namespace utilities;
         
         assert(N > 0);
         
+        NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
         printf("\n");
         printf("--------------------------------------------\n");
-        printf("Running bench_JPJsonParser1d %d times.\n", N);
+        printf("Running bench_JPJsonParserIncludingDestruction %d times.\n", N);
         printf("--------------------------------------------\n");    
-        NSData* data = createDataFromFileInResourceFolder(JSON_TEST_FILE);
+        NSData* data = createDataFromFileInResourceFolder(file);
         NSStringEncoding encoding = [data jpj_detectUnicodeNSStringEncoding];
         if (encoding == -1) {
             NSLog(@"ERROR: NSData doesn't contain text encoded in Unicode");
             abort();
         }
         printf("Timing includes destruction of JSON representation\n");
-        printf("using a NSData with %s content as input and interface method:\n"
-               "+parseData:options:error: (JPJsonParser)\n",
-               NSStringEncodingToUnicodeSchemeCStr(encoding));
-        printf("Input file: %s, size: %d, encoding: %s\n", 
-               [JSON_TEST_FILE UTF8String], (int)[data length], NSStringEncodingToUnicodeSchemeCStr(encoding));
+        printf("Using a NSData with %s content as input and interface method:\n"
+               "+parseData:options:error: (JPJsonParser)\n"
+               "options: %s\n"
+               "The input encoding will be detected automatically\n",
+               NSStringEncodingToUnicodeSchemeCStr(encoding), JPJsonParserOptionsToString(opt).c_str());
+        printf("Input file: %s, size: %d, encoding: %s\n",
+               [file UTF8String], (int)[data length], NSStringEncodingToUnicodeSchemeCStr(encoding));
         
         
-        NSError* error;
         MinMaxAvg<double> te;
         timer t = timer();
         
@@ -553,13 +611,17 @@ namespace {
         for (int i = 0; i < N; ++i) 
         {
             t.start();
-            
             NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+            NSError* error;
             // This method creates and destroys the internal semantic actions
             // instance.
             id result = [JPJsonParser parseData:data 
-                                        options:(JPJsonParserOptions)0
+                                        options:(JPJsonParserOptions)opt
                                           error:&error];
+            if (!result) {
+                gotError = YES;
+                NSLog(@"PJsonParser ERROR: %@", error);
+            }
             [pool release];
             
             t.stop();
@@ -569,88 +631,16 @@ namespace {
                 break;
         }
         
-        if (gotError) {
-            NSLog(@"ERROR: %@", error);
-        }
-        else {
+        if (!gotError) {
             NSLog(@"JPJsonParser: elapsed time for parsing:\nmin: %.3f ms, max: %0.3f ms, avg: %0.3f ms\n", 
                   te.min()*1e3, te.max()*1e3, te.avg()*1e3);
         }
         
         [data release];
+        [pool release];
     }
     
     
-    // -----------------------------------------------------------------------------
-    //  bench_JPJsonParser2()
-    //  Class JPJsonParser
-    //  Timing includes destruction of objects.
-    //  Using a NSData with UTF-8 content as input and interface method:
-    //  +parseData:encoding:options:error:
-    //  The input encoding shall be set explicitly
-    // -----------------------------------------------------------------------------
-    void bench_JPJsonParser2(NSString* file, const int N, bool printInfo = false)
-    {
-        using namespace utilities;
-        
-        assert(N > 0);
-        
-        printf("\n");
-        printf("--------------------------------------------\n");
-        printf("Running bench_JPJsonParser2 %d times.\n", N);
-        printf("--------------------------------------------\n"); 
-        NSData* data = createDataFromFileInResourceFolder(JSON_TEST_FILE);
-        NSStringEncoding encoding = [data jpj_detectUnicodeNSStringEncoding];
-        if (encoding == -1) {
-            NSLog(@"ERROR: NSData doesn't contain text encoded in Unicode");
-            abort();
-        }
-        printf("Timing includes destruction of objects, too\n");
-        printf("Using a NSData with %s content as input and interface method:\n"
-               "+parseData:options:error: (JPJsonParser)\n"
-               "options: JPJsonParserCreateMutableContainers\n"
-               "The input encoding shall be set explicitly\n",
-               NSStringEncodingToUnicodeSchemeCStr(encoding));
-        printf("Input file: %s, size: %d, encoding: %s\n", 
-               [JSON_TEST_FILE UTF8String], (int)[data length], NSStringEncodingToUnicodeSchemeCStr(encoding));
-        
-        
-        NSError* error;
-        MinMaxAvg<double> te;
-        timer t = timer();
-        
-        BOOL gotError = NO;
-        for (int i = 0; i < N; ++i) 
-        {
-            t.start();
-            
-            NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-            // This method creates and destroys the internal semantic actions
-            // instance.
-            id result = [JPJsonParser parseData:data 
-                                        options:(JPJsonParserOptions)(JPJsonParserCreateMutableContainers)
-                                          error:&error];
-            [pool release];
-            
-            t.stop();
-            te.set(t.seconds());
-            
-            if (!result)
-                break;
-        }
-        
-        if (gotError) {
-            NSLog(@"ERROR: %@", error);
-        }
-        else {
-            NSLog(@"JPJsonParser: elapsed time for parsing:\nmin: %.3f ms, max: %0.3f ms, avg: %0.3f ms\n", 
-                  te.min()*1e3, te.max()*1e3, te.avg()*1e3);
-        }
-        
-        [data release];
-    }
-    
-
     
     // -----------------------------------------------------------------------------
     // bench_JPAsyncJsonParser
@@ -659,31 +649,33 @@ namespace {
     // kept alive, giving it and advantage, since key strings are cached.\n"
     // So this test is not directly comparable to the others.
     // -----------------------------------------------------------------------------
-    void bench_JPAsyncJsonParser(NSString* file, const int N, bool printInfo = false)
+    void bench_JPAsyncJsonParser(JPJsonParserOptions opt, NSString* file, const int N, bool printInfo = false)
     {
         using namespace utilities;
         
         assert(N > 0);
         
+        NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
         printf("\n");
         printf("--------------------------------------------\n");
         printf("Running bench_JPAsyncJsonParser %d times.\n", N);
         printf("--------------------------------------------\n");    
-        NSData* data = createDataFromFileInResourceFolder(JSON_TEST_FILE);
+        NSData* data = createDataFromFileInResourceFolder(file);
         NSStringEncoding encoding = [data jpj_detectUnicodeNSStringEncoding];
         if (encoding == -1) {
             NSLog(@"ERROR: NSData doesn't contain text encoded in Unicode");
             abort();
         }
-        printf("Asynchronous Parser, using a NSData with %s\n"
-               "content as input.\n"
+        printf("Asynchronous Parser with options %s,"
+               "\nusing a NSData with %s content as input.\n"
                "Timing measures the average time including destruction\n"
                "of JSON objects. The semantic actions object is kept alive,\n"
                "giving it and advantage, since key strings are cached.\n"
                "This test is not directly comparable to the others.\n",
+               JPJsonParserOptionsToString(opt).c_str(),
                NSStringEncodingToUnicodeSchemeCStr(encoding));
         printf("Input file: %s, size: %d, encoding: %s\n", 
-               [JSON_TEST_FILE UTF8String], (int)[data length], NSStringEncodingToUnicodeSchemeCStr(encoding));
+               [file UTF8String], (int)[data length], NSStringEncodingToUnicodeSchemeCStr(encoding));
         
         __block BOOL gotError = NO;
         timer t = timer();
@@ -691,8 +683,10 @@ namespace {
         dispatch_semaphore_t sem = dispatch_semaphore_create(0);
         JPAsyncJsonParser* parser = [[JPAsyncJsonParser alloc] init];
         JPRepresentationGenerator* sa = (JPRepresentationGenerator*)[parser semanticActions];
+        [sa configureWithOptions:opt];
         sa.parseMultipleDocuments = YES;
-        // The handlers should use its own (serial) queue. Handler blocks must not 
+        
+        // The handlers should use its own (serial) queue. Handler blocks must not
         // be scheduled on the global concurrent queue (where the parser runs), if
         // option parseMultipleDocumentsAsynchronously equals YES, otherwise handler 
         // blocks may cause a deadlock. Here, in this example, the handler blocks
@@ -702,6 +696,7 @@ namespace {
         dispatch_queue_t handlerDispatchQueue = dispatch_queue_create("com.test.json.parser.handler", NULL);
         [sa setHandlerDispatchQueue:handlerDispatchQueue];
         dispatch_release(handlerDispatchQueue);
+        
         
         sa.startJsonHandlerBlock = ^{
         };
@@ -745,7 +740,8 @@ namespace {
          NSLog(@"JPJsonParser: elapsed time for parsing:\nmin: %.3f ms, max: %0.3f ms, avg: %0.3f ms\n", 
          te.min()*1e3, te.max()*1e3, te.avg()*1e3);
          }
-         */ 
+         */
+        [pool release];
     }
     
     
@@ -757,17 +753,18 @@ namespace {
 #pragma mark - JSONKit
     
     
-    void bench_JSONKitString1(NSString* file, const int N, bool printInfo = false)
+    void bench_JSONKitWithNSString(JKParseOptionFlags opt, NSString* file, const int N, bool printInfo = false)
     {
         using namespace utilities;
         
         assert(N > 0);
         
+        NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
         printf("\n");
         printf("--------------------------------------------\n");
-        printf("Running bench_JSONKitString1 %d times.\n", N);
+        printf("Running bench_JSONKitWithNSString %d times.\n", N);
         printf("--------------------------------------------\n");    
-        NSData* data = createDataFromFileInResourceFolder(JSON_TEST_FILE);
+        NSData* data = createDataFromFileInResourceFolder(file);
         NSStringEncoding encoding = [data jpj_detectUnicodeNSStringEncoding];
         if (encoding == -1) {
             NSLog(@"ERROR: NSData doesn't contain text encoded in Unicode");
@@ -775,11 +772,10 @@ namespace {
         }
         printf("using a NSString as input,\n"
                "interface method: mutableObjectWithData: (JSONDecoder),\n"
-               "JKParseOptionFlags = 0\n");
+               "options %s\n", JSONKitParseOptionsToString(opt).c_str());
         printf("Input file: %s, size: %d, encoding: %s\n", 
-               [JSON_TEST_FILE UTF8String], (int)[data length], NSStringEncodingToUnicodeSchemeCStr(encoding));
+               [file UTF8String], (int)[data length], NSStringEncodingToUnicodeSchemeCStr(encoding));
         
-        NSError* error;
         MinMaxAvg<double> te;
         timer t = timer();
         
@@ -787,6 +783,7 @@ namespace {
         for (int i = 0; i < N; ++i) 
         {
             NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+            NSError* error;
             NSString* input = [[NSString alloc] initWithBytes:[data bytes] length:[data length] encoding:encoding];
             if (input == nil) {
                 NSLog(@"ERROR: Could not create a NSString from NSData object. Probably encoding error.");
@@ -794,7 +791,7 @@ namespace {
             }
             
             t.start();
-            JSONDecoder* decoder = [[JSONDecoder alloc] initWithParseOptions:(JKParseOptionFlags)JKParseOptionNone]; 
+            JSONDecoder* decoder = [[JSONDecoder alloc] initWithParseOptions:opt];
             const char* utf8data = [input UTF8String];
             NSUInteger length = [input lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
             id result = [decoder objectWithUTF8String:(const unsigned char*)(utf8data) length:length error:&error];
@@ -805,37 +802,40 @@ namespace {
             t.reset();
             [result release];
             [input release];
-            [pool release];
             
+            if (!result) {
+                gotError = YES;
+                NSLog(@"ERROR: %@", error);
+            }
+            [pool release];
             if (!result)
                 break;
         }
         
-        if (gotError) {
-            NSLog(@"ERROR: %@", error);
-        }
-        else {
+        if (!gotError) {
             NSLog(@"JSONKit: elapsed time for parsing:\nmin: %.3f ms, max: %0.3f ms, avg: %0.3f ms\n", 
                   te.min()*1e3, te.max()*1e3, te.avg()*1e3);
         }
         
         [data release];
+        [pool release];
     }
     
     
     
     
-    void bench_JSONKit1(NSString* file, const int N, bool printInfo = false)
+    void bench_JSONKitWithNSData(JKParseOptionFlags opt, NSString* file, const int N, bool printInfo = false)
     {
         using namespace utilities;
         
         assert(N > 0);
         
+        NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
         printf("\n");
         printf("--------------------------------------------\n");
-        printf("Running bench_JSONKit1 %d times.\n", N);
+        printf("Running bench_JSONKitWithNSData %d times.\n", N);
         printf("--------------------------------------------\n");
-        NSData* data = createDataFromFileInResourceFolder(JSON_TEST_FILE);
+        NSData* data = createDataFromFileInResourceFolder(file);
         NSStringEncoding encoding = [data jpj_detectUnicodeNSStringEncoding];
         if (encoding == -1) {
             NSLog(@"ERROR: NSData doesn't contain text encoded in Unicode");
@@ -843,12 +843,11 @@ namespace {
         }
         printf("using a NSData with %s content as input,\n"
                "interface method: objectWithData: (JSONDecoder),\n"
-               "JKParseOptionFlags = 0\n",
-               NSStringEncodingToUnicodeSchemeCStr(encoding));
+               "options %s\n",
+               NSStringEncodingToUnicodeSchemeCStr(encoding), JSONKitParseOptionsToString(opt).c_str());
         printf("Input file: %s, size: %d, encoding: %s\n", 
-               [JSON_TEST_FILE UTF8String], (int)[data length], NSStringEncodingToUnicodeSchemeCStr(encoding));
+               [file UTF8String], (int)[data length], NSStringEncodingToUnicodeSchemeCStr(encoding));
         
-        NSError* error;
         MinMaxAvg<double> te;
         timer t = timer();
         
@@ -856,8 +855,9 @@ namespace {
         for (int i = 0; i < N; ++i) 
         {
             NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+            NSError* error = nil;
             t.start();
-            JSONDecoder* decoder = [[JSONDecoder alloc] initWithParseOptions:(JKParseOptionFlags)JKParseOptionNone];
+            JSONDecoder* decoder = [[JSONDecoder alloc] initWithParseOptions:opt];
             id result = [decoder objectWithData:data];
             [result retain];
             [decoder release];
@@ -865,34 +865,37 @@ namespace {
             te.set(t.seconds());
             t.reset();
             [result release];
-            [pool release];
             
+            if (!result) {
+                gotError = YES;
+                NSLog(@"JSONKit ERROR: %@", error);
+            }
+            [pool release];
             if (!result)
                 break;
         }
         
-        if (gotError) {
-            NSLog(@"ERROR: %@", error);
-        }
-        else {
-            NSLog(@"JSONKit: elapsed time for parsing:\nmin: %.3f ms, max: %0.3f ms, avg: %0.3f ms\n", 
+        if (!gotError) {
+            NSLog(@"JSONKit: elapsed time for parsing:\nmin: %.3f ms, max: %0.3f ms, avg: %0.3f ms\n",
                   te.min()*1e3, te.max()*1e3, te.avg()*1e3);
         }
         
         [data release];
+        [pool release];
     }
     
-    void bench_JSONKit2(NSString* file, const int N, bool printInfo = false)
+    void bench_JSONKitIncludingDestruction(JKParseOptionFlags opt, NSString* file, const int N, bool printInfo = false)
     {
         using namespace utilities;
         
         assert(N > 0);
         
+        NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
         printf("\n");
         printf("--------------------------------------------\n");
-        printf("Running bench_JSONKit2 %d times.\n", N);
+        printf("Running bench_JSONKitIncludingDestruction %d times.\n", N);
         printf("--------------------------------------------\n"); 
-        NSData* data = createDataFromFileInResourceFolder(JSON_TEST_FILE);
+        NSData* data = createDataFromFileInResourceFolder(file);
         NSStringEncoding encoding = [data jpj_detectUnicodeNSStringEncoding];
         if (encoding == -1) {
             NSLog(@"ERROR: NSData doesn't contain text encoded in Unicode");
@@ -901,12 +904,11 @@ namespace {
         printf("Timing includes destruction of objects\n");
         printf("using a NSData with %s content as input,\n"
                "interface method: objectWithData: (JSONDecoder),\n"
-               "JKParseOptionFlags = 0\n",
-               NSStringEncodingToUnicodeSchemeCStr(encoding));
+               "options %s\n",
+               NSStringEncodingToUnicodeSchemeCStr(encoding), JSONKitParseOptionsToString(opt).c_str());
         printf("Input file: %s, size: %d, encoding: %s\n", 
-               [JSON_TEST_FILE UTF8String], (int)[data length], NSStringEncodingToUnicodeSchemeCStr(encoding));
+               [file UTF8String], (int)[data length], NSStringEncodingToUnicodeSchemeCStr(encoding));
         
-        NSError* error;
         MinMaxAvg<double> te;
         timer t = timer();
         
@@ -915,11 +917,18 @@ namespace {
         {
             t.start();
             NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-            JSONDecoder* decoder = [[JSONDecoder alloc] initWithParseOptions:(JKParseOptionFlags)JKParseOptionNone];
+            JSONDecoder* decoder = [[JSONDecoder alloc] initWithParseOptions:opt];
             id result = [decoder objectWithData:data];
             [result retain];
             [decoder release];
             [result release];
+            
+            
+            if (!result) {
+                gotError = YES;
+                NSLog(@"JSONKit ERROR:<nil>");
+            }
+            
             [pool release];
                         
             t.stop();
@@ -929,15 +938,13 @@ namespace {
                 break;
         }
         
-        if (gotError) {
-            NSLog(@"ERROR: %@", error);
-        }
-        else {
+        if (!gotError) {
             NSLog(@"JSONKit: elapsed time for parsing:\nmin: %.3f ms, max: %0.3f ms, avg: %0.3f ms\n", 
                   te.min()*1e3, te.max()*1e3, te.avg()*1e3);
         }
         
         [data release];
+        [pool release];
     }
     
 #endif 
@@ -945,17 +952,18 @@ namespace {
     
 #pragma mark - NSJSONSerialization
     
-    void bench_NSJSONSerialization1(NSString* file, const int N, bool printInfo = false)
+    void bench_NSJSONSerialization(NSJSONReadingOptions opt, NSString* file, const int N, bool printInfo = false)
     {
         using namespace utilities;
         
         assert(N > 0);
         
+        NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
         printf("\n");
         printf("--------------------------------------------\n");
-        printf("Running NSJSONSerialization bench %d times.\n", N);
+        printf("Running bench_NSJSONSerialization %d times.\n", N);
         printf("--------------------------------------------\n");    
-        NSData* data = createDataFromFileInResourceFolder(JSON_TEST_FILE);
+        NSData* data = createDataFromFileInResourceFolder(file);
         NSStringEncoding encoding = [data jpj_detectUnicodeNSStringEncoding];
         if (encoding == -1) {
             NSLog(@"ERROR: NSData doesn't contain text encoded in Unicode");
@@ -963,56 +971,59 @@ namespace {
         }
         printf("using a NSData with %s content as input,\n"
                "interface method: JSONObjectWithData:options:error:, \n"
-               "options: none\n",
-               NSStringEncodingToUnicodeSchemeCStr(encoding));
+               "options: %s\n",
+               NSStringEncodingToUnicodeSchemeCStr(encoding), NSJSONSerializationParseOptionsToString(opt).c_str());
         printf("Input file: %s, size: %d, encoding: %s\n",
-               [JSON_TEST_FILE UTF8String], (int)[data length], NSStringEncodingToUnicodeSchemeCStr(encoding));
+               [file UTF8String], (int)[data length], NSStringEncodingToUnicodeSchemeCStr(encoding));
         
-        NSError* error;
         MinMaxAvg<double> te;
         timer t = timer();
         
         BOOL gotError = NO;
-        error = nil;
         for (int i = 0; i < N; ++i) 
         {
             NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+            NSError* error;
             t.start();
-            id result = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
+            id result = [NSJSONSerialization JSONObjectWithData:data options:opt error:&error];
             gotError = result == nil;
             [result retain];
             t.stop();
             te.set(t.seconds());
             t.reset();
             [result release];
+            
+            if (gotError) {
+                NSLog(@"NSJSONSerialization ERROR: %@", error);
+            }
             [pool release];
             
             if (!result)
                 break;
         }
         
-        if (gotError) {
-            NSLog(@"ERROR: %@", error);
-        }
-        else {
-            NSLog(@"NSJSONSerialization: elapsed time for parsing:\nmin: %.3f ms, max: %0.3f ms, avg: %0.3f ms\n", 
+        
+        if (!gotError) {
+            NSLog(@"NSJSONSerialization: elapsed time for parsing:\nmin: %.3f ms, max: %0.3f ms, avg: %0.3f ms\n",
                   te.min()*1e3, te.max()*1e3, te.avg()*1e3);
         }
-        
         [data release];
+        [pool release];
     }
     
-    void bench_NSJSONSerialization2(NSString* file, const int N, bool printInfo = false)
+
+    void bench_NSJSONSerializationIncludingDestruction(NSJSONReadingOptions opt, NSString* file, const int N, bool printInfo = false)
     {
         using namespace utilities;
         
         assert(N > 0);
         
+        NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
         printf("\n");
         printf("--------------------------------------------\n");
-        printf("Running NSJSONSerialization bench %d times.\n", N);
+        printf("Running bench_NSJSONSerializationIncludingDestruction %d times.\n", N);
         printf("--------------------------------------------\n");    
-        NSData* data = createDataFromFileInResourceFolder(JSON_TEST_FILE);
+        NSData* data = createDataFromFileInResourceFolder(file);
         NSStringEncoding encoding = [data jpj_detectUnicodeNSStringEncoding];
         if (encoding == -1) {
             NSLog(@"ERROR: NSData doesn't contain text encoded in Unicode");
@@ -1021,10 +1032,10 @@ namespace {
         printf("Timing includes destruction of objects, too\n");
         printf("using a NSData with %s content as input,\n"
                "interface method: JSONObjectWithData:options:error:, \n"
-               "options: none\n",
-               NSStringEncodingToUnicodeSchemeCStr(encoding));
+               "options: %s\n",
+               NSStringEncodingToUnicodeSchemeCStr(encoding), NSJSONSerializationParseOptionsToString(opt).c_str());
         printf("Input file: %s, size: %d, encoding: %s\n", 
-               [JSON_TEST_FILE UTF8String], (int)[data length], NSStringEncodingToUnicodeSchemeCStr(encoding));
+               [file UTF8String], (int)[data length], NSStringEncodingToUnicodeSchemeCStr(encoding));
         
         NSError* error;
         MinMaxAvg<double> te;
@@ -1036,28 +1047,27 @@ namespace {
         {
             t.start();
             NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-            id result = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
+            id result = [NSJSONSerialization JSONObjectWithData:data options:opt error:&error];
             gotError = result == nil;
             [result retain];
             [result release];
-            [pool release];
-            
+            if (gotError) {
+                NSLog(@"NSJSONSerialization ERROR: %@", error);
+            }
+            [pool release];            
             t.stop();
             te.set(t.seconds());
-
             if (!result)
                 break;
         }
         
-        if (gotError) {
-            NSLog(@"ERROR: %@", error);
-        }
-        else {
+        if (!gotError) {
             NSLog(@"NSJSONSerialization: elapsed time for parsing:\nmin: %.3f ms, max: %0.3f ms, avg: %0.3f ms\n", 
                   te.min()*1e3, te.max()*1e3, te.avg()*1e3);
         }
         
         [data release];
+        [pool release];
     }
     
 
@@ -1069,41 +1079,78 @@ namespace {
 
 int main (int argc, const char * argv[])
 {
+    NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
+    
 #if defined (DEBUG)
     int N = 1;
 #else
-    int N = 1000;
+    int N = 100;
 #endif    
-
     
     
-    NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
-    
-    time_t time_info;    
+    time_t time_info;
     std::time(&time_info);
     printf("%s\n%s\n", ctime(&time_info), BOOST_COMPILER);
     NSLog(@"Start Bench");
+    
+
+    // -------------------------------------------------------------------------
+    // Paths to JSON files which is used for all tests
+    // -------------------------------------------------------------------------
+    
+    NSArray* testFiles = @[
+//                           @"apache_builds.json",
+//                           @"github_events.json",
+//                           @"instruments.json",
+//                           @"mesh.json",
+                           @"mesh.pretty.json"
+//                           @"nested.json",
+//                           @"random.json",
+//                           @"repeat.json",
+//                           @"truenull.json",
+//                           @"twitter_timeline.json",
+//                           @"update-center.json",
+//                           @"sample.json",
+//                           @"Test-UTF8-esc.json",
+//                           @"Test-UTF8.json"
+                           ];
+    
+    for (id testFile in testFiles) {
+        NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
+
+        //bench_JPJsonParserWithNSData(JPJsonParserOptions(JPJsonParserLogLevelError), testFile, N);
+//        bench_JPJsonParserWithNSData(JPJsonParserOptions(JPJsonParserLogLevelError | JPJsonParserGeneratorUseArenaAllocator), testFile, N);
+        //    bench_JPJsonParserSAXStyle1x(testFile, N);
+        //    bench_JPJsonParserWithNSData1(testFile, N);
+        //    bench_JPJsonParserWithNSData1m(testFile, N);
+        //    bench_JPJsonParserWithNSDataReuseSemanticActionsObject(testFile, N);
+        //    bench_JPJsonParserWithNSString1(testFile,N);
+        //    bench_JPJsonParser1d(testFile, N);
+        //    bench_JPJsonParser2(testFile, N);
+        //    bench_JPAsyncJsonParser(testFile, N);
+#if 1
+        bench_NSJSONSerialization(NSJSONReadingOptions(0), testFile, N);
+        //    bench_NSJSONSerialization1m(testFile, N);
+#endif
+        //
+        //#if defined (USE_JSONKit)
+//        bench_JSONKitWithNSData(JKParseOptionFlags(0), testFile, N);
+//        bench_JSONKitWithNSData(JKParseOptionFlags(0), testFile, N);
+//        bench_JSONKitWithNSData(JKParseOptionFlags(0), testFile, N);
+//        bench_JSONKitWithNSData(JKParseOptionFlags(0), testFile, N);
+        //    bench_JSONKit2(testFile, N);
+        //    bench_JSONKitString1(testFile, N);
+        //#endif
+        
+        [pool drain];
+    }
+    
+    
+    
 
     
-    bench_JPJsonParserSAXStyle1x(JSON_TEST_FILE, N);
-    bench_JPJsonParserWithNSData1a(JSON_TEST_FILE, N);
-    bench_JPJsonParserWithNSDataReuseSemanticActionsObject(JSON_TEST_FILE, N);
-    bench_JPJsonParserWithNSData1b(JSON_TEST_FILE, N);
-    bench_JPJsonParserWithNSString1(JSON_TEST_FILE,N);
-    bench_JPJsonParser1d(JSON_TEST_FILE, N);
-    bench_JPJsonParser2(JSON_TEST_FILE, N);
-    bench_JPAsyncJsonParser(JSON_TEST_FILE, N);
-#if 1
-    bench_NSJSONSerialization1(JSON_TEST_FILE, N);
-    bench_NSJSONSerialization2(JSON_TEST_FILE, N);
-#endif
-//
-//#if defined (USE_JSONKit)
-//    bench_JSONKit1(JSON_TEST_FILE, N);
-//    bench_JSONKit2(JSON_TEST_FILE, N);
-//    bench_JSONKitString1(JSON_TEST_FILE, N);
-//#endif
     
+    NSLog(@"\nFinished Bench");
     [pool drain];
     return 0;
 }

@@ -63,33 +63,90 @@
  
  ### JPJsonParserOptions ###
  
- #### Unicode Handling ####
+ 
+#### Unicode 'NULL' (U+0000) Handling
+ 
+  - `JPJsonParserSignalErrorOnNULLCharacter`
+
+  If this option is set, the parser will signal an error if it encounters an
+  Unicode 'NULL' character within a JSON String. Note that a Unicode 'NULL'
+  in a JSON String is a valid character. However, Unicode 'NULL' characters
+  may be problematic in string representations like NSString, and applications.
+  Thus, this option may be set to detect unwanted Unicode 'NULL' characters.
+
+
+  - `JPJsonParserSubstituteUnicodeNULLCharacter`
+
+  If this option is set, the parser will substitute Unicode 'NULL' characters
+  encountered within JSON strings in the input text with the Unicode replace-
+  ment character U+FFFD when creating the string representation.
+
+  It is not recommended to enable this option. Substituting an Unicode 'NULL'
+  character will modify the meaning of the input source and should be used
+  with care.
+
+
+ - `JPJsonParserRemoveUnicodeNULLCharacter`
+
+  If this option is set, the parser will not retain the Unicode 'NULL' character
+  in the _decoded_ JSON string when generating a representation.
+
+  It is not recommended to enable this option. Removing an Unicode 'NULL'
+  character will modify the meaning of the input source and should be used
+  with care.
+
+
+
+  If none of the above Unicode 'NULL' handling options is set, the parser will
+  retain any Unicode 'NULL' characters in the string representation.
+
+  Note: Occurrences of Unicode 'NULL' characters outside of JSON strings will
+  be always syntax errors and treated as such.
+ 
+ 
+ 
+#### Unicode Noncharacter Handling
  
  -  `JPJsonParserSignalErrorOnNoncharacter`
- 
- If this option is set, the parser will signal an error if it encounters
- an _Unicode noncharacter_ within the JSON document.
- This is the default setting.
- 
- 
+
+  If this option is set, the parser will signal an error if it encounters an
+  Unicode noncharacter within a JSON String. Note that a Unicode noncharacter
+  in a JSON String does not make the unicode string illformed. However, Unicode
+  noncharacters are rarely useful in a meaningful JSON String. On the other hand,
+  Unicode noncharacters may be problematic in string representations on the
+  application level.
+
+
  -  `JPJsonParserSubstituteUnicodeNoncharacter`
+
+  If this option is set, the parser will substitute Unicode noncharacters
+  encountered within JSON strings in the input text with the Unicode replace-
+  ment character U+FFFD when creating the string representation.
+
+  It is not recommended to enable this option. Substituting an Unicode noncharacter
+  will modify the meaning of the input source and should be used with care.
+
+
+ - `JPJsonParserRemoveUnicodeNoncharacter`
+
+  If this option is set, the parser will not retain the Unicode noncharacter
+  in the _decoded_ JSON string when generating a representation.
+
+  It is not recommended to enable this option. Removing an Unicode noncharacter
+  will modify the meaning of the input source and should be used with care.
+
+
+
+  If none of the above Unicode Noncharacter Handling options is set, the parser
+  will retain any Unicode 'NULL' characters in the string representation.
+
+  Note: Occurrences of Unicode noncharacters outside of JSON strings will
+  be always syntax errors and treated as such.
  
- If this option is set, the parser will substitute _Unicode noncharacters_
- encountered within JSON Strings in the input text with the _Unicode 
- replacement character_ `U+FFFD` when creating the strings for a JSON container. 
+
  
- It is not recommended to enable this option. Substituting an _Unicode 
- noncharacter_ may modify the meaning of the input source and should be used 
- with care. Usually, _Unicode noncharacters_ are not allowed in valid Unicode 
- sequences which is used to transmit data.
- Occurrences of _Unicode noncharacters_ outside of JSON Strings will be always
- syntax errors and treated as such.
  
- -  `JPJsonParserSkipUnicodeNoncharacter`
  
- If this option is set, the parser will ignore the _Unicode noncharacter_
- and remove it from the _decoded_ JSON string when generating a representation.
- *Note:* this feature is not yet implemented
  
  
  #### Parser Options ####
@@ -169,9 +226,18 @@
  
  -  `JPJsonParserNumberGeneratorGenerateAuto`
  
- The parser's number generator creates a suitable `NSNumber` or a 
- `NSDecimalNumber` object when it encounters a number in the input text. 
+ The parser's number generator creates a `NSNumber` object with a suitable 
+ underlaying numeric C type when it encounters a number in the input text.
  `JPJsonParserNumberGeneratorGenerateAuto` equals zero and is the default option.
+ 
+ 
+ 
+ -  `JPJsonParserNumberGeneratorGenerateAutoWithDecimals`
+ 
+ The parser's number generator creates a `NSNumber` with a suitable underlaying 
+ numeric C type or a `NSDecimalNumber` object when it encounters a number in the 
+ input text.
+ 
  
  
  -  `JPJsonParserNumberGeneratorGenerateStrings`

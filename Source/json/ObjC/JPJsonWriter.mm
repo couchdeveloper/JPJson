@@ -373,7 +373,7 @@ namespace std {
     
 namespace {
     
-    __autoreleasing NSError* __attribute__((ns_returns_autoreleased))
+    NSError* __attribute__((ns_returns_autoreleased))
     makeError(int errorCode, const char* errorStr, NSError* underlayingError)
     {
         NSString* errStr = [[NSString alloc] initWithUTF8String:errorStr];

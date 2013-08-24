@@ -134,11 +134,13 @@ typedef json::objc::RepresentationGenerator<JP_CFStringEncoding>    Representati
     if (JPJsonParserNumberGeneratorOptions & options) {
         if (JPJsonParserNumberGeneratorGenerateAuto & options)
             self.numberGeneratorOption = JPSemanticActionsNumberGeneratorGenerateAuto;
+        else if (JPJsonParserNumberGeneratorGenerateAutoWithDecimals & options)
+            self.numberGeneratorOption = JPSemanticActionsNumberGeneratorGenerateAutoWithDecimal;
         else if (JPJsonParserNumberGeneratorGenerateStrings & options)
             self.numberGeneratorOption = JPSemanticActionsNumberGeneratorGenerateNSString;
-        else if (JPJsonParserGeneratorGenerateDecimals & options)
+        else if (JPJsonParserNumberGeneratorGenerateDecimals & options)
             self.numberGeneratorOption = JPSemanticActionsNumberGeneratorGenerateNSDecimalNumber;
-    }    
+    }
 }
 
 
@@ -193,6 +195,9 @@ typedef json::objc::RepresentationGenerator<JP_CFStringEncoding>    Representati
         case JPSemanticActionsNumberGeneratorGenerateAuto:
             sa_->numberGeneratorOption(json::objc::sa_options::NumberGeneratorGenerateAuto);
             break;
+        case JPSemanticActionsNumberGeneratorGenerateAutoWithDecimal:
+            sa_->numberGeneratorOption(json::objc::sa_options::NumberGeneratorGenerateAutoWithDecimal);
+            break;
         case JPSemanticActionsNumberGeneratorGenerateNSString:
             sa_->numberGeneratorOption(json::objc::sa_options::NumberGeneratorGenerateString);
             break;
@@ -207,6 +212,8 @@ typedef json::objc::RepresentationGenerator<JP_CFStringEncoding>    Representati
     switch (sa_->numberGeneratorOption()) {
         case json::objc::sa_options::NumberGeneratorGenerateAuto:
             return JPSemanticActionsNumberGeneratorGenerateAuto;
+        case json::objc::sa_options::NumberGeneratorGenerateAutoWithDecimal:
+            return JPSemanticActionsNumberGeneratorGenerateAutoWithDecimal;
         case json::objc::sa_options::NumberGeneratorGenerateString:
             return JPSemanticActionsNumberGeneratorGenerateNSString;
         case json::objc::sa_options::NumberGeneratorGenerateDecimalNumber:

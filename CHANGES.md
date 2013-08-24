@@ -118,4 +118,14 @@
 
 
   
+### Version 0.7 beta
+
+
+
   
+#### Bug fixes
+
+* Objective-C Representation Generator:
+    Fixed an edge-case where JSON Number conversions selected a NSNumberDecimal where a double would have been appropriate.
+    
+

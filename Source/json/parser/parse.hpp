@@ -56,24 +56,30 @@ namespace json {
             
             // Mutual exclusive
             SignalErrorOnUnicodeNoncharacter    = 1UL << 0,
-            SubstituteUnicodeNoncharacters      = 1UL << 1,
-            SkipUnicodeNoncharacters            = 1UL << 2,
+            SubstituteUnicodeNoncharacter       = 1UL << 1,
+            RemoveUnicodeNoncharacter           = 1UL << 2,
             
             // Mutual exclusive
-            LogLevelDebug                       = 1UL << 3,
-            LogLevelWarning                     = 1UL << 4,
-            LogLevelError                       = 1UL << 5,
-            LogLevelNone                        = 1UL << 6,
+            SignalErrorOnUnicodeNULLCharacter   = 1UL << 3,
+            SubstituteUnicodeNULLCharacter      = 1UL << 4,
+            RemoveUnicodeNULLCharacter          = 1UL << 5,
+            
+            // Mutual exclusive
+            LogLevelDebug                       = 1UL << 6,
+            LogLevelWarning                     = 1UL << 7,
+            LogLevelError                       = 1UL << 8,
+            LogLevelNone                        = 1UL << 9,
             
             // non_conformance_flags (can be ored)
             // not yet implemented!
-            AllowComments                       = 1UL << 7,              
-            AllowControlCharacters              = 1UL << 8,     
-            AllowLeadingPlusInNumbers           = 1UL << 9,
-            AllowLeadingZerosInIntegers         = 1UL << 10,
+            AllowComments                       = 1UL << 10,
+            AllowControlCharacters              = 1UL << 11,
+            AllowLeadingPlusInNumbers           = 1UL << 12,
+            AllowLeadingZerosInIntegers         = 1UL << 13,
 
             
-            NoncharacterHandling = SignalErrorOnUnicodeNoncharacter | SubstituteUnicodeNoncharacters | SkipUnicodeNoncharacters,
+            NoncharacterHandling = SignalErrorOnUnicodeNoncharacter | SubstituteUnicodeNoncharacter | RemoveUnicodeNoncharacter,
+            NULLCharacterHandling = SignalErrorOnUnicodeNULLCharacter | SubstituteUnicodeNULLCharacter | RemoveUnicodeNULLCharacter,
             LogLevel = LogLevelDebug | LogLevelWarning | LogLevelError |  LogLevelNone,
             NonConformanceFlags = AllowComments | AllowControlCharacters | AllowLeadingPlusInNumbers | AllowLeadingZerosInIntegers
         };
@@ -298,17 +304,37 @@ namespace json { namespace parse_internal {
             }
         }
         
+        if (json::ParseOptions::NULLCharacterHandling & flags) {
+            if (json::ParseOptions::SignalErrorOnUnicodeNULLCharacter & flags) {
+                sa.unicode_nullcharacter_handling(json::semanticactions::SignalErrorOnUnicodeNULLCharacter);
+            }
+            else if (json::ParseOptions::SubstituteUnicodeNULLCharacter & flags) {
+                sa.unicode_nullcharacter_handling(json::semanticactions::SubstituteUnicodeNULLCharacter);
+            }
+            else if (json::ParseOptions::RemoveUnicodeNULLCharacter & flags) {
+                sa.unicode_nullcharacter_handling(json::semanticactions::RemoveUnicodeNULLCharacter);
+            }
+        }
+        else {
+            sa.unicode_nullcharacter_handling(json::semanticactions::AllowUnicodeNULLCharacter);
+        }
+        
         if (json::ParseOptions::NoncharacterHandling & flags) {
             if (json::ParseOptions::SignalErrorOnUnicodeNoncharacter & flags) {
                 sa.unicode_noncharacter_handling(json::semanticactions::SignalErrorOnUnicodeNoncharacter);
             }
-            else if (json::ParseOptions::SubstituteUnicodeNoncharacters & flags) {
+            else if (json::ParseOptions::SubstituteUnicodeNoncharacter & flags) {
                 sa.unicode_noncharacter_handling(json::semanticactions::SubstituteUnicodeNoncharacter);
             }
-            else if (json::ParseOptions::SkipUnicodeNoncharacters & flags) {
-                sa.unicode_noncharacter_handling(json::semanticactions::SkipUnicodeNoncharacters);
+            else if (json::ParseOptions::RemoveUnicodeNoncharacter & flags) {
+                sa.unicode_noncharacter_handling(json::semanticactions::RemoveUnicodeNoncharacter);
             }
         }
+        else {
+            sa.unicode_noncharacter_handling(json::semanticactions::AllowUnicodeNoncharacter);
+        }
+        
+        
         
         if (json::ParseOptions::NonConformanceFlags & flags) {
             using json::semanticactions::ExtensionOptions;
