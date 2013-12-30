@@ -66,9 +66,6 @@
                   location = "group:unicode_traits.hpp">
                </FileRef>
                <FileRef
-                  location = "group:unicode_filter.hpp">
-               </FileRef>
-               <FileRef
                   location = "group:unicode_errors.hpp">
                </FileRef>
                <FileRef
@@ -318,6 +315,13 @@
       <Group
          location = "group:Documentation"
          name = "Documentation">
+         <Group
+            location = "group:Documentation/Scripts"
+            name = "Scripts">
+            <FileRef
+               location = "group:CreateDoc.rb">
+            </FileRef>
+         </Group>
          <Group
             location = "build:"
             name = "Generated">

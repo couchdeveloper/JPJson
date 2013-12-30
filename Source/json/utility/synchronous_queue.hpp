@@ -23,7 +23,6 @@
 
 
 #include "json/config.hpp"
-#include <boost/utility.hpp>
 #include <utility>
 #include <iostream>
 #include <semaphore.h>
@@ -65,7 +64,7 @@ namespace json { namespace utility {
     //  value_type
     
     template <typename T>
-    class synchronous_queue : boost::noncopyable {
+    class synchronous_queue {
     public:
         
         typedef T value_type;
@@ -77,6 +76,10 @@ namespace json { namespace utility {
             TIMEOUT_NOTHING_OFFERED = -3
         };
         
+        
+        // noncopyable
+        synchronous_queue(const synchronous_queue&) = delete;
+        synchronous_queue& operator=(const synchronous_queue&) = delete;
         
         synchronous_queue() 
         : sync_(0), send_(1), recv_(0), empty_(true)
@@ -103,7 +106,6 @@ namespace json { namespace utility {
             sync_.wait();
         }
         
-#if !defined (BOOST_NO_RVALUE_REFERENCES)
         void put(T&& v) {
             send_.wait();
             assert(empty_);
@@ -112,7 +114,6 @@ namespace json { namespace utility {
             recv_.signal();
             sync_.wait();
         }
-#endif        
         
         result_type put(const T& v, double timeout) {
             if (send_.wait(timeout)) {
@@ -132,7 +133,6 @@ namespace json { namespace utility {
             }        
         }
         
-#if !defined (BOOST_NO_RVALUE_REFERENCES)
         result_type put(T&& v, double timeout) {
             if (send_.wait(timeout)) {
                 assert(empty_);
@@ -150,7 +150,6 @@ namespace json { namespace utility {
                 return TIMEOUT_NOT_DELIVERED;
             }        
         }
-#endif        
         
         
         
@@ -159,12 +158,8 @@ namespace json { namespace utility {
             recv_.wait();
             assert(not empty_);
             T& v = *reinterpret_cast<T*>(storage_);
-#if !defined (BOOST_NO_RVALUE_REFERENCES)
-            T result = std::move(v);            
-#else                        
-            T result = v;
-#endif            
-            reinterpret_cast<T*>(storage_)->~T();            
+            T result = std::move(v);
+            reinterpret_cast<T*>(storage_)->~T();
             empty_ = true;
             sync_.signal();
             send_.signal();
@@ -176,11 +171,7 @@ namespace json { namespace utility {
                 assert(not empty_);
                 T& v = *reinterpret_cast<T*>(storage_);
                 std::pair<result_type, T> result = 
-#if !defined (BOOST_NO_RVALUE_REFERENCES)
                     std::pair<result_type, T>(OK, std::move(v));
-#else                        
-                    std::pair<result_type, T>(OK, v);
-#endif                            
                 reinterpret_cast<T*>(storage_)->~T();
                 empty_ = true;
                 sync_.signal();

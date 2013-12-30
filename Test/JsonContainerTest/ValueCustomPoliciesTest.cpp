@@ -56,7 +56,7 @@ using namespace json;
 //    };
 // }
 //
-// json::object is just a container facade. It's underlaying container requires
+// json::object is just a container facade. It's underlying container requires
 // to be signature compatible with a std::map. Although, only a few signatures 
 // are used. 
 //
@@ -67,7 +67,7 @@ using namespace json;
 // For any other none-std associative container this can be accomplished by a 
 // suitable adapter quite easily.
 //
-// In order to change the underlaying container for json::object with a
+// In order to change the underlying container for json::object with a
 // signature compatible associative container you just need to define your 
 // own policy and pass it as a template argument to json::value:
 //
@@ -81,14 +81,14 @@ using namespace json;
 //        
 //    }
 //
-// The above example uses a boost::unordered_map as the underlaying container
+// The above example uses a boost::unordered_map as the underlying container
 // implementation for the json::object.
 // json::value requires the policy to supply the type definitions array_imp_t and 
 // object_imp_t as shown above.
 //
 // json:.value's type mechanerie ensures that json::value::array_type and 
 // json::value::object_type are correctly calculated as a facade using the 
-// specified underlaying container types. For convenience, the following 
+// specified underlying container types. For convenience, the following 
 // type definitions should be declared:
 // 
 //  typedef value<MyPolicies> Value;
@@ -311,7 +311,7 @@ namespace {
     TEST_F(ValueCustomPoliciesTest, CustomPolicies)
     {
         // Class template json::value template template parameters are "policies"
-        // which determine the underlaying implementations for the JSON primitives
+        // which determine the underlying implementations for the JSON primitives
         // and JSON containers.
         
         // Declare a JSON value type with custom policies:

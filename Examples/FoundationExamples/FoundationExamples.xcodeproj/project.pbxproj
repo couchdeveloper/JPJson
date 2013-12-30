@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A10E428D170B5BFF00E8AE24 /* libjson.A.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A10E428C170B5BFF00E8AE24 /* libjson.A.dylib */; };
-		A10E428F170B5D3300E8AE24 /* libjson.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A10E428E170B5D3300E8AE24 /* libjson.a */; };
 		A126812014556BB500131E77 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A126811F14556BB500131E77 /* main.m */; };
 		A126813014556D4900131E77 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1F001371440A27E007A72A9 /* Foundation.framework */; };
 		A126813814557F4A00131E77 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1F001371440A27E007A72A9 /* Foundation.framework */; };
@@ -16,11 +14,7 @@
 		A126814B145588A400131E77 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1F001371440A27E007A72A9 /* Foundation.framework */; };
 		A126814E145588A400131E77 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A126814D145588A400131E77 /* main.m */; };
 		A12681581455892400131E77 /* JsonValidatorSemanticActions.m in Sources */ = {isa = PBXBuildFile; fileRef = A12681571455892400131E77 /* JsonValidatorSemanticActions.m */; };
-		A129D98B17133437001DF586 /* JPJson.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A129D98917133419001DF586 /* JPJson.framework */; };
-		A129D98C17133568001DF586 /* JPJson.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A10E429B170B64E100E8AE24 /* JPJson.framework */; };
-		A129D98D17133597001DF586 /* JPJson.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A10E429B170B64E100E8AE24 /* JPJson.framework */; };
 		A1314AE015530FA500CC4910 /* sample_json.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = A1314ADE15530F7F00CC4910 /* sample_json.json */; };
-		A15728E2171830900007C3F2 /* JPJson.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A10E429B170B64E100E8AE24 /* JPJson.framework */; };
 		A15E63671456D4EC000F22F6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1F001371440A27E007A72A9 /* Foundation.framework */; };
 		A15E636A1456D4EC000F22F6 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A15E63691456D4EC000F22F6 /* main.m */; };
 		A15E63781456D649000F22F6 /* JsonPathSemanticActions.mm in Sources */ = {isa = PBXBuildFile; fileRef = A15E63771456D649000F22F6 /* JsonPathSemanticActions.mm */; };
@@ -39,6 +33,13 @@
 		A1D4608E1582428C004D330F /* sample_json.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = A1314ADE15530F7F00CC4910 /* sample_json.json */; };
 		A1D4608F1582428C004D330F /* Test-UTF8.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = A1D4607F158241AF004D330F /* Test-UTF8.json */; };
 		A1D460901582428C004D330F /* Test-UTF8-esc.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = A1D46081158241C8004D330F /* Test-UTF8-esc.json */; };
+		A1EC302117C8F55F006A08FC /* libjson.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A1EC302017C8F55F006A08FC /* libjson.a */; };
+		A1EC302317C8F56A006A08FC /* JPJson.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1EC302217C8F56A006A08FC /* JPJson.framework */; };
+		A1EC302417C8F571006A08FC /* JPJson.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1EC302217C8F56A006A08FC /* JPJson.framework */; };
+		A1EC302517C8F579006A08FC /* JPJson.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1EC302217C8F56A006A08FC /* JPJson.framework */; };
+		A1EC302617C8F581006A08FC /* JPJson.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1EC302217C8F56A006A08FC /* JPJson.framework */; };
+		A1EC302717C8F587006A08FC /* JPJson.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1EC302217C8F56A006A08FC /* JPJson.framework */; };
+		A1EC302817C8F58D006A08FC /* JPJson.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1EC302217C8F56A006A08FC /* JPJson.framework */; };
 		A1F0014B1440A2A0007A72A9 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1F001371440A27E007A72A9 /* Foundation.framework */; };
 		A1F0014E1440A2A0007A72A9 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A1F0014D1440A2A0007A72A9 /* main.m */; };
 /* End PBXBuildFile section */
@@ -125,9 +126,6 @@
 		A10E4289170B58F200E8AE24 /* project.debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = project.debug.xcconfig; sourceTree = "<group>"; };
 		A10E428A170B58F200E8AE24 /* project.release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = project.release.xcconfig; sourceTree = "<group>"; };
 		A10E428B170B59D300E8AE24 /* project.dist.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = project.dist.xcconfig; sourceTree = "<group>"; };
-		A10E428C170B5BFF00E8AE24 /* libjson.A.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libjson.A.dylib; path = ../../DerivedData/JPJson/Build/Products/Release/libjson.A.dylib; sourceTree = "<group>"; };
-		A10E428E170B5D3300E8AE24 /* libjson.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjson.a; path = ../../DerivedData/JPJson/Build/Products/Release/libjson.a; sourceTree = "<group>"; };
-		A10E429B170B64E100E8AE24 /* JPJson.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JPJson.framework; path = ../../DerivedData/JPJson/Build/Products/Debug/JPJson.framework; sourceTree = "<group>"; };
 		A126811A14556BB400131E77 /* Sample3 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Sample3; sourceTree = BUILT_PRODUCTS_DIR; };
 		A126811C14556BB500131E77 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		A126811F14556BB500131E77 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -139,7 +137,6 @@
 		A1268150145588A400131E77 /* Sample5-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Sample5-Prefix.pch"; sourceTree = "<group>"; };
 		A12681561455892300131E77 /* JsonValidatorSemanticActions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JsonValidatorSemanticActions.h; sourceTree = "<group>"; };
 		A12681571455892400131E77 /* JsonValidatorSemanticActions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JsonValidatorSemanticActions.m; sourceTree = "<group>"; };
-		A129D98917133419001DF586 /* JPJson.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JPJson.framework; path = ../../DerivedData/JPJson/Build/Products/Release/JPJson.framework; sourceTree = "<group>"; };
 		A1314ADE15530F7F00CC4910 /* sample_json.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = sample_json.json; sourceTree = "<group>"; };
 		A15E63651456D4EC000F22F6 /* Sample10 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Sample10; sourceTree = BUILT_PRODUCTS_DIR; };
 		A15E63691456D4EC000F22F6 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -154,12 +151,13 @@
 		A199EFD8144480D200B53269 /* Sample2 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Sample2; sourceTree = BUILT_PRODUCTS_DIR; };
 		A199EFDC144480D200B53269 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		A199EFDF144480D200B53269 /* Sample2-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Sample2-Prefix.pch"; sourceTree = "<group>"; };
-		A19AD783151B332000D2A086 /* JPJson.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JPJson.framework; path = "../../../../../Library/Developer/Xcode/DerivedData/JPJson-ejutwqptiebgcjcabedtzqzwdhuj/Build/Products/Debug/JPJson.framework"; sourceTree = "<group>"; };
 		A1CA8B411441D42E0076C0CB /* Readme.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = Readme.rtf; sourceTree = "<group>"; };
 		A1CFB9321510C8CA0010942D /* project.common.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = project.common.xcconfig; sourceTree = "<group>"; };
 		A1D4607F158241AF004D330F /* Test-UTF8.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = "Test-UTF8.json"; path = "../../Resources/Test-UTF8.json"; sourceTree = "<group>"; };
 		A1D46081158241C8004D330F /* Test-UTF8-esc.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = "Test-UTF8-esc.json"; path = "../../Resources/Test-UTF8-esc.json"; sourceTree = "<group>"; };
 		A1E2FC1914517346009D68EF /* Out-UTF8-pretty.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "Out-UTF8-pretty.json"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A1EC302017C8F55F006A08FC /* libjson.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjson.a; path = "../../../../../Library/Developer/Xcode/DerivedData/JPJson-ejutwqptiebgcjcabedtzqzwdhuj/Build/Products/Debug/libjson.a"; sourceTree = "<group>"; };
+		A1EC302217C8F56A006A08FC /* JPJson.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JPJson.framework; path = "../../../../../Library/Developer/Xcode/DerivedData/JPJson-ejutwqptiebgcjcabedtzqzwdhuj/Build/Products/Debug/JPJson.framework"; sourceTree = "<group>"; };
 		A1F001371440A27E007A72A9 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		A1F001491440A2A0007A72A9 /* Sample1 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Sample1; sourceTree = BUILT_PRODUCTS_DIR; };
 		A1F0014D1440A2A0007A72A9 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -171,7 +169,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A10E428D170B5BFF00E8AE24 /* libjson.A.dylib in Frameworks */,
+				A1EC302417C8F571006A08FC /* JPJson.framework in Frameworks */,
 				A126813014556D4900131E77 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -180,7 +178,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A129D98B17133437001DF586 /* JPJson.framework in Frameworks */,
+				A1EC302517C8F579006A08FC /* JPJson.framework in Frameworks */,
 				A126813814557F4A00131E77 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -189,7 +187,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A129D98C17133568001DF586 /* JPJson.framework in Frameworks */,
+				A1EC302617C8F581006A08FC /* JPJson.framework in Frameworks */,
 				A126814B145588A400131E77 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -198,7 +196,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A15728E2171830900007C3F2 /* JPJson.framework in Frameworks */,
+				A1EC302817C8F58D006A08FC /* JPJson.framework in Frameworks */,
 				A15E63671456D4EC000F22F6 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -207,7 +205,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A129D98D17133597001DF586 /* JPJson.framework in Frameworks */,
+				A1EC302717C8F587006A08FC /* JPJson.framework in Frameworks */,
 				A1977E35156B86FE0074D9B2 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -216,6 +214,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A1EC302317C8F56A006A08FC /* JPJson.framework in Frameworks */,
 				A199EFDA144480D200B53269 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -224,7 +223,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A10E428F170B5D3300E8AE24 /* libjson.a in Frameworks */,
+				A1EC302117C8F55F006A08FC /* libjson.a in Frameworks */,
 				A1F0014B1440A2A0007A72A9 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -387,11 +386,8 @@
 		A1F001361440A27E007A72A9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				A10E428E170B5D3300E8AE24 /* libjson.a */,
-				A10E428C170B5BFF00E8AE24 /* libjson.A.dylib */,
-				A129D98917133419001DF586 /* JPJson.framework */,
-				A10E429B170B64E100E8AE24 /* JPJson.framework */,
-				A19AD783151B332000D2A086 /* JPJson.framework */,
+				A1EC302217C8F56A006A08FC /* JPJson.framework */,
+				A1EC302017C8F55F006A08FC /* libjson.a */,
 				A1F001371440A27E007A72A9 /* Foundation.framework */,
 				A126811C14556BB500131E77 /* CoreFoundation.framework */,
 			);
@@ -643,9 +639,9 @@
 		A126812314556BB500131E77 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				LIBRARY_SEARCH_PATHS = (
+				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../DerivedData/JPJson/Build/Products/Release\"",
+					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/JPJson-ejutwqptiebgcjcabedtzqzwdhuj/Build/Products/Debug",
 				);
 				OTHER_CFLAGS = "-v";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -655,9 +651,9 @@
 		A126812414556BB500131E77 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				LIBRARY_SEARCH_PATHS = (
+				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../DerivedData/JPJson/Build/Products/Release\"",
+					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/JPJson-ejutwqptiebgcjcabedtzqzwdhuj/Build/Products/Debug",
 				);
 				OTHER_CFLAGS = "-v";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -667,7 +663,10 @@
 		A126814114557F4A00131E77 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/JPJson-ejutwqptiebgcjcabedtzqzwdhuj/Build/Products/Debug",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Sample4/Sample4-Prefix.pch";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -677,7 +676,10 @@
 		A126814214557F4A00131E77 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/JPJson-ejutwqptiebgcjcabedtzqzwdhuj/Build/Products/Debug",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Sample4/Sample4-Prefix.pch";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -687,7 +689,10 @@
 		A1268154145588A400131E77 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/JPJson-ejutwqptiebgcjcabedtzqzwdhuj/Build/Products/Debug",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Sample5/Sample5-Prefix.pch";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -697,7 +702,10 @@
 		A1268155145588A400131E77 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/JPJson-ejutwqptiebgcjcabedtzqzwdhuj/Build/Products/Debug",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Sample5/Sample5-Prefix.pch";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -735,13 +743,12 @@
 		A14C058715BA7ABD006E4790 /* Dist */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Sample1/Sample1-Prefix.pch";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../DerivedData/JPJson/Build/Products/Release\"",
+					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/JPJson-ejutwqptiebgcjcabedtzqzwdhuj/Build/Products/Debug",
 				);
 				OTHER_CFLAGS = "-v";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -751,7 +758,10 @@
 		A14C058815BA7ABD006E4790 /* Dist */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/JPJson-ejutwqptiebgcjcabedtzqzwdhuj/Build/Products/Debug",
+				);
 				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Sample2/Sample2-Prefix.pch";
@@ -762,9 +772,9 @@
 		A14C058915BA7ABD006E4790 /* Dist */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				LIBRARY_SEARCH_PATHS = (
+				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../DerivedData/JPJson/Build/Products/Release\"",
+					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/JPJson-ejutwqptiebgcjcabedtzqzwdhuj/Build/Products/Debug",
 				);
 				OTHER_CFLAGS = "-v";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -775,8 +785,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = (
-					"$(SYMROOT)/Release",
-					"\"$(SRCROOT)/../../DerivedData/JPJson/Build/Products/Release\"",
+					"$(inherited)",
+					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/JPJson-ejutwqptiebgcjcabedtzqzwdhuj/Build/Products/Debug",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Sample4/Sample4-Prefix.pch";
@@ -787,7 +797,10 @@
 		A14C058B15BA7ABD006E4790 /* Dist */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/JPJson-ejutwqptiebgcjcabedtzqzwdhuj/Build/Products/Debug",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Sample5/Sample5-Prefix.pch";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -800,7 +813,7 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../DerivedData/JPJson/Build/Products/Debug\"",
+					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/JPJson-ejutwqptiebgcjcabedtzqzwdhuj/Build/Products/Debug",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Sample6/Sample6-Prefix.pch";
@@ -814,7 +827,7 @@
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../DerivedData/JPJson/Build/Products/Debug\"",
+					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/JPJson-ejutwqptiebgcjcabedtzqzwdhuj/Build/Products/Debug",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Sample10/Sample10-Prefix.pch";
@@ -833,7 +846,7 @@
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../DerivedData/JPJson/Build/Products/Debug\"",
+					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/JPJson-ejutwqptiebgcjcabedtzqzwdhuj/Build/Products/Debug",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Sample10/Sample10-Prefix.pch";
@@ -852,7 +865,7 @@
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../DerivedData/JPJson/Build/Products/Debug\"",
+					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/JPJson-ejutwqptiebgcjcabedtzqzwdhuj/Build/Products/Debug",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Sample10/Sample10-Prefix.pch";
@@ -872,7 +885,7 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../DerivedData/JPJson/Build/Products/Debug\"",
+					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/JPJson-ejutwqptiebgcjcabedtzqzwdhuj/Build/Products/Debug",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Sample6/Sample6-Prefix.pch";
@@ -891,7 +904,7 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../DerivedData/JPJson/Build/Products/Debug\"",
+					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/JPJson-ejutwqptiebgcjcabedtzqzwdhuj/Build/Products/Debug",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Sample6/Sample6-Prefix.pch";
@@ -903,7 +916,10 @@
 		A199EFE3144480D200B53269 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/JPJson-ejutwqptiebgcjcabedtzqzwdhuj/Build/Products/Debug",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Sample2/Sample2-Prefix.pch";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -913,7 +929,10 @@
 		A199EFE4144480D200B53269 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/JPJson-ejutwqptiebgcjcabedtzqzwdhuj/Build/Products/Debug",
+				);
 				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Sample2/Sample2-Prefix.pch";
@@ -982,12 +1001,11 @@
 		A1F001541440A2A0007A72A9 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Sample1/Sample1-Prefix.pch";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../DerivedData/JPJson/Build/Products/Release\"",
+					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/JPJson-ejutwqptiebgcjcabedtzqzwdhuj/Build/Products/Debug",
 				);
 				OTHER_CFLAGS = "-v";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -997,13 +1015,12 @@
 		A1F001551440A2A0007A72A9 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Sample1/Sample1-Prefix.pch";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../DerivedData/JPJson/Build/Products/Release\"",
+					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/JPJson-ejutwqptiebgcjcabedtzqzwdhuj/Build/Products/Debug",
 				);
 				OTHER_CFLAGS = "-v";
 				PRODUCT_NAME = "$(TARGET_NAME)";

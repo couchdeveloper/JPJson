@@ -131,14 +131,15 @@ typedef json::objc::RepresentationGenerator<JP_CFStringEncoding>    Representati
     self.createMutableContainers = JPJsonParserCreateMutableContainers & options ? YES : NO;
     self.useArenaAllocator = JPJsonParserGeneratorUseArenaAllocator & options ? YES : NO;
     
-    if (JPJsonParserNumberGeneratorOptions & options) {
-        if (JPJsonParserNumberGeneratorGenerateAuto & options)
+    JPJsonParserOptions opt = JPJsonParserNumberGeneratorMask & options;
+    if (opt) {
+        if (opt == JPJsonParserNumberGeneratorGenerateAuto)
             self.numberGeneratorOption = JPSemanticActionsNumberGeneratorGenerateAuto;
-        else if (JPJsonParserNumberGeneratorGenerateAutoWithDecimals & options)
+        else if (opt == JPJsonParserNumberGeneratorGenerateAutoWithDecimals)
             self.numberGeneratorOption = JPSemanticActionsNumberGeneratorGenerateAutoWithDecimal;
-        else if (JPJsonParserNumberGeneratorGenerateStrings & options)
+        else if (opt == JPJsonParserNumberGeneratorGenerateStrings)
             self.numberGeneratorOption = JPSemanticActionsNumberGeneratorGenerateNSString;
-        else if (JPJsonParserNumberGeneratorGenerateDecimals & options)
+        else if (opt == JPJsonParserNumberGeneratorGenerateDecimals)
             self.numberGeneratorOption = JPSemanticActionsNumberGeneratorGenerateNSDecimalNumber;
     }
 }
@@ -219,8 +220,6 @@ typedef json::objc::RepresentationGenerator<JP_CFStringEncoding>    Representati
         case json::objc::sa_options::NumberGeneratorGenerateDecimalNumber:
             return JPSemanticActionsNumberGeneratorGenerateNSDecimalNumber;
     }
-    assert("bad JPSemanticActionsNumberGeneratorOption" == 0);
-    return json::objc::sa_options::NumberGeneratorGenerateAuto;
 }
 
 

@@ -1,6 +1,11 @@
 //
 //  common.xcconfig
 //
+#include "../../../Xcode.config/$user.boost.xcconfig"
+
+
+HEADER_SEARCH_PATHS = $(BOOST_HEADER_SEARCH_PATH)
+GCC_PREPROCESSOR_DEFINITIONS = $(BOOST_GCC_PREPROCESSOR_DEFINITIONS)
 
 // Source Root Path
 JPSOURCE_ROOT = "$(SRCROOT)/../../../Source"

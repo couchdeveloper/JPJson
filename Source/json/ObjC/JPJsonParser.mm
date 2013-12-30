@@ -229,7 +229,7 @@ namespace {
     //     std::runtime_error:      "streambuf seek failed"
     //     std::runtime_error:      "an unknown error has been occured"
     //
-    //     Other expections may be thrown by the underlaying parser.
+    //     Other expections may be thrown by the underlying parser.
     //
     bool run(const char* first, const char* last, JPUnicodeEncoding encoding, 
              JPSemanticActionsBase* sa)

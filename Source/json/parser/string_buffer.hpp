@@ -26,18 +26,9 @@
 #include "json/unicode/unicode_converter.hpp"
 #include "json/unicode/unicode_conversion.hpp"
 #include "json/endian/byte_swap.hpp"
-
 #include "string_storage.hpp"
+#include <cassert>
 
-#include <boost/static_assert.hpp>
-#include <boost/utility/enable_if.hpp>
-#include <boost/type_traits.hpp>
-#include <boost/mpl/or.hpp>
-#include <boost/mpl/and.hpp>
-#include <boost/mpl/not.hpp>
-
-
-#include <assert.h>
 
 
 
@@ -72,7 +63,7 @@ namespace json { namespace parser_internal {
          
          
          // Appends a code unit whose endianness equals the endiannes of the
-         // underlaying string storage.
+         // underlying string storage.
          // It does not check the validity of the code unit nor the validity of 
          // the code unit in the context of the string.
          void 
@@ -121,22 +112,17 @@ namespace json { namespace parser_internal {
     {
         // Although not strictly required, EncodingT's endianness shall be
         // equal host endianness:
-        BOOST_STATIC_ASSERT( (boost::is_same<
+        static_assert( (std::is_same<
                               typename encoding_traits<typename add_endianness<EncodingT>::type>::endian_tag,
                               typename host_endianness::type
-                              >::value == true)  );
+                              >::value == true), "");
         
         // For efficiency reasons, EncodingT shall be either UTF_32_encoding_tag in
         // host endianness, or it shall be equal the SemanticActionsT's encoding:
         // (With the rule above, this also implies, that SemanticActionsT's encoding 
         // must have host endianness as well)
-        BOOST_STATIC_ASSERT((boost::mpl::or_<
-                             boost::is_same<
-                             typename add_endianness<EncodingT>::type, 
-                             typename add_endianness<UTF_32_encoding_tag>::type
-                             >
-                             , boost::is_same<EncodingT, typename SemanticActionsT::encoding_t>
-                             >::value == true));
+        static_assert((std::is_same<typename add_endianness<EncodingT>::type, typename add_endianness<UTF_32_encoding_tag>::type>::value
+                       or std::is_same<EncodingT, typename SemanticActionsT::encoding_t>::value) , "");
         
     private:
         typedef string_storage<EncodingT>                           base;
@@ -182,7 +168,7 @@ namespace json { namespace parser_internal {
         
         
         // Appends a code unit whose endianness equals the endiannes of the
-        // underlaying string storage.
+        // underlying string storage.
         // It does not check the validity of the code unit nor the validity of 
         // the code unit in the context of the string.
         void 
@@ -222,12 +208,9 @@ namespace json { namespace parser_internal {
         template <typename E>
         void 
         append_unicode_imp(json::unicode::code_point_t codepoint,
-                           typename boost::enable_if<
-                           boost::is_same<
-                           UTF_32_encoding_tag, 
-                           E
-                           >    
-                           >::type* dummy = 0)
+                           typename std::enable_if<
+                                std::is_same<UTF_32_encoding_tag,E>::value
+                           >::type* = 0)
         {
             // code_point_t equals code_unit_t if endianness will be adjusted
             base::append(byte_swap<host_endian_t, to_endian_t>(static_cast<code_unit_type>(codepoint)));
@@ -236,12 +219,9 @@ namespace json { namespace parser_internal {
         template <typename E>
         void 
         append_unicode_imp(json::unicode::code_point_t codepoint,
-                           typename boost::disable_if<
-                           boost::is_same<
-                           UTF_32_encoding_tag, 
-                           E
-                           >    
-                           >::type* dummy = 0)
+                           typename std::enable_if<
+                                !std::is_same<UTF_32_encoding_tag, E>::value
+                           >::type* = 0)
         {
             typedef converter<code_point_t, to_encoding_t, Validation::UNSAFE, Stateful::No, ParseOne::Yes> cvt_t;
             base::extend(4/sizeof(code_unit_type));
@@ -256,7 +236,7 @@ namespace json { namespace parser_internal {
         
     private:
         
-        // sync() will be called by the underlaying string storage whenever
+        // sync() will be called by the underlying string storage whenever
         // its internal buffer would overflow and needs to be synchronized with
         // the external buffer managed by the semantic actions object. The
         // string storage will reset its internal buffer.
@@ -272,14 +252,12 @@ namespace json { namespace parser_internal {
         struct write_policy_traits {
             // Shall not be instantiated. Use different encodings to ensure 
             // efficient string buffers.
-            BOOST_STATIC_ASSERT(sizeof(Enable)==0);  
+            static_assert(sizeof(Enable)==0, "");
         };
         
         template <typename E1, typename E2>
         struct write_policy_traits<E1, E2,
-        typename boost::enable_if<
-        boost::is_same<E1, E2>
-        >::type
+            typename std::enable_if<std::is_same<E1, E2>::value>::type
         > 
         {
             typedef write_policy_direct type;
@@ -288,15 +266,10 @@ namespace json { namespace parser_internal {
         
         template <typename E1, typename E2>
         struct write_policy_traits<E1, E2,
-        typename boost::enable_if<
-        boost::mpl::and_<
-        boost::is_same<typename encoding_traits<E1>::encoding_form, UTF_32_encoding_tag>,
-        boost::mpl::not_<
-        boost::is_same<typename encoding_traits<E2>::encoding_form, UTF_32_encoding_tag>
-        >
-        >
-        >::type
-        > 
+            typename std::enable_if<
+                std::is_same<typename encoding_traits<E1>::encoding_form, UTF_32_encoding_tag>::value
+                and !std::is_same<typename encoding_traits<E2>::encoding_form, UTF_32_encoding_tag>::value
+            >::type>
         {
             typedef write_policy_inplace_convert type;
         };
@@ -307,9 +280,9 @@ namespace json { namespace parser_internal {
         template <typename E>
         inline void 
         write(bool hasMore, 
-              typename boost::enable_if<
-              boost::is_same<typename write_policy_traits<E, sa_encoding_type>::type, write_policy_direct>    
-              >::type* dummy = 0) 
+              typename std::enable_if<
+                std::is_same<typename write_policy_traits<E, sa_encoding_type>::type, write_policy_direct>::value
+              >::type* = 0)
         {
             sa_.value_string(base::buffer(), hasMore);
             //            
@@ -326,9 +299,9 @@ namespace json { namespace parser_internal {
         template <typename E>
         void 
         write(bool hasMore,
-              typename boost::enable_if<
-              boost::is_same<typename write_policy_traits<E, sa_encoding_type>::type, write_policy_inplace_convert>    
-              >::type* dummy = 0) 
+              typename std::enable_if<
+                std::is_same<typename write_policy_traits<E, sa_encoding_type>::type, write_policy_inplace_convert>::value
+              >::type* = 0)
         {
             typedef converter<E, sa_encoding_type, unicode::Validation::UNSAFE, unicode::Stateful::No, unicode::ParseOne::No> cvt_t;
             typedef typename encoding_traits<sa_encoding_type>::code_unit_type sa_char_t;            

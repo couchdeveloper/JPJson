@@ -24,18 +24,14 @@
 //#include "json/config.hpp"
 #include "json/unicode/unicode_traits.hpp"
 #include "json/endian/endian.hpp"
-
-
 #include <memory>
 #include <vector>
 #include <algorithm>
-#include <assert.h>
 #include <limits>
 #include <stdexcept>
+#include <cassert>
 
 
-#include <boost/utility.hpp>
-#include <boost/type_traits.hpp>
 
 
 #if !defined (JSON_PARSER_INTERNAL_STRING_STORAGE_MIN_CHUNK_SIZE)
@@ -68,7 +64,7 @@ namespace json { namespace parser_internal {
     
 
     template <typename EncodingT>
-    class string_storage : boost::noncopyable
+    class string_storage
     {
     public:        
         typedef EncodingT                                               encoding_type;
@@ -79,6 +75,10 @@ namespace json { namespace parser_internal {
         
         
     public:
+        // noncopyable
+        string_storage(const string_storage&) = delete;
+        string_storage& operator=(const string_storage&) = delete;
+        
         string_storage() 
         :   storage_start_(0), storage_end_(0), storage_cap_(0), 
             allow_partial_string_(false)
@@ -115,7 +115,7 @@ namespace json { namespace parser_internal {
             // of code units.
             //
             // Synching the buffer writes the current characters from the buffer 
-            // to the underlaying Semantic Actions object as a "partial string" 
+            // to the underlying Semantic Actions object as a "partial string" 
             // and then restes the current buffer.
             //
             // Synching requires that we take care of the boundaries of a possibly

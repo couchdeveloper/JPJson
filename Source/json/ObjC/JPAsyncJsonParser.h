@@ -32,7 +32,7 @@
  partitioned into a contiguous set of data buffers. The concatenated content may
  comprise one or more JSON documents.
  
- When downloading a resource from the net, the underlaying network layer will
+ When downloading a resource from the net, the underlying network layer will
  usually provide the content in chunks, each contained in a data buffer. For example,
  `NSURLConnection` delivers the content as a sequence of `NSData` objects to its delegate.
  The sequence of data buffers make up the complete input which may contain one or more
@@ -44,15 +44,15 @@
  received as a sequence of data buffers, e.g. from a `NSURLConnection` delegate or 
  through a `NSStream` interface.
  
- A `JPAsyncJsonParser` instance will invoke the underlaying parser
+ A `JPAsyncJsonParser` instance will invoke the underlying parser
  asynchronously. That is, when an `JPAsyncJsonParser` instance receives the 
- `start` message, the underlaying JSON parser will be executed on a different
- thread and the method `start` returns  immediately. The underlaying JSON parser 
+ `start` message, the underlying JSON parser will be executed on a different
+ thread and the method `start` returns  immediately. The underlying JSON parser 
  will then wait for incoming data buffer to become available for parsing.
  
  The client is responsible to provide the sequence of `NSData` objects which 
  will be sent by message `parserBuffer:` to the `JPAsyncJsonParser` instance.
- The underlaying JSON parser in turn will consume this data buffer and start
+ The underlying JSON parser in turn will consume this data buffer and start
  parsing it. As a result it will send parse events to the semantic actions 
  object as long as there is data available, or until the parser receives an 
  `EOF` from the input. If there is no data available and the parser expects 
@@ -204,7 +204,7 @@
  @return Returns `YES` if the parser will consume this buffer. Returns `NO` if a
  timeout occurred, or if the parser is in cancel or error state.
  
- @warning *Caution:* The buffer's byte sequence MUST start or end only at
+ @warning The buffer's byte sequence MUST start or end only at
  complete Unicode _code unites_. That is, for instance, UTF-8 encoded text may
  start and end at any byte boundary, while UTF-16 and UTF-32 requires to start 
  and end at their respective code units (two bytes and four bytes).

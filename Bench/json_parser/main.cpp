@@ -19,6 +19,7 @@
 //
 
 #include <boost/config.hpp>
+#include <boost/version.hpp>
 
 #include <iostream>
 #include <fstream>
@@ -43,8 +44,9 @@
 namespace {
     
     
-    const char* TEST_JSON = "mesh.json";
+    //const char* TEST_JSON = "mesh.json";
     //const char* TEST_JSON = "sample.json";
+    const char* TEST_JSON = "TEST-UTF8-esc.json";
     
     std::vector<char> loadFileFromResourceFolder(const char* fileName) 
     {        
@@ -75,6 +77,19 @@ namespace {
 
 
 namespace test {
+    
+    inline void printSystemInfo(std::ostream& os) {
+        time_t time_info;
+        std::time(&time_info);
+        os << ctime(&time_info) << "\n";
+        os << BOOST_COMPILER << "\n";
+        
+        os << "Using Boost "
+        << BOOST_VERSION / 100000     << "."  // major version
+        << BOOST_VERSION / 100 % 1000 << "."  // minior version
+        << BOOST_VERSION % 100                // patch level
+        << std::endl;
+    }
     
 #if defined (DEBUG)
     constexpr int N = 1;
@@ -548,10 +563,7 @@ int main ()
     std::cout << "===============================\n";
     std::cout << "Parser Benchmark\n";
     std::cout << "===============================\n";
-    time_t time_info;    
-    std::time(&time_info);
-    std::cout << ctime(&time_info) << "\n";
-    std::cout << BOOST_COMPILER << "\n";
+    test::printSystemInfo(std::cout);
     
     try {
         bench_validating_parser();

@@ -30,6 +30,8 @@
 /* Begin PBXBuildFile section */
 		A103FB6A13EA8BC4009FA571 /* gtest_main.cc in Sources */ = {isa = PBXBuildFile; fileRef = A164221013D4357400796785 /* gtest_main.cc */; };
 		A1070B9014780A0400C1847D /* base64_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1E95E0F147288E100A78D3F /* base64_test.cpp */; };
+		A1101A681819A18300BE9713 /* variant_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1228A4416DFAAEB001926E8 /* variant_test.cpp */; };
+		A112B1B51819AA4A00A69088 /* ValueTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A164225A13D4427000796785 /* ValueTest.cpp */; };
 		A1185508170B4565002EAEFC /* number_to_string_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A172BCAF1701EC3000A29A10 /* number_to_string_test.cpp */; };
 		A1185509170B4594002EAEFC /* write_value_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A172BCB117021E5E00A29A10 /* write_value_test.cpp */; };
 		A11E4A6016203FFD0094B278 /* NSStreamStreambufTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A11E4A5E16203FFD0094B278 /* NSStreamStreambufTest.mm */; };
@@ -44,6 +46,15 @@
 		A144F303145871230062D5E9 /* timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A199FC7613D5D186000170CD /* timer.cpp */; };
 		A146C87F150518C10067A55B /* unicode_detect_bom_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1A1BE6A142B448B00335044 /* unicode_detect_bom_test.cpp */; };
 		A146C880150519B10067A55B /* unicode_conversion_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A140DD1C13E94E36009DBB8C /* unicode_conversion_test.cpp */; };
+		A149AF4C1819A5A500C461AA /* mpl_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1AF9A7A16E730B0003190E7 /* mpl_test.cpp */; };
+		A149AF4D1819A5AC00C461AA /* string_to_number_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A126DCC2154FD991001E09F0 /* string_to_number_test.cpp */; };
+		A149AF4E1819A5B300C461AA /* number_to_string_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A172BCAF1701EC3000A29A10 /* number_to_string_test.cpp */; };
+		A149AF4F1819A5BA00C461AA /* base64_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1E95E0F147288E100A78D3F /* base64_test.cpp */; };
+		A149AF501819A5C700C461AA /* logger_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A16718B413EA880100A39091 /* logger_test.cpp */; };
+		A149AF511819A5CD00C461AA /* synchronous_queue_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A18DFC0B1425C6DA00DAFE2E /* synchronous_queue_test.cpp */; };
+		A149AF521819A5D800C461AA /* syncqueue_streambuf_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A18DFC111426416800DAFE2E /* syncqueue_streambuf_test.cpp */; };
+		A149AF531819A5E500C461AA /* semaphore_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A19F3A6C142877E400266273 /* semaphore_test.cpp */; };
+		A149AF541819A5F400C461AA /* arena_allocator_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A18421CE16E227F400609385 /* arena_allocator_test.cpp */; };
 		A14BE8E2146818460077EA5C /* timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A199FC7613D5D186000170CD /* timer.cpp */; };
 		A14BE8E3146818470077EA5C /* timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A199FC7613D5D186000170CD /* timer.cpp */; };
 		A14BE8E4146818A70077EA5C /* timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A199FC7613D5D186000170CD /* timer.cpp */; };
@@ -60,9 +71,16 @@
 		A171E6DE13D485AB00260A6B /* gtest_main.cc in Sources */ = {isa = PBXBuildFile; fileRef = A164221013D4357400796785 /* gtest_main.cc */; };
 		A171E74C13D4966E00260A6B /* gtest_main.cc in Sources */ = {isa = PBXBuildFile; fileRef = A164221013D4357400796785 /* gtest_main.cc */; };
 		A171E77713D497E700260A6B /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A171E77613D497E700260A6B /* CoreFoundation.framework */; };
-		A172BCB01701EC3000A29A10 /* number_to_string_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A172BCAF1701EC3000A29A10 /* number_to_string_test.cpp */; };
-		A172BCB217021E5E00A29A10 /* write_value_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A172BCB117021E5E00A29A10 /* write_value_test.cpp */; };
 		A18421D016E2280C00609385 /* arena_allocator_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A18421CE16E227F400609385 /* arena_allocator_test.cpp */; };
+		A187647A183FC392002E7E4B /* JPJson.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1876479183FC392002E7E4B /* JPJson.framework */; };
+		A187647C183FC3F2002E7E4B /* NullTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A164225513D4427000796785 /* NullTest.cpp */; };
+		A187647D183FC3F6002E7E4B /* BooleanTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A164225013D4427000796785 /* BooleanTest.cpp */; };
+		A187647E183FC3FA002E7E4B /* IntegralNumberTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1C69CB216DE10E50078E034 /* IntegralNumberTest.cpp */; };
+		A187647F183FC40C002E7E4B /* DecimalNumberTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A158A90A16D79E10001E3645 /* DecimalNumberTest.cpp */; };
+		A1876480183FC40F002E7E4B /* FloatNumberTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A12289F816DE1FA5001926E8 /* FloatNumberTest.cpp */; };
+		A1876481183FC416002E7E4B /* ValueCustomPoliciesTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A164225413D4427000796785 /* ValueCustomPoliciesTest.cpp */; };
+		A1876482183FC419002E7E4B /* write_value_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A172BCB117021E5E00A29A10 /* write_value_test.cpp */; };
+		A1876484183FC4C0002E7E4B /* libjson.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A1876483183FC4C0002E7E4B /* libjson.a */; };
 		A1884A59150119DB00A5A91E /* utilities_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1D2529413DDA3A100960381 /* utilities_test.cpp */; };
 		A1884A5B150119DF00A5A91E /* unicode_converter_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A105D10513F687CB006DE4C7 /* unicode_converter_test.cpp */; };
 		A18D5E901715F12E002F7987 /* NSStreamStreambufTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A11E4A5E16203FFD0094B278 /* NSStreamStreambufTest.mm */; };
@@ -83,18 +101,6 @@
 		A199FC7913D5D186000170CD /* timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A199FC7613D5D186000170CD /* timer.cpp */; };
 		A199FC7A13D5D186000170CD /* timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A199FC7613D5D186000170CD /* timer.cpp */; };
 		A199FC7C13D5DB12000170CD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A199FC7B13D5DB12000170CD /* Foundation.framework */; };
-		A1A8875E16F9D76E00490B07 /* string_to_number_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A126DCC2154FD991001E09F0 /* string_to_number_test.cpp */; };
-		A1A8875F16F9D77200490B07 /* logger_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A16718B413EA880100A39091 /* logger_test.cpp */; };
-		A1A8876016F9D77600490B07 /* synchronous_queue_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A18DFC0B1425C6DA00DAFE2E /* synchronous_queue_test.cpp */; };
-		A1A8876116F9D77900490B07 /* syncqueue_streambuf_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A18DFC111426416800DAFE2E /* syncqueue_streambuf_test.cpp */; };
-		A1A8876216F9D77D00490B07 /* semaphore_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A19F3A6C142877E400266273 /* semaphore_test.cpp */; };
-		A1A8876316F9D78100490B07 /* base64_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1E95E0F147288E100A78D3F /* base64_test.cpp */; };
-		A1A8876416FA082600490B07 /* ValueTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A164225A13D4427000796785 /* ValueTest.cpp */; };
-		A1A8876516FA1E6B00490B07 /* NullTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A164225513D4427000796785 /* NullTest.cpp */; };
-		A1A8876616FA1E7000490B07 /* BooleanTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A164225013D4427000796785 /* BooleanTest.cpp */; };
-		A1A8876716FA1E7000490B07 /* IntegralNumberTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1C69CB216DE10E50078E034 /* IntegralNumberTest.cpp */; };
-		A1A8876816FA1E7000490B07 /* DecimalNumberTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A158A90A16D79E10001E3645 /* DecimalNumberTest.cpp */; };
-		A1A8876916FA1E7000490B07 /* FloatNumberTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A12289F816DE1FA5001926E8 /* FloatNumberTest.cpp */; };
 		A1AA92AA152B68A400181B93 /* TestJson in CopyFiles */ = {isa = PBXBuildFile; fileRef = A1AF4B371461A3490065B048 /* TestJson */; };
 		A1AF4B431462B4970065B048 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1AF4B421462B4970065B048 /* main.cpp */; };
 		A1AF4B491462B5AB0065B048 /* logger_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A16718B413EA880100A39091 /* logger_test.cpp */; };
@@ -122,7 +128,6 @@
 		A1AF4B761462C5A20065B048 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A199FC7B13D5DB12000170CD /* Foundation.framework */; };
 		A1AF4B801462D4D30065B048 /* Test-UTF8-esc.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = A1AF4B7F1462D4D30065B048 /* Test-UTF8-esc.json */; };
 		A1AF9A7C16E73F83003190E7 /* mpl_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1AF9A7A16E730B0003190E7 /* mpl_test.cpp */; };
-		A1AF9A7D16E73F8A003190E7 /* variant_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1228A4416DFAAEB001926E8 /* variant_test.cpp */; };
 		A1B20CBC153C5A5000557321 /* JsonParserTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A164227B13D442A300796785 /* JsonParserTest.cpp */; };
 		A1B20CBD153C5A5400557321 /* JsonSemanticActionsTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A164227C13D442A300796785 /* JsonSemanticActionsTest.cpp */; };
 		A1C0602E16232A9B00BB201D /* gtest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1E67819161ECE7C00E80CA7 /* gtest.framework */; };
@@ -131,20 +136,15 @@
 		A1CC0A791710037B00679BCF /* CFDataCacheTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1DC52B914582CDA00CE28F2 /* CFDataCacheTest.mm */; };
 		A1D2527E13DDA2AE00960381 /* gtest_main.cc in Sources */ = {isa = PBXBuildFile; fileRef = A164221013D4357400796785 /* gtest_main.cc */; };
 		A1DA320E171A9AE800E0C210 /* gtest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1E67819161ECE7C00E80CA7 /* gtest.framework */; };
-		A1DA3210171A9E0100E0C210 /* JPJson.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1DA320F171A9E0100E0C210 /* JPJson.framework */; };
-		A1DA3212171A9F4E00E0C210 /* libjson.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A1DA3211171A9F4E00E0C210 /* libjson.a */; };
 		A1DC4BE614582BB700CE28F2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A199FC7B13D5DB12000170CD /* Foundation.framework */; };
 		A1DC52BF1458368200CE28F2 /* gtest_main.cc in Sources */ = {isa = PBXBuildFile; fileRef = A164221013D4357400796785 /* gtest_main.cc */; };
 		A1DC74BF16DBC79100B7730A /* DecimalNumberTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A158A90A16D79E10001E3645 /* DecimalNumberTest.cpp */; };
-		A1DFFA4816F062E100F9E0D4 /* arena_allocator_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A18421CE16E227F400609385 /* arena_allocator_test.cpp */; };
-		A1DFFA4916F0630400F9E0D4 /* mpl_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1AF9A7A16E730B0003190E7 /* mpl_test.cpp */; };
 		A1E6781B161ECEC400E80CA7 /* gtest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1E67819161ECE7C00E80CA7 /* gtest.framework */; };
 		A1E6781C161ECECA00E80CA7 /* gtest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1E67819161ECE7C00E80CA7 /* gtest.framework */; };
 		A1E6781D161ECECE00E80CA7 /* gtest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1E67819161ECE7C00E80CA7 /* gtest.framework */; };
 		A1E6781E161ECED400E80CA7 /* gtest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1E67819161ECE7C00E80CA7 /* gtest.framework */; };
 		A1E6781F161ECED800E80CA7 /* gtest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1E67819161ECE7C00E80CA7 /* gtest.framework */; };
 		A1E67820161ECEDC00E80CA7 /* gtest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1E67819161ECE7C00E80CA7 /* gtest.framework */; };
-		A1F5B8DC16EDEA53002F14CC /* ValueCustomPoliciesTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A164225413D4427000796785 /* ValueCustomPoliciesTest.cpp */; };
 		A1FF8C771489201B003DF439 /* NSData+JPJsonDetectEncodingTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A12AC926146BE78F00AED943 /* NSData+JPJsonDetectEncodingTest.mm */; };
 /* End PBXBuildFile section */
 
@@ -299,7 +299,6 @@
 /* Begin PBXFileReference section */
 		A105D10513F687CB006DE4C7 /* unicode_converter_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = unicode_converter_test.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		A1070B9114780A2C00C1847D /* string_buffer_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = string_buffer_test.cpp; sourceTree = "<group>"; };
-		A113FB8917154FC500D65C91 /* JPJson.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JPJson.framework; path = ../DerivedData/JPJson/Build/Products/Release/JPJson.framework; sourceTree = "<group>"; };
 		A11E4A5E16203FFD0094B278 /* NSStreamStreambufTest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = NSStreamStreambufTest.mm; sourceTree = "<group>"; };
 		A12289F816DE1FA5001926E8 /* FloatNumberTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FloatNumberTest.cpp; sourceTree = "<group>"; };
 		A1228A4416DFAAEB001926E8 /* variant_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = variant_test.cpp; sourceTree = "<group>"; };
@@ -308,14 +307,10 @@
 		A1228A4A16E08F64001926E8 /* string_stack_storage_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = string_stack_storage_test.cpp; sourceTree = "<group>"; };
 		A126DCB6154EC071001E09F0 /* string_storage_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = string_storage_test.cpp; sourceTree = "<group>"; };
 		A126DCC2154FD991001E09F0 /* string_to_number_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = string_to_number_test.cpp; sourceTree = "<group>"; };
-		A12712EE15A1DE7E00C2846E /* libjson.A.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libjson.A.dylib; path = "../Libraries/Mac OS X Libraries/build/Release/libjson.A.dylib"; sourceTree = "<group>"; };
-		A12712F215A1E24F00C2846E /* libjson.A.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libjson.A.dylib; path = "../Libraries/Mac OS X Libraries/build/Release/libjson.A.dylib"; sourceTree = "<group>"; };
-		A12712F415A1E49E00C2846E /* libjson.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjson.a; path = ../Build/Products/Debug/libjson.a; sourceTree = "<group>"; };
 		A12AC926146BE78F00AED943 /* NSData+JPJsonDetectEncodingTest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "NSData+JPJsonDetectEncodingTest.mm"; sourceTree = "<group>"; };
 		A12BA48F145417900083BAA6 /* JPRepresentationGeneratorTest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = JPRepresentationGeneratorTest.mm; sourceTree = "<group>"; };
 		A12BA49114541AD40083BAA6 /* JPSemanticActionsBaseTest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = JPSemanticActionsBaseTest.mm; sourceTree = "<group>"; };
 		A130A19B168DA4F500D18244 /* project.common.macosx.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = project.common.macosx.xcconfig; sourceTree = "<group>"; };
-		A1386FD2160B3F5A00C16B00 /* JPJson.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JPJson.framework; path = "../../../../Library/Developer/Xcode/DerivedData/JPJson-ejutwqptiebgcjcabedtzqzwdhuj/Build/Products/Debug/JPJson.framework"; sourceTree = "<group>"; };
 		A140DD1C13E94E36009DBB8C /* unicode_conversion_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = unicode_conversion_test.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		A148127214AA035200CC7BEA /* json_path_parser_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = json_path_parser_test.cpp; sourceTree = "<group>"; };
 		A158A90A16D79E10001E3645 /* DecimalNumberTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DecimalNumberTest.cpp; sourceTree = "<group>"; };
@@ -343,6 +338,8 @@
 		A172BCB117021E5E00A29A10 /* write_value_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = write_value_test.cpp; sourceTree = "<group>"; };
 		A177AB6B14630A8800BA3AED /* AllTests-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AllTests-Prefix.pch"; sourceTree = "<group>"; };
 		A18421CE16E227F400609385 /* arena_allocator_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = arena_allocator_test.cpp; sourceTree = "<group>"; };
+		A1876479183FC392002E7E4B /* JPJson.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JPJson.framework; path = "../../../../Library/Developer/Xcode/DerivedData/JPJson-ejutwqptiebgcjcabedtzqzwdhuj/Build/Products/Release/JPJson.framework"; sourceTree = "<group>"; };
+		A1876483183FC4C0002E7E4B /* libjson.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjson.a; path = "../../Libraries/Mac OS X Libraries/build/Release/libjson.a"; sourceTree = "<group>"; };
 		A18DFC0B1425C6DA00DAFE2E /* synchronous_queue_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = synchronous_queue_test.cpp; sourceTree = "<group>"; };
 		A18DFC111426416800DAFE2E /* syncqueue_streambuf_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = syncqueue_streambuf_test.cpp; sourceTree = "<group>"; };
 		A18FD42B144471AD003E6EBA /* Test-UTF8-esc.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = "Test-UTF8-esc.json"; path = "../Resources/Test-UTF8-esc.json"; sourceTree = "<group>"; };
@@ -359,15 +356,12 @@
 		A199FCB013D74363000170CD /* JPJsonWriterTest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; path = JPJsonWriterTest.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		A19F3A6C142877E400266273 /* semaphore_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = semaphore_test.cpp; sourceTree = "<group>"; };
 		A1A1BE6A142B448B00335044 /* unicode_detect_bom_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = unicode_detect_bom_test.cpp; sourceTree = "<group>"; };
-		A1A9415615179E3200AF9548 /* libjson.A.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libjson.A.dylib; path = "../../../../Library/Developer/Xcode/DerivedData/Json-hiazqngtzsfxawgakamtpamfsytx/Build/Products/Release/libjson.A.dylib"; sourceTree = "<group>"; };
-		A1A9415815179E5200AF9548 /* libjson.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjson.a; path = "../../../../Library/Developer/Xcode/DerivedData/Json-hiazqngtzsfxawgakamtpamfsytx/Build/Products/Release/libjson.a"; sourceTree = "<group>"; };
 		A1AA92A6152AF6C400181B93 /* JsonParser2Test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JsonParser2Test.cpp; sourceTree = "<group>"; };
 		A1AF4B371461A3490065B048 /* TestJson */ = {isa = PBXFileReference; lastKnownFileType = folder; name = TestJson; path = ../Resources/TestJson; sourceTree = "<group>"; };
 		A1AF4B3F1462B4960065B048 /* AllTests */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = AllTests; sourceTree = BUILT_PRODUCTS_DIR; };
 		A1AF4B421462B4970065B048 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		A1AF4B7F1462D4D30065B048 /* Test-UTF8-esc.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = "Test-UTF8-esc.json"; path = "../Resources/Test-UTF8-esc.json"; sourceTree = "<group>"; };
 		A1AF9A7A16E730B0003190E7 /* mpl_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mpl_test.cpp; sourceTree = "<group>"; };
-		A1C29BAF15A1DA5700D3CBF7 /* libjson.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjson.a; path = ../Build/Products/Release/libjson.a; sourceTree = "<group>"; };
 		A1C55DC715B6D0A500C573C6 /* NSDataStreambufTest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = NSDataStreambufTest.mm; sourceTree = "<group>"; };
 		A1C60D4A16E0F4DE00B7CFE0 /* JsonArrayTest.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = JsonArrayTest.cpp; sourceTree = "<group>"; };
 		A1C60D4B16E0F4DE00B7CFE0 /* JsonContainerMoveSematicsTest.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = JsonContainerMoveSematicsTest.cpp; sourceTree = "<group>"; };
@@ -381,8 +375,6 @@
 		A1CFB92D1510B1FB0010942D /* project.release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; lineEnding = 0; path = project.release.xcconfig; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.xcconfig; };
 		A1D2529013DDA2AE00960381 /* unicode_test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = unicode_test; sourceTree = BUILT_PRODUCTS_DIR; };
 		A1D2529413DDA3A100960381 /* utilities_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = utilities_test.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		A1DA320F171A9E0100E0C210 /* JPJson.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JPJson.framework; path = ../DerivedData/JPJson/Build/Products/Debug/JPJson.framework; sourceTree = "<group>"; };
-		A1DA3211171A9F4E00E0C210 /* libjson.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjson.a; path = ../DerivedData/JPJson/Build/Products/Release/libjson.a; sourceTree = "<group>"; };
 		A1DC4BE414582BB700CE28F2 /* ObjC_private_test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ObjC_private_test; sourceTree = BUILT_PRODUCTS_DIR; };
 		A1DC4BEB14582BB800CE28F2 /* ObjC_private_test-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ObjC_private_test-Prefix.pch"; sourceTree = "<group>"; };
 		A1DC52B914582CDA00CE28F2 /* CFDataCacheTest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; path = CFDataCacheTest.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -431,7 +423,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A1DA3210171A9E0100E0C210 /* JPJson.framework in Frameworks */,
+				A187647A183FC392002E7E4B /* JPJson.framework in Frameworks */,
 				A1C0602E16232A9B00BB201D /* gtest.framework in Frameworks */,
 				A199FC7C13D5DB12000170CD /* Foundation.framework in Frameworks */,
 				A171E77713D497E700260A6B /* CoreFoundation.framework in Frameworks */,
@@ -450,7 +442,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A1DA3212171A9F4E00E0C210 /* libjson.a in Frameworks */,
+				A1876484183FC4C0002E7E4B /* libjson.a in Frameworks */,
 				A1DA320E171A9AE800E0C210 /* gtest.framework in Frameworks */,
 				A1AF4B751462C59B0065B048 /* CoreFoundation.framework in Frameworks */,
 				A1AF4B761462C5A20065B048 /* Foundation.framework in Frameworks */,
@@ -508,8 +500,6 @@
 		A16421F813D4354300796785 = {
 			isa = PBXGroup;
 			children = (
-				A1DA3211171A9F4E00E0C210 /* libjson.a */,
-				A1DA320F171A9E0100E0C210 /* JPJson.framework */,
 				A130A19C168DA54200D18244 /* Xcode Config */,
 				A16718A513EA85F700A39091 /* Tests */,
 				A199FC9F13D7092A000170CD /* Resources */,
@@ -628,17 +618,10 @@
 		A171E77813D497F000260A6B /* Frameworks & Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				A113FB8917154FC500D65C91 /* JPJson.framework */,
-				A1386FD2160B3F5A00C16B00 /* JPJson.framework */,
+				A1876479183FC392002E7E4B /* JPJson.framework */,
 				A199FC7B13D5DB12000170CD /* Foundation.framework */,
 				A171E77613D497E700260A6B /* CoreFoundation.framework */,
 				A1E67819161ECE7C00E80CA7 /* gtest.framework */,
-				A12712F415A1E49E00C2846E /* libjson.a */,
-				A12712F215A1E24F00C2846E /* libjson.A.dylib */,
-				A12712EE15A1DE7E00C2846E /* libjson.A.dylib */,
-				A1C29BAF15A1DA5700D3CBF7 /* libjson.a */,
-				A1A9415815179E5200AF9548 /* libjson.a */,
-				A1A9415615179E3200AF9548 /* libjson.A.dylib */,
 			);
 			name = "Frameworks & Libraries";
 			sourceTree = "<group>";
@@ -676,6 +659,7 @@
 		A1AF4B411462B4970065B048 /* AllTests */ = {
 			isa = PBXGroup;
 			children = (
+				A1876483183FC4C0002E7E4B /* libjson.a */,
 				A1AF4B421462B4970065B048 /* main.cpp */,
 				A177AB6B14630A8800BA3AED /* AllTests-Prefix.pch */,
 			);
@@ -901,7 +885,7 @@
 		A16421FA13D4354300796785 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0460;
+				LastUpgradeCheck = 0500;
 			};
 			buildConfigurationList = A16421FD13D4354300796785 /* Build configuration list for PBXProject "Test" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -934,16 +918,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A187647E183FC3FA002E7E4B /* IntegralNumberTest.cpp in Sources */,
+				A187647C183FC3F2002E7E4B /* NullTest.cpp in Sources */,
+				A112B1B51819AA4A00A69088 /* ValueTest.cpp in Sources */,
+				A1876480183FC40F002E7E4B /* FloatNumberTest.cpp in Sources */,
+				A187647D183FC3F6002E7E4B /* BooleanTest.cpp in Sources */,
+				A1876481183FC416002E7E4B /* ValueCustomPoliciesTest.cpp in Sources */,
 				A171E6D013D4853600260A6B /* gtest_main.cc in Sources */,
+				A187647F183FC40C002E7E4B /* DecimalNumberTest.cpp in Sources */,
 				A199FC7713D5D186000170CD /* timer.cpp in Sources */,
-				A1A8876416FA082600490B07 /* ValueTest.cpp in Sources */,
-				A1F5B8DC16EDEA53002F14CC /* ValueCustomPoliciesTest.cpp in Sources */,
-				A1A8876516FA1E6B00490B07 /* NullTest.cpp in Sources */,
-				A1A8876616FA1E7000490B07 /* BooleanTest.cpp in Sources */,
-				A1A8876716FA1E7000490B07 /* IntegralNumberTest.cpp in Sources */,
-				A1A8876816FA1E7000490B07 /* DecimalNumberTest.cpp in Sources */,
-				A1A8876916FA1E7000490B07 /* FloatNumberTest.cpp in Sources */,
-				A172BCB217021E5E00A29A10 /* write_value_test.cpp in Sources */,
+				A1876482183FC419002E7E4B /* write_value_test.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -951,18 +935,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A149AF4D1819A5AC00C461AA /* string_to_number_test.cpp in Sources */,
+				A149AF511819A5CD00C461AA /* synchronous_queue_test.cpp in Sources */,
 				A103FB6A13EA8BC4009FA571 /* gtest_main.cc in Sources */,
+				A149AF531819A5E500C461AA /* semaphore_test.cpp in Sources */,
+				A149AF4E1819A5B300C461AA /* number_to_string_test.cpp in Sources */,
+				A149AF521819A5D800C461AA /* syncqueue_streambuf_test.cpp in Sources */,
+				A149AF4C1819A5A500C461AA /* mpl_test.cpp in Sources */,
+				A149AF4F1819A5BA00C461AA /* base64_test.cpp in Sources */,
 				A14BE8E3146818470077EA5C /* timer.cpp in Sources */,
-				A1DFFA4916F0630400F9E0D4 /* mpl_test.cpp in Sources */,
-				A172BCB01701EC3000A29A10 /* number_to_string_test.cpp in Sources */,
-				A1A8875E16F9D76E00490B07 /* string_to_number_test.cpp in Sources */,
-				A1AF9A7D16E73F8A003190E7 /* variant_test.cpp in Sources */,
-				A1DFFA4816F062E100F9E0D4 /* arena_allocator_test.cpp in Sources */,
-				A1A8875F16F9D77200490B07 /* logger_test.cpp in Sources */,
-				A1A8876016F9D77600490B07 /* synchronous_queue_test.cpp in Sources */,
-				A1A8876116F9D77900490B07 /* syncqueue_streambuf_test.cpp in Sources */,
-				A1A8876216F9D77D00490B07 /* semaphore_test.cpp in Sources */,
-				A1A8876316F9D78100490B07 /* base64_test.cpp in Sources */,
+				A1101A681819A18300BE9713 /* variant_test.cpp in Sources */,
+				A149AF501819A5C700C461AA /* logger_test.cpp in Sources */,
+				A149AF541819A5F400C461AA /* arena_allocator_test.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1138,7 +1122,6 @@
 		A130A1A5168DB65700D18244 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
 				COMBINE_HIDPI_IMAGES = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -1147,7 +1130,6 @@
 		A130A1A6168DB65700D18244 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
 				COMBINE_HIDPI_IMAGES = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -1187,6 +1169,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -1222,6 +1205,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
@@ -1271,6 +1255,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				OTHER_CFLAGS = "-v";
@@ -1296,6 +1281,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1319,9 +1305,10 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../DerivedData/JPJson/Build/Products/Debug\"",
+					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/JPJson-ejutwqptiebgcjcabedtzqzwdhuj/Build/Products/Release",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
@@ -1339,7 +1326,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../DerivedData/JPJson/Build/Products/Debug\"",
+					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/JPJson-ejutwqptiebgcjcabedtzqzwdhuj/Build/Products/Release",
 				);
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_OPTIMIZATION_LEVEL = 3;
@@ -1354,6 +1341,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
@@ -1378,6 +1366,11 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/JPJson-ejutwqptiebgcjcabedtzqzwdhuj/Build/Products/Release",
+				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -1390,9 +1383,9 @@
 					"$(ICU_HEADER_SEARCH_PATH)",
 				);
 				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
 					"$(ICU_LIBRARY_SEARCH_PATH)",
-					"\"$(SRCROOT)/../DerivedData/JPJson/Build/Products/Release\"",
+					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/JPJson-ejutwqptiebgcjcabedtzqzwdhuj/Build/Products/Release",
+					"$(inherited)",
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -1408,6 +1401,10 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/JPJson-ejutwqptiebgcjcabedtzqzwdhuj/Build/Products/Release",
+				);
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -1419,9 +1416,9 @@
 					"$(ICU_HEADER_SEARCH_PATH)",
 				);
 				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
 					"$(ICU_LIBRARY_SEARCH_PATH)",
-					"\"$(SRCROOT)/../DerivedData/JPJson/Build/Products/Release\"",
+					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/JPJson-ejutwqptiebgcjcabedtzqzwdhuj/Build/Products/Release",
+					"$(inherited)",
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -1436,6 +1433,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				LIBRARY_SEARCH_PATHS = (
@@ -1477,6 +1475,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;

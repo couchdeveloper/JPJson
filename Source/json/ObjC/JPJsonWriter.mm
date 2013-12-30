@@ -374,15 +374,15 @@ namespace std {
 namespace {
     
     NSError* __attribute__((ns_returns_autoreleased))
-    makeError(int errorCode, const char* errorStr, NSError* underlayingError)
+    makeError(int errorCode, const char* errorStr, NSError* underlyingError)
     {
         NSString* errStr = [[NSString alloc] initWithUTF8String:errorStr];
         NSString* localizedErrStr = NSLocalizedString(errStr, errStr);
         NSArray* objectsArray = [[NSArray alloc] initWithObjects: localizedErrStr, nil];
         NSArray* keysArray = [[NSArray alloc] initWithObjects: NSLocalizedDescriptionKey, nil];            
         NSMutableDictionary* userInfoDict = [[NSMutableDictionary alloc] initWithObjects:objectsArray forKeys: keysArray];
-        if (underlayingError) {
-            [userInfoDict setObject:underlayingError forKey:NSUnderlyingErrorKey];
+        if (underlyingError) {
+            [userInfoDict setObject:underlyingError forKey:NSUnderlyingErrorKey];
         }
         return [NSError errorWithDomain:@"JPJsonWriter" code:errorCode userInfo:userInfoDict];
     }

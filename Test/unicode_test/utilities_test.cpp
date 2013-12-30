@@ -529,8 +529,8 @@ namespace {
         }
     }
     
-    TEST_F(utilities_test, DISABLED_isControlCode) {
-    }
+//    TEST_F(utilities_test, DISABLED_isControlCode) {
+//    }
 
     
     
@@ -676,7 +676,7 @@ namespace {
     }
 
     
-    TEST_F(utilities_test, DISABLED_utf8_encoded_length_unsafe) {        
+    TEST_F(utilities_test, utf8_encoded_length_unsafe) {        
         int failCount = 0;
         for (code_point_t i = 0; i < (kUnicodeCodeSpaceMax + 100); ++i) {
             int result = utf8_encoded_length_unsafe(i);

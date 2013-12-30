@@ -272,7 +272,8 @@ namespace {
             int where;
         };
         
-        test_s tests[] = {  
+        test_s tests[] = {
+
             // JP_EMPTY_TEXT_ERROR
             {"",                JP_EMPTY_TEXT_ERROR,          "text is empty",        0},
             {" ",               JP_EMPTY_TEXT_ERROR,          "text is empty",        1},
@@ -304,11 +305,6 @@ namespace {
             {"[[]",             JP_UNEXPECTED_END_ERROR,    "unexpected end of text",       3},
             
             
-            // JP_UNICODE_NULL_NOT_ALLOWED_ERROR
-            // Note: the iterator to the input will be incremented past the Unicode Null character (U+0000),
-            // since the detection of Unicode Nulls will be determined by a filter predicate in the parser.
-            {"[\"a\x00x\"]",    json::JP_UNICODE_NULL_NOT_ALLOWED_ERROR,    "encountered U+0000",       4},
-            
             // JP_EXPECTED_ARRAY_OR_OBJECT_ERROR
             {"x",               JP_EXPECTED_ARRAY_OR_OBJECT_ERROR,     "expected array or object",      0},
             {"]",               JP_EXPECTED_ARRAY_OR_OBJECT_ERROR,     "expected array or object",      0},
@@ -336,11 +332,11 @@ namespace {
             {"[\"\\90123\"]",   JP_INVALID_ESCAPE_SEQ_ERROR,    "invalid escape sequence",  3},
                         
             //    JP_BADNUMBER_ERROR,                     // "bad number"
+            //    JP_EXPECTED_NUMBER_ERROR,               // "expected number"
+
             
             //    JP_EXPECTED_STRING_ERROR
             {"{123}",           JP_EXPECTED_STRING_ERROR,   "expected string",              1},
-            
-            //    JP_EXPECTED_NUMBER_ERROR,               // "expected number"
             
             
             // JP_EXPECTED_VALUE_ERROR
@@ -350,10 +346,6 @@ namespace {
             {"[t]",             JP_EXPECTED_VALUE_ERROR,    "expected value",               2},            
             {"{\"a\" :}",       JP_EXPECTED_VALUE_ERROR,    "expected value",               6}
             
-            
-
-            //{"\x00[]",        JP_UNICODE_NULL_NOT_ALLOWED_ERROR,      "received U+0000", 0},
-            //{"[\"a\x00bc\"]", JP_UNICODE_NULL_NOT_ALLOWED_ERROR,      "received U+0000", 9},
         };
         
         typedef const char* InputIterator;
@@ -365,6 +357,8 @@ namespace {
         {
             semantic_actions_t sa;
             sa.log_level(semanticactions::LogLevelNone);
+            sa.unicode_nullcharacter_handling(semanticactions::SignalErrorOnUnicodeNULLCharacter);
+            sa.unicode_noncharacter_handling(semanticactions::SignalErrorOnUnicodeNoncharacter);
             parser_t parser(sa);
                         
             InputIterator start = &(*first).input[0];
@@ -374,10 +368,12 @@ namespace {
                 --end;
             }
             
-            json::parser_error_type result = parser.parse(p, end);
+            json::parser_error_type expected_result = (*first).error_code;
+            json::parser_error_type result = JP_UNKNOWN_ERROR;
+            result = parser.parse(p, end);
             const parse_state_t& state = parser.state();
-            EXPECT_EQ( (*first).error_code, result )  << "[" << idx << "]: " << "with input: '" << (*first).input << "'";
-            EXPECT_EQ( (*first).error_code, state.error() )<< "[" << idx << "]: "   << "with input: '" << (*first).input << "'";
+            EXPECT_EQ( expected_result, result )  << "[" << idx << "]: " << "with input: '" << (*first).input << "'";
+            EXPECT_EQ( expected_result, state.error() )<< "[" << idx << "]: "   << "with input: '" << (*first).input << "'";
             EXPECT_TRUE( sa.result() == 0 )<< "[" << idx << "]: "  << "with input: '" << (*first).input << "'";
             EXPECT_EQ( (*first).where, std::distance(start, p) )  << "with input: '" << (*first).input << "'";
             if ((*first).error_code != result or (*first).where != std::distance(start, p)) {
@@ -498,7 +494,7 @@ namespace {
     }
     
     
-    TEST_F(JsonParserTest, DISABLED_NoopParser_Malformed_UTF16) {
+    TEST_F(JsonParserTest, NoopParser_Malformed_UTF16) {
         EXPECT_TRUE(0=="TEST NOT YET IMPLEMENTED");
     }  
     
@@ -513,12 +509,8 @@ namespace {
         typedef parser_t::semantic_actions_type semantic_actions_t;
         typedef json::parser_error_type error_type;
         
-        //
-        // Invalid Unicode code points in JSON text
-        //
-        //    JP_UNICODE_NONCHARACTER_ERROR,          // "encountered unicode noncharacter"
-        //    JP_UNICODE_REJECTED_BY_FILTER,          // "Unicode code point rejected by filter"
-                
+        //    JP_UNICODE_NONCHARACTER_NOT_ACCEPTED_ERROR,          // "encountered unicode noncharacter"
+        
         struct test_s {
             char input[64];
             int error_code;
@@ -527,40 +519,40 @@ namespace {
         };
         
         test_s tests[] = {   
-            {"[\"abc\uFFFExyz\"]",        JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 8},
-            {"[\"abc\uFFFFxyz\"]",        JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 8},
-            {"[\"abc\U0001FFFExyz\"]",    JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
-            {"[\"abc\U0001FFFFxyz\"]",    JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
-            {"[\"abc\U0002FFFExyz\"]",    JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
-            {"[\"abc\U0002FFFFxyz\"]",    JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
-            {"[\"abc\U0003FFFExyz\"]",    JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
-            {"[\"abc\U0003FFFFxyz\"]",    JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
-            {"[\"abc\U0004FFFExyz\"]",    JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
-            {"[\"abc\U0004FFFFxyz\"]",    JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
-            {"[\"abc\U0005FFFExyz\"]",    JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
-            {"[\"abc\U0005FFFFxyz\"]",    JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
-            {"[\"abc\U0006FFFExyz\"]",    JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
-            {"[\"abc\U0006FFFFxyz\"]",    JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
-            {"[\"abc\U0007FFFExyz\"]",    JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
-            {"[\"abc\U0007FFFFxyz\"]",    JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
-            {"[\"abc\U0008FFFExyz\"]",    JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
-            {"[\"abc\U0008FFFFxyz\"]",    JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
-            {"[\"abc\U0009FFFExyz\"]",    JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
-            {"[\"abc\U0009FFFFxyz\"]",    JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
-            {"[\"abc\U000AFFFExyz\"]",    JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
-            {"[\"abc\U000AFFFFxyz\"]",    JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
-            {"[\"abc\U000BFFFExyz\"]",    JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
-            {"[\"abc\U000BFFFFxyz\"]",    JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
-            {"[\"abc\U000CFFFExyz\"]",    JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
-            {"[\"abc\U000CFFFFxyz\"]",    JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
-            {"[\"abc\U000DFFFExyz\"]",    JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
-            {"[\"abc\U000DFFFFxyz\"]",    JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
-            {"[\"abc\U000EFFFExyz\"]",    JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
-            {"[\"abc\U000EFFFFxyz\"]",    JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
-            {"[\"abc\U000FFFFExyz\"]",    JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
-            {"[\"abc\U000FFFFFxyz\"]",    JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
-            {"[\"abc\U0010FFFExyz\"]",    JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9},
-            {"[\"abc\U0010FFFFxyz\"]",    JP_UNICODE_NONCHARACTER_ERROR,    "encountered unicode noncharacter", 9}
+            {"[\"abc\uFFFExyz\"]",        JP_UNICODE_NONCHARACTER_NOT_ACCEPTED_ERROR,    "encountered unicode noncharacter", 8},
+            {"[\"abc\uFFFFxyz\"]",        JP_UNICODE_NONCHARACTER_NOT_ACCEPTED_ERROR,    "encountered unicode noncharacter", 8},
+            {"[\"abc\U0001FFFExyz\"]",    JP_UNICODE_NONCHARACTER_NOT_ACCEPTED_ERROR,    "encountered unicode noncharacter", 9},
+            {"[\"abc\U0001FFFFxyz\"]",    JP_UNICODE_NONCHARACTER_NOT_ACCEPTED_ERROR,    "encountered unicode noncharacter", 9},
+            {"[\"abc\U0002FFFExyz\"]",    JP_UNICODE_NONCHARACTER_NOT_ACCEPTED_ERROR,    "encountered unicode noncharacter", 9},
+            {"[\"abc\U0002FFFFxyz\"]",    JP_UNICODE_NONCHARACTER_NOT_ACCEPTED_ERROR,    "encountered unicode noncharacter", 9},
+            {"[\"abc\U0003FFFExyz\"]",    JP_UNICODE_NONCHARACTER_NOT_ACCEPTED_ERROR,    "encountered unicode noncharacter", 9},
+            {"[\"abc\U0003FFFFxyz\"]",    JP_UNICODE_NONCHARACTER_NOT_ACCEPTED_ERROR,    "encountered unicode noncharacter", 9},
+            {"[\"abc\U0004FFFExyz\"]",    JP_UNICODE_NONCHARACTER_NOT_ACCEPTED_ERROR,    "encountered unicode noncharacter", 9},
+            {"[\"abc\U0004FFFFxyz\"]",    JP_UNICODE_NONCHARACTER_NOT_ACCEPTED_ERROR,    "encountered unicode noncharacter", 9},
+            {"[\"abc\U0005FFFExyz\"]",    JP_UNICODE_NONCHARACTER_NOT_ACCEPTED_ERROR,    "encountered unicode noncharacter", 9},
+            {"[\"abc\U0005FFFFxyz\"]",    JP_UNICODE_NONCHARACTER_NOT_ACCEPTED_ERROR,    "encountered unicode noncharacter", 9},
+            {"[\"abc\U0006FFFExyz\"]",    JP_UNICODE_NONCHARACTER_NOT_ACCEPTED_ERROR,    "encountered unicode noncharacter", 9},
+            {"[\"abc\U0006FFFFxyz\"]",    JP_UNICODE_NONCHARACTER_NOT_ACCEPTED_ERROR,    "encountered unicode noncharacter", 9},
+            {"[\"abc\U0007FFFExyz\"]",    JP_UNICODE_NONCHARACTER_NOT_ACCEPTED_ERROR,    "encountered unicode noncharacter", 9},
+            {"[\"abc\U0007FFFFxyz\"]",    JP_UNICODE_NONCHARACTER_NOT_ACCEPTED_ERROR,    "encountered unicode noncharacter", 9},
+            {"[\"abc\U0008FFFExyz\"]",    JP_UNICODE_NONCHARACTER_NOT_ACCEPTED_ERROR,    "encountered unicode noncharacter", 9},
+            {"[\"abc\U0008FFFFxyz\"]",    JP_UNICODE_NONCHARACTER_NOT_ACCEPTED_ERROR,    "encountered unicode noncharacter", 9},
+            {"[\"abc\U0009FFFExyz\"]",    JP_UNICODE_NONCHARACTER_NOT_ACCEPTED_ERROR,    "encountered unicode noncharacter", 9},
+            {"[\"abc\U0009FFFFxyz\"]",    JP_UNICODE_NONCHARACTER_NOT_ACCEPTED_ERROR,    "encountered unicode noncharacter", 9},
+            {"[\"abc\U000AFFFExyz\"]",    JP_UNICODE_NONCHARACTER_NOT_ACCEPTED_ERROR,    "encountered unicode noncharacter", 9},
+            {"[\"abc\U000AFFFFxyz\"]",    JP_UNICODE_NONCHARACTER_NOT_ACCEPTED_ERROR,    "encountered unicode noncharacter", 9},
+            {"[\"abc\U000BFFFExyz\"]",    JP_UNICODE_NONCHARACTER_NOT_ACCEPTED_ERROR,    "encountered unicode noncharacter", 9},
+            {"[\"abc\U000BFFFFxyz\"]",    JP_UNICODE_NONCHARACTER_NOT_ACCEPTED_ERROR,    "encountered unicode noncharacter", 9},
+            {"[\"abc\U000CFFFExyz\"]",    JP_UNICODE_NONCHARACTER_NOT_ACCEPTED_ERROR,    "encountered unicode noncharacter", 9},
+            {"[\"abc\U000CFFFFxyz\"]",    JP_UNICODE_NONCHARACTER_NOT_ACCEPTED_ERROR,    "encountered unicode noncharacter", 9},
+            {"[\"abc\U000DFFFExyz\"]",    JP_UNICODE_NONCHARACTER_NOT_ACCEPTED_ERROR,    "encountered unicode noncharacter", 9},
+            {"[\"abc\U000DFFFFxyz\"]",    JP_UNICODE_NONCHARACTER_NOT_ACCEPTED_ERROR,    "encountered unicode noncharacter", 9},
+            {"[\"abc\U000EFFFExyz\"]",    JP_UNICODE_NONCHARACTER_NOT_ACCEPTED_ERROR,    "encountered unicode noncharacter", 9},
+            {"[\"abc\U000EFFFFxyz\"]",    JP_UNICODE_NONCHARACTER_NOT_ACCEPTED_ERROR,    "encountered unicode noncharacter", 9},
+            {"[\"abc\U000FFFFExyz\"]",    JP_UNICODE_NONCHARACTER_NOT_ACCEPTED_ERROR,    "encountered unicode noncharacter", 9},
+            {"[\"abc\U000FFFFFxyz\"]",    JP_UNICODE_NONCHARACTER_NOT_ACCEPTED_ERROR,    "encountered unicode noncharacter", 9},
+            {"[\"abc\U0010FFFExyz\"]",    JP_UNICODE_NONCHARACTER_NOT_ACCEPTED_ERROR,    "encountered unicode noncharacter", 9},
+            {"[\"abc\U0010FFFFxyz\"]",    JP_UNICODE_NONCHARACTER_NOT_ACCEPTED_ERROR,    "encountered unicode noncharacter", 9}
         };
         
         typedef const char* InputIterator;
@@ -574,6 +566,69 @@ namespace {
             // Default behavior for Unicode noncharacters: signal error
             semantic_actions_t sa;
             sa.log_level(semanticactions::LogLevelNone);
+            sa.unicode_noncharacter_handling(semanticactions::SignalErrorOnUnicodeNoncharacter);
+            parser_t parser(sa);
+            
+            InputIterator start = &(*first).input[0];
+            InputIterator p = start;
+            InputIterator end = p + sizeof((*first).input);
+            while (end > start and *(end-1) == 0) {
+                --end;
+            }
+            
+            char buffer[64];
+            InputIterator s = p;
+            char* d = buffer;
+            std::size_t count = json::unicode::convert(s, end, UTF_8_encoding_tag(), d, UTF_8_encoding_tag(), unicode::ReplaceIllFormed);
+            buffer[count] = 0;
+            
+            json::parser_error_type result = parser.parse(p, end);
+            const parse_state_t& state = parser.state();
+            std::size_t consumed = std::distance(start, p);
+            
+            EXPECT_EQ( (*first).error_code, static_cast<int>(result) ) << "with input[" << idx << "]: " << buffer;
+            EXPECT_EQ( (*first).error_code, static_cast<int>(state.error()) ) << "with input[" << idx << "]: " << buffer;
+            EXPECT_TRUE( sa.result() == 0 ) << "with input[" << idx << "]: " << buffer;
+            EXPECT_EQ( (*first).where, consumed) << "with input[" << idx << "]: " << buffer;
+            
+            ++first;
+            ++idx;
+        }
+    }
+    
+    
+    TEST_F(JsonParserTest, NoopParser_NULLCharacters)
+    {
+        using namespace json;
+        
+        typedef NoopParser parser_t;
+        typedef parser_t::state_t parse_state_t;
+        typedef parser_t::semantic_actions_type semantic_actions_t;
+        typedef json::parser_error_type error_type;
+        
+        struct test_s {
+            char input[64];
+            int error_code;
+            const char* error_str;
+            int where;
+        };
+        
+        test_s tests[] = {
+            {"[\"abc\u0000xyz\"]",        JP_UNICODE_NULLCHARACTER_NOT_ACCEPTED_ERROR,    "Unicode 'NULL' not accepted", 6},
+        };
+        
+        typedef const char* InputIterator;
+        
+        test_s* first = tests;
+        test_s* last = first + sizeof(tests) / sizeof(test_s);
+        
+        int idx = 0;
+        while (first != last)
+        {
+            // Default behavior for Unicode noncharacters: signal error
+            semantic_actions_t sa;
+            sa.log_level(semanticactions::LogLevelNone);
+            sa.unicode_nullcharacter_handling(semanticactions::SignalErrorOnUnicodeNULLCharacter);
             parser_t parser(sa);
             
             InputIterator start = &(*first).input[0];

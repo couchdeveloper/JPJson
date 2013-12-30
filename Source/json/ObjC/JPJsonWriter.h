@@ -25,23 +25,28 @@
 #import <Foundation/Foundation.h>
 
 
-enum  {
-    JPJsonWriterPrettyPrint =               1UL << 0,
-    JPJsonWriterSortKeys =                  1UL << 1,
-    JPJsonWriterEscapeUnicodeCharacters =   1UL << 2,
-    JPJsonWriterWriteBOM =                  1UL << 3,
-    JPJsonWriterEscapeSolidus =             1UL << 4
+/**
+ @enum JPJsonWriterOptions
+ 
+ GroupName
+ 
+ JPJsonWriter Options
+ */
+typedef NS_OPTIONS(NSUInteger, JPJsonWriterOptions)  {
+    JPJsonWriterPrettyPrint =               1UL << 0,    /** Output will be more readable */
+    JPJsonWriterSortKeys =                  1UL << 1,    /** Keys in JSON Objects will be sorted */
+    JPJsonWriterEscapeUnicodeCharacters =   1UL << 2,    /** Non ASCII characters will be Unicode escaped */
+    JPJsonWriterWriteBOM =                  1UL << 3,    /** A BOM is prepended */
+    JPJsonWriterEscapeSolidus =             1UL << 4     /** The Escape Solidus will be escaped */
 };
-typedef NSUInteger JPJsonWriterOptions;
-
-
-
 
 
 /**
  A JPJsonWriter class will be used to serialize a Foundation object into
  a JSON text.
  
+ 
+ The following JPJsonWriter Options can be set:
  
  ### JPJsonWriter Options ###
 
@@ -76,11 +81,7 @@ typedef NSUInteger JPJsonWriterOptions;
     If this option is set, the generator will escape the "solidus" (`/`)
     character.
  
-*/  
-
-
-
-
+*/
 @interface JPJsonWriter : NSObject 
 
 

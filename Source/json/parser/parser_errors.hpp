@@ -60,7 +60,10 @@ namespace json {
         
         
         // Invalid Unicode code points in JSON text
-        JP_UNICODE_NONCHARACTER_ERROR,          // "encountered unicode noncharacter" / Encountered an "Unicode noncharacter" in input - this value is not interchangable.
+        JP_UNICODE_NONCHARACTER_NOT_ACCEPTED_ERROR,    // Encountered an "Unicode noncharacter" in a JSON string - this disallowed by the current settings.input - this value is not interchangable.
+        
+        JP_UNICODE_NULLCHARACTER_NOT_ACCEPTED_ERROR,   // Encountered an "Unicode 'NULL'" in a JSON string - this disallowed by the current settings.
+        
         JP_UNICODE_REJECTED_BY_FILTER,          // "Unicode code point rejected by filter"
         
         // JSON container errors
@@ -112,7 +115,10 @@ namespace json {
                 
                 
                 // Invalid Unicode code points in JSON text
-            case JP_UNICODE_NONCHARACTER_ERROR:          return "encountered Unicode noncharacter"; break; // Encountered an "Unicode noncharacter" in input - this value is not interchangable.
+                
+            case JP_UNICODE_NONCHARACTER_NOT_ACCEPTED_ERROR: return "Unicode noncharacter not accepted"; break; // Encountered an "Unicode noncharacter" in a JSON string - this disallowed by the current settings.
+            case JP_UNICODE_NULLCHARACTER_NOT_ACCEPTED_ERROR: return "Unicode 'NULL' not accepted"; break; // Encountered an "Unicode 'NULL'" in a JSON string - this disallowed by the current settings.
+
             case JP_UNICODE_REJECTED_BY_FILTER:          return "Unicode code point rejected by filter"; break;
                 
                 // JSON container errors

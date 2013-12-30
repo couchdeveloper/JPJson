@@ -17,7 +17,10 @@ SDKROOT = iphoneos
 //
 // Architectures
 //
-ARCHS = armv7 armv7s
+ARCHS = $(ARCHS_STANDARD_INCLUDING_64_BIT)
+
+//:completeSettings = none
+
 
 //
 // Deployment Target

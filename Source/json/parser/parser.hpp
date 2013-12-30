@@ -23,7 +23,6 @@
 
 
 #include "json/config.hpp"
-#include <boost/iterator/iterator_traits.hpp>
 #include "parser_errors.hpp"
 #include "semantic_actions_base.hpp"
 #include "string_buffer.hpp"
@@ -32,10 +31,10 @@
 #include "json/unicode/unicode_converter.hpp"
 #include "json/endian/endian.hpp"
 #include <type_traits>
-#include <assert.h>
-#include <string.h>
+#include <iterator>
+#include <cassert>
+#include <cstring>
 #include <limits>
-#include <alloca.h>
 
 
 #if defined (DEBUG)
@@ -110,9 +109,9 @@ namespace json {
             string_buffer_encoding, SemanticActions
         >                                                       string_buffer_t;
         typedef parser_internal::number_string_buffer<128>      number_string_buffer_t;        
-        typedef typename boost::iterator_value<
+        typedef typename std::iterator_traits<
             InputIterator
-        >::type                                                 iterator_value_type;
+        >::value_type                                           iterator_value_type;
         
         //
         // Static Assertions:
@@ -128,7 +127,7 @@ namespace json {
         
         // Currently, the parser requires that the endianess of its string_buffer
         // encoding matches the platform endianness or is UTF-8 encoding.
-        static_assert( (boost::is_same<
+        static_assert( (std::is_same<
                               typename encoding_traits<typename add_endianness<string_buffer_encoding>::type>::endian_tag,
                               typename host_endianness::type
                               >::value == true), "" );
@@ -254,7 +253,8 @@ namespace json {
         // May throw an exception if internal buffers could not be allocated.
         // 
         int
-        string_buffer_pushback_unicode(unicode::code_point_t unicode) 
+        __attribute__((noinline))
+        string_buffer_pushback_unicode(unicode::code_point_t unicode)
         {
             if (nonch_opt_ != semanticactions::AllowUnicodeNoncharacter) {
                 if (__builtin_expect(unicode::isNonCharacter(unicode), 0)) {
@@ -262,8 +262,7 @@ namespace json {
                         case semanticactions::AllowUnicodeNoncharacter:
                             break;
                         case semanticactions::SignalErrorOnUnicodeNoncharacter:
-                            state_.error() = JP_UNICODE_NONCHARACTER_ERROR;
-                            sa_.error(state_.error(), state_.error_str());
+                            state_.error() = JP_UNICODE_NONCHARACTER_NOT_ACCEPTED_ERROR;
                             return -1;
                             break;
 
@@ -272,6 +271,7 @@ namespace json {
                             break;
                             
                         case semanticactions::RemoveUnicodeNoncharacter:
+                            return 0;
                             break;
                     }
                 }
@@ -284,8 +284,7 @@ namespace json {
                     case semanticactions::AllowUnicodeNULLCharacter:
                         break;
                     case semanticactions::SignalErrorOnUnicodeNULLCharacter:
-                        state_.error() = JP_UNICODE_NULL_NOT_ALLOWED_ERROR;  // TODO: use better error code
-                        sa_.error(state_.error(), state_.error_str());
+                        state_.error() = JP_UNICODE_NULLCHARACTER_NOT_ACCEPTED_ERROR;
                         return -1;
                         break;
                     case semanticactions::SubstituteUnicodeNULLCharacter:
@@ -979,7 +978,7 @@ namespace json {
                         case unicode::E_UNCONVERTABLE_OFFSET:
                         case unicode::E_INVALID_CODE_POINT:
                         case unicode::E_INVALID_UNICODE:        state_.error() = JP_ILLFORMED_UNICODE_SEQUENCE_ERROR; break;
-                        case unicode::E_NO_CHARACTER:           state_.error() = JP_UNICODE_NONCHARACTER_ERROR; break;
+                        case unicode::E_NO_CHARACTER:           state_.error() = JP_UNICODE_NONCHARACTER_NOT_ACCEPTED_ERROR; break;
                         case unicode::E_UNEXPECTED_ENDOFINPUT:  state_.error() = JP_UNEXPECTED_END_ERROR; break;
                         default: state_.error() = JP_INVALID_UNICODE_ERROR;                    
                     }

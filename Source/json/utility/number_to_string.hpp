@@ -58,6 +58,16 @@ namespace json { namespace utility {
         return std::to_string(value);
     }
     
+    
+    template <typename T, typename OutputIterator>
+    OutputIterator write_number(T const& value, OutputIterator dest
+                                , typename std::enable_if<std::is_arithmetic<T>::value>::type* = 0)
+    {
+        std::string s = std::to_string(value);
+        return std::copy(s.begin(), s.end(), dest);
+    }
+    
+    
 #endif
     
     

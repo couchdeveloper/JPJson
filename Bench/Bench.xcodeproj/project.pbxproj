@@ -47,6 +47,7 @@
 		A1C05DB9178CC35000C7A117 /* update-center.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = A1C05DAE178CC32100C7A117 /* update-center.json */; };
 		A1C9A5571541BD39004B4ED6 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A171E72413D4928400260A6B /* CoreFoundation.framework */; };
 		A1E9C4E516E643F200F04BB0 /* Test-UTF8.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = A1A9D4DC157A063F00211F1B /* Test-UTF8.json */; };
+		A1EC302917C8F612006A08FC /* JPJson.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A16C49C317C774360061CC8B /* JPJson.framework */; };
 		A1EF0DA1142666BF0083221D /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1EF0DA0142666BF0083221D /* main.cpp */; };
 		A1EF0DA814266A230083221D /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A171E72413D4928400260A6B /* CoreFoundation.framework */; };
 		A1FBA581157A0B030004204A /* Test-UTF8-esc.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = A1A9D4DB157A063F00211F1B /* Test-UTF8-esc.json */; };
@@ -260,6 +261,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A1EC302917C8F612006A08FC /* JPJson.framework in Frameworks */,
 				A1977E4C156CBE920074D9B2 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -830,6 +832,7 @@
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				LLVM_LTO = NO;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -868,7 +871,6 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_DYNAMIC_NO_PIC = YES;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_OPTIMIZATION_LEVEL = fast;
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				LLVM_LTO = YES;
@@ -908,6 +910,7 @@
 			buildSettings = {
 				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_PREPROCESSOR_DEFINITIONS = "$(BENCH_GCC_PREPROCESSOR_DEFINITIONS)";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -1043,7 +1046,6 @@
 				GCC_DYNAMIC_NO_PIC = YES;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_INPUT_FILETYPE = sourcecode.cpp.objcpp;
-				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
 					"$(ICU_GCC_PREPROCESSOR_DEFINITIONS)",

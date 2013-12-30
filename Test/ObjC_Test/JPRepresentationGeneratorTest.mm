@@ -61,10 +61,12 @@ namespace {
 #if defined (DEBUG)
             EXPECT_EQ(int(JPSemanticActionsLogLevelDebug), int([sa logLevel]));
 #else
-            EXPECT_EQ(int(JPSemanticActionsLogLevelWarning), int([sa logLevel]));
+            EXPECT_EQ(int(JPSemanticActionsLogLevelError), int([sa logLevel]));
 #endif
             
+            EXPECT_EQ(int(JPSemanticActionsSignalErrorOnUnicodeNULLCharacter), int([sa unicodeNULLCharacterHandling]));
             EXPECT_EQ(int(JPSemanticActionsSignalErrorOnUnicodeNoncharacter), int([sa unicodeNoncharacterHandling]));
+
             EXPECT_EQ(int(0), int([sa nonConformanceOptions]));
             
             EXPECT_EQ(NO, sa.ignoreSpuriousTrailingBytes);
@@ -83,6 +85,8 @@ namespace {
             EXPECT_EQ(NO, sa.keepStringCacheOnClear);
             EXPECT_EQ(NO, sa.parseMultipleDocuments);
             EXPECT_EQ(int(JPSemanticActionsNumberGeneratorGenerateAuto), int([sa numberGeneratorOption]));
+            
+            EXPECT_EQ(NO, sa.generateEncodedStrings);
             
             EXPECT_EQ(nil, sa.error);
         }
@@ -113,26 +117,48 @@ namespace {
             sa.parseMultipleDocumentsAsynchronously = NO;
             EXPECT_EQ(NO, sa.parseMultipleDocumentsAsynchronously);
             
-            
+
+#if !defined (DEBUG)
+            // In Release mode, the max severity is set to warning
+            sa.logLevel = JPSemanticActionsLogLevelDebug;
+            EXPECT_EQ((int)JPSemanticActionsLogLevelWarning, sa.logLevel);
+#else
             sa.logLevel = JPSemanticActionsLogLevelDebug;
             EXPECT_EQ((int)JPSemanticActionsLogLevelDebug, sa.logLevel);
+#endif
             sa.logLevel = JPSemanticActionsLogLevelWarning;
             EXPECT_EQ((int)JPSemanticActionsLogLevelWarning, sa.logLevel);
             sa.logLevel = JPSemanticActionsLogLevelError;
             EXPECT_EQ((int)JPSemanticActionsLogLevelError, sa.logLevel);
             sa.logLevel = JPSemanticActionsLogLevelNone;
             EXPECT_EQ((int)JPSemanticActionsLogLevelNone, sa.logLevel);
+            
+#if !defined (DEBUG)
+            // In Release mode, the max severity is set to warning
+            sa.logLevel = JPSemanticActionsLogLevelDebug;
+            EXPECT_EQ((int)JPSemanticActionsLogLevelWarning, sa.logLevel);
+#else
             sa.logLevel = JPSemanticActionsLogLevelDebug;
             EXPECT_EQ((int)JPSemanticActionsLogLevelDebug, sa.logLevel);
+#endif
             
             sa.unicodeNoncharacterHandling = JPSemanticActionsSignalErrorOnUnicodeNoncharacter;
             EXPECT_EQ((int)JPSemanticActionsSignalErrorOnUnicodeNoncharacter, sa.unicodeNoncharacterHandling);
             sa.unicodeNoncharacterHandling = JPSemanticActionsSubstituteUnicodeNoncharacter;
             EXPECT_EQ((int)JPSemanticActionsSubstituteUnicodeNoncharacter, sa.unicodeNoncharacterHandling);
-            sa.unicodeNoncharacterHandling = JPSemanticActionsSkipUnicodeNoncharacters;
-            EXPECT_EQ((int)JPSemanticActionsSkipUnicodeNoncharacters, sa.unicodeNoncharacterHandling);
+            sa.unicodeNoncharacterHandling = JPSemanticActionsRemoveUnicodeNoncharacter;
+            EXPECT_EQ((int)JPSemanticActionsRemoveUnicodeNoncharacter, sa.unicodeNoncharacterHandling);
             sa.unicodeNoncharacterHandling = JPSemanticActionsSignalErrorOnUnicodeNoncharacter;
             EXPECT_EQ((int)JPSemanticActionsSignalErrorOnUnicodeNoncharacter, sa.unicodeNoncharacterHandling);
+
+            sa.unicodeNULLCharacterHandling = JPSemanticActionsSignalErrorOnUnicodeNULLCharacter;
+            EXPECT_EQ((int)JPSemanticActionsSignalErrorOnUnicodeNoncharacter, sa.unicodeNULLCharacterHandling);
+            sa.unicodeNULLCharacterHandling = JPSemanticActionsSubstituteUnicodeNULLCharacter;
+            EXPECT_EQ((int)JPSemanticActionsSubstituteUnicodeNULLCharacter, sa.unicodeNULLCharacterHandling);
+            sa.unicodeNULLCharacterHandling = JPSemanticActionsRemoveUnicodeNULLCharacter;
+            EXPECT_EQ((int)JPSemanticActionsRemoveUnicodeNULLCharacter, sa.unicodeNULLCharacterHandling);
+            sa.unicodeNULLCharacterHandling = JPSemanticActionsSignalErrorOnUnicodeNULLCharacter;
+            EXPECT_EQ((int)JPSemanticActionsSignalErrorOnUnicodeNULLCharacter, sa.unicodeNULLCharacterHandling);
             
             sa.nonConformanceOptions = JPSemanticActionsAllowComments;
             EXPECT_EQ((int)JPSemanticActionsAllowComments, sa.nonConformanceOptions);
