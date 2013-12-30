@@ -160,7 +160,7 @@ namespace {
     
     // The __has_select compile time helper function should determine whether a
     // given set of arguments passed to a variant's constructor will unabiguously
-    // find the target type, and as such tests the underlaying type machinery
+    // find the target type, and as such tests the underlying type machinery
     // of class variant: json::utility::detail::constructor.
     //
     // It's intended that its return type becomes std::true_type if the given
@@ -170,62 +170,65 @@ namespace {
     // *Currently* the `Select` facility will only work for *one* argument.
     // Multiple arguments may be enabled if the compiler supports inheriting
     // constructors.
-    
-    template <typename...Types>
-    struct __Selector : json::utility::detail::selector<Types...> {};
-    
-    template <typename Selector, typename... Args>
-    using __Select = decltype(Selector::select(std::declval<Args>()...));
-    // Note: static member __Select::select() will fail to compile if there
-    // is no target type that can be unabiguously constructed from the given
-    // arguments.
-        
-    template <typename Selector, typename... Args>
-    constexpr auto __has_select_test(Selector&&, Args&&...)
-    -> decltype(__Select<Selector, Args...>(), std::true_type() );
 
+    namespace {
     
-    constexpr auto __has_select_test(...)
-    -> std::false_type;
-    
-    template <typename Selector, typename... Args>
-    struct __has_select : decltype(__has_select_test(std::declval<Selector>(), std::declval<Args>()... ))
-    {};
-    
-    template <typename T>
-    struct _Result {
-        typedef T type;
-    };
-    
-    TEST_F(variant_test, TestTestHasSelect)
-    {
-        // Test our test-helpers itself:
-        struct M {
-            M() = delete;
-            M(int){};
-        };
-        struct Arg {};
-        struct A {A(); A(const Arg&); };
-        struct B {B();};
-        struct D { D(){}; D(const int&, const M& m){}; };
+        template <typename...Types>
+        struct __Selector : json::utility::detail::selector<Types...> {};
         
-        // Basicly, mimics the class json::utility::detail::constructor:
-        struct selector {
-            static auto select(const A&) -> _Result<A>;
-            static auto select(const B&) -> _Result<B>;
-            static auto select(const D&) -> _Result<D>;
-        };
+        template <typename Selector, typename... Args>
+        using __Select = decltype(Selector::select(std::declval<Args>()...));
+        // Note: static member __Select::select() will fail to compile if there
+        // is no target type that can be unabiguously constructed from the given
+        // arguments.
+    
         
-        struct C {};
+        template <typename Selector, typename... Args>
+        inline constexpr auto __has_select_test(Selector&&, Args&&...)
+        -> decltype(__Select<Selector, Args...>(), std::true_type() );
+
+        inline constexpr auto __has_select_test(...)
+        -> std::false_type;
         
-        static_assert( __has_select<selector, A>::value == true, "");
-        static_assert( __has_select<selector, Arg>::value == true, "");
-        static_assert( __has_select<selector, B>::value == true, "");
-        static_assert( __has_select<selector, D>::value == true, "");
-        static_assert( __has_select<selector, int>::value == false, "");
-        static_assert( __has_select<selector, short>::value == false, "");
-        static_assert( __has_select<selector, C>::value == false, "");
+        template <typename Selector, typename... Args>
+        struct __has_select : decltype(__has_select_test(std::declval<Selector>(), std::declval<Args>()... ))
+        {};
+        
     }
+    
+//    template <typename T>
+//    struct _Result {
+//        typedef T type;
+//    };
+//    TEST_F(variant_test, TestTestHasSelect)
+//    {
+//        // Test our test-helpers itself:
+//        struct M {
+//            M() = delete;
+//            M(int){};
+//        };
+//        struct Arg {};
+//        struct A {A(); A(const Arg&); };
+//        struct B {B();};
+//        struct D { D(){}; D(const int&, const M& m){}; };
+//        
+//        // Basicly, mimics the class json::utility::detail::constructor:
+//        struct selector {
+//            static auto select(const A&) -> _Result<A>;
+//            static auto select(const B&) -> _Result<B>;
+//            static auto select(const D&) -> _Result<D>;
+//        };
+//        
+//        struct C {};
+//        
+//        static_assert( __has_select<selector, A>::value == true, "");
+//        static_assert( __has_select<selector, Arg>::value == true, "");
+//        static_assert( __has_select<selector, B>::value == true, "");
+//        static_assert( __has_select<selector, D>::value == true, "");
+//        static_assert( __has_select<selector, int>::value == false, "");
+//        static_assert( __has_select<selector, short>::value == false, "");
+//        static_assert( __has_select<selector, C>::value == false, "");
+//    }
 
     
     

@@ -118,7 +118,7 @@ namespace json {
     //  class value_generator
     //
     //
-    //  Uses json_value_t as the underlaying JSON representation. 
+    //  Uses json_value_t as the underlying JSON representation. 
     //  
     // Template parameter EncodingT shall be derived from json::utf_encoding_tag.
     // EncodingT shall match the StringBufferEncoding of the parser.

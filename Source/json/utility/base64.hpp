@@ -23,12 +23,12 @@
 #define BASE64_BASE64_HPP
 
 
-#include <boost/iterator/iterator_traits.hpp>
+#include <iterator>
 #include <stdexcept>
-#include <stdint.h>
 #include <sstream>
 #include <iostream>
 #include <cassert>
+#include <cstdint>
 
 //  Generate lookup table:
 // 
@@ -76,7 +76,7 @@ namespace json { namespace utility {
     template <class InputIterator, class OutputIterator>
     OutputIterator encodeBase64(InputIterator first, InputIterator last, OutputIterator result)
     {
-        static_assert( (sizeof(typename boost::iterator_value<InputIterator>::type) == sizeof(char)), "" );
+        static_assert( (sizeof(typename std::iterator_traits<InputIterator>::value_type) == sizeof(char)), "" );
         
         using base64_detail::to_int;
         
@@ -162,7 +162,7 @@ namespace json { namespace utility {
     template <class InputIterator, class OutputIterator>
     OutputIterator decodeBase64(InputIterator first, InputIterator last, OutputIterator result)
     {
-        static_assert(sizeof(typename boost::iterator_value<InputIterator>::type) == sizeof(char), "");
+        static_assert(sizeof(typename std::iterator_traits<InputIterator>::value_type) == sizeof(char), "");
         
         using base64_detail::to_int;
         using base64_detail::lookup;

@@ -3,7 +3,7 @@
 //  
 //
 //  Created by Andreas Grosam on 1/27/12.
-//  Copyright 2011 Andreas Grosam
+//  Copyright 2013 Andreas Grosam
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -26,7 +26,6 @@
 #include "unicode_utilities.hpp"
 #include "unicode_traits.hpp"
 #include "unicode_errors.hpp"
-#include "unicode_filter.hpp"
 
 #include <boost/iterator/iterator_traits.hpp>
 #include <boost/mpl/int.hpp>

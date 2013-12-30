@@ -21,7 +21,7 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXFileReference section */
-		A15D892B146592250001E08D /* CreateDoc.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; lineEnding = 0; path = CreateDoc.rb; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		A15D892B146592250001E08D /* CreateDoc.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; lineEnding = 0; path = CreateDoc.rb; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -46,7 +46,7 @@
 		A1D1C05814652D9B000C145F /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0420;
+				LastUpgradeCheck = 0500;
 			};
 			buildConfigurationList = A1D1C05B14652D9B000C145F /* Build configuration list for PBXProject "Documentation" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -86,6 +86,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				JPSOURCE_ROOT = "$(SRCROOT)/../../Source";
+				ONLY_ACTIVE_ARCH = YES;
 			};
 			name = Debug;
 		};

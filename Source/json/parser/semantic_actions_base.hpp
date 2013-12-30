@@ -161,6 +161,11 @@ namespace json {
             opt_pass_escaped_string_(false),
             canceled_(false)
         {
+#if defined (NDEBUG)
+            logger_.log_level(json::utility::LOG_ERROR);
+#else
+            logger_.log_level(json::utility::LOG_DEBUG);
+#endif
         }
 
         
@@ -386,8 +391,15 @@ namespace json {
             os << "Input encoding: " << sa.inputEncoding() << "\n"
 
             << "Unicode noncharacter handling: " << 
-                ((sa.noncharacter_handling_option_==SignalErrorOnUnicodeNoncharacter) ? "SignalErrorOnUnicodeNoncharacter"
-                : ((sa.noncharacter_handling_option_==SubstituteUnicodeNoncharacter) ? "SubstituteUnicodeNoncharacter" : "SkipUnicodeNoncharacters"))
+                (sa.noncharacter_handling_option_==SignalErrorOnUnicodeNoncharacter ? "SignalErrorOnUnicodeNoncharacter"
+                : sa.noncharacter_handling_option_==SubstituteUnicodeNoncharacter ? "SubstituteUnicodeNoncharacter"
+                : sa.noncharacter_handling_option_==RemoveUnicodeNoncharacter ? "RemoveUnicodeNoncharacter"
+                : "AllowUnicodeNoncharacters")
+            << "Unicode 'NULL' character handling: " <<
+                (sa.nullcharacter_handling_option_==SignalErrorOnUnicodeNULLCharacter ? "SignalErrorOnUnicodeNULLCharacter"
+                : sa.nullcharacter_handling_option_==SubstituteUnicodeNULLCharacter ? "SubstituteUnicodeNULLCharacter"
+                : sa.nullcharacter_handling_option_==RemoveUnicodeNULLCharacter ? "RemoveUnicodeNULLCharacter"
+                : "AllowUnicodeNULLCharacters")
             << "\nPass Escaped Strings: " << (sa.passEscapdedString() ? "YES" : "NO")
             << "\n"
             << "\nBasic Json Parser Options:"

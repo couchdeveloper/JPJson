@@ -113,48 +113,52 @@ typedef JPSemanticActions_ErrorHandlerBlockType       ErrorHandlerBlockType;
     self.parseMultipleDocumentsAsynchronously = (options & JPJsonParserParseMultipleDocumentsAsynchronously) != 0;
     self.generateEncodedStrings = (options & JPJsonParserEncodedStrings) != 0;
     
-    if (JPJsonParserNULLCharacterHandling & options) {
-        if (JPJsonParserSignalErrorOnNULLCharacter & options) {
+    JPJsonParserOptions opt = JPJsonParserNULLCharacterOptionMask & options;
+    if (opt) {
+        if (opt == JPJsonParserAllowUnicodeNULLCharacter)
+            self.unicodeNULLCharacterHandling = JPSemanticActionsAllowUnicodeNULLCharacter;
+        else if (opt == JPJsonParserSignalErrorOnUnicodeNULLCharacter) {
             self.unicodeNULLCharacterHandling = JPSemanticActionsSignalErrorOnUnicodeNULLCharacter;
-        } else if (JPJsonParserSubstituteUnicodeNULLCharacter & options) {
+        } else if (opt == JPJsonParserSubstituteUnicodeNULLCharacter) {
             self.unicodeNULLCharacterHandling = JPSemanticActionsSubstituteUnicodeNULLCharacter;
-        } else if (JPJsonParserRemoveUnicodeNULLCharacter & options) {
+        } else if (opt == JPJsonParserRemoveUnicodeNULLCharacter) {
             self.unicodeNULLCharacterHandling = JPSemanticActionsRemoveUnicodeNULLCharacter;
+        }  else {
+            assert("invalid option" == 0);
         }
     }
-    else {
-        self.unicodeNULLCharacterHandling = JPSemanticActionsAllowUnicodeNULLCharacter;
-    }
     
-    if (JPJsonParserNoncharacterHandling & options) {
-        if (JPJsonParserSignalErrorOnNoncharacter & options) {
+    opt = JPJsonParserNoncharacterOptionMask & options;
+    if (opt) {
+        if (opt == JPJsonParserAllowUnicodeNoncharacter) {
+            self.unicodeNoncharacterHandling = JPSemanticActionsAllowUnicodeNoncharacter;
+        } else if (opt == JPJsonParserSignalErrorOnUnicodeNoncharacter) {
             self.unicodeNoncharacterHandling = JPSemanticActionsSignalErrorOnUnicodeNoncharacter;
-        } else if (JPJsonParserSubstituteUnicodeNoncharacter & options) {
+        } else if (opt == JPJsonParserSubstituteUnicodeNoncharacter) {
             self.unicodeNoncharacterHandling = JPSemanticActionsSubstituteUnicodeNoncharacter;
-        } else if (JPJsonParserRemoveUnicodeNoncharacter & options) {
+        } else if (opt == JPJsonParserRemoveUnicodeNoncharacter) {
             self.unicodeNoncharacterHandling = JPSemanticActionsRemoveUnicodeNoncharacter;
+        } else {
+            assert("invalid option" == 0);
         }
-    }
-    else {
-        self.unicodeNoncharacterHandling = JPSemanticActionsAllowUnicodeNoncharacter;
     }
     
-    if (JPJsonParserLogLevel && options) {
-        if (JPJsonParserLogLevelDebug & options) {
-            self.logLevel = JPSemanticActionsLogLevelDebug;
-        }
-        else if (JPJsonParserLogLevelWarning & options) {
-            self.logLevel = JPSemanticActionsLogLevelWarning;
-        }
-        else if (JPJsonParserLogLevelError & options) {
-            self.logLevel = JPSemanticActionsLogLevelError;
-        }
-        else if (JPJsonParserLogLevelNone & options) {
+    opt = JPJsonParserLogLevelMask & options;
+    if (opt) {
+        if (opt == JPJsonParserLogLevelNone) {
             self.logLevel = JPSemanticActionsLogLevelNone;
-        }        
+        } else if (opt == JPJsonParserLogLevelError) {
+            self.logLevel = JPSemanticActionsLogLevelError;
+        } else if (opt == JPJsonParserLogLevelWarning) {
+            self.logLevel = JPSemanticActionsLogLevelWarning;
+        } else if (opt == JPJsonParserLogLevelDebug) {
+            self.logLevel = JPSemanticActionsLogLevelDebug;
+        } else {
+            assert("invalid option" == 0);
+        }
     }
     
-    if (JPJsonParserNonConformanceFlags & options) {
+    if (JPJsonParserNonConformanceMask & options) {
         NSUInteger flags = 0;
         if (JPJsonParserAllowComments & options) {
             flags |= JPSemanticActionsAllowComments;
@@ -378,8 +382,6 @@ typedef JPSemanticActions_ErrorHandlerBlockType       ErrorHandlerBlockType;
         case json::semanticactions::LogLevelNone:
             return JPSemanticActionsLogLevelNone;
     }
-    assert("bad log-level"==0);
-    return json::semanticactions::LogLevelWarning;
 }
 
 
@@ -414,15 +416,15 @@ typedef JPSemanticActions_ErrorHandlerBlockType       ErrorHandlerBlockType;
 
 - (JPSemanticActionsUnicodeNULLCharacterHandling) unicodeNULLCharacterHandling
 {
-    switch (self.imp->unicode_noncharacter_handling()) {
-        case json::semanticactions::AllowUnicodeNoncharacter:
+    switch (self.imp->unicode_nullcharacter_handling()) {
+        case json::semanticactions::AllowUnicodeNULLCharacter:
             return JPSemanticActionsAllowUnicodeNULLCharacter;
-        case json::semanticactions::SignalErrorOnUnicodeNoncharacter:
-            return JPSemanticActionsSignalErrorOnUnicodeNoncharacter;
-        case json::semanticactions::SubstituteUnicodeNoncharacter:
-            return JPSemanticActionsSubstituteUnicodeNoncharacter;
-        case json::semanticactions::RemoveUnicodeNoncharacter:
-            return JPSemanticActionsRemoveUnicodeNoncharacter;
+        case json::semanticactions::SignalErrorOnUnicodeNULLCharacter:
+            return JPSemanticActionsSignalErrorOnUnicodeNULLCharacter;
+        case json::semanticactions::SubstituteUnicodeNULLCharacter:
+            return JPSemanticActionsSubstituteUnicodeNULLCharacter;
+        case json::semanticactions::RemoveUnicodeNULLCharacter:
+            return JPSemanticActionsRemoveUnicodeNULLCharacter;
     }
 }
 

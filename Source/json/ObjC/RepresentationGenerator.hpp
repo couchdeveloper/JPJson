@@ -958,7 +958,7 @@ namespace json { namespace objc {
                         else {
                             // Try to represent the integral JSON number in a double:
                             (this->logger_).log(json::utility::LOG_WARNING,
-                                                "Integral JSON number is out of range to be represented in largest underlaying integral number representation. Using a double as underlaying type. Original JSON number: %.*s",
+                                                "Integral JSON number is out of range to be represented in largest underlying integral number representation. Using a double as underlying type. Original JSON number: %.*s",
                                                 number.c_str_len(), number.c_str());
                             double d = json::utility::string_to_number<double>(number.c_str(), number.c_str_len());
                             cfNumber = CFNumberCreate(numberAlloc, kCFNumberDoubleType, &d);
@@ -969,7 +969,7 @@ namespace json { namespace objc {
                     else if (number.is_scientific()) 
                     {
                         // A number with an exponent
-                        // Always use an NSNumber with an underlaying double. If the conversion will possibly loose precision,
+                        // Always use an NSNumber with an underlying double. If the conversion will possibly loose precision,
                         // log a message but convert it anyway:
                         if (number.digits() > std::numeric_limits<double>::max_digits10) {
                             // The JSON number has more digits than neccesary to be represented by a double precisely enough.
@@ -984,11 +984,11 @@ namespace json { namespace objc {
                     else /* number is fixed*/
                     {
                         // If the precision of a double is sufficient to represent the
-                        // decimal number, use an underlaying double, otherwise use
+                        // decimal number, use an underlying double, otherwise use
                         // a NSDecimalNumber:
                         if (number.digits() <= std::numeric_limits<double>::max_digits10) // a double has sufficient precision
                         {      
-                            // use an NSNumber with underlaying double
+                            // use an NSNumber with underlying double
                             double d = json::utility::string_to_number<double>(number.c_str(), number.c_str_len());
                             cfNumber = CFNumberCreate(numberAlloc, kCFNumberDoubleType, &d);
                         }
@@ -1004,7 +1004,7 @@ namespace json { namespace objc {
                             }
                         }
                         else {
-                            // use an NSNumber with underlaying double
+                            // use an NSNumber with underlying double
                             // log precision warning:
                             double d = json::utility::string_to_number<double>(number.c_str(), number.c_str_len());
                             cfNumber = CFNumberCreate(numberAlloc, kCFNumberDoubleType, &d);

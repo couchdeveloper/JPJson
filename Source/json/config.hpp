@@ -35,10 +35,15 @@
  that when using standard conversions defined in header <xlocale.h>. 
  */
 #define JSON_UTILITY_STRING_TO_NUMBER_USE_QI
-
-
 #define JSON_UTILITY_NUMBER_TO_STRING_USE_KARMA
 
+
+#if !defined(JSON_UTILITY_STRING_TO_NUMBER_USE_QI)
+#warning JSON_UTILITY_STRING_TO_NUMBER_USE_QI disabled
+#endif
+#if !defined (JSON_UTILITY_NUMBER_TO_STRING_USE_KARMA)
+#warning JSON_UTILITY_NUMBER_TO_STRING_USE_KARMA disabled
+#endif
 
 /**
  JSON_PARSER_INTERNAL_STRING_STORAGE_MIN_CHUNK_SIZE specifies the minimum

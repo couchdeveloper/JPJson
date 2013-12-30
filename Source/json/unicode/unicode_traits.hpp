@@ -2,7 +2,7 @@
 //  unicode_traits.hpp
 //  
 //  Created by Andreas Grosam on 2/23/12.
-//  Copyright 2011 Andreas Grosam
+//  Copyright 2013 Andreas Grosam
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -190,7 +190,7 @@ namespace json { namespace unicode {
     
     template <typename EncodingT>
     struct encoding_traits {
-        //  code_unit_type      The underlaying integer type representing an Unicode 
+        //  code_unit_type      The underlying integer type representing an Unicode 
         //                      code unit. It is the minimal bit combination that
         //                      can represent a unit of encoded text for processing
         //                      or interchange.

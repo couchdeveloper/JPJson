@@ -59,7 +59,7 @@ namespace {
     
 #pragma mark -
     
-    TEST_F(syncqueue_streambuf_test, Constructor) 
+    TEST_F(syncqueue_streambuf_test, Constructor)
     {
         typedef json::objc::CFDataBuffer<char>                  CFDataBuffer;
         typedef synchronous_queue<CFDataBuffer>                 queue_t;
@@ -97,8 +97,7 @@ namespace {
         dispatch_semaphore_t sem = dispatch_semaphore_create(0);
         dispatch_async(dispatch_get_global_queue(0, 0), ^{
             CFDataBuffer buffer = CFDataBuffer(s, strlen(s));
-            EXPECT_EQ(queue_t::OK, q.put(buffer, 0.2)) << "put() timed out";
-            EXPECT_EQ(queue_t::OK, q.put(CFDataBuffer(), 1)) << "put() timed out";
+            EXPECT_EQ(queue_t::OK, q.put(buffer, 1)) << "put() timed out";
             dispatch_semaphore_signal(sem);
         });
         
@@ -238,11 +237,7 @@ namespace {
     } 
     
     
-#if defined (_LIBCPP_VERSION) && _LIBCPP_VERSION == 1101
-    TEST_F(syncqueue_streambuf_test, DISABLED_missaligned_buffer)
-#else
     TEST_F(syncqueue_streambuf_test, missaligned_buffer)
-#endif
     {
         typedef json::objc::CFDataBuffer<char>                      CFDataBuffer;
         typedef synchronous_queue<CFDataBuffer>                     queue_t;

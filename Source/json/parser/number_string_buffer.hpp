@@ -24,14 +24,10 @@
 
 #include "json/config.hpp"
 #include "json/unicode/unicode_traits.hpp"
-
 #include <cstring>
-#include <assert.h>
-
+#include <cassert>
 #include <stdexcept>
 #include <utility>
-
-#include <boost/utility.hpp>
 
 
 namespace json { namespace parser_internal {
@@ -49,7 +45,7 @@ namespace json { namespace parser_internal {
     
     
     template <size_t Size>
-    class number_string_buffer : boost::noncopyable 
+    class number_string_buffer
     {
     public:
         typedef char                                    code_unit_t;
@@ -57,6 +53,11 @@ namespace json { namespace parser_internal {
         typedef typename std::pair<char const*, size_t> const_buffer_type;        
         
     public:
+        // non copyable
+        number_string_buffer(const number_string_buffer&) = delete;
+        number_string_buffer& operator=(const number_string_buffer&) = delete;
+        
+        
         number_string_buffer() noexcept
         : end_(buffer_)
         {}

@@ -120,7 +120,7 @@ namespace {
     //     std::runtime_error:      "streambuf seek failed"
     //     std::runtime_error:      "an unknown error has been occured"
     //
-    //     Other expections may be thrown by the underlaying parser.
+    //     Other expections may be thrown by the underlying parser.
     //
     // Notes:
     // The function may require to look-ahead into the actual characters in

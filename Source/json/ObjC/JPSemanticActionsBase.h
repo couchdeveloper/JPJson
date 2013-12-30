@@ -23,43 +23,39 @@
 #import <Foundation/Foundation.h>
 
 /** Unicode 'NULL' (U+0000) Handling */
-enum {
+typedef NS_ENUM(NSUInteger, JPSemanticActionsUnicodeNULLCharacterHandling) {
     JPSemanticActionsAllowUnicodeNULLCharacter,
     JPSemanticActionsSignalErrorOnUnicodeNULLCharacter,
     JPSemanticActionsSubstituteUnicodeNULLCharacter,
     JPSemanticActionsRemoveUnicodeNULLCharacter
 };
-typedef NSUInteger JPSemanticActionsUnicodeNULLCharacterHandling;
 
 
 /** Unicode Noncharacter Handling */
-enum {
+typedef NS_ENUM(NSUInteger, JPSemanticActionsUnicodeNoncharacterHandling) {
     JPSemanticActionsAllowUnicodeNoncharacter,
     JPSemanticActionsSignalErrorOnUnicodeNoncharacter,
     JPSemanticActionsSubstituteUnicodeNoncharacter, 
     JPSemanticActionsRemoveUnicodeNoncharacter
 };
-typedef NSUInteger JPSemanticActionsUnicodeNoncharacterHandling;
 
 /** Log behavior */
-enum {
+typedef NS_ENUM(NSUInteger, JPSemanticActionsLogLevel) {
     JPSemanticActionsLogLevelDebug,
     JPSemanticActionsLogLevelWarning,
     JPSemanticActionsLogLevelError,
     JPSemanticActionsLogLevelNone
 };
-typedef NSUInteger JPSemanticActionsLogLevel;
 
 
 /** non_conformance_flags (can be ored) */
-enum {
+typedef NS_OPTIONS(NSUInteger, JPSemanticActionsNonConformanceOptions) {
     JPSemanticActionsAllowNone                     = 0,
     JPSemanticActionsAllowComments                 = 1UL << 0,              
     JPSemanticActionsAllowControlCharacters        = 1UL << 1,     
     JPSemanticActionsAllowLeadingPlusInNumbers     = 1UL << 2,
     JPSemanticActionsAllowLeadingZerosInIntegers   = 1UL << 3
 };
-typedef NSUInteger JPSemanticActionsNonConformanceOptions;
 
 
 
@@ -236,7 +232,7 @@ typedef void (^JPSemanticActions_ErrorHandlerBlockType)(NSError*);
  It is recommended to leave this flag disabled in systems where system resources 
  are scarce or if the data input possibly contains many and large JSON documents. 
  When downloading large data, this helps throttling the consumption of system
- resources by the underlaying network layer.
+ resources by the underlying network layer.
 
  Default: `NO`
 */ 
@@ -245,7 +241,7 @@ typedef void (^JPSemanticActions_ErrorHandlerBlockType)(NSError*);
 
 /**
  Sets or returns the log level of the semantic actions instance and the
- underlaying JSON parser. 
+ underlying JSON parser. 
  
  Possible values are constants defined in enumeration `JPSemanticActionsLogLevel`:
  
@@ -266,7 +262,7 @@ typedef void (^JPSemanticActions_ErrorHandlerBlockType)(NSError*);
 
 /**
  Sets or returns the policy for handling Unicode 'NULL' characters of the receiver
- and the underlaying JSON parser.
+ and the underlying JSON parser.
  
  Possible values are constants defined in enumeration `JPSemanticActionsUnicodeNULLCharacterHandling`:
  
@@ -281,7 +277,7 @@ typedef void (^JPSemanticActions_ErrorHandlerBlockType)(NSError*);
 
 /**
  Sets or returns the policy for handling Unicode noncharacters of the receiver 
- and the underlaying JSON parser. 
+ and the underlying JSON parser. 
  
  Possible values are constants defined in enumeration `JPSemanticActionsUnicodeNoncharacterHandling`:
  
@@ -295,7 +291,7 @@ typedef void (^JPSemanticActions_ErrorHandlerBlockType)(NSError*);
 
 
 /**
- Sets or returns the strictness of the underlaying JSON parser.
+ Sets or returns the strictness of the underlying JSON parser.
  
  Possible values are ored flags which are defined in enumeration `JPSemanticActionsNonConformanceOptions`:
  
@@ -316,8 +312,8 @@ typedef void (^JPSemanticActions_ErrorHandlerBlockType)(NSError*);
  Sets or returns the option whether the receiver will get passed encoded JSON strings.
  
  Usually, a semantic actions object will require a properly decoded JSON string
- that matches the orginal source string. If this options is enabled however, the 
- underlaying parser passes properly _encoded_ JSON Strings in method 
+ that matches the original source string. If this options is enabled however, the
+ underlying parser passes properly _encoded_ JSON Strings in method 
  `-parserFoundKeyValuePairBeginWithKey:length:encoding:index:` and 
  `-parserFoundString:length:hasMore:encoding:`. That is, the string is encoded
  as required by RFC 4627.

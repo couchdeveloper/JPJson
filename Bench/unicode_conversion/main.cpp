@@ -1673,9 +1673,9 @@ int main (int argc, const char * argv[])
         
                 //profile();
 
-        bench_UTF8_to_codepoint(1000*1000, 10);
-        bench_UTF16_to_codepoint();
-        bench_UTF32_to_codepoint();
+//        bench_UTF8_to_codepoint(1000*1000, 10);
+//        bench_UTF16_to_codepoint();
+//        bench_UTF32_to_codepoint();
         
 //        bench_codepoint_to_UTF8();
 //        bench_codepoint_to_UTF16();

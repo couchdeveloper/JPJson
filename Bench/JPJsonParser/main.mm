@@ -97,11 +97,11 @@ namespace {
             return "none";
         }
         std::string result;
-        if (opt & JPJsonParserSignalErrorOnNoncharacter) {
-            result += "JPJsonParserSignalErrorOnNoncharacter ";
+        if (opt & JPJsonParserSignalErrorOnUnicodeNoncharacter) {
+            result += "JPJsonParserSignalErrorOnUnicodeNoncharacter ";
         }
-        if (opt & JPJsonParserSignalErrorOnNoncharacter) {
-            result += "JPJsonParserSignalErrorOnNoncharacter ";
+        if (opt & JPJsonParserSignalErrorOnUnicodeNoncharacter) {
+            result += "JPJsonParserSignalErrorOnUnicodeNoncharacter ";
         }
         if (opt & JPJsonParserSubstituteUnicodeNoncharacter) {
             result += "JPJsonParserSubstituteUnicodeNoncharacter ";
@@ -109,8 +109,8 @@ namespace {
         if (opt & JPJsonParserRemoveUnicodeNoncharacter) {
             result += "JPJsonParserRemoveUnicodeNoncharacter ";
         }
-        if (opt & JPJsonParserSignalErrorOnNULLCharacter) {
-            result += "JPJsonParserSignalErrorOnNULLCharacter ";
+        if (opt & JPJsonParserSignalErrorOnUnicodeNULLCharacter) {
+            result += "JPJsonParserSignalErrorOnUnicodeNULLCharacter ";
         }
         if (opt & JPJsonParserSubstituteUnicodeNULLCharacter) {
             result += "JPJsonParserSubstituteUnicodeNULLCharacter ";
@@ -543,8 +543,8 @@ namespace {
             // instance.
             
             JPStreamSemanticActions* sa = [[JPStreamSemanticActions alloc] initWithHandlerDispatchQueue:NULL];        
-            success = [JPJsonParser parseData:data semanticActions:sa];
             [sa configureWithOptions:opt];
+            success = [JPJsonParser parseData:data semanticActions:sa];
             t.stop();
             te.set(t.seconds());
             t.reset();
@@ -1099,56 +1099,46 @@ int main (int argc, const char * argv[])
     // -------------------------------------------------------------------------
     
     NSArray* testFiles = @[
-//                           @"apache_builds.json",
-//                           @"github_events.json",
-//                           @"instruments.json",
-//                           @"mesh.json",
-                           @"mesh.pretty.json"
-//                           @"nested.json",
-//                           @"random.json",
-//                           @"repeat.json",
-//                           @"truenull.json",
-//                           @"twitter_timeline.json",
-//                           @"update-center.json",
-//                           @"sample.json",
-//                           @"Test-UTF8-esc.json",
-//                           @"Test-UTF8.json"
+                           @"apache_builds.json",
+                           @"github_events.json",
+                           @"instruments.json",
+                           @"mesh.json",
+                           @"mesh.pretty.json",
+                           @"nested.json",
+                           @"random.json",
+                           @"repeat.json",
+                           @"truenull.json",
+                           @"twitter_timeline.json",
+                           @"update-center.json",
+                           @"sample.json",
+                           @"Test-UTF8-esc.json",
+                           @"Test-UTF8.json"
                            ];
     
     for (id testFile in testFiles) {
-        NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
+        {
+            NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
+            bench_JPJsonParserSAXStyle(JPJsonParserOptions(JPJsonParserAllowUnicodeNoncharacter | JPJsonParserAllowUnicodeNULLCharacter), testFile, N);
+            [pool drain];
+        }
+        {
+            NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
+            bench_JPJsonParserWithNSData(JPJsonParserOptions(JPJsonParserAllowUnicodeNoncharacter | JPJsonParserAllowUnicodeNULLCharacter), testFile, N);
+            [pool drain];
+        }
+        {
+            NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
+            bench_NSJSONSerialization(NSJSONReadingOptions(0), testFile, N);
+            [pool drain];
+        }
+        {
+            NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
+            bench_JSONKitWithNSData(JKParseOptionFlags(0), testFile, N);
+            [pool drain];
+        }
 
-        //bench_JPJsonParserWithNSData(JPJsonParserOptions(JPJsonParserLogLevelError), testFile, N);
-//        bench_JPJsonParserWithNSData(JPJsonParserOptions(JPJsonParserLogLevelError | JPJsonParserGeneratorUseArenaAllocator), testFile, N);
-        //    bench_JPJsonParserSAXStyle1x(testFile, N);
-        //    bench_JPJsonParserWithNSData1(testFile, N);
-        //    bench_JPJsonParserWithNSData1m(testFile, N);
-        //    bench_JPJsonParserWithNSDataReuseSemanticActionsObject(testFile, N);
-        //    bench_JPJsonParserWithNSString1(testFile,N);
-        //    bench_JPJsonParser1d(testFile, N);
-        //    bench_JPJsonParser2(testFile, N);
-        //    bench_JPAsyncJsonParser(testFile, N);
-#if 1
-        bench_NSJSONSerialization(NSJSONReadingOptions(0), testFile, N);
-        //    bench_NSJSONSerialization1m(testFile, N);
-#endif
-        //
-        //#if defined (USE_JSONKit)
-//        bench_JSONKitWithNSData(JKParseOptionFlags(0), testFile, N);
-//        bench_JSONKitWithNSData(JKParseOptionFlags(0), testFile, N);
-//        bench_JSONKitWithNSData(JKParseOptionFlags(0), testFile, N);
-//        bench_JSONKitWithNSData(JKParseOptionFlags(0), testFile, N);
-        //    bench_JSONKit2(testFile, N);
-        //    bench_JSONKitString1(testFile, N);
-        //#endif
-        
-        [pool drain];
+    
     }
-    
-    
-    
-
-    
     
     NSLog(@"\nFinished Bench");
     [pool drain];

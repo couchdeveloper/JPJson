@@ -159,7 +159,7 @@ namespace {
     TEST_F(JPJsonWriterTest, BasicWriterNSNumberAsCharTest)
     {
         @autoreleasepool {
-            // A NSNumber with an underlaying type `char` will be mapped to an integer:
+            // A NSNumber with an underlying type `char` will be mapped to an integer:
             NSArray* array = [[NSArray alloc] initWithObjects:
                               [NSNumber numberWithChar:NO],
                               [NSNumber numberWithChar:YES],
@@ -185,7 +185,7 @@ namespace {
     TEST_F(JPJsonWriterTest, BasicWriterNSNumberAsUnsignedCharTest)
     {
         @autoreleasepool {
-            // A NSNumber with an underlaying type `unsigned char` will be mapped to an integer:
+            // A NSNumber with an underlying type `unsigned char` will be mapped to an integer:
             
             NSArray* array = [[NSArray alloc] initWithObjects:
                               [NSNumber numberWithUnsignedChar:NO],
@@ -212,7 +212,7 @@ namespace {
     TEST_F(JPJsonWriterTest, BasicWriterNSNumberAsShortTest)
     {
         @autoreleasepool {
-            // A NSNumber with an underlaying type `short` will be mapped to an integer:
+            // A NSNumber with an underlying type `short` will be mapped to an integer:
             NSArray* array = [[NSArray alloc] initWithObjects:
                               [NSNumber numberWithShort:0],
                               [NSNumber numberWithShort:1],
@@ -238,7 +238,7 @@ namespace {
     TEST_F(JPJsonWriterTest, BasicWriterNSNumberAsUnsignedShortTest)
     {
         @autoreleasepool {
-            // A NSNumber with an underlaying type `unsigned short` will be mapped to an integer:
+            // A NSNumber with an underlying type `unsigned short` will be mapped to an integer:
             NSArray* array = [[NSArray alloc] initWithObjects:
                               [NSNumber numberWithUnsignedShort:0],
                               [NSNumber numberWithUnsignedShort:1],
@@ -261,7 +261,7 @@ namespace {
     TEST_F(JPJsonWriterTest, BasicWriterNSNumberAsIntTest)
     {
         @autoreleasepool {
-            // A NSNumber with an underlaying type `int` will be mapped to an integer:
+            // A NSNumber with an underlying type `int` will be mapped to an integer:
             
             NSArray* array = [[NSArray alloc] initWithObjects:
                               [NSNumber numberWithInt:0],
@@ -288,7 +288,7 @@ namespace {
     TEST_F(JPJsonWriterTest, BasicWriterNSNumberAsUnsignedIntTest)
     {
         @autoreleasepool {
-            // A NSNumber with an underlaying type `unsigned int` will be mapped to an integer:
+            // A NSNumber with an underlying type `unsigned int` will be mapped to an integer:
             
             NSArray* array = [[NSArray alloc] initWithObjects:
                               [NSNumber numberWithUnsignedInt:0],
@@ -313,7 +313,7 @@ namespace {
     TEST_F(JPJsonWriterTest, BasicWriterNSNumberAsLongTest)
     {
         @autoreleasepool {
-            // A NSNumber with an underlaying type `unsigned int` will be mapped to an integer:
+            // A NSNumber with an underlying type `unsigned int` will be mapped to an integer:
             
             NSArray* array = [[NSArray alloc] initWithObjects:
                               [NSNumber numberWithLong:0],
@@ -340,7 +340,7 @@ namespace {
     TEST_F(JPJsonWriterTest, BasicWriterNSNumberAsUnsignedLongTest)
     {
         @autoreleasepool {
-            // A NSNumber with an underlaying type `unsigned long` will be mapped to an integer:
+            // A NSNumber with an underlying type `unsigned long` will be mapped to an integer:
             
             NSArray* array = [[NSArray alloc] initWithObjects:
                               [NSNumber numberWithUnsignedLong:0],
@@ -365,7 +365,7 @@ namespace {
     TEST_F(JPJsonWriterTest, BasicWriterNSNumberAsLongLongTest)
     {
         @autoreleasepool {
-            // A NSNumber with an underlaying type `unsigned long long` will be mapped to an integer:
+            // A NSNumber with an underlying type `unsigned long long` will be mapped to an integer:
             
             NSArray* array = [[NSArray alloc] initWithObjects:
                               [NSNumber numberWithLongLong:0],
@@ -392,7 +392,7 @@ namespace {
     TEST_F(JPJsonWriterTest, BasicWriterNSNumberAsUnsignedLongLongTest)
     {
         @autoreleasepool {
-            // A NSNumber with an underlaying type `unsigned long long` will be mapped to an integer:
+            // A NSNumber with an underlying type `unsigned long long` will be mapped to an integer:
             
             NSArray* array = [[NSArray alloc] initWithObjects:
                               [NSNumber numberWithUnsignedLongLong:0],

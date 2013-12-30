@@ -3,7 +3,7 @@
 //  
 //
 //  Created by Andreas Grosam on 5/18/11.
-//  Copyright 2011 Andreas Grosam
+//  Copyright 2013 Andreas Grosam
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.

@@ -298,7 +298,7 @@ namespace json { namespace utility {
         struct _Selector<Which, T, Ts...> : _Selector<Which+1, Ts...>
         {
             using _Selector<Which+1, Ts...>::__select;
-            static constexpr _Result<Which, T> __select(T const&);
+            static constexpr auto __select(T const&) -> decltype(_Result<Which, T>());
         };
 #endif
         

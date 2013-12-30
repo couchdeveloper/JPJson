@@ -74,7 +74,7 @@ namespace {
      
     // Handling of Unicode noncharacters 
     // (Mutual exclusive flags)
-    JPJsonParserSignalErrorOnNoncharacter       
+    JPJsonParserSignalErrorOnUnicodeNoncharacter       
     JPJsonParserSubstituteUnicodeNoncharacter   
     JPJsonParserSkipUnicodeNoncharacter         
     
@@ -236,18 +236,18 @@ namespace {
         // 1)   If the number of digits of the JSON integer number is eqpual or
         //      smaller than the maximal number of digits (in decimal base) that 
         //      can be represented by a signed int without overflow, then a 
-        //      NSNumber with underlaying type signed int will be generated.
+        //      NSNumber with underlying type signed int will be generated.
         //
         // 2)   Otherwise, if the number of digits of the JSON integer number is
         //      equal or smaller than the maximal number of digits (in decimal
         //      base) that can be represented by a signed long  without overflow,
-        //      then a NSNumber with an underlaying type signed long will be 
+        //      then a NSNumber with an underlying type signed long will be 
         //      generated.
         //
         // 3)   Otherwise, if the number of digits of the JSON integer number is
         //      equal or smaller than the maximal number of digits (in decimal
         //      base) that can be represented by a signed long long without
-        //      overflow, then a NSNumber with an underlaying type signed long
+        //      overflow, then a NSNumber with an underlying type signed long
         //      long will be generated.
         //
         // 4)   Otherwise, if the number of digits of the JSON integer number is
@@ -356,7 +356,7 @@ namespace {
         // 1)   If the number of significant digits of the JSON float number is 
         //      eqpual or smaller than the maximal number of digits (in decimal 
         //      base) that can be represented by a double, then a NSNumber with 
-        //      underlaying type double will be generated. If the resulting 
+        //      underlying type double will be generated. If the resulting 
         //      value is out of range, a range error will be signaled.
         // 
         //
@@ -364,7 +364,7 @@ namespace {
         //      number is greater than the maximal number of digits (in decimal
         //      base) that can be represented by a double and if the exponent is
         //      also greater than 127 or smaller than -127, then a NSNumber with
-        //      underlaying type double will be generated and a WARNING will be
+        //      underlying type double will be generated and a WARNING will be
         //      logged to the console about loosing precision.
         //
         //      Otherwise, if the number of significant digits of the JSON float 
@@ -539,38 +539,94 @@ namespace {
             NSString* jsonText = @"[\"abc\uFFFEdef\"]";
             
             __autoreleasing NSError* error = nil;
+            
+            // Allow Unicode Noncharacters
             id json = [JPJsonParser parseString:jsonText
-                                        options:(JPJsonParserOptions)JPJsonParserSignalErrorOnNoncharacter
+                                        options:(JPJsonParserOptions)JPJsonParserAllowUnicodeNoncharacter
+                                          error:&error];
+            EXPECT_TRUE(json != nil);
+            NSString* value = [json objectAtIndex:0];
+            EXPECT_TRUE( [@"abc\uFFFEdef" isEqualToString:value] );
+            
+            // Signal Error On Unicode Noncharacter
+            error = nil;
+            json = [JPJsonParser parseString:jsonText
+                                        options:(JPJsonParserOptions)JPJsonParserSignalErrorOnUnicodeNoncharacter
                                           error:&error];
             EXPECT_EQ(nil, json);
             EXPECT_TRUE(error != nil);
-            EXPECT_TRUE([[error description] rangeOfString:@"encountered Unicode noncharacter"].length != 0);
+            EXPECT_TRUE([[error description] rangeOfString:@"Unicode noncharacter not accepted"].length != 0);
             
+            // Substitute Unicode Noncharacter
             error = nil;
             json = [JPJsonParser parseString:jsonText
                                      options:(JPJsonParserOptions)JPJsonParserSubstituteUnicodeNoncharacter
                                        error:&error];
             EXPECT_TRUE(json != nil);
-            EXPECT_TRUE(error == nil);
-            NSString* value = [json objectAtIndex:0];
+            value = [json objectAtIndex:0];
             // Unicode replacement character: U+FFFD
             const NSString* repl_str = @"abc\uFFFDdef";
             EXPECT_TRUE([repl_str isEqualToString:value]);
             
-#if 0 // The option `JPJsonParserSkipUnicodeNoncharacter`is not yet implemented
+            // Remove Unicode Noncharacter
             error = nil;
             json = [JPJsonParser parseString:jsonText
-                                     options:(JPJsonParserOptions)JPJsonParserSkipUnicodeNoncharacter
+                                     options:(JPJsonParserOptions)JPJsonParserRemoveUnicodeNoncharacter
                                        error:&error];
             EXPECT_TRUE(json != nil);
-            EXPECT_TRUE(error == nil);
             value = [json objectAtIndex:0];
-            // Unicode replacement character: U+FFFD
-            const NSString* str = @"abcdef";
-            EXPECT_TRUE([str isEqualToString:value]);
-#endif        
+            EXPECT_TRUE([@"abcdef" isEqualToString:value]);
         }
     }
+    
+    
+    TEST_F(JPJsonParserTest, JPJsonParserOptionsUnicodeNULLCharactersHandling)
+    {
+        @autoreleasepool {
+            NSString* jsonText = @"[\"abc\u0000def\"]";
+            
+            __autoreleasing NSError* error = nil;
+            
+            // Allow Unicode 'NULL' characters
+            id json = [JPJsonParser parseString:jsonText
+                                        options:(JPJsonParserOptions)JPJsonParserAllowUnicodeNULLCharacter
+                                          error:&error];
+            EXPECT_TRUE(json != nil);
+            NSString* value = [json objectAtIndex:0];
+            EXPECT_TRUE( [@"abc\u0000def" isEqualToString:value] );
+            
+            // Signal Error On Unicode 'NULL'
+            error = nil;
+            json = [JPJsonParser parseString:jsonText
+                                     options:(JPJsonParserOptions)JPJsonParserSignalErrorOnUnicodeNULLCharacter
+                                       error:&error];
+            EXPECT_EQ(nil, json);
+            EXPECT_TRUE(error != nil);
+            EXPECT_TRUE([[error description] rangeOfString:@"Unicode 'NULL' not accepted"].length != 0) << [[error description] UTF8String];
+            
+            // Substitute Unicode 'NULL'
+            error = nil;
+            json = [JPJsonParser parseString:jsonText
+                                     options:(JPJsonParserOptions)JPJsonParserSubstituteUnicodeNULLCharacter
+                                       error:&error];
+            EXPECT_TRUE(json != nil);
+            value = [json objectAtIndex:0];
+            // Unicode replacement character: U+FFFD
+            const NSString* repl_str = @"abc\uFFFDdef";
+            EXPECT_TRUE([repl_str isEqualToString:value]);
+            
+            // Remove Unicode 'NULL'
+            error = nil;
+            json = [JPJsonParser parseString:jsonText
+                                     options:(JPJsonParserOptions)JPJsonParserRemoveUnicodeNULLCharacter
+                                       error:&error];
+            EXPECT_TRUE(json != nil);
+            value = [json objectAtIndex:0];
+            EXPECT_TRUE([@"abcdef" isEqualToString:value]);
+        }
+    }
+    
+    
     
 
     TEST_F(JPJsonParserTest, JPJsonParserOptionsIgnoreSpuriousTrailingBytes) 

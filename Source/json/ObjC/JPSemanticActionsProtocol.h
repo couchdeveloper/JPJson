@@ -24,7 +24,7 @@
 
 
 /**
- JPSemanticActionsProtocol defines the interface between the _underlaying 
+ JPSemanticActionsProtocol defines the interface between the _underlying 
  JSON parser_ and the semantic actions object. The protocol must be implemented
  by concrete subclasses of JPSemanticActionsBase.
  
@@ -32,7 +32,7 @@
  notify the semantic actions object of certain _parse events_ and provide 
  necessary information for the event. 
   
- Parse events are signaled by the underlaying JSON parser via messages sent to
+ Parse events are signaled by the underlying JSON parser via messages sent to
  the semantic actions object whose signature is prefixed with "parserFound". The 
  semantic actions object is supposed to implement a corresponding "semantic action" 
  appropriate for the event and the current context and current state.
@@ -52,7 +52,7 @@
  respectively hierarchical, structure of a JSON representation.
  
  
- Finally, the underlaying parser sends messages parserFound<JSON_primitive>, that 
+ Finally, the underlying parser sends messages parserFound<JSON_primitive>, that 
  is `parserFoundString`, `parserFoundNull`, `parserFoundBoolean` and
  `parserFoundNumber` when it encounters a corresponding JSON primitive value. 
 

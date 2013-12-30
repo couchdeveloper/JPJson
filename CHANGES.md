@@ -64,7 +64,7 @@
 
 * JPJsonWriter: fixed a memory leak in JPJsonWriter (now uses NSDataStreambuf class internally)
 
-* JPJsonWriter: fixed a bug in converting NSNumber objects whose underlaying type equals BOOL and whose address is not equal `kCFBooleanTrue` or not equal `kCFBooleanFalse`.
+* JPJsonWriter: fixed a bug in converting NSNumber objects whose underlying type equals BOOL and whose address is not equal `kCFBooleanTrue` or not equal `kCFBooleanFalse`.
 
 
 
@@ -120,6 +120,18 @@
   
 ### Version 0.7 beta
 
+* API Changes
+
+    Parser options (JPJsonParserOptions) have been changed. Please read the documentation.
+
+
+* Unicode Noncharacher and Unicode 'NULL' Behavior and Options
+
+    JPJsonParser now can be configured in detail how to handle Unicode noncharacters and Unicode 'NULL' characters in JSON Strings.
+    Please consult the documentation for a detailed description.
+
+
+* The Documentation now is more complete
 
 
   
@@ -128,4 +140,19 @@
 * Objective-C Representation Generator:
     Fixed an edge-case where JSON Number conversions selected a NSNumberDecimal where a double would have been appropriate.
     
+
+
+
+
+### Version 0.8.0 beta
+
+ * API Changes
+ 
+   - Changed values and namings for parser options `JPJsonParserOptions`
+
+ * Updated Documentation
+ 
+ * Removed a couple of boost dependencies.
+ 
+ 
 

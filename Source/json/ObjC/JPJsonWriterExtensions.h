@@ -160,7 +160,7 @@
  
  @return Returns 0 on success, otherwise -1.
  
- Parmeter `object` shall respond to message `count` and shall implement the
+ Parameter `object` shall respond to message `count` and shall implement the
  protocol NSFastEnumeration. 
  */
 + (int) serializeObjectAsJSONArray:(id) object 

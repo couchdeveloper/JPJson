@@ -155,7 +155,7 @@ namespace {
          
          
          // Appends a code unit whose endianness equals the endiannes of the
-         // underlaying string storage.
+         // underlying string storage.
          // It does not check the validity of the code unit nor the validity of 
          // the code unit in the context of the string.
          void 

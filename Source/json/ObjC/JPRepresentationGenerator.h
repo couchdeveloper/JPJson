@@ -30,13 +30,12 @@
 
 
 /** Number generator options */
-enum  {
+typedef NS_ENUM(NSUInteger, JPSemanticActionsNumberGeneratorOption)  {
     JPSemanticActionsNumberGeneratorGenerateAuto = 0,
     JPSemanticActionsNumberGeneratorGenerateAutoWithDecimal = 1,
     JPSemanticActionsNumberGeneratorGenerateNSDecimalNumber =  2,
     JPSemanticActionsNumberGeneratorGenerateNSString  = 3
 };
-typedef NSUInteger JPSemanticActionsNumberGeneratorOption;
 
 
 
@@ -59,7 +58,7 @@ typedef NSUInteger JPSemanticActionsNumberGeneratorOption;
  allocator which is used to create foundation objects. That cache, the buffers and 
  the allocator can be reused when multiple JSON documents shall be parsed.
  
- *Note:* Reusing a sematic actions object can reduce memory foot-print and speeds up 
+ *Note:* Reusing a semantic actions object can reduce memory foot-print and speeds up
  parsing of multiple JSON documents.
  
  
@@ -129,29 +128,29 @@ typedef NSUInteger JPSemanticActionsNumberGeneratorOption;
  1.  If the number of digits of a JSON *integer number* is equal or
      smaller than the maximal number of digits (in decimal base) that
      can be represented by a `signed int` without overflow, then a
-     `NSNumber` with underlaying type `signed int` will be generated.
+     `NSNumber` with underlying type `signed int` will be generated.
 
  2.  Otherwise, if the number of digits of a JSON *integer number* is
      equal or smaller than the maximal number of digits (in decimal
      base) that can be represented by a `signed long`  without overflow,
-     then a `NSNumber` with an underlaying type `signed long` will be
+     then a `NSNumber` with an underlying type `signed long` will be
      generated.
 
  3.  Otherwise, if the number of digits of the JSON *integer number* is
      equal or smaller than the maximal number of digits (in decimal
      base) that can be represented by a `signed long long` without
-     overflow, then a `NSNumber` with an underlaying type `signed long long`
+     overflow, then a `NSNumber` with an underlying type `signed long long`
      will be generated.
 
- 4.  Otherwise:
- 
- 4.1 If option `JPSemanticActionsNumberGeneratorGenerateAutoWithDecimal` is defined:
+ 4.  Otherwise, if option `JPSemanticActionsNumberGeneratorGenerateAutoWithDecimal` 
+     is defined:
+     
      A `NSDecimalNumber` is created. If the number of digits is larger than the
      maximum number of digits that a NSDecimalNumber can represent without
      loosing precision (larger than 38 digits), a warning is logged to the 
      console.
  
- 4.2 else, the integral JSON Number will be represented as a double, and a 
+     Else, the integral JSON Number will be represented as a double, and a
      warning will be logged to the console that the integral value cannot be
      represented by a corresponding integral type.
 
@@ -164,16 +163,16 @@ typedef NSUInteger JPSemanticActionsNumberGeneratorOption;
  1.  If the number of digits of the decimal number including leading zeros is equal
      or smaller than the maximal number of digits (in decimal base) that are required
      for converting the string into a `double` and back to a string without loss of
-     accuracy, then a `NSNumber` with underlaying type `double` will be generated.
+     accuracy, then a `NSNumber` with underlying type `double` will be generated.
 
- 2.  Otherwise:
- 
- 2.1 If option `JPSemanticActionsNumberGeneratorGenerateAutoWithDecimal` is defined:
-     A `NSDecimalNumber` is created. If the `NSDecimalNumber` cannot represent 
+ 2.  Otherwise, if option `JPSemanticActionsNumberGeneratorGenerateAutoWithDecimal` 
+     is defined:
+     
+     A `NSDecimalNumber` is created. If the `NSDecimalNumber` cannot represent
      the value with the same precision as the JSON number (having more than 38 
      digits), a warning will be logged to the console.
  
- 2.1 else, an `NSNumber` with an underlaying `double` will be created and a warning
+     Else, an `NSNumber` with an underlying `double` will be created and a warning
      will be logged to the console that the conversion may loose precision.
  
  
@@ -184,7 +183,7 @@ typedef NSUInteger JPSemanticActionsNumberGeneratorOption;
  A number in scientific form has an optional decimal point and an exponent.
 
  1. A JSON number in scientific format will always be converted to a NSNumber
-    with an underlaying `double` type. If the resulting value is out of range, 
+    with an underlying `double` type. If the resulting value is out of range, 
     a warning will be logged to the console.
 
  
@@ -301,7 +300,7 @@ typedef NSUInteger JPSemanticActionsNumberGeneratorOption;
  
  The memory allocated for the whole representation will eventually be freed only
  until after _ALL_ objects of the representation have been deallocated. Thus, in 
- order to avoid possibly large memory areas hanging around unsused, this option is 
+ order to avoid possibly large memory areas hanging around unused, this option is
  only useful if the representation is used as a whole and released as a whole without 
  having objects elsewhere referencing one or more objects from the representation.
 
@@ -352,7 +351,7 @@ typedef NSUInteger JPSemanticActionsNumberGeneratorOption;
 
 /** @name Canceling a Running Parser */
 /**
- Sets a cancelation request which the underlaying parser is supposed to
+ Sets a cancelation request which the underlying parser is supposed to
  read which in turn causes it to cancel.
  */
 - (void) cancel;

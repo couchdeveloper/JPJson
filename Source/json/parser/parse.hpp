@@ -23,7 +23,6 @@
 
 
 #include "json/config.hpp"
-#include <boost/iterator/iterator_traits.hpp>
 #include "parser.hpp"
 #include "semantic_actions_base.hpp"
 #include "json/unicode/unicode_detect_bom.hpp"
@@ -510,7 +509,7 @@ namespace json {
         
         
         static_assert( (std::is_base_of<utf_encoding_tag, SourceEncoding>::value), "" );
-        static_assert( (sizeof(typename boost::iterator_value<IteratorT>::type)
+        static_assert( (sizeof(typename std::iterator_traits<IteratorT>::value_type)
                               == sizeof(typename encoding_traits<SourceEncoding>::code_unit_type)), "" );
         
         SemanticActions sa;
@@ -580,7 +579,7 @@ namespace json {
         
         //static_assert( (std::is_base_of<json::semantic_actions_base, SemanticActionsT>::value), "" );
         static_assert( (std::is_base_of<unicode::utf_encoding_tag, SourceEncoding>::value), "" );
-        static_assert( (sizeof(typename boost::iterator_value<IteratorT>::type) 
+        static_assert( (sizeof(typename std::iterator_traits<IteratorT>::value_type)
                               == sizeof(typename encoding_traits<SourceEncoding>::code_unit_type)), "" );
         
         // TODO: make a static assert which checks the semantic actions. For now, 

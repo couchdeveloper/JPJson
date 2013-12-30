@@ -866,6 +866,26 @@ namespace test { namespace mpl {
 }}
 
 
+namespace json { namespace utility { namespace mpl {
+   
+    template <int C>
+    struct int_ : std::integral_constant<int, C> {
+    };
+    
+    
+    namespace test {
+        
+        typedef int_<8> eight;
+    
+        static_assert(( std::is_same<eight::value_type, int>::value ), "");
+        static_assert(( std::is_same<eight::type, eight>::value ), "");
+//        std::static_assert(( std::is_same< std::next< eight >::type, int_<9> > ), "");
+//        std::static_assert(( std::is_same< std::prior< eight >::type, int_<7> > ), "");
+//        std::static_assert( (eight::value), ==, 8 , "");
+    
+    }
+    
+}}}
 
 
 
