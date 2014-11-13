@@ -4,9 +4,6 @@
 
 #include "common.ios.xcconfig"
 
-// Source Root Path
-JPSOURCE_ROOT = "$(SRCROOT)/../../Source"
-
 // Header search paths
 PRJ_HEADER_SEARCH_PATHS = $(JPSOURCE_ROOT) $(BOOST_HEADER_SEARCH_PATH)
 

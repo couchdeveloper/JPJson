@@ -140,7 +140,7 @@ namespace json { namespace unicode {
     // Returns true if the given code point is defined specifically as
     // a control code. A control point implies, that it is also a valid 
     // code point.
-    inline constexpr bool inline isControlCode(code_point_t code_point) {
+    inline constexpr bool isControlCode(code_point_t code_point) {
         return (code_point <= 0x001Fu)
             or (code_point >= 0x007Fu and code_point <= 0x009Fu);
     }

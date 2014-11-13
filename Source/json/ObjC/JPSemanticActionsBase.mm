@@ -266,7 +266,6 @@ typedef JPSemanticActions_ErrorHandlerBlockType       ErrorHandlerBlockType;
             dispatch_async(self.handlerDispatchQueue, self.startJsonHandlerBlock);
         }
         else {
-            assert (dispatch_get_current_queue() != self.handlerDispatchQueue);
             dispatch_sync(self.handlerDispatchQueue,  self.startJsonHandlerBlock);
             
         }
@@ -294,7 +293,6 @@ typedef JPSemanticActions_ErrorHandlerBlockType       ErrorHandlerBlockType;
             });
         }
         else {
-            assert (dispatch_get_current_queue() != self.handlerDispatchQueue);
             dispatch_sync(self.handlerDispatchQueue,  ^{
                 self.endJsonHandlerBlock(result);
             });
