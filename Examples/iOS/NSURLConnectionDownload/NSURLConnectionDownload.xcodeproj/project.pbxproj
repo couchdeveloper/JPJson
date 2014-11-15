@@ -8,9 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		A1615B63143F2FE300DA0A11 /* UIDevice-Hardware.m in Sources */ = {isa = PBXBuildFile; fileRef = A1615B62143F2FE300DA0A11 /* UIDevice-Hardware.m */; };
-		A1973C8C1717DF5A00BD73CB /* project.common.ios.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = A1973C8B1717DF5A00BD73CB /* project.common.ios.xcconfig */; };
-		A1E1A8BB1717E08800D6AD0A /* project.debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = A1E1A8B91717E08800D6AD0A /* project.debug.xcconfig */; };
-		A1E1A8BC1717E08800D6AD0A /* project.release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = A1E1A8BA1717E08800D6AD0A /* project.release.xcconfig */; };
 		A1ED08ED1428F0B800B276C4 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1ED08EC1428F0B800B276C4 /* UIKit.framework */; };
 		A1ED08EF1428F0B800B276C4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1ED08EE1428F0B800B276C4 /* Foundation.framework */; };
 		A1ED08F11428F0B800B276C4 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1ED08F01428F0B800B276C4 /* CoreGraphics.framework */; };
@@ -171,7 +168,7 @@
 		A1ED08DF1428F0B800B276C4 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0420;
+				LastUpgradeCheck = 0610;
 			};
 			buildConfigurationList = A1ED08E21428F0B800B276C4 /* Build configuration list for PBXProject "NSURLConnectionDownload" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -214,9 +211,6 @@
 				A1ED08F71428F0B800B276C4 /* InfoPlist.strings in Resources */,
 				A1ED090D1429073200B276C4 /* NSURLConnectionDownloadViewController.xib in Resources */,
 				A1EDAF2615B420820001D840 /* JPJson iOS Libraries.xcodeproj in Resources */,
-				A1973C8C1717DF5A00BD73CB /* project.common.ios.xcconfig in Resources */,
-				A1E1A8BB1717E08800D6AD0A /* project.debug.xcconfig in Resources */,
-				A1E1A8BC1717E08800D6AD0A /* project.release.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -265,6 +259,7 @@
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				ONLY_ACTIVE_ARCH = YES;
 			};
 			name = Debug;
 		};

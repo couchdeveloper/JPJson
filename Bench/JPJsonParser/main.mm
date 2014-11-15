@@ -1116,24 +1116,29 @@ int main (int argc, const char * argv[])
                            ];
     
     for (id testFile in testFiles) {
+//        {
+//            NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
+//            bench_JPJsonParserSAXStyle(JPJsonParserOptions(JPJsonParserAllowUnicodeNoncharacter | JPJsonParserAllowUnicodeNULLCharacter), testFile, N);
+//            [pool drain];
+//        }
+//        {
+//            NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
+//            bench_JPJsonParserWithNSData(JPJsonParserOptions(JPJsonParserAllowUnicodeNoncharacter | JPJsonParserAllowUnicodeNULLCharacter), testFile, N);
+//            [pool drain];
+//        }
+//        {
+//            NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
+//            bench_NSJSONSerialization(NSJSONReadingOptions(0), testFile, N);
+//            [pool drain];
+//        }
+//        {
+//            NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
+//            bench_JSONKitWithNSData(JKParseOptionFlags(0), testFile, N);
+//            [pool drain];
+//        }
         {
             NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
-            bench_JPJsonParserSAXStyle(JPJsonParserOptions(JPJsonParserAllowUnicodeNoncharacter | JPJsonParserAllowUnicodeNULLCharacter), testFile, N);
-            [pool drain];
-        }
-        {
-            NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
-            bench_JPJsonParserWithNSData(JPJsonParserOptions(JPJsonParserAllowUnicodeNoncharacter | JPJsonParserAllowUnicodeNULLCharacter), testFile, N);
-            [pool drain];
-        }
-        {
-            NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
-            bench_NSJSONSerialization(NSJSONReadingOptions(0), testFile, N);
-            [pool drain];
-        }
-        {
-            NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
-            bench_JSONKitWithNSData(JKParseOptionFlags(0), testFile, N);
+            bench_JPAsyncJsonParser(JPJsonParserOptions(JPJsonParserAllowUnicodeNoncharacter | JPJsonParserAllowUnicodeNULLCharacter), testFile, N);
             [pool drain];
         }
 

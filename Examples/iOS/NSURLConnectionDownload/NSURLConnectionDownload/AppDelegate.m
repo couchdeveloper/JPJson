@@ -26,7 +26,7 @@ static NSString* deviceInformationString()
                             @"\nLocalized Model: %@"
                             @"\nPlatform: %@"
                             @"\nHardware Model: %@"
-                            @"\nPlatform Type: %u"
+                            @"\nPlatform Type: %lu"
                             @"\nPlatform String: %@"
                             @"\nCPU Frequency: %g MHz"
                             @"\nBUS Frequency: %g MHz"
@@ -37,7 +37,7 @@ static NSString* deviceInformationString()
                             device.model, device.localizedModel,
                             [device platform], 
                             [device hwmodel],
-                            [device platformType], 
+                            (unsigned long)[device platformType],
                             [device platformString],
                             [device cpuFrequency]*1e-06, 
                             [device busFrequency]*1e-06,
@@ -56,18 +56,15 @@ static NSString* deviceInformationString()
 
 - (void)dealloc
 {
-    [window_ release];
-    [viewController_ release];
-    [super dealloc];
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
-    self.viewController = [[[NSURLConnectionDownloadViewController alloc] 
+    self.viewController = [[NSURLConnectionDownloadViewController alloc]
                             initWithNibName:@"NSURLConnectionDownloadViewController" 
-                            bundle:nil] autorelease];
+                            bundle:nil];
     self.window.rootViewController = self.viewController;
     [self.window makeKeyAndVisible];
     NSLog(@"Starting Bench for Device: %@\n", deviceInformationString());

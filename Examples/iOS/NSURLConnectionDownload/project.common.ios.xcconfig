@@ -11,10 +11,10 @@
 CLANG_CXX_LIBRARY = libc++
 
 // C++ Language Dialect
-CLANG_CXX_LANGUAGE_STANDARD = c++0x
+CLANG_CXX_LANGUAGE_STANDARD = c++14
 
 // Automatic Reference Counting
-CLANG_ENABLE_OBJC_ARC = NO
+CLANG_ENABLE_OBJC_ARC = YES
 
 //
 // Base SDK  (Latest)
@@ -25,7 +25,7 @@ SDKROOT = iphoneos
 // Architectures
 //
 // Note: Xcode IDE >= 4.5 does not support armv6 devices anymore.
-ARCHS = armv7 armv7s
+ARCHS = $(ARCHS_STANDARD)
 
 //
 // Deployment Target
@@ -39,7 +39,7 @@ ARCHS = armv7 armv7s
 // features.
 // On the other hand, now with deployment target >= 5, clangs new C++ standard
 // library is now available and new C++11 features can now be used in the code.
-IPHONEOS_DEPLOYMENT_TARGET = 6.0
+IPHONEOS_DEPLOYMENT_TARGET = 7.1
 
 
 //
