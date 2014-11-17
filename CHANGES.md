@@ -163,7 +163,8 @@
 - Fixed one memory leak which has been caused by the optimisation opportunity `USE_OPTIMIZED_IMMUTABLE_CALLBACKS` (a macro set in file `RepresentationGenerator.hpp`).
  This will be fixed in a future release.
 
-
+- Fixed a memory leak in CFDataBuffer
+ The move assignment and the assignment operator now correctly release an existing buffer.
 
 #### Changes
 
