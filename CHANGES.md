@@ -158,6 +158,15 @@
 
 ### Version 0.8.1 beta
 
+#### Bug fixes
+
+- Fixed one memory leak which has been caused by the optimisation opportunity `USE_OPTIMIZED_IMMUTABLE_CALLBACKS` (a macro set in file `RepresentationGenerator.hpp`).
+ This will be fixed in a future release.
+
+
+
+#### Changes
+
  * Migrated the project to Xcode 6.1
 
  * The JPJson Lib for iOS has been updated for new architectures.
@@ -166,8 +175,10 @@
 
  * Fixed a minor bug in a method in the `JPJsoneWriter` class not returning the correct value.
 
- * Fixed a number of bugs in the JSONKit library which is still maintained for benchmark comparisons.
+ * Fixed a number of bugs in the JSONKit library. The JSONKit library is still maintained for benchmark comparisons.
 
  * Fixed potential memory leak in UIDevice-Hardware source file (used in tests).
 
  * Updated samples.
+
+

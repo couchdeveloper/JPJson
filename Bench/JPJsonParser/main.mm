@@ -709,15 +709,15 @@ namespace {
             gotError = YES;
             NSLog(@"ERROR: %@", error);
         };
+        sa = nil;
         
         [parser start];
-        
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             for (int i = 0; i < N; ++i) 
             {
                 // this will block, until the parser has taken it
-                bool delivered = [parser parseBuffer:data]; 
+                bool delivered = [parser parseBuffer:data];
                 if (not delivered)
                     break;
             }
@@ -728,7 +728,6 @@ namespace {
         dispatch_semaphore_wait(sem, DISPATCH_TIME_FOREVER);
         [parser release];
         t.stop();
-        
         
         if (!gotError) {
             NSLog(@"JPJsonParser: elapsed time for parsing %d documents:\n"
@@ -741,6 +740,7 @@ namespace {
          te.min()*1e3, te.max()*1e3, te.avg()*1e3);
          }
          */
+        [data release];
         [pool release];
     }
     
@@ -1104,7 +1104,7 @@ int main (int argc, const char * argv[])
                            @"instruments.json",
                            @"mesh.json",
                            @"mesh.pretty.json",
-                           @"nested.json",
+                           //@"nested.json",
                            @"random.json",
                            @"repeat.json",
                            @"truenull.json",

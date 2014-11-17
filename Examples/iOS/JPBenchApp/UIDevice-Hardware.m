@@ -232,6 +232,7 @@
     
     if ((buf = malloc(len)) == NULL) {
         printf("Could not allocate memory. error!\n");
+        free(buf);
         return NULL;
     }
     

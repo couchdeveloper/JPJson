@@ -94,7 +94,7 @@ namespace json { namespace objc {
         CFDataBuffer(CFDataRef data) noexcept 
         {
             assert(data == nullptr || CFDataGetLength(data) % sizeof(T) == 0);
-            if (data == nullptr or (size_ = CFDataGetLength(data))/sizeof(T) == 0) {
+            if (data == nullptr or (size_ = CFDataGetLength(data)/sizeof(T)) == 0) {
                 data_ = nullptr;
                 size_ = 0;
                 buffer_ = 0;

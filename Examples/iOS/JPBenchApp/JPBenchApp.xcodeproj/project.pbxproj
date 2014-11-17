@@ -20,7 +20,6 @@
 		A138815A13D0D57B0006461E /* JPBenchAppViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A138815813D0D57B0006461E /* JPBenchAppViewController.xib */; };
 		A156BE94146C181400BE6E82 /* Test-UTF8-esc.json in Resources */ = {isa = PBXBuildFile; fileRef = A156BE93146C181400BE6E82 /* Test-UTF8-esc.json */; };
 		A176DED01A15637900A3DCBD /* libjson-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A18DC6E315B3F58800F921C2 /* libjson-iOS.a */; };
-		A176DED51A179D3A00A3DCBD /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = A176DED41A179D3A00A3DCBD /* README.md */; };
 		A18A705D1512292000FEB03C /* Test-UTF8.json in Resources */ = {isa = PBXBuildFile; fileRef = A18A705C1512292000FEB03C /* Test-UTF8.json */; };
 		A1B0AE5F15B1E90500E0C685 /* JPJson iOS Libraries.xcodeproj in Resources */ = {isa = PBXBuildFile; fileRef = A1B0AE5E15B1E90500E0C685 /* JPJson iOS Libraries.xcodeproj */; };
 		A1FAF1DD143F225500CD2CCB /* UIDevice-Hardware.m in Sources */ = {isa = PBXBuildFile; fileRef = A1FAF1DC143F225500CD2CCB /* UIDevice-Hardware.m */; };
@@ -293,7 +292,6 @@
 				A138814E13D0D57B0006461E /* main.m in Sources */,
 				A138815113D0D57B0006461E /* JPBenchAppAppDelegate.m in Sources */,
 				A138815713D0D57B0006461E /* JPBenchAppViewController.mm in Sources */,
-				A176DED51A179D3A00A3DCBD /* README.md in Sources */,
 				A1FAF1DD143F225500CD2CCB /* UIDevice-Hardware.m in Sources */,
 				A125E034156FBF2A006EB6FD /* JSONKit.m in Sources */,
 				A113FB811714588C00D65C91 /* timer.cpp in Sources */,

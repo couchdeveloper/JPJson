@@ -516,7 +516,7 @@ namespace {
     // check if the receiver was killed, and if so return NO, otherwise
     // retry.
     int timedout = 0;
-    while (syncQueue_.put(CFDataByteBuffer((__bridge CFDataRef)buffer), 5.0) == sync_queue_t::TIMEOUT_NOT_DELIVERED)
+    while (syncQueue_.put(CFDataByteBuffer((__bridge CFDataRef)(buffer)), 5.0) == sync_queue_t::TIMEOUT_NOT_DELIVERED)
     {
         if (killed_  or finished_) {
             return NO;
