@@ -51,7 +51,7 @@ static NSString* deviceInformationString()
                             @"\nLocalized Model: %@"
                             @"\nPlatform: %@"
                             @"\nHardware Model: %@"
-                            @"\nPlatform Type: %u"
+                            @"\nPlatform Type: %lu"
                             @"\nPlatform String: %@"
                             @"\nCPU Frequency: %g MHz"
                             @"\nBUS Frequency: %g MHz"
@@ -62,7 +62,7 @@ static NSString* deviceInformationString()
                             device.model, device.localizedModel,
                             [device platform], 
                             [device hwmodel],
-                            [device platformType], 
+                            (unsigned long)[device platformType], 
                             [device platformString],
                             [device cpuFrequency]*1e-06, 
                             [device busFrequency]*1e-06,

@@ -8,7 +8,6 @@
 // Source Root Path
 JPSOURCE_ROOT = "$(SRCROOT)/../../Source"
 
-
 //
 // Base SDK  (Latest)
 //
@@ -17,9 +16,7 @@ SDKROOT = iphoneos
 //
 // Architectures
 //
-ARCHS = $(ARCHS_STANDARD_INCLUDING_64_BIT)
-
-//:completeSettings = none
+ARCHS = $(ARCHS_STANDARD)
 
 
 //
@@ -30,9 +27,7 @@ ARCHS = $(ARCHS_STANDARD_INCLUDING_64_BIT)
 // iOS 4.2.x. This is sad, since this library doesn't depend on fancy iOS features.
 // On the other hand, now with deployment target >= 5, clangs new C++ standard
 // library is now available and new C++11 features can now be used in the code.
-IPHONEOS_DEPLOYMENT_TARGET = 5.0
-
-
+IPHONEOS_DEPLOYMENT_TARGET = 7.1
 
 
 //
@@ -42,16 +37,15 @@ IPHONEOS_DEPLOYMENT_TARGET = 5.0
 // C++ Standard Library, using clang's C++ library
 CLANG_CXX_LIBRARY = libc++
 
-// C++ Language Dialect, C++11
-CLANG_CXX_LANGUAGE_STANDARD = c++0x
+// C++ Language Dialect
+CLANG_CXX_LANGUAGE_STANDARD = c++14
+
 
 // Automatic Reference Counting
 // Note: the current implementation very likey does not benefit from ARC, since
 // its manual memory management is already highly optimized. Nonetheless, a
 // future impementation will switch to ARC eventually.
 CLANG_ENABLE_OBJC_ARC = YES
-
-
 
 
 //

@@ -60,7 +60,7 @@
 // USE_OPTIMIZED_IMMUTABLE_CALLBACKS
 // If this macro is defined, immutable CF containers (CFDictionaryRef and CFArrayRef)
 // will use callbacks which avoid one retain/release cycle per element when possible.
-#define USE_OPTIMIZED_IMMUTABLE_CALLBACKS
+//#define USE_OPTIMIZED_IMMUTABLE_CALLBACKS
 
 
 // Note: An arena alloctor is generally only available when creating immutable
@@ -561,12 +561,7 @@ namespace json { namespace objc {
             // in stack_[0]. There shall be no other elements.
             assert(stack_.size() == 1);
             assert(markers_.size() == 0);
-
             if (stack_.size() != 1 or markers_.size() != 0) {
-//                for (CFTypeRef o : stack_) {
-//                    CFRelease(o);
-//                }
-//                stack_.clear();
                 throwLogicError("json::RepresentationGenerator: logic error");
             }
             

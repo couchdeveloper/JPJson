@@ -222,7 +222,7 @@ namespace {
 @end
 
 @interface JPOutputStreamStreambuffer ()
-@property (weak, nonatomic, readwrite) NSError* error;
+@property (nonatomic, readwrite) NSError* error;
 @end
 
 @interface JPOutputStreamStreambuffer (Internal) <JPJsonStreambufferInternalProtocol>
@@ -1225,13 +1225,13 @@ namespace {
         if (error) {
             *error = makeError(1, "Parameter error: 'object' equals nil", nil);
         }
-        return nil;
+        return 0;
     }
     if(![object respondsToSelector:@selector(JPJson_serializeTo:encoding:options:level:)]) {
         if (error) {
             *error = makeError(2, "Parameter error: 'object' is not a JSON object", nil);
         }
-        return nil;
+        return 0;
     }
     switch (encoding) {
         case JPUnicodeEncoding_UTF8:
@@ -1243,13 +1243,13 @@ namespace {
             if (error) {
                 *error = makeError(6, "Encoding not suported in this version", nil);
             }
-            return nil;
+            return 0;
             break;
         default:
             if (error) {
                 *error = makeError(3, "Parameter error: invalid encoding specified", nil);
             }
-            return nil;
+            return 0;
     }
     JPOutputStreamStreambuffer* streambuf = [[JPOutputStreamStreambuffer alloc] initWithOutputStream:ostream];
     if ((options & JPJsonWriterWriteBOM) != 0) {
@@ -1258,7 +1258,7 @@ namespace {
             if (error) {
                 *error = makeError(4, "Unknown error occured", streambuf.error);
             }
-            return nil;
+            return 0;
         }
     }
     int result = [object JPJson_serializeTo:streambuf encoding:encoding options:options level:0];

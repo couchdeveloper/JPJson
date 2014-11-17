@@ -232,11 +232,13 @@
     
     if ((buf = malloc(len)) == NULL) {
         printf("Could not allocate memory. error!\n");
+        free(buf);
         return NULL;
     }
     
     if (sysctl(mib, 6, buf, &len, NULL, 0) < 0) {
         printf("Error: sysctl, take 2");
+        free(buf);
         return NULL;
     }
     

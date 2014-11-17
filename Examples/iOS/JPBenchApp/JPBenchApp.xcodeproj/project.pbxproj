@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A113FB7A1714531C00D65C91 /* project.common.ios.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = A113FB791714531C00D65C91 /* project.common.ios.xcconfig */; };
-		A113FB7E171455F600D65C91 /* libjson-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A18DC6E315B3F58800F921C2 /* libjson-iOS.a */; };
 		A113FB811714588C00D65C91 /* timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A113FB7F1714588C00D65C91 /* timer.cpp */; };
 		A125E034156FBF2A006EB6FD /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = A125E031156FBF2A006EB6FD /* JSONKit.m */; };
 		A138814113D0D57B0006461E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A138814013D0D57B0006461E /* UIKit.framework */; };
@@ -21,12 +19,20 @@
 		A138815713D0D57B0006461E /* JPBenchAppViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = A138815613D0D57B0006461E /* JPBenchAppViewController.mm */; };
 		A138815A13D0D57B0006461E /* JPBenchAppViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A138815813D0D57B0006461E /* JPBenchAppViewController.xib */; };
 		A156BE94146C181400BE6E82 /* Test-UTF8-esc.json in Resources */ = {isa = PBXBuildFile; fileRef = A156BE93146C181400BE6E82 /* Test-UTF8-esc.json */; };
+		A176DED01A15637900A3DCBD /* libjson-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A18DC6E315B3F58800F921C2 /* libjson-iOS.a */; };
 		A18A705D1512292000FEB03C /* Test-UTF8.json in Resources */ = {isa = PBXBuildFile; fileRef = A18A705C1512292000FEB03C /* Test-UTF8.json */; };
 		A1B0AE5F15B1E90500E0C685 /* JPJson iOS Libraries.xcodeproj in Resources */ = {isa = PBXBuildFile; fileRef = A1B0AE5E15B1E90500E0C685 /* JPJson iOS Libraries.xcodeproj */; };
 		A1FAF1DD143F225500CD2CCB /* UIDevice-Hardware.m in Sources */ = {isa = PBXBuildFile; fileRef = A1FAF1DC143F225500CD2CCB /* UIDevice-Hardware.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		A176DED11A1563AF00A3DCBD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A1B0AE5E15B1E90500E0C685 /* JPJson iOS Libraries.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = A16AEB311441FB2700FDB7B2;
+			remoteInfo = JPJsonLib;
+		};
 		A18DC6E215B3F58800F921C2 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = A1B0AE5E15B1E90500E0C685 /* JPJson iOS Libraries.xcodeproj */;
@@ -59,6 +65,7 @@
 		A138815613D0D57B0006461E /* JPBenchAppViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; path = JPBenchAppViewController.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		A138815913D0D57B0006461E /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/JPBenchAppViewController.xib; sourceTree = "<group>"; };
 		A156BE93146C181400BE6E82 /* Test-UTF8-esc.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "Test-UTF8-esc.json"; path = "../../../Resources/Test-UTF8-esc.json"; sourceTree = "<group>"; };
+		A176DED41A179D3A00A3DCBD /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		A18A705A1511F9E000FEB03C /* project.debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; lineEnding = 0; path = project.debug.xcconfig; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.xcconfig; };
 		A18A705B1511F9EE00FEB03C /* project.release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; lineEnding = 0; path = project.release.xcconfig; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.xcconfig; };
 		A18A705C1512292000FEB03C /* Test-UTF8.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "Test-UTF8.json"; path = "../../../Resources/Test-UTF8.json"; sourceTree = "<group>"; };
@@ -74,7 +81,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A113FB7E171455F600D65C91 /* libjson-iOS.a in Frameworks */,
+				A176DED01A15637900A3DCBD /* libjson-iOS.a in Frameworks */,
 				A138814113D0D57B0006461E /* UIKit.framework in Frameworks */,
 				A138814313D0D57B0006461E /* Foundation.framework in Frameworks */,
 				A138814513D0D57B0006461E /* CoreGraphics.framework in Frameworks */,
@@ -107,6 +114,7 @@
 		A138813113D0D57B0006461E = {
 			isa = PBXGroup;
 			children = (
+				A176DED41A179D3A00A3DCBD /* README.md */,
 				A113FB791714531C00D65C91 /* project.common.ios.xcconfig */,
 				A18A705A1511F9E000FEB03C /* project.debug.xcconfig */,
 				A18A705B1511F9EE00FEB03C /* project.release.xcconfig */,
@@ -207,6 +215,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				A176DED21A1563AF00A3DCBD /* PBXTargetDependency */,
 			);
 			name = JPBenchApp;
 			productName = JPBenchApp;
@@ -219,7 +228,12 @@
 		A138813313D0D57B0006461E /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0420;
+				LastUpgradeCheck = 0610;
+				TargetAttributes = {
+					A138813B13D0D57B0006461E = {
+						DevelopmentTeam = XA5RXB77R9;
+					};
+				};
 			};
 			buildConfigurationList = A138813613D0D57B0006461E /* Build configuration list for PBXProject "JPBenchApp" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -265,7 +279,6 @@
 				A156BE94146C181400BE6E82 /* Test-UTF8-esc.json in Resources */,
 				A18A705D1512292000FEB03C /* Test-UTF8.json in Resources */,
 				A1B0AE5F15B1E90500E0C685 /* JPJson iOS Libraries.xcodeproj in Resources */,
-				A113FB7A1714531C00D65C91 /* project.common.ios.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -286,6 +299,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		A176DED21A1563AF00A3DCBD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = JPJsonLib;
+			targetProxy = A176DED11A1563AF00A3DCBD /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		A138814913D0D57B0006461E /* InfoPlist.strings */ = {
@@ -324,6 +345,7 @@
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				ONLY_ACTIVE_ARCH = YES;
 			};
 			name = Debug;
 		};
@@ -342,6 +364,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -352,10 +376,11 @@
 					"$(SRCROOT)/Vendor",
 				);
 				INFOPLIST_FILE = "JPBenchApp/JPBenchApp-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = "-v";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -364,6 +389,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "JPBenchApp/JPBenchApp-Prefix.pch";
@@ -373,9 +400,10 @@
 					"$(SRCROOT)/Vendor",
 				);
 				INFOPLIST_FILE = "JPBenchApp/JPBenchApp-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				OTHER_CFLAGS = "-v";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;
 			};

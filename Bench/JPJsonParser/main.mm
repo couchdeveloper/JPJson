@@ -709,15 +709,15 @@ namespace {
             gotError = YES;
             NSLog(@"ERROR: %@", error);
         };
+        sa = nil;
         
         [parser start];
-        
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             for (int i = 0; i < N; ++i) 
             {
                 // this will block, until the parser has taken it
-                bool delivered = [parser parseBuffer:data]; 
+                bool delivered = [parser parseBuffer:data];
                 if (not delivered)
                     break;
             }
@@ -726,13 +726,13 @@ namespace {
         
         // Wait until the parser has been finished
         dispatch_semaphore_wait(sem, DISPATCH_TIME_FOREVER);
+        dispatch_release(sem);
         [parser release];
         t.stop();
         
-        
         if (!gotError) {
             NSLog(@"JPJsonParser: elapsed time for parsing %d documents:\n"
-                  "average: %.3f s\n", N, t.seconds());
+                  "total: %.3f s\navarage: %.3f ms\n", N, t.seconds(), 1000*t.seconds()/N);
         }
         
         /*    
@@ -741,6 +741,7 @@ namespace {
          te.min()*1e3, te.max()*1e3, te.avg()*1e3);
          }
          */
+        [data release];
         [pool release];
     }
     
@@ -1104,7 +1105,7 @@ int main (int argc, const char * argv[])
                            @"instruments.json",
                            @"mesh.json",
                            @"mesh.pretty.json",
-                           @"nested.json",
+                           //@"nested.json",
                            @"random.json",
                            @"repeat.json",
                            @"truenull.json",
@@ -1134,6 +1135,11 @@ int main (int argc, const char * argv[])
         {
             NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
             bench_JSONKitWithNSData(JKParseOptionFlags(0), testFile, N);
+            [pool drain];
+        }
+        {
+            NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
+            bench_JPAsyncJsonParser(JPJsonParserOptions(JPJsonParserAllowUnicodeNoncharacter | JPJsonParserAllowUnicodeNULLCharacter), testFile, N);
             [pool drain];
         }
 

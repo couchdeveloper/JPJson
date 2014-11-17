@@ -96,11 +96,11 @@ If this was successful, you may clear the build folder and proceed with installi
 
 If you are a "sudoer" on your system (which is not the default for a normal User Account), you may simply use the **Terminal App**, `cd` into the folder where gtest's Xcode project is located and perform the installation build typing the following commands into the console (note that `$` indicates the prompt and does not belong to the command):
 
-```
+````
 $ cd ~/Develop/gtest/gtest-1.6.0/xcode
 $ sudo xcodebuild -target gtest-framework -configuration Release \
   install INSTALL_PATH=/Library/Frameworks DSTROOT=/
-```
+````
 
 You will be prompted for your password (enter your user password) and then xcodebuild starts building and installing the framework into `/Library/Frameworks` folder. You are done installing gtest.
 

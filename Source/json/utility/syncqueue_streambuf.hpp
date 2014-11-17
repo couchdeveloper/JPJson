@@ -150,7 +150,7 @@ namespace json { namespace utility {
                 return EOF;  // timeout
             }
             else {
-                buffer_ = r.second;
+                buffer_ = std::move(r.second);
             }
             if (buffer_.data() == NULL or buffer_.size() == 0) {
                 //queue_ptr_->commit();
