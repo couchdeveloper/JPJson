@@ -132,6 +132,9 @@ namespace json { namespace objc {
         // Assignment operator
         CFDataBuffer& operator=(CFDataBuffer const& other) noexcept {
             if (this != &other) {
+                if (data_) {
+                    CFRelease(data_);
+                }
                 data_ = static_cast<CFDataRef>(other.data_ != nullptr ? CFRetain(other.data_) : nullptr);
                 buffer_ = other.buffer_;
                 size_ = other.size_;
@@ -142,6 +145,9 @@ namespace json { namespace objc {
         // Move assignment operator
         CFDataBuffer& operator=(CFDataBuffer&& other) noexcept {
             if (this != &other) {
+                if (data_) {
+                    CFRelease(data_);
+                }
                 data_ = other.data_;
                 buffer_ = other.buffer_;
                 size_ = other.size_;

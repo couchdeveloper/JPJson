@@ -70,11 +70,18 @@ namespace {
         std::cout << "--------------------------------------------------------\n";
         std::cout << "     Concurrent syncqueue_streambuf and iterator        \n";
         std::cout << "--------------------------------------------------------\n";
+        std::cout
+        << "Concurrently run one producer and one consumer.\n"
+        << "The synchronous queue uses a CFDataBuffer as element type.\n"
+        << "The producer puts " << N <<  " buffers (CFDataBuffers) each containing " << strlen(s) << " bytes \n"
+        << "while the consumer reads the buffer content using a basic_syncqueue_streambuf.\n";
+        
+
         std::cout << std::endl;
         
-        typedef json::objc::CFDataBuffer<char>              CFDataBuffer;
-        typedef synchronous_queue<CFDataBuffer>             queue_t;
-        typedef basic_syncqueue_streambuf<CFDataBuffer, char>    stream_buffer_t;
+        typedef json::objc::CFDataBuffer<char>                      CFDataBuffer;
+        typedef synchronous_queue<CFDataBuffer>                     queue_t;
+        typedef basic_syncqueue_streambuf<CFDataBuffer, char>       stream_buffer_t;
         
         typedef std::pair<queue_t::result_type, queue_t::value_type> get_result_t;
         typedef queue_t::result_type                                 put_result_t;
@@ -143,7 +150,8 @@ namespace {
         
         std::cout << "producer_timeout_occured: " << producer_timeout_occured << "\n";
         std::cout << "completed: " << completed << std::endl;
-        std::cout << "elapsed time: " << std::fixed << std::setprecision(2) << t.seconds() << "s\n\n" << std::endl;
+        std::cout << "elapsed time: " << std::fixed << std::setprecision(2) << t.seconds() << "s\n";
+        std::cout << strlen(s)*N/(1024.0*1024.0)/t.seconds() << " MBytes/s\n\n";
     }
     
     
@@ -187,11 +195,11 @@ int main (int argc, const char * argv[])
 {
 
     test1(s1);
-    test1(s2);
-    test1(s3);
-    test2(s1);
-    test2(s2);
-    test2(s3);
+//    test1(s2);
+//    test1(s3);
+//    test2(s1);
+//    test2(s2);
+//    test2(s3);
     return 0;
 }
 
